@@ -2084,3 +2084,7 @@ Fresh final qualification: **24,214 complete core tests pass** (including 8,196 
 ## Optional decimal review checkpoint — 29 October 2026
 
 Current delivery: [reviewed optional implementation](schema-optional-review/README.md). Review found no further production defect; all changed source hashes match the qualified 24,214-core/260-Schema candidate and exact unchanged gates. Schema 0.6/core 1.34.1 remain unpublished. User-authorized checkpoint commits/pushes use the existing core checkpoint and Schema feature branches. Earlier uncommitted implementation notices are capture-time history. Next: separately scope bounded repeated decimal children; no repetition, full schema/session acceptance, consumer adoption or release is inferred.
+
+## Bounded repeated decimal scope — 29 October 2026
+
+The reviewed optional implementation is checkpointed at core `5e277c6a` / Schema `773fd69`. The [next bounded repetition scope](schema-repeated-children/README.md) is prepared before implementation: local minimum zero/one, maximum up to sixteen and total maximum budget sixteen, ordered distinct instances sharing original declarations, narrow cardinality-error handling and ambiguous singular-export refusal. Current Schema 0.6/core 1.34.1 and tested source are unchanged. Sixteen scratch observations support scoping; 260 Schema/24,214 core and exact gate results are inherited from the reviewed source-identical candidate. Schema 0.7/v3 is a proposed future implementation only. No general API/session acceptance, merge or release.

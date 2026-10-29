@@ -143,3 +143,5 @@ The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-revie
 The unpublished [optional decimal assessment candidate](docs/schema-optional-implementation/README.md) extends the finite Schema profile while preserving original assessed state through engine copies.
 
 The [optional assessment review checkpoint](docs/schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.
+
+The next [bounded repeated-decimal scope](docs/schema-repeated-children/README.md) defines finite occurrence, assertion-cardinality and copy/projection boundaries before implementation.

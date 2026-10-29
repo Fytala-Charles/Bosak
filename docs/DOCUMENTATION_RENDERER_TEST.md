@@ -665,3 +665,7 @@ Current core/Schema canonical pages and the new implementation guide/dossier rec
 ## Optional implementation review delivery — 29 October 2026
 
 Current canonical and review pages receive a separate HTML/local-destination check and strict Schema docs check. Tested source identities are verified unchanged; earlier sealed dossier bytes are preserved. Review receipts live under `docs/schema-optional-review/evidence`. No screenshot or new full-engine test claim.
+
+## Bounded repeated decimal scope — 29 October 2026
+
+Current core/Schema canonical and new adoption/plan pages receive separate HTML/local-destination checks and the strict Schema docs checker. Source-identical qualification and sealed receipt preservation are verified; no fresh full engine/gate, screenshot or hosted-CI result is claimed. New receipts belong to `docs/schema-repeated-children/evidence`.

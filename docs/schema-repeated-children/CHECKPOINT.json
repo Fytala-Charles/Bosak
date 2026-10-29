@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "authorization": "Continue recommendations: review/checkpoint optional implementation then scope bounded repetitions",
+  "core": {
+    "base": "5e277c6a8233dc63af350c4485cc87609c132643",
+    "target": "origin/checkpoint/restart-2026-10-29",
+    "deliveryResolver": "git log -1 --format=%H -- docs/schema-repeated-children/README.md"
+  },
+  "schema": {
+    "base": "773fd69faa9ff7a5bb27f1c4f8469f3024efc043",
+    "target": "origin/feature/bounded-document-assessment",
+    "deliveryResolver": "git log -1 --format=%H -- docs/REPEATED-DECIMAL-PLAN.md",
+    "commit": "77c740ca5c86f9a98afbeacbe8949b0076da7abd",
+    "remoteVerified": true,
+    "workingTreeClean": true
+  },
+  "merge": false,
+  "tag": false,
+  "publication": false
+}

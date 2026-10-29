@@ -59,3 +59,5 @@ The [optional-child scope delivery](docs/schema-optional-children/delivery/READM
 The bounded [optional decimal implementation](docs/schema-optional-implementation/README.md) is now a locally qualified candidate (Schema 0.6/core 1.34.1). Further structural coverage, broader schema/session acceptance and product adoption remain future work.
 
 The [optional assessment implementation](docs/schema-optional-review/README.md) is reviewed for checkpoint delivery. Bounded repeated-child coverage is the next scope; general schema/session acceptance and product adoption remain future work.
+
+The next [bounded repetition slice](docs/schema-repeated-children/README.md) is specified but not implemented. Current optional support remains Schema 0.6/core 1.34.1; Schema 0.7/v3 is a future candidate target. General schema/session acceptance and product adoption remain separate.

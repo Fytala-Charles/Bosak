@@ -1,4 +1,4 @@
-Current development entry point: [Reviewed optional implementation checkpoint](schema-optional-review/README.md). The paired delivery supersedes the original uncommitted implementation capture.
+Current development entry point: [Bounded repeated decimal scope](schema-repeated-children/README.md). Optional implementation is checkpointed; repetition implementation is the next slice.
 
 Current development entry point: [Native Schema assessment checkpoint](#native-schema-assessment-checkpoint--29-october-2026). The earlier integration, Apache publication and C44 checkpoints remain historical context.
 
@@ -18533,3 +18533,11 @@ Source bases/unchanged HEADs: core `6b362a15f6fb62eebc36f82e803e35faf42cecd4`, S
 Current delivery: [reviewed optional implementation](schema-optional-review/README.md). Review found no further production defect; all changed source hashes match the qualified 24,214-core/260-Schema candidate and exact unchanged gates. Schema 0.6/core 1.34.1 remain unpublished. User-authorized checkpoint commits/pushes use the existing core checkpoint and Schema feature branches. Earlier uncommitted implementation notices are capture-time history. Next: separately scope bounded repeated decimal children; no repetition, full schema/session acceptance, consumer adoption or release is inferred.
 
 Schema optional implementation delivery: `773fd69faa9ff7a5bb27f1c4f8469f3024efc043`, remote-verified on `origin/feature/bounded-document-assessment` with a clean feature tree. Core review delivery resolver: `git log -1 --format=%H -- docs/schema-optional-review/README.md`; remote target `origin/checkpoint/restart-2026-10-29`. No merge or release.
+
+## Bounded repeated decimal scope — 29 October 2026
+
+The reviewed optional implementation is checkpointed at core `5e277c6a` / Schema `773fd69`. The [next bounded repetition scope](schema-repeated-children/README.md) is prepared before implementation: local minimum zero/one, maximum up to sixteen and total maximum budget sixteen, ordered distinct instances sharing original declarations, narrow cardinality-error handling and ambiguous singular-export refusal. Current Schema 0.6/core 1.34.1 and tested source are unchanged. Sixteen scratch observations support scoping; 260 Schema/24,214 core and exact gate results are inherited from the reviewed source-identical candidate. Schema 0.7/v3 is a proposed future implementation only. No general API/session acceptance, merge or release.
+
+What was built in this scope: exact pre-implementation normative selection, finite occurrence/aggregate budget, repeated-state and ambiguous-projection decisions, narrow known-cardinality-error policy, acceptance matrix and sixteen diagnostic observations. Existing implementation source/versions remain unchanged; owning snapshots and strict docs checks pass. Delivery resolver: `git log -1 --format=%H -- docs/schema-repeated-children/README.md`. Next: implement the bounded repeated slice; no repeated support is claimed now.
+
+Repeated-scope Schema delivery: `77c740ca5c86f9a98afbeacbe8949b0076da7abd`, remote-verified on `origin/feature/bounded-document-assessment` with a clean worktree. Its optional implementation base remains `773fd69`. Core scope delivery resolver: `git log -1 --format=%H -- docs/schema-repeated-children/README.md`; remote target `origin/checkpoint/restart-2026-10-29`. The optional implementation base is `5e277c6a`. No merge or release.

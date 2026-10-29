@@ -1,0 +1,63 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Records repeated-child refusal and sequence-valued comparison controls before implementation.
+// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
+//                      | Charles Korthout | 0.2   | 29-10-2026     | Demonstrate original whole-document annotations through XPath and XSLT                    |
+//                      | Charles Korthout | 0.3   | 29-10-2026     | Demonstrate an omitted optional particle without shifting later state (0.6)               |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+var rows = new List<object>();
+foreach (var maximum in new[]{"2","02","16","unbounded"})
+{
+    var schema=XDocument.Parse($"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'><xs:element name='order'><xs:complexType><xs:sequence><xs:element name='n' type='xs:decimal' minOccurs='0' maxOccurs='{maximum}'/></xs:sequence><xs:assert test='1 eq 1'/></xs:complexType></xs:element></xs:schema>");
+    var assessor=SchemaServices.CreateDocumentAssessor(schema);
+    var result=assessor.Assess(XDocument.Parse("<order><n>2</n><n>3</n></order>"));
+    rows.Add(new{id="current-repetition-refusal",maximum,supported=assessor.IsSupported,outcome=result.Outcome.ToString(),hasDocument=result.Document is not null});
+    if(assessor.IsSupported || result.Outcome!=SchemaAssessmentOutcome.Unsupported || result.Document is not null)throw new Exception("Unexpected current repetition admission");
+}
+foreach(var count in new[]{0,1,2})
+{
+    var root=new XElement("order");
+    for(var i=0;i<count;i++)
+    {
+        var leaf=new XElement("n",i+2);
+        XdmElementAssessment.Decimal(root,new object(),i+2).AttachTo(leaf);root.Add(leaf);
+    }
+    var context=new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(root)),1,1);
+    foreach(var expression in new[]{"n eq 2","n ne 2","n le 3","1 eq 1"})
+    {
+        try
+        {
+            var value=XPath31Expression.Compile(expression,new CompileOptions{Compatibility=XPathCompatibility.XPath20}).Evaluate(context);
+            var ebv=value.GetEffectiveBooleanValue();
+            rows.Add(new{id="comparison-cardinality",count,expression,outcome=value.Kind.ToString(),effectiveBoolean=ebv});
+            if(count==2 && expression!="1 eq 1")throw new Exception("Expected multi-item cardinality failure");
+        }
+        catch(InvalidOperationException error) when(error.Message.StartsWith("XPTY0004:",StringComparison.Ordinal))
+        {
+            if(count!=2 || expression=="1 eq 1")throw;
+            rows.Add(new{id="comparison-cardinality",count,expression,outcome="XPTY0004",exceptionType=error.GetType().FullName,message=error.Message});
+        }
+    }
+}
+File.WriteAllText(args[0],JsonSerializer.Serialize(rows,new JsonSerializerOptions{WriteIndented=true})+"\n");
+Console.WriteLine($"{rows.Count} repetition/cardinality observations recorded; no repetition implementation used.");
