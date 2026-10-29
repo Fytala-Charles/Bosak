@@ -185,3 +185,7 @@ The [bounded presence assertion candidate](docs/schema-presence-implementation/R
 [Real consumer inspector typed-boundary proof](docs/braid-typed-inspector/README.md).
 
 [Typed-inspector proof and integration review](docs/braid-typed-inspector-review/README.md).
+
+[Isolated guarded authoring-port facade proof](docs/braid-guarded-ports/README.md).
+
+[Guarded authoring-port facade review](docs/braid-guarded-ports-review/README.md).

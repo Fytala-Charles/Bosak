@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "5712f367670c2900ccb2eba6d7ecedc180b0aebc4c9b93863fed844988bc0b0f"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "5064c3b0b7b01e9d0183793f33a516a17658cfd6a40920269b1a82111d754891"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "3b36d617e122ad96516b20cafc343e5dac3c24c3db15f6520d9340a9960a460f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "7a736d37afb0a0b8d3bf292906a68a30f90ffc7bb1388fe144c2144dbed2291d"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "21c189cf1317658adf7694611949bcb58ec10e656d98f4ac7acbb724e5fac0eb"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "060278c6e6df5bcbd83d7eaa2e5a2bfa1c099456914b7c72f817b55b7e20f092"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "1458a96ec3656125b62ad106527e181b4671b0bdf487d2cf46905c1594422e4b"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "45d527c82a980ec3fd9b4252a640f6e92232b6f988cadc4bb4c858678b0a6dc7"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-count-implementation/README.md",
+      "htmlSha256": "ff732085a9c7b07cd6d451cb075a26f5b82ff3f97136a5fe5020e8b00498f046"
+    },
+    {
+      "source": "docs/schema-count-implementation/GUIDE.md",
+      "htmlSha256": "af228badf3de1cc301f1c1033641c9dfe2eee6e115ff1687ea094dae3359018e"
+    },
+    {
+      "source": "docs/schema-count-implementation/ASSESSMENT-GUIDE.md",
+      "htmlSha256": "960166cfa50af9a0814bb1c0a130372e7b793f10602c1e0a5358183171ef8a3f"
+    },
+    {
+      "source": "docs/schema-count-implementation/ADOPTION.md",
+      "htmlSha256": "88b29b8faa9f6a053815cdd1ac3fe1e1c24715566667b484fc052cb6456c89f6"
+    },
+    {
+      "source": "docs/braid-guarded-ports/README.md",
+      "htmlSha256": "3587e31eebe355c4cc836436f0f342c32acbd752a101be407c4552e810f351e4"
+    },
+    {
+      "source": "docs/braid-guarded-ports-review/README.md",
+      "htmlSha256": "235949cd24c9e488b3f1ed5411757312a3c2157bba6368b0b294a8d542aeb364"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "6fb283daa1d0b981b6969921ddcfb5440faeeffda899e7de12762cd6a7462cf4"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "5ca6ef823dda3d753ad2ab6b6d718bd541a4a6796dfa022e3be6a0fd7854510b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "a43c9f9e535363ceb361c573ed3340aabf9cd2e6a58e45570a4d56be4d8011fe"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "459014745eef68a39dc3b85883c6906f3f21048f7c13c87aa07d150f06856790"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "eba38b4ed1ab4a6f9d53b2a403de01fef2989a3321774be23b3e1a799a57903f"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "9cbacfe8ca39df2d09415c8c712d235eebe33f93212122a95da584eec71c913d"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "29aba13e66fd130532e40656bdfb0bc8b2ca829d726d97f6b063bc6112fdc7e1"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/COUNT-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "b61b98430ba2e9fd28d3b2d05e4db156d262287adadeb623b929ad8b68bac73b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-GUARDED-PORT-FACADE-PROOF.md",
+      "htmlSha256": "3587e31eebe355c4cc836436f0f342c32acbd752a101be407c4552e810f351e4"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-GUARDED-PORT-FACADE-REVIEW.md",
+      "htmlSha256": "135a45deff1ee8070f9b1b408d284bd7f9c8c4baafb24087d8a89bc268fa3e88"
+    }
+  ],
+  "localLinks": 2373,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

@@ -1,0 +1,312 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Tests session-bound exported port and target facades over the actual consumer adapter.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated runtime admission experiment                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Bosak.Braid.Application;
+using Bosak.Braid.Core;
+
+internal static class Program
+{
+    internal static readonly JsonSerializerOptions Json=new(){PropertyNameCaseInsensitive=true,WriteIndented=true};
+    internal static ISourceInspector Make(Assembly assembly,IResourceReader? reader,int limit)=>(ISourceInspector)assembly.GetType("Factory")!.GetMethod("Create",BindingFlags.Public|BindingFlags.Static)!.Invoke(null,[reader,limit])!;
+    internal const string Text="<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'><xsl:template match='/'><out><child/></out></xsl:template></xsl:stylesheet>";
+    internal static async Task<int> Main(string[] args)
+    {
+        var manifest=JsonSerializer.Deserialize<Manifest>(File.ReadAllText(args[0]),Json)!;var source=new SourceDocument(new Uri("file:///guarded/main.xsl"),Encoding.UTF8.GetBytes(Text));
+        var work=Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[1]))!,"work-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(work);
+        string Root(string name){var root=Path.Combine(work,name);Directory.CreateDirectory(root);foreach(var member in manifest.Members)File.Copy(member.Path,Path.Combine(root,member.Name+".dll"));return root;}
+        var checks=new List<object>();void Check(string name,bool pass){checks.Add(new{name,passed=pass});if(!pass)throw new InvalidOperationException(name);}
+        bool Refuses(Action operation){try{operation();return false;}catch(Admission){return true;}catch(TargetInvocationException e)when(e.InnerException is Admission){return true;}}
+        using var session=new Session(manifest,Root("primary"),args[2]);using var gate=new Gate(session);var raw=session.Create(null,64);var facade=new InspectorFacade(gate,raw);
+        var original=await raw.InspectAsync(source);var projected=await facade.InspectAsync(source);
+        Check("actual-inspection-succeeds",projected.Success&&projected.Issues.Count==0);
+        Check("retained-bytes-identical",projected.Modules.Single().Source.CopyOriginalBytes().SequenceEqual(original.Modules.Single().Source.CopyOriginalBytes()));
+        Check("projected-entry-data-identical",JsonSerializer.Serialize(projected.Modules.Single().Entries,Json)==JsonSerializer.Serialize(original.Modules.Single().Entries,Json));
+        var portProperties=typeof(SourceInspectionResult).GetProperties().Where(p=>p.PropertyType.IsInterface&&p.PropertyType.Assembly==typeof(ISourceInspector).Assembly).ToArray();
+        Check("all-nine-existing-port-properties-inventoried",portProperties.Length==9);
+        Check("unsupported-eight-ports-removed",portProperties.Where(p=>p.Name!="LiteralElementEditor").All(p=>p.GetValue(projected) is null));
+        Check("only-returned-port-is-host-facade",projected.LiteralElementEditor?.GetType().Assembly==Assembly.GetExecutingAssembly());
+        Check("no-public-result-port-has-raw-context-type",portProperties.All(p=>p.GetValue(projected) is not{} value||value.GetType().Assembly==Assembly.GetExecutingAssembly()));
+        var supports=typeof(SourceAuthoringCapabilities).GetProperties().Where(p=>p.PropertyType==typeof(bool)&&p.Name.StartsWith("Supports",StringComparison.Ordinal)).ToArray();
+        Check("all-mutation-capability-flags-disabled",supports.All(p=>(bool)p.GetValue(projected.Capabilities!)! == (p.Name=="SupportsInspection")));
+        Check("raw-engine-capabilities-not-mutated",original.Capabilities!.SupportsLiteralElementRename&&raw.Capabilities!.SupportsLiteralElementRename);
+        var entry=projected.Modules.Single().Entries.Single(e=>e.Name=="child");var port=projected.LiteralElementEditor!;
+        var issued=await port.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename);var target=issued.Target!;
+        Check("real-target-is-wrapped",issued.Failure is null&&target.GetType().Assembly==Assembly.GetExecutingAssembly());
+        Check("wrapped-target-data-matches",target.LocalName=="child"&&target.NodeId==entry.NodeId&&target.Range==entry.Range&&target.ModuleUri==source.Uri);
+        Check("target-has-no-public-raw-object-accessor",target.GetType().GetProperties(BindingFlags.Public|BindingFlags.Instance).All(p=>!typeof(ILiteralElementTarget).IsAssignableFrom(p.PropertyType)&&!typeof(ILiteralElementEditor).IsAssignableFrom(p.PropertyType)));
+        var same=await port.ProposeAsync(target,"child");Check("nochange-returns-same-wrapped-target",same.Failure is null&&same.Candidate is null&&ReferenceEquals(same.NoChangeTarget,target));
+        Check("nochange-does-not-publish-review",same.Review is null);
+        var before=gate.ForwardedCalls;
+        foreach(var operation in Enum.GetValues<LiteralElementOperation>().Where(x=>x!=LiteralElementOperation.Rename))
+        {
+            var unsupported=await port.GetTargetAsync(source.Uri,entry.NodeId,operation);Check("unsupported-operation-refused-"+operation,unsupported.Failure?.Code=="UnsupportedProfile"&&unsupported.Target is null);
+        }
+        var changed=await port.ProposeAsync(target,"changed");Check("changed-name-refused",changed.Failure?.Code=="UnsupportedProfile"&&changed.Candidate is null);
+        var nullName=await port.ProposeAsync(target,null);Check("null-name-refused",nullName.Failure?.Code=="UnsupportedProfile");
+        Check("unsupported-intents-never-forwarded",before==gate.ForwardedCalls);
+        var rawIssued=await original.LiteralElementEditor!.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename);
+        var foreignRaw=await port.ProposeAsync(rawIssued.Target!,"child");Check("raw-target-not-accepted-by-facade",foreignRaw.Failure?.Code=="ForeignTarget");
+        var anotherResult=await facade.InspectAsync(source);var anotherPort=anotherResult.LiteralElementEditor!;
+        Check("different-snapshot-port-refuses-target",(await anotherPort.ProposeAsync(target,"child")).Failure?.Code=="ForeignTarget");
+        using var otherSession=new Session(manifest,Root("other"),args[2]);using var otherGate=new Gate(otherSession);var otherFacade=new InspectorFacade(otherGate,otherSession.Create(null,64));var otherResult=await otherFacade.InspectAsync(source);
+        Check("different-session-refuses-target",(await otherResult.LiteralElementEditor!.ProposeAsync(target,"child")).Failure?.Code=="ForeignTarget");
+        using(var cancelled=new CancellationTokenSource())
+        {
+            cancelled.Cancel();var observed=false;try{await port.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename,cancelled.Token);}catch(OperationCanceledException){observed=true;}Check("pre-cancellation-propagates",observed);
+        }
+        foreach(var fault in new[]{"wrong-nochange","candidate"})
+        {
+            var faulty=original with{LiteralElementEditor=new FaultEditor(original.LiteralElementEditor!,original,source,fault)};var faultFacade=new InspectorFacade(gate,new ReturnInspector(faulty));
+            var faultProjection=await faultFacade.InspectAsync(source);var faultPort=faultProjection.LiteralElementEditor!;var faultTarget=(await faultPort.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename)).Target!;
+            var result=await faultPort.ProposeAsync(faultTarget,"child");Check("faulty-underlying-response-suppressed-"+fault,result.Failure?.Code=="InvalidResponse"&&result.Candidate is null&&result.NoChangeTarget is null);
+        }
+        var driftPort=otherResult.LiteralElementEditor!;var driftTarget=(await driftPort.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename)).Target!;
+        var beforeDrift=otherGate.ForwardedCalls;File.Copy(manifest.CandidateMembers.Single(m=>m.Name=="Bosak.Xslt").Path,Path.Combine(otherSession.Root,"Bosak.Xslt.dll"),true);
+        Check("artifact-drift-refuses-target-metadata",Refuses(()=>_ = driftTarget.LocalName));
+        var driftInspection=await otherFacade.InspectAsync(source);Check("artifact-drift-refuses-inspection",!driftInspection.Success&&driftInspection.Issues.Single().Code=="ArtifactRefused");
+        Check("artifact-drift-refuses-target-discovery",(await driftPort.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename)).Failure?.Code=="ArtifactRefused");
+        Check("artifact-drift-refuses-proposal",(await driftPort.ProposeAsync(driftTarget,"child")).Failure?.Code=="ArtifactRefused");
+        Check("artifact-drift-does-not-forward",otherGate.ForwardedCalls==beforeDrift);
+        File.Copy(manifest.Members.Single(m=>m.Name=="Bosak.Xslt").Path,Path.Combine(otherSession.Root,"Bosak.Xslt.dll"),true);
+        Check("restored-files-do-not-readmit-revoked-session",(await driftPort.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename)).Failure?.Code=="ArtifactRefused");
+        var metadata=typeof(ILiteralElementTarget).GetProperties();var forwardBeforeClose=gate.ForwardedCalls;gate.Dispose();
+        Check("underlying-session-released-when-idle",gate.Released);
+        foreach(var property in metadata)Check("closed-target-getter-refused-"+property.Name,Refuses(()=>_ = property.GetValue(target)));
+        Check("closed-inspector-capability-getter-refused",Refuses(()=>_ = facade.Capabilities));
+        var closedInspection=await facade.InspectAsync(source);Check("closed-inspector-returns-no-authority",!closedInspection.Success&&closedInspection.Issues.Single().Code=="SessionClosed"&&portProperties.All(p=>p.GetValue(closedInspection) is null));
+        Check("closed-port-target-discovery-refused",(await port.GetTargetAsync(source.Uri,entry.NodeId,LiteralElementOperation.Rename)).Failure?.Code=="SessionClosed");
+        Check("closed-port-proposal-refused",(await port.ProposeAsync(target,"child")).Failure?.Code=="SessionClosed");
+        Check("no-postclose-forwarding",forwardBeforeClose==gate.ForwardedCalls);
+        Check("historical-byte-data-remains-readable",projected.Modules.Single().Source.CopyOriginalBytes().SequenceEqual(source.CopyOriginalBytes()));
+        var rawEscape=await original.LiteralElementEditor.ProposeAsync(rawIssued.Target!,"child");Check("raw-control-still-reproduces-old-gap",ReferenceEquals(rawEscape.NoChangeTarget,rawIssued.Target));
+        using var pendingSession=new Session(manifest,Root("pending-close"),args[2]);using var pendingGate=new Gate(pendingSession);var block=new BlockingReader();var pendingFacade=new InspectorFacade(pendingGate,pendingSession.Create(block,64));
+        var included=new SourceDocument(source.Uri,Encoding.UTF8.GetBytes(Text.Replace("<xsl:template","<xsl:include href='module.xsl'/><xsl:template",StringComparison.Ordinal)));
+        var pending=pendingFacade.InspectAsync(included);await block.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));pendingGate.Dispose();
+        Check("inflight-close-defers-underlying-release",!pendingGate.Released);
+        var refusedNew=await pendingFacade.InspectAsync(source);Check("closing-refuses-new-work",!refusedNew.Success&&refusedNew.Issues.Single().Code=="SessionClosed");
+        block.Continue.SetResult();var afterClose=await pending.WaitAsync(TimeSpan.FromSeconds(10));Check("inflight-result-does-not-publish-raw-ports",!afterClose.Success&&afterClose.Issues.Single().Code=="SessionClosed"&&portProperties.All(p=>p.GetValue(afterClose) is null));
+        Check("release-after-inflight-completion",pendingGate.Released);
+        Check("no-default-engine-or-adapter-fallback",!AssemblyLoadContext.Default.Assemblies.Any(a=>Session.Required.Contains(a.GetName().Name!)));
+        File.WriteAllText(args[1],JsonSerializer.Serialize(new{checks,underlyingRuntimeLedger=session.Loaded,portProperties=portProperties.Select(p=>p.Name),targetProperties=metadata.Select(p=>p.Name),primaryForwardedCalls=gate.ForwardedCalls,rawControlStillCallable=true,facadeNoChangeOnly=true,actualBraidProductionModified=false,allReturnedPortsGuardedOrRemoved=true,controlledInflightCloseQualified=true,arbitraryConcurrencyQualified=false},Json));
+        Console.WriteLine($"{checks.Count} guarded-facade controls passed; no raw result ports/targets returned; controlled in-flight close refused publication.");return 0;
+    }
+}
+internal sealed class ReturnInspector(SourceInspectionResult result):ISourceInspector
+{
+    /// <inheritdoc />
+    public SourceAuthoringCapabilities? Capabilities=>result.Capabilities;
+    /// <inheritdoc />
+    public Task<SourceInspectionResult> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default)=>Task.FromResult(result);
+}
+internal sealed class FaultEditor(ILiteralElementEditor raw,SourceInspectionResult inspection,SourceDocument source,string fault):ILiteralElementEditor
+{
+    /// <inheritdoc />
+    public Task<LiteralElementTargetResult> GetTargetAsync(Uri uri,int id,LiteralElementOperation operation,CancellationToken cancellationToken=default)=>raw.GetTargetAsync(uri,id,operation,cancellationToken);
+    /// <inheritdoc />
+    public Task<LiteralElementResult> ProposeAsync(ILiteralElementTarget target,string? name,CancellationToken cancellationToken=default)=>Task.FromResult(fault=="wrong-nochange"?new LiteralElementResult(null,null,null):new(new(LiteralElementOperation.Rename,"diagnostic-fault",source,inspection,target.NodeId,target.NodeId,new Dictionary<int,int>(),[],[],[],[]),null,null));
+}
+internal sealed class BlockingReader:IResourceReader
+{
+    internal TaskCompletionSource Entered{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);internal TaskCompletionSource Continue{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);
+    /// <inheritdoc />
+    public async Task<SourceDocument> ReadAsync(Uri resolvedUri,CancellationToken cancellationToken=default)
+    {
+        Entered.SetResult();await Continue.Task.WaitAsync(cancellationToken);return new SourceDocument(resolvedUri,Encoding.UTF8.GetBytes("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'/>"));
+    }
+}
+internal sealed class Admission(string code):InvalidOperationException(code){internal string Code{get;}=code;}
+internal sealed class Gate(Session session):IDisposable
+{
+    private readonly object sync=new();private bool closing;private int active;private bool released;
+    internal int ForwardedCalls{get;private set;}internal int Rejected{get;private set;}
+    internal bool Released{get{lock(sync)return released;}}
+    internal IDisposable Enter(CancellationToken token=default)
+    {
+        token.ThrowIfCancellationRequested();lock(sync){Demand();active++;return new Lease(this);}
+    }
+    private void Demand()
+    {
+        if(closing){Rejected++;throw new Admission("SessionClosed");}
+        try{session.Demand();}catch(InvalidOperationException){Rejected++;throw new Admission("ArtifactRefused");}
+    }
+    internal void Publish(){lock(sync)Demand();}
+    internal void Forward(){lock(sync){Demand();ForwardedCalls++;}}
+    internal T Read<T>(Func<T> read){using var lease=Enter();var value=read();Publish();return value;}
+    private void End(){lock(sync){active--;if(closing&&active==0&&!released){session.Dispose();released=true;}}}
+    /// <summary>Closes future admission and delays underlying unload until in-flight calls finish.</summary>
+    public void Dispose(){lock(sync){closing=true;if(active==0&&!released){session.Dispose();released=true;}}}
+    private sealed class Lease(Gate owner):IDisposable
+    {
+        private bool done;
+        /// <inheritdoc />
+        public void Dispose(){if(!done){done=true;owner.End();}}
+    }
+}
+internal sealed class InspectorFacade(Gate gate,ISourceInspector raw):ISourceInspector
+{
+    /// <inheritdoc />
+    public SourceAuthoringCapabilities? Capabilities=>gate.Read(()=>Narrow(raw.Capabilities));
+    private static SourceAuthoringCapabilities? Narrow(SourceAuthoringCapabilities? original)=>original is null?null:new()
+    {
+        EngineAssemblyName=original.EngineAssemblyName,EngineVersion=original.EngineVersion,SupportsInspection=true,
+        ModuleLimit=original.ModuleLimit,ModuleByteLimit=original.ModuleByteLimit,TotalByteLimit=original.TotalByteLimit,EngineDefaultModuleLimit=original.EngineDefaultModuleLimit,
+        VersionPolicy=original.VersionPolicy,SupportedEncodings=Array.AsReadOnly(original.SupportedEncodings.ToArray()),FidelityModes=Array.AsReadOnly(original.FidelityModes.ToArray()),
+        DocumentedLimits=Array.AsReadOnly(original.DocumentedLimits.Append("Diagnostic profile: inspection, rename target and exact same-name NoChange only; no changed candidate or Apply.").ToArray())
+    };
+    /// <inheritdoc />
+    public async Task<SourceInspectionResult> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);gate.Forward();var result=await raw.InspectAsync(source,cancellationToken);gate.Publish();
+            return result with{Capabilities=Narrow(result.Capabilities),ExpressionEditor=null,ValueOfInserter=null,ValueOfDeleter=null,TextDeleter=null,TextInserter=null,LiteralElementInserter=null,TextBodyReplacer=null,LiteralAttributeEditor=null,
+                LiteralElementEditor=result.LiteralElementEditor is null?null:new ElementFacade(gate,result.LiteralElementEditor)};
+        }
+        catch(Admission refusal){return new(false,[],[new InspectionIssue(refusal.Code,source.Uri,"Diagnostic session admission refused.")]);}
+    }
+}
+internal sealed class ElementFacade(Gate gate,ILiteralElementEditor raw):ILiteralElementEditor
+{
+    /// <inheritdoc />
+    public async Task<LiteralElementTargetResult> GetTargetAsync(Uri moduleUri,int nodeId,LiteralElementOperation operation,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);if(operation!=LiteralElementOperation.Rename)return new(null,new("UnsupportedProfile","Only read-only rename target discovery is admitted."));
+            gate.Forward();var result=await raw.GetTargetAsync(moduleUri,nodeId,operation,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,result.Failure);
+            if(result.Target is null||result.Target.Operation!=operation||result.Target.ModuleUri!=moduleUri||result.Target.NodeId!=nodeId)return new(null,new("InvalidResponse","Raw target did not match requested authority."));
+            return new(new Target(this,gate,result.Target),null);
+        }
+        catch(Admission refusal){return new(null,new(refusal.Code,"Diagnostic session admission refused."));}
+    }
+    /// <inheritdoc />
+    public async Task<LiteralElementResult> ProposeAsync(ILiteralElementTarget target,string? name,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);
+            if(target is not Target owned||!ReferenceEquals(owned.Owner,this))return Failure("ForeignTarget");
+            if(name!=owned.Raw.LocalName)return Failure("UnsupportedProfile");
+            gate.Forward();var result=await raw.ProposeAsync(owned.Raw,name,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,null,result.Failure);
+            if(result.Candidate is not null||!ReferenceEquals(result.NoChangeTarget,owned.Raw)||result.Review is not null)return Failure("InvalidResponse");
+            return new(null,owned,null);
+        }
+        catch(Admission refusal){return Failure(refusal.Code);}
+    }
+    private static LiteralElementResult Failure(string code)=>new(null,null,new(code,"Diagnostic NoChange-only port refused this operation."));
+    private sealed class Target:ILiteralElementTarget
+    {
+        internal ElementFacade Owner{get;}internal ILiteralElementTarget Raw{get;}private readonly Gate gate;
+        internal Target(ElementFacade owner,Gate admission,ILiteralElementTarget raw){Owner=owner;Raw=raw;gate=admission;}
+        /// <inheritdoc />
+        public LiteralElementOperation Operation=>gate.Read(()=>Raw.Operation);
+        /// <inheritdoc />
+        public LiteralElementMoveContext? MoveContext=>gate.Read(()=>Raw.MoveContext);
+        /// <inheritdoc />
+        public int? ConditionalParentId=>gate.Read(()=>Raw.ConditionalParentId);
+        /// <inheritdoc />
+        public Uri ModuleUri=>gate.Read(()=>Raw.ModuleUri);
+        /// <inheritdoc />
+        public int NodeId=>gate.Read(()=>Raw.NodeId);
+        /// <inheritdoc />
+        public InspectionRange Range=>gate.Read(()=>Raw.Range);
+        /// <inheritdoc />
+        public string LocalName=>gate.Read(()=>Raw.LocalName);
+    }
+}
+internal sealed record Member(string Name,string Identity,string Sha256,string Path,bool Readable);
+internal sealed record Contract(string Name,string Path,string Sha256);
+internal sealed record Manifest(string Revision,Member[] Members,Contract[] Contracts,Member[] CandidateMembers);
+internal sealed record Loaded(string Name,string Identity,string SnapshotSha256,string Mvid,string SourcePath,string Location);
+internal sealed record Request(int Version,string RequestId,string Identity,string Profile,string Fault);
+internal sealed record Response(int Version,string RequestId,string Identity,string Profile,bool Accepted,string Result,Loaded[] Loaded,int ProcessId,string Error);
+internal sealed record WorkerRun(int ExitCode,int TimeoutSeconds,Response Response,string StandardError);
+internal sealed class Session:IDisposable
+{
+    internal static readonly string[] Required=["Bosak.XPath.Core","Bosak.XPath.Parser","Bosak.XPath.Compiler","Bosak.XPath.Runtime","Bosak.XPath.Standard","Bosak.XPath.Providers","Bosak.XPath.Api","Bosak.XQuery","Bosak.Xslt","Bosak.Braid.Infrastructure"];
+    private readonly Manifest manifest;private readonly Dictionary<string,byte[]> snapshots=new(StringComparer.Ordinal);private readonly GuardedContext context;private readonly byte[] plugin;private bool revoked;private bool closed;
+    internal IReadOnlyList<Assembly> Shared{get;}=[typeof(ISourceInspector).Assembly,typeof(SourceDocument).Assembly];
+    internal string Root{get;}internal string Identity{get;}internal List<Loaded> Loaded{get;}=[];
+    internal Session(Manifest approved,string root,string operationPlugin)
+    {
+        manifest=approved;Root=Path.GetFullPath(root);Identity=Digest(approved);plugin=File.ReadAllBytes(operationPlugin);
+        if(manifest.Contracts.Length!=2 || !manifest.Contracts.Select(c=>c.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Shared.Select(a=>a.GetName().Name!)))throw new InvalidOperationException("Invalid shared contract approval");
+        foreach(var shared in Shared)
+        {
+            var expected=manifest.Contracts.Single(c=>c.Name==shared.GetName().Name);
+            if(Hash(File.ReadAllBytes(shared.Location))!=expected.Sha256 || File.Exists(Path.Combine(Root,expected.Name+".dll")))throw new InvalidOperationException("Shared contract mismatch/duplicate");
+        }
+        foreach(var member in manifest.Members)
+        {
+            var file=Path.Combine(Root,member.Name+".dll");if((File.GetAttributes(file)&FileAttributes.ReparsePoint)!=0)throw new InvalidOperationException("Unsupported artifact link");
+            var bytes=File.ReadAllBytes(file);if(Hash(bytes)!=member.Sha256||Metadata(bytes).Identity!=member.Identity)throw new InvalidOperationException("Artifact mismatch: "+member.Name);snapshots.Add(member.Name,bytes);
+        }
+        context=new GuardedContext(this);
+    }
+    internal ISourceInspector Create(IResourceReader? reader,int limit)
+    {
+        Demand();var assembly=context.Assemblies.SingleOrDefault(x=>x.GetName().Name=="InspectorFactory")??context.LoadFromStream(new MemoryStream(plugin,false));
+        return Program.Make(assembly,reader,limit);
+    }
+    internal void Demand()
+    {
+        if(closed)throw new InvalidOperationException("Session closed");
+        if(revoked)throw new InvalidOperationException("Session revoked");
+        try{foreach(var member in manifest.Members)if(Hash(File.ReadAllBytes(Path.Combine(Root,member.Name+".dll")))!=member.Sha256)throw new InvalidOperationException("Runtime artifact drift: "+member.Name);}
+        catch(Exception error){revoked=true;throw new InvalidOperationException("Runtime admission refused",error);}
+    }
+    internal static string Digest(Manifest manifest)
+    {
+        if(manifest.Members.Length!=10||!manifest.Members.Select(m=>m.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Required)||manifest.Revision.Length!=40||!manifest.Revision.All(Uri.IsHexDigit))throw new InvalidOperationException("Invalid approval manifest");
+        return "experiment-runtime-v1:"+manifest.Revision+":"+Hash(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(manifest.Members.OrderBy(m=>m.Name,StringComparer.Ordinal).Select(m=>new{m.Name,m.Identity,m.Sha256}))));
+    }
+    internal static string Hash(byte[] bytes)=>Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+    private static (string Identity,string Mvid) Metadata(byte[] bytes)
+    {
+        using var pe=new PEReader(new MemoryStream(bytes,false));var reader=pe.GetMetadataReader();var definition=reader.GetAssemblyDefinition();
+        var name=new AssemblyName{ Name=reader.GetString(definition.Name),Version=definition.Version,CultureName=definition.Culture.IsNil?"":reader.GetString(definition.Culture)};
+        if(!definition.PublicKey.IsNil)name.SetPublicKey(reader.GetBlobBytes(definition.PublicKey));else name.SetPublicKeyToken([]);
+        return(name.FullName,reader.GetGuid(reader.GetModuleDefinition().Mvid).ToString());
+    }
+    /// <summary>Requests unload of this isolated context; actual garbage collection is not certified.</summary>
+    public void Dispose(){if(!closed){closed=true;context.Unload();}}
+    private sealed class GuardedContext(Session owner):AssemblyLoadContext(isCollectible:true)
+    {
+        /// <inheritdoc />
+        protected override Assembly? Load(AssemblyName requested)
+        {
+            var shared=owner.Shared.SingleOrDefault(a=>a.GetName().Name==requested.Name);
+            if(shared is not null){if(shared.FullName!=requested.FullName)throw new InvalidOperationException("Shared reference identity mismatch");return shared;}
+            if(!owner.snapshots.TryGetValue(requested.Name!,out var bytes))
+            {if(requested.Name!.StartsWith("Bosak.",StringComparison.Ordinal))throw new InvalidOperationException("Unapproved engine assembly");return null;}
+            var member=owner.manifest.Members.Single(x=>x.Name==requested.Name);var expected=new AssemblyName(member.Identity);
+            if(requested.Version>expected.Version||!requested.GetPublicKeyToken().AsSpan().SequenceEqual(expected.GetPublicKeyToken()))throw new InvalidOperationException("Unapproved assembly reference");
+            var assembly=LoadFromStream(new MemoryStream(bytes,false));var metadata=Metadata(bytes);
+            if(assembly.FullName!=metadata.Identity||assembly.ManifestModule.ModuleVersionId.ToString()!=metadata.Mvid)throw new InvalidOperationException("Loaded snapshot identity mismatch");
+            owner.Loaded.Add(new(requested.Name!,assembly.FullName!,Hash(bytes),metadata.Mvid,Path.Combine(owner.Root,requested.Name+".dll"),assembly.Location));return assembly;
+        }
+    }
+}
