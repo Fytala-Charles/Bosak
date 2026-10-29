@@ -32,6 +32,12 @@ Schema is now open source; the earlier proprietary-provider boundary no longer d
 
 Full XSD 1.1 structural validation, complete real component/provider coverage, engine atomization/copy integration and actual consumer source/ABI acceptance remain pending. The proposed API is unaccepted. REQ-139 remains pending; REQ-126 retains its bounded completion and all 48 historical observations.
 
+The first [real open Schema integration](schema-integration/README.md) now provides an XSD 1.0 validation/typed-transformation example and a separate optional CI job. Fresh qualification passes 24,203 core tests, 122 source-integration cases (114 existing plus eight new), 114 unchanged Schema binary-replacement cases and both exact conformance gates, including unchanged skip identities/reasons. Braid passes 1,872 unchanged cases plus four separately rerun cases with its expected engine identity updated only in an isolated copy. These are bounded observations, not full XSD 1.1/session interoperability or consumer adoption; see the results receipt for the complete consumer disposition. The recorded qualification table above remains its earlier checkpoint.
+
+A local unsigned preview combines the existing nine core candidate packages with Schema `0.4.0-alpha.1` using isolated dependency-pin overrides. Its package-only typed transformation and all ten package/output identities verify. This local preparation does not publish a release, change the public source pins or adopt an API.
+
+XmlDb's corrected candidate route passes all 27 adapter source tests. All 593 unchanged integration binary cases have passing evidence across the initial run and explicit layout/timeout reruns; this is not one uninterrupted pass. The independent storage baseline was cancelled after 1,258 observed passes and is not certified as complete. Exact routing, package/output identities and original failures are retained in the qualification dossier.
+
 Use `D:/Development/Bosak.Schema.Public` for active public Schema source. `D:/Development/Bosak.Licensing` contains private infrastructure; the original locked `D:/Development/Bosak.Schema` directory also points to that private repository. This local migration detail belongs here and in the handover, not in the user quick start.
 
 ## Authoring, tooling and newer profiles

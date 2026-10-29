@@ -4154,3 +4154,16 @@ When imported schema definitions fail compilation, the public XQuery resolver pa
 ## Reader and engineering documentation
 
 The [README](../README.md) contains the concise introduction and quick start; the [roadmap](../ROADMAP.md) covers current direction and Apache Schema licensing. [Implementation status](IMPLEMENTATION_STATUS.md) separates source candidates, qualification and open integration boundaries. Dated checkpoints and the earlier roadmap are retained in [development history](DEVELOPMENT_HISTORY.md); original evidence dossiers remain authoritative for individual receipts.
+
+## Optional open Schema example
+
+The [runnable price example](../integrations/Schema/README.md) compiles the pinned public Apache Schema source against this checkout, imports an in-memory XSD 1.0 schema, validates a copy and transforms its schema-derived decimal value. It retains the caller's unannotated XML and refuses unbundled schema resolution. Invalid content fails structural validation.
+
+After preparing the public Schema checkout as described in the example guide:
+
+```sh
+dotnet run --project integrations/Schema/Example/Bosak.Schema.Example.csproj -c Release
+dotnet test integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj -c Release
+```
+
+This optional harness does not change normal core dependencies or published package pins. The XSD 1.1 assertion checks are separate from full document assessment; they do not provide a typed-document handoff. [Qualification and API decision](schema-integration/README.md).

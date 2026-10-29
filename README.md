@@ -104,6 +104,8 @@ Version 1.26.3 is the [verified published baseline](docs/RELEASE-1.26.3-PUBLICAT
 
 Schema's public source has its own version and compatibility lifecycle; the Apache transition did not publish a new Schema NuGet package. See its [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md) and the [ecosystem overview](docs/ECOSYSTEM.md).
 
+Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
+
 ## Work in VS Code
 
 Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) for diagnostics, completion, navigation and evaluate/run commands. See the [extension guide](vscode-bosak/README.md) for its bundled-engine release cycle.

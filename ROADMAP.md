@@ -18,7 +18,7 @@ Last updated: **29 October 2026**. This roadmap replaces the old beta/paired-com
 
 ## Next priorities
 
-1. **Integrate the open schema foundation.** Reassess the smallest useful core/session API now that Schema is Apache-2.0. Preserve the modular dependency direction, original PSVI, component authority and resource/lifetime boundaries. Production API acceptance remains pending.
+1. **Integrate the open schema foundation.** The first [runnable integration](integrations/Schema/README.md) uses existing APIs for XSD 1.0 validation and typed transformation. Next, establish an assessed-document result for staged XSD 1.1 without overstating structural validation. Preserve modular dependencies, original PSVI, component authority and resource/lifetime boundaries. Production session-API acceptance remains pending.
 2. **Qualify real providers and consumers.** Build and test the actual Schema, XmlDb and Braid integrations, including compatible-schema handoff, lazy results and unchanged-consumer ABI checks, before freezing or releasing the new integration.
 3. **Complete staged XSD 1.1 coverage.** Implement or explicitly refuse remaining structural/assessment features; publish precise support profiles rather than broad conformance claims.
 4. **Reconcile 4.0 draft behavior.** Triage the recorded JNode, record, map and comparison gaps against immutable adopted specification revisions. Keep each semantic change and conformance admission separately reviewed.

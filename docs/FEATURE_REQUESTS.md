@@ -2251,6 +2251,8 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 Requester: **Bosak.Schema**. Registered: **2026-10-27**. Status: **Pending**. Target: **TBD**. Owner: **Unassigned**.
 
+**29 October 2026 integration update:** The [open Schema example and qualification](schema-integration/README.md) exercise real Schema source with current core using existing XSD 1.0 APIs, plus separate staged XSD 1.1 assertion checks. No new typing callback/session contract is accepted; REQ-139 remains pending. The original licensing-dependent proposal below is historical: Schema is now Apache-2.0 and activation-free. A genuine assessed-document result and complete claimed structural coverage must precede XSD 1.1 consumer acceptance.
+
 #### Problem Statement
 
 Bosak.Schema (REQ-009, staged W3C XML Schema 1.1) has shipped add-side: an immutable compiled XSD 1.1 model, secure resolution, `xs:assert` validation, `xs:assertion` facets, and (S5a/S5b) open content and default attributes compile support. Its S0 source audit confirmed the blocker on this side: **every schema-bearing core API — `XsltCompiler.SchemaSet`, `EvaluationContext.SchemaSet`/`GetSchema*`, `XdmSchemaAnnotator`, `IXsdValidator` — is typed against `System.Xml.Schema.XmlSchemaSet`, which is XSD 1.0 only**. The 30 harness-confirmed W3C XSD 1.1 conformance skips (core REQ-112 posture; 18× stream/non-stream-101…109, 6× merge-049…054, accumulator-073, si-apply-templates-007/012, catalog-005/009, strip-space-009) close only via engine integration: `xs:alternative` types elements during the engine's own assessment, and no amount of add-side document validation removes the skips.

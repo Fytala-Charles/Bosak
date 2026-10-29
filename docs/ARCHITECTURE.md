@@ -2042,3 +2042,9 @@ The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-
 ### Conformance schema ownership diagnostics (candidate 1.26.6)
 
 The QT3 host may explicitly select guarded query-owned schema initialization for bounded diagnostics. XQuery supplies main-module import metadata internally to the conformance assembly; the public API stays unchanged. Explicit schema profiles, validated sources, modules, environment expressions and incomplete namespace/file mappings retain eager preparation. Normal runners keep the default eager path. [Design and verification](conformance/k02-schema-loader/README.md).
+
+## Open Schema development integration
+
+The optional [Schema harness](../integrations/Schema/README.md) preserves dependency direction: a non-packable source wrapper compiles pinned public Schema files and references the core projects; core projects reference no Schema assembly. The example uses existing schema-aware XSLT compilation, strict XSD 1.0 copy validation and typed atomization. Its resolver serves one bundled schema and never falls back to URI acquisition. The normal solution and default execution path are unchanged.
+
+Staged XSD 1.1 assertion validation remains distinct from structural assessment and exported PSVI. The [API decision](schema-integration/README.md#api-decision) postpones the larger session contract until a real, bounded assessed-document result exists. No node interface, value layout, public core API, profile or package-version change is introduced.

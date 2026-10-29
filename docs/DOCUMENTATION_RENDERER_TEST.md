@@ -633,3 +633,7 @@ Eleven repair/canonical/catalog pages render with markdown-it and unchanged Fyta
 ## Experimental substring correction - 24 October 2026
 
 Nine contract/canonical/catalog pages render with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-substring-contract-render`. Owner policy,38 API/two host controls, raw native receipt hashes, explicit current-frozen failure, JSON/links, header histories and16-field entry checked. Original native output and separators preserved by `.gitattributes`. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
+
+## Open Schema integration documentation — 29 October 2026
+
+The reader-document validator was extended to render six additional pages covering the optional integration guide, scope, qualification, reference correction, next slice and evidence guide alongside the existing reader pages. Local Markdown destinations and anchors are checked, complete historical README/roadmap snapshots and the FYTALA statement remain intact, and 141 sealed earlier review/prototype artifacts retain their identities. This is HTML/render-structure verification, not a screenshot or hosted-CI claim. Current receipts are in `docs/schema-integration/evidence` and ignored render output under `.guard-tmp/reader-docs-cleanup/render`.

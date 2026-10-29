@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup>
+    <_CandidateBosakPackage Include="Bosak.XPath.Core" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.Xdm'" />
+    <_CandidateBosakPackage Include="Bosak.XPath.Api;Bosak.XPath.Providers" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.Xdm.Tests'" />
+    <_CandidateBosakPackage Include="Bosak.XPath.Api" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.IntegrationTests' or '$(MSBuildProjectName)' == 'EmbeddedQuickstart'" />
+    <PackageReference Remove="@(_CandidateBosakPackage)" />
+    <ProjectReference Include="@(_CandidateBosakPackage->'D:/Development/Bosak/src/%(Identity)/%(Identity).csproj')" />
+  </ItemGroup>
+</Project>
