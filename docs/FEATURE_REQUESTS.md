@@ -6344,3 +6344,7 @@ Final repeated-candidate qualification: **334 complete Schema cases pass**, incl
 ## Repetition implementation review checkpoint — 29 October 2026
 
 Current delivery: [reviewed Schema 0.7 repetition implementation](schema-repetition-review/README.md), core 1.34.1 unchanged. No additional defect was found; tested source hashes and original qualification match. User-authorized commits/pushes checkpoint this source before a separate fn:count assertion scope. Earlier uncommitted implementation notices describe capture time. Full schema/session/API acceptance, consumer adoption, merge and release remain pending.
+
+## Count assertion scope — 29 October 2026
+
+The [fn:count adoption and plan](schema-count-assertions/README.md) prepare the next bounded assertion operand: unprefixed count(DeclaredChildName), without broader grammar, aliases/prefixed calls or altered native validation. Bare count child names are preserved. Twelve diagnostic observations support scoping; native count assertions remain unimplemented. Current reviewed source is Schema 0.7/core 1.34.1; proposed Schema 0.8/v4 is future implementation. Core/Schema qualification is inherited from unchanged reviewed source, not new full runs. Earlier sealed repetition evidence remains unchanged; no general API/session acceptance, merge or release.

@@ -1,0 +1,63 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Records count assertion refusal, scalar semantics and native validation-order controls.
+// SPECIAL NOTES        : Pre-implementation count assertion diagnostics; no production grammar change.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+static XDocument Schema(string assertion,string name="amount") => XDocument.Parse($"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'><xs:element name='order'><xs:complexType><xs:sequence><xs:element name='{name}' type='xs:decimal' minOccurs='0' maxOccurs='16'/></xs:sequence><xs:assert test='{assertion}'/></xs:complexType></xs:element></xs:schema>");
+static XdmValue Query(XElement root,string expression) => XPath31Expression.Compile(expression,new CompileOptions{Compatibility=XPathCompatibility.XPath20}).Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(root)),1,1));
+var rows=new List<object>();
+foreach(var expression in new[]{"count(amount) eq 2","count ( amount ) eq 2","count(amount) eq count(amount)","fn:count(amount) eq 2","sum(amount) gt 0"})
+{
+    var assessor=SchemaServices.CreateDocumentAssessor(Schema(expression));
+    var result=assessor.Assess(XDocument.Parse("<order><amount>2</amount><amount>2</amount></order>"));
+    rows.Add(new{id="current-schema-refusal",expression,supported=assessor.IsSupported,outcome=result.Outcome.ToString(),hasDocument=result.Document is not null});
+    if(assessor.IsSupported || result.Outcome!=SchemaAssessmentOutcome.Unsupported || result.Document is not null)throw new Exception("Unexpected assertion admission");
+}
+var native=SchemaServices.CreateDocumentAssessor(Schema("1 eq 1"));
+foreach(var expected in new[]{0,1,2,16})
+{
+    var input=new XDocument(new XElement("order",new XComment("root comment"),new XProcessingInstruction("scope","count"),new XText("  "),Enumerable.Range(0,expected).Select(_=>new XElement("amount",2))));
+    var assessment=native.Assess(input);
+    if(assessment.Outcome!=SchemaAssessmentOutcome.Valid)throw new Exception("Native baseline invalid");
+    var root=assessment.Document!.CreateDocumentCopy(true).Root!;
+    var count=Query(root,"count(amount)");
+    var prefixed=Query(root,"fn:count(amount)");
+    var equal=Query(root,$"count(amount) eq {expected}");
+    rows.Add(new{id="actual-engine-count",expected,count=count.IntegerValue,kind=count.Kind.ToString(),schemaType=count.SchemaTypeName,comparison=equal.BooleanValue,prefixedHostCount=prefixed.IntegerValue,rootHasNoTypedValue=new XDocumentNode(root).HasNoTypedValue});
+    if(count.IntegerValue!=expected || prefixed.IntegerValue!=expected || !equal.BooleanValue)throw new Exception("Count mismatch");
+}
+var collision=SchemaServices.CreateDocumentAssessor(Schema("count eq 2","count"));
+var validCollision=collision.Assess(XDocument.Parse("<order><count>2</count></order>"));
+if(validCollision.Outcome!=SchemaAssessmentOutcome.Valid)throw new Exception("Bare count child changed");
+rows.Add(new{id="bare-count-child",supported=collision.IsSupported,outcome=validCollision.Outcome.ToString(),hostFunctionCount=Query(validCollision.Document!.CreateDocumentCopy(true).Root!,"count(count)").IntegerValue});
+foreach(var (lexical,expected) in new[]{("bad",SchemaAssessmentOutcome.Invalid),("79228162514264337593543950336",SchemaAssessmentOutcome.Unsupported)})
+{
+    var input=XDocument.Parse($"<order><amount>2</amount><amount>{lexical}</amount></order>");
+    var hostCount=Query(input.Root!,"count(amount)").IntegerValue;
+    var result=native.Assess(input);
+    rows.Add(new{id="native-validation-before-count",lexical,hostCount,outcome=result.Outcome.ToString(),hasDocument=result.Document is not null});
+    if(hostCount!=2 || result.Outcome!=expected || result.Document is not null)throw new Exception("Validation order mismatch");
+}
+File.WriteAllText(args[0],JsonSerializer.Serialize(rows,new JsonSerializerOptions{WriteIndented=true})+"\n");
+Console.WriteLine($"{rows.Count} count/grammar/validation-order observations recorded; schema count admission remains unimplemented.");

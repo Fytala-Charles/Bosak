@@ -677,3 +677,7 @@ Current canonical and owning repetition/assessment guide pages receive HTML/loca
 ## Repetition review checkpoint — 29 October 2026
 
 Current core/Schema canonical and review pages receive separate HTML/local-link and strict Schema documentation checks. Tested-source and original sealed evidence hashes are verified. New receipts are in `docs/schema-repetition-review/evidence`; no screenshot or fresh full-core/gate claim.
+
+## Count assertion scope — 29 October 2026
+
+Current canonical, owning adoption/plan and core snapshots receive separate HTML/local-link and strict Schema docs checks. Normative source representation hashes, reviewed code identity and previous sealed dossier preservation are verified. New receipts live in `docs/schema-count-assertions/evidence`; no fresh full-engine/gate, screenshot or hosted-CI result is claimed.

@@ -147,3 +147,5 @@ The [optional assessment review checkpoint](docs/schema-optional-review/README.m
 The unpublished [bounded repeated-decimal candidate](docs/schema-repeated-implementation/README.md) supports finite repetitions with original occurrence state and explicit cardinality/projection behavior.
 
 The [bounded repetition review checkpoint](docs/schema-repetition-review/README.md) records current implementation review and paired delivery identity.
+
+The next [count assertion scope](docs/schema-count-assertions/README.md) defines a finite cardinality-function grammar extension while preserving native validation and existing child-name semantics.
