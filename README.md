@@ -106,6 +106,8 @@ Schema's public source has its own version and compatibility lifecycle; the Apac
 
 Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
 
+An unpublished [native XSD 1.1 assessment candidate](docs/schema-assessment/README.md) adds a bounded structurally checked document result and typed decimal exports.
+
 ## Work in VS Code
 
 Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) for diagnostics, completion, navigation and evaluate/run commands. See the [extension guide](vscode-bosak/README.md) for its bundled-engine release cycle.
@@ -133,3 +135,7 @@ See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XS
 ## Support and contribute
 
 Use [Discussions](https://github.com/Fytala-Charles/Bosak/discussions) for questions and [Issues](https://github.com/Fytala-Charles/Bosak/issues) for bugs. [Commercial support](COMMERCIAL.md) and [GitHub Sponsors](https://github.com/sponsors/Fytala-Charles) support development; schema access and conformance fixes are not paywalled.
+
+The unpublished [native whole-document assessment candidate](docs/schema-document-bridge/README.md) documents the optional Schema/provider integration and local source-build commands.
+
+The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.

@@ -18,7 +18,7 @@ Last updated: **29 October 2026**. This roadmap replaces the old beta/paired-com
 
 ## Next priorities
 
-1. **Integrate the open schema foundation.** The first [runnable integration](integrations/Schema/README.md) uses existing APIs for XSD 1.0 validation and typed transformation. Next, establish an assessed-document result for staged XSD 1.1 without overstating structural validation. Preserve modular dependencies, original PSVI, component authority and resource/lifetime boundaries. Production session-API acceptance remains pending.
+1. **Integrate the open schema foundation.** The [XSD 1.0 example](integrations/Schema/README.md) and [native bounded XSD 1.1 assessment candidate](docs/schema-assessment/README.md) now provide real typed-value paths. Next, qualify the smallest whole-document/anonymous-root bridge while retaining original component state and explicit unsupported coverage. Production session-API acceptance remains pending.
 2. **Qualify real providers and consumers.** Build and test the actual Schema, XmlDb and Braid integrations, including compatible-schema handoff, lazy results and unchanged-consumer ABI checks, before freezing or releasing the new integration.
 3. **Complete staged XSD 1.1 coverage.** Implement or explicitly refuse remaining structural/assessment features; publish precise support profiles rather than broad conformance claims.
 4. **Reconcile 4.0 draft behavior.** Triage the recorded JNode, record, map and comparison gaps against immutable adopted specification revisions. Keep each semantic change and conformance admission separately reviewed.
@@ -45,3 +45,7 @@ Commercial support and consulting can fund development without restricting acces
 Changes follow [Semantic Versioning](https://semver.org/) and documented adoption/migration decisions. Extended-year construction does not imply every date operation supports that range; .NET decimal precision and external HTTP behavior also impose documented limits. See [implementation status](docs/IMPLEMENTATION_STATUS.md) and [integration](docs/INTEGRATION.md) for technical details.
 
 Historical launch, release, test and pricing statements remain preserved as dated evidence in [development history](docs/DEVELOPMENT_HISTORY.md), not as current roadmap gates.
+
+The bounded [whole-document assessment bridge candidate](docs/schema-document-bridge/README.md) is under local qualification; broader schema coverage and consumer acceptance remain future work.
+
+The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.

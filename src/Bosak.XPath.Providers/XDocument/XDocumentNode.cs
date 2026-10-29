@@ -118,6 +118,7 @@
 
 //                      | Charles Korthout | 2.18  | 28-10-2026     | Respect copied-element no-inherit namespace boundaries on the XDM namespace axis (1.31.0). |
 //                      | Charles Korthout | 2.19  | 28-10-2026     | Expose strip typed values/types and XQuery-specific ID reset semantics (1.32.0). |
+//                      | Charles Korthout | 2.20  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -458,6 +459,10 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     public XdmValue TypedValue => GetTypedValue();
 
+    /// <summary>The original optional finite-profile assessment, verified against current XML content.</summary>
+    public XdmElementAssessment? ElementAssessment => !_isNamespaceNode && _node is XElement element
+        ? XdmElementAssessment.Get(element) : null;
+
     /// <summary>
     /// Gets a value indicating whether this node has no typed value per XDM.
     /// For elements this is true when schema validation produced a complex type
@@ -474,6 +479,7 @@ public sealed class XDocumentNode : IXdmNode
             if (_node is not XElement element)
                 return false;
 
+            if (ElementAssessment is { } assessment) return assessment.HasNoTypedValue;
             if (element.GetSchemaInfo()?.IsNil ?? false)
                 return false;
 
@@ -500,6 +506,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (_node is not XElement element)
                 return false;
+            if (ElementAssessment is { } assessment) return assessment.HasNoTypedValue;
             return element.GetSchemaInfo()?.SchemaType is XmlSchemaComplexType;
         }
     }
@@ -514,6 +521,9 @@ public sealed class XDocumentNode : IXdmNode
             return XdmValue.FromString(StringValue, "untypedAtomic");
         if (_isNamespaceNode)
             return XdmValue.FromString(StringValue);
+
+        if (ElementAssessment is { } assessment)
+            return assessment.TypedValue ?? throw new InvalidOperationException("FOTY0012: The assessed element-only type has no typed value.");
 
         IXmlSchemaInfo? info = _node switch
         {
@@ -1297,6 +1307,8 @@ public sealed class XDocumentNode : IXdmNode
             return (XmlSchema.Namespace, _node is XAttribute ? "untypedAtomic" : "untyped");
         if (_isNamespaceNode)
             return null;
+        if (ElementAssessment is { } assessment)
+            return assessment.HasNoTypedValue ? (string.Empty, string.Empty) : (XmlSchema.Namespace, "decimal");
 
         IXmlSchemaInfo? info = _node switch
         {
@@ -1329,6 +1341,8 @@ public sealed class XDocumentNode : IXdmNode
     {
         if (_isNamespaceNode || _node is not XElement element)
             return null;
+        if (ElementAssessment is not null)
+            throw new NotSupportedException("BSK-XSD-016: Declaration matching requires original component authority; QName matching is not an admission proof.");
         var info = element.GetSchemaInfo();
         var decl = info?.SchemaElement;
         if (decl is null)

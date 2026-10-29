@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -75,6 +76,7 @@ internal static class XQueryConstructionMetadata
 
     internal static void Strip(XObject target)
     {
+        if (target is XElement element) XdmElementAssessment.Remove(element);
         target.RemoveAnnotations<IXmlSchemaInfo>();
         target.RemoveAnnotations<XdmIdProperties>();
         target.RemoveAnnotations<ConstructedElementAnnotation>();
@@ -84,6 +86,7 @@ internal static class XQueryConstructionMetadata
 
     private static void CopyAnnotation(XObject source, XObject target)
     {
+        if (source is XElement from && target is XElement to) XdmElementAssessment.Copy(from, to);
         target.RemoveAnnotations<IXmlSchemaInfo>();
         target.RemoveAnnotations<XdmIdProperties>();
         target.RemoveAnnotations<ConstructedElementAnnotation>();

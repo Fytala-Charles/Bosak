@@ -2251,6 +2251,8 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 Requester: **Bosak.Schema**. Registered: **2026-10-27**. Status: **Pending**. Target: **TBD**. Owner: **Unassigned**.
 
+**Native backend candidate — 29 October 2026:** A [bounded assessed-document result](schema-assessment/README.md) now exists in the separate Schema 0.5 feature worktree. It natively validates admitted structure/decimals before assertions and retains original component state. Built-in decimal projections run in Bosak; full anonymous-root projection is explicitly unsupported. This does not accept a core session interface or complete REQ-139; broader component/consumer acceptance remains pending.
+
 **29 October 2026 integration update:** The [open Schema example and qualification](schema-integration/README.md) exercise real Schema source with current core using existing XSD 1.0 APIs, plus separate staged XSD 1.1 assertion checks. No new typing callback/session contract is accepted; REQ-139 remains pending. The original licensing-dependent proposal below is historical: Schema is now Apache-2.0 and activation-free. A genuine assessed-document result and complete claimed structural coverage must precede XSD 1.1 consumer acceptance.
 
 #### Problem Statement
@@ -6294,3 +6296,17 @@ REQ-136 implementation checkpoint (23 October 2026): consumer design review foun
 REQ-136 merge checkpoint (23 October 2026): consumer implementation review cleared exact head b535a56b; PR422 merged as ff9f5094 with identical tree. Source1.24.0 is prepared but unpublished. [Review receipt](REQ-136-CONSUMER-IMPLEMENTATION-RECEIPT.json), [readiness](RELEASE-1.24.0-READINESS.md). Status remains In Progress until publication/delivery; consumer integration and native acceptance remain separate.
 
 REQ-136 publication checkpoint (23 October2026): source lifecycle implementation is published as1.24.0 with verified signed packages and public consumers. Consumer integration/acceptance is pending; LE14-LE15 and remaining LE17-LE18 Braid gates are not inferred from engine/public tests. [Publication proof](RELEASE-1.24.0-PUBLICATION.md).
+
+## Whole-document assessment candidate — 29 October 2026
+
+The [bounded document bridge](schema-document-bridge/README.md) supersedes the earlier decimal-projection-only boundary for this unpublished candidate. Core 1.34.0 adds an optional XML-provider assessment carrier; native Schema 0.5 exports original anonymous-root/decimal states, preserving/stripping copies and explicit mutation/reassessment refusal. The general session proposal and broader REQ-139/REQ-009 acceptance remain pending. Source changes remain uncommitted; public release and consumer pins are unchanged.
+
+Fresh bridge qualification: Release build has zero warnings/errors; complete core aggregate **24,207 passed**, native Schema **204 passed** (13 whole-document cases), QT3 **31,397/0/424**, qt4 gated **8,941/0/1,918**, 230 sets and 11 experimental passes. Exact skip mappings match the sealed integration checkpoint. The initial sandbox database failures are retained separately; the local-HTTP-authorized rerun passes all 47 cases. Whole-document example and strict Schema documentation checks pass. See [bridge evidence](schema-document-bridge/README.md).
+
+## Bounded bridge API review — 29 October 2026
+
+The [API review](schema-document-bridge/API-REVIEW.md) found and corrected failed-attachment exception safety: a replacement is checked completely before the previous binding is removed. Two regressions cover failed replacement and failed initial attachment. The trusted-host API carries immutable original state supplied by the host; it does not validate schemas or certify arbitrary host claims. Existing finite semantics and candidate version 1.34.0 remain unchanged. Shape-verification allocation cost is documented for later measurement. General API freeze and broader schema/session acceptance remain pending.
+
+Current qualification and local checkpoint disposition are recorded in the [review checkpoint](schema-document-bridge/api-review/README.md). Earlier bridge/assessment receipts remain unchanged. Optional-child support is a proposed future slice, not implemented by this review.
+
+Post-review verification: **24,209 core tests pass in one complete solution run**, **204 Schema tests pass**, and all six focused provider attachment cases pass. Release build: zero warnings/errors. QT3 **31,397/0/424**, qt4 **8,941/0/1,918** (230 gated sets, 11 experimental passes), with exact skip mappings unchanged. The full-document example retains original root state and passes typed-value and preserve/strip checks. Prior sealed assessment, bridge and integration receipts remain unchanged.

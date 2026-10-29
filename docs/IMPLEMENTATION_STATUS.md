@@ -28,6 +28,10 @@ The [cross-system review](compatibility/xdm40-2026-10-29/README.md) and [revised
 
 ## Schema and XDM integration
 
+The unpublished [Schema 0.5 native assessment candidate](schema-assessment/README.md) now checks one complete finite XSD 1.1 structure/decimal/assertion profile before exposing an owned document and original component state. Its 191-case suite (114 original plus 77 new) passes with published 1.26.3 and current core source; 114 unchanged legacy test binaries also pass with only Schema replaced. The API adds seven exported types without removing existing public members. These scopes overlap. Full typed anonymous-root projection remains explicitly unsupported; no general session API, product adoption or full XSD 1.1 claim follows.
+
+Development is isolated at `D:/Development/Bosak/.worktrees/Bosak.Schema.Assessment`, branch `feature/bounded-document-assessment`, with uncommitted changes on public base `044d2cb`. The existing public checkout and its 1.26.3 dependency pins are unchanged. Core source/gates remain source-identical; their complete earlier qualification is inherited for this step. The candidate guide and receipts own the exact supported profile and refusal boundaries.
+
 Schema is now open source; the earlier proprietary-provider boundary no longer determines the public API shape. Reassess the smallest useful contract before C45. Keep host/XDM profile, XSD version, component authority and source/snapshot identity distinct, retain original PSVI across compatible universes and preserve caller ownership/cancellation.
 
 Full XSD 1.1 structural validation, complete real component/provider coverage, engine atomization/copy integration and actual consumer source/ABI acceptance remain pending. The proposed API is unaccepted. REQ-139 remains pending; REQ-126 retains its bounded completion and all 48 historical observations.
@@ -55,3 +59,17 @@ The current-draft JNode/record/map/comparison gaps are recorded in the [immutabl
 Normal source verification is `dotnet build Bosak.sln` and `dotnet test Bosak.sln`. [AGENTS.md](../AGENTS.md) supplies manual conformance commands and the Windows XSLT test workaround. The [XSLT harness guide](XSLT40-HARNESS-HARDENING.md) documents watchdogs and retained receipts.
 
 New engineering checkpoints belong in this page, request-specific dossiers and [agent handover](AGENT_HANDOVER.md); dated historical summaries belong in [development history](DEVELOPMENT_HISTORY.md). Keep receipt provenance, source/publication identity and owner decisions separate.
+
+## Whole-document assessment candidate — 29 October 2026
+
+The [bounded document bridge](schema-document-bridge/README.md) supersedes the earlier decimal-projection-only boundary for this unpublished candidate. Core 1.34.0 adds an optional XML-provider assessment carrier; native Schema 0.5 exports original anonymous-root/decimal states, preserving/stripping copies and explicit mutation/reassessment refusal. The general session proposal and broader REQ-139/REQ-009 acceptance remain pending. Source changes remain uncommitted; public release and consumer pins are unchanged.
+
+Fresh bridge qualification: Release build has zero warnings/errors; complete core aggregate **24,207 passed**, native Schema **204 passed** (13 whole-document cases), QT3 **31,397/0/424**, qt4 gated **8,941/0/1,918**, 230 sets and 11 experimental passes. Exact skip mappings match the sealed integration checkpoint. The initial sandbox database failures are retained separately; the local-HTTP-authorized rerun passes all 47 cases. Whole-document example and strict Schema documentation checks pass. See [bridge evidence](schema-document-bridge/README.md).
+
+## Bounded bridge API review — 29 October 2026
+
+The [API review](schema-document-bridge/API-REVIEW.md) found and corrected failed-attachment exception safety: a replacement is checked completely before the previous binding is removed. Two regressions cover failed replacement and failed initial attachment. The trusted-host API carries immutable original state supplied by the host; it does not validate schemas or certify arbitrary host claims. Existing finite semantics and candidate version 1.34.0 remain unchanged. Shape-verification allocation cost is documented for later measurement. General API freeze and broader schema/session acceptance remain pending.
+
+Current qualification and local checkpoint disposition are recorded in the [review checkpoint](schema-document-bridge/api-review/README.md). Earlier bridge/assessment receipts remain unchanged. Optional-child support is a proposed future slice, not implemented by this review.
+
+Post-review verification: **24,209 core tests pass in one complete solution run**, **204 Schema tests pass**, and all six focused provider attachment cases pass. Release build: zero warnings/errors. QT3 **31,397/0/424**, qt4 **8,941/0/1,918** (230 gated sets, 11 experimental passes), with exact skip mappings unchanged. The full-document example retains original root state and passes typed-value and preserve/strip checks. Prior sealed assessment, bridge and integration receipts remain unchanged.

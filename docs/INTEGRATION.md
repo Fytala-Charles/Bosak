@@ -4157,6 +4157,8 @@ The [README](../README.md) contains the concise introduction and quick start; th
 
 ## Optional open Schema example
 
+For the unpublished native XSD 1.1 document result, see the [assessment candidate and API guide](schema-assessment/README.md). It is separate from the XSD 1.0 example below and from descriptor assertion-only success. Only its explicit finite profile is structurally certified by the result; whole typed-root export remains unsupported.
+
 The [runnable price example](../integrations/Schema/README.md) compiles the pinned public Apache Schema source against this checkout, imports an in-memory XSD 1.0 schema, validates a copy and transforms its schema-derived decimal value. It retains the caller's unannotated XML and refuses unbundled schema resolution. Invalid content fails structural validation.
 
 After preparing the public Schema checkout as described in the example guide:
@@ -4167,3 +4169,17 @@ dotnet test integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj -c R
 ```
 
 This optional harness does not change normal core dependencies or published package pins. The XSD 1.1 assertion checks are separate from full document assessment; they do not provide a typed-document handoff. [Qualification and API decision](schema-integration/README.md).
+
+## Whole-document assessment candidate — 29 October 2026
+
+The [bounded document bridge](schema-document-bridge/README.md) supersedes the earlier decimal-projection-only boundary for this unpublished candidate. Core 1.34.0 adds an optional XML-provider assessment carrier; native Schema 0.5 exports original anonymous-root/decimal states, preserving/stripping copies and explicit mutation/reassessment refusal. The general session proposal and broader REQ-139/REQ-009 acceptance remain pending. Source changes remain uncommitted; public release and consumer pins are unchanged.
+
+Fresh bridge qualification: Release build has zero warnings/errors; complete core aggregate **24,207 passed**, native Schema **204 passed** (13 whole-document cases), QT3 **31,397/0/424**, qt4 gated **8,941/0/1,918**, 230 sets and 11 experimental passes. Exact skip mappings match the sealed integration checkpoint. The initial sandbox database failures are retained separately; the local-HTTP-authorized rerun passes all 47 cases. Whole-document example and strict Schema documentation checks pass. See [bridge evidence](schema-document-bridge/README.md).
+
+## Bounded bridge API review — 29 October 2026
+
+The [API review](schema-document-bridge/API-REVIEW.md) found and corrected failed-attachment exception safety: a replacement is checked completely before the previous binding is removed. Two regressions cover failed replacement and failed initial attachment. The trusted-host API carries immutable original state supplied by the host; it does not validate schemas or certify arbitrary host claims. Existing finite semantics and candidate version 1.34.0 remain unchanged. Shape-verification allocation cost is documented for later measurement. General API freeze and broader schema/session acceptance remain pending.
+
+Current qualification and local checkpoint disposition are recorded in the [review checkpoint](schema-document-bridge/api-review/README.md). Earlier bridge/assessment receipts remain unchanged. Optional-child support is a proposed future slice, not implemented by this review.
+
+Post-review verification: **24,209 core tests pass in one complete solution run**, **204 Schema tests pass**, and all six focused provider attachment cases pass. Release build: zero warnings/errors. QT3 **31,397/0/424**, qt4 **8,941/0/1,918** (230 gated sets, 11 experimental passes), with exact skip mappings unchanged. The full-document example retains original root state and passes typed-value and preserve/strip checks. Prior sealed assessment, bridge and integration receipts remain unchanged.

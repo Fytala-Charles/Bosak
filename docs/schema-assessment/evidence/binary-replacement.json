@@ -1,0 +1,8 @@
+{
+  "changedAssemblies": [
+    "Bosak.Schema.dll"
+  ],
+  "unchangedTestAssemblySha256": "48e81c7ca2e379993496c3c51a06107367778c7be832c71f6fdf0b73540ba07e",
+  "oldSchemaSha256": "63e1401b908c14b4762518b55b02ebff6e9c875f3415d6849ff42eb63ad5bff3",
+  "newSchemaSha256": "b82f5902cb359836fa99fc0ed0ec4ccbf4d2573d40b7686bee4f4250b5166b76"
+}

@@ -576,6 +576,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 7.60  | 23-10-2026     | Use the default mode for omitted apply-templates mode in function sequences.              |
+//                      | Charles Korthout | 7.61  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -11395,6 +11396,8 @@ internal sealed class TransformEngine
                     {
                         copy.AddAnnotation(elemSchemaInfo);
                     }
+                    if (node is XDocumentNode nativeCopySource && nativeCopySource.UnderlyingObject is XElement nativeCopyElement)
+                        XdmElementAssessment.Copy(nativeCopyElement, copy);
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
                         CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces, copyAccumulators);
@@ -11896,6 +11899,8 @@ internal sealed class TransformEngine
                     {
                         elem.AddAnnotation(elemSchemaInfo);
                     }
+                    if (node is XDocumentNode nativeContainerSource && nativeContainerSource.UnderlyingObject is XElement nativeContainerElement)
+                        XdmElementAssessment.Copy(nativeContainerElement, elem);
                     if (copyAccumulators)
                         AttachAccumulatorValues(node, elem);
                     AddElementToContainer(elem, container);
@@ -12398,6 +12403,7 @@ internal sealed class TransformEngine
                 {
                     copy.AddAnnotation(srcElemInfo);
                 }
+                XdmElementAssessment.Copy(srcElem, copy);
                 // REQ-114 (PB-3 C9, copy-5034): carry the element-level is-id/is-idref
                 // snapshot too, so fn:id/fn:idref keep working after a strip-copy.
                 if (srcElem.Annotation<XdmIdProperties>() is { } srcElemIdProperties)
@@ -16294,6 +16300,8 @@ internal sealed class TransformEngine
     /// </summary>
     private static XdmValue AtomizeForVariableCoercion(IXdmNode node)
     {
+        if (node is XDocumentNode { ElementAssessment.HasNoTypedValue: true })
+            throw new InvalidOperationException("FOTY0012: Cannot coerce an assessed element-only node to an atomic value.");
         if (node.SchemaTypeAnnotation is null || node.HasNoTypedValue)
             return XdmValue.FromString(node.StringValue, "untypedAtomic");
         var typed = node.TypedValue;

@@ -2045,6 +2045,22 @@ The QT3 host may explicitly select guarded query-owned schema initialization for
 
 ## Open Schema development integration
 
+The [native Schema assessment candidate](schema-assessment/README.md) adds no core project dependency. Schema owns the finite structural/decimal/assertion compiler and immutable original component state. A built-in decimal child can be exported through the existing provider; the anonymous root remains in the native result and full typed-document projection refuses explicitly. This concrete backend now informs the next minimal bridge; the prior general session proposal is not adopted.
+
 The optional [Schema harness](../integrations/Schema/README.md) preserves dependency direction: a non-packable source wrapper compiles pinned public Schema files and references the core projects; core projects reference no Schema assembly. The example uses existing schema-aware XSLT compilation, strict XSD 1.0 copy validation and typed atomization. Its resolver serves one bundled schema and never falls back to URI acquisition. The normal solution and default execution path are unchanged.
 
 Staged XSD 1.1 assertion validation remains distinct from structural assessment and exported PSVI. The [API decision](schema-integration/README.md#api-decision) postpones the larger session contract until a real, bounded assessed-document result exists. No node interface, value layout, public core API, profile or package-version change is introduced.
+
+## Whole-document assessment candidate — 29 October 2026
+
+The [bounded document bridge](schema-document-bridge/README.md) supersedes the earlier decimal-projection-only boundary for this unpublished candidate. Core 1.34.0 adds an optional XML-provider assessment carrier; native Schema 0.5 exports original anonymous-root/decimal states, preserving/stripping copies and explicit mutation/reassessment refusal. The general session proposal and broader REQ-139/REQ-009 acceptance remain pending. Source changes remain uncommitted; public release and consumer pins are unchanged.
+
+Fresh bridge qualification: Release build has zero warnings/errors; complete core aggregate **24,207 passed**, native Schema **204 passed** (13 whole-document cases), QT3 **31,397/0/424**, qt4 gated **8,941/0/1,918**, 230 sets and 11 experimental passes. Exact skip mappings match the sealed integration checkpoint. The initial sandbox database failures are retained separately; the local-HTTP-authorized rerun passes all 47 cases. Whole-document example and strict Schema documentation checks pass. See [bridge evidence](schema-document-bridge/README.md).
+
+## Bounded bridge API review — 29 October 2026
+
+The [API review](schema-document-bridge/API-REVIEW.md) found and corrected failed-attachment exception safety: a replacement is checked completely before the previous binding is removed. Two regressions cover failed replacement and failed initial attachment. The trusted-host API carries immutable original state supplied by the host; it does not validate schemas or certify arbitrary host claims. Existing finite semantics and candidate version 1.34.0 remain unchanged. Shape-verification allocation cost is documented for later measurement. General API freeze and broader schema/session acceptance remain pending.
+
+Current qualification and local checkpoint disposition are recorded in the [review checkpoint](schema-document-bridge/api-review/README.md). Earlier bridge/assessment receipts remain unchanged. Optional-child support is a proposed future slice, not implemented by this review.
+
+Post-review verification: **24,209 core tests pass in one complete solution run**, **204 Schema tests pass**, and all six focused provider attachment cases pass. Release build: zero warnings/errors. QT3 **31,397/0/424**, qt4 **8,941/0/1,918** (230 gated sets, 11 experimental passes), with exact skip mappings unchanged. The full-document example retains original root state and passes typed-value and preserve/strip checks. Prior sealed assessment, bridge and integration receipts remain unchanged.

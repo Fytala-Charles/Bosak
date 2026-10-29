@@ -637,3 +637,15 @@ Nine contract/canonical/catalog pages render with markdown-it and unchanged Fyta
 ## Open Schema integration documentation — 29 October 2026
 
 The reader-document validator was extended to render six additional pages covering the optional integration guide, scope, qualification, reference correction, next slice and evidence guide alongside the existing reader pages. Local Markdown destinations and anchors are checked, complete historical README/roadmap snapshots and the FYTALA statement remain intact, and 141 sealed earlier review/prototype artifacts retain their identities. This is HTML/render-structure verification, not a screenshot or hosted-CI claim. Current receipts are in `docs/schema-integration/evidence` and ignored render output under `.guard-tmp/reader-docs-cleanup/render`.
+
+## Native Schema assessment documentation — 29 October 2026
+
+The native assessment check renders sixteen core reader/assessment pages and nine owning Schema canonical/profile pages, verifies local destinations and preserves all 39 earlier sealed integration files plus 141 preceding review/prototype artifacts. The owning Schema documentation checker passes in Strict mode. Results and rebased guide/adoption/ADR snapshots are in `docs/schema-assessment`; the primary editable implementation remains in the persistent Schema feature worktree. No screenshot, hosted CI or new full-core runtime qualification is claimed by this documentation check.
+
+## Whole-document bridge documentation — 29 October 2026
+
+Current bridge/canonical pages are checked separately from the sealed assessment dossier. HTML rendering and local-link validation use unchanged Fytala CSS; no screenshot or hosted-CI claim. See `docs/schema-document-bridge/evidence/documentation-checks.json`.
+
+## Bounded bridge API review — 29 October 2026
+
+Current canonical/guide/review pages receive a separate HTML/local-destination check with unchanged Fytala CSS. Original sealed documentation-check receipts are preserved. New render and strict Schema documentation receipts belong to `docs/schema-document-bridge/api-review/evidence`. No screenshot or hosted-CI claim.
