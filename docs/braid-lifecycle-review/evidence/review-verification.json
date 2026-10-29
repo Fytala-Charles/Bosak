@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-29",
+  "priorDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16,
+    "schema-repeated-implementation": 33,
+    "schema-repetition-review": 9,
+    "schema-count-assertions": 17,
+    "schema-count-implementation": 30,
+    "schema-count-review": 9,
+    "schema-presence-implementation": 28,
+    "schema-presence-review": 9,
+    "schema-consumer-priorities": 6,
+    "xmldb-compatibility": 28,
+    "braid-compatibility": 36,
+    "consumer-qualification-review": 6,
+    "binary-compatibility-scope": 9,
+    "binary-compatibility-execution": 560,
+    "binary-compatibility-review": 6,
+    "braid-engine-identity-policy": 7,
+    "braid-identity-prototype": 19,
+    "braid-identity-review": 6,
+    "braid-runtime-admission": 20,
+    "braid-runtime-review": 6,
+    "braid-integration-design": 7,
+    "braid-typed-inspector": 22,
+    "braid-typed-inspector-review": 6,
+    "braid-guarded-ports": 17,
+    "braid-guarded-ports-review": 6,
+    "braid-facade-lifecycle-contract": 7,
+    "braid-lifecycle-proof": 18
+  },
+  "allOriginalBytesPreserved": true,
+  "controlsVerified": 65,
+  "caseTracesVerified": [
+    {
+      "case": "publish-then-close",
+      "events": 23,
+      "leases": 5,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "busy",
+      "events": 11,
+      "leases": 2,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "callback-reentry",
+      "events": 16,
+      "leases": 3,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "callback-close-self-drain",
+      "events": 6,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "pre-cancel",
+      "events": 2,
+      "leases": 0,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "post-admission-cancel",
+      "events": 11,
+      "leases": 2,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "cancel-and-close",
+      "events": 7,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "caller-stops-awaiting",
+      "events": 7,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "bounded-drain",
+      "events": 7,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "drift-during-callback",
+      "events": 6,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "ArtifactRefused"
+    },
+    {
+      "case": "independent-a",
+      "events": 6,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "independent-b",
+      "events": 6,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    },
+    {
+      "case": "lease-idempotence",
+      "events": 6,
+      "leases": 1,
+      "releaseRequests": 1,
+      "reason": "UserClose"
+    }
+  ],
+  "monotonicStateAndEventOrdering": true,
+  "balancedLeasesAndOneIdleReleasePerCase": true,
+  "snapshotAndCompiledIdentitiesMatch": true,
+  "productionUnchanged": true,
+  "freshExecutionInReview": false
+}

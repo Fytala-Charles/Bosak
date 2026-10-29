@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29",
+  "scope": "Proposed consumer facade/lifecycle contract and deterministic schedule acceptance scope",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/consumer-source-identities.json",
+      "bytes": 1504,
+      "sha256": "7e418e3a664d7e6b755710978d5a1c615b6d6df580c3ac0289776f61ab967cb0"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4273,
+      "sha256": "7ccc4a57d8506a7e5607137c0ea377c766a8fa393836faa6817bfe824c50ca87"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1370,
+      "sha256": "d4d98505a0698d330102acebd4d75c727fa23deff7b209dd8bafe5ca55621461"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13158,
+      "sha256": "86ab0e951a1b1cc276e3824b58c8519ae56acf52b16c15099aef74779543b48d"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 542,
+      "sha256": "cc78dccb931710b31639cd83edf84185d24c9cf6433099f6aa2ef0356e93397f"
+    }
+  ]
+}

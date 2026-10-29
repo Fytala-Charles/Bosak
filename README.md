@@ -189,3 +189,9 @@ The [bounded presence assertion candidate](docs/schema-presence-implementation/R
 [Isolated guarded authoring-port facade proof](docs/braid-guarded-ports/README.md).
 
 [Guarded authoring-port facade review](docs/braid-guarded-ports-review/README.md).
+
+[Consumer facade and lifecycle contract scope](docs/braid-facade-lifecycle-contract/README.md).
+
+[Deterministic consumer facade lifecycle proof](docs/braid-lifecycle-proof/README.md).
+
+[Facade lifecycle contract and proof review](docs/braid-lifecycle-review/README.md).

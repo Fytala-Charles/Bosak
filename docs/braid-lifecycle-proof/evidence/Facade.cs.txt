@@ -1,0 +1,71 @@
+internal sealed class InspectorFacade:ISourceInspector
+{
+    private readonly Gate gate;private readonly ISourceInspector raw;private readonly SourceAuthoringCapabilities? facts;
+    internal InspectorFacade(Gate gate,ISourceInspector raw){this.gate=gate;this.raw=raw;facts=raw.Capabilities;}
+    /// <inheritdoc />
+    public SourceAuthoringCapabilities? Capabilities=>gate.Read(()=>facts);
+    internal SourceAuthoringCapabilities? EngineFacts => facts;
+    internal object AdmissionProfile => gate.Profile;
+    /// <inheritdoc />
+    public async Task<SourceInspectionResult> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);gate.Forward();var result=await raw.InspectAsync(source,cancellationToken);gate.Publish();
+            return result with{Capabilities=result.Capabilities,ExpressionEditor=null,ValueOfInserter=null,ValueOfDeleter=null,TextDeleter=null,TextInserter=null,LiteralElementInserter=null,TextBodyReplacer=null,LiteralAttributeEditor=null,
+                LiteralElementEditor=!result.Success||result.Issues.Count!=0||result.LiteralElementEditor is null?null:new ElementFacade(gate,result.LiteralElementEditor)};
+        }
+        catch(Admission refusal){return new(false,[],[new InspectionIssue(refusal.Code,source.Uri,"Diagnostic session admission refused.")]);}
+    }
+}
+internal sealed class ElementFacade(Gate gate,ILiteralElementEditor raw):ILiteralElementEditor
+{
+    /// <inheritdoc />
+    public async Task<LiteralElementTargetResult> GetTargetAsync(Uri moduleUri,int nodeId,LiteralElementOperation operation,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);if(operation!=LiteralElementOperation.Rename)return new(null,new("UnsupportedProfile","Only read-only rename target discovery is admitted."));
+            gate.Forward();var result=await raw.GetTargetAsync(moduleUri,nodeId,operation,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,result.Failure);
+            if(result.Target is null||result.Target.Operation!=operation||result.Target.ModuleUri!=moduleUri||result.Target.NodeId!=nodeId)return new(null,new("InvalidResponse","Raw target did not match requested authority."));
+            return new(new Target(this,gate,result.Target),null);
+        }
+        catch(Admission refusal){return new(null,new(refusal.Code,"Diagnostic session admission refused."));}
+    }
+    /// <inheritdoc />
+    public async Task<LiteralElementResult> ProposeAsync(ILiteralElementTarget target,string? name,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);
+            if(target is not Target owned||!ReferenceEquals(owned.Owner,this))return Failure("ForeignTarget");
+            if(name!=owned.Raw.LocalName)return Failure("UnsupportedProfile");
+            gate.Forward();var result=await raw.ProposeAsync(owned.Raw,name,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,null,result.Failure);
+            if(result.Candidate is not null||!ReferenceEquals(result.NoChangeTarget,owned.Raw)||result.Review is not null)return Failure("InvalidResponse");
+            return new(null,owned,null);
+        }
+        catch(Admission refusal){return Failure(refusal.Code);}
+    }
+    private static LiteralElementResult Failure(string code)=>new(null,null,new(code,"Diagnostic NoChange-only port refused this operation."));
+    private sealed class Target:ILiteralElementTarget
+    {
+        internal ElementFacade Owner{get;}internal ILiteralElementTarget Raw{get;}private readonly Gate gate;private readonly LiteralElementOperation operation;private readonly LiteralElementMoveContext? move;private readonly int? parent;private readonly Uri uri;private readonly int id;private readonly InspectionRange range;private readonly string name;
+        internal Target(ElementFacade owner,Gate admission,ILiteralElementTarget raw){Owner=owner;Raw=raw;gate=admission;operation=raw.Operation;move=raw.MoveContext;parent=raw.ConditionalParentId;uri=raw.ModuleUri;id=raw.NodeId;range=raw.Range with{};name=raw.LocalName;}
+        /// <inheritdoc />
+        public LiteralElementOperation Operation=>gate.Read(()=>operation);
+        /// <inheritdoc />
+        public LiteralElementMoveContext? MoveContext=>gate.Read(()=>move);
+        /// <inheritdoc />
+        public int? ConditionalParentId=>gate.Read(()=>parent);
+        /// <inheritdoc />
+        public Uri ModuleUri=>gate.Read(()=>uri);
+        /// <inheritdoc />
+        public int NodeId=>gate.Read(()=>id);
+        /// <inheritdoc />
+        public InspectionRange Range=>gate.Read(()=>range);
+        /// <inheritdoc />
+        public string LocalName=>gate.Read(()=>name);
+    }
+}
