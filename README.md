@@ -175,3 +175,7 @@ The [bounded presence assertion candidate](docs/schema-presence-implementation/R
 [Isolated consumer identity-policy prototype](docs/braid-identity-prototype/README.md).
 
 [Identity-policy prototype review](docs/braid-identity-review/README.md).
+
+[Isolated actual-runtime identity admission experiment](docs/braid-runtime-admission/README.md).
+
+[Actual-runtime admission experiment review](docs/braid-runtime-review/README.md).

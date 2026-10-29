@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed standalone runtime experiment checkpoint; no Braid product integration",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 293,
+      "sha256": "000bf2d83a8fc28b3043652666445829d3b1a21cea2eeb1f62238fdbb0dd1ea6"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4603,
+      "sha256": "94dd9866b8c922741188acd36d53973483cb645c7901b2658cef3607445fae5e"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1330,
+      "sha256": "e339a492929eb7cf39bec689475cefacaac2232548038e5fbaf35411016e51a7"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2611,
+      "sha256": "ec5b459c1eb12ae3717150ad1a76382a6430b27d85274fe473a7a3037acddd18"
+    }
+  ]
+}

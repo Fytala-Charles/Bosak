@@ -1,0 +1,209 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Tests actual snapshot binding, lazy engine loads and independent worker admission.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated runtime admission experiment                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Diagnostics;
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+
+internal static class Program
+{
+    internal const string Profile="approved-snapshot-experiment-v1";
+    internal static readonly JsonSerializerOptions Json=new(){PropertyNameCaseInsensitive=true,WriteIndented=true};
+    internal static int Main(string[] args)
+    {
+        if(args[0]=="--worker")return Worker(args);
+        var inputs=JsonSerializer.Deserialize<Dictionary<string,Manifest>>(File.ReadAllText(args[0]),Json)!;
+        var baseline=inputs["baseline"];var candidate=inputs["candidate"];var plugin=args[2];
+        var work=Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[1]))!,"work-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(work);
+        var checks=new List<object>();var sessions=new List<object>();var workers=new List<object>();
+        void Check(string name,bool pass){checks.Add(new{name,passed=pass});if(!pass)throw new InvalidOperationException(name);}
+        string Root(string label,Manifest manifest){var root=Path.Combine(work,label);Directory.CreateDirectory(root);foreach(var member in manifest.Members)File.Copy(member.Path,Path.Combine(root,member.Name+".dll"));return root;}
+        bool Refuses(Action action){try{action();return false;}catch(Exception error) when(error is InvalidOperationException or IOException or UnauthorizedAccessException){return true;}}
+        void Capture(string name,Session session)=>sessions.Add(new{name,identity=session.Identity,loaded=session.Loaded,sourceRoot=session.Root});
+        var root=Root("approved",baseline);
+        using(var session=new Session(baseline,root,plugin))
+        {
+            Check("real-xslt-approved-snapshot",session.Invoke("Xslt")=="<ok>2</ok>");
+            Check("xquery-not-forced-at-xslt-admission",!session.Loaded.Any(x=>x.Name=="Bosak.XQuery"));
+            Check("xslt-path-observes-eight-engine-members",session.Loaded.Count==8);
+            Check("real-deferred-xquery-succeeds",session.Invoke("Query")=="3");
+            Check("lazy-xquery-completes-nine-member-binding",session.Loaded.Count==9);
+            Check("snapshot-assembly-location-empty-by-design",session.Loaded.All(x=>x.Location.Length==0));
+            Check("all-loaded-identities-and-snapshot-hashes-match",session.Loaded.All(x=>baseline.Members.Any(m=>m.Name==x.Name&&m.Identity==x.Identity&&m.Sha256==x.SnapshotSha256)));
+            Capture("baseline-lazy-query",session);
+        }
+        using(var moved=new Session(baseline,Root("relocated",baseline),plugin))
+        using(var original=new Session(baseline,root,plugin))Check("relocation-preserves-approved-runtime-identity",moved.Identity==original.Identity);
+        var oldApprovalNewFiles=Root("old-approval-new-files",candidate);
+        Check("new-closure-under-old-approval-refused",Refuses(()=>{using var _=new Session(baseline,oldApprovalNewFiles,plugin);}));
+        using(var approvedNew=new Session(candidate,oldApprovalNewFiles,plugin))
+        {
+            Check("separately-approved-current-xslt-executes",approvedNew.Invoke("Xslt")=="<ok>2</ok>");
+            Check("separately-approved-current-query-executes",approvedNew.Invoke("Query")=="3");Capture("explicit-current-approval",approvedNew);
+        }
+        var partial=Root("facade-only",baseline);File.Copy(candidate.Members.Single(m=>m.Name=="Bosak.Xslt").Path,Path.Combine(partial,"Bosak.Xslt.dll"),true);
+        Check("facade-only-substitution-refused",Refuses(()=>{using var _=new Session(baseline,partial,plugin);}));
+        var missing=Root("missing",baseline);File.Delete(Path.Combine(missing,"Bosak.XQuery.dll"));
+        Check("missing-lazy-file-refused-before-admission",Refuses(()=>{using var _=new Session(baseline,missing,plugin);}));
+        Check("duplicate-approval-member-refused",Refuses(()=>{using var _=new Session(baseline with{Members=baseline.Members.Append(baseline.Members[0]).ToArray()},root,plugin);}));
+        var corrupt=Root("corrupt",baseline);var corruptPath=Path.Combine(corrupt,"Bosak.XPath.Core.dll");var bytes=File.ReadAllBytes(corruptPath);bytes[^1]^=1;File.WriteAllBytes(corruptPath,bytes);
+        Check("same-metadata-different-byte-refused",Refuses(()=>{using var _=new Session(baseline,corrupt,plugin);}));
+        var lazyRoot=Root("lazy-replacement",baseline);
+        using(var session=new Session(baseline,lazyRoot,plugin))
+        {
+            Check("lazy-replacement-control-xslt",session.Invoke("Xslt")=="<ok>2</ok>");
+            var target=Path.Combine(lazyRoot,"Bosak.XQuery.dll");File.Copy(candidate.Members.Single(m=>m.Name=="Bosak.XQuery").Path,target,true);
+            Check("replacement-before-deferred-use-refused",Refuses(()=>session.Invoke("Query")));
+            Check("refused-query-was-not-loaded",!session.Loaded.Any(x=>x.Name=="Bosak.XQuery"));
+            File.Copy(baseline.Members.Single(m=>m.Name=="Bosak.XQuery").Path,target,true);
+            Check("revoked-session-does-not-self-readmit",Refuses(()=>session.Invoke("Xslt")));Capture("revoked-lazy-session",session);
+        }
+        using(var reopened=new Session(baseline,lazyRoot,plugin))Check("fresh-session-after-restore-admits",reopened.Invoke("Query")=="3");
+        var loadedRoot=Root("loaded-replacement",baseline);
+        using(var session=new Session(baseline,loadedRoot,plugin))
+        {
+            _=session.Invoke("Xslt");File.Copy(candidate.Members.Single(m=>m.Name=="Bosak.XPath.Core").Path,Path.Combine(loadedRoot,"Bosak.XPath.Core.dll"),true);
+            Check("changed-already-loaded-file-refuses-next-dispatch",Refuses(()=>session.Invoke("Xslt")));Capture("loaded-file-drift",session);
+        }
+        var intervalRoot=Root("between-check-and-lazy-use",baseline);
+        using(var session=new Session(baseline,intervalRoot,plugin))
+        {
+            _=session.Invoke("Xslt");
+            Check("approved-snapshot-survives-controlled-postcheck-file-change",session.Invoke("Query",()=>File.Copy(candidate.Members.Single(m=>m.Name=="Bosak.XQuery").Path,Path.Combine(intervalRoot,"Bosak.XQuery.dll"),true))=="3");
+            Check("postcheck-lazy-load-used-approved-baseline-bytes",session.Loaded.Single(x=>x.Name=="Bosak.XQuery").SnapshotSha256==baseline.Members.Single(m=>m.Name=="Bosak.XQuery").Sha256);
+            Check("postcheck-drift-revokes-following-operation",Refuses(()=>session.Invoke("Xslt")));Capture("controlled-check-dispatch-interval",session);
+        }
+        Check("no-engine-fallback-to-default-context",!AssemblyLoadContext.Default.Assemblies.Any(x=>Session.Required.Contains(x.GetName().Name!)));
+        var baselineFile=Path.Combine(work,"baseline-manifest.json");File.WriteAllText(baselineFile,JsonSerializer.Serialize(baseline,Json));
+        var candidateFile=Path.Combine(work,"candidate-manifest.json");File.WriteAllText(candidateFile,JsonSerializer.Serialize(candidate,Json));
+        var identity=Session.Digest(baseline);var request=new Request(1,"request-1",identity,Profile,"");
+        var first=RunWorker(baselineFile,Root("worker-one",baseline),plugin,request);workers.Add(first);
+        Check("independent-worker-executes-real-query",Accept(request,first.Response)&&first.Response.Result=="3"&&first.Response.Loaded.Length==9);
+        var second=RunWorker(baselineFile,Root("worker-restart",baseline),plugin,request);workers.Add(second);
+        Check("worker-restart-has-new-process-same-identity",Accept(request,second.Response)&&second.Response.ProcessId!=first.Response.ProcessId&&second.Response.Identity==first.Response.Identity);
+        var wrongApproval=RunWorker(baselineFile,Root("worker-replaced",candidate),plugin,request);workers.Add(wrongApproval);
+        Check("worker-replacement-refused-under-old-approval",!wrongApproval.Response.Accepted&&wrongApproval.Response.Loaded.Length==0&&!Accept(request,wrongApproval.Response));
+        var different=RunWorker(candidateFile,Root("worker-different-approval",candidate),plugin,request);workers.Add(different);
+        Check("worker-identity-disagreement-refused-before-query",!different.Response.Accepted&&different.Response.Loaded.Length==0&&!Accept(request,different.Response));
+        var wrongProfile=RunWorker(baselineFile,Root("worker-profile",baseline),plugin,request with{Profile="other"});workers.Add(wrongProfile);
+        Check("worker-request-profile-refused",!wrongProfile.Response.Accepted&&wrongProfile.Response.Loaded.Length==0);
+        foreach(var fault in new[]{"request","profile","identity","version"})
+        {
+            var response=RunWorker(baselineFile,Root("worker-response-"+fault,baseline),plugin,request with{Fault=fault});workers.Add(response);
+            Check("parent-refuses-wrong-response-"+fault,!Accept(request,response.Response));
+        }
+        File.WriteAllText(args[1],JsonSerializer.Serialize(new{checks,sessions,workers,actualPublicEngineOperations=true,actualIndependentWorkerProcesses=true,actualBraidIntegration=false,scope="Isolated approved byte snapshots in collectible AssemblyLoadContext; default product loader not modified"},Json));
+        Console.WriteLine($"{checks.Count} actual runtime controls passed; {workers.Count} independent worker exchanges; lazy XQuery binding verified.");return 0;
+    }
+    internal static bool Accept(Request request,Response response)=>response.Accepted&&response.Version==request.Version&&response.RequestId==request.RequestId&&response.Identity==request.Identity&&response.Profile==request.Profile;
+    private static WorkerRun RunWorker(string manifest,string root,string plugin,Request request)
+    {
+        var info=new ProcessStartInfo("dotnet"){UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true,RedirectStandardError=true};
+        foreach(var arg in new[]{Assembly.GetExecutingAssembly().Location,"--worker",manifest,root,plugin,Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request,Json)))})info.ArgumentList.Add(arg);
+        using var process=Process.Start(info)!;var output=process.StandardOutput.ReadToEndAsync();var error=process.StandardError.ReadToEndAsync();
+        if(!process.WaitForExit(15000)){process.Kill(true);process.WaitForExit();throw new InvalidOperationException("Worker watchdog expired");}
+        var text=output.GetAwaiter().GetResult();var stderr=error.GetAwaiter().GetResult();if(process.ExitCode!=0)throw new InvalidOperationException("Worker failure: "+stderr);
+        return new(process.ExitCode,15,JsonSerializer.Deserialize<Response>(text,Json)!,stderr);
+    }
+    private static int Worker(string[] args)
+    {
+        var manifest=JsonSerializer.Deserialize<Manifest>(File.ReadAllText(args[1]),Json)!;var request=JsonSerializer.Deserialize<Request>(Encoding.UTF8.GetString(Convert.FromBase64String(args[4])),Json)!;
+        Response response;
+        try
+        {
+            using var session=new Session(manifest,args[2],args[3]);
+            if(request.Version!=1||request.Profile!=Profile||request.Identity!=session.Identity||string.IsNullOrWhiteSpace(request.RequestId))response=new(1,request.RequestId,session.Identity,Profile,false,"",[],Environment.ProcessId,"request identity/profile mismatch");
+            else
+            {
+                var result=session.Invoke("Xslt");if(result!="<ok>2</ok>")throw new InvalidOperationException("Worker transform");result=session.Invoke("Query");
+                response=new(1,request.RequestId,session.Identity,Profile,true,result,session.Loaded.ToArray(),Environment.ProcessId,"");
+            }
+        }
+        catch(Exception error){response=new(1,request.RequestId,"",Profile,false,"",[],Environment.ProcessId,error.GetType().Name+":"+error.Message);}
+        response=request.Fault switch{"request"=>response with{RequestId="wrong"},"profile"=>response with{Profile="wrong"},"identity"=>response with{Identity="wrong"},"version"=>response with{Version=2},_=>response};
+        Console.Write(JsonSerializer.Serialize(response,Json));return 0;
+    }
+}
+internal sealed record Member(string Name,string Identity,string Sha256,string Path,bool Readable);
+internal sealed record Manifest(string Revision,Member[] Members);
+internal sealed record Loaded(string Name,string Identity,string SnapshotSha256,string Mvid,string SourcePath,string Location);
+internal sealed record Request(int Version,string RequestId,string Identity,string Profile,string Fault);
+internal sealed record Response(int Version,string RequestId,string Identity,string Profile,bool Accepted,string Result,Loaded[] Loaded,int ProcessId,string Error);
+internal sealed record WorkerRun(int ExitCode,int TimeoutSeconds,Response Response,string StandardError);
+internal sealed class Session:IDisposable
+{
+    internal static readonly string[] Required=["Bosak.XPath.Core","Bosak.XPath.Parser","Bosak.XPath.Compiler","Bosak.XPath.Runtime","Bosak.XPath.Standard","Bosak.XPath.Providers","Bosak.XPath.Api","Bosak.XQuery","Bosak.Xslt"];
+    private readonly Manifest manifest;private readonly Dictionary<string,byte[]> snapshots=new(StringComparer.Ordinal);private readonly GuardedContext context;private readonly byte[] plugin;private bool revoked;
+    internal string Root{get;}internal string Identity{get;}internal List<Loaded> Loaded{get;}=[];
+    internal Session(Manifest approved,string root,string operationPlugin)
+    {
+        manifest=approved;Root=Path.GetFullPath(root);Identity=Digest(approved);plugin=File.ReadAllBytes(operationPlugin);
+        foreach(var member in manifest.Members)
+        {
+            var file=Path.Combine(Root,member.Name+".dll");if((File.GetAttributes(file)&FileAttributes.ReparsePoint)!=0)throw new InvalidOperationException("Unsupported artifact link");
+            var bytes=File.ReadAllBytes(file);if(Hash(bytes)!=member.Sha256||Metadata(bytes).Identity!=member.Identity)throw new InvalidOperationException("Artifact mismatch: "+member.Name);snapshots.Add(member.Name,bytes);
+        }
+        context=new GuardedContext(this);
+    }
+    internal string Invoke(string operation,Action? afterCheck=null)
+    {
+        Check();afterCheck?.Invoke();
+        var assembly=context.Assemblies.SingleOrDefault(x=>x.GetName().Name=="Operations")??context.LoadFromStream(new MemoryStream(plugin,false));
+        try{return (string)assembly.GetType("Operations")!.GetMethod(operation,BindingFlags.Public|BindingFlags.Static)!.Invoke(null,null)!;}
+        catch(TargetInvocationException error){throw new InvalidOperationException("Operation failed",error.InnerException);}
+    }
+    private void Check()
+    {
+        if(revoked)throw new InvalidOperationException("Session revoked");
+        try{foreach(var member in manifest.Members)if(Hash(File.ReadAllBytes(Path.Combine(Root,member.Name+".dll")))!=member.Sha256)throw new InvalidOperationException("Runtime artifact drift: "+member.Name);}
+        catch(Exception error){revoked=true;throw new InvalidOperationException("Runtime admission refused",error);}
+    }
+    internal static string Digest(Manifest manifest)
+    {
+        if(manifest.Members.Length!=9||!manifest.Members.Select(m=>m.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Required)||manifest.Revision.Length!=40||!manifest.Revision.All(Uri.IsHexDigit))throw new InvalidOperationException("Invalid approval manifest");
+        return "experiment-runtime-v1:"+manifest.Revision+":"+Hash(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(manifest.Members.OrderBy(m=>m.Name,StringComparer.Ordinal).Select(m=>new{m.Name,m.Identity,m.Sha256}))));
+    }
+    private static string Hash(byte[] bytes)=>Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+    private static (string Identity,string Mvid) Metadata(byte[] bytes)
+    {
+        using var pe=new PEReader(new MemoryStream(bytes,false));var reader=pe.GetMetadataReader();var definition=reader.GetAssemblyDefinition();
+        var name=new AssemblyName{ Name=reader.GetString(definition.Name),Version=definition.Version,CultureName=definition.Culture.IsNil?"":reader.GetString(definition.Culture)};
+        if(!definition.PublicKey.IsNil)name.SetPublicKey(reader.GetBlobBytes(definition.PublicKey));else name.SetPublicKeyToken([]);
+        return(name.FullName,reader.GetGuid(reader.GetModuleDefinition().Mvid).ToString());
+    }
+    /// <summary>Requests unload of this isolated context; actual garbage collection is not certified.</summary>
+    public void Dispose()=>context.Unload();
+    private sealed class GuardedContext(Session owner):AssemblyLoadContext(isCollectible:true)
+    {
+        /// <inheritdoc />
+        protected override Assembly? Load(AssemblyName requested)
+        {
+            if(!owner.snapshots.TryGetValue(requested.Name!,out var bytes))
+            {if(requested.Name!.StartsWith("Bosak.",StringComparison.Ordinal))throw new InvalidOperationException("Unapproved engine assembly");return null;}
+            var member=owner.manifest.Members.Single(x=>x.Name==requested.Name);var expected=new AssemblyName(member.Identity);
+            if(requested.Version>expected.Version||!requested.GetPublicKeyToken().AsSpan().SequenceEqual(expected.GetPublicKeyToken()))throw new InvalidOperationException("Unapproved assembly reference");
+            var assembly=LoadFromStream(new MemoryStream(bytes,false));var metadata=Metadata(bytes);
+            if(assembly.FullName!=metadata.Identity||assembly.ManifestModule.ModuleVersionId.ToString()!=metadata.Mvid)throw new InvalidOperationException("Loaded snapshot identity mismatch");
+            owner.Loaded.Add(new(requested.Name!,assembly.FullName!,Hash(bytes),metadata.Mvid,Path.Combine(owner.Root,requested.Name+".dll"),assembly.Location));return assembly;
+        }
+    }
+}

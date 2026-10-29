@@ -1,0 +1,1 @@
+34 actual runtime controls passed; 9 independent worker exchanges; lazy XQuery binding verified.
