@@ -6448,3 +6448,7 @@ F140-01 is In Progress: [core API inventory/proposed scope](foundation-api-basel
 ## REQ-140 member-level draft progress — 30 October 2026
 
 F140-01 remains In Progress. [Member manifest and compatibility matrix](foundation-api-contract-draft/README.md) cover all 5,766 entries; conservative Core/query closure reaches 40 public types, including 11 additional Runtime dependencies. Twenty planned consumer/ABI/behavior/package cases remain NotRun; ten review-tool tests pass. FG-01/04/07 have concrete preparation artifacts, with their decisions and joint requirements still open. Engine source, external projects, C45 disposition, release and freeze are unchanged.
+
+## REQ-140 / F140-01 ownership review progress — 30 October 2026
+
+The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md) supplies source tracing and ten bounded memory-only observations. Existing explicit provider/host ownership is proposed; joint requirements and any optional scope stay open. A throwing StreamCompleted callback reproducibly skips owned-reader disposal; a focused exception-safe completion fix is the next core-owned slice, tracked here as Pending implementation/qualification. No production source/API/pin or external owner work changed. Full compatibility cases, C45 and freeze remain pending.

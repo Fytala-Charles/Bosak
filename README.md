@@ -122,6 +122,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
 | [Foundation API review](docs/foundation-api-baseline/README.md) | Proposed shared API scope and compatibility questions for Schema and XmlDb. |
 | [Foundation contract draft](docs/foundation-api-contract-draft/README.md) | Proposed member scope and planned consumer compatibility cases. |
+| [Result ownership review](docs/foundation-result-ownership/README.md) | Lazy and escaped result lifetimes, ownership proposal and observations. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived checkpoints and earlier roadmap snapshots. |
 
 Build and test a source checkout:

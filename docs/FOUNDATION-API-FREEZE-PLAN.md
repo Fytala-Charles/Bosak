@@ -51,3 +51,7 @@ The [core API baseline](foundation-api-baseline/README.md) is complete at exact 
 ## F140-01 member-level draft progress — 30 October 2026
 
 The [member manifest and compatibility matrix](foundation-api-contract-draft/README.md) now cover every baseline entry. Conservative public-type closure exposes 11 additional Runtime dependencies beyond Core/query seeds. This advances FG-01/04/07 preparation, not owner acceptance: all 20 compatibility cases are NotRun, all owner dispositions Pending, and no interface or scope is frozen. External requirements remain delegated. Next core task is the focused lifetime/ownership decision note.
+
+## REQ-140 / F140-01 ownership review progress — 30 October 2026
+
+The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md) supplies source tracing and ten bounded memory-only observations. Existing explicit provider/host ownership is proposed; joint requirements and any optional scope stay open. A throwing StreamCompleted callback reproducibly skips owned-reader disposal; a focused exception-safe completion fix is the next core-owned slice, tracked here as Pending implementation/qualification. No production source/API/pin or external owner work changed. Full compatibility cases, C45 and freeze remain pending.

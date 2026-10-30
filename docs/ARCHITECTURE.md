@@ -2200,3 +2200,8 @@ The [compiled API inventory and proposed freeze scope](foundation-api-baseline/R
 ## F140-01 member-level draft — 30 October 2026
 
 The [proposed contract manifest and compatibility matrix](foundation-api-contract-draft/README.md) cover all 5,766 baseline entries with exact overload IDs, interface-slot distinctions and planned case links. Conservative Core/query signature reachability includes 11 additional Runtime types (40 total); these require explicit review before final member selection. Twenty behavioral/package/consumer cases remain NotRun. Ten audit-tool tests pass; engine source, public APIs, external owner work and pins are unchanged. Joint requirements, FG-01/04/07 decisions, C45 acceptance and freeze remain pending. Next: focused lazy/escaped-result lifetime and ownership decision note.
+
+
+## F140-01 result ownership review — 30 October 2026
+
+The [proposed ownership disposition](foundation-result-ownership/DECISION.md) traces lazy, nested and escaped result paths. Ten bounded memory-only observations confirm no universal early-release protocol and reproduce an owned-reader cleanup gap when StreamCompleted throws. Existing interfaces/layouts remain unchanged; explicit provider/host resource ownership is the proposed compatibility baseline, with an optional scope subject to actual consumer needs. Next core slice: exception-safe owned streaming completion with failure-precedence tests. No engine fix, consumer qualification, C45 acceptance or API freeze occurs here; the previous twenty compatibility gates remain NotRun.
