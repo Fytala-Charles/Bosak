@@ -231,3 +231,8 @@ The [seven-package local candidate](foundation-package-qualification/README.md) 
 ## F140 package-backed full qualification — 30 October 2026
 
 The [exact seven-package cohort](foundation-package-gates/README.md) now passes all 24,225 tests in the solution's ten unit projects plus unchanged QT3 31,397/0/424 and gated qt4 8,941/0/1,918 (230 sets, 11 experimental passes). Actual process reports verify package hashes; XSLT/XQuery/database product assemblies remain explicitly qualified source-built bytes where required. Original fixture-layout and missing exit-report attempts are retained separately; corrected executions change no assertions or package bytes. This is not a wholly package-derived ten-product cohort or real consumer acceptance. Source/version, publication, C45 and API freeze remain unchanged. Next: consolidated core readiness/owner acceptance packet.
+
+
+## REQ-140 consolidated readiness — 30 October 2026
+
+The [core readiness/owner packet](foundation-readiness/README.md) is the consolidated entry point for exact package/API/source and qualification identities. It pins thirteen immutable evidence inputs, preserves the seven-package/source-built-product scope, and lists eight pending joint requirements with an unfilled owner response template. Existing legacy candidate qualification is available; full shared-foundation readiness, finite neutral C45 scope, actual Schema/XmlDb evidence and API freeze remain pending. Source/packages and owner projects are unchanged. Core next reconciles returned requirements into the finite C139-01/C45 decision and named stable member manifest.

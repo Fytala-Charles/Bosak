@@ -75,3 +75,7 @@ The [seven-package Core/API candidate](foundation-package-qualification/README.m
 ## Exact package-cohort full gates — 30 October 2026
 
 [Full solution and frozen gate execution](foundation-package-gates/README.md) now qualifies the seven selected package DLLs in an explicitly recorded mixed environment, with 24,225 passing unit tests, unchanged QT3/qt4 and actual binding hashes. It is bounded core evidence, not actual dual-consumer or wholly package-derived product certification. Preserved setup corrections are not skip admissions. General C45/required contract gaps and all owner freeze/release dispositions remain pending; prepare the consolidated core handoff packet next.
+
+## Consolidated owner handoff — 30 October 2026
+
+Use [the readiness packet](foundation-readiness/README.md) as the entry point: exact source/feed/API/evidence identities, qualified scope, pending requirements and role-specific acceptance return instructions. Readiness means local evidence is available, not that the full shared foundation is ready for freeze. No owner sign-off is inferred and no prior frozen template/receipt is filled in automatically. Core next maps returned required needs to the finite C139-01/C45 decision and named member manifest; required gaps and all joint release/freeze dispositions remain open.

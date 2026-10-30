@@ -6472,3 +6472,7 @@ REQ-140 remains In Progress. [Seven local 1.34.2 packages](foundation-package-qu
 ## REQ-140 package-backed full test/gate evidence — 30 October 2026
 
 The [seven-package mixed-cohort qualification](foundation-package-gates/README.md) passes 24,225 tests/ten solution projects and both frozen gates with exact skip names/reasons unchanged. Actual default-context bindings match package hashes; other product assemblies remain separately source-built. Original Runtime fixture-path failures and the first successful XSLT run lacking testhost binding proof are retained; selected corrected runs use unchanged assertions/binaries/packages. Eight verifier controls pass. REQ-140 stays In Progress; neutral C45 scope, actual consumers, signing/publication and API freeze remain Pending. Next core task is the consolidated readiness/owner checklist packet.
+
+## REQ-140 consolidated core handoff — 30 October 2026
+
+[Core readiness and owner acceptance packet](foundation-readiness/README.md) now binds thirteen immutable inputs, the exact seven-package feed and current mixed-cohort qualification to an eight-item pending requirements ledger. The blank Schema/XmlDb return template supplies no sign-off or product adoption. Existing candidate artifacts are qualified for the recorded legacy scope; shared REQ-140 remains In Progress, REQ-139/C45 and actual consumer/freeze/release decisions stay pending. No source/version/package or external owner change. Next is reconciliation of actual owner requirements into the finite neutral contract/member-scope decision.
