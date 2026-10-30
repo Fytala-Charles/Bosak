@@ -71,3 +71,7 @@ The [retained-caller harness](foundation-legacy-compatibility/README.md) demonst
 ## Local immutable-source package evidence — 30 October 2026
 
 The [seven-package Core/API candidate](foundation-package-qualification/README.md) binds repository and assembly identity to c88eea43 / 1.34.2 and retains package/archive/cache/output/loaded hashes. Existing caller source and unchanged binaries pass their twenty selected legacy cases using only restored package dependencies. This is a local prepared artifact cohort, not F140-04 completion: package-backed full solution/gates, actual consumer qualification, neutral C45 scope and joint freeze remain pending. Release packaging must deliberately retain the reviewed NOTICE asset recipe or adopt an equivalent stock-pack change.
+
+## Exact package-cohort full gates — 30 October 2026
+
+[Full solution and frozen gate execution](foundation-package-gates/README.md) now qualifies the seven selected package DLLs in an explicitly recorded mixed environment, with 24,225 passing unit tests, unchanged QT3/qt4 and actual binding hashes. It is bounded core evidence, not actual dual-consumer or wholly package-derived product certification. Preserved setup corrections are not skip admissions. General C45/required contract gaps and all owner freeze/release dispositions remain pending; prepare the consolidated core handoff packet next.

@@ -1,0 +1,359 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "scope": "Package-backed gate dossier; generated build/bytecode outputs and this manifest excluded",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "be24270ed71590fe016d88315f7274103830c33c924dbaf07408ea6253495f8d"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "29dac85a09bc24f1f4bdbde6a3616e09bd6b457ae054dcade1f9349936d8ed89"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Api.Tests/39664.json",
+      "sha256": "d9cee274fa770a91c4d419aedc3657b43bd3a115da1b8f5a08b6a60e051289e3"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Api.Tests/47016.json",
+      "sha256": "975fb019b5426b3519d379ad9ea796990d4d1d3eb45471e18ced86f4baab99fb"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Api.Tests/50156.json",
+      "sha256": "ae32032dec5a0b0aea991c52744ff783a078a967d1a58377b49045b674e64d10"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Compiler.Tests/2584.json",
+      "sha256": "6f0e68a27266cacc371f1264baa52303567cabab80da61d9a2a4e8a7ca92fc4d"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Compiler.Tests/26908.json",
+      "sha256": "075fa8982dc7af8e2fa47214fe045b3981ff13a6402261af7e3f4980bdb1ce8e"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Compiler.Tests/40924.json",
+      "sha256": "c4e53d6b0dba04167417e000fac4c31c6b4a7845f7943a9216d0306c5fba873d"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Conformance/51700.json",
+      "sha256": "b502edcda91a732687c2081c2e6f3f3adc37b352ac3470bbfab6a4e4a9ea438d"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Conformance40/42236.json",
+      "sha256": "404bf25777d1353b892c919bd2536f17a8262a2cab2df73f13292daa501d8be4"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Core.Tests/33880.json",
+      "sha256": "9b138b941cf4421be65f4f6648c40df53480ab2a0c4725929a0cadfcd8b94388"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Core.Tests/55236.json",
+      "sha256": "9c49755c9103d620aec7bdb0735c07a64865ed8e0072b7d7e0b5dadf253d8afc"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Core.Tests/65328.json",
+      "sha256": "5cd20cbcb5b08627ec35ea90571cd6c8af5c19d79cd1f6728a1e23954625fd68"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Parser.Tests/44296.json",
+      "sha256": "3ddda7bcccd97a5ded0932dcbd3ca5a9083e1640538a2f581e2ca0dd4734877c"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Parser.Tests/46448.json",
+      "sha256": "a3db7c5caa9a993478bee3cf1c471344b42147e0af3cc5a3a87c267a1b4bf549"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Parser.Tests/64260.json",
+      "sha256": "5797f50e5191a51c0d421350e3b5750d346a98f8c5d2ecffe62d503961eefa9a"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Database.Tests/49004.json",
+      "sha256": "80a98880e2763a463c699b28c57c7a0ee2e7be3518841bd82de976a538458549"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Database.Tests/49764.json",
+      "sha256": "9f1b927b61afe2fc606ee989b4f8c8b388b2bf5271d92cf613a7e4dd53e7ddc4"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Database.Tests/52796.json",
+      "sha256": "5def2a8791ea0f5c39e6310a645ca79c08377605ccbd958dc920d73e21343eea"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Tests/3992.json",
+      "sha256": "fe042a15eacd98178f67f8e505b13ff5921e97ec7f2dbc0eef4363ae7bce3f5d"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Tests/45792.json",
+      "sha256": "14e00b515218b3f4d0ef6361096fedaaf4de731943f95a5d511c67d897d1892e"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Providers.Tests/63500.json",
+      "sha256": "c42ea9321bbf3da1a13005722271bb70563664add0b72e20f191507446ac4645"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Runtime.Tests/50384.json",
+      "sha256": "78249813a9a773a6e06c353f3dcd8beeb6903cff52b558cf5e1776ef31d77e25"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Runtime.Tests/57308.json",
+      "sha256": "c91a875219aad3aa0a378e1747b025e6e21129ad4a551bf511219df8b4e96a85"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Runtime.Tests/59268.json",
+      "sha256": "93fdd203810fb717d6eaf2e41cce348135531d7d374239a540eeb80581acde9a"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Standard.Tests/35440.json",
+      "sha256": "105323795397dfce2b31c793d4fd63fadbb997ec0df56958f5cab42c9a87f27f"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Standard.Tests/37576.json",
+      "sha256": "1a84ced3210f71e78732bac8aa1b77160f78de91f0c60c48a677f65c0c644936"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XPath.Standard.Tests/64864.json",
+      "sha256": "677e131ee2414660f6c8672cb702ec60048eedf3f9b4fd4bab8ba37521bad347"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XQuery.Tests/24080.json",
+      "sha256": "e8dd75577f5c4986821dfa4b7e2b4f80a0d311eae78fa7f078c0791f943ac253"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XQuery.Tests/33112.json",
+      "sha256": "a62f95746a2f51ccdd41b2a3fb4320662ac110c6f1dffe9287abc7da0c373067"
+    },
+    {
+      "path": "evidence/bindings/Bosak.XQuery.Tests/44464.json",
+      "sha256": "9d68d3eaa8f06acf6717f0c59b73b0d35d02f72b072e633c0509f4d4fe4aa30f"
+    },
+    {
+      "path": "evidence/bindings/Bosak.Xslt.Tests/16776.json",
+      "sha256": "3398674c8092e96918a682aef5d9eef9b18fa8f65eaf416d15a979807ab98442"
+    },
+    {
+      "path": "evidence/bindings/Bosak.Xslt.Tests/49828.json",
+      "sha256": "e586e3a38512d54743a10f29ccef90904fe6933e8cd63c760d21b8ac3df37789"
+    },
+    {
+      "path": "evidence/bindings/Bosak.Xslt.Tests/9664.json",
+      "sha256": "8c6a970139ac3bc2f477bc3f68787765a492a44201fe5abe66863a460b47e5c8"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Api.Tests.trx.gz",
+      "sha256": "2ce10a846b51c1a9c758dfdfec3fdc4f9b124400046834a370c666e435b19542"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Api.Tests.txt",
+      "sha256": "ce7613e5d0adc9d29e26b988d7beffe42b92835a7ab7e4e0cdcfe06d62f81e29"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Compiler.Tests.trx.gz",
+      "sha256": "59e3dd21118a35d1eb5ff066cf47dfb13b4d57508f93ba3edd067be7f199dfd6"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Compiler.Tests.txt",
+      "sha256": "8a53f4058ede8d10ce9d60088199f3e88a6633730215c206fde4fa1f61447b45"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Conformance.txt",
+      "sha256": "248faa1adf6ddf7c5443644d4e4bf72f47ce561f87a9541f0026759f009d31a6"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Conformance40.txt",
+      "sha256": "35ad80b622a8fec0c9a2a9d99b8cc3683a1b6cef3d1a38e163c7dba9e0f83d9c"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Core.Tests.trx.gz",
+      "sha256": "6b7ef36a9c68190a082e43271636d95ee632a6154476e7cfac928944a2de1ba7"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Core.Tests.txt",
+      "sha256": "f9858078e71ae6a4b620a723f322ab18353908eb4e62e9e248ce5380e829e156"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Parser.Tests.trx.gz",
+      "sha256": "7cdb4ca2310c3ccb88329dbefd05a2b7ecf71b27f919f63ef1904bd36147b750"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Parser.Tests.txt",
+      "sha256": "ebcc83a06fde16ba7ff846e594f89a91e45fdfc0f881bbd81cf5290b1fe60dc6"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Providers.Database.Tests.trx.gz",
+      "sha256": "a40e9c17132b39e8222487192af345a5eca51e0948e5995b6c65b59a66adac09"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Providers.Database.Tests.txt",
+      "sha256": "aec0472ed1fbfe0b309ead33cbd523a669f609e8b1c4c5f5ef0354e8c6873d81"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Providers.Tests.trx.gz",
+      "sha256": "ab90329e1e5f741ddbd26dbd317828bd61fbf14b4cafa21264a00b6dccdf9be4"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Providers.Tests.txt",
+      "sha256": "1a170319dc1f84a7e5ef15d112a981e17a693ea8837e61fc5f0dd19dcb1e27ea"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Runtime.Tests-corrected-layout.trx.gz",
+      "sha256": "dd6e7736f972bdb16ca972eabdcbfe79e1d8dcd09af44e1cf9001dbb295ed939"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Runtime.Tests-corrected-layout.txt",
+      "sha256": "f8c65b9e85fea1177161fec7aab76f3324fa25a187aab22a300da57c4dfac867"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Standard.Tests.trx.gz",
+      "sha256": "209086e904d9a4232c8c7744ea6410e87d3588b1dc7b96b2d934ae2e0f3a9652"
+    },
+    {
+      "path": "evidence/Bosak.XPath.Standard.Tests.txt",
+      "sha256": "1342b1d23b2bf59846bf87eeb5b25fbfcacafe6fa4d1b405f3b508d1d30adc82"
+    },
+    {
+      "path": "evidence/Bosak.XQuery.Tests.trx.gz",
+      "sha256": "ddb1b959907451106ccfba9ae9846b02ae37bf472146364ede46e412aa46121c"
+    },
+    {
+      "path": "evidence/Bosak.XQuery.Tests.txt",
+      "sha256": "9b494eb0f60169972d33dd14ed63e157a0a935a69adaab3efbff435d40ae9671"
+    },
+    {
+      "path": "evidence/Bosak.Xslt.Tests-load-capture.trx.gz",
+      "sha256": "c4486062c7aba78dff3c27a0c6c08d839a1a1e4df96cbaecb79a4e2d7f7bb6df"
+    },
+    {
+      "path": "evidence/Bosak.Xslt.Tests-load-capture.txt",
+      "sha256": "9d87734dfa635c977f785e115dae6058d53df11ac4dfae1e177e3cbf7a3e2134"
+    },
+    {
+      "path": "evidence/initial-bindings/Bosak.XPath.Runtime.Tests/25544.json",
+      "sha256": "c1e6f344147c4152cd776241deb8fd83bcc4357c2885d17ef74792226145dd0c"
+    },
+    {
+      "path": "evidence/initial-bindings/Bosak.XPath.Runtime.Tests/59056.json",
+      "sha256": "8060f7d9464fcb392dc2d96e8eb6346214bed8c630f1cf6cc1c65792e6ab61af"
+    },
+    {
+      "path": "evidence/initial-bindings/Bosak.XPath.Runtime.Tests/59620.json",
+      "sha256": "1be5504b733f881742b3837ee636f002bb59ab26ff0f32a75827e209673e7a0c"
+    },
+    {
+      "path": "evidence/initial-bindings/Bosak.Xslt.Tests/12968.json",
+      "sha256": "f337e436d1b84f3f0511902c170eab7311143037e5becd7a0bb85a36de4fd8dd"
+    },
+    {
+      "path": "evidence/initial-bindings/Bosak.Xslt.Tests/51108.json",
+      "sha256": "40b4a645f0888b6926e54e4bf4fb463ba423bf8bcc36a1fc90794d59b4e74ae9"
+    },
+    {
+      "path": "evidence/initial-Bosak.XPath.Runtime.Tests-execution.json",
+      "sha256": "d0dbf1106702dc5a43f45585f8079ebfcf43637860a077231803f3886128a712"
+    },
+    {
+      "path": "evidence/initial-Bosak.XPath.Runtime.Tests.trx.gz",
+      "sha256": "5790bac807eef438bfa4d00c696c4d950e8eca6ff09ffec9be8cf6c34815d7f9"
+    },
+    {
+      "path": "evidence/initial-Bosak.XPath.Runtime.Tests.txt",
+      "sha256": "0b8a12dac01b6246e75a747a7c6968fef4071a4eaa3ce9f53bf6f98c5d543515"
+    },
+    {
+      "path": "evidence/initial-Bosak.Xslt.Tests-execution.json",
+      "sha256": "0a2966665b3c6d34fdeaea83ea98b9e953420e74db86299fa194f942b054d491"
+    },
+    {
+      "path": "evidence/initial-Bosak.Xslt.Tests.trx.gz",
+      "sha256": "1d1a6958f7115019ed315b5f9b910103aaa3a446c2d5e8b6029bfbc467d2a2b2"
+    },
+    {
+      "path": "evidence/initial-Bosak.Xslt.Tests.txt",
+      "sha256": "a885ec555e24cd128f45311626fae42fa1eee4b44db3704319b1efa4fefc5a34"
+    },
+    {
+      "path": "evidence/observer-v1-build.txt",
+      "sha256": "234b6e63daa148f467e226a15758f2ea7112969361cecc69906f9d6d8cf17f46"
+    },
+    {
+      "path": "evidence/observer-v1.zip",
+      "sha256": "2bd0c1e99c1cd9199bcfd3f2a37446e838baf5722b72b03362944b8a30a344d5"
+    },
+    {
+      "path": "evidence/observer-v2-build.txt",
+      "sha256": "73b3b8ff6e1b813bd69a3ad638378ef52bf89b4c3363f28fbc9b70eed1b100bd"
+    },
+    {
+      "path": "evidence/observer-v2.zip",
+      "sha256": "d728008a160f754b07e453c54d13225c2d8495c9aafe5175015e08e342e35d3f"
+    },
+    {
+      "path": "evidence/qt3-skips.txt",
+      "sha256": "2c7a59c03ca54ea88314d5a851915bf3fe3a029600f089dc14c7f97405036613"
+    },
+    {
+      "path": "evidence/qt4-skips.txt",
+      "sha256": "ca3d1f0651f257492bfb423d6769ceba00c726fc73b5e4d295e5afec06f1f1d0"
+    },
+    {
+      "path": "evidence/runners.json",
+      "sha256": "b236568681f289401001a13807caf55460a9cd3f0661034945ab0d9f34bf9234"
+    },
+    {
+      "path": "evidence/runtime-layout-correction.json",
+      "sha256": "b617bc82b9914c97aa10391ae399077995a2a9b07c7290fc3635e93645e9f655"
+    },
+    {
+      "path": "evidence/startup-hook-v1.cs.txt",
+      "sha256": "73887563f37c0cc5ad5d0246885aef8c31b77402036be75ee1fdc013184c34e5"
+    },
+    {
+      "path": "evidence/verifier-tests.txt",
+      "sha256": "a28d11bbdcd5bed1034f569adb65f7bf2387bdeafdc01f8751271c268e192632"
+    },
+    {
+      "path": "evidence/xslt-binding-correction.json",
+      "sha256": "ac5b640a439c1306451e97cc7c48461fdfc411dcf8423c0b8def7f0961effe71"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a835faae11be5327e1d6760b1f2d0fd7713de76d1e8def9e808eedd12793c4b6"
+    },
+    {
+      "path": "RESULTS.json",
+      "sha256": "62387e970958af79c21953ac4142a3546a7d9907b10e171e353eb9c78503ec13"
+    },
+    {
+      "path": "SCOPE.json",
+      "sha256": "34be750cab27319a5e4bb0df6077c7e314df6dfee71a557d80f88d96aaff2243"
+    },
+    {
+      "path": "tools/BindingHook.csproj",
+      "sha256": "5782db204dd8a0d7dbb652de79ab8bcb29ade86f6ce850378e0e25a2ee92c401"
+    },
+    {
+      "path": "tools/collect.py",
+      "sha256": "b69f911f2e71371659467894fabeabf1ffbb87a28f937b8646b9e7a70062beeb"
+    },
+    {
+      "path": "tools/prepare.py",
+      "sha256": "9f6e107cb45f3cf89cc8d4558bfb2052546dc5e93a386963d956c9d224cc36d3"
+    },
+    {
+      "path": "tools/run.py",
+      "sha256": "f3957b5045ea4a2ab7f05f7fbd6e79279ea0d9a5ade9310c6b9cdc5b8064f22f"
+    },
+    {
+      "path": "tools/StartupHook.cs",
+      "sha256": "de55f78775558825dce0e88985032761fc023556ee4d4f38d6725ad469d1e347"
+    },
+    {
+      "path": "tools/test_receipts.py",
+      "sha256": "fc819980cc31505555695458e233517b05503ea2be20bd0c79adb20834a2cc1c"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "351c482c196c9ba892aa91bce187ee515fe552d4bc7c9e3b3b679ea279bda8ee"
+    }
+  ]
+}

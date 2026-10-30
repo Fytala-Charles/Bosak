@@ -19,7 +19,7 @@ Last updated: **30 October 2026**. This page holds current engineering detail; t
 
 | Scope | Recorded result | Interpretation |
 |---|---|---|
-| Complete core solution | 24,225 passing tests / 0 failures | Original 1.34.2 cleanup [qualification](streaming-completion-cleanup/RESULTS.json); new package-cohort full runs remain pending. |
+| Complete core solution | 24,225 passing tests / 0 failures | Fresh seven-package mixed-cohort [qualification](foundation-package-gates/README.md); other required products remain source-built, not package-derived. |
 | Frozen QT3 gate | 31,397 passed / 0 failed / 424 skipped | Preserve exact skip names/reasons and adopted baseline. |
 | qt4 gated run | 8,941 passed / 0 failed / 1,918 skipped; 230 gated sets, 11 experimental passes | Bounded adopted coverage, not complete current-draft certification. |
 | Revised isolated schema prototype | 123 controls; twelve detected bad variants; 32 compiled proposed neutral types | [C44-R2 dossier](conformance/k04-schema-compatibility-prototype/README.md); no production API/ABI acceptance. |
@@ -226,3 +226,8 @@ The [isolated compatibility harness](foundation-legacy-compatibility/README.md) 
 ## F140 immutable-source package candidate — 30 October 2026
 
 The [seven-package local candidate](foundation-package-qualification/README.md) is built from committed source c88eea43 / 1.34.2 with matching repository/informational revisions. The recorded pack recipe adds the exact committed NOTICE asset without changing stock source metadata. A PackageReference-only caller and unchanged 1.34.1 caller each pass the 20 legacy cases; a fresh feed/cache replay also passes. All package/cache/output/loaded hashes match; 2,205 metadata entries across 78 types remain unchanged in the seven assemblies. These are unsigned local candidates, not publication or actual consumer acceptance. Prior full engine/gate qualification is a separate cohort; package-backed full tests/gates are next. Source/version and external owners remain unchanged; C45/freeze stay Pending.
+
+
+## F140 package-backed full qualification — 30 October 2026
+
+The [exact seven-package cohort](foundation-package-gates/README.md) now passes all 24,225 tests in the solution's ten unit projects plus unchanged QT3 31,397/0/424 and gated qt4 8,941/0/1,918 (230 sets, 11 experimental passes). Actual process reports verify package hashes; XSLT/XQuery/database product assemblies remain explicitly qualified source-built bytes where required. Original fixture-layout and missing exit-report attempts are retained separately; corrected executions change no assertions or package bytes. This is not a wholly package-derived ten-product cohort or real consumer acceptance. Source/version, publication, C45 and API freeze remain unchanged. Next: consolidated core readiness/owner acceptance packet.

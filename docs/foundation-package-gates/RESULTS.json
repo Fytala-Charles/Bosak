@@ -1,0 +1,976 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "status": "Exact seven-package cohort locally qualified with unchanged source-built other products; no publication/freeze",
+  "packageFeedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "unitTests": {
+    "passed": 24225,
+    "failed": 0,
+    "projects": 10
+  },
+  "runners": [
+    {
+      "runner": "Bosak.XPath.Core.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "70f308d210f40e95df6cfed4d537e98087c7afe2a43109808abd3c2aa81e2daf",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Core.Tests/33880.json",
+        "evidence/bindings/Bosak.XPath.Core.Tests/55236.json",
+        "evidence/bindings/Bosak.XPath.Core.Tests/65328.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Core.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Core.Tests\\Bosak.XPath.Core.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Core.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 2.11,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 132,
+      "failed": 0,
+      "trx": "Bosak.XPath.Core.Tests.trx.gz",
+      "uncompressedTrxSha256": "6297cce1d3a1980a940974b23d48b018968a0753c6850e64cbd596a24ee47179"
+    },
+    {
+      "runner": "Bosak.XPath.Parser.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "2e3e58ccf8a2520a29faf4d9beee51dea43929da317874b0a0a7668cdc4bcaca",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Parser.Tests/44296.json",
+        "evidence/bindings/Bosak.XPath.Parser.Tests/46448.json",
+        "evidence/bindings/Bosak.XPath.Parser.Tests/64260.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Parser.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Parser.Tests\\Bosak.XPath.Parser.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Parser.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 2.02,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 202,
+      "failed": 0,
+      "trx": "Bosak.XPath.Parser.Tests.trx.gz",
+      "uncompressedTrxSha256": "f0a41bd09d09fdb1241d984e934b22e1b49c5a5f8dc7a32746a131a09d3dff2b"
+    },
+    {
+      "runner": "Bosak.XPath.Runtime.Tests",
+      "kind": "unit",
+      "attemptId": "corrected-layout",
+      "entrySha256": "bd19e77e8a6be6ba080b997a64a666dcdb8c8bd93e699d4d5cb41198f41e7131",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Runtime.Tests/50384.json",
+        "evidence/bindings/Bosak.XPath.Runtime.Tests/57308.json",
+        "evidence/bindings/Bosak.XPath.Runtime.Tests/59268.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Runtime.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Runtime-corrected\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Runtime.Tests-corrected-layout"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 2.79,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 269,
+      "failed": 0,
+      "trx": "Bosak.XPath.Runtime.Tests-corrected-layout.trx.gz",
+      "uncompressedTrxSha256": "ec4911d08114787feab168932a9f5d77e16ce6af87123b66e81882f38d3b2016"
+    },
+    {
+      "runner": "Bosak.XPath.Api.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "81c28f270e746f45ba5b2e29557f84ed44c90d2bdf66f84e1ebd276db64db60e",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Api.Tests/39664.json",
+        "evidence/bindings/Bosak.XPath.Api.Tests/47016.json",
+        "evidence/bindings/Bosak.XPath.Api.Tests/50156.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Api.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Api.Tests\\Bosak.XPath.Api.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Api.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 2.27,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 489,
+      "failed": 0,
+      "trx": "Bosak.XPath.Api.Tests.trx.gz",
+      "uncompressedTrxSha256": "25f5a4f3f17ae720076c8d2ea4a68f884257616ed435df8e458b2be4525cd911"
+    },
+    {
+      "runner": "Bosak.XPath.Standard.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "51b1f5c3be36bc6d45f6efe45c24eea984fd9bca35770518199e2247a8aa62c5",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Standard.Tests/35440.json",
+        "evidence/bindings/Bosak.XPath.Standard.Tests/37576.json",
+        "evidence/bindings/Bosak.XPath.Standard.Tests/64864.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Standard.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Standard.Tests\\Bosak.XPath.Standard.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Standard.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 6.46,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 13797,
+      "failed": 0,
+      "trx": "Bosak.XPath.Standard.Tests.trx.gz",
+      "uncompressedTrxSha256": "07c0eb771a539732bf54d111ead15d734d0835074424a468dfa5595eba7756c6"
+    },
+    {
+      "runner": "Bosak.XPath.Compiler.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "3d6ad90694a5d10f5343cc1ad630aa60617c4a6f1b8c0b828acad67d29868b0b",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Compiler.Tests/2584.json",
+        "evidence/bindings/Bosak.XPath.Compiler.Tests/26908.json",
+        "evidence/bindings/Bosak.XPath.Compiler.Tests/40924.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Compiler.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Compiler.Tests\\Bosak.XPath.Compiler.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Compiler.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 1.94,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 66,
+      "failed": 0,
+      "trx": "Bosak.XPath.Compiler.Tests.trx.gz",
+      "uncompressedTrxSha256": "bd2818dd96b3f5feb99341f3b8f3eafb01a7861019a7014b28bde43a2971d08c"
+    },
+    {
+      "runner": "Bosak.Xslt.Tests",
+      "kind": "unit",
+      "attemptId": "load-capture",
+      "entrySha256": "0adc44895c7379ed2a567398e261c4b9fb9d52107ea534f18108cfc0c4bc9690",
+      "observerSha256": "0eff1dda612d1a114e7a35056cac39a3111ea05881d0171bda4c7974e16a1073",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [
+        {
+          "assembly": "Bosak.XQuery",
+          "sha256": "e5e2145c408b33d94861b72cf0a6936b8fa16d1cb2b1c4cba65728a4908270e0",
+          "scope": "Original qualified source-built product; not package-derived"
+        },
+        {
+          "assembly": "Bosak.Xslt",
+          "sha256": "7d18c30d36cbfbbcf897c49dab83980a871158e6565f801a3bf23b3051efea04",
+          "scope": "Original qualified source-built product; not package-derived"
+        }
+      ],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [
+        "Bosak.XQuery",
+        "Bosak.Xslt"
+      ],
+      "bindingReports": [
+        "evidence/bindings/Bosak.Xslt.Tests/16776.json",
+        "evidence/bindings/Bosak.Xslt.Tests/49828.json",
+        "evidence/bindings/Bosak.Xslt.Tests/9664.json"
+      ],
+      "execution": {
+        "runner": "Bosak.Xslt.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.Xslt.Tests\\Bosak.Xslt.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.Xslt.Tests-load-capture"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 229.94,
+        "hookSha256": "0eff1dda612d1a114e7a35056cac39a3111ea05881d0171bda4c7974e16a1073"
+      },
+      "passed": 8196,
+      "failed": 0,
+      "trx": "Bosak.Xslt.Tests-load-capture.trx.gz",
+      "uncompressedTrxSha256": "164226c0b1ef29fb0f7736f0473ee76ada269e6db9e7a648ec179bb078472fe3"
+    },
+    {
+      "runner": "Bosak.XQuery.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "8b2f85d68d4a1ff0138c73715dd7c670f3f13bb5d75c77c58ca30c7afc9971fc",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [
+        {
+          "assembly": "Bosak.XQuery",
+          "sha256": "e5e2145c408b33d94861b72cf0a6936b8fa16d1cb2b1c4cba65728a4908270e0",
+          "scope": "Original qualified source-built product; not package-derived"
+        }
+      ],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [
+        "Bosak.XQuery"
+      ],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XQuery.Tests/24080.json",
+        "evidence/bindings/Bosak.XQuery.Tests/33112.json",
+        "evidence/bindings/Bosak.XQuery.Tests/44464.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XQuery.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XQuery.Tests\\Bosak.XQuery.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XQuery.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 2.86,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 804,
+      "failed": 0,
+      "trx": "Bosak.XQuery.Tests.trx.gz",
+      "uncompressedTrxSha256": "cb8ccbb23e8a68273fa1a2f7c781b082b6602ffdcff5c63ea495f3705d12cb3c"
+    },
+    {
+      "runner": "Bosak.XPath.Providers.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "f49faffd012c8f8344a38a8d5e2a0620dcc628cd3047a74fe0f0db5ba61b9258",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Providers.Tests/3992.json",
+        "evidence/bindings/Bosak.XPath.Providers.Tests/45792.json",
+        "evidence/bindings/Bosak.XPath.Providers.Tests/63500.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Providers.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Providers.Tests\\Bosak.XPath.Providers.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Providers.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 10.55,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 223,
+      "failed": 0,
+      "trx": "Bosak.XPath.Providers.Tests.trx.gz",
+      "uncompressedTrxSha256": "44fd1f9f5db93c12c75bec685caa28e15b42e7e9df502773075a45a12a294a4a"
+    },
+    {
+      "runner": "Bosak.XPath.Providers.Database.Tests",
+      "kind": "unit",
+      "attemptId": "initial",
+      "entrySha256": "eb124d42bc5b42ffd8c0e441beefc3e265424e798e2fe0ca6f849ff9b7056d36",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        }
+      ],
+      "sourceBuiltProducts": [
+        {
+          "assembly": "Bosak.XPath.Providers.Database",
+          "sha256": "d7857fb7f4ea61a158263c53e6cf8c135e96200acda281ae0a54b9aeab0dfdca",
+          "scope": "Original qualified source-built product; not package-derived"
+        }
+      ],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime"
+      ],
+      "observedSourceProducts": [
+        "Bosak.XPath.Providers.Database"
+      ],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Providers.Database.Tests/49004.json",
+        "evidence/bindings/Bosak.XPath.Providers.Database.Tests/49764.json",
+        "evidence/bindings/Bosak.XPath.Providers.Database.Tests/52796.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Providers.Database.Tests",
+        "argv": [
+          "dotnet",
+          "vstest",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Providers.Database.Tests\\Bosak.XPath.Providers.Database.Tests.dll",
+          "/Logger:trx;LogFileName=results.trx",
+          "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.XPath.Providers.Database.Tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 6.79,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "passed": 47,
+      "failed": 0,
+      "trx": "Bosak.XPath.Providers.Database.Tests.trx.gz",
+      "uncompressedTrxSha256": "67d6676ffde202cc460a0323eea6206d4d4c7bdefcfcea5a8ec2cf77bef8b6fa"
+    },
+    {
+      "runner": "Bosak.XPath.Conformance",
+      "kind": "gate",
+      "attemptId": "initial",
+      "entrySha256": "a3384c5ee55ca0a3cf3983eb6c5337c0e752ff58ca8dfb791e5522b2f5a961c9",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [
+        {
+          "assembly": "Bosak.XQuery",
+          "sha256": "e5e2145c408b33d94861b72cf0a6936b8fa16d1cb2b1c4cba65728a4908270e0",
+          "scope": "Original qualified source-built product; not package-derived"
+        },
+        {
+          "assembly": "Bosak.Xslt",
+          "sha256": "7d18c30d36cbfbbcf897c49dab83980a871158e6565f801a3bf23b3051efea04",
+          "scope": "Original qualified source-built product; not package-derived"
+        }
+      ],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [
+        "Bosak.XQuery",
+        "Bosak.Xslt"
+      ],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Conformance/51700.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Conformance",
+        "argv": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Conformance\\Bosak.XPath.Conformance.dll",
+          "D:\\Development\\Bosak\\tests\\qt3tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 74.33,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "gate": "qt3",
+      "counts": [
+        31397,
+        0,
+        424
+      ],
+      "exactSkipNamesReasonsUnchanged": true
+    },
+    {
+      "runner": "Bosak.XPath.Conformance40",
+      "kind": "gate",
+      "attemptId": "initial",
+      "entrySha256": "44891eadfd4416490d7ddb4cc7baba6e25ca689e203d7af16254c51a482911f6",
+      "observerSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "packageReplacements": [
+        {
+          "assembly": "Bosak.XPath.Core",
+          "originalSha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02",
+          "packageSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+        },
+        {
+          "assembly": "Bosak.XPath.Parser",
+          "originalSha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622",
+          "packageSha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+        },
+        {
+          "assembly": "Bosak.XPath.Compiler",
+          "originalSha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142",
+          "packageSha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+        },
+        {
+          "assembly": "Bosak.XPath.Providers",
+          "originalSha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035",
+          "packageSha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+        },
+        {
+          "assembly": "Bosak.XPath.Runtime",
+          "originalSha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54",
+          "packageSha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+        },
+        {
+          "assembly": "Bosak.XPath.Standard",
+          "originalSha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e",
+          "packageSha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+        },
+        {
+          "assembly": "Bosak.XPath.Api",
+          "originalSha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7",
+          "packageSha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+        }
+      ],
+      "sourceBuiltProducts": [
+        {
+          "assembly": "Bosak.XQuery",
+          "sha256": "e5e2145c408b33d94861b72cf0a6936b8fa16d1cb2b1c4cba65728a4908270e0",
+          "scope": "Original qualified source-built product; not package-derived"
+        },
+        {
+          "assembly": "Bosak.Xslt",
+          "sha256": "7d18c30d36cbfbbcf897c49dab83980a871158e6565f801a3bf23b3051efea04",
+          "scope": "Original qualified source-built product; not package-derived"
+        }
+      ],
+      "observedPackageAssemblies": [
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Compiler",
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Parser",
+        "Bosak.XPath.Providers",
+        "Bosak.XPath.Runtime",
+        "Bosak.XPath.Standard"
+      ],
+      "observedSourceProducts": [
+        "Bosak.Xslt"
+      ],
+      "bindingReports": [
+        "evidence/bindings/Bosak.XPath.Conformance40/42236.json"
+      ],
+      "execution": {
+        "runner": "Bosak.XPath.Conformance40",
+        "argv": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.XPath.Conformance40\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests"
+        ],
+        "exitCode": 0,
+        "elapsedSeconds": 20.34,
+        "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+      },
+      "gate": "qt4",
+      "counts": [
+        8941,
+        0,
+        1918
+      ],
+      "exactSkipNamesReasonsUnchanged": true
+    }
+  ],
+  "preservedInitialAttempts": [
+    {
+      "runner": "Bosak.XPath.Runtime.Tests",
+      "passed": 218,
+      "failed": 51,
+      "trx": "initial-Bosak.XPath.Runtime.Tests.trx.gz",
+      "selectedForAggregate": false
+    },
+    {
+      "runner": "Bosak.Xslt.Tests",
+      "passed": 8196,
+      "failed": 0,
+      "trx": "initial-Bosak.Xslt.Tests.trx.gz",
+      "selectedForAggregate": false
+    }
+  ],
+  "scope": "Seven package-derived libraries plus qualified source-built XSLT/XQuery/database products where required; LanguageServer and external consumers excluded",
+  "productionSourceChanged": false,
+  "testAssertionsChanged": false,
+  "newSkipAdmissions": false,
+  "packageBytesChanged": false,
+  "actualConsumerQualified": false,
+  "publicationOrFreezeAccepted": false,
+  "documentationChecks": {
+    "result": "Passed",
+    "renderedPages": 35,
+    "localLinksChecked": 3003,
+    "scope": "HTML render/local destinations; no screenshot or hosted CI claim"
+  },
+  "observers": [
+    {
+      "version": "v1",
+      "archive": "observer-v1.zip",
+      "sha256": "2bd0c1e99c1cd9199bcfd3f2a37446e838baf5722b72b03362944b8a30a344d5",
+      "assemblySha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2",
+      "sourceSha256": "73887563f37c0cc5ad5d0246885aef8c31b77402036be75ee1fdc013184c34e5",
+      "capturePolicy": "Process exit"
+    },
+    {
+      "version": "v2",
+      "archive": "observer-v2.zip",
+      "sha256": "d728008a160f754b07e453c54d13225c2d8495c9aafe5175015e08e342e35d3f",
+      "assemblySha256": "0eff1dda612d1a114e7a35056cac39a3111ea05881d0171bda4c7974e16a1073",
+      "sourceSha256": "de55f78775558825dce0e88985032761fc023556ee4d4f38d6725ad469d1e347",
+      "capturePolicy": "Assembly load plus process exit; configuration captured at startup"
+    }
+  ],
+  "originalBinDirectoriesUnchanged": true,
+  "verifierTests": {
+    "passed": 8,
+    "failed": 0
+  }
+}

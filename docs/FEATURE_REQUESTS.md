@@ -6468,3 +6468,7 @@ F140-01 remains In Progress. [Core-owned legacy/no-schema qualification](foundat
 ## REQ-140 local package preparation — 30 October 2026
 
 REQ-140 remains In Progress. [Seven local 1.34.2 packages](foundation-package-qualification/README.md) have exact committed c88eea43 provenance, an explicit NOTICE asset recipe and isolated package-only restore. Twenty cases pass in each primary source/unchanged-binary mode, plus a fresh feed replay; eight verifier refusal controls pass. The seven assemblies retain 2,205 metadata entries/78 types unchanged. This advances bounded C139-04/F140-04 delivery preparation only: full package-backed engine/gate tests, actual consumer/signature acceptance, release and freeze remain pending. No production source/version or external owner change.
+
+## REQ-140 package-backed full test/gate evidence — 30 October 2026
+
+The [seven-package mixed-cohort qualification](foundation-package-gates/README.md) passes 24,225 tests/ten solution projects and both frozen gates with exact skip names/reasons unchanged. Actual default-context bindings match package hashes; other product assemblies remain separately source-built. Original Runtime fixture-path failures and the first successful XSLT run lacking testhost binding proof are retained; selected corrected runs use unchanged assertions/binaries/packages. Eight verifier controls pass. REQ-140 stays In Progress; neutral C45 scope, actual consumers, signing/publication and API freeze remain Pending. Next core task is the consolidated readiness/owner checklist packet.
