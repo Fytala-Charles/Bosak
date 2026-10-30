@@ -156,3 +156,8 @@ Bosak REQ-140 now registers the shared foundation for both Bosak.Schema and Bosa
 ## F140-01 core API baseline — 30 October 2026
 
 The [compiled API inventory and proposed freeze scope](docs/foundation-api-baseline/README.md) records source `f758a29f` / candidate 1.34.1: 11 assemblies, 270 exported types and 5,766 metadata entries. Core inventory is complete; member-level scope, joint Schema/XmlDb requirements, actual consumer qualification and freeze acceptance remain pending. Contract observations distinguish required/default interfaces, XML enum values, value-type field shape, lazy ownership and the existing bounded schema bridge. Nine open decisions are recorded. Fresh Release build passed with five existing nullable warnings; no runtime suites or conformance gates were rerun for this metadata audit. Production APIs, package pins and external owner work are unchanged.
+
+
+## F140-01 member-level draft — 30 October 2026
+
+The [proposed contract manifest and compatibility matrix](docs/foundation-api-contract-draft/README.md) cover all 5,766 baseline entries with exact overload IDs, interface-slot distinctions and planned case links. Conservative Core/query signature reachability includes 11 additional Runtime types (40 total); these require explicit review before final member selection. Twenty behavioral/package/consumer cases remain NotRun. Ten audit-tool tests pass; engine source, public APIs, external owner work and pins are unchanged. Joint requirements, FG-01/04/07 decisions, C45 acceptance and freeze remain pending. Next: focused lazy/escaped-result lifetime and ownership decision note.

@@ -6444,3 +6444,7 @@ Read-only adoption proposal reviewed (29 October 2026): compiled draft source/pr
 ## REQ-140 core inventory progress — 30 October 2026
 
 F140-01 is In Progress: [core API inventory/proposed scope](foundation-api-baseline/README.md) complete (11 assemblies, 270 types, 5,766 metadata entries). Joint requirements and member-level closure remain open, with nine recorded decisions. F140-02 through F140-04, C45 acceptance and API freeze remain pending. Fresh Release build/metadata checks passed; production source and consumer pins unchanged; runtime/gate receipts remain historical.
+
+## REQ-140 member-level draft progress — 30 October 2026
+
+F140-01 remains In Progress. [Member manifest and compatibility matrix](foundation-api-contract-draft/README.md) cover all 5,766 entries; conservative Core/query closure reaches 40 public types, including 11 additional Runtime dependencies. Twenty planned consumer/ABI/behavior/package cases remain NotRun; ten review-tool tests pass. FG-01/04/07 have concrete preparation artifacts, with their decisions and joint requirements still open. Engine source, external projects, C45 disposition, release and freeze are unchanged.

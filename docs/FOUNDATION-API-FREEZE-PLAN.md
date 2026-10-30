@@ -47,3 +47,7 @@ Before semantic changes, pin immutable specification revisions/sections/deviatio
 ## F140-01 progress — 30 October 2026
 
 The [core API baseline](foundation-api-baseline/README.md) is complete at exact source f758a29f; the joint contract inventory is **In Progress**. All 270 observed type dispositions remain proposed/Pending. Member-level selection, consumer requirements and the nine open decisions still block final scope and freeze. External execution remains with the delegated owners. No F140-02 implementation or F140-04 acceptance occurs here.
+
+## F140-01 member-level draft progress — 30 October 2026
+
+The [member manifest and compatibility matrix](foundation-api-contract-draft/README.md) now cover every baseline entry. Conservative public-type closure exposes 11 additional Runtime dependencies beyond Core/query seeds. This advances FG-01/04/07 preparation, not owner acceptance: all 20 compatibility cases are NotRun, all owner dispositions Pending, and no interface or scope is frozen. External requirements remain delegated. Next core task is the focused lifetime/ownership decision note.

@@ -1,0 +1,37 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "productionBaselineRevision": "f758a29f368201abdb98af003274451c84a9b7c4",
+  "documentationPreparationRevision": "bed37596c91428dc0517c79ff6309299106aea25",
+  "baselineVerifier": "Passed; 245 source/build hashes unchanged",
+  "deterministicRegeneration": "Passed",
+  "independentMemberClosureVerifier": "Passed",
+  "auditToolTests": {
+    "passed": 10,
+    "failed": 0,
+    "receipt": "tool-tests.txt",
+    "receiptNormalization": "UTF-8/LF with trailing whitespace removed from captured console output"
+  },
+  "documentationChecks": {
+    "result": "Passed",
+    "renderedPages": 24,
+    "localLinksChecked": 2493,
+    "scope": "HTML render/local destinations; no screenshot or hosted CI claim"
+  },
+  "engineBuildRun": false,
+  "runtimeSuitesRun": false,
+  "conformanceGatesRun": false,
+  "externalRepositoriesChanged": false,
+  "behavioralCasesExecuted": 0,
+  "freezeAccepted": false,
+  "artifactHashes": {
+    "scope-rules.json": "8bfcd14eeece7f4f832181a21ed631a9e28ecd7d142ca811a3610c6454812274",
+    "compatibility-cases.json": "70e216d8158be8ceaad506dce9d16dd4e9e240ad5e30cf7ca7a8ea6c5d92c3fe",
+    "tools/compile_manifest.py": "a0b29a27182e25d366429b5cbf2e82500f4b3282cade4030026fbb6242c24fdd",
+    "tools/verify_manifest.py": "09ffda00e5f3baa4403e24996da195ea3752d6c942d8d97c3a6afa142dd3724b",
+    "tools/test_manifest.py": "33ecc4ae50cba4946e23068fe745f6154c963462fabe09750434ebd6fedaf71b",
+    "evidence/member-manifest.json": "9de81974678e056748aca16b9bda0ade52d09f7cb50348420fe40ea6c70c090d",
+    "evidence/signature-closure.json": "18d1474e0c86a288d11832e99a08b4cd8135a946734f8df97514b25349f0b36c",
+    "evidence/tool-tests.txt": "ca6827ab6fdbb46398150da943f9b07262a3027f0a13e5b66fffe9126b9970a8"
+  }
+}
