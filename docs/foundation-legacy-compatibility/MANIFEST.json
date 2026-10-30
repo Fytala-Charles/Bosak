@@ -1,0 +1,95 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "scope": "Legacy caller dossier, excluding generated build/bytecode outputs and this manifest",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "0c0a12062d3b6009412df86cb40249448b6228ca2c484f13c5abf828a49a7d11"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "29dac85a09bc24f1f4bdbde6a3616e09bd6b457ae054dcade1f9349936d8ed89"
+    },
+    {
+      "path": "CASES.md",
+      "sha256": "587e636d5e4600a4015bf9aebab2a29b902477327a4177630325313aff381db9"
+    },
+    {
+      "path": "evidence/baseline-caller-build.txt",
+      "sha256": "b639a88af8d85b2f51fc8063afa4aba75d5b2239dee225c294594d12a0f3f603"
+    },
+    {
+      "path": "evidence/baseline-engine-build.txt",
+      "sha256": "a2f7786bf2ef6ff3c65fa33dc624a3ab1b251d162717b106db73e6ae78ce0fe3"
+    },
+    {
+      "path": "evidence/baseline-runtime.zip",
+      "sha256": "ab3134b2800a1b76461d319fc324f1cfcb0d85b939ad0e36cdb03b872ba2cf16"
+    },
+    {
+      "path": "evidence/baseline.json",
+      "sha256": "5b60da224c275e353124b704eab09b907145f1ddf5db9c1d3e844b77b59c0a64"
+    },
+    {
+      "path": "evidence/bundles.json",
+      "sha256": "e53ef3f553f2d6f1e8fea3de1a5666ae66deb10fbb7ec567dc6c60098d947633"
+    },
+    {
+      "path": "evidence/candidate-caller-build.txt",
+      "sha256": "378df0ea75d730c90944cf0cfbff89d18b7a8b78c1299dfa3e1a9427562addca"
+    },
+    {
+      "path": "evidence/dotnet-info.txt",
+      "sha256": "5c6ed8522f5dc369f57517fe2b4a729439641fd395322ae1a5f4a2bd82735006"
+    },
+    {
+      "path": "evidence/recompiled-source-runtime.zip",
+      "sha256": "811373da0b56754a58ed1d7157f0f1a4467d7016391d911da1235a43f3af71e7"
+    },
+    {
+      "path": "evidence/recompiled-source.json",
+      "sha256": "de7748e71370bd473f12d279d9c9c328acf3c52d1325c013e702c65797715a54"
+    },
+    {
+      "path": "evidence/unchanged-binary-runtime.zip",
+      "sha256": "d62c1b73a48f2adb9de5a594b76c13275e168b008a7d19177e3e7a386c0dbb18"
+    },
+    {
+      "path": "evidence/unchanged-binary.json",
+      "sha256": "42b29a62b97624beb71156fcf0a9429cb253f3216b10702f4100a7c601674c63"
+    },
+    {
+      "path": "evidence/verifier-tests.txt",
+      "sha256": "53a13d3237e657ca69909e55963a271a2c89309a9c00850d97628b3b34b97216"
+    },
+    {
+      "path": "harness/LegacyCaller.csproj",
+      "sha256": "7044952abbf7a7f3c1f3c83e3ffe543d700712060f4f61de7d1e3c8b7ea9dcac"
+    },
+    {
+      "path": "harness/Program.cs",
+      "sha256": "9c71edf726d57d72ac88df53afc7cb61c12ae094253e4691332025919a2e1c82"
+    },
+    {
+      "path": "README.md",
+      "sha256": "8adf7140e56b62b61d54c170848cac625fc86313297e709de49be90823978c07"
+    },
+    {
+      "path": "RESULTS.json",
+      "sha256": "a80847f80547b8a29cc82f7c25012161270e3c1cd5812caf893287f08414b420"
+    },
+    {
+      "path": "SCOPE.json",
+      "sha256": "29b985b7f5e09be21ba6a608eb3fe1087060ec2b519fb6173dacbd131a4da211"
+    },
+    {
+      "path": "tools/test_receipts.py",
+      "sha256": "c90bb828c5afcfe477c12d4537cfeddce3aa5abc73c8cb61cee0de8099272895"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "5a6429f071571b2542fd1eeba2236beec5b50c7f57df53e007fce780a369d791"
+    }
+  ]
+}

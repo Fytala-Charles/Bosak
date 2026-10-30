@@ -63,3 +63,7 @@ The [completion cleanup slice](streaming-completion-cleanup/README.md), source c
 ## F140-01 external boundary proposal — 30 October 2026
 
 The [external dependency review](foundation-external-dependencies/BOUNDARY.md) completes the core inventory of public external signature types and proposes an explicit legacy compatibility ledger alongside future neutral contracts. Five logical options/context members expose schema types inside the proposed graph; they cannot be silently removed by calling the rest neutral. Core/Schema/XmlDb scope disposition, exact neutral signatures and compatibility/freeze acceptance remain Pending. No production change occurred. Prepare the existing legacy/no-provider compatibility harness next, while owners execute their delegated packages.
+
+## Bounded legacy caller evidence — 30 October 2026
+
+The [retained-caller harness](foundation-legacy-compatibility/README.md) demonstrates selected source/default/error and unchanged-binary paths from local source-built 1.34.1 to qualified 1.34.2 across 20 cases/three modes. Exact observations match and loaded assembly hashes are verified. This advances core-owned FC-01/02/03/15 preparation; it does not certify the actual required consumers, their older published pins, packages, C45 or joint freeze. The candidate informational revision still reflects its pre-commit build base; committed-source/package provenance is the next explicit qualification task.

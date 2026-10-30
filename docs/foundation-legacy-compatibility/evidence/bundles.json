@@ -1,0 +1,180 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "scope": "Runtime-only local test bundles, not NuGet packages or published release; license and NOTICE retained",
+  "sourceArchive": {
+    "gitArchiveRevision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+    "paths": [
+      "src"
+    ],
+    "tarSha256": "80dfa99c29eea93ec9c1fbbf905655d6895d12a290a878ea0c9176c47ecae3b6",
+    "sourceArchiveNotCommitted": true
+  },
+  "bundles": [
+    {
+      "mode": "baseline",
+      "archive": "baseline-runtime.zip",
+      "sha256": "ab3134b2800a1b76461d319fc324f1cfcb0d85b939ad0e36cdb03b872ba2cf16",
+      "members": [
+        {
+          "path": "LegacyCaller.dll",
+          "sha256": "3393b28af914dadc84984842d4a9f6106619c3ef77cc719bb92347eb8def54e1"
+        },
+        {
+          "path": "LegacyCaller.deps.json",
+          "sha256": "9a6ab5a5983dffff3ac3b1575d6ea09a4f4a98ddb8f5b1264e55b984aabb6361"
+        },
+        {
+          "path": "LegacyCaller.runtimeconfig.json",
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "path": "Bosak.XPath.Api.dll",
+          "sha256": "2d85497d54ff767af24b6c7cb278b808029bc844296d105770ee340c6609542e"
+        },
+        {
+          "path": "Bosak.XPath.Core.dll",
+          "sha256": "9139decb3920cfe5740ac984764540bf9fbb9efd429338d5b09dde971f751333"
+        },
+        {
+          "path": "Bosak.XPath.Runtime.dll",
+          "sha256": "75ba4bb1d540d5ff5f628f9f0d5fad7190afdba30a65f59de5c7d4403bad9df9"
+        },
+        {
+          "path": "Bosak.XPath.Providers.dll",
+          "sha256": "9a19a738ad0198bc394867aa5d504612bc7f965e74d46875188bfd556267ab1c"
+        },
+        {
+          "path": "Bosak.XPath.Standard.dll",
+          "sha256": "8319e28a4ba01511577d2d55e875f55ad116d724ca668dbcdca93abd936c9392"
+        },
+        {
+          "path": "Bosak.XPath.Compiler.dll",
+          "sha256": "a393cc94b10323aa84968d52bde6c6637b30d6e7a67593c1d058f2200a8b4ba4"
+        },
+        {
+          "path": "Bosak.XPath.Parser.dll",
+          "sha256": "566ac0e23493d1725276fb4fb40f29435ebe8dbb9a3d9088ef6cf1bbef0c9cb9"
+        },
+        {
+          "path": "license.md",
+          "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da"
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d"
+        }
+      ]
+    },
+    {
+      "mode": "unchanged-binary",
+      "archive": "unchanged-binary-runtime.zip",
+      "sha256": "d62c1b73a48f2adb9de5a594b76c13275e168b008a7d19177e3e7a386c0dbb18",
+      "members": [
+        {
+          "path": "LegacyCaller.dll",
+          "sha256": "3393b28af914dadc84984842d4a9f6106619c3ef77cc719bb92347eb8def54e1"
+        },
+        {
+          "path": "LegacyCaller.deps.json",
+          "sha256": "9a6ab5a5983dffff3ac3b1575d6ea09a4f4a98ddb8f5b1264e55b984aabb6361"
+        },
+        {
+          "path": "LegacyCaller.runtimeconfig.json",
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "path": "Bosak.XPath.Api.dll",
+          "sha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7"
+        },
+        {
+          "path": "Bosak.XPath.Core.dll",
+          "sha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02"
+        },
+        {
+          "path": "Bosak.XPath.Runtime.dll",
+          "sha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54"
+        },
+        {
+          "path": "Bosak.XPath.Providers.dll",
+          "sha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035"
+        },
+        {
+          "path": "Bosak.XPath.Standard.dll",
+          "sha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e"
+        },
+        {
+          "path": "Bosak.XPath.Compiler.dll",
+          "sha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142"
+        },
+        {
+          "path": "Bosak.XPath.Parser.dll",
+          "sha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622"
+        },
+        {
+          "path": "license.md",
+          "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da"
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d"
+        }
+      ]
+    },
+    {
+      "mode": "recompiled-source",
+      "archive": "recompiled-source-runtime.zip",
+      "sha256": "811373da0b56754a58ed1d7157f0f1a4467d7016391d911da1235a43f3af71e7",
+      "members": [
+        {
+          "path": "LegacyCaller.dll",
+          "sha256": "254ec29ffbe7ac23c38c0b9e2cd6ca4ffe0b13cc99e17120df3fab4f10f55199"
+        },
+        {
+          "path": "LegacyCaller.deps.json",
+          "sha256": "ed165d56316c4db977aca7beb72deb6245a7733a3386f7b73203674adb47389e"
+        },
+        {
+          "path": "LegacyCaller.runtimeconfig.json",
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "path": "Bosak.XPath.Api.dll",
+          "sha256": "5c2b083a64d5f5d26f9aa36a0610c10afd7eec50c9d54abe92499bffbb30cbc7"
+        },
+        {
+          "path": "Bosak.XPath.Core.dll",
+          "sha256": "5fcb5472c3cd45556d62ddd0b079d1e3c4f15147d9d2703dcfcf59b72353be02"
+        },
+        {
+          "path": "Bosak.XPath.Runtime.dll",
+          "sha256": "6ed149c2e4bf074ca877c0c4395b3c48ad78c0fa166abe799c74f16ac1386b54"
+        },
+        {
+          "path": "Bosak.XPath.Providers.dll",
+          "sha256": "765ea343a6c5eeb2746ff8608e37b03d7762abc1712866554f6e9ca04ad30035"
+        },
+        {
+          "path": "Bosak.XPath.Standard.dll",
+          "sha256": "5c999760665d7bfb767b400b2e4597e9d16071ed25adda935ce46cbceb767c1e"
+        },
+        {
+          "path": "Bosak.XPath.Compiler.dll",
+          "sha256": "3a63ad1f88f68cabd2afb621568f500da1145f8dc3c4269ff176c05f46e64142"
+        },
+        {
+          "path": "Bosak.XPath.Parser.dll",
+          "sha256": "2010dacd387ce2e95030839ec4cc3521187d1b496656765d002d340ab119f622"
+        },
+        {
+          "path": "license.md",
+          "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da"
+        },
+        {
+          "path": "NOTICE",
+          "sha256": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d"
+        }
+      ]
+    }
+  ]
+}

@@ -6460,3 +6460,7 @@ The F140 ownership review finding is resolved in source candidate **1.34.2**: [s
 ## REQ-140 external dependency preparation — 30 October 2026
 
 F140-01 remains In Progress. The [external signature review](foundation-external-dependencies/README.md) covers all 3,506 public declarations and proposes the stable/legacy boundary: 176 external definitions overall, 47 within the proposed graph; 26 schema-exposing declarations, including nine in the proposed graph. All existing compatibility obligations remain; no C45/public API signature is accepted. Six extraction and eight review-tool checks pass. Source 1.34.2, external owners/pins and historical engine/gate receipts are unchanged. Next core-owned work is the legacy/no-provider compatibility harness; joint requirements and freeze remain pending.
+
+## REQ-140 bounded legacy source/binary checks — 30 October 2026
+
+F140-01 remains In Progress. [Core-owned legacy/no-schema qualification](foundation-legacy-compatibility/README.md) passes 20 unique cases in three primary execution modes (60 case-executions), including unchanged caller binaries crossing 1.34.1 to exact qualified 1.34.2 dependencies. Eight verifier/mutation controls pass. These are bounded FC-01/02/03/15 inputs; full real-consumer gates and the prior planned-case matrix are not marked complete. Production source/version, external owners/pins, C45 and freeze remain unchanged. Next core task: committed-source local candidate packages and package-only caller qualification, not release/publication.

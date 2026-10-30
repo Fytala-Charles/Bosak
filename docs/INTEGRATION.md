@@ -4334,3 +4334,8 @@ The [proposed ownership disposition](foundation-result-ownership/DECISION.md) tr
 ## F140-01 external signature review — 30 October 2026
 
 The [external dependency inventory and boundary proposal](foundation-external-dependencies/README.md) link all 3,506 public declarations to the existing metadata baseline: 176 external named definitions, with 47 in the proposed type graph. Twenty-six declarations expose System.Xml.Schema types; nine in the proposed graph represent five logical options/context members. Preserve those legacy compatibility obligations while the neutral schema contract remains unaccepted. Third-party LSP types occur only in LanguageServer and stay outside the proposed foundation graph. Source remains 1.34.2; no engine or external-owner change. Fourteen audit-tool checks pass; prior full tests/gates are historical, not rerun here. Next: isolated legacy/no-provider compatibility harness.
+
+
+## F140 legacy/no-schema caller qualification — 30 October 2026
+
+The [isolated compatibility harness](foundation-legacy-compatibility/README.md) passes 20 cases in three modes: baseline 1.34.1, byte-identical retained caller with qualified 1.34.2 dependencies, and the same source rebuilt against 1.34.2. All observations match; seven loaded dependency hashes and three retained caller artifacts are verified. Eight verifier refusal controls pass. This is bounded core-owned evidence for options/context, validation/default/error and annotation/preserve/strip paths, not real Schema/XmlDb/Braid or published-pin qualification. Production source/version remain unchanged; earlier full engine/gate results are inherited. Next: immutable committed-source candidate packaging and package-only harness qualification, without publication or freeze.
