@@ -930,7 +930,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | Implemented, published and consumer-accepted | 1.26.0 published | Bosak | 2026-10-25 |
 | REQ-139 | Bosak.Schema | [Minimal core/schema contract disposition and guarded implementation owner packages C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) | Execute core API/provenance/compatibility and immutable delivery work independently of Braid product gates; reconcile existing bounded bridge and Apache Schema ownership | Pending | TBD after owner scope | Bosak core maintainers; individual assignment pending | 2026-10-30 |
 
-| REQ-140 | Bosak.Schema / Bosak.XmlDb | [Shared foundation and versioned public API freeze](FOUNDATION-API-FREEZE-PLAN.md) | Qualify both actual consumers against one stable core contract before publication/freeze; keep provider implementations separate | Pending | Named foundation release TBD | Bosak maintainers + Schema/XmlDb owner sign-offs | 2026-10-30 |
+| REQ-140 | Bosak.Schema / Bosak.XmlDb | [Shared foundation and versioned public API freeze](FOUNDATION-API-FREEZE-PLAN.md) | Qualify both actual consumers against one stable core contract before publication/freeze; keep provider implementations separate | In Progress | Named foundation release TBD | Bosak maintainers + Schema/XmlDb owner sign-offs | 2026-10-30 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -6440,3 +6440,7 @@ Finite read-only adoption proposal (29 October 2026): additive inspection-only s
 
 
 Read-only adoption proposal reviewed (29 October 2026): compiled draft source/project/assembly/XML hashes and port-free data shape verified; zero-warning/error build receipt preserved. This is an additive inspection-only proposal at Braid 1.26.2, not implementation or actual public API adoption. Existing default editing/preview/export stays untouched; no product pin/core API/ID change. Earlier uncommitted notices are history; delivery resolves through review Git history. Next: consumer-owned implementation task/ADR at the unchanged pin. [Proposal review checkpoint](braid-readonly-adoption-review/README.md).
+
+## REQ-140 core inventory progress — 30 October 2026
+
+F140-01 is In Progress: [core API inventory/proposed scope](foundation-api-baseline/README.md) complete (11 assemblies, 270 types, 5,766 metadata entries). Joint requirements and member-level closure remain open, with nine recorded decisions. F140-02 through F140-04, C45 acceptance and API freeze remain pending. Fresh Release build/metadata checks passed; production source and consumer pins unchanged; runtime/gate receipts remain historical.

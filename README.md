@@ -120,6 +120,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
+| [Foundation API review](docs/foundation-api-baseline/README.md) | Proposed shared API scope and compatibility questions for Schema and XmlDb. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived checkpoints and earlier roadmap snapshots. |
 
 Build and test a source checkout:

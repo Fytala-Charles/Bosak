@@ -43,3 +43,7 @@ Freeze does not require every unrelated product feature, M2 storage/host workflo
 Schema [REQ-009/S009-01–04](https://github.com/Fytala-Charles/Bosak.Schema/blob/feature/bounded-document-assessment/docs/REQ-009-OWNER-WORK-PACKAGES.md) owns backend coverage and foundation acceptance. XmlDb [REQ-009/FX009-01–03](https://github.com/Fytala-Charles/Bosak.XmlDb/blob/docs/shared-foundation-api-freeze/docs/BOSAK-FOUNDATION-OWNER-WORK.md) owns its persistent-provider qualification and sign-off; optional schema adapter stays separate REQ-008. Core REQ-139 owns the neutral schema seam under this shared REQ-140 goal.
 
 Before semantic changes, pin immutable specification revisions/sections/deviations. Preserve original checkouts, package pins, stores and sealed receipts. Report exact source/package/test/API-manifest identities and outstanding gaps. No permanent API, package publication, storage migration, issuer/key or product adoption is supplied by this documentation-only goal registration.
+
+## F140-01 progress — 30 October 2026
+
+The [core API baseline](foundation-api-baseline/README.md) is complete at exact source f758a29f; the joint contract inventory is **In Progress**. All 270 observed type dispositions remain proposed/Pending. Member-level selection, consumer requirements and the nine open decisions still block final scope and freeze. External execution remains with the delegated owners. No F140-02 implementation or F140-04 acceptance occurs here.

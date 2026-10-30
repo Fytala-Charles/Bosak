@@ -2190,3 +2190,8 @@ Owner execution registration — 30 October 2026: [parallel owner handoff](PARAL
 ## Shared foundation goal — 30 October 2026
 
 Bosak REQ-140 now registers the shared foundation for both Bosak.Schema and Bosak.XmlDb. XmlDb is a required acceptance consumer alongside Schema. [The coordinated plan](FOUNDATION-API-FREEZE-PLAN.md) defines F140-01 through F140-04: joint contract inventory, accepted gap implementation, actual dual-consumer qualification, then publication and a named versioned API freeze. Core REQ-139 supplies the neutral schema seam; Schema owns full XSD 1.1 implementation. The bounded assessment is not full support. Freeze and C45 acceptance remain pending; existing package pins, storage formats and Braid product gates remain unchanged.
+
+
+## F140-01 core API baseline — 30 October 2026
+
+The [compiled API inventory and proposed freeze scope](foundation-api-baseline/README.md) records source `f758a29f` / candidate 1.34.1: 11 assemblies, 270 exported types and 5,766 metadata entries. Core inventory is complete; member-level scope, joint Schema/XmlDb requirements, actual consumer qualification and freeze acceptance remain pending. Contract observations distinguish required/default interfaces, XML enum values, value-type field shape, lazy ownership and the existing bounded schema bridge. Nine open decisions are recorded. Fresh Release build passed with five existing nullable warnings; no runtime suites or conformance gates were rerun for this metadata audit. Production APIs, package pins and external owner work are unchanged.
