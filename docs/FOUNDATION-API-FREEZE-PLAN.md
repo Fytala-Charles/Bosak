@@ -2,6 +2,8 @@
 
 Registered: 30 October 2026. Requester: repository owner/user. Accountable owner: **Bosak maintainers**, with required **Bosak.Schema and Bosak.XmlDb owner sign-off**. Status: **Pending contract/implementation/freeze qualification**. The strategic goal is explicitly selected; no existing proposed signature or API freeze is accepted by this registration.
 
+Finite C139-01/C45 review — 30 October 2026: [contract decision matrix](foundation-contract-decision/README.md) partitions all 32 prototype types / 377 reflected entries into six review groups. Selected committed owner inputs are pinned read-only: public Schema descriptor work has advanced, while core session integration and full structural validation remain incomplete; XmlDb provider qualification remains proposed. No returned candidate acceptance appears in the selected records. Exact production signatures, immutable semantic adoption and bounded implementation scope remain Pending; C45, API freeze and publication remain unaccepted. No product change or new runtime test run. Delivery: `git log -1 --format=%H -- docs/foundation-contract-decision/README.md`.
+
 ## Selected outcome
 
 Bosak provides the common query/XDM/provider and schema-integration foundation needed by **both Bosak.Schema and Bosak.XmlDb**, then publishes a qualified versioned stable foundation API. The freeze is a named public contract/version, not a promise that every experimental or future Bosak API can never evolve.

@@ -41,6 +41,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+Finite C139-01/C45 review — 30 October 2026: [contract decision matrix](foundation-contract-decision/README.md) partitions all 32 prototype types / 377 reflected entries into six review groups. Selected committed owner inputs are pinned read-only: public Schema descriptor work has advanced, while core session integration and full structural validation remain incomplete; XmlDb provider qualification remains proposed. No returned candidate acceptance appears in the selected records. Exact production signatures, immutable semantic adoption and bounded implementation scope remain Pending; C45, API freeze and publication remain unaccepted. No product change or new runtime test run. Delivery: `git log -1 --format=%H -- docs/foundation-contract-decision/README.md`.
+
 ## Current source: 1.34.2 streaming completion — 30 October 2026
 
 The unpublished [1.34.2 cleanup candidate](streaming-completion-cleanup/README.md) now attempts owned-reader disposal even when a StreamCompleted handler fails. Supplied readers remain caller-owned and CloseInput semantics are preserved. Callback-only/disposal-only failures retain their original exception; dual failure is AggregateException with callback first and disposal second. There is no new required member, layout or public metadata change. Fresh full tests and frozen gates pass; real consumer/package qualification, general lifetime scope and API freeze remain pending. Earlier dated candidate notes below retain their historical scope.

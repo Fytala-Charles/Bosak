@@ -6,6 +6,8 @@
 
 Last updated: **30 October 2026**. This page holds current engineering detail; the [README](../README.md) introduces the product and the [roadmap](../ROADMAP.md) describes direction. Dated checkpoints moved out of the README are preserved in [development history](DEVELOPMENT_HISTORY.md#readme-snapshot-2026-10-29). Original evidence dossiers remain unchanged.
 
+Finite C139-01/C45 review — 30 October 2026: [contract decision matrix](foundation-contract-decision/README.md) partitions all 32 prototype types / 377 reflected entries into six review groups. Selected committed owner inputs are pinned read-only: public Schema descriptor work has advanced, while core session integration and full structural validation remain incomplete; XmlDb provider qualification remains proposed. No returned candidate acceptance appears in the selected records. Exact production signatures, immutable semantic adoption and bounded implementation scope remain Pending; C45, API freeze and publication remain unaccepted. No product change or new runtime test run. Delivery: `git log -1 --format=%H -- docs/foundation-contract-decision/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

@@ -142,6 +142,8 @@ Remote backup: `origin/checkpoint/restart-2026-10-29`, [draft PR #467](https://g
 
 Read [restart state](RESTART-2026-10-29.md) and [XDM 4.0 compatibility review plan](XDM40-COMPATIBILITY-REVIEW-PLAN.md) first. C44 is complete at `affc228a`; C45 production approval remains pending. Resume with the consumer compatibility review. Older dated sections below are historical. Delivery commit: `git log -1 --format=%H -- docs/RESTART-2026-10-29.md`.
 
+Finite C139-01/C45 review — 30 October 2026: [contract decision matrix](foundation-contract-decision/README.md) partitions all 32 prototype types / 377 reflected entries into six review groups. Selected committed owner inputs are pinned read-only: public Schema descriptor work has advanced, while core session integration and full structural validation remain incomplete; XmlDb provider qualification remains proposed. No returned candidate acceptance appears in the selected records. Exact production signatures, immutable semantic adoption and bounded implementation scope remain Pending; C45, API freeze and publication remain unaccepted. No product change or new runtime test run. Delivery: `git log -1 --format=%H -- docs/foundation-contract-decision/README.md`.
+
 ## REQ-126 C05 type/collection/pattern reconciliation — 26 October 2026
 
 Source/proposal base: `d0ca0741`; delivery commit: `git log -1 --format=%H -- docs/conformance/k04-quote-routing/adoption/BASELINE-ADOPTION.md`. What was built: exact approved TestExecutor routing patch/history 0.28 and AGENTS baseline update; fresh normal gate and exact skip-delta verification. No engine or public API change.
