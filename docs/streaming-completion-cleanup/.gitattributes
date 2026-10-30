@@ -1,0 +1,5 @@
+# Preserve exact hashed dossier bytes, including console whitespace.
+* -text whitespace=cr-at-eol
+*.json -text whitespace=cr-at-eol
+evidence/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+verify.py -text whitespace=cr-at-eol

@@ -20,6 +20,8 @@
 //                      |                  |       |                | RecordPostProcessor removed (supplied via StreamingLoadOptions; engine composes through  |
 //                      |                  |       |                | the internal implementation property)                                                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 30-10-2026     | 1.34.2: Document exception-safe owned-reader completion and dual-error policy          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Providers.Streaming;
 
@@ -35,6 +37,12 @@ public interface IStreamingDocument
     /// Raised once, when the stream has been read to the end of the root element.
     /// Used to fire document-node <c>phase="end"</c> accumulator rules.
     /// </summary>
+    /// <remarks>
+    /// The provider attempts to dispose its owned reader after handlers complete, including
+    /// when a handler throws. Caller-supplied readers remain caller-owned. A handler-only
+    /// or disposal-only failure propagates unchanged; if both fail, an
+    /// <see cref="AggregateException"/> retains the handler failure first and disposal failure second.
+    /// </remarks>
     event Action? StreamCompleted;
 
     /// <summary>

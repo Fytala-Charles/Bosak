@@ -1631,3 +1631,8 @@ Unpublished source candidate 1.2.1 retains module fixed bindings when local vers
 ## Local variable and parameter QName identities - 2026-10-13
 
 Unpublished source candidate 1.2.1 retains module fixed identities for variable and parameter names when local versions select earlier grammar. Declaration binding, authoring scope, parameter passing and captured keyword metadata now agree in the verified cases. All 35 new regressions and 8,088 unit tests pass; conformance gates retain their counts. Published version remains 1.2.0. See [verification evidence and boundaries](../docs/XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).
+
+
+## 30 October 2026 — Streaming completion cleanup
+
+The unpublished 1.34.2 [bounded cleanup slice](streaming-completion-cleanup/README.md) closes the owned-reader disposal gap on throwing completion callbacks and retains both errors on dual failure. Eleven new regressions, full solution tests and frozen gates pass; exported API metadata is unchanged. Broader owner/result lifetime, real consumer qualification and API freeze remain pending. Original adoption and execution receipts remain in the slice dossier.

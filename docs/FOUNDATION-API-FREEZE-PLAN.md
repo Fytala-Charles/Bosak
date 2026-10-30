@@ -55,3 +55,7 @@ The [member manifest and compatibility matrix](foundation-api-contract-draft/REA
 ## REQ-140 / F140-01 ownership review progress — 30 October 2026
 
 The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md) supplies source tracing and ten bounded memory-only observations. Existing explicit provider/host ownership is proposed; joint requirements and any optional scope stay open. A throwing StreamCompleted callback reproducibly skips owned-reader disposal; a focused exception-safe completion fix is the next core-owned slice, tracked here as Pending implementation/qualification. No production source/API/pin or external owner work changed. Full compatibility cases, C45 and freeze remain pending.
+
+## Bounded ownership fix qualified — 30 October 2026
+
+The [completion cleanup slice](streaming-completion-cleanup/README.md), source candidate 1.34.2, resolves the reproduced owned-reader disposal gap with eleven regressions and complete local engine/gate qualification. Existing metadata/interfaces/layouts are unchanged; aggregate dual-failure behavior is explicitly documented. FG-04 remains open for early-abandonment/escaped-result and actual consumer ownership; this is not general scope/API acceptance. Next core preparation is external public-signature dependency/legacy-schema boundary inventory (FG-01/02/07).

@@ -6452,3 +6452,7 @@ F140-01 remains In Progress. [Member manifest and compatibility matrix](foundati
 ## REQ-140 / F140-01 ownership review progress — 30 October 2026
 
 The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md) supplies source tracing and ten bounded memory-only observations. Existing explicit provider/host ownership is proposed; joint requirements and any optional scope stay open. A throwing StreamCompleted callback reproducibly skips owned-reader disposal; a focused exception-safe completion fix is the next core-owned slice, tracked here as Pending implementation/qualification. No production source/API/pin or external owner work changed. Full compatibility cases, C45 and freeze remain pending.
+
+## REQ-140 bounded cleanup implementation — 30 October 2026
+
+The F140 ownership review finding is resolved in source candidate **1.34.2**: [streaming completion cleanup](streaming-completion-cleanup/README.md) always attempts owned-reader disposal after completion handlers, preserving supplied reader ownership. Eleven new cases pass (six failed on the original); all 24,225 core tests and frozen QT3/qt4 pass with exact skip maps unchanged. All 5,766 public metadata entries remain identical. This completes only the reproduced completion cleanup item; shared REQ-140 stays In Progress, REQ-139/C45 and broader ownership/consumer qualification/freeze remain pending. No delegated owner project, package pin or storage format changed.

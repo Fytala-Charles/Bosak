@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-30",
+  "candidateVersion": "1.34.2",
+  "baseRevision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+  "baselineApiSourceRevision": "f758a29f368201abdb98af003274451c84a9b7c4",
+  "changedProductionSourceFiles": [
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/IStreamingDocument.cs",
+      "baselineSha256": "2435a3896e28ad25137f8004a249f39ac6b227b2be28215d28efaf214d56bb19",
+      "candidateSha256": "a1d6bda7a5da69c9101c91f2a9b16b7b4693975b230c1d76fc39df7ef11bfe42"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSource.cs",
+      "baselineSha256": "8da2b5e75cc58415a443e163c80b4bf782a8e4a869a0b519e953bca1d3519b57",
+      "candidateSha256": "ca7fe31d6e5d7a69ad5ff9624778e2add65263e54c43ef8a7457697d0cf2cb43"
+    },
+    {
+      "path": "src/Directory.Build.props",
+      "baselineSha256": "fff68d162b9a5c63cdf273d056ad608abece494ffbb30074f980bc1e5a58c972",
+      "candidateSha256": "412e36f939a9d983d8b50a1c198644bbfbcd1e6bebe8769c12b8c8af31863a41"
+    }
+  ],
+  "newRegressionSource": {
+    "path": "tests/Bosak.XPath.Providers.Tests/StreamingCompletionTests.cs",
+    "sha256": "f19a0fd3bcc6591ff4578e619de78f796c0e1d6ddf878c8a85e611f97ef62d7d"
+  },
+  "historicalBaselineDisposition": "Original source hash verifier intentionally detects these three changes; previous receipts remain unchanged. Candidate API declarations are compared separately."
+}

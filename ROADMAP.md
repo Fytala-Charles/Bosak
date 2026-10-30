@@ -4,7 +4,12 @@
   <p>Current direction for the open XML engine and schema foundation</p>
 </div>
 
-Last updated: **29 October 2026**. This roadmap replaces the old beta/paired-commercial-launch checklist. Detailed measurements and historical milestones are in [implementation status](docs/IMPLEMENTATION_STATUS.md) and [development history](docs/DEVELOPMENT_HISTORY.md#roadmap-snapshot-2026-10-29).
+## Immediate foundation work
+
+The bounded [streaming completion fix](docs/streaming-completion-cleanup/README.md) is qualified in unpublished source 1.34.2. Next, inventory public dependencies outside Bosak assemblies and propose the stable versus legacy System.Xml.Schema boundary. Continue joint member-scope, ownership and real consumer qualification as delegated owner requirements arrive. General schema API acceptance, package publication and the named shared API freeze remain pending.
+
+
+Last updated: **30 October 2026**. This roadmap replaces the old beta/paired-commercial-launch checklist. Detailed measurements and historical milestones are in [implementation status](docs/IMPLEMENTATION_STATUS.md) and [development history](docs/DEVELOPMENT_HISTORY.md#roadmap-snapshot-2026-10-29).
 
 ## Where we are
 

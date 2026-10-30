@@ -11,38 +11,28 @@ Last updated: **30 October 2026**. This page holds current engineering detail; t
 | Scope | Recorded state | Evidence |
 |---|---|---|
 | Published Bosak packages | Verified 1.26.3, source `08fbdc31ac79baac04cf00f4773ec6d0b2dd247f` | [Publication receipt](RELEASE-1.26.3-PUBLICATION.md) |
-| Current core source | Unpublished candidate 1.33.1 | `src/Directory.Build.props`; [C42 repair](conformance/k04-schema-element-fix/README.md) |
-| Public schema engine | Apache-2.0, activation-free, 0.4 development line; no new NuGet release from the transition | [Schema publication](SCHEMA-APACHE-PUBLICATION-2026-10-29.md) |
+| Current core source | Unpublished candidate 1.34.2 | `src/Directory.Build.props`; [streaming completion cleanup](streaming-completion-cleanup/README.md) |
+| Public schema engine | Apache-2.0, activation-free; implementation/release work delegated to its owner; finite native assessment is not full XSD 1.1 | [Schema owner work](https://github.com/Fytala-Charles/Bosak.Schema/blob/feature/bounded-document-assessment/docs/REQ-009-OWNER-WORK-PACKAGES.md) |
 
 ## Recorded qualification
 
 | Scope | Recorded result | Interpretation |
 |---|---|---|
-| Complete core solution | 24,203 passing tests | Inherited source-identical engine qualification; not rerun for this documentation cleanup. |
+| Complete core solution | 24,225 passing tests / 0 failures | Fresh 1.34.2 [qualification](streaming-completion-cleanup/RESULTS.json); eleven new streaming completion cases. |
 | Frozen QT3 gate | 31,397 passed / 0 failed / 424 skipped | Preserve exact skip names/reasons and adopted baseline. |
 | qt4 gated run | 8,941 passed / 0 failed / 1,918 skipped; 230 gated sets, 11 experimental passes | Bounded adopted coverage, not complete current-draft certification. |
 | Revised isolated schema prototype | 123 controls; twelve detected bad variants; 32 compiled proposed neutral types | [C44-R2 dossier](conformance/k04-schema-compatibility-prototype/README.md); no production API/ABI acceptance. |
-| Public Schema solution | 114 passing tests and public CI | Separate schema-only suite; not a complete XSD 1.1 or core-provider certification. |
+| Public Schema solution | Separate owner-managed qualification | Historical receipts remain in schema dossiers; no Schema execution against 1.34.2 is claimed here. |
 
 The [cross-system review](compatibility/xdm40-2026-10-29/README.md) and [revised prototype qualification](conformance/k04-schema-compatibility-prototype/QUALIFICATION.md) distinguish real observations, fake-provider controls, BCL witnesses and inherited results. Counts from different scopes must not be added together as one suite.
 
 ## Schema and XDM integration
 
-The unpublished [Schema 0.5 native assessment candidate](schema-assessment/README.md) now checks one complete finite XSD 1.1 structure/decimal/assertion profile before exposing an owned document and original component state. Its 191-case suite (114 original plus 77 new) passes with published 1.26.3 and current core source; 114 unchanged legacy test binaries also pass with only Schema replaced. The API adds seven exported types without removing existing public members. These scopes overlap. Full typed anonymous-root projection remains explicitly unsupported; no general session API, product adoption or full XSD 1.1 claim follows.
+The existing bounded native document bridge preserves original assessment state through the optional provider annotation, supports its finite anonymous-root/decimal/assertion profile and preserve/strip copies, and refuses unsupported authority/projection paths. See the [bounded bridge](schema-document-bridge/README.md), [current owner queue](PARALLEL-OWNER-WORK.md) and [shared foundation plan](FOUNDATION-API-FREEZE-PLAN.md); original dated receipts retain their own source/profile/test identities.
 
-Development is isolated at `D:/Development/Bosak/.worktrees/Bosak.Schema.Assessment`, branch `feature/bounded-document-assessment`, with uncommitted changes on public base `044d2cb`. The existing public checkout and its 1.26.3 dependency pins are unchanged. Core source/gates remain source-identical; their complete earlier qualification is inherited for this step. The candidate guide and receipts own the exact supported profile and refusal boundaries.
+Bosak.Schema owns full XSD 1.1 validation; Bosak.XmlDb is a required independent consumer for ordinary persistent XML as well as any separately scoped schema integration. General C45/session/component/provenance contracts, full real-provider coverage and actual source/package/unchanged-binary qualification remain pending. The existing bounded bridge is not full XSD 1.1 support or API freeze acceptance.
 
-Schema is now open source; the earlier proprietary-provider boundary no longer determines the public API shape. Reassess the smallest useful contract before C45. Keep host/XDM profile, XSD version, component authority and source/snapshot identity distinct, retain original PSVI across compatible universes and preserve caller ownership/cancellation.
-
-Full XSD 1.1 structural validation, complete real component/provider coverage, engine atomization/copy integration and actual consumer source/ABI acceptance remain pending. The proposed API is unaccepted. REQ-139 remains pending; REQ-126 retains its bounded completion and all 48 historical observations.
-
-The first [real open Schema integration](schema-integration/README.md) now provides an XSD 1.0 validation/typed-transformation example and a separate optional CI job. Fresh qualification passes 24,203 core tests, 122 source-integration cases (114 existing plus eight new), 114 unchanged Schema binary-replacement cases and both exact conformance gates, including unchanged skip identities/reasons. Braid passes 1,872 unchanged cases plus four separately rerun cases with its expected engine identity updated only in an isolated copy. These are bounded observations, not full XSD 1.1/session interoperability or consumer adoption; see the results receipt for the complete consumer disposition. The recorded qualification table above remains its earlier checkpoint.
-
-A local unsigned preview combines the existing nine core candidate packages with Schema `0.4.0-alpha.1` using isolated dependency-pin overrides. Its package-only typed transformation and all ten package/output identities verify. This local preparation does not publish a release, change the public source pins or adopt an API.
-
-XmlDb's corrected candidate route passes all 27 adapter source tests. All 593 unchanged integration binary cases have passing evidence across the initial run and explicit layout/timeout reruns; this is not one uninterrupted pass. The independent storage baseline was cancelled after 1,258 observed passes and is not certified as complete. Exact routing, package/output identities and original failures are retained in the qualification dossier.
-
-Use `D:/Development/Bosak.Schema.Public` for active public Schema source. `D:/Development/Bosak.Licensing` contains private infrastructure; the original locked `D:/Development/Bosak.Schema` directory also points to that private repository. This local migration detail belongs here and in the handover, not in the user quick start.
+Source candidate 1.34.2 fixes only exception-safe streaming completion and retains all public metadata. External projects/pins are unchanged and were not built or tested by this slice. Consumer owners supply their exact current requirements and qualification; private licensing remains outside this foundation. REQ-139 remains Pending and shared REQ-140 remains In Progress.
 
 ## Authoring, tooling and newer profiles
 
@@ -216,3 +206,7 @@ The [proposed contract manifest and compatibility matrix](foundation-api-contrac
 ## F140-01 result ownership review — 30 October 2026
 
 The [proposed ownership disposition](foundation-result-ownership/DECISION.md) traces lazy, nested and escaped result paths. Ten bounded memory-only observations confirm no universal early-release protocol and reproduce an owned-reader cleanup gap when StreamCompleted throws. Existing interfaces/layouts remain unchanged; explicit provider/host resource ownership is the proposed compatibility baseline, with an optional scope subject to actual consumer needs. Next core slice: exception-safe owned streaming completion with failure-precedence tests. No engine fix, consumer qualification, C45 acceptance or API freeze occurs here; the previous twenty compatibility gates remain NotRun.
+
+## 1.34.2 streaming completion — 30 October 2026
+
+[Exception-safe owned-reader completion](streaming-completion-cleanup/README.md) is implemented and freshly qualified. A throwing completion handler cannot skip the owned-reader disposal attempt; dual faults retain callback then disposal error in AggregateException. Existing ownership/default APIs and 5,766 metadata entries remain unchanged. All 24,225 core tests and frozen QT3/qt4 pass; no consumer/package/freeze acceptance follows. Broader early-abandonment/escaped-result ownership remains open.
