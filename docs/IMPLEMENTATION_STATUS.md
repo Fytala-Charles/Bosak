@@ -4,7 +4,7 @@
   <p>Technical qualification, source candidates and open integration boundaries</p>
 </div>
 
-Last updated: **29 October 2026**. This page holds current engineering detail; the [README](../README.md) introduces the product and the [roadmap](../ROADMAP.md) describes direction. Dated checkpoints moved out of the README are preserved in [development history](DEVELOPMENT_HISTORY.md#readme-snapshot-2026-10-29). Original evidence dossiers remain unchanged.
+Last updated: **30 October 2026**. This page holds current engineering detail; the [README](../README.md) introduces the product and the [roadmap](../ROADMAP.md) describes direction. Dated checkpoints moved out of the README are preserved in [development history](DEVELOPMENT_HISTORY.md#readme-snapshot-2026-10-29). Original evidence dossiers remain unchanged.
 
 ## Releases and source state
 
@@ -192,3 +192,8 @@ Finite read-only adoption proposal (29 October 2026): additive inspection-only s
 
 
 Read-only adoption proposal reviewed (29 October 2026): compiled draft source/project/assembly/XML hashes and port-free data shape verified; zero-warning/error build receipt preserved. This is an additive inspection-only proposal at Braid 1.26.2, not implementation or actual public API adoption. Existing default editing/preview/export stays untouched; no product pin/core API/ID change. Earlier uncommitted notices are history; delivery resolves through review Git history. Next: consumer-owned implementation task/ADR at the unchanged pin. [Proposal review checkpoint](braid-readonly-adoption-review/README.md).
+
+
+## Registered owner work — 30 October 2026
+
+[REQ-139 C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) requests minimal public-transition-aware contract disposition, guarded implementation after approval, real consumer/API/gate qualification and immutable delivery. [Parallel handoff](PARALLEL-OWNER-WORK.md) links Schema REQ-009 work. Current bounded 1.34.1 integration is preserved; C45/general API acceptance is not inferred. Documentation only; no fresh engine tests/gates or new behavior.
