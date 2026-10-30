@@ -1,0 +1,24 @@
+python : test_application_packages_do_not_enter_foundation 
+(test_review.ExternalBoundaryTests.test_application_packages_do_not_enter_foundation) ... ok
+At line:3 char:1
++ python -m unittest discover -s docs/foundation-external-dependencies/ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_applicatio...ndation) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_complete_candidate_coverage (test_review.ExternalBoundaryTests.test_complete_candidate_coverage) ... ok
+test_erased_schema_dependency_refuses (test_review.ExternalBoundaryTests.test_erased_schema_dependency_refuses) ... ok
+test_false_freeze_refuses (test_review.ExternalBoundaryTests.test_false_freeze_refuses) ... ok
+test_init_only_modifier_dependency_is_captured 
+(test_review.ExternalBoundaryTests.test_init_only_modifier_dependency_is_captured) ... ok
+test_legacy_surface_cannot_be_silently_reclassified 
+(test_review.ExternalBoundaryTests.test_legacy_surface_cannot_be_silently_reclassified) ... ok
+test_missing_public_declaration_refuses (test_review.ExternalBoundaryTests.test_missing_public_declaration_refuses) 
+... ok
+test_non_schema_validator_signatures_are_not_neutral_acceptance 
+(test_review.ExternalBoundaryTests.test_non_schema_validator_signatures_are_not_neutral_acceptance) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.215s
+
+OK

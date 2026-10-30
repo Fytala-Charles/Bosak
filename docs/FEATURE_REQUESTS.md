@@ -6456,3 +6456,7 @@ The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md)
 ## REQ-140 bounded cleanup implementation — 30 October 2026
 
 The F140 ownership review finding is resolved in source candidate **1.34.2**: [streaming completion cleanup](streaming-completion-cleanup/README.md) always attempts owned-reader disposal after completion handlers, preserving supplied reader ownership. Eleven new cases pass (six failed on the original); all 24,225 core tests and frozen QT3/qt4 pass with exact skip maps unchanged. All 5,766 public metadata entries remain identical. This completes only the reproduced completion cleanup item; shared REQ-140 stays In Progress, REQ-139/C45 and broader ownership/consumer qualification/freeze remain pending. No delegated owner project, package pin or storage format changed.
+
+## REQ-140 external dependency preparation — 30 October 2026
+
+F140-01 remains In Progress. The [external signature review](foundation-external-dependencies/README.md) covers all 3,506 public declarations and proposes the stable/legacy boundary: 176 external definitions overall, 47 within the proposed graph; 26 schema-exposing declarations, including nine in the proposed graph. All existing compatibility obligations remain; no C45/public API signature is accepted. Six extraction and eight review-tool checks pass. Source 1.34.2, external owners/pins and historical engine/gate receipts are unchanged. Next core-owned work is the legacy/no-provider compatibility harness; joint requirements and freeze remain pending.

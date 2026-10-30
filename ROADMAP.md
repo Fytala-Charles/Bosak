@@ -6,7 +6,7 @@
 
 ## Immediate foundation work
 
-The bounded [streaming completion fix](docs/streaming-completion-cleanup/README.md) is qualified in unpublished source 1.34.2. Next, inventory public dependencies outside Bosak assemblies and propose the stable versus legacy System.Xml.Schema boundary. Continue joint member-scope, ownership and real consumer qualification as delegated owner requirements arrive. General schema API acceptance, package publication and the named shared API freeze remain pending.
+The bounded [streaming completion fix](docs/streaming-completion-cleanup/README.md) is qualified in unpublished source 1.34.2. The [external signature review](docs/foundation-external-dependencies/README.md) now proposes an explicit legacy compatibility ledger alongside the future neutral foundation. Next, prepare an isolated compatibility harness for existing legacy schema and no-provider behavior. Continue joint member-scope, ownership and real consumer qualification as delegated owner requirements arrive. General schema API acceptance, package publication and the named shared API freeze remain pending.
 
 
 Last updated: **30 October 2026**. This roadmap replaces the old beta/paired-commercial-launch checklist. Detailed measurements and historical milestones are in [implementation status](docs/IMPLEMENTATION_STATUS.md) and [development history](docs/DEVELOPMENT_HISTORY.md#roadmap-snapshot-2026-10-29).

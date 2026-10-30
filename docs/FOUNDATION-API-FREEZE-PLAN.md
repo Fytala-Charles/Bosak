@@ -59,3 +59,7 @@ The [lazy/escaped-result decision note](foundation-result-ownership/DECISION.md)
 ## Bounded ownership fix qualified — 30 October 2026
 
 The [completion cleanup slice](streaming-completion-cleanup/README.md), source candidate 1.34.2, resolves the reproduced owned-reader disposal gap with eleven regressions and complete local engine/gate qualification. Existing metadata/interfaces/layouts are unchanged; aggregate dual-failure behavior is explicitly documented. FG-04 remains open for early-abandonment/escaped-result and actual consumer ownership; this is not general scope/API acceptance. Next core preparation is external public-signature dependency/legacy-schema boundary inventory (FG-01/02/07).
+
+## F140-01 external boundary proposal — 30 October 2026
+
+The [external dependency review](foundation-external-dependencies/BOUNDARY.md) completes the core inventory of public external signature types and proposes an explicit legacy compatibility ledger alongside future neutral contracts. Five logical options/context members expose schema types inside the proposed graph; they cannot be silently removed by calling the rest neutral. Core/Schema/XmlDb scope disposition, exact neutral signatures and compatibility/freeze acceptance remain Pending. No production change occurred. Prepare the existing legacy/no-provider compatibility harness next, while owners execute their delegated packages.

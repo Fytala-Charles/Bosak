@@ -2210,3 +2210,8 @@ The [proposed contract manifest and compatibility matrix](foundation-api-contrac
 ## F140-01 result ownership review — 30 October 2026
 
 The [proposed ownership disposition](foundation-result-ownership/DECISION.md) traces lazy, nested and escaped result paths. Ten bounded memory-only observations confirm no universal early-release protocol and reproduce an owned-reader cleanup gap when StreamCompleted throws. Existing interfaces/layouts remain unchanged; explicit provider/host resource ownership is the proposed compatibility baseline, with an optional scope subject to actual consumer needs. Next core slice: exception-safe owned streaming completion with failure-precedence tests. No engine fix, consumer qualification, C45 acceptance or API freeze occurs here; the previous twenty compatibility gates remain NotRun.
+
+
+## F140-01 external signature review — 30 October 2026
+
+The [external dependency inventory and boundary proposal](foundation-external-dependencies/README.md) link all 3,506 public declarations to the existing metadata baseline: 176 external named definitions, with 47 in the proposed type graph. Twenty-six declarations expose System.Xml.Schema types; nine in the proposed graph represent five logical options/context members. Preserve those legacy compatibility obligations while the neutral schema contract remains unaccepted. Third-party LSP types occur only in LanguageServer and stay outside the proposed foundation graph. Source remains 1.34.2; no engine or external-owner change. Fourteen audit-tool checks pass; prior full tests/gates are historical, not rerun here. Next: isolated legacy/no-provider compatibility harness.

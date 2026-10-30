@@ -210,3 +210,8 @@ The [proposed ownership disposition](foundation-result-ownership/DECISION.md) tr
 ## 1.34.2 streaming completion — 30 October 2026
 
 [Exception-safe owned-reader completion](streaming-completion-cleanup/README.md) is implemented and freshly qualified. A throwing completion handler cannot skip the owned-reader disposal attempt; dual faults retain callback then disposal error in AggregateException. Existing ownership/default APIs and 5,766 metadata entries remain unchanged. All 24,225 core tests and frozen QT3/qt4 pass; no consumer/package/freeze acceptance follows. Broader early-abandonment/escaped-result ownership remains open.
+
+
+## F140-01 external signature review — 30 October 2026
+
+The [external dependency inventory and boundary proposal](foundation-external-dependencies/README.md) link all 3,506 public declarations to the existing metadata baseline: 176 external named definitions, with 47 in the proposed type graph. Twenty-six declarations expose System.Xml.Schema types; nine in the proposed graph represent five logical options/context members. Preserve those legacy compatibility obligations while the neutral schema contract remains unaccepted. Third-party LSP types occur only in LanguageServer and stay outside the proposed foundation graph. Source remains 1.34.2; no engine or external-owner change. Fourteen audit-tool checks pass; prior full tests/gates are historical, not rerun here. Next: isolated legacy/no-provider compatibility harness.
