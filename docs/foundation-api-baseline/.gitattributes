@@ -1,0 +1,3 @@
+# Preserve hashed audit receipts and tool bytes across checkouts.
+evidence/** -text
+tools/** -text

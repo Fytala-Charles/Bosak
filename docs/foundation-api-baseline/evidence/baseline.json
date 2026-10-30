@@ -1014,7 +1014,7 @@
     "tools/Program.cs": "4edc5d7e100e45fd013c99c710983437aa68732303415463ae950c91939974cf",
     "tools/Inventory.csproj": "15498a0b7e3d3780abde846b3d91a7be559e370f0c2caef1bdb4ee55bbcea65e",
     "evidence/proposed-type-scope.json": "98604500aad7c655f522a0504c6c04815ba7964a646e8ac08ba22b0728c8e667",
-    "evidence/build.txt": "39f73efb9429c88255509f7671eb7eaf58c09bc479cabba69d3d9a7100eef57d",
-    "evidence/dotnet-info.txt": "fdbb5763441467fa85fee6c9eaad0f95252caf58ff5c29ac02112a9660afeb39"
+    "evidence/build.txt": "740ceda7c0a3d1a6aa05f690b5b49016686a5ef611d7f000b27d77eaec82b3f0",
+    "evidence/dotnet-info.txt": "5c6ed8522f5dc369f57517fe2b4a729439641fd395322ae1a5f4a2bd82735006"
   }
 }
