@@ -67,3 +67,7 @@ The [external dependency review](foundation-external-dependencies/BOUNDARY.md) c
 ## Bounded legacy caller evidence — 30 October 2026
 
 The [retained-caller harness](foundation-legacy-compatibility/README.md) demonstrates selected source/default/error and unchanged-binary paths from local source-built 1.34.1 to qualified 1.34.2 across 20 cases/three modes. Exact observations match and loaded assembly hashes are verified. This advances core-owned FC-01/02/03/15 preparation; it does not certify the actual required consumers, their older published pins, packages, C45 or joint freeze. The candidate informational revision still reflects its pre-commit build base; committed-source/package provenance is the next explicit qualification task.
+
+## Local immutable-source package evidence — 30 October 2026
+
+The [seven-package Core/API candidate](foundation-package-qualification/README.md) binds repository and assembly identity to c88eea43 / 1.34.2 and retains package/archive/cache/output/loaded hashes. Existing caller source and unchanged binaries pass their twenty selected legacy cases using only restored package dependencies. This is a local prepared artifact cohort, not F140-04 completion: package-backed full solution/gates, actual consumer qualification, neutral C45 scope and joint freeze remain pending. Release packaging must deliberately retain the reviewed NOTICE asset recipe or adopt an equivalent stock-pack change.

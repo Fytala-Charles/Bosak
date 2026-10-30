@@ -1,0 +1,33 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "recordedBeforeExecution": true,
+  "sourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "callerRevision": "becfc051219baf99743b1f5dd9ddb1707e7fb390",
+  "version": "1.34.2",
+  "packages": [
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XPath.Api"
+  ],
+  "scope": "Seven-package Core/API closure, not all product packages or a release",
+  "recipe": "Compile committed source with exact SourceRevisionId/RepositoryCommit. Pack using recorded targets that also include the exact committed NOTICE asset. No edits to production source or stock pack metadata.",
+  "consumer": "Exact committed legacy caller source compiled with only a PackageReference to Bosak.XPath.Api [1.34.2], using private feed/cache and no fallback folders.",
+  "unchangedBinary": "Retained 1.34.1 caller DLL/deps/runtimeconfig with restored package DLLs",
+  "checks": [
+    "Exact package nuspec repository commit, version, dependency closure, license/NOTICE and Standard Unicode license",
+    "Package archive/cache/output/loaded assembly hashes and c88 informational revision",
+    "All 20 observations equal legacy baseline in both modes",
+    "Compiled public metadata unchanged for selected seven assemblies"
+  ],
+  "limits": [
+    "No package signing, NuGet push, release/tag, consumer adoption or API freeze",
+    "No actual external consumer qualification",
+    "No source semantics, interface, enum, layout or version change",
+    "Prior full engine/gate qualification inherited by source identity; fresh package-caller checks are separate"
+  ]
+}

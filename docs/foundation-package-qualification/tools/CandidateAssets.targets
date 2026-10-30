@@ -1,0 +1,6 @@
+<Project>
+  <!-- Explicit candidate pack payload; source asset is pinned to the archived commit. -->
+  <ItemGroup>
+    <None Include="$(CandidateSourceRoot)/NOTICE" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+</Project>

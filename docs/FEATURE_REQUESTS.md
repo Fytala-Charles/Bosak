@@ -6464,3 +6464,7 @@ F140-01 remains In Progress. The [external signature review](foundation-external
 ## REQ-140 bounded legacy source/binary checks — 30 October 2026
 
 F140-01 remains In Progress. [Core-owned legacy/no-schema qualification](foundation-legacy-compatibility/README.md) passes 20 unique cases in three primary execution modes (60 case-executions), including unchanged caller binaries crossing 1.34.1 to exact qualified 1.34.2 dependencies. Eight verifier/mutation controls pass. These are bounded FC-01/02/03/15 inputs; full real-consumer gates and the prior planned-case matrix are not marked complete. Production source/version, external owners/pins, C45 and freeze remain unchanged. Next core task: committed-source local candidate packages and package-only caller qualification, not release/publication.
+
+## REQ-140 local package preparation — 30 October 2026
+
+REQ-140 remains In Progress. [Seven local 1.34.2 packages](foundation-package-qualification/README.md) have exact committed c88eea43 provenance, an explicit NOTICE asset recipe and isolated package-only restore. Twenty cases pass in each primary source/unchanged-binary mode, plus a fresh feed replay; eight verifier refusal controls pass. The seven assemblies retain 2,205 metadata entries/78 types unchanged. This advances bounded C139-04/F140-04 delivery preparation only: full package-backed engine/gate tests, actual consumer/signature acceptance, release and freeze remain pending. No production source/version or external owner change.
