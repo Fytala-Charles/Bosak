@@ -2186,3 +2186,7 @@ Read-only adoption proposal reviewed (29 October 2026): compiled draft source/pr
 
 
 Owner execution registration — 30 October 2026: [parallel owner handoff](PARALLEL-OWNER-WORK.md) and [REQ-139 C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) define concrete core maintainer deliverables, evidence and blockers, linked to public Schema REQ-009 S009-01–03. Contract disposition and qualification/delivery preparation can proceed independently of Braid D02-D07. C45 production/API acceptance and release remain pending; registration does not implement or adopt an API.
+
+## Shared foundation goal — 30 October 2026
+
+Bosak REQ-140 now registers the shared foundation for both Bosak.Schema and Bosak.XmlDb. XmlDb is a required acceptance consumer alongside Schema. [The coordinated plan](FOUNDATION-API-FREEZE-PLAN.md) defines F140-01 through F140-04: joint contract inventory, accepted gap implementation, actual dual-consumer qualification, then publication and a named versioned API freeze. Core REQ-139 supplies the neutral schema seam; Schema owns full XSD 1.1 implementation. The bounded assessment is not full support. Freeze and C45 acceptance remain pending; existing package pins, storage formats and Braid product gates remain unchanged.

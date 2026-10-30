@@ -1,6 +1,8 @@
 # REQ-139 — Bosak owner execution packages
 
-Registered: 30 October 2026. Requester: Bosak.Schema; registration directed by the user. Braid/XmlDb are compatibility stakeholders, not newly adopted schema consumers. Accountable owner role: **Bosak core maintainers**; individual scheduling/assignment belongs to that owner. Parent status remains **Pending**. This registration requests work; it does not accept C45, freeze a public API or authorize publication.
+Registered: 30 October 2026. Requester: Bosak.Schema; registration directed by the user. XmlDb is a required foundation consumer under REQ-140; that does not make its untyped store a Schema consumer. Braid remains a compatibility stakeholder. Accountable owner role: **Bosak core maintainers**; individual scheduling/assignment belongs to that owner. Parent status remains **Pending**. This registration requests work; it does not accept C45, freeze a public API or authorize publication.
+
+Shared goal: [REQ-140 foundation/API freeze](FOUNDATION-API-FREEZE-PLAN.md). This packet supplies the Schema-specific workstream; C139-03 must include real XmlDb acceptance, and C139-04 does not freeze the shared surface without the joint gate.
 
 ## Current basis and boundaries
 

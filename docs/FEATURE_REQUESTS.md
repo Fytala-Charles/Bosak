@@ -930,6 +930,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | Implemented, published and consumer-accepted | 1.26.0 published | Bosak | 2026-10-25 |
 | REQ-139 | Bosak.Schema | [Minimal core/schema contract disposition and guarded implementation owner packages C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) | Execute core API/provenance/compatibility and immutable delivery work independently of Braid product gates; reconcile existing bounded bridge and Apache Schema ownership | Pending | TBD after owner scope | Bosak core maintainers; individual assignment pending | 2026-10-30 |
 
+| REQ-140 | Bosak.Schema / Bosak.XmlDb | [Shared foundation and versioned public API freeze](FOUNDATION-API-FREEZE-PLAN.md) | Qualify both actual consumers against one stable core contract before publication/freeze; keep provider implementations separate | Pending | Named foundation release TBD | Bosak maintainers + Schema/XmlDb owner sign-offs | 2026-10-30 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.
@@ -2246,6 +2247,14 @@ The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) define
 Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Candidate/Failure remove one eligible paired empty/nonempty or self-closing literal text instruction, including its actual payload. Exact outside bytes, nullable original body, complete removed/survivor/merge partitions and actual surviving parent are retained. Conservative parent/control/static/resource and encoding/byte limits follow the [reviewed contract](REQ-134-TEXT-DELETION-CONTRACT.md). New typed cancellation preserves existing value-of throwing behavior and replacement scope. No NoChange result exists.
 
 The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Published 1.22.0 is independently verified; Braid final implementation review is complete. Consumer-only acceptance groups, Braid adoption and native observations remain pending. REQ-133 consumer acceptance remains unchanged.
+
+### REQ-140: Shared Foundation for Bosak.Schema and Bosak.XmlDb; Versioned API Freeze
+
+Requester: **Repository owner/user**, 30 October 2026. Owner role: **Bosak maintainers**, with required **Schema and XmlDb owner sign-offs**. Status: **Pending**; strategic goal selected, exact contract/freeze not approved by registration.
+
+[Owner plan F140-01–04](FOUNDATION-API-FREEZE-PLAN.md) and [pending freeze record](FOUNDATION-API-FREEZE.template.json) define the joint requirements, implementation, real consumer/package/API/ABI qualification and publish/freeze deliverables. Bosak supplies the neutral foundation; Schema owns full XSD 1.1 implementation and XmlDb owns persistent storage/provider behavior. XmlDb is required for freeze even without optional Schema integration. REQ-139 supplies the schema-specific contract work under this umbrella.
+
+Freeze covers an enumerated versioned public surface and compatibility policy. Actual Schema and XmlDb qualification on the same candidate, explicit owner sign-offs, full core/gates and immutable package/API identities are required. Required unresolved contract gaps keep freeze Pending. Braid remains a compatibility consumer; its unrelated native/trust gates do not block foundation work. Current bounded Schema success is not full XSD 1.1 support, and no storage migration or all-future-API immutability is implied.
 
 ### REQ-139: XSD 1.1 Engine Seam for Bosak.Schema
 
