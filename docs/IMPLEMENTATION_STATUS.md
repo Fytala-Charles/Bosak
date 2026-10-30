@@ -8,6 +8,8 @@ Last updated: **30 October 2026**. This page holds current engineering detail; t
 
 Finite C139-01/C45 review — 30 October 2026: [contract decision matrix](foundation-contract-decision/README.md) partitions all 32 prototype types / 377 reflected entries into six review groups. Selected committed owner inputs are pinned read-only: public Schema descriptor work has advanced, while core session integration and full structural validation remain incomplete; XmlDb provider qualification remains proposed. No returned candidate acceptance appears in the selected records. Exact production signatures, immutable semantic adoption and bounded implementation scope remain Pending; C45, API freeze and publication remain unaccepted. No product change or new runtime test run. Delivery: `git log -1 --format=%H -- docs/foundation-contract-decision/README.md`.
 
+Proposed C139-01 implementation ordering — 30 October 2026: [requirements-to-scope review](foundation-implementation-scope/README.md) maps twelve registered needs to existing XML contracts and missing optional Schema authority/session boundaries. No new required XmlDb provider member is demonstrated. Annotation/authority and real provider facts precede exact session signatures and routing; atomic/list/union, compatible views and lifetime remain required. Accepted signatures remain empty; C139-01, C45 and freeze stay Pending. No source or package change. Delivery: `git log -1 --format=%H -- docs/foundation-implementation-scope/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |
