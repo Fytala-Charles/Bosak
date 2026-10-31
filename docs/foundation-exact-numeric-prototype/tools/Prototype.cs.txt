@@ -1,0 +1,145 @@
+// Generated isolated experiment; not production API or authenticated evidence.
+// COPYRIGHT: Fytala
+// LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Globalization;
+using System.Text.Json;
+using System.Security.Cryptography;
+using Bosak.XPath.Core.Xdm;
+
+try { Experiment.Run(); }
+catch(Exception e) { Console.Error.WriteLine(e); Environment.ExitCode=1; }
+
+sealed class CapacityException(string message):Exception(message);
+readonly record struct Limits {
+ internal readonly int Digits,Scale;
+ internal Limits(int digits,int scale) {
+  if(digits<=0||scale<0)throw new ArgumentOutOfRangeException(nameof(digits));
+  Digits=digits;Scale=scale;
+ }
+ internal void Check(BigInteger value,int scale) {
+  if(Digits<=0||Scale<0)throw new ArgumentException("Default limits invalid");
+  if(scale<0)throw new ArgumentOutOfRangeException(nameof(scale));
+  if(scale>Scale)throw new CapacityException("Scale capacity");
+  if(BigInteger.Abs(value).ToString(CultureInfo.InvariantCulture).Length>Digits)throw new CapacityException("Coefficient capacity");
+ }
+}
+readonly struct ExactDecimal:IEquatable<ExactDecimal> {
+ internal BigInteger Coefficient {get;}
+ internal int Scale {get;}
+ internal ExactDecimal(BigInteger coefficient,int scale,Limits limits) {
+  // Check supplied representation first: normalization must not bypass a work quota.
+  limits.Check(coefficient,scale);
+  if(coefficient.IsZero)scale=0;
+  while(scale>0) {
+   var q=BigInteger.DivRem(coefficient,10,out var remainder);
+   if(!remainder.IsZero)break;
+   coefficient=q;scale--;
+  }
+  Coefficient=coefficient;Scale=scale;
+ }
+ internal string Format(int maxCharacters) {
+  if(maxCharacters<=0)throw new ArgumentOutOfRangeException(nameof(maxCharacters));
+  string digits=BigInteger.Abs(Coefficient).ToString(CultureInfo.InvariantCulture);
+  long length=(Coefficient.Sign<0?1L:0L)+(Scale==0?digits.Length:Math.Max(digits.Length+1L,Scale+2L));
+  if(length>maxCharacters)throw new CapacityException("Formatting capacity");
+  string text=Scale==0?digits:digits.Length>Scale?digits.Insert(digits.Length-Scale,"."):"0."+new string('0',Scale-digits.Length)+digits;
+  return Coefficient.Sign<0?"-"+text:text;
+ }
+ internal decimal NarrowDecimal() {
+  if(Scale>28||BigInteger.Abs(Coefficient)>new BigInteger(decimal.MaxValue))throw new OverflowException("Exact decimal range/scale");
+  // Parsing may round: require an exact representation roundtrip before returning.
+  if(!decimal.TryParse(Format(128),NumberStyles.AllowLeadingSign|NumberStyles.AllowDecimalPoint,CultureInfo.InvariantCulture,out var result))throw new OverflowException("Decimal range");
+  var bits=decimal.GetBits(result);
+  var coefficient=new BigInteger((uint)bits[0])+(new BigInteger((uint)bits[1])<<32)+(new BigInteger((uint)bits[2])<<64);
+  if(bits[3]<0)coefficient=-coefficient;
+  var check=new ExactDecimal(coefficient,(bits[3]>>16)&255,new Limits(29,28));
+  if(!Equals(check))throw new OverflowException("Inexact decimal narrowing");
+  return result;
+ }
+ public bool Equals(ExactDecimal other)=>Coefficient==other.Coefficient&&Scale==other.Scale;
+ public override bool Equals(object? other)=>other is ExactDecimal v&&Equals(v);
+ public override int GetHashCode()=>HashCode.Combine(Coefficient,Scale);
+}
+sealed class Payload(object number,object? evidence) {
+ internal readonly object Number=number;
+ internal readonly object? Evidence=evidence;
+}
+[StructLayout(LayoutKind.Sequential)]
+readonly struct Carrier {
+ readonly long inline;
+ readonly double reservedDouble;
+ readonly decimal reservedDecimal;
+ readonly object? reference;
+ readonly int kind;
+ Carrier(long scalar,object? value,int tag) {inline=scalar;reference=value;kind=tag;reservedDouble=0;reservedDecimal=0;}
+ internal static Carrier Integer(BigInteger n,Limits limits,object? evidence=null) {
+  limits.Check(n,0);
+  if(n>=long.MinValue&&n<=long.MaxValue)return new((long)n,evidence,0);
+  return new(0,new Payload(n,evidence),1);
+ }
+ internal static Carrier Decimal(ExactDecimal n,object? evidence=null)=>new(0,new Payload(n,evidence),2);
+ internal BigInteger IntegerValue=>kind==0?new BigInteger(inline):kind==1?(BigInteger)((Payload)reference!).Number:throw new InvalidOperationException();
+ internal long NarrowInteger()=>checked((long)IntegerValue);
+ internal ExactDecimal DecimalValue=>kind==2?(ExactDecimal)((Payload)reference!).Number:throw new InvalidOperationException();
+ internal object? Evidence=>kind==0?reference:((Payload)reference!).Evidence;
+}
+static class Experiment {
+ static readonly Limits limits=new(128,128);
+ static Carrier sink;
+ static BigInteger integerSink;
+ static object? evidenceSink;
+ static int checks;
+ static void Check(bool value,string message){if(!value)throw new Exception(message);checks++;}
+ static void Refuse<T>(Action action) where T:Exception {try{action();}catch(T){checks++;return;}throw new Exception("Expected "+typeof(T).Name);}
+ static long Cost(Action action){for(int i=0;i<2000;i++)action();long start=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<10000;i++)action();return (GC.GetAllocatedBytesForCurrentThread()-start)/10000;}
+ internal static void Run() {
+  var huge=BigInteger.Parse("1234567890123456789012345678901234567890",CultureInfo.InvariantCulture);
+  var token=new object();var plain=Carrier.Integer(huge,limits);var marked=Carrier.Integer(huge,limits,token);
+  Check(plain.IntegerValue==huge,"large integer");Check(marked.IntegerValue==huge,"evidenced integer");
+  Check(plain.Evidence is null&&ReferenceEquals(marked.Evidence,token),"separate payload and evidence");
+  Check(Carrier.Integer(42,limits,token).NarrowInteger()==42,"inline narrowing");
+  Check(ReferenceEquals(Carrier.Integer(42,limits,token).Evidence,token),"inline evidence");
+  Check(Carrier.Integer(long.MinValue,limits).NarrowInteger()==long.MinValue,"minimum");
+  Check(Carrier.Integer(long.MaxValue,limits).NarrowInteger()==long.MaxValue,"maximum");
+  Refuse<OverflowException>(()=>plain.NarrowInteger());
+  Refuse<CapacityException>(()=>Carrier.Integer(huge,new Limits(39,0)));
+  Refuse<ArgumentException>(()=>Carrier.Integer(1,default));
+  Refuse<ArgumentOutOfRangeException>(()=>new Limits(0,0));
+  Refuse<ArgumentOutOfRangeException>(()=>new ExactDecimal(1,-1,limits));
+  Refuse<CapacityException>(()=>new ExactDecimal(1,129,limits));
+  Refuse<CapacityException>(()=>new ExactDecimal(1000,3,new Limits(3,3)));
+  var x=new ExactDecimal(1234500,4,limits);var y=new ExactDecimal(12345,2,limits);
+  Check(x.Equals(y)&&x.GetHashCode()==y.GetHashCode(),"normalized equality/hash");
+  Check(x.Format(6)=="123.45","decimal format");Check(x.NarrowDecimal()==123.45m,"decimal narrowing");
+  Check(new ExactDecimal(0,128,limits).Format(1)=="0","canonical zero");
+  Check(default(ExactDecimal).Equals(new ExactDecimal(0,0,limits)),"default zero");
+  Check(new ExactDecimal(-123,5,limits).Format(8)=="-0.00123","signed small decimal");
+  Refuse<CapacityException>(()=>x.Format(5));
+  Refuse<CapacityException>(()=>new ExactDecimal(1,128,limits).Format(10));
+  Refuse<OverflowException>(()=>new ExactDecimal(1,29,limits).NarrowDecimal());
+  Refuse<OverflowException>(()=>new ExactDecimal(huge,0,limits).NarrowDecimal());
+  Refuse<OverflowException>(()=>new ExactDecimal(BigInteger.Pow(10,127),0,limits).NarrowDecimal());
+  Check(new ExactDecimal(new BigInteger(decimal.MaxValue),0,limits).NarrowDecimal()==decimal.MaxValue,"maximum decimal");
+  Check(new ExactDecimal(new BigInteger(decimal.MinValue),0,limits).NarrowDecimal()==decimal.MinValue,"minimum decimal");
+  Refuse<OverflowException>(()=>new ExactDecimal(BigInteger.Parse("123456789012345678901234567891"),1,limits).NarrowDecimal());
+  var dec=Carrier.Decimal(x,token);Check(dec.DecimalValue.Equals(x)&&ReferenceEquals(dec.Evidence,token),"decimal evidence");
+  Refuse<InvalidOperationException>(()=>{_ = dec.IntegerValue;});
+  Check(Unsafe.SizeOf<Carrier>()==48&&Unsafe.SizeOf<XdmValue>()==48,"carrier and product size");
+  var costs=new Dictionary<string,long>{
+   ["inline-create"]=Cost(()=>sink=Carrier.Integer(42,limits)),
+   ["inline-create-evidence"]=Cost(()=>sink=Carrier.Integer(42,limits,token)),
+   ["big-create"]=Cost(()=>sink=Carrier.Integer(huge,limits)),
+   ["big-create-evidence"]=Cost(()=>sink=Carrier.Integer(huge,limits,token)),
+   ["big-read"]=Cost(()=>integerSink=plain.IntegerValue),
+   ["big-read-evidence"]=Cost(()=>{integerSink=marked.IntegerValue;evidenceSink=marked.Evidence;}),
+   ["decimal-create"]=Cost(()=>sink=Carrier.Decimal(x)),
+   ["decimal-create-evidence"]=Cost(()=>sink=Carrier.Decimal(x,token))};
+  string loadedCoreSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(typeof(XdmValue).Assembly.Location))).ToLowerInvariant();
+  Console.WriteLine(JsonSerializer.Serialize(new{checks,carrierBytes=Unsafe.SizeOf<Carrier>(),productBytes=Unsafe.SizeOf<XdmValue>(),loadedCoreSha256,iterations=10000,bytesPerOperation=costs,scope="Isolated model only; evidence is an ordinary token, not authenticated production evidence."},new JsonSerializerOptions{WriteIndented=true}));
+  GC.KeepAlive(sink);GC.KeepAlive(integerSink);GC.KeepAlive(evidenceSink);
+ }
+}
