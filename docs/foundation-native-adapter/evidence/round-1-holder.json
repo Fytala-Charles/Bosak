@@ -1,0 +1,374 @@
+{
+  "mode": "holder",
+  "scope": "Unchanged selected native source \u002B V5 adapter \u002B actual package API/VM; holder replaces Core only; not full provider acceptance",
+  "checks": [
+    {
+      "id": "N01-native-profile",
+      "passed": true
+    },
+    {
+      "id": "N02-native-valid",
+      "passed": true
+    },
+    {
+      "id": "N03-original-local-components",
+      "passed": true
+    },
+    {
+      "id": "N04-distinct-occurrence-state",
+      "passed": true
+    },
+    {
+      "id": "N05-absent-declaration-retained",
+      "passed": true
+    },
+    {
+      "id": "N06-copy-snapshot",
+      "passed": true
+    },
+    {
+      "id": "N07-copy-original-state",
+      "passed": true
+    },
+    {
+      "id": "N08-anonymous-root",
+      "passed": true
+    },
+    {
+      "id": "N09-original-declaration-handle",
+      "passed": true
+    },
+    {
+      "id": "N10-shared-type-handle",
+      "passed": true
+    },
+    {
+      "id": "N11-copy-type-origin",
+      "passed": true
+    },
+    {
+      "id": "N12-plain-decimal",
+      "passed": true
+    },
+    {
+      "id": "N13-real-original-evidence",
+      "passed": true
+    },
+    {
+      "id": "N14-scalar-no-enumeration",
+      "passed": true
+    },
+    {
+      "id": "N15-equal-digest-distinct-authority",
+      "passed": true
+    },
+    {
+      "id": "N16-foreign-document",
+      "passed": true
+    },
+    {
+      "id": "N17-unissued-value",
+      "passed": true
+    },
+    {
+      "id": "N18-input-mutation-isolated",
+      "passed": true
+    },
+    {
+      "id": "N19-export-mutation-isolated",
+      "passed": true
+    },
+    {
+      "id": "N20-invalid-no-document",
+      "passed": true
+    },
+    {
+      "id": "N21-unsupported-no-document",
+      "passed": true
+    },
+    {
+      "id": "N22-native-cancellation",
+      "passed": true
+    },
+    {
+      "id": "N24-assertion-invalid",
+      "passed": true
+    },
+    {
+      "id": "N25-exactness-unsupported",
+      "passed": true
+    },
+    {
+      "id": "N26-independent-origin",
+      "passed": true
+    },
+    {
+      "id": "N27-actual-component-identity",
+      "passed": true
+    },
+    {
+      "id": "N28-foreign-identity-refused",
+      "passed": true
+    },
+    {
+      "id": "VM-value-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-type-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-value-let",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-let",
+      "passed": true
+    },
+    {
+      "id": "VM-type-let",
+      "passed": true
+    },
+    {
+      "id": "VM-value-array",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-array",
+      "passed": true
+    },
+    {
+      "id": "VM-type-array",
+      "passed": true
+    },
+    {
+      "id": "VM-value-map",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-map",
+      "passed": true
+    },
+    {
+      "id": "VM-type-map",
+      "passed": true
+    },
+    {
+      "id": "VM-value-function",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-function",
+      "passed": true
+    },
+    {
+      "id": "VM-type-function",
+      "passed": true
+    },
+    {
+      "id": "VM-value-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-type-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-value-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-type-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-value-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-type-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-value-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-type-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-value-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-type-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-value-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-type-sum",
+      "passed": true
+    },
+    {
+      "id": "N23-root-FOTY0012",
+      "passed": true
+    }
+  ],
+  "checkCount": 61,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "map",
+      "expression": "map{\u0027a\u0027:$v}?a",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "node-data",
+      "expression": "data($n)",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "copied-node-data",
+      "expression": "data($copy)",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v \u002B 1",
+      "value": "11",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "decimal-cast",
+      "expression": "xs:decimal($v)",
+      "value": "10",
+      "markerPreserved": true,
+      "typePreserved": true
+    },
+    {
+      "id": "integer-cast",
+      "expression": "xs:integer($v)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "sum",
+      "expression": "$v \u002B $w",
+      "value": "15",
+      "markerPreserved": false,
+      "typePreserved": false
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "1eca4830034393b22ecfb3e0ea7f2c8eacf7f62e60ddf9840296556c2621c5d4",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d",
+      "context": "Default",
+      "collectible": false
+    }
+  ]
+}

@@ -34,6 +34,9 @@ Foundation call-site disposition (31 October 2026): [actual-source audit and fin
 V5 boundary experiment (31 October 2026): [draft and retained diagnostics](foundation-boundary-experiment/README.md) compile 34 proposed types against the retained Core DLL and pass 54 prior protocol plus 21 new producer controls. Plain-value/evidence cells, scalar access, issued-container checks and narrowed namespace context close the draft producer gap; descriptive context fields are not authority. Actual compiler capture, VM carrier, real Schema adapter and full consumer/performance qualification remain unimplemented or pending. Product Core 1.34.2 and C45/four-owner freeze status are unchanged. Next: real bounded decimal assessment adapter and actual API/VM transport qualification.
 
 
+Native decimal adapter trial (31 October 2026): [actual native-source/API/VM diagnostic](foundation-native-adapter/README.md) passes 61 controls in four processes using exact native Schema c362499 plus retained package DLLs and a Core-only holder hybrid. Original local/anonymous type, declaration, occurrence and copy identities survive tested direct-node/value paths; Invalid/Unsupported expose no document and root data raises FOTY0012. Same-type xs:decimal preserves existing evidence while cross-type xs:integer and arithmetic drop it: observed behavior, not a new provenance rule. No full tree wrapping, bound advisor, production carrier or full consumer qualification is claimed. Next: disposition same-type constructor provenance, then whole navigable snapshot diagnostics. Core 1.34.2/C45/four-owner freeze remain unchanged.
+
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

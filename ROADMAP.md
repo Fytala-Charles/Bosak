@@ -6,7 +6,9 @@
 
 The [actual-source audit](docs/foundation-callsite-disposition/README.md) identified the producer boundary and context-capture requirements now addressed in the V5 draft; production integration remains pending.
 
-V5 boundary diagnostics now pass 75 controls. Next: [real bounded adapter and API/VM transport](docs/foundation-boundary-experiment/README.md); full capture, consumer qualification and freeze remain pending.
+V5 boundary diagnostics now pass 75 controls. The subsequent native adapter trial exercises direct-node/value transport; whole-tree routing, full capture, consumer qualification and freeze remain pending.
+
+The [native decimal adapter trial](docs/foundation-native-adapter/README.md) passes 61 controls in four real API/VM runs. Next: resolve the same-type constructor provenance distinction and qualify whole-snapshot navigation before production carrier integration.
 
 ## Immediate foundation work
 
