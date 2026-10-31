@@ -1,0 +1,151 @@
+{
+  "recordFormatVersion": 1,
+  "status": "FX009-01 engineering requirements matrix delivered for owner/Core review; FX009-02/03 pending",
+  "ownerRole": "Bosak.XmlDb maintainers; engineering audit only, no human signer asserted",
+  "consumerRepositoryRevision": "2f9a36bc3ff22c8215d2f12ff38541770dd82585",
+  "candidateSourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "candidateFeedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "packagesUsed": [
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.26.2",
+      "scope": "Unchanged production pin; candidate not consumed"
+    },
+    {
+      "id": "Bosak.XPath.Api / Bosak.XPath.Providers",
+      "version": "1.26.2",
+      "scope": "Existing evaluation tests only"
+    }
+  ],
+  "publicApiManifestPathAndSha256": {
+    "path": "docs/foundation-api-contract-draft/evidence/member-manifest.json",
+    "sha256": "9de81974678e056748aca16b9bda0ade52d09f7cb50348420fe40ea6c70c090d",
+    "baselineSourceRevision": "f758a29f368201abdb98af003274451c84a9b7c4",
+    "baselineVersion": "1.34.1",
+    "entryCount": 5766,
+    "mappedEntryCount": 176,
+    "note": "IDs are proposed baseline manifest identities; matching source members is not fresh 1.34.2 compiled/package/ABI qualification",
+    "immutableUrl": "https://github.com/Fytala-Charles/Bosak/blob/94ed4413556d375bddf20955b6f1c41d26677aac/docs/foundation-api-contract-draft/evidence/member-manifest.json",
+    "mappedEvidenceOnlyCount": 6,
+    "mappedKinds": {
+      "A": 3,
+      "F": 46,
+      "L": 3,
+      "T": 10,
+      "M": 72,
+      "P": 42
+    }
+  },
+  "supportedProfileAndExclusions": {
+    "profile": "Existing untyped persistent XML / default 3.1 caller boundary with explicit snapshot ownership",
+    "exclusions": [
+      "No full XDM 4.0 conformance claim",
+      "No persistent generalized JNode/JSON or schema typing requirement for ordinary XML",
+      "No general cancellation/reentry/concurrent-disposal promise",
+      "No waiver of existing Core or Schema-owner requirements"
+    ]
+  },
+  "requiredFoundationNeedsAndMemberMapping": {
+    "path": "fx009-01-matrix.json",
+    "sha256": "2c9fd631d9ee7fb5d39d42cb5e0da14fbac63649dc087fbc5c3725b1adf09186",
+    "requirementAreas": 15,
+    "uniqueManifestEntries": 176
+  },
+  "requiredContractGaps": [
+    {
+      "id": "FXG-01",
+      "owner": "XmlDb + Core",
+      "classification": "Existing behavior/profile question",
+      "need": "Agree typed-value/atomization expectations for the declared untyped XML/query profile; FromString alone is not a complete conformance argument.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Pinned and candidate differential data()/type/numeric/error cases; normative adoption only before an actual semantic change."
+    },
+    {
+      "id": "FXG-02",
+      "owner": "XmlDb + Core",
+      "classification": "Ownership boundary requiring explicit disposition",
+      "need": "Agree cached Current, nested/container escapes and BindResult outer-only guard behavior; do not promise every value access throws after disposal.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Actual cached/nested/materialized/copied results before/after source snapshot disposal on exact candidate."
+    },
+    {
+      "id": "FXG-03",
+      "owner": "XmlDb + Core / FG-04",
+      "classification": "Lifecycle qualification and optional-scope decision",
+      "need": "Explicit caller snapshot ownership through early break, exhaustion, abandoned enumeration, faults and cancellation; no universal Dispose addition assumed.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Actual reader/generation lease held and released once; owned vs foreign enumerator/callback cleanup; optional scope only if a concrete missing requirement remains."
+    },
+    {
+      "id": "FXG-04",
+      "owner": "XmlDb / FX009-02",
+      "classification": "Candidate source/package/binary qualification pending",
+      "need": "Real provider and tests against exact 1.34.2 cohort, constants/defaults/default dispatch, axes/namespaces/order/typing/errors, source/binary baseline differences and no format mutation.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Isolated candidate source and supported unchanged-binary runs, precise loaded DLL/package hashes, existing-store reopen and historical snapshot fixtures."
+    },
+    {
+      "id": "FXG-05",
+      "owner": "XmlDb + Core / FG-06",
+      "classification": "Supported scope / concurrency and deferred capture",
+      "need": "Record sequential scope and absent general cancellation/reentry/concurrent-disposal guarantee; verify any claimed deferred context behavior.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Finite accepted scope, actual candidate cancellation/error/early-exit tests and ordered/repeated concurrent tests only for separately supported behaviors."
+    },
+    {
+      "id": "FXG-06",
+      "owner": "Core + Schema + XmlDb / FX009-03",
+      "classification": "Joint contract/owner acceptance pending",
+      "need": "Select exact stable/legacy/experimental manifest scope; this consumer audit cannot freeze Core or complete full Schema foundation requirements.",
+      "newCoreMemberDemonstrated": false,
+      "nextEvidence": "Dated owner dispositions against exact final manifest/feed; no product adoption or release inferred."
+    }
+  ],
+  "sourcePackageAndUnchangedBinaryEvidence": {
+    "candidateExecuted": false,
+    "currentPinTest": {
+      "path": ".tools/fx009-01/current-pin/fx009-01-current-pin_net10.0_20261030214812.trx",
+      "sha256": "f7796faac6dc16d7395f5b3e86da78f5512675f95696361849fd3b205ec124a0",
+      "counts": {
+        "total": 27,
+        "executed": 27,
+        "passed": 27,
+        "failed": 0,
+        "error": 0,
+        "timeout": 0,
+        "aborted": 0,
+        "inconclusive": 0,
+        "passedButRunAborted": 0,
+        "notRunnable": 0,
+        "notExecuted": 0,
+        "disconnected": 0,
+        "warning": 0,
+        "completed": 0,
+        "inProgress": 0,
+        "pending": 0
+      },
+      "platform": "Windows",
+      "configuration": "Debug",
+      "declaredPackage": "Bosak.XPath.Core/1.26.2",
+      "outputCoreAssemblySha256": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+      "matchesCachedPinnedPackageAssembly": true,
+      "loadTimeBindingObserverUsed": false,
+      "candidateQualification": false,
+      "archivedPath": "evidence/current-pin.trx.xml"
+    },
+    "earlier1341Receipts": "Historical only; see Core docs/xmldb-compatibility and docs/binary-compatibility-review"
+  },
+  "positiveInvalidUnsupportedErrorCopyEvidence": "Exact source/fixture bindings in the matrix; 27 existing current-pin Xdm tests pass; expanded candidate/copy/error qualification pending FX009-02",
+  "ownershipCancellationConcurrencyEvidence": "Static borrowed-snapshot/cached-current/normal-exhaustion/default-member audit; six open items; no general concurrency or handle-leak claim",
+  "schemaUniverseOriginalPsviAndCompatibleViewEvidence": null,
+  "xmlSnapshotIdentityOrderEnumFormatLeaseEvidence": "FXR-01/02/05/06/07/08/09/10 and exact source/fixture anchors; no disk/enum/pin mutation",
+  "baselineDifferencesVersusNewRegressions": "Known xmlns/Attributes behavior and cached Current are existing baseline observations; no new candidate regression or required Core signature demonstrated",
+  "decision": null,
+  "decidedBy": null,
+  "decidedAt": null,
+  "productAdoptionAuthorized": false,
+  "publicationAuthorized": false,
+  "freezeAccepted": false,
+  "localDeliveryOnly": true,
+  "newCoreSignatureDemonstrated": false
+}
