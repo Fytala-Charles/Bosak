@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+[Provenance and operation ownership](docs/foundation-provenance-lifetime/README.md) now has ten proposed transition rules, a compiled V2 atomic-evidence amendment and controlled file-lifetime evidence. Keep raw-operation ownership out of canceled waiting scopes. Next reconcile these rules with real providers and finish advisor/compatible-view signatures before final scope.
+
 [Actual VM carrier traces](docs/foundation-vm-carrier-probe/README.md) show which structural/atomization paths retain markers and which constructors/computations drop them. Selective inline storage removes the sampled integer holder allocation, while reference-backed costs and CLR equality remain unresolved. Next settle explicit provenance transition laws and session ownership before choosing final contracts.
 
 [Isolated E-01/E-02 experiments](docs/foundation-carrier-experiments/README.md) now expose concrete allocation, payload-access, default-equality and wrapper transport trade-offs. Neither carrier is selected. Next audit actual VM boundaries and test lower-allocation alternatives against the required provenance laws and owner budgets.

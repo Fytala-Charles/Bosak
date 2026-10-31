@@ -22,6 +22,8 @@ C139-01 carrier experiments — 31 October 2026: [partial E-01/E-02 results](fou
 
 C139-01 actual VM carrier probe — 31 October 2026: [27-case return](foundation-vm-carrier-probe/README.md) exercises exact package API/VM with baseline plus two Core-only diagnostic hybrids, six processes and verified seven-assembly bindings. Selective inline marker removes holder allocation for the sampled integer, not strings; all 27 payload/error outcomes match baseline. Structural paths and typed-node data preserve sampled markers; casts/construction drop them. Untyped witness and three error codes retained. CLR default equality still differs; no provenance law, carrier, budget, full-provider or API acceptance. Delivery: `git log -1 --format=%H -- docs/foundation-vm-carrier-probe/README.md`.
 
+C139-01 provenance/lifetime review — 31 October 2026: [PL-01–10 and V2 declaration amendment](foundation-provenance-lifetime/README.md) separate current atomic type evidence, optional original assessment and non-authorizing audit lineage; original node origin remains required. Exact 2017 Recommendation revisions/sections are recorded as proposed basis, not production adoption. Standalone admission model passes three repeats of 12 scenarios/46 checks with actual private file handles. Canceling an active wait/drain retains raw ownership; an intentionally waiter-owned lease demonstrates premature closure. Core operation API placement, real providers/workers/races and full E-04 remain pending. No product change or freeze. Delivery: `git log -1 --format=%H -- docs/foundation-provenance-lifetime/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

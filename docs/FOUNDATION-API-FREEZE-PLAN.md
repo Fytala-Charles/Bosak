@@ -107,3 +107,7 @@ The [C139-01 first signature slice](foundation-contract-design/README.md) replac
 ## Actual VM carrier return — 31 October 2026
 
 [Partial actual-VM evidence](foundation-vm-carrier-probe/README.md) extends the carrier experiments: 27 repeated cases retain baseline payload/error behavior and document structural versus cast/construction markers with synthetic typed nodes. A selective integer marker avoids a holder allocation; strings and CLR equality remain unresolved. This is an unqualified diagnostic hybrid, not a selected representation or full provider/semantic/performance gate.
+
+## Provenance and operation-ownership proposal — 31 October 2026
+
+[PL-01–10/V2 and partial E-04](foundation-provenance-lifetime/README.md) propose current type evidence independently of original assessment, with casts/computation not automatically inheriting authority. A private admission model demonstrates correct raw-owned lifetime and unsafe waiter-owned release using fresh file handles. This does not adopt production semantics or force a public Core owner/drain API; exact placement and actual provider/worker qualification remain pending.
