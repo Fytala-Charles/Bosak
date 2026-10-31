@@ -1,0 +1,2 @@
+# Preserve exact owner status and return evidence bytes.
+* -text whitespace=cr-at-eol
