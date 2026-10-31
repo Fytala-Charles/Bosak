@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5cd98dfd-e357-42fd-ab7e-8d8bac7bf16f" name="@47dac2f21652 2026-10-30 21:33:19" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-30T21:33:19.2299682+00:00" queuing="2026-10-30T21:33:19.2299683+00:00" start="2026-10-30T21:33:17.8342524+00:00" finish="2026-10-30T21:33:22.0258706+00:00" />
+  <TestSettings name="default" id="bf60d27c-2206-497a-958f-a6519b8dad4b">
+    <Deployment runDeploymentRoot="_47dac2f21652_2026-10-30_21_33_19" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="17278969-707e-4f85-97be-b774d5d971e1" testId="acb6a399-a1a0-6dd7-923c-b01477918e96" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 6)" computerName="47dac2f21652" duration="00:00:00.9246677" startTime="2026-10-30T21:33:18.2160717+00:00" endTime="2026-10-30T21:33:19.1428483+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="17278969-707e-4f85-97be-b774d5d971e1" />
+    <UnitTestResult executionId="5cd9b040-b50a-40ab-bf75-f15f4f9d54fb" testId="382d5290-ff13-694e-9051-10db807d153f" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 1)" computerName="47dac2f21652" duration="00:00:00.0019621" startTime="2026-10-30T21:33:19.1857967+00:00" endTime="2026-10-30T21:33:19.1876990+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5cd9b040-b50a-40ab-bf75-f15f4f9d54fb" />
+    <UnitTestResult executionId="f0884afb-05e7-471e-be28-052616901c9d" testId="48652f7d-94da-8a65-3122-7b57adb07cf7" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 128)" computerName="47dac2f21652" duration="00:00:00.0191052" startTime="2026-10-30T21:33:21.8839520+00:00" endTime="2026-10-30T21:33:21.9033400+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f0884afb-05e7-471e-be28-052616901c9d" />
+    <UnitTestResult executionId="3d62748c-49fd-4182-850b-e6f919d72121" testId="bc218422-8529-9658-b8b3-85e652ffee49" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 1)" computerName="47dac2f21652" duration="00:00:00.0490796" startTime="2026-10-30T21:33:21.9050759+00:00" endTime="2026-10-30T21:33:21.9541946+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d62748c-49fd-4182-850b-e6f919d72121" />
+    <UnitTestResult executionId="c9655371-1e13-46d3-b7db-0f0dc1f4c0c3" testId="14917d01-5f62-45b9-2c2c-7124f3620de3" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 1)" computerName="47dac2f21652" duration="00:00:00.0107213" startTime="2026-10-30T21:33:20.1092478+00:00" endTime="2026-10-30T21:33:20.1199848+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c9655371-1e13-46d3-b7db-0f0dc1f4c0c3" />
+    <UnitTestResult executionId="0e6ab188-74e0-4427-9401-a7f92b8953fc" testId="9966ecaa-4a50-344d-6919-c49d1d234496" testName="Bosak.XmlDb.Xdm.Tests.TransactionalQueryTests.XPath_CommittedScalar_PreservesSnapshotsAndLazyNavigation" computerName="47dac2f21652" duration="00:00:00.3361192" startTime="2026-10-30T21:33:18.2151584+00:00" endTime="2026-10-30T21:33:18.5544734+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e6ab188-74e0-4427-9401-a7f92b8953fc" />
+    <UnitTestResult executionId="834101c1-a928-4b6a-8479-56d236a52cf4" testId="c4a6f701-bf74-2630-0a62-4a9a7188baa6" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 128)" computerName="47dac2f21652" duration="00:00:00.8036748" startTime="2026-10-30T21:33:20.1267751+00:00" endTime="2026-10-30T21:33:20.9305614+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="834101c1-a928-4b6a-8479-56d236a52cf4" />
+    <UnitTestResult executionId="2723b69b-77f3-4bc2-9970-79aa2f2c97a9" testId="afee1794-90b5-8dbb-8ca1-f44dbbf58a59" testName="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests.PackageReferences_EmbeddedAdapter_HasOnlyPinnedBosakCore" computerName="47dac2f21652" duration="00:00:00.0038466" startTime="2026-10-30T21:33:18.2160460+00:00" endTime="2026-10-30T21:33:18.2229950+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2723b69b-77f3-4bc2-9970-79aa2f2c97a9" />
+    <UnitTestResult executionId="bd7324e9-d466-48f2-ae3a-20d85b3e7072" testId="a8051caa-b828-9968-100c-f3f317bdda93" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 128)" computerName="47dac2f21652" duration="00:00:00.0017485" startTime="2026-10-30T21:33:21.9035797+00:00" endTime="2026-10-30T21:33:21.9050168+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd7324e9-d466-48f2-ae3a-20d85b3e7072" />
+    <UnitTestResult executionId="893eb331-3d2e-4857-b861-91d214ff8682" testId="86d9a669-01a1-9973-f5bf-80dd1609bee1" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 16)" computerName="47dac2f21652" duration="00:00:00.0041019" startTime="2026-10-30T21:33:19.1545356+00:00" endTime="2026-10-30T21:33:19.1586679+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="893eb331-3d2e-4857-b861-91d214ff8682" />
+    <UnitTestResult executionId="828fae16-93c2-4cc1-990e-b9edfcae8f5f" testId="89e2d4de-9048-c728-974e-fe1c223bc7f2" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 16)" computerName="47dac2f21652" duration="00:00:00.8697302" startTime="2026-10-30T21:33:19.2139499+00:00" endTime="2026-10-30T21:33:20.0595669+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="828fae16-93c2-4cc1-990e-b9edfcae8f5f" />
+    <UnitTestResult executionId="0fdbf509-1aae-4718-bfcb-d97435e68550" testId="40978675-318b-33fe-6b54-50af65d7c466" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 128)" computerName="47dac2f21652" duration="00:00:00.0019287" startTime="2026-10-30T21:33:19.1877943+00:00" endTime="2026-10-30T21:33:19.1896631+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fdbf509-1aae-4718-bfcb-d97435e68550" />
+    <UnitTestResult executionId="6e554eb3-b333-4c9e-8674-3e42cc8c111e" testId="94954224-96e1-efea-98aa-4f6d560a2e5b" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 16)" computerName="47dac2f21652" duration="00:00:00.0269302" startTime="2026-10-30T21:33:19.1588006+00:00" endTime="2026-10-30T21:33:19.1856502+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e554eb3-b333-4c9e-8674-3e42cc8c111e" />
+    <UnitTestResult executionId="94e39a23-8c5f-4c0a-a73e-35f2c6f25201" testId="8597fc2e-50fe-8a39-0943-3e99576264f5" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 1)" computerName="47dac2f21652" duration="00:00:00.0018686" startTime="2026-10-30T21:33:20.1230978+00:00" endTime="2026-10-30T21:33:20.1247398+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94e39a23-8c5f-4c0a-a73e-35f2c6f25201" />
+    <UnitTestResult executionId="19bd65ea-cdd6-404d-bc7c-25188531d771" testId="c2521f97-d405-201f-84e8-5f536a441bd7" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.LazySequence_DisposedBetweenFetches_Throws" computerName="47dac2f21652" duration="00:00:00.0016063" startTime="2026-10-30T21:33:21.9610156+00:00" endTime="2026-10-30T21:33:21.9623179+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19bd65ea-cdd6-404d-bc7c-25188531d771" />
+    <UnitTestResult executionId="d0714f82-79bb-4706-97dc-5746ae7a7215" testId="edace3b0-3996-7340-932c-3c7aebb73e40" testName="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests.ProjectReferences_FoundationGraph_MatchesApprovedBoundary" computerName="47dac2f21652" duration="00:00:00.0059155" startTime="2026-10-30T21:33:18.2313865+00:00" endTime="2026-10-30T21:33:18.2314519+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0714f82-79bb-4706-97dc-5746ae7a7215" />
+    <UnitTestResult executionId="46cbf854-ddc0-41bc-a82b-25eae1fd096c" testId="efc503f0-bdc0-2e29-a4fa-2cee1717aafd" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 80)" computerName="47dac2f21652" duration="00:00:00.0027580" startTime="2026-10-30T21:33:20.1202362+00:00" endTime="2026-10-30T21:33:20.1229765+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46cbf854-ddc0-41bc-a82b-25eae1fd096c" />
+    <UnitTestResult executionId="179d20b0-e595-418b-8531-5b8c92682b04" testId="4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 128)" computerName="47dac2f21652" duration="00:00:00.0115769" startTime="2026-10-30T21:33:19.1432115+00:00" endTime="2026-10-30T21:33:19.1543953+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="179d20b0-e595-418b-8531-5b8c92682b04" />
+    <UnitTestResult executionId="19f69250-55f0-440e-ac62-78ca52407d2f" testId="1c43c0c9-8ded-98c1-c7e3-e7623c03dc20" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 2)" computerName="47dac2f21652" duration="00:00:00.0493117" startTime="2026-10-30T21:33:20.0602773+00:00" endTime="2026-10-30T21:33:20.1090668+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19f69250-55f0-440e-ac62-78ca52407d2f" />
+    <UnitTestResult executionId="38fc5749-e18b-48f1-b651-391c29d7e00f" testId="a27756f4-609b-27d6-ef23-7296f1921fba" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 16)" computerName="47dac2f21652" duration="00:00:00.0017593" startTime="2026-10-30T21:33:21.9543171+00:00" endTime="2026-10-30T21:33:21.9560359+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="38fc5749-e18b-48f1-b651-391c29d7e00f" />
+    <UnitTestResult executionId="49b60e10-cd88-4951-9f1e-cd5f18a80cab" testId="95536010-703f-6d4d-87a7-c897df2b095e" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.DocumentLoader_SnapshotScoped_PreservesIdentityAndPayloadIsolation" computerName="47dac2f21652" duration="00:00:00.0044693" startTime="2026-10-30T21:33:21.9561206+00:00" endTime="2026-10-30T21:33:21.9606013+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49b60e10-cd88-4951-9f1e-cd5f18a80cab" />
+    <UnitTestResult executionId="9903aca6-1eca-4ca8-aefc-7ff579d32d3c" testId="c9d7e1b1-8468-8020-a620-0d18c0897251" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 16)" computerName="47dac2f21652" duration="00:00:00.0014436" startTime="2026-10-30T21:33:21.8824900+00:00" endTime="2026-10-30T21:33:21.8839008+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9903aca6-1eca-4ca8-aefc-7ff579d32d3c" />
+    <UnitTestResult executionId="44f4e406-594e-4c05-abeb-c89164eea481" testId="9a338fcf-2dbb-7054-0ef1-304c4d46f1c7" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 1)" computerName="47dac2f21652" duration="00:00:00.9461963" startTime="2026-10-30T21:33:20.9307064+00:00" endTime="2026-10-30T21:33:21.8768978+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44f4e406-594e-4c05-abeb-c89164eea481" />
+    <UnitTestResult executionId="bdfd9f02-b6ae-4507-be43-57b6bd05f9db" testId="b02d9103-f7d9-00b3-483f-0faf253cbfb9" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 33)" computerName="47dac2f21652" duration="00:00:00.0018737" startTime="2026-10-30T21:33:20.1248308+00:00" endTime="2026-10-30T21:33:20.1266849+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdfd9f02-b6ae-4507-be43-57b6bd05f9db" />
+    <UnitTestResult executionId="e941cfcc-0bba-43dd-a157-9df3d521f311" testId="d6ceeb64-f12c-5c47-b28a-a228fcb97fad" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_NamespacesAndMixedContent_MatchesProvider" computerName="47dac2f21652" duration="00:00:00.0039201" startTime="2026-10-30T21:33:21.9762310+00:00" endTime="2026-10-30T21:33:21.9801428+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e941cfcc-0bba-43dd-a157-9df3d521f311" />
+    <UnitTestResult executionId="0127c5c9-5313-4eca-b369-1b617f8668e4" testId="fec4442a-a066-553e-1a05-2a9ab539ff18" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.Axes_AllNodeContexts_MatchInMemoryProvider" computerName="47dac2f21652" duration="00:00:00.0137971" startTime="2026-10-30T21:33:21.9623982+00:00" endTime="2026-10-30T21:33:21.9761316+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0127c5c9-5313-4eca-b369-1b617f8668e4" />
+    <UnitTestResult executionId="7dcb498a-724c-4008-9eb2-647ca0dcd051" testId="4073810b-2573-04cf-aa5a-e6b13ad750ba" testName="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 4)" computerName="47dac2f21652" duration="00:00:00.0054230" startTime="2026-10-30T21:33:21.8771085+00:00" endTime="2026-10-30T21:33:21.8823963+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7dcb498a-724c-4008-9eb2-647ca0dcd051" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 16)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="86d9a669-01a1-9973-f5bf-80dd1609bee1">
+      <Execution id="893eb331-3d2e-4857-b861-91d214ff8682" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 1)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="bc218422-8529-9658-b8b3-85e652ffee49">
+      <Execution id="3d62748c-49fd-4182-850b-e6f919d72121" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.Axes_AllNodeContexts_MatchInMemoryProvider" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="fec4442a-a066-553e-1a05-2a9ab539ff18">
+      <Execution id="0127c5c9-5313-4eca-b369-1b617f8668e4" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="Axes_AllNodeContexts_MatchInMemoryProvider" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 16)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="c9d7e1b1-8468-8020-a620-0d18c0897251">
+      <Execution id="9903aca6-1eca-4ca8-aefc-7ff579d32d3c" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 1)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="382d5290-ff13-694e-9051-10db807d153f">
+      <Execution id="5cd9b040-b50a-40ab-bf75-f15f4f9d54fb" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 1)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="8597fc2e-50fe-8a39-0943-3e99576264f5">
+      <Execution id="94e39a23-8c5f-4c0a-a73e-35f2c6f25201" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 128)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="c4a6f701-bf74-2630-0a62-4a9a7188baa6">
+      <Execution id="834101c1-a928-4b6a-8479-56d236a52cf4" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 4)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="4073810b-2573-04cf-aa5a-e6b13ad750ba">
+      <Execution id="7dcb498a-724c-4008-9eb2-647ca0dcd051" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 2)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="1c43c0c9-8ded-98c1-c7e3-e7623c03dc20">
+      <Execution id="19f69250-55f0-440e-ac62-78ca52407d2f" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 128)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="40978675-318b-33fe-6b54-50af65d7c466">
+      <Execution id="0fdbf509-1aae-4718-bfcb-d97435e68550" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 80)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="efc503f0-bdc0-2e29-a4fa-2cee1717aafd">
+      <Execution id="46cbf854-ddc0-41bc-a82b-25eae1fd096c" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 1, group: 33)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="b02d9103-f7d9-00b3-483f-0faf253cbfb9">
+      <Execution id="bdfd9f02-b6ae-4507-be43-57b6bd05f9db" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.TransactionalQueryTests.XPath_CommittedScalar_PreservesSnapshotsAndLazyNavigation" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="9966ecaa-4a50-344d-6919-c49d1d234496">
+      <Execution id="0e6ab188-74e0-4427-9401-a7f92b8953fc" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.TransactionalQueryTests" name="XPath_CommittedScalar_PreservesSnapshotsAndLazyNavigation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 1)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="9a338fcf-2dbb-7054-0ef1-304c4d46f1c7">
+      <Execution id="44f4e406-594e-4c05-abeb-c89164eea481" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 128)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="48652f7d-94da-8a65-3122-7b57adb07cf7">
+      <Execution id="f0884afb-05e7-471e-be28-052616901c9d" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 128)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd">
+      <Execution id="179d20b0-e595-418b-8531-5b8c92682b04" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10, group: 1)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="14917d01-5f62-45b9-2c2c-7124f3620de3">
+      <Execution id="c9655371-1e13-46d3-b7db-0f0dc1f4c0c3" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_NamespacesAndMixedContent_MatchesProvider" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="d6ceeb64-f12c-5c47-b28a-a228fcb97fad">
+      <Execution id="e941cfcc-0bba-43dd-a157-9df3d521f311" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_NamespacesAndMixedContent_MatchesProvider" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 128)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="a8051caa-b828-9968-100c-f3f317bdda93">
+      <Execution id="bd7324e9-d466-48f2-ae3a-20d85b3e7072" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 0, group: 16)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="a27756f4-609b-27d6-ef23-7296f1921fba">
+      <Execution id="38fc5749-e18b-48f1-b651-391c29d7e00f" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests.ProjectReferences_FoundationGraph_MatchesApprovedBoundary" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="edace3b0-3996-7340-932c-3c7aebb73e40">
+      <Execution id="d0714f82-79bb-4706-97dc-5746ae7a7215" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests" name="ProjectReferences_FoundationGraph_MatchesApprovedBoundary" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.DocumentLoader_SnapshotScoped_PreservesIdentityAndPayloadIsolation" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="95536010-703f-6d4d-87a7-c897df2b095e">
+      <Execution id="49b60e10-cd88-4951-9f1e-cd5f18a80cab" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="DocumentLoader_SnapshotScoped_PreservesIdentityAndPayloadIsolation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.LazySequence_DisposedBetweenFetches_Throws" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="c2521f97-d405-201f-84e8-5f536a441bd7">
+      <Execution id="19bd65ea-cdd6-404d-bc7c-25188531d771" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="LazySequence_DisposedBetweenFetches_Throws" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 6)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="acb6a399-a1a0-6dd7-923c-b01477918e96">
+      <Execution id="17278969-707e-4f85-97be-b774d5d971e1" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests.PackageReferences_EmbeddedAdapter_HasOnlyPinnedBosakCore" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="afee1794-90b5-8dbb-8ca1-f44dbbf58a59">
+      <Execution id="2723b69b-77f3-4bc2-9970-79aa2f2c97a9" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.DependencyBoundaryTests" name="PackageReferences_EmbeddedAdapter_HasOnlyPinnedBosakCore" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 500, group: 16)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="94954224-96e1-efea-98aa-4f6d560a2e5b">
+      <Execution id="6e554eb3-b333-4c9e-8674-3e42cc8c111e" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+    <UnitTest name="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests.XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads(count: 10000, group: 16)" storage="/work/frozen/replacement/tests/bosak.xmldb.xdm.tests.dll" id="89e2d4de-9048-c728-974e-fe1c223bc7f2">
+      <Execution id="828fae16-93c2-4cc1-990e-b9edfcae8f5f" />
+      <TestMethod codeBase="/work/frozen/replacement/tests/Bosak.XmlDb.Xdm.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.Xdm.Tests.PersistentQueryTests" name="XPath_VaryingGroups_MatchesInMemoryWithoutUnrelatedReads" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="acb6a399-a1a0-6dd7-923c-b01477918e96" executionId="17278969-707e-4f85-97be-b774d5d971e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="382d5290-ff13-694e-9051-10db807d153f" executionId="5cd9b040-b50a-40ab-bf75-f15f4f9d54fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48652f7d-94da-8a65-3122-7b57adb07cf7" executionId="f0884afb-05e7-471e-be28-052616901c9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc218422-8529-9658-b8b3-85e652ffee49" executionId="3d62748c-49fd-4182-850b-e6f919d72121" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="14917d01-5f62-45b9-2c2c-7124f3620de3" executionId="c9655371-1e13-46d3-b7db-0f0dc1f4c0c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9966ecaa-4a50-344d-6919-c49d1d234496" executionId="0e6ab188-74e0-4427-9401-a7f92b8953fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4a6f701-bf74-2630-0a62-4a9a7188baa6" executionId="834101c1-a928-4b6a-8479-56d236a52cf4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="afee1794-90b5-8dbb-8ca1-f44dbbf58a59" executionId="2723b69b-77f3-4bc2-9970-79aa2f2c97a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8051caa-b828-9968-100c-f3f317bdda93" executionId="bd7324e9-d466-48f2-ae3a-20d85b3e7072" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="86d9a669-01a1-9973-f5bf-80dd1609bee1" executionId="893eb331-3d2e-4857-b861-91d214ff8682" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89e2d4de-9048-c728-974e-fe1c223bc7f2" executionId="828fae16-93c2-4cc1-990e-b9edfcae8f5f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40978675-318b-33fe-6b54-50af65d7c466" executionId="0fdbf509-1aae-4718-bfcb-d97435e68550" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="94954224-96e1-efea-98aa-4f6d560a2e5b" executionId="6e554eb3-b333-4c9e-8674-3e42cc8c111e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8597fc2e-50fe-8a39-0943-3e99576264f5" executionId="94e39a23-8c5f-4c0a-a73e-35f2c6f25201" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2521f97-d405-201f-84e8-5f536a441bd7" executionId="19bd65ea-cdd6-404d-bc7c-25188531d771" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="edace3b0-3996-7340-932c-3c7aebb73e40" executionId="d0714f82-79bb-4706-97dc-5746ae7a7215" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="efc503f0-bdc0-2e29-a4fa-2cee1717aafd" executionId="46cbf854-ddc0-41bc-a82b-25eae1fd096c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd" executionId="179d20b0-e595-418b-8531-5b8c92682b04" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c43c0c9-8ded-98c1-c7e3-e7623c03dc20" executionId="19f69250-55f0-440e-ac62-78ca52407d2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a27756f4-609b-27d6-ef23-7296f1921fba" executionId="38fc5749-e18b-48f1-b651-391c29d7e00f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95536010-703f-6d4d-87a7-c897df2b095e" executionId="49b60e10-cd88-4951-9f1e-cd5f18a80cab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9d7e1b1-8468-8020-a620-0d18c0897251" executionId="9903aca6-1eca-4ca8-aefc-7ff579d32d3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9a338fcf-2dbb-7054-0ef1-304c4d46f1c7" executionId="44f4e406-594e-4c05-abeb-c89164eea481" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b02d9103-f7d9-00b3-483f-0faf253cbfb9" executionId="bdfd9f02-b6ae-4507-be43-57b6bd05f9db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d6ceeb64-f12c-5c47-b28a-a228fcb97fad" executionId="e941cfcc-0bba-43dd-a157-9df3d521f311" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fec4442a-a066-553e-1a05-2a9ab539ff18" executionId="0127c5c9-5313-4eca-b369-1b617f8668e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4073810b-2573-04cf-aa5a-e6b13ad750ba" executionId="7dcb498a-724c-4008-9eb2-647ca0dcd051" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="27" executed="27" passed="27" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.9)
+[xUnit.net 00:00:00.07]   Discovering: Bosak.XmlDb.Xdm.Tests
+[xUnit.net 00:00:00.09]   Discovered:  Bosak.XmlDb.Xdm.Tests
+[xUnit.net 00:00:00.11]   Starting:    Bosak.XmlDb.Xdm.Tests
+[xUnit.net 00:00:03.89]   Finished:    Bosak.XmlDb.Xdm.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

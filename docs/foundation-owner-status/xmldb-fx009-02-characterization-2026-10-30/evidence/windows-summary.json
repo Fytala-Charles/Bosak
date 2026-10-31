@@ -1,0 +1,15 @@
+{
+  "scope": "Windows sequential ordinary XML characterization; not joint contract acceptance",
+  "sourceBaselineTests": 27,
+  "sourceCandidateTests": 27,
+  "binaryControlTests": 27,
+  "binaryReplacementTests": 27,
+  "sameTestIds": true,
+  "observationsPerRole": 37,
+  "allFourObservationSetsEqual": true,
+  "frozenLayoutsUnchangedAfterExecution": true,
+  "exactSevenDllDifferencesBeforeExecution": true,
+  "existingStoreBytesAndInventoryUnchanged": true,
+  "currentRepublishMayOccur": "Legacy Open can republish byte-identical CURRENT in these owned fixtures; not write-free I/O proof",
+  "candidateQualifiedAsStableApi": false
+}

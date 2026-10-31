@@ -1,0 +1,22 @@
+{
+  "command": [
+    "dotnet",
+    "restore",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\candidate\\source\\tests\\Bosak.XmlDb.Xdm.Tests\\Bosak.XmlDb.Xdm.Tests.csproj",
+    "--source",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\feed",
+    "--source",
+    "C:\\Users\\charl\\.nuget\\packages",
+    "--packages",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\candidate-cache",
+    "--ignore-failed-sources",
+    "--force-evaluate",
+    "-p:NuGetAudit=false",
+    "-v",
+    "quiet"
+  ],
+  "exitCode": 0,
+  "seconds": 1.494591400027275,
+  "timeoutSeconds": 240,
+  "isolatedNuGetAuditDisabled": true
+}

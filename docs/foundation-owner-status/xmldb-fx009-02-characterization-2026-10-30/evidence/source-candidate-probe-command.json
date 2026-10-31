@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\candidate\\source\\qualification\\Probe\\bin\\Release\\net10.0\\Fx009Probe.dll",
+    "qualify",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\retained-existing",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\results\\source-candidate-observations.json",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\source-candidate-scratch"
+  ],
+  "exitCode": 0,
+  "seconds": 0.7161546999996062,
+  "timeoutSeconds": 180,
+  "observer": "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\observer\\bin\\Release\\net10.0\\PackageBindingHook.dll"
+}

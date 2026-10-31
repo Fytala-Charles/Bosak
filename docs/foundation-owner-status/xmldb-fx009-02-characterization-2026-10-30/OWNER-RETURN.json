@@ -1,0 +1,98 @@
+{
+  "recordFormatVersion": 1,
+  "status": "FX009-02 bounded existing-API characterization passes; joint contract/FX009-03 and wider acceptance pending",
+  "ownerRole": "Bosak.XmlDb maintainers; bounded engineering return, no human signer asserted",
+  "consumerRepositoryRevision": "2f9a36bc3ff22c8215d2f12ff38541770dd82585",
+  "candidateSourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "candidateFeedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "packagesUsed": {
+    "production": "Bosak.XPath.Core 1.26.2 unchanged",
+    "isolatedCandidate": "Exact seven-package 1.34.2 cohort; package hashes in evidence/selection.json"
+  },
+  "publicApiManifestPathAndSha256": {
+    "path": "docs/foundation-api-contract-draft/evidence/member-manifest.json",
+    "sha256": "9de81974678e056748aca16b9bda0ade52d09f7cb50348420fe40ea6c70c090d",
+    "baselineSourceRevision": "f758a29f368201abdb98af003274451c84a9b7c4",
+    "baselineVersion": "1.34.1",
+    "entryCount": 5766,
+    "mappedEntryCount": 176,
+    "note": "IDs are proposed baseline manifest identities; matching source members is not fresh 1.34.2 compiled/package/ABI qualification",
+    "immutableUrl": "https://github.com/Fytala-Charles/Bosak/blob/94ed4413556d375bddf20955b6f1c41d26677aac/docs/foundation-api-contract-draft/evidence/member-manifest.json",
+    "mappedEvidenceOnlyCount": 6,
+    "mappedKinds": {
+      "A": 3,
+      "F": 46,
+      "L": 3,
+      "T": 10,
+      "M": 72,
+      "P": 42
+    }
+  },
+  "supportedProfileAndExclusions": {
+    "profile": "Sequential ordinary untyped XML/default XPath 3.1 and explicit borrowed snapshot ownership through existing APIs",
+    "notQualified": [
+      "General cancellation/reentry/concurrent snapshot disposal",
+      "Mutable/deferred semantic capture and full XDM 4.0/Schema",
+      "Entire Storage/Integration on the candidate",
+      "Shared API freeze/release/product adoption/retirement"
+    ]
+  },
+  "requiredFoundationNeedsAndMemberMapping": {
+    "source": "Previously delivered FX009-01 15-area/176-entry matrix",
+    "sha256": "2c9fd631d9ee7fb5d39d42cb5e0da14fbac63649dc087fbc5c3725b1adf09186"
+  },
+  "requiredContractGaps": [
+    {
+      "id": "FXG-01",
+      "engineeringDisposition": "Bounded baseline/candidate equality observed, including String typed carrier and 26 differential query/error outcomes; normative/full-profile policy remains for owner disposition.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-02",
+      "engineeringDisposition": "Cached Current, constant defaults and identity hashing remain readable; actual persistent leaf/fetch and nested/map/array dereference guards reject disposal. Borrowed values are not universally invalidated or detached.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-03",
+      "engineeringDisposition": "Two actual generation leases survive coordinator close and later commit, then release on explicit snapshot disposal. Early/normal foreign iterator cleanup remains caller-owned; caller cancellation surfaces OperationCanceledException without closing the snapshot in these sequential fixtures.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-04",
+      "engineeringDisposition": "Exact 1.34.2 package source rebuild and seven-DLL-only frozen replacement pass on Windows/Linux for committed 2f9a36b XML scope; no original store/pin or local M2 source change. Broader compatibility and final candidate acceptance remain open.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-05",
+      "engineeringDisposition": "Sequential contexts and caller cancellation callback only. General token propagation, concurrent snapshot disposal, reentry and mutable/deferred environment capture are not qualified.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-06",
+      "engineeringDisposition": "Existing Core proposals support testing retained XML APIs, but accepted-signature lists and joint stable manifest/sign-offs remain pending. No freeze/adoption/release decision inferred.",
+      "finalAccepted": false
+    }
+  ],
+  "sourcePackageAndUnchangedBinaryEvidence": {
+    "resultsPath": "RESULTS.json",
+    "resultsSha256": "58edab4ee72eac03a5cb34db5dcd83c5ca5e5c592a4b455b36c1d0ee5481fe40",
+    "manifestSha256": "4d45052c00aeced79228dee1f1ea062c631aa103892657063cf69d876504a9f5",
+    "primaryModesPerPlatform": 4,
+    "distinctExistingTestIds": 27,
+    "observationsPerMode": 37,
+    "countsOverlap": true,
+    "linuxArchivalReplayAddsNoDistinctCoverage": true
+  },
+  "positiveInvalidUnsupportedErrorCopyEvidence": "Actual 26 differential query/error cases, seven kind mappings, cached/nested guards, actual leases, foreign early/normal cleanup and caller cancellation; raw logs/TRX/observations and exact replay binaries retained.",
+  "ownershipCancellationConcurrencyEvidence": "Explicit caller ownership characterized sequentially; broader policy remains pending; not general cancellation/race or leak certification.",
+  "schemaUniverseOriginalPsviAndCompatibleViewEvidence": null,
+  "xmlSnapshotIdentityOrderEnumFormatLeaseEvidence": "Existing owned H1 fixtures retain byte/file/directory equality across modes; separate scratch commit/lease tests preserve old snapshots. CURRENT may be republished byte-identically; no original store/pin is changed.",
+  "baselineDifferencesVersusNewRegressions": "All primary Windows/Linux observation sets and test IDs match; cached Current/default getters are existing behavior, not a new candidate defect.",
+  "decision": null,
+  "decidedBy": null,
+  "decidedAt": null,
+  "productAdoptionAuthorized": false,
+  "publicationAuthorized": false,
+  "freezeAccepted": false,
+  "localDeliveryOnly": true
+}

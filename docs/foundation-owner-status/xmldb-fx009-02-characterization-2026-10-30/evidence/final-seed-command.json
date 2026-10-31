@@ -1,0 +1,12 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\frozen\\control\\probe\\Fx009Probe.dll",
+    "seed",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\retained-existing"
+  ],
+  "exitCode": 0,
+  "seconds": 0.2170221000269521,
+  "timeoutSeconds": 180,
+  "observer": "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\observer\\bin\\Release\\net10.0\\PackageBindingHook.dll"
+}

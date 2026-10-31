@@ -1,0 +1,942 @@
+{
+  "recordFormatVersion": 1,
+  "recordedUtc": "2026-10-30T21:44:11.892083+00:00",
+  "workPackage": "FX009-02 bounded characterization; FX009-03 acceptance pending",
+  "consumerRevision": "2f9a36bc3ff22c8215d2f12ff38541770dd82585",
+  "candidateSourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "candidateVersion": "1.34.2",
+  "candidateFeedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "scope": "Sequential ordinary untyped XML/default XPath 3.1 and explicit borrowed snapshot ownership through existing APIs",
+  "primaryVerification": {
+    "scope": "Bounded sequential existing-API XML characterization; no joint acceptance",
+    "platforms": {
+      "windows": {
+        "source-baseline": {
+          "tests": {
+            "path": "results\\source-baseline-tests\\results.trx",
+            "sha256": "42b25ab50e14301519217c7884b135d70e30d0f0913214304f0d32ffac9b0596",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/source-baseline-observations.json",
+            "sha256": "9d43edb3fa1dd9c1e46d7579bc6cb8a477fc4cc8736f721766c6f5452f4b56b3",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/source-baseline-tests-bindings/58764.json",
+                "sha256": "c9b92b2ab48355fd7e1c56978cc402d753e87fa50f0a35a11debf10aa0f7b6bf",
+                "processId": 58764,
+                "processName": "testhost"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/source-baseline-probe-bindings/52412.json",
+                "sha256": "dbfbe60ec7109accb84727325b77ab35241d4614fa92230eb65fc242de998fe6",
+                "processId": 52412,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "source-candidate": {
+          "tests": {
+            "path": "results\\source-candidate-tests\\results.trx",
+            "sha256": "149490b03836f6a84563eeb123f663b7c63491eb2f9f3bc222ec70755a10b85e",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/source-candidate-observations.json",
+            "sha256": "95f1e0ca5753e4c8360d2158f239d3056257d77e62cc566c8f69c1f71eab4741",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/source-candidate-tests-bindings/45368.json",
+                "sha256": "2356a25ade86de2fe97e9dc11651e66d80ddd04ce656e30680dc3381750936c5",
+                "processId": 45368,
+                "processName": "testhost"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/source-candidate-probe-bindings/34324.json",
+                "sha256": "4b79423395bc867a7c1664614977493abbad39cdc1d524ecae3222e1b258b0db",
+                "processId": 34324,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "binary-control": {
+          "tests": {
+            "path": "results\\binary-control-tests\\results.trx",
+            "sha256": "3ad5b3ba2a7cc5b53a387318c4572f9da46f921666a7d4f08de1c58533a17efa",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/binary-control-observations.json",
+            "sha256": "c310f354b23f193743a51a800a08264f02c0a5fb9669ef4a48391a1a58a42ed2",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/binary-control-tests-bindings/41300.json",
+                "sha256": "16b01027dc2f3a9a7eb7d1021cd2d26c6f0a3efe924222c595a46cdf1cf3eee1",
+                "processId": 41300,
+                "processName": "testhost"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/binary-control-probe-bindings/28336.json",
+                "sha256": "30645dc2613abd8923a68e194c5c47a8f7c9aa4420569476b29b21b7b252c91e",
+                "processId": 28336,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "binary-replacement": {
+          "tests": {
+            "path": "results\\binary-replacement-tests\\results.trx",
+            "sha256": "27e138af3c578ac671ef8aca6e0ce2f32395cd3a76089bb14f02d1b8273a193e",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/binary-replacement-observations.json",
+            "sha256": "77d2097135e2414e04a7af86ee68221da8483e709e391fedac9e6424047ea41b",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/binary-replacement-tests-bindings/56196.json",
+                "sha256": "cce4c00ed7561abcc5db016fae542601b367013f603ad42c1e9f8178da482363",
+                "processId": 56196,
+                "processName": "testhost"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/binary-replacement-probe-bindings/33932.json",
+                "sha256": "db040dec4607400fb68dd3e9a12a2f7ee3e09e33351103cd4cfe0bf145e6323b",
+                "processId": 33932,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        }
+      },
+      "linux": {
+        "source-baseline": {
+          "tests": {
+            "path": "results\\linux\\source-baseline-tests\\results.trx",
+            "sha256": "8b6199548de5bcb0d6b84a4b2b88901c0d9c3a9f9b589c7f7b8db8bc6ace3dc8",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/linux/source-baseline-observations.json",
+            "sha256": "846a0cd134095e62c84a71c471b8b02c5c2bb82e77042d2c181d6b8e73cea921",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/source-baseline-tests-bindings/792.json",
+                "sha256": "42097a56354e01194561032526bccfbfe6a867fa146d931ee41bb6a4718bbd7b",
+                "processId": 792,
+                "processName": "dotnet"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/source-baseline-probe-bindings/821.json",
+                "sha256": "cdbc4d89f96730fd2e07a05be07b8826d3399017ab01b9b0be2cca995ab74944",
+                "processId": 821,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "source-candidate": {
+          "tests": {
+            "path": "results\\linux\\source-candidate-tests\\results.trx",
+            "sha256": "d0adba2f350a17fbb88b5cba8bc1ba45aac2555e6d636c44ef7c2443e6e5402d",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/linux/source-candidate-observations.json",
+            "sha256": "15b262e5ad615fc785238ecd2f450dd7609dadbcbb5fc5f5ecded8bb577bf5d5",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/source-candidate-tests-bindings/854.json",
+                "sha256": "8fc8f7b2e72cd771034927edf041d76a4885d9e19841251c05a140157d47b335",
+                "processId": 854,
+                "processName": "dotnet"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/source-candidate-probe-bindings/883.json",
+                "sha256": "afbe115989a1d2514459b69d11682edfce64daf63f22a5db11e070b9d5e79e6b",
+                "processId": 883,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "binary-control": {
+          "tests": {
+            "path": "results\\linux\\binary-control-tests\\results.trx",
+            "sha256": "8941938b15bc4d09dbbcb49d3345817648a63cb632fd68e9538703feb474d379",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/linux/binary-control-observations.json",
+            "sha256": "5effe3a724e0122459387612c709866db7a402b1dccde8e03d1d7fd4d8b48417",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/binary-control-tests-bindings/916.json",
+                "sha256": "b87bd457baa44ab3d24b3f7d46300377b66760dd3507bb4a65eebc9bf963fa8d",
+                "processId": 916,
+                "processName": "dotnet"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+              "Bosak.XPath.Compiler": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+              "Bosak.XPath.Core": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+              "Bosak.XPath.Parser": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+              "Bosak.XPath.Providers": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+              "Bosak.XPath.Runtime": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+              "Bosak.XPath.Standard": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/binary-control-probe-bindings/945.json",
+                "sha256": "7ce1ff0d9ea19b0e60e5ad19c2937d0b157ae538ea6f3a2ca25e5f78296b9d99",
+                "processId": 945,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        },
+        "binary-replacement": {
+          "tests": {
+            "path": "results\\linux\\binary-replacement-tests\\results.trx",
+            "sha256": "599bbc0052c9f289f8f48e394fabe04e24d58bfce2af2d830ba4a7e080b159db",
+            "counts": {
+              "total": 27,
+              "executed": 27,
+              "passed": 27,
+              "failed": 0,
+              "error": 0,
+              "timeout": 0,
+              "aborted": 0,
+              "inconclusive": 0,
+              "passedButRunAborted": 0,
+              "notRunnable": 0,
+              "notExecuted": 0,
+              "disconnected": 0,
+              "warning": 0,
+              "completed": 0,
+              "inProgress": 0,
+              "pending": 0
+            },
+            "testIds": [
+              "14917d01-5f62-45b9-2c2c-7124f3620de3",
+              "1c43c0c9-8ded-98c1-c7e3-e7623c03dc20",
+              "382d5290-ff13-694e-9051-10db807d153f",
+              "4073810b-2573-04cf-aa5a-e6b13ad750ba",
+              "40978675-318b-33fe-6b54-50af65d7c466",
+              "48652f7d-94da-8a65-3122-7b57adb07cf7",
+              "4fa7cd54-dd60-3bd3-a3c0-0125447fd2cd",
+              "8597fc2e-50fe-8a39-0943-3e99576264f5",
+              "86d9a669-01a1-9973-f5bf-80dd1609bee1",
+              "89e2d4de-9048-c728-974e-fe1c223bc7f2",
+              "94954224-96e1-efea-98aa-4f6d560a2e5b",
+              "95536010-703f-6d4d-87a7-c897df2b095e",
+              "9966ecaa-4a50-344d-6919-c49d1d234496",
+              "9a338fcf-2dbb-7054-0ef1-304c4d46f1c7",
+              "a27756f4-609b-27d6-ef23-7296f1921fba",
+              "a8051caa-b828-9968-100c-f3f317bdda93",
+              "acb6a399-a1a0-6dd7-923c-b01477918e96",
+              "afee1794-90b5-8dbb-8ca1-f44dbbf58a59",
+              "b02d9103-f7d9-00b3-483f-0faf253cbfb9",
+              "bc218422-8529-9658-b8b3-85e652ffee49",
+              "c2521f97-d405-201f-84e8-5f536a441bd7",
+              "c4a6f701-bf74-2630-0a62-4a9a7188baa6",
+              "c9d7e1b1-8468-8020-a620-0d18c0897251",
+              "d6ceeb64-f12c-5c47-b28a-a228fcb97fad",
+              "edace3b0-3996-7340-932c-3c7aebb73e40",
+              "efc503f0-bdc0-2e29-a4fa-2cee1717aafd",
+              "fec4442a-a066-553e-1a05-2a9ab539ff18"
+            ]
+          },
+          "probe": {
+            "path": "results/linux/binary-replacement-observations.json",
+            "sha256": "0b1923e09ffeca4ab36d4439128c239f3b4bc99f668537865fb33f2e32525b6f",
+            "observationCount": 37
+          },
+          "testBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/binary-replacement-tests-bindings/978.json",
+                "sha256": "6904c9c251034b1879c13fe344dcb448e23cc867a73e338c17709c9657fe2881",
+                "processId": 978,
+                "processName": "dotnet"
+              }
+            ]
+          },
+          "probeBindings": {
+            "engineHashes": {
+              "Bosak.XPath.Api": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+              "Bosak.XPath.Compiler": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+              "Bosak.XPath.Core": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+              "Bosak.XPath.Parser": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+              "Bosak.XPath.Providers": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+              "Bosak.XPath.Runtime": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+              "Bosak.XPath.Standard": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+            },
+            "defaultContextAndIntendedLayout": true,
+            "receipts": [
+              {
+                "path": "results/linux/binary-replacement-probe-bindings/1008.json",
+                "sha256": "174bbc483c5b4fdf58cbe84ed7ef2ff3aea305aa237af3755e5fb9400872ce5f",
+                "processId": 1008,
+                "processName": "dotnet"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "distinctExistingTestIds": 27,
+    "observationsPerRole": 37,
+    "primaryPlatformRoleRuns": 8,
+    "testsAcrossRunsOverlap": true,
+    "sameTestIdsAcrossAllRuns": true,
+    "allPrimaryObservationsEqualAcrossPlatformsAndRoles": true,
+    "eachTesthostAndProbeLoadsExactSevenEngineDlls": true,
+    "defaultContextAndIntendedLayout": true,
+    "detachedInvariantSanityControls": [
+      {
+        "name": "wrong-engine-hash",
+        "rejected": true
+      },
+      {
+        "name": "missing-engine",
+        "rejected": true
+      },
+      {
+        "name": "consumer-rewrite",
+        "rejected": true
+      },
+      {
+        "name": "failed-case",
+        "rejected": true
+      },
+      {
+        "name": "store-mutation",
+        "rejected": true
+      },
+      {
+        "name": "wrong-context",
+        "rejected": true
+      },
+      {
+        "name": "wrong-layout",
+        "rejected": true
+      }
+    ],
+    "controlsAreNotEndToEndTamperQualification": true,
+    "coreAcceptance": null,
+    "candidateApiFreezeAccepted": false,
+    "newEngineSignatureRequired": false,
+    "concurrentDisposalOrGeneralCancellationQualified": false,
+    "productPinChanged": false
+  },
+  "reviewReturn": [
+    {
+      "id": "FXG-01",
+      "engineeringDisposition": "Bounded baseline/candidate equality observed, including String typed carrier and 26 differential query/error outcomes; normative/full-profile policy remains for owner disposition.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-02",
+      "engineeringDisposition": "Cached Current, constant defaults and identity hashing remain readable; actual persistent leaf/fetch and nested/map/array dereference guards reject disposal. Borrowed values are not universally invalidated or detached.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-03",
+      "engineeringDisposition": "Two actual generation leases survive coordinator close and later commit, then release on explicit snapshot disposal. Early/normal foreign iterator cleanup remains caller-owned; caller cancellation surfaces OperationCanceledException without closing the snapshot in these sequential fixtures.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-04",
+      "engineeringDisposition": "Exact 1.34.2 package source rebuild and seven-DLL-only frozen replacement pass on Windows/Linux for committed 2f9a36b XML scope; no original store/pin or local M2 source change. Broader compatibility and final candidate acceptance remain open.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-05",
+      "engineeringDisposition": "Sequential contexts and caller cancellation callback only. General token propagation, concurrent snapshot disposal, reentry and mutable/deferred environment capture are not qualified.",
+      "finalAccepted": false
+    },
+    {
+      "id": "FXG-06",
+      "engineeringDisposition": "Existing Core proposals support testing retained XML APIs, but accepted-signature lists and joint stable manifest/sign-offs remain pending. No freeze/adoption/release decision inferred.",
+      "finalAccepted": false
+    }
+  ],
+  "freshTestCasesPerRole": 27,
+  "freshObservationsPerRole": 37,
+  "distinctTestIds": 27,
+  "primaryPlatformRoleRuns": 8,
+  "countsOverlapAcrossRoles": true,
+  "linuxArchivalReplayAdditionalDistinctCoverage": false,
+  "linuxReplayMatchesExactPrimaryFrozenBytes": true,
+  "productPin": "1.26.2 unchanged",
+  "candidateUsedOnlyInIsolatedCopies": true,
+  "coreOwnerDecision": null,
+  "xmlDbFinalOwnerSignoff": null,
+  "schemaOwnerDecision": null,
+  "namedStableManifestAccepted": false,
+  "candidateApiFrozen": false,
+  "productAdoptionAuthorized": false,
+  "publicationAuthorized": false,
+  "fullXdm4OrSchemaOrPowerLossOrConcurrentDisposalQualified": false,
+  "noGlobalReaderAbsenceOrReclamationAuthority": true,
+  "nugetAudit": "Disabled only for isolated offline candidate/Linux restores; no vulnerability-audit or release claim; product settings unchanged",
+  "nugetHashAccounting": "Raw archive SHA-512 verified against archive sidecars separately from assets/NuGet metadata contentHash; both retained; no package edited",
+  "preservation": "Original checkouts/pins/frozen formats and old evidence unchanged. Owned fixture CURRENT may be republished byte-identically during legacy Open; not write-free-I/O proof.",
+  "archives": {
+    "windows": {
+      "control": {
+        "path": ".tools/fx009-02/results/windows-frozen-control.zip",
+        "sha256": "bd1644426d1103afa83b7172bef5b3c73da7eacef34583a188eb26292230cbe8",
+        "bytes": 4892439
+      },
+      "replacement": {
+        "path": ".tools/fx009-02/results/windows-frozen-replacement.zip",
+        "sha256": "9300a34fa660a4b307a7861167a2b112ad9d04ca3a3cc3fda06db3a0c7088665",
+        "bytes": 4961471
+      }
+    },
+    "linux": {
+      "archives": {
+        "control": {
+          "path": "results/linux-replay/frozen-control.tar.gz",
+          "sha256": "b23fd4881af56e379dacbcd959f95478887ef44807ba3f327c047744d6e77e02",
+          "bytes": 3984829,
+          "fileCount": 125,
+          "sameExactFilesAsPrimaryFrozenLayouts": true
+        },
+        "replacement": {
+          "path": "results/linux-replay/frozen-replacement.tar.gz",
+          "sha256": "788b9c11dd7ffe718c2995c0adafe7e2e5e706e654af113a2061a59acdc711b6",
+          "bytes": 4055534,
+          "fileCount": 125,
+          "sameExactFilesAsPrimaryFrozenLayouts": true
+        }
+      },
+      "replayRunsOverlapPrimary": true,
+      "allFourReplayObservationSetsMatchPrimary": true,
+      "replayTestCasesPerRole": 27
+    }
+  },
+  "finalChecks": {
+    "documentationStrict": "passed",
+    "documentationPortability": "passed",
+    "whitespaceBothRepos": "passed",
+    "bothPacketVerifierCopies": "passed",
+    "derivedPackageCacheRelocatedWithoutByteChange": "obj/candidate-cache; documentation scanner unchanged"
+  }
+}
