@@ -1,0 +1,16 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/attempt-1-log.txt": "28b1ab6b36abe398c6452f2667ee9e611612b59e83de6a83bc7acf35d242fc08",
+  "evidence/attempt-1-Probe.cs.txt": "afb0fcec0cc864c268ab5dbbf219c02d06bff78c121a752d944b44f0667cbb7f",
+  "evidence/attempt-2-observations.json": "7dfe554438621360494e64b8f4a91dcf814729a463a327066f12c637f70b7a7b",
+  "evidence/documentation-checks.json": "90079dcb2e14b214a217da7ffc7a8e140cef189bd36e1c8af5b2942550cc9284",
+  "evidence/INPUTS.json": "301bd001f50ee89040f7d8dbf54f838d06bdaac77fa0a5c5eb592c44505e0523",
+  "evidence/probe-0.json": "61d363064e489d2f17adf9ba41378cc8bcb39b3e126a25317cba26e94bb5c386",
+  "evidence/probe-1.json": "61d363064e489d2f17adf9ba41378cc8bcb39b3e126a25317cba26e94bb5c386",
+  "evidence/probe-build.txt": "716fe68809b7e328ab658784cf3a0e99df0b47f0d023110471079a5e715d6ae2",
+  "README.md": "8f77ed45f29138ca779455934b26f770e570ae2bd439a2733acc171b600f5790",
+  "SPEC-BASIS.md": "0eec90d6d05102bf0e6f2dd8e304820edc34c3321e5e7583707dc0aa6c1b1aa0",
+  "tools/Probe.cs.txt": "9cf95301ff5a7b9eb9120e5f8bb2f582e38dc2ebeb6c7e607ce8f09600030c71",
+  "tools/run.py": "6eb3ca71959896f8bad7440ea58c0750a2aa489f3a1f4ffdb3bd7bc401d922f7",
+  "tools/verify.py": "fbc0fd2405523be8b6c483f06214ff22d0def3e4ea5e479fecb7d58c3f1dfa4a"
+}
