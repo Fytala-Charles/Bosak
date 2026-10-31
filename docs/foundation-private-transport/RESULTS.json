@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-31",
+  "productionModified": false,
+  "candidateChecksPerRun": 121,
+  "controlChecksPerRun": 103,
+  "runsPerMode": 2,
+  "vmExpressionsPerRun": 14,
+  "legacyReplays": 2,
+  "legacyPassedPerReplay": 20,
+  "legacyFailed": 0,
+  "finalBuilds": 5,
+  "finalBuildWarnings": 0,
+  "finalBuildErrors": 0,
+  "compileOnlyFailedAttempts": 2,
+  "publicApiAccepted": false
+}

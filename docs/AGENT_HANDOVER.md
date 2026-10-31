@@ -193,6 +193,8 @@ Fieldwise carrier equality ? 31 October 2026: [isolated optimization and frozen-
 
 Native kernel/carrier trial (31 October 2026): the isolated production private kernel/session plus unchanged native assessment sources passed 103 control and 109 carrier checks twice each, 14 VM expressions per process, and two retained legacy 20/0 replays. Production remains 1.35.0; public API acceptance and freeze remain pending. Next is direct private transport/read composition with explicit constructor admission. See [the sealed trial](foundation-native-kernel-carrier/README.md).
 
+Direct private transport trial (31 October 2026): isolated Core kernel attachment/read and Runtime operation composition replace the host evidence frame. Candidate121/control103 checks pass twice each, 14 VM expressions per process and two legacy20/0 replays; 48-byte values and no public diagnostic helpers. Production remains 1.35.0. Next: complete atomic fixture coverage and transport cost measurements before promotion; C45/API freeze pending. See [the sealed private transport trial](foundation-private-transport/README.md).
+
 ## REQ-126 C05 type/collection/pattern reconciliation — 26 October 2026
 
 Source/proposal base: `d0ca0741`; delivery commit: `git log -1 --format=%H -- docs/conformance/k04-quote-routing/adoption/BASELINE-ADOPTION.md`. What was built: exact approved TestExecutor routing patch/history 0.28 and AGENTS baseline update; fresh normal gate and exact skip-delta verification. No engine or public API change.

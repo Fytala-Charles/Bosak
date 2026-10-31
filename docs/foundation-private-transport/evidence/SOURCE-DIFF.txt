@@ -1,0 +1,353 @@
+--- baseline/XdmValue.cs.txt
++++ candidate/XdmValue.cs.txt
+@@ -355,7 +355,7 @@
+         {
+             if (_kind != XdmValueKind.Decimal)
+                 ThrowInvalidAccess(nameof(DecimalValue));
+-            return (decimal)PrototypePayload!;
++            return (decimal)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -366,7 +366,7 @@
+         {
+             if (_kind != XdmValueKind.String)
+                 ThrowInvalidAccess(nameof(StringValue));
+-            return (string)PrototypePayload!;
++            return (string)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -377,7 +377,7 @@
+         {
+             if (_kind != XdmValueKind.Duration)
+                 ThrowInvalidAccess(nameof(DurationValue));
+-            return (string)PrototypePayload!;
++            return (string)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -388,7 +388,7 @@
+         {
+             if (_kind != XdmValueKind.Node)
+                 ThrowInvalidAccess(nameof(NodeValue));
+-            return (IXdmNode)PrototypePayload!;
++            return (IXdmNode)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -399,7 +399,7 @@
+         {
+             if (_kind != XdmValueKind.Sequence)
+                 ThrowInvalidAccess(nameof(SequenceValue));
+-            return (IXdmSequence?)PrototypePayload;
++            return (IXdmSequence?)SchemaTransportPayload;
+         }
+     }
+ 
+@@ -410,7 +410,7 @@
+         {
+             if (_kind != XdmValueKind.External)
+                 ThrowInvalidAccess(nameof(ExternalValue));
+-            return PrototypePayload;
++            return SchemaTransportPayload;
+         }
+     }
+ 
+@@ -421,7 +421,7 @@
+         {
+             if (_kind != XdmValueKind.Function)
+                 ThrowInvalidAccess(nameof(FunctionValue));
+-            return PrototypePayload!;
++            return SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -432,7 +432,7 @@
+         {
+             if (_kind != XdmValueKind.Map)
+                 ThrowInvalidAccess(nameof(MapValue));
+-            return (XdmMap)PrototypePayload!;
++            return (XdmMap)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -443,7 +443,7 @@
+         {
+             if (_kind != XdmValueKind.Array)
+                 ThrowInvalidAccess(nameof(ArrayValue));
+-            return (XdmArray)PrototypePayload!;
++            return (XdmArray)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -454,7 +454,7 @@
+         {
+             if (_kind != XdmValueKind.JNode)
+                 ThrowInvalidAccess(nameof(JNodeValue));
+-            return (XdmJNode)PrototypePayload!;
++            return (XdmJNode)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -465,7 +465,7 @@
+         {
+             if (_kind != XdmValueKind.DateTime)
+                 ThrowInvalidAccess(nameof(DateTimeValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+         }
+     }
+ 
+@@ -476,7 +476,7 @@
+         {
+             if (_kind != XdmValueKind.Date)
+                 ThrowInvalidAccess(nameof(DateValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+         }
+     }
+ 
+@@ -487,7 +487,7 @@
+         {
+             if (_kind != XdmValueKind.Time)
+                 ThrowInvalidAccess(nameof(TimeValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+         }
+     }
+ 
+@@ -501,7 +501,7 @@
+         {
+             if (_kind != XdmValueKind.DateTime)
+                 ThrowInvalidAccess(nameof(DateTimeXPathValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true);
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
+         }
+     }
+ 
+@@ -515,7 +515,7 @@
+         {
+             if (_kind != XdmValueKind.Date)
+                 ThrowInvalidAccess(nameof(DateXPathValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true);
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
+         }
+     }
+ 
+@@ -529,7 +529,7 @@
+         {
+             if (_kind != XdmValueKind.Time)
+                 ThrowInvalidAccess(nameof(TimeXPathValue));
+-            return PrototypePayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)PrototypePayload!).ToXPathDateTime(hasTimezone: true);
++            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
+         }
+     }
+ 
+@@ -540,7 +540,7 @@
+         {
+             if (_kind is not (XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time))
+                 return false;
+-            return PrototypePayload is not DateTimeWrapper w || w.HasTimezone;
++            return SchemaTransportPayload is not DateTimeWrapper w || w.HasTimezone;
+         }
+     }
+ 
+@@ -551,7 +551,7 @@
+         {
+             if (_kind != XdmValueKind.QName)
+                 ThrowInvalidAccess(nameof(QNameValue));
+-            return (XsQName)PrototypePayload!;
++            return (XsQName)SchemaTransportPayload!;
+         }
+     }
+ 
+@@ -568,16 +568,16 @@
+             // xs:anyURI) have a string-like EBV; values annotated hexBinary/base64Binary/
+             // gYear etc. are not in the string group and raise FORG0006.
+             XdmValueKind.String => IsEbvStringLike(_schemaTypeName)
+-                ? !string.IsNullOrEmpty((string?)PrototypePayload)
++                ? !string.IsNullOrEmpty((string?)SchemaTransportPayload)
+                 : throw new InvalidOperationException(
+                     "FORG0006: The effective boolean value is not defined for values of this atomic type"),
+             XdmValueKind.Integer => _integer != 0,
+-            XdmValueKind.Decimal => (decimal)PrototypePayload! != 0m,
++            XdmValueKind.Decimal => (decimal)SchemaTransportPayload! != 0m,
+             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
+             XdmValueKind.Sequence => SequenceEffectiveBooleanValue(),
+             XdmValueKind.Node => true,
+             // xs:anyURI is in the string-like group: EBV is true iff the value is non-empty.
+-            XdmValueKind.Uri => !string.IsNullOrEmpty((string?)PrototypePayload),
++            XdmValueKind.Uri => !string.IsNullOrEmpty((string?)SchemaTransportPayload),
+             XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime or XdmValueKind.Duration
+                 or XdmValueKind.QName or XdmValueKind.Binary =>
+                 throw new InvalidOperationException(
+@@ -609,7 +609,7 @@
+     /// </summary>
+     private bool SequenceEffectiveBooleanValue()
+     {
+-        if (PrototypePayload is not IXdmSequence seq)
++        if (SchemaTransportPayload is not IXdmSequence seq)
+             return false;
+ 
+         // Single-pass (streamed) sequences can be enumerated exactly once: decide
+@@ -671,11 +671,11 @@
+             XdmValueKind.Undefined => "()",
+             XdmValueKind.Boolean => _integer != 0 ? "true" : "false",
+             XdmValueKind.Integer => _integer.ToString(),
+-            XdmValueKind.Decimal => FormatCanonicalDecimal((decimal)PrototypePayload!),
++            XdmValueKind.Decimal => FormatCanonicalDecimal((decimal)SchemaTransportPayload!),
+             XdmValueKind.Double => FormatXPathDouble(_double),
+             XdmValueKind.Float => FormatXPathFloat((float)_double),
+-            XdmValueKind.String => (string?)PrototypePayload ?? string.Empty,
+-            XdmValueKind.Node => ((IXdmNode?)PrototypePayload)?.StringValue ?? string.Empty,
++            XdmValueKind.String => (string?)SchemaTransportPayload ?? string.Empty,
++            XdmValueKind.Node => ((IXdmNode?)SchemaTransportPayload)?.StringValue ?? string.Empty,
+             XdmValueKind.Sequence => "(sequence)",
+             XdmValueKind.Function => "(function)",
+             XdmValueKind.Map => "(map)",
+@@ -684,9 +684,9 @@
+             XdmValueKind.DateTime => FormatDateTimeBySchemaType(DateTimeXPathValue, _schemaTypeName),
+             XdmValueKind.Date => FormatXPathDateTime(DateXPathValue, false),
+             XdmValueKind.Time => FormatXPathTime(TimeXPathValue),
+-            XdmValueKind.QName => ((XsQName)PrototypePayload!).ToString(),
+-            XdmValueKind.Duration => (string?)PrototypePayload ?? string.Empty,
+-            XdmValueKind.External => $"(external: {PrototypePayload?.GetType().Name})",
++            XdmValueKind.QName => ((XsQName)SchemaTransportPayload!).ToString(),
++            XdmValueKind.Duration => (string?)SchemaTransportPayload ?? string.Empty,
++            XdmValueKind.External => $"(external: {SchemaTransportPayload?.GetType().Name})",
+             _ => $"(kind: {_kind})"
+         };
+     }
+@@ -914,42 +914,43 @@
+     }
+ 
+ 
+-    private bool PrototypeHasMarker => PrototypeMarker(this) is not null;
+-    private XdmValue PrototypePlain => new(_kind,_integer,_double,PrototypePayload,_schemaTypeName,_userSchemaTypeName);
+-    private bool PrototypeRawEquals(XdmValue other) =>
++    internal static XdmValue WithoutSchemaEvidence(XdmValue value) => value.SchemaTransportPlain;
++    private bool SchemaTransportHasMarker => SchemaTransportMarker(this) is not null;
++    private XdmValue SchemaTransportPlain => new(_kind,_integer,_double,SchemaTransportPayload,_schemaTypeName,_userSchemaTypeName);
++    private bool SchemaTransportRawEquals(XdmValue other) =>
+         _kind == other._kind && _integer == other._integer && _double.Equals(other._double)
+         && object.Equals(_reference, other._reference)
+         && string.Equals(_schemaTypeName, other._schemaTypeName, StringComparison.Ordinal)
+         && string.Equals(_userSchemaTypeName, other._userSchemaTypeName, StringComparison.Ordinal);
+-    private int PrototypeRawHash() => base.GetHashCode();
++    private int SchemaTransportRawHash() => base.GetHashCode();
+     /// <inheritdoc/>
+     public override bool Equals(object? other)
+     {
+         if(other is not XdmValue value) return false;
+-        if(!PrototypeHasMarker && !value.PrototypeHasMarker) return base.Equals(other);
+-        return PrototypePlain.PrototypeRawEquals(value.PrototypePlain);
++        if(!SchemaTransportHasMarker && !value.SchemaTransportHasMarker) return base.Equals(other);
++        return SchemaTransportPlain.SchemaTransportRawEquals(value.SchemaTransportPlain);
+     }
+     /// <inheritdoc/>
+-    public override int GetHashCode() => PrototypeHasMarker ? PrototypePlain.PrototypeRawHash() : base.GetHashCode();
++    public override int GetHashCode() => SchemaTransportHasMarker ? SchemaTransportPlain.SchemaTransportRawHash() : base.GetHashCode();
+ 
+     // Diagnostic marker only: no schema authority or new normative XPath behavior.
+-    private sealed record PrototypeBox(object? Payload, object Marker);
++    private sealed record SchemaTransportBox(object? Payload, object Marker);
+     /// <summary>Diagnostic atomic marker attachment, not an authority factory.</summary>
+     /// <param name="value">The plain atomic value.</param>
+     /// <param name="marker">The diagnostic marker.</param>
+     /// <returns>The marked diagnostic value.</returns>
+-    public static XdmValue PrototypeAttach(XdmValue value, object marker)
++    internal static XdmValue SchemaTransportAttach(XdmValue value, object marker)
+     {
+         ArgumentNullException.ThrowIfNull(marker);
+         if(value._kind is < XdmValueKind.String or > XdmValueKind.Binary) throw new ArgumentException("Atomic values only",nameof(value));
+-        var payload = value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? marker : new PrototypeBox(value.PrototypePayload,marker);
++        var payload = value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? marker : new SchemaTransportBox(value.SchemaTransportPayload,marker);
+         return new(value._kind,value._integer,value._double,payload,value._schemaTypeName,value._userSchemaTypeName);
+     }
+     /// <summary>Reads only a diagnostic marker.</summary>
+     /// <param name="value">The diagnostic value.</param>
+     /// <returns>The marker, if present.</returns>
+-    public static object? PrototypeMarker(XdmValue value) => value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? value._reference : value._reference is PrototypeBox box ? box.Marker : null;
+-    private object? PrototypePayload => _kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? null : _reference is PrototypeBox box ? box.Payload : _reference;
++    internal static object? SchemaTransportMarker(XdmValue value) => value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? value._reference : value._reference is SchemaTransportBox box ? box.Marker : null;
++    private object? SchemaTransportPayload => _kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? null : _reference is SchemaTransportBox box ? box.Payload : _reference;
+ }
+ 
+ /// <summary>
+--- baseline/SchemaEvidenceKernel.cs.txt
++++ candidate/SchemaEvidenceKernel.cs.txt
+@@ -1,3 +1,4 @@
++// Generated isolated private transport candidate.
+ // ===========================================================================================================================================================
+ // AUTHOR               : Charles Korthout
+ // CREATE DATE          : 31 October 2026
+@@ -168,9 +169,34 @@
+         var origin = scalar.OriginalAssessment;
+         if (origin is not null && !_issuer.OwnsAssessment(origin)) throw new ArgumentException("Unissued assessment evidence.", nameof(scalar));
+         var value = scalar.Value;
++        if (XdmValue.SchemaTransportMarker(value) is not null)
++            throw new ArgumentException("Issuer values must be plain.", nameof(scalar));
+         if (value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)
+             throw new ArgumentException("A scalar atomic value is required.", nameof(scalar));
+         return (value, declared, actual, origin);
++    }
++
++    // Generated isolated candidate; no host frame or public transport factory.
++    internal XdmValue AttachValue(Evidence evidence)
++    {
++        CheckEvidence(evidence);
++        return XdmValue.SchemaTransportAttach(evidence.Value, evidence);
++    }
++
++    internal Evidence? ReadValue(XdmValue value)
++    {
++        AdmitEnvironment(_environment);
++        var marker = XdmValue.SchemaTransportMarker(value);
++        if (marker is null) return null;
++        if (marker is not Evidence evidence) throw new ArgumentException("Unrecognized evidence marker.", nameof(value));
++        CheckEvidence(evidence);
++        var plain = XdmValue.WithoutSchemaEvidence(value);
++        var expected = evidence.Value;
++        if (plain.Kind != expected.Kind || plain.SchemaTypeName != expected.SchemaTypeName
++            || plain.UserSchemaTypeName != expected.UserSchemaTypeName
++            || !XdmValueEqualityComparer.Instance.Equals(plain, expected))
++            throw new ArgumentException("Rebound evidence payload.", nameof(value));
++        return evidence;
+     }
+ 
+     internal void CheckEvidence(Evidence evidence)
+--- baseline/SchemaQuerySession.cs.txt
++++ candidate/SchemaQuerySession.cs.txt
+@@ -1,3 +1,4 @@
++// Generated isolated direct private transport candidate.
+ // ===========================================================================================================================================================
+ // AUTHOR               : Charles Korthout
+ // CREATE DATE          : 31 October 2026
+@@ -51,6 +52,7 @@
+     }
+ 
+     internal SchemaQueryEnvironment Environment { get; }
++    internal SchemaEvidenceKernel.Evidence? ReadEvidence(XdmValue value) => _kernel.ReadValue(value);
+     internal SchemaEvidenceKernel.Snapshot OpenSnapshot(SchemaQueryEnvironment environment, object identity,
+         object assessment, Action release, CancellationToken cancellationToken = default)
+         => _kernel.Open(environment, identity, assessment, release, cancellationToken);
+@@ -100,6 +102,18 @@
+             _cancellationToken.ThrowIfCancellationRequested();
+             _owner._kernel.CheckSnapshot(_snapshot);
+         }
++        internal void ValidateAccess() => Check();
++        internal XdmValue ReadValue(ISchemaIssuedScalar value)
++        { Check(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
++        internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)
++        {
++            Check();
++            var evidence = _owner._kernel.ReadValue(source)
++                ?? throw new ArgumentException("An admitted source value is required.", nameof(source));
++            if (evidence.Snapshot is not null && !ReferenceEquals(evidence.Snapshot, _snapshot))
++                throw new ArgumentException("Source belongs to another operation snapshot.", nameof(source));
++            return _owner._kernel.AttachValue(_owner._kernel.AdmitConversion(evidence, constructed, _cancellationToken));
++        }
+         internal XdmValue Evaluate(EvaluationContext context)
+         {
+             Check();

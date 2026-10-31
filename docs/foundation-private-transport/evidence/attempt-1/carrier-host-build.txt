@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj (in 57 ms).
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(67,91): error CS8602: Dereference of a possibly null reference. [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(68,46): error CS8602: Dereference of a possibly null reference. [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(67,91): error CS8602: Dereference of a possibly null reference. [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(68,46): error CS8602: Dereference of a possibly null reference. [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:01.54
