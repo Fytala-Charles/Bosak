@@ -69,6 +69,7 @@
 //                      | Charles Korthout | 0.35  | 13-10-2026     | Reject undeclared prefixes in host function keyword names.                               |
 //                      | Charles Korthout | 0.36  | 14-10-2026     | Preserve optional host keyword omissions for declaration-time defaults.                  |
 //                      | Charles Korthout | 0.37  | 14-10-2026     | Support private namespace-free XSLT 4.0 functions.                                      |
+//                      | Charles Korthout | 0.38  | 31-10-2026     | Capture effective context for private schema sessions (1.35.0).                          |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -94,6 +95,9 @@ public sealed class XPath31Expression
     private readonly string? _definingElementDefaultNamespace;
     private readonly string? _baseUri;
     private readonly XPathCompatibility _compatibility;
+
+    internal SchemaQueryEnvironment CaptureSchemaEnvironment(CompileOptions frozenOptions)
+        => SchemaSessionCompilation.Capture(frozenOptions, _namespaces, _defaultElementNamespace);
 
     private XPath31Expression(IrModule module, IReadOnlyDictionary<string, string>? namespaces = null, string? defaultElementNamespace = null, string? definingElementDefaultNamespace = null, string? baseUri = null, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {

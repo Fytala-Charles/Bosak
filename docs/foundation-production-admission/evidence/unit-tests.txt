@@ -1,0 +1,63 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+Test run for D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 63 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+[xUnit.net 00:00:00.21]     Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords [FAIL]
+[xUnit.net 00:00:00.21]     Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_OtherUri_DelegatesToFallback [FAIL]
+  Failed Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords [12 ms]
+  Error Message:
+   System.Net.HttpListenerException : Failed to listen on prefix 'http://127.0.0.1:54393/' because it conflicts with an existing registration on the machine.
+  Stack Trace:
+     at System.Net.HttpListener.AddPrefixCore(String registeredPrefix)
+   at System.Net.HttpListener.AddAllPrefixes()
+   at System.Net.HttpListener.Start()
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62
+   at Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingTeardownTests.cs:line 40
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_OtherUri_DelegatesToFallback [1 ms]
+  Error Message:
+   System.Net.HttpListenerException : The process cannot access the file because it is being used by another process.
+  Stack Trace:
+     at System.Net.HttpListener.AddPrefixCore(String registeredPrefix)
+   at System.Net.HttpListener.AddAllPrefixes()
+   at System.Net.HttpListener.Start()
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62
+   at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs:line 34
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+
+Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 74 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   278, Skipped:     0, Total:   278, Duration: 325 ms - Bosak.XPath.Runtime.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 414 ms - Bosak.XPath.Api.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   143, Skipped:     0, Total:   143, Duration: 748 ms - Bosak.XPath.Core.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   804, Skipped:     0, Total:   804, Duration: 579 ms - Bosak.XQuery.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed: 13797, Skipped:     0, Total: 13797, Duration: 2 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+
+Failed!  - Failed:     2, Passed:    45, Skipped:     0, Total:    47, Duration: 4 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   223, Skipped:     0, Total:   223, Duration: 10 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:  8196, Skipped:     0, Total:  8196, Duration: 3 m 50 s - Bosak.Xslt.Tests.dll (net10.0)

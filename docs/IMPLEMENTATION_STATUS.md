@@ -43,12 +43,15 @@ Whole-snapshot navigation trial (31 October 2026): [candidate disposition and re
 Private evidence-kernel trial (31 October 2026): [kernel, constructor bridge and retained evidence](foundation-evidence-kernel/README.md) pass 205 controls in two guarded runs plus all prior 162 controls in four baseline/holder runs. The trusted harness kernel checks issued containers/carriers and exact snapshot origin, guards real successful VM casts, caches immutable scalar evidence, detaches fresh built-in targets, bounds snapshot admission and defers cleanup until raw lease completion. Closed node content/navigation is refused even when XdmSequence caches its current node reference. Core/Runtime hooks are public diagnostic scratch shims, not production APIs; V5 signatures and production remain unchanged. Full advisor/environment admission, whole-operation and concurrent/persistent lifetime, final carrier/performance/compatibility qualification and C45/four-owner freeze remain pending. Next: direct private Core/runtime composition replacing the diagnostic hook, with full binding/operation qualification and required product gates.
 
 
+Private production admission ? 31 October 2026: [Core 1.35.0 implementation and qualification](foundation-production-admission/README.md) add an internal issuer/evidence kernel, immutable opt-in XPath context and directly composed operation ownership. The scalar boundary verifies issuer/type/origin identity and admits validated conversion results; raw work retains its snapshot through completion. Public V5 signatures, atomic VM transport and general provider/advisor binding are not promoted. Public metadata and 48-byte XdmValue remain unchanged; all 24,245 unit tests and exact QT3/qt4 gates pass, with unchanged skip identities/reasons and retained binary caller20/0. Localhost access resolves the initial sandbox failures; a complete serial database-project rerun resolves the final fixture port collision. Earlier 1.34.2 artifacts remain historical. Next: carrier/provider integration and immutable-package consumer/performance qualification; C45/publication/four-owner freeze remain pending.
+
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |
 |---|---|---|
 | Published Bosak packages | Verified 1.26.3, source `08fbdc31ac79baac04cf00f4773ec6d0b2dd247f` | [Publication receipt](RELEASE-1.26.3-PUBLICATION.md) |
-| Current core source | Unpublished candidate 1.34.2 | `src/Directory.Build.props`; [streaming completion cleanup](streaming-completion-cleanup/README.md) |
+| Current core source | Unpublished candidate 1.35.0, internal admission only | `src/Directory.Build.props`; [production admission](foundation-production-admission/README.md) |
 | Local Core/API package candidate | Seven unsigned 1.34.2 packages from c88eea43; not published | [Package-only qualification](foundation-package-qualification/README.md) |
 | Public schema engine | Apache-2.0, activation-free; implementation/release work delegated to its owner; finite native assessment is not full XSD 1.1 | [Schema owner work](https://github.com/Fytala-Charles/Bosak.Schema/blob/feature/bounded-document-assessment/docs/REQ-009-OWNER-WORK-PACKAGES.md) |
 
@@ -56,11 +59,11 @@ Private evidence-kernel trial (31 October 2026): [kernel, constructor bridge and
 
 | Scope | Recorded result | Interpretation |
 |---|---|---|
-| Complete core solution | 24,225 passing tests / 0 failures | Fresh seven-package mixed-cohort [qualification](foundation-package-gates/README.md); other required products remain source-built, not package-derived. |
+| Complete core solution | 24,245 unique tests pass after the complete serial database-project rerun | Current source-built [1.35.0 admission](foundation-production-admission/README.md). The earlier 24,225-test [1.34.2 package cohort](foundation-package-gates/README.md) stays historical. |
 | Frozen QT3 gate | 31,397 passed / 0 failed / 424 skipped | Preserve exact skip names/reasons and adopted baseline. |
 | qt4 gated run | 8,941 passed / 0 failed / 1,918 skipped; 230 gated sets, 11 experimental passes | Bounded adopted coverage, not complete current-draft certification. |
 | Revised isolated schema prototype | 123 controls; twelve detected bad variants; 32 compiled proposed neutral types | [C44-R2 dossier](conformance/k04-schema-compatibility-prototype/README.md); no production API/ABI acceptance. |
-| Public Schema solution | Separate owner-managed qualification | Historical receipts remain in schema dossiers; no Schema execution against 1.34.2 is claimed here. |
+| Public Schema solution | Separate owner-managed qualification | Historical receipts remain in schema dossiers; no full owner-solution execution against 1.35.0 is claimed here. |
 
 The [cross-system review](compatibility/xdm40-2026-10-29/README.md) and [revised prototype qualification](conformance/k04-schema-compatibility-prototype/QUALIFICATION.md) distinguish real observations, fake-provider controls, BCL witnesses and inherited results. Counts from different scopes must not be added together as one suite.
 
