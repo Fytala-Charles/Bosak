@@ -1,0 +1,115 @@
+--- private-transport/XdmValue.cs.txt
++++ corrected/XdmValue.cs.txt
+@@ -914,6 +914,38 @@
+     }
+ 
+ 
++    // Exact representation binding, independent of map-key equality.
++    internal bool SchemaTransportMatches(XdmValue other)
++    {
++        if (_kind != other._kind || _integer != other._integer
++            || BitConverter.DoubleToInt64Bits(_double) != BitConverter.DoubleToInt64Bits(other._double)
++            || !string.Equals(_schemaTypeName, other._schemaTypeName, StringComparison.Ordinal)
++            || !string.Equals(_userSchemaTypeName, other._userSchemaTypeName, StringComparison.Ordinal)) return false;
++        var left = SchemaTransportPayload;
++        var right = other.SchemaTransportPayload;
++        if (ReferenceEquals(left, right)) return true;
++        switch (_kind)
++        {
++            case XdmValueKind.Decimal:
++                if (left is not decimal a || right is not decimal b) return false;
++                Span<int> aBits = stackalloc int[4]; Span<int> bBits = stackalloc int[4];
++                decimal.GetBits(a, aBits); decimal.GetBits(b, bBits);
++                return aBits.SequenceEqual(bBits);
++            case XdmValueKind.String: case XdmValueKind.Duration: case XdmValueKind.Uri: case XdmValueKind.Binary:
++                return left is string text && right is string otherText && string.Equals(text, otherText, StringComparison.Ordinal);
++            case XdmValueKind.QName:
++                return left is XsQName q && right is XsQName r
++                    && q.LocalName == r.LocalName && q.NamespaceUri == r.NamespaceUri && q.Prefix == r.Prefix;
++            case XdmValueKind.Date: case XdmValueKind.Time: case XdmValueKind.DateTime:
++                if (left is not DateTimeWrapper x || right is not DateTimeWrapper y) return false;
++                var d = x.Value; var e = y.Value;
++                return x.HasTimezone == y.HasTimezone && d.Year == e.Year && d.Month == e.Month && d.Day == e.Day
++                    && d.Hour == e.Hour && d.Minute == e.Minute && d.Second == e.Second && d.Millisecond == e.Millisecond
++                    && d.TimezoneOffsetMinutes == e.TimezoneOffsetMinutes && d.HasTimezone == e.HasTimezone;
++            default: return false;
++        }
++    }
++
+     internal static XdmValue WithoutSchemaEvidence(XdmValue value) => value.SchemaTransportPlain;
+     private bool SchemaTransportHasMarker => SchemaTransportMarker(this) is not null;
+     private XdmValue SchemaTransportPlain => new(_kind,_integer,_double,SchemaTransportPayload,_schemaTypeName,_userSchemaTypeName);
+--- private-transport/SchemaEvidenceKernel.cs.txt
++++ corrected/SchemaEvidenceKernel.cs.txt
+@@ -110,6 +110,27 @@
+     internal Evidence Read(Snapshot snapshot, ISchemaIssuedScalar value, CancellationToken cancellationToken)
+     {
+         CheckSnapshot(snapshot);
++        var lease = snapshot.EnterRead();
++        try
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            if (!_issuer.OwnsValue(value)) throw new ArgumentException("Unissued scalar container.", nameof(value));
++            cancellationToken.ThrowIfCancellationRequested();
++            var cached = snapshot.ReadCached(value);
++            return cached ?? ReadUncached(snapshot, value, cancellationToken);
++        }
++        catch (Exception primary)
++        {
++            try { lease.Dispose(); }
++            catch (Exception cleanup) { throw new AggregateException("Operation and owned cleanup both failed.", primary, cleanup); }
++            throw;
++        }
++        finally { lease.Dispose(); }
++    }
++
++    private Evidence ReadUncached(Snapshot snapshot, ISchemaIssuedScalar value, CancellationToken cancellationToken)
++    {
++        CheckSnapshot(snapshot);
+         var operation = snapshot.Enter();
+         try
+         {
+@@ -146,7 +167,7 @@
+                 && source.Value.Kind == target.Value.Kind
+                 && source.Value.SchemaTypeName == target.Value.SchemaTypeName
+                 && source.Value.UserSchemaTypeName == target.Value.UserSchemaTypeName
+-                && XdmValueEqualityComparer.Instance.Equals(source.Value, target.Value);
++                && source.Value.SchemaTransportMatches(target.Value);
+             source.Snapshot?.Check();
+             return same ? source : new Evidence(_seal, target.Value, target.Declared, target.Actual, null, null);
+         }
+@@ -194,7 +215,7 @@
+         var expected = evidence.Value;
+         if (plain.Kind != expected.Kind || plain.SchemaTypeName != expected.SchemaTypeName
+             || plain.UserSchemaTypeName != expected.UserSchemaTypeName
+-            || !XdmValueEqualityComparer.Instance.Equals(plain, expected))
++            || !plain.SchemaTransportMatches(expected))
+             throw new ArgumentException("Rebound evidence payload.", nameof(value));
+         return evidence;
+     }
+@@ -263,6 +284,25 @@
+         internal IDisposable Enter()
+         {
+             lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new Lease(this); }
++        }
++        internal ReadLease EnterRead()
++        {
++            lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new ReadLease(this); }
++        }
++        // Synchronous stack-owned local only; no interface boxing or async escape.
++        internal ref struct ReadLease
++        {
++            private Snapshot? _snapshot;
++            internal ReadLease(Snapshot snapshot) => _snapshot = snapshot;
++            internal void Dispose() { var snapshot = _snapshot; _snapshot = null; snapshot?.Leave(); }
++        }
++        internal Evidence? ReadCached(ISchemaIssuedScalar value)
++        {
++            lock (_gate)
++            {
++                ObjectDisposedException.ThrowIf(_closing, this);
++                return _values.TryGetValue(value, out var existing) ? existing : null;
++            }
+         }
+         internal Evidence GetOrCreate(ISchemaIssuedScalar value, Func<Evidence> create)
+         {

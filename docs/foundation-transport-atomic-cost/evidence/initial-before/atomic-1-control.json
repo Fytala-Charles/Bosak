@@ -1,0 +1,4230 @@
+{
+  "mode": "control",
+  "fixtureCount": 39,
+  "kindCount": 11,
+  "checkCount": 373,
+  "checks": [
+    {
+      "id": "true-payload",
+      "passed": true
+    },
+    {
+      "id": "true-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "true-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "true-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "true-evidence",
+      "passed": true
+    },
+    {
+      "id": "true-vm-values",
+      "passed": true
+    },
+    {
+      "id": "true-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "true-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "true-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "false-payload",
+      "passed": true
+    },
+    {
+      "id": "false-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "false-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "false-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "false-evidence",
+      "passed": true
+    },
+    {
+      "id": "false-vm-values",
+      "passed": true
+    },
+    {
+      "id": "false-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "false-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "false-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "integer-payload",
+      "passed": true
+    },
+    {
+      "id": "integer-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "integer-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "integer-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "integer-evidence",
+      "passed": true
+    },
+    {
+      "id": "integer-vm-values",
+      "passed": true
+    },
+    {
+      "id": "integer-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "integer-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "integer-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "int-payload",
+      "passed": true
+    },
+    {
+      "id": "int-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "int-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "int-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "int-evidence",
+      "passed": true
+    },
+    {
+      "id": "int-vm-values",
+      "passed": true
+    },
+    {
+      "id": "int-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "int-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "int-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "user-int-payload",
+      "passed": true
+    },
+    {
+      "id": "user-int-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "user-int-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "user-int-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "user-int-evidence",
+      "passed": true
+    },
+    {
+      "id": "user-int-vm-values",
+      "passed": true
+    },
+    {
+      "id": "user-int-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "user-int-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "user-int-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "decimal-payload",
+      "passed": true
+    },
+    {
+      "id": "decimal-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "decimal-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "decimal-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "decimal-evidence",
+      "passed": true
+    },
+    {
+      "id": "decimal-vm-values",
+      "passed": true
+    },
+    {
+      "id": "decimal-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "decimal-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "decimal-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-payload",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-evidence",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-vm-values",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "decimal-scale-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "nan-payload",
+      "passed": true
+    },
+    {
+      "id": "nan-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "nan-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "nan-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "nan-evidence",
+      "passed": true
+    },
+    {
+      "id": "nan-vm-values",
+      "passed": true
+    },
+    {
+      "id": "nan-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "nan-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "nan-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "infinity-payload",
+      "passed": true
+    },
+    {
+      "id": "infinity-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "infinity-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "infinity-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "infinity-evidence",
+      "passed": true
+    },
+    {
+      "id": "infinity-vm-values",
+      "passed": true
+    },
+    {
+      "id": "infinity-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "infinity-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "infinity-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "zero-payload",
+      "passed": true
+    },
+    {
+      "id": "zero-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "zero-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "zero-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "zero-evidence",
+      "passed": true
+    },
+    {
+      "id": "zero-vm-values",
+      "passed": true
+    },
+    {
+      "id": "zero-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "zero-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "zero-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-payload",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-evidence",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-vm-values",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "negative-zero-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "float-payload",
+      "passed": true
+    },
+    {
+      "id": "float-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "float-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "float-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "float-evidence",
+      "passed": true
+    },
+    {
+      "id": "float-vm-values",
+      "passed": true
+    },
+    {
+      "id": "float-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "float-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "float-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "string-payload",
+      "passed": true
+    },
+    {
+      "id": "string-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "string-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "string-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "string-evidence",
+      "passed": true
+    },
+    {
+      "id": "string-vm-values",
+      "passed": true
+    },
+    {
+      "id": "string-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "string-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "string-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "string-copy-payload",
+      "passed": true
+    },
+    {
+      "id": "string-copy-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "string-copy-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "string-copy-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "string-copy-evidence",
+      "passed": true
+    },
+    {
+      "id": "string-copy-vm-values",
+      "passed": true
+    },
+    {
+      "id": "string-copy-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "string-copy-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "string-copy-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "token-payload",
+      "passed": true
+    },
+    {
+      "id": "token-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "token-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "token-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "token-evidence",
+      "passed": true
+    },
+    {
+      "id": "token-vm-values",
+      "passed": true
+    },
+    {
+      "id": "token-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "token-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "token-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-payload",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-evidence",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-vm-values",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "hexBinary-annotation-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-payload",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-evidence",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-vm-values",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "base64Binary-annotation-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-payload",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-evidence",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-vm-values",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "anyURI-annotation-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "duration-payload",
+      "passed": true
+    },
+    {
+      "id": "duration-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "duration-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "duration-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "duration-evidence",
+      "passed": true
+    },
+    {
+      "id": "duration-vm-values",
+      "passed": true
+    },
+    {
+      "id": "duration-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "duration-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "duration-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "qname-payload",
+      "passed": true
+    },
+    {
+      "id": "qname-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "qname-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "qname-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "qname-evidence",
+      "passed": true
+    },
+    {
+      "id": "qname-vm-values",
+      "passed": true
+    },
+    {
+      "id": "qname-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "qname-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "qname-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "dateTime-payload",
+      "passed": true
+    },
+    {
+      "id": "dateTime-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "dateTime-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "dateTime-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "dateTime-evidence",
+      "passed": true
+    },
+    {
+      "id": "dateTime-vm-values",
+      "passed": true
+    },
+    {
+      "id": "dateTime-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "dateTime-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "dateTime-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "date-payload",
+      "passed": true
+    },
+    {
+      "id": "date-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "date-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "date-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "date-evidence",
+      "passed": true
+    },
+    {
+      "id": "date-vm-values",
+      "passed": true
+    },
+    {
+      "id": "date-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "date-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "date-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "time-payload",
+      "passed": true
+    },
+    {
+      "id": "time-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "time-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "time-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "time-evidence",
+      "passed": true
+    },
+    {
+      "id": "time-vm-values",
+      "passed": true
+    },
+    {
+      "id": "time-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "time-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "time-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "float-nan-payload",
+      "passed": true
+    },
+    {
+      "id": "float-nan-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "float-nan-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "float-nan-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "float-nan-evidence",
+      "passed": true
+    },
+    {
+      "id": "float-nan-vm-values",
+      "passed": true
+    },
+    {
+      "id": "float-nan-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "float-nan-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "float-nan-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-payload",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-evidence",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-vm-values",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "float-infinity-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-payload",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-evidence",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-vm-values",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "float-negative-zero-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-payload",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-evidence",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-vm-values",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "negative-infinity-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-payload",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-evidence",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-vm-values",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-dateTime-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-payload",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-evidence",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-vm-values",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-date-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-payload",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-evidence",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-vm-values",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "no-timezone-time-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "year-zero-payload",
+      "passed": true
+    },
+    {
+      "id": "year-zero-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "year-zero-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "year-zero-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "year-zero-evidence",
+      "passed": true
+    },
+    {
+      "id": "year-zero-vm-values",
+      "passed": true
+    },
+    {
+      "id": "year-zero-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "year-zero-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "year-zero-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "year-10000-payload",
+      "passed": true
+    },
+    {
+      "id": "year-10000-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "year-10000-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "year-10000-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "year-10000-evidence",
+      "passed": true
+    },
+    {
+      "id": "year-10000-vm-values",
+      "passed": true
+    },
+    {
+      "id": "year-10000-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "year-10000-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "year-10000-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-payload",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-evidence",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-vm-values",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "yearMonthDuration-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-payload",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-evidence",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-vm-values",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "dayTimeDuration-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "empty-string-payload",
+      "passed": true
+    },
+    {
+      "id": "empty-string-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "empty-string-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "empty-string-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "empty-string-evidence",
+      "passed": true
+    },
+    {
+      "id": "empty-string-vm-values",
+      "passed": true
+    },
+    {
+      "id": "empty-string-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "empty-string-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "empty-string-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "min-integer-payload",
+      "passed": true
+    },
+    {
+      "id": "min-integer-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "min-integer-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "min-integer-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "min-integer-evidence",
+      "passed": true
+    },
+    {
+      "id": "min-integer-vm-values",
+      "passed": true
+    },
+    {
+      "id": "min-integer-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "min-integer-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "min-integer-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "max-integer-payload",
+      "passed": true
+    },
+    {
+      "id": "max-integer-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "max-integer-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "max-integer-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "max-integer-evidence",
+      "passed": true
+    },
+    {
+      "id": "max-integer-vm-values",
+      "passed": true
+    },
+    {
+      "id": "max-integer-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "max-integer-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "max-integer-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-payload",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-evidence",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-vm-values",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "max-decimal-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "user-string-payload",
+      "passed": true
+    },
+    {
+      "id": "user-string-legacy-types",
+      "passed": true
+    },
+    {
+      "id": "user-string-clr-equality",
+      "passed": true
+    },
+    {
+      "id": "user-string-clr-hash",
+      "passed": true
+    },
+    {
+      "id": "user-string-evidence",
+      "passed": true
+    },
+    {
+      "id": "user-string-vm-values",
+      "passed": true
+    },
+    {
+      "id": "user-string-vm-metadata",
+      "passed": true
+    },
+    {
+      "id": "user-string-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "user-string-snapshot-close",
+      "passed": true
+    },
+    {
+      "id": "double-zero-sign-rebind",
+      "passed": true
+    },
+    {
+      "id": "double-zero-sign-conversion",
+      "passed": true
+    },
+    {
+      "id": "float-zero-sign-rebind",
+      "passed": true
+    },
+    {
+      "id": "float-zero-sign-conversion",
+      "passed": true
+    },
+    {
+      "id": "nan-bits-rebind",
+      "passed": true
+    },
+    {
+      "id": "nan-bits-conversion",
+      "passed": true
+    },
+    {
+      "id": "duration-lexical-rebind",
+      "passed": true
+    },
+    {
+      "id": "duration-lexical-conversion",
+      "passed": true
+    },
+    {
+      "id": "qname-prefix-rebind",
+      "passed": true
+    },
+    {
+      "id": "qname-prefix-conversion",
+      "passed": true
+    },
+    {
+      "id": "dateTime-offset-rebind",
+      "passed": true
+    },
+    {
+      "id": "dateTime-offset-conversion",
+      "passed": true
+    },
+    {
+      "id": "fresh-string-equivalent-noop",
+      "passed": true
+    },
+    {
+      "id": "fresh-decimal-equivalent-noop",
+      "passed": true
+    },
+    {
+      "id": "fresh-qname-equivalent-noop",
+      "passed": true
+    },
+    {
+      "id": "fresh-dateTime-equivalent-noop",
+      "passed": true
+    },
+    {
+      "id": "cache-repeat-same-evidence",
+      "passed": true
+    },
+    {
+      "id": "cache-repeat-no-getters",
+      "passed": true
+    },
+    {
+      "id": "cache-canceled-read",
+      "passed": true
+    },
+    {
+      "id": "cache-close-during-membership",
+      "passed": true
+    },
+    {
+      "id": "cache-close-release-once",
+      "passed": true
+    },
+    {
+      "id": "cache-session-close-release-once",
+      "passed": true
+    }
+  ],
+  "observations": [
+    {
+      "id": "true",
+      "kind": "Boolean",
+      "payload": "true",
+      "items": [
+        {
+          "payload": "true",
+          "origin": false
+        },
+        {
+          "payload": "true",
+          "origin": false
+        },
+        {
+          "payload": "true",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "false",
+      "kind": "Boolean",
+      "payload": "false",
+      "items": [
+        {
+          "payload": "false",
+          "origin": false
+        },
+        {
+          "payload": "false",
+          "origin": false
+        },
+        {
+          "payload": "false",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "integer",
+      "kind": "Integer",
+      "payload": "42",
+      "items": [
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "int",
+      "kind": "Integer",
+      "payload": "42",
+      "items": [
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "user-int",
+      "kind": "Integer",
+      "payload": "42",
+      "items": [
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        },
+        {
+          "payload": "42",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "decimal",
+      "kind": "Decimal",
+      "payload": "12.5",
+      "items": [
+        {
+          "payload": "12.5",
+          "origin": false
+        },
+        {
+          "payload": "12.5",
+          "origin": false
+        },
+        {
+          "payload": "12.5",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "decimal-scale",
+      "kind": "Decimal",
+      "payload": "12.5",
+      "items": [
+        {
+          "payload": "12.5",
+          "origin": false
+        },
+        {
+          "payload": "12.5",
+          "origin": false
+        },
+        {
+          "payload": "12.5",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "nan",
+      "kind": "Double",
+      "payload": "FFF8000000000000",
+      "items": [
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "infinity",
+      "kind": "Double",
+      "payload": "7FF0000000000000",
+      "items": [
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "zero",
+      "kind": "Double",
+      "payload": "0000000000000000",
+      "items": [
+        {
+          "payload": "0000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "0000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "0000000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "negative-zero",
+      "kind": "Double",
+      "payload": "8000000000000000",
+      "items": [
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "float",
+      "kind": "Float",
+      "payload": "4004000000000000",
+      "items": [
+        {
+          "payload": "4004000000000000",
+          "origin": false
+        },
+        {
+          "payload": "4004000000000000",
+          "origin": false
+        },
+        {
+          "payload": "4004000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "string",
+      "kind": "String",
+      "payload": "alpha",
+      "items": [
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "string-copy",
+      "kind": "String",
+      "payload": "alpha",
+      "items": [
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "token",
+      "kind": "String",
+      "payload": "alpha",
+      "items": [
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "hexBinary-annotation",
+      "kind": "String",
+      "payload": "4142",
+      "items": [
+        {
+          "payload": "4142",
+          "origin": false
+        },
+        {
+          "payload": "4142",
+          "origin": false
+        },
+        {
+          "payload": "4142",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "base64Binary-annotation",
+      "kind": "String",
+      "payload": "QUI=",
+      "items": [
+        {
+          "payload": "QUI=",
+          "origin": false
+        },
+        {
+          "payload": "QUI=",
+          "origin": false
+        },
+        {
+          "payload": "QUI=",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "anyURI-annotation",
+      "kind": "String",
+      "payload": "urn:value",
+      "items": [
+        {
+          "payload": "urn:value",
+          "origin": false
+        },
+        {
+          "payload": "urn:value",
+          "origin": false
+        },
+        {
+          "payload": "urn:value",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "duration",
+      "kind": "Duration",
+      "payload": "P1D",
+      "items": [
+        {
+          "payload": "P1D",
+          "origin": false
+        },
+        {
+          "payload": "P1D",
+          "origin": false
+        },
+        {
+          "payload": "P1D",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "qname",
+      "kind": "QName",
+      "payload": "p|urn:t|name",
+      "items": [
+        {
+          "payload": "p|urn:t|name",
+          "origin": false
+        },
+        {
+          "payload": "p|urn:t|name",
+          "origin": false
+        },
+        {
+          "payload": "p|urn:t|name",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "dateTime",
+      "kind": "DateTime",
+      "payload": "2026|10|31|1|2|3|0|60|True",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "date",
+      "kind": "Date",
+      "payload": "2026|10|31|1|2|3|0|60|True",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "time",
+      "kind": "Time",
+      "payload": "2026|10|31|1|2|3|0|60|True",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|True",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "float-nan",
+      "kind": "Float",
+      "payload": "FFF8000000000000",
+      "items": [
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF8000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "float-infinity",
+      "kind": "Float",
+      "payload": "7FF0000000000000",
+      "items": [
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "7FF0000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "float-negative-zero",
+      "kind": "Float",
+      "payload": "8000000000000000",
+      "items": [
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        },
+        {
+          "payload": "8000000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "negative-infinity",
+      "kind": "Double",
+      "payload": "FFF0000000000000",
+      "items": [
+        {
+          "payload": "FFF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF0000000000000",
+          "origin": false
+        },
+        {
+          "payload": "FFF0000000000000",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "no-timezone-dateTime",
+      "kind": "DateTime",
+      "payload": "2026|10|31|1|2|3|0|60|False",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "no-timezone-date",
+      "kind": "Date",
+      "payload": "2026|10|31|1|2|3|0|60|False",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "no-timezone-time",
+      "kind": "Time",
+      "payload": "2026|10|31|1|2|3|0|60|False",
+      "items": [
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        },
+        {
+          "payload": "2026|10|31|1|2|3|0|60|False",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "year-zero",
+      "kind": "DateTime",
+      "payload": "0|1|1|0|0|0|0|0|True",
+      "items": [
+        {
+          "payload": "0|1|1|0|0|0|0|0|True",
+          "origin": false
+        },
+        {
+          "payload": "0|1|1|0|0|0|0|0|True",
+          "origin": false
+        },
+        {
+          "payload": "0|1|1|0|0|0|0|0|True",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "year-10000",
+      "kind": "DateTime",
+      "payload": "10000|1|1|0|0|0|0|0|True",
+      "items": [
+        {
+          "payload": "10000|1|1|0|0|0|0|0|True",
+          "origin": false
+        },
+        {
+          "payload": "10000|1|1|0|0|0|0|0|True",
+          "origin": false
+        },
+        {
+          "payload": "10000|1|1|0|0|0|0|0|True",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "yearMonthDuration",
+      "kind": "Duration",
+      "payload": "P2M",
+      "items": [
+        {
+          "payload": "P2M",
+          "origin": false
+        },
+        {
+          "payload": "P2M",
+          "origin": false
+        },
+        {
+          "payload": "P2M",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "dayTimeDuration",
+      "kind": "Duration",
+      "payload": "PT24H",
+      "items": [
+        {
+          "payload": "PT24H",
+          "origin": false
+        },
+        {
+          "payload": "PT24H",
+          "origin": false
+        },
+        {
+          "payload": "PT24H",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "empty-string",
+      "kind": "String",
+      "payload": "",
+      "items": [
+        {
+          "payload": "",
+          "origin": false
+        },
+        {
+          "payload": "",
+          "origin": false
+        },
+        {
+          "payload": "",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "min-integer",
+      "kind": "Integer",
+      "payload": "-9223372036854775808",
+      "items": [
+        {
+          "payload": "-9223372036854775808",
+          "origin": false
+        },
+        {
+          "payload": "-9223372036854775808",
+          "origin": false
+        },
+        {
+          "payload": "-9223372036854775808",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "max-integer",
+      "kind": "Integer",
+      "payload": "9223372036854775807",
+      "items": [
+        {
+          "payload": "9223372036854775807",
+          "origin": false
+        },
+        {
+          "payload": "9223372036854775807",
+          "origin": false
+        },
+        {
+          "payload": "9223372036854775807",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "max-decimal",
+      "kind": "Decimal",
+      "payload": "79228162514264337593543950335",
+      "items": [
+        {
+          "payload": "79228162514264337593543950335",
+          "origin": false
+        },
+        {
+          "payload": "79228162514264337593543950335",
+          "origin": false
+        },
+        {
+          "payload": "79228162514264337593543950335",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "user-string",
+      "kind": "String",
+      "payload": "alpha",
+      "items": [
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        },
+        {
+          "payload": "alpha",
+          "origin": false
+        }
+      ]
+    }
+  ],
+  "changesObserved": [
+    {
+      "id": "double-zero-sign",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "0000000000000000"
+    },
+    {
+      "id": "float-zero-sign",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "0000000000000000"
+    },
+    {
+      "id": "nan-bits",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "FFF8000000000000"
+    },
+    {
+      "id": "duration-lexical",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "P1D"
+    },
+    {
+      "id": "qname-prefix",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "p|urn:t|name"
+    },
+    {
+      "id": "dateTime-offset",
+      "refused": false,
+      "detached": false,
+      "exact": false,
+      "payload": "2026|10|31|1|2|3|0|60|True"
+    }
+  ],
+  "costs": [
+    {
+      "kind": "integer",
+      "operation": "payload-access",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 13400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 13500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 13300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 13300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 13300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 61200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 2399000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "cached-kernel-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 273100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 277100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 222000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 226500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 226400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 224800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 223300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "issued-value-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 221200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 226600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 224800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 224600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 216400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 273900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 491300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "evidence-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 124500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 124000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 124500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 126000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 122600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 131300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 146200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "exact-noop",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 200900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 200200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 201000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 196700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 198800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 200900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 200900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "payload-access",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 91200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 91100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 92800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 93700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 92200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 90500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 90700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "cached-kernel-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4761300,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3423400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3257100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3320800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3799200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4247000,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3523300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "issued-value-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3550200,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3352300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3385500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4014800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3324400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4320700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3486800,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "evidence-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 691700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 718500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 679700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 637500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 677900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 680800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 665000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "integer",
+      "operation": "exact-noop",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3896000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3730300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3722600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3743200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3839300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3827700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3751200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "payload-access",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "cached-kernel-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 166400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 165900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 167300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 166700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 166200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 166200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 164900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "issued-value-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 164400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "evidence-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 44900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "exact-noop",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 175200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 177000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 176700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 175300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 174200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 182400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 5000,
+          "allocatedBytes": 32000,
+          "nanoseconds": 192700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "payload-access",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 59600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 62400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 63200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 63400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 63000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 62800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 62900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "cached-kernel-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3333700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3350300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3417200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3269600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3398600,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3393500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3376800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "issued-value-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3222100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3260100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3247900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3195300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3317900,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3376000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3318700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "evidence-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 601500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 605700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 602600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 601300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 610600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 606300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 0,
+          "nanoseconds": 626900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "string",
+      "operation": "exact-noop",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3583600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3435000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3629700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3524200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3520900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3477500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 640000,
+          "nanoseconds": 3454300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "payload-access",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 9900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 9800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 10000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "cached-kernel-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 165000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 172700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 167300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 165200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 168700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 242300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 197800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "issued-value-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 164500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 164900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 166900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 170700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 163000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 176000,
+          "nanoseconds": 164800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "evidence-read",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 38200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 38100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 37200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 35900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 36000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 35800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 0,
+          "nanoseconds": 35600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "exact-noop",
+      "count": 1000,
+      "samples": [
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 420600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 422500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 422700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 426400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 428500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 424000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 42000,
+          "allocatedBytes": 96000,
+          "nanoseconds": 425800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "payload-access",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 96200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 98600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 99000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 102500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 114000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 102000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 102100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "cached-kernel-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3204700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3279300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3374700,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3282100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3501300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3343500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3380300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "issued-value-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3301600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3279300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3203200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3384500,
+          "gen0": 1,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4622500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 3207400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 3520000,
+          "nanoseconds": 4054000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "evidence-read",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 636900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 930000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 702400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 615000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 787200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 706300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 0,
+          "nanoseconds": 749100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "kind": "decimal",
+      "operation": "exact-noop",
+      "count": 20000,
+      "samples": [
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 9272200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8850100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8510200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8306300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8341700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8411700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "checksum": 840000,
+          "allocatedBytes": 1920000,
+          "nanoseconds": 8353100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    }
+  ],
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "cpu": "Intel64 Family 6 Model 198 Stepping 2, GenuineIntel",
+  "processorCount": 24,
+  "serverGC": false,
+  "totalAvailableMemoryBytes": 102496944128,
+  "xdmValueSize": 48,
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "cd2d323cec043c97c32f72fcaae820496f477326d82f468cd58b6b95cd8c6ac1",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "2fd135b98ecc6c853fa37cae63c6da0321372679d6ebce91ba7bf17c3933ef2e",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588",
+      "context": "Default",
+      "collectible": false
+    }
+  ]
+}
