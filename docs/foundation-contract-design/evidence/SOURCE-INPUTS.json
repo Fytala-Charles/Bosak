@@ -1,0 +1,30 @@
+{
+  "coreBase": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+  "files": [
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "revision": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+      "sha256": "d213cdd9be7434a8e86d70504a59b5673d520c70d4cab0a1c88418373e65fd22"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+      "revision": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+      "sha256": "ecd3ad5db439462533537b81a5d3673249c47a6cf0c6edae8c260ff20088c8fb"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "revision": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+      "sha256": "5c7b06d6898c9a626bcc9474d9c8fb4cc9c7961f3a1190ca164f4a3b019f2791"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmMap.cs",
+      "revision": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+      "sha256": "ecd5dd97b34b5e6fb21357fde4c6fc87e91cc0dfd4391e3c4029b69c6c8a14ad"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmArray.cs",
+      "revision": "4d5b497c46900a8fb80224fa3a823ba7ff0c3577",
+      "sha256": "2585a8ba8d3c15b91a34751c2671b6a0caaec97cf2931490c451a0c0dc59b244"
+    }
+  ]
+}

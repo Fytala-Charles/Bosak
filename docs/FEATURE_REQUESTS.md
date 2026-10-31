@@ -433,6 +433,8 @@ Braid pre-freeze integration registered — 31 October 2026: [BF140-01–05 requ
 
 Performance and final-breaking-change intent — 31 October 2026: [PF-01–09](foundation-performance/README.md) registers required pre-freeze performance/API-longevity work for Core, Schema, XmlDb and Braid. Measure ordinary paths, authority/value transport, persistent streaming/I/O/leases, worker/data movement and cache/currentness; agree workload targets and budgets before design acceptance. All scenarios NotRun; no performance claim or freeze acceptance. Resolve known performance-driven signature needs now; later unavoidable breaks require explicit major-version/migration review. Delivery: `git log -1 --format=%H -- docs/foundation-performance/README.md`.
 
+C139-01 concrete transport/ownership draft — 31 October 2026: [13-type isolated signature slice](foundation-contract-design/README.md) proposes authority identity/derivation/affiliation/closure, original node/atomic/list provenance and optional operation admission without required legacy node/sequence/layout changes. Exact package-backed declaration build passes zero warnings/errors; metadata observes current 48-byte XdmValue on this x64 runtime only. Four discriminating experiments remain NotRun; carrier choice, full semantic profile/advisor/compatible views and final signatures remain Pending. No production/API adoption, performance qualification, gate rerun or freeze. Delivery: `git log -1 --format=%H -- docs/foundation-contract-design/README.md`.
+
 ## Bosak 1.17.0 published - 17 October 2026
 
 Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.
@@ -6494,3 +6496,7 @@ REQ-140 remains In Progress. Braid REQ-122 / BF140-01–05 is registered as a re
 ## REQ-140 performance and final API change intent — 31 October 2026
 
 REQ-140 remains In Progress. F140-05/PF-01–09 is required before F140-04 freeze: real workloads, budgets, baseline/final candidate measurements and Core/Schema/XmlDb/Braid performance dispositions. This is the intended final breaking foundation API change. No benchmark has executed and no contract, performance or release acceptance is recorded.
+
+## REQ-139 C139-01 concrete declaration slice — 31 October 2026
+
+REQ-139 remains Pending acceptance. The [transport/ownership draft](foundation-contract-design/README.md) supplies exact declarations and zero-warning compilation against the candidate Core DLL, not production behavior. E-01–04 must decide carrier propagation/cost, complete authority operation granularity and resource lifecycle before final signature disposition. Profile capture/advisor/compatible-view signatures remain outstanding. REQ-140 stays In Progress; no implementation authorization or freeze follows from compilation.

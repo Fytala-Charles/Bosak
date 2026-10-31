@@ -95,3 +95,7 @@ The [seven-package Core/API candidate](foundation-package-qualification/README.m
 ## Consolidated owner handoff — 30 October 2026
 
 Use [the readiness packet](foundation-readiness/README.md) as the entry point: exact source/feed/API/evidence identities, qualified scope, pending requirements and role-specific acceptance return instructions. Readiness means local evidence is available, not that the full shared foundation is ready for freeze. No owner sign-off is inferred and no prior frozen template/receipt is filled in automatically. Core next maps returned required needs to the finite C139-01/C45 decision and named member manifest; required gaps and all joint release/freeze dispositions remain open.
+
+## Concrete transport/ownership draft — 31 October 2026
+
+The [C139-01 first signature slice](foundation-contract-design/README.md) replaces a generic prototype inventory with 13 concrete draft types, explicit ownership/error rules and four distinguishing experiment plans. Declaration compilation against the exact 1.34.2 Core DLL passes without warnings; no production implementation or performance behavior is proved. Final carrier representation and the remaining profile/advisor/compatible-view API need real experiments and owner disposition. Full known requirements remain freeze blockers.

@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+The [first concrete C139-01 declarations](docs/foundation-contract-design/README.md) now compile against the candidate Core DLL. Next run isolated carrier/provenance and ownership experiments before choosing final representation; complete semantic-profile, advisor and compatible-view signatures afterward. This is a partial design, not a production API acceptance.
+
 Treat the shared freeze as the intended final breaking foundation API change. [PF-01–09](docs/foundation-performance/README.md) requires upfront performance design, representative budgets and final-candidate measurement for Core, Schema, XmlDb and Braid; unresolved performance-driven contract gaps block freeze.
 
 Braid is now a required pre-freeze integration consumer: [BF140-01–05](docs/braid-foundation-requirements/README.md) covers semantic environment, typed/persistent inputs, worker ownership, versioned run identity and real-provider qualification. Core, Schema, XmlDb and Braid must dispose the exact shared scope; unrelated Braid native/trust rollout stays separate.

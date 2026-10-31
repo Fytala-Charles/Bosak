@@ -1,0 +1,143 @@
+// Generated isolated API-shape proposal, 31 October 2026. Not production implementation.
+// AUTHOR: Charles Korthout; COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System;
+using System.Collections.Immutable;
+using System.Threading;
+using Bosak.XPath.Core.Xdm;
+namespace C13901.Draft;
+
+/// <summary>Provider-created original component identity; owner verifies membership.</summary>
+public interface ISchemaComponentHandle
+{
+    /// <summary>The admitted authority, not a QName or digest.</summary>
+    ISchemaAuthority Authority { get; }
+}
+/// <summary>Opaque identity of original assessment/source binding; no lease is implied.</summary>
+public interface ISchemaAssessmentOrigin
+{
+    /// <summary>The original host source binding, never a component authority or live lease.</summary>
+    ISchemaSourceBinding Source { get; }
+}
+/// <summary>Opaque original source identity; current copied snapshot identity stays provider-owned.</summary>
+public interface ISchemaSourceBinding { }
+/// <summary>Immutable original atomic provenance, distinct from a compatibility view.</summary>
+public interface ISchemaAtomicProvenance
+{
+    /// <summary>The original declared/governing type.</summary>
+    ISchemaComponentHandle DeclaredType { get; }
+    /// <summary>The actual selected atomic type, including union member selection.</summary>
+    ISchemaComponentHandle ActualType { get; }
+    /// <summary>The original assessment binding.</summary>
+    ISchemaAssessmentOrigin Origin { get; }
+}
+/// <summary>Authority-issued typed value metadata; no ownership transfer.</summary>
+public interface ISchemaTypedValue
+{
+    /// <summary>The governing type, retaining list/union boundaries.</summary>
+    ISchemaComponentHandle GoverningType { get; }
+    /// <summary>Whether the schema value is a list, even for zero or one member.</summary>
+    bool IsList { get; }
+    /// <summary>Atomics in order; each value must retain its own atomic provenance.</summary>
+    XdmSequence Atomics { get; }
+}
+/// <summary>Optional schema channel; existing node implementers are unaffected.</summary>
+public interface ISchemaAnnotatedNode : IXdmNode
+{
+    /// <summary>The original component/assessment view; never rewritten by admission.</summary>
+    ISchemaNodeFacts OriginalSchemaFacts { get; }
+}
+/// <summary>Original node facts, distinct from an authority-compatible view.</summary>
+public interface ISchemaNodeFacts
+{
+    /// <summary>The original governing type.</summary>
+    ISchemaComponentHandle Type { get; }
+    /// <summary>The governing declaration where present.</summary>
+    ISchemaComponentHandle? Declaration { get; }
+    /// <summary>The original assessment/source binding.</summary>
+    ISchemaAssessmentOrigin Origin { get; }
+    /// <summary>True when atomization must report no typed value.</summary>
+    bool HasNoTypedValue { get; }
+    /// <summary>Whether the original assessment is nilled.</summary>
+    bool IsNilled { get; }
+    /// <summary>Reads the actual typed value under the caller-held execution lifetime.</summary>
+    /// <param name="cancellationToken">Cancellation of this read, not owner disposal.</param>
+    /// <returns>The actual typed value, or an explicit unsupported result.</returns>
+    SchemaResult<ISchemaTypedValue> ReadTypedValue(CancellationToken cancellationToken);
+}
+/// <summary>Neutral owned-unsupported versus successful authority outcome.</summary>
+public enum SchemaResultKind
+{
+    /// <summary>A complete supported answer, including false or empty answers.</summary>
+    Supported,
+    /// <summary>A supported lookup found no component.</summary>
+    NotFound,
+    /// <summary>The authority cannot answer the owned capability.</summary>
+    Unsupported
+}
+/// <summary>Explicit authority result; construction/invariants remain part of review.</summary>
+/// <typeparam name="T">The supported payload type.</typeparam>
+public abstract class SchemaResult<T>
+{
+    /// <summary>The outcome category.</summary>
+    public abstract SchemaResultKind Kind { get; }
+    /// <summary>The supported payload.</summary>
+    public abstract T Value { get; }
+    /// <summary>The optional provider diagnostic identifier.</summary>
+    public abstract string? DiagnosticCode { get; }
+}
+/// <summary>Provider-owned authority operations; no issuer factories on the public host.</summary>
+public interface ISchemaAuthority
+{
+    /// <summary>Checks actual membership, not the handle's own claimed Authority.</summary>
+    /// <param name="component">The purported component.</param>
+    /// <returns>True only for a component issued by this authority.</returns>
+    bool Owns(ISchemaComponentHandle component);
+    /// <summary>Compares component identity using authority, without mandated handle interning.</summary>
+    /// <param name="first">First owned component.</param>
+    /// <param name="second">Second owned component.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>The authoritative identity comparison or unsupported outcome.</returns>
+    SchemaResult<bool> IsSameComponent(ISchemaComponentHandle first, ISchemaComponentHandle second, CancellationToken cancellationToken);
+    /// <summary>Queries an actual derivation relation.</summary>
+    /// <param name="actual">Original candidate type.</param>
+    /// <param name="expected">Expected governing type.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A supported relation or explicit unsupported outcome.</returns>
+    SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle actual, ISchemaComponentHandle expected, CancellationToken cancellationToken);
+    /// <summary>Queries substitution affiliation without treating names as authority.</summary>
+    /// <param name="member">Candidate declaration.</param>
+    /// <param name="head">Expected head declaration.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A supported relation or explicit unsupported outcome.</returns>
+    SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle member, ISchemaComponentHandle head, CancellationToken cancellationToken);
+    /// <summary>Returns complete declared reachable components, without silent truncation.</summary>
+    /// <param name="governingType">The governing original type.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>The complete closure or explicit unsupported outcome.</returns>
+    SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle governingType, CancellationToken cancellationToken);
+}
+/// <summary>Optional host/provider operation admission; never added to existing nodes/sequences.</summary>
+public interface IQueryOperationLifetime
+{
+    /// <summary>Attempts admission before evaluating or exposing deferred provider work.</summary>
+    /// <param name="cancellationToken">Cancellation of admission.</param>
+    /// <returns>An operation lease; refusal throws before any provider dispatch.</returns>
+    IQueryOperationLease Enter(CancellationToken cancellationToken);
+}
+/// <summary>Releases this admitted operation once; does not own the caller snapshot.</summary>
+public interface IQueryOperationLease : IDisposable
+{
+    /// <summary>Checks that this operation may still perform provider work.</summary>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    void ThrowIfUnavailable(CancellationToken cancellationToken);
+}
+/// <summary>Proposed atomic channel; bodies are intentionally not implemented.</summary>
+public static class SchemaAtomics
+{
+    /// <summary>Observes provenance without invoking a provider or acquiring a lease.</summary>
+    /// <param name="value">The atomic carrier.</param>
+    /// <param name="provenance">Original provenance if present.</param>
+    /// <returns>True if original atomic provenance is attached.</returns>
+    public static bool TryGetProvenance(in XdmValue value, out ISchemaAtomicProvenance? provenance) => throw new NotSupportedException("Shape only");
+}
