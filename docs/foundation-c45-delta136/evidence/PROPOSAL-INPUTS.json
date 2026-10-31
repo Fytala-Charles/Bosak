@@ -1,0 +1,13 @@
+{
+  "v5SourceSha256": "3fbfeea5a88d93cf24ec137850c5f3358d0b6028577b133d9ff259c7b6beb940",
+  "sources": {
+    "OperationLifetime.cs.txt": "4666976ab15ddd2792ad00f7f2995e9f5623baa1bfb85ca5caac6d0731234b1e",
+    "Provider.cs.txt": "c7df80a247343374ec12eefa98c80917c70fc406458cf062f647430e8e2e3912",
+    "QueryFacade.cs.txt": "ea3d633ffef232e44afc04a31389c8eb656fc75de95e388e4a79c2e596d98285"
+  },
+  "proposedPublicTypes": 40,
+  "proposalAssemblies": 2,
+  "newExportsInProduction": 0,
+  "proposedBodiesExecuted": false,
+  "namespacePlacementProposed": true
+}

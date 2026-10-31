@@ -69,6 +69,8 @@ Private scalar transport promoted — 31 October 2026: source **1.36.0** applies
 
 C45 owner-review handoff prepared — 31 October 2026: [the source-pinned 1.36.0 packet](foundation-c45-handoff136/README.md) reconciles fresh issue #468 and seven local owner documents, with 43 explicit N/FXR/FXG/BF/PF review rows and a public bounded integration fixture. XmlDb requirements are now committed at checkout 280f706; their older 1.34.2 qualification remains separate. No owner messages/checkouts/pins or product source changed. The public provider SDK and complete named stable manifest remain pending; the seven-assembly reflection receipt is not that manifest. Next Core task: refresh the full 1.36 named API inventory and exact proposed C45 public delta; owners can review/design and refresh ordinary compatibility in parallel. All acceptance/budget/freeze flags remain pending.
 
+Full 1.36 inventory and C45 declaration proposal — 31 October 2026: [the refreshed packet](foundation-c45-delta136/README.md) records eleven assemblies/270 types/5,770 entries, preserving all 5,766 old IDs and 176 XmlDb mappings. Four new rows represent the two equality methods plus attribute evidence. Ten qualified engine DLL hashes are unchanged; LanguageServer was rebuilt for complete metadata capture. A 40-type Core/API public-shape proposal compiles separately, with 43 requirement mappings and 12 NotRun acceptance cases. No product exports/source or owner pins changed. Stable classifications and C45 remain unaccepted. Required precision/domain, all-host, closure and lifetime decisions remain explicit before freeze; next resolve those signature risks with owner use cases.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

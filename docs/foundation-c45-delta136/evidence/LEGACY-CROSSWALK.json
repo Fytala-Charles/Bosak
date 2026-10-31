@@ -1,0 +1,1442 @@
+{
+  "scope": "Legacy exact signature IDs retained; row positions may shift. No owner acceptance.",
+  "oldEntries": 5766,
+  "currentEntries": 5770,
+  "preservedIds": 5766,
+  "added": [
+    {
+      "id": "1aaaf60c49fbfa838c13b76135a944c1f5bc00ccb6b62a3b2c8c6632110c186a",
+      "assembly": "Bosak.XPath.Core",
+      "row": "A Bosak.XPath.Core.Xdm.XdmValue.Equals(System.Object other:None:none:required=:optional=:attrs=):[System.Runtime.CompilerServices.NullableContextAttribute((Byte)2)]"
+    },
+    {
+      "id": "37f6f98cea73493da546371b09bb079325e112736cad71d0693ad0bc294548fb",
+      "assembly": "Bosak.XPath.Core",
+      "row": "A Bosak.XPath.Core.Xdm.XdmValue.GetHashCode():"
+    },
+    {
+      "id": "06b7f050e1b0a1a9eb0628cc7c89c9c10e645baa12edc675710ee1ec4c660f61",
+      "assembly": "Bosak.XPath.Core",
+      "row": "M Bosak.XPath.Core.Xdm.XdmValue.Equals:Public, Virtual, HideBySig:Standard, HasThis:System.Boolean :None:none:required=:optional=:attrs=(System.Object other:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "id": "9d66d8abc4e009a86636258232bbe84b73df19c74359bf4a184347092337928b",
+      "assembly": "Bosak.XPath.Core",
+      "row": "M Bosak.XPath.Core.Xdm.XdmValue.GetHashCode:Public, Virtual, HideBySig:Standard, HasThis:System.Int32 :None:none:required=:optional=:attrs=():"
+    }
+  ],
+  "removed": [],
+  "xmlDbMappedCount": 176,
+  "xmlDbMappedEntries": [
+    {
+      "id": "00b8edafad0d5cc4bf3ba369b0daa5a1f94b6aff1f285b5d6a0fafeff104bbc1",
+      "oldRow": 180,
+      "currentRow": 180,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0199e09da71828624a1ea9591677f7597b1ede46d9c151b5adc9de7f2918018a",
+      "oldRow": 743,
+      "currentRow": 747,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "027dabd5f06b13de0f89abdfa9e2d65f116f418f09a2d5208e5c7176f3eb14a7",
+      "oldRow": 305,
+      "currentRow": 307,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0460cee45f966ca86b7013f9470c4aff90ff32d63957496650993f03c21a86b0",
+      "oldRow": 337,
+      "currentRow": 339,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "05a80c3bc175e72446ced51842b2aa6ad011d07e6470b12eff8997bb89a00114",
+      "oldRow": 705,
+      "currentRow": 705,
+      "assembly": "Bosak.XPath.Runtime",
+      "reviewGroup": "RuntimeDependencyReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "067594a6ec65a8b164f6150715b8daac3f69132bf546e2731764914c7a6fd6ca",
+      "oldRow": 421,
+      "currentRow": 423,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "06f90e7f688a4d51eff45454e979d233339d44b42437b904725d8c94868eb1dc",
+      "oldRow": 354,
+      "currentRow": 356,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0735fea9a97d94946ebdd28af5e76fef9a8e2c50466eedaa81adff88eeffaed9",
+      "oldRow": 358,
+      "currentRow": 360,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "09324a6e6ca5375b41a4b9054ab58db5b0e45f24cdb87d6670362af1126132e4",
+      "oldRow": 331,
+      "currentRow": 333,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "09605d3d470264e0dd9ee60d1f273d97bf8f9515a75003b20366c262c851c557",
+      "oldRow": 311,
+      "currentRow": 313,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "09d402bbdff22f09eb24b6f0c098b4a193e61ed6dc0631c6ff541e9ceb6f43fe",
+      "oldRow": 455,
+      "currentRow": 457,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "09da137d62e5a7b3994af90779f3fa0d410f4048767e8196d85e769405e96354",
+      "oldRow": 315,
+      "currentRow": 317,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0b1c223fcf43a1c57811c1765aaff8ec538037316e523c0f5806eda0c05ee1a8",
+      "oldRow": 678,
+      "currentRow": 682,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0bfb18b47b66314c5d6d1991e16d94d4bdb7f7e8a309a5210b51a47ef50d3a09",
+      "oldRow": 350,
+      "currentRow": 352,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "0cfdcc1ccd302ea69c7674deb8615c256a494022333dc32234cc24a997c3bf96",
+      "oldRow": 414,
+      "currentRow": 416,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "107f4aa1cce1050acf3efb5b5b17f62b505a9b9b1eb0f9721585a0cb802d92e8",
+      "oldRow": 767,
+      "currentRow": 771,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "11c8d2833c45fde23d48b6e6d39164b3eee805586d6d124285871522494621a5",
+      "oldRow": 588,
+      "currentRow": 588,
+      "assembly": "Bosak.XPath.Runtime",
+      "reviewGroup": "RuntimeDependencyReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "11dd3372def48147a354e20d6733269a297a6974a4d025b3220ebad1c75f2419",
+      "oldRow": 601,
+      "currentRow": 604,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "13003da2a667fd536fd901f0dbcdb6ef55f9710cf31c39bc1d8b76bde99b142b",
+      "oldRow": 411,
+      "currentRow": 413,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "17695a1073d50abdb0bbd2aef0864e805357b303dd45ac08f9d45d5ba039cf28",
+      "oldRow": 457,
+      "currentRow": 459,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "18b13159694bd552919d7a93b6c498977d710dcb2bb1e6abea5c025d99ee6a7d",
+      "oldRow": 669,
+      "currentRow": 673,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "19b7bb5d0e984b02c9f789c89d2284edd7af2c27edef0b8c7a0392f43ea64f54",
+      "oldRow": 600,
+      "currentRow": 603,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "19c8f673af57eaf52d746a904fbdaf3be851f824a770b432f5ecb9c70849a54a",
+      "oldRow": 425,
+      "currentRow": 427,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "1cbf7d6d320620463357284755f3c51f9ae7ded8cf6a2f91f3cac5dfe54999b7",
+      "oldRow": 303,
+      "currentRow": 305,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "1d4c8698db79b52d29815751c8ea71ad0f0897278e1ab4302dedc5d7c8150cf8",
+      "oldRow": 310,
+      "currentRow": 312,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "1d773b738c145d006a4e66d560e81f6585010297aaf1b2b04c9d3b92f85a1521",
+      "oldRow": 316,
+      "currentRow": 318,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "1f0fd360cb6eed34642cfa6937c7df752eea79e1caed44af740b75ef4a72b061",
+      "oldRow": 798,
+      "currentRow": 802,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "1fd7dba9c74cdaaf5ec7ada1cf6ed9a755a926340853e83ea7f79bf553fbe404",
+      "oldRow": 344,
+      "currentRow": 346,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "200f2f69ddbc51bb380b17c43e1c4d36c50966727696f4aca9c7dc6c344ab562",
+      "oldRow": 791,
+      "currentRow": 795,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "22be795ca5345874d4a35d92a7f20d6bb81d18a9bfc4c8a3bc2a2bb9e137fd74",
+      "oldRow": 353,
+      "currentRow": 355,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2386de10850701a01dbbf396207f2a955ec567af2c93ee406548a64e06bce662",
+      "oldRow": 559,
+      "currentRow": 559,
+      "assembly": "Bosak.XPath.Runtime",
+      "reviewGroup": "RuntimeDependencyReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "24850aa7b74f3d99057d7ccb956890449cfd033f9a58a19f3dfac3635a4b0199",
+      "oldRow": 620,
+      "currentRow": 624,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2617a0b04c91ce7bde753c0a37dde57e6187cfc72e4c984552225afc038c1b18",
+      "oldRow": 768,
+      "currentRow": 772,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "26538a50dbca7c2f2c5de4e6f0839cc29a2700f48675cffe36df8e206e2e260a",
+      "oldRow": 349,
+      "currentRow": 351,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "DraftMemberReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "277ed416fa1bb5ba09ad03f3a217367108ed781ffa25eae80a0965120fb83daf",
+      "oldRow": 420,
+      "currentRow": 422,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "27be2dae3f1b3e7180ce739cccbcfe43fe37b2d1ad94a9addcc0aa70bfd1d544",
+      "oldRow": 690,
+      "currentRow": 694,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2877697ce4075ec1ffb4273fb0fdeb5c3cd6a02c5c933d6e68b968193a1141da",
+      "oldRow": 599,
+      "currentRow": 602,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "29298df0ec0c9563c52f83a770dcec698e248df930ff202eb7abf890e86fe3f5",
+      "oldRow": 357,
+      "currentRow": 359,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2ac66cba436c92a8be9df0e3b27de715e6901a3788b0c684a9be890852b07738",
+      "oldRow": 340,
+      "currentRow": 342,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2aeb6432d977da7028179986c0b7bc760598b4a8e624aa0755cac301a8c0aaf4",
+      "oldRow": 345,
+      "currentRow": 347,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2b6dc139a161bf2391684409e533d7bcfcf6f0a809805548ef2f0a251de512db",
+      "oldRow": 670,
+      "currentRow": 674,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2c4a388d8602f90d909f95518e21e1f67798f85998131bb53b3a0c0d4c71ec5d",
+      "oldRow": 342,
+      "currentRow": 344,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2c4ea4bf105d12bff68f3645bb427daaf0a28e9a2d92fcc2d17cc3476cf6c340",
+      "oldRow": 638,
+      "currentRow": 642,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "2f2efb789f3ea5702c9b930dd3d31deaa8bcdf67cd354235508159412621bc17",
+      "oldRow": 405,
+      "currentRow": 407,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "3111033e3793451f49749b403d69538186d59b9c1405a75e189dbe98e1d0e114",
+      "oldRow": 563,
+      "currentRow": 565,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "32efd88137cc589222db6194a99c60138ebe898e0a669008f2c4d9eddee56d90",
+      "oldRow": 407,
+      "currentRow": 409,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "348a6b2ae7faad07a62cc0e461ed59e889016412c6a3eac62577f30bf88592c0",
+      "oldRow": 424,
+      "currentRow": 426,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "361aaf90cd64042889428695495003d418a91d0e217ce2c8325d09bcd9fd7932",
+      "oldRow": 326,
+      "currentRow": 328,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "364cf0e4da88b723d51a1a25134ad41b27a5eb0032f74fa7f12d1f41430a0fe3",
+      "oldRow": 755,
+      "currentRow": 759,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "366e4b4f1ac9d6953d44dc75f2c054287cb60a5b213809d04a9ab7063ce81039",
+      "oldRow": 569,
+      "currentRow": 572,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "39c9546f3f305c2ccefe17461dba4214758ad7eed03cd85aa6f6da8544c2a076",
+      "oldRow": 730,
+      "currentRow": 734,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "3a7f9d48bd4b2f9f45278d1cc5457a392e3e0b3b4fae5f6f19c235da8a1d8edb",
+      "oldRow": 433,
+      "currentRow": 435,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "3adc42554647e107d701499c0deab43ded410b926eb8d6f7d6458775fa6a0b3b",
+      "oldRow": 313,
+      "currentRow": 315,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "3bea850e521f3da33b4860e971bbeb803d5da777c8a60ec12c21e9d71e25b8ed",
+      "oldRow": 609,
+      "currentRow": 613,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "3c0bb291e0dbe33742218299e14dec94db4b50d83ab22e9272500b6a6c8eeed4",
+      "oldRow": 772,
+      "currentRow": 776,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "4114f3e1c7716ea7c85532cbb852d928c5cd2bc4ce085be6aa1a3bff6b4f6d0a",
+      "oldRow": 566,
+      "currentRow": 568,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "41743458c35e2bf06815025d4438c708ead96080eda59622a05e0d83a40af12c",
+      "oldRow": 631,
+      "currentRow": 635,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "DraftMemberReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "423c5a7c49d8e1170a3b8a7a9db8c546a84b94761df61bad078cbbd6a8b5c1fa",
+      "oldRow": 422,
+      "currentRow": 424,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "43613aaabd4e6bd32dc50b8430db6255e5b65241aff1e99bbd0720f12543e7c6",
+      "oldRow": 665,
+      "currentRow": 669,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "452b5d6eafc78d4d473160c30ed84c3cd7ebf62865d41e17ef5c02579babd09c",
+      "oldRow": 413,
+      "currentRow": 415,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "494561b6164767517732e11703929e3fe8eef067c6f62935449dd3af61378a85",
+      "oldRow": 347,
+      "currentRow": 349,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "497cb941837c89d21ab2e7ad6f9fa122f7505b11f93014229b735c39dc88ef17",
+      "oldRow": 595,
+      "currentRow": 598,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "4b7e269b70f5655eacbf9bcc3d3a199cbceba2ce578b6da609743e3ca5ba9ac5",
+      "oldRow": 408,
+      "currentRow": 410,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "4c5250cb0e94e150f759d0ce69dea9e698e2a611f765f282bcec5508b522e2b3",
+      "oldRow": 115,
+      "currentRow": 115,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "4cc6ecdcc6a1d2a3b8792ffbc6c2172f6b6f4e586358494e1f778ca4ede74746",
+      "oldRow": 637,
+      "currentRow": 641,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5085c32a57933c9511e8cd1086b3997bb8ecab1aafb68d6923291b1fd8ad0137",
+      "oldRow": 741,
+      "currentRow": 745,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5196271c65406294dfbaa57078a1ce4765542677ff523b8d981341fd9a15075e",
+      "oldRow": 428,
+      "currentRow": 430,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "51eef5ed7cf28e7027897cb8a12d4e6801a05997a748f850cc823fcd2d8cac27",
+      "oldRow": 565,
+      "currentRow": 567,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "54b3d5d561a32a361043d78f92be2ddc22e3371beca6729e17daee6a48434ac1",
+      "oldRow": 417,
+      "currentRow": 419,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "575b800e076125b4e91579ac90aaaec33e025a62983cffa12e0aa0cc12ce6526",
+      "oldRow": 675,
+      "currentRow": 679,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "596820db7eb91a29df1faec29f1a6b0653ed87701a308d30298d09819225109b",
+      "oldRow": 178,
+      "currentRow": 178,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    },
+    {
+      "id": "59ae6494971ec96596b8036302935e2791258d0fc732e4fb7a6d871313074dfd",
+      "oldRow": 785,
+      "currentRow": 789,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5a1c95ca2f41a7fb79db919f0f7e8ce3d5b8e7dcd50bd2c70aaf34b37691b031",
+      "oldRow": 429,
+      "currentRow": 431,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5d221cf08929f59521f7bd470b59eb6d6f07aed22db68deb37e90220e2f1c2cb",
+      "oldRow": 335,
+      "currentRow": 337,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5ee3619c756e13cfb5f8636492624afd09efa9bf9ab81cfac50c166d409fe514",
+      "oldRow": 308,
+      "currentRow": 310,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5f968bfbac21ed4852bb61523d5d561b791cceba61d3d00985ba3105f0d982c3",
+      "oldRow": 419,
+      "currentRow": 421,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "5f98ba1807401e2c59418c7c30908b9ef570d0c590710d3560a794910a98e250",
+      "oldRow": 666,
+      "currentRow": 670,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "60ebfd21bdc5c1da10673f4da0957ec91867a0a5e313c54915efb4469b82925b",
+      "oldRow": 802,
+      "currentRow": 806,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "61479ca660eda1923a9ffc2d541b19cee4c1d9cbf116ff4c3c7a109964c62d22",
+      "oldRow": 805,
+      "currentRow": 809,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "61ae49c9724a563e104b8722b45cf5b17906c7124e3c3f4aec127617b3506483",
+      "oldRow": 329,
+      "currentRow": 331,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "623362495e73fb85f9f33806e1e9b060ab69a283654e28bfff5b834dae6a7de3",
+      "oldRow": 430,
+      "currentRow": 432,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "62aeb914b135e603326daf086c8b200255f11e7fee2935911754afd839c86b26",
+      "oldRow": 682,
+      "currentRow": 686,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "6393ac65189691a4a1c8073cd820644bef034799bbdb004708895ce537961215",
+      "oldRow": 596,
+      "currentRow": 599,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "63efb03c7bf7df44c312e7f26e1969c4ea8ea47846642870ef0515fcdd6e6d15",
+      "oldRow": 702,
+      "currentRow": 706,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "65009b35188642ab87f42f4b99ac6487a1f31c0d939776214762a25740fda0d5",
+      "oldRow": 676,
+      "currentRow": 680,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "651886d834b779ce7ed91444b0f22aca313df20d5da5da3ca38427735fb3bcd3",
+      "oldRow": 742,
+      "currentRow": 746,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "65fd272f16e969dfef8601cfe84b6221399b7d3674cbb8e3d9f35ac1c9fe2aea",
+      "oldRow": 784,
+      "currentRow": 788,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "68e5c0c33174a2e71a8b1d2a40247e1aac1832503d4dc1fe3c2bbc274e2d4a67",
+      "oldRow": 436,
+      "currentRow": 438,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "6ad984fb34dadd45ed5f60dd8429b26c0bdfb5dcdeaa6dc04723236a55f9dab3",
+      "oldRow": 406,
+      "currentRow": 408,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "70beb8519317b8e798ca9e80032d38251591d00f3de9558465267e3bdbb3879a",
+      "oldRow": 416,
+      "currentRow": 418,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "7150f67b3889061fd1cd2b4fc0eec70ef89851d26902170d8fdb26c56f0f7280",
+      "oldRow": 401,
+      "currentRow": 403,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "719df616683da5f729a7395575a2c5c56c205c17ba936bad1bb2ee648fba635c",
+      "oldRow": 677,
+      "currentRow": 681,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "719ffbbd10e71f7a94df4373b1950432c004513a07fc17e73f64b3f2ff231303",
+      "oldRow": 801,
+      "currentRow": 805,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "73131c61ff47981c11d29e92588ec789488f1d71a29494e1a5399ba4a2f6caff",
+      "oldRow": 689,
+      "currentRow": 693,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "740d65dbeee1f30a1f3b1af1fb8a246b1edbda6b4a89055528b4bddf2e0d1b1e",
+      "oldRow": 328,
+      "currentRow": 330,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "74e099eae3f0835be3d2fa65284124d71ae9faf0d6bf09f732ec2f5139a99fdf",
+      "oldRow": 686,
+      "currentRow": 690,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "755981c580bfbba15c25d7102870441a8a4e0e9bc22f6d95bbe7c62a604b7b2f",
+      "oldRow": 423,
+      "currentRow": 425,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "759534d70ed2f6e3ba54f00283cb7e1f8683c5c663dfce1d77950cbf4566c834",
+      "oldRow": 312,
+      "currentRow": 314,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "77be611f26c102abba21e71daf2e2894e0ff098ac09bcc18265bb286594fcbd2",
+      "oldRow": 307,
+      "currentRow": 309,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "78e9eae411b3a5ecfd675fba37bb54d466c8e4a10aadc5f1ff1a02a1b1598107",
+      "oldRow": 562,
+      "currentRow": 564,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "7902e0c4bac2f64279b1e473e945d7ab198798e9973878b8f00b98a4a5cc66f0",
+      "oldRow": 404,
+      "currentRow": 406,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "7b6a223fad4cd28978c1c7f197ce05c66580244106fe037c034fae266b06db7c",
+      "oldRow": 435,
+      "currentRow": 437,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "7ba1a6e07472e40e723f3c01ed85564738fc1881c65387b43ca4f0d16c9b69c0",
+      "oldRow": 409,
+      "currentRow": 411,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "7d57509e527cd4436271846290b0ff6bfb00e20817b5c8138f56b517b33f1310",
+      "oldRow": 372,
+      "currentRow": 374,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    },
+    {
+      "id": "7f7e486a02001732e7bb84fb171b3fd840222ebf5394d35d1ba761ce01a737ad",
+      "oldRow": 369,
+      "currentRow": 371,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    },
+    {
+      "id": "819281ca0a6c6a7334e195098b188d382db1def363a5c587d9f55d0b3922a5bc",
+      "oldRow": 786,
+      "currentRow": 790,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "82068e2110591fbf834d8ac8f17318ed1181d21f7c167ddf44f73ccecd61f600",
+      "oldRow": 535,
+      "currentRow": 535,
+      "assembly": "Bosak.XPath.Runtime",
+      "reviewGroup": "RuntimeDependencyReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "82973c84f74f767fc884ae4dd3c6f003ea951a5e558624b9228de19ea0a13bb4",
+      "oldRow": 668,
+      "currentRow": 672,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8304f6f72cb16c79d87291e4f0d9ec817f140c14f0aa23c7f485c60043a62a81",
+      "oldRow": 314,
+      "currentRow": 316,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8681cbe9df31fe62fa7586eedc90839bcda1927b59e60f8da3c3886085104bcf",
+      "oldRow": 803,
+      "currentRow": 807,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8ac3548c062fc6d3529474d70710c9369cf794efd116476bef463feb69262c34",
+      "oldRow": 546,
+      "currentRow": 548,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8c2d296ed9dd21d00bb88ad9e60dc2b909124d3e3f7daf596eac254cd3a2ec6d",
+      "oldRow": 400,
+      "currentRow": 402,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8d2aa5a8a9d1bbf46f218097be6d3e71a33a1981b82aac1b9a69f5ca60cd0951",
+      "oldRow": 356,
+      "currentRow": 358,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "8f318b0f2986e198f5a014541e9b52c3ecac9791fc47d76403c0fbae2862e56c",
+      "oldRow": 117,
+      "currentRow": 117,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "911b66588ed7045b5ea9ee53f659684f5990585d7e0daa39c123405243b5e6e6",
+      "oldRow": 338,
+      "currentRow": 340,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "9469ba8049563aecd111f389b008878b58c8cbc20e343d322798c25fd94f9fa2",
+      "oldRow": 687,
+      "currentRow": 691,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "967a640b6fd987f7bfeff6f331d4b1b87ffd32540f5b473a1577b2cf097c5387",
+      "oldRow": 568,
+      "currentRow": 570,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "990b8d0b4fc94332fbcc5cd1272e679cf95e5f7ac6021db097cb4a362fabb9d2",
+      "oldRow": 410,
+      "currentRow": 412,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "9cbe29a3248ddc5be817edfec8225670dca5aee4ed299aa9eee37a53bf6ad742",
+      "oldRow": 773,
+      "currentRow": 777,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "9df1e8819891cc5d11cda8550b2a39874746104da08841686f615fff4077a62a",
+      "oldRow": 567,
+      "currentRow": 569,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "a0029fa0a74b2a4d3673f06523c757148e172235133542acaed8b48a68bc46c4",
+      "oldRow": 415,
+      "currentRow": 417,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "a3e6d0e30d2edf241b080a5af62f03fd45ca373c76c14ec8e8a19664e9fb2f77",
+      "oldRow": 679,
+      "currentRow": 683,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "a40ca5f3621ea2ca901c5a2e69e9f58e389264b5b999668b01f7d3c695552a77",
+      "oldRow": 688,
+      "currentRow": 692,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "a4128f678bbf9d72e1fdda43cbb39cb1bd621a1c8a175dd4d595efa93e75ad24",
+      "oldRow": 633,
+      "currentRow": 637,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "a678e3e3aa68a25c8fa390f4aa2a3dd1124ad45c1198abff697ddf6c4baaf8ed",
+      "oldRow": 327,
+      "currentRow": 329,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "aa8b6e0615b39f15c945cf0b655aa74d6cd7cec848704a635b00e262db811450",
+      "oldRow": 431,
+      "currentRow": 433,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "af5383287372234db19671a1f50de1b0e2e729dd4e5309a7cc64c2e2f92233ab",
+      "oldRow": 766,
+      "currentRow": 770,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "DraftMemberReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b4447fe3e625158989f9de58fdeed5d6107e090c64fa6ce816ecdc01f679ae28",
+      "oldRow": 672,
+      "currentRow": 676,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b4fa935b9fcbd6f5d7ca8c4fd4aac2a5f21ff13c5e7d29cb7f953c5df7ee754c",
+      "oldRow": 403,
+      "currentRow": 405,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b61058aca22bde81d5dc8c0e2d09ef0eca56ed8e825979670a07f26831a63c49",
+      "oldRow": 427,
+      "currentRow": 429,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b6d9ecf894def3d16127ad0b00baf518d312426014cd3e695cfd49f84610ff6c",
+      "oldRow": 564,
+      "currentRow": 566,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b75ecb0bbebb8424176a4d604fd9aeb1b720099ab8bc1d9ef3841a86458c2e5b",
+      "oldRow": 434,
+      "currentRow": 436,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "b7cf15fe90d87045485829cd0af80ec1b9b82400fba48a6a59516dc6e2917c4a",
+      "oldRow": 674,
+      "currentRow": 678,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "bdd0fe136f52eee182b734f5e678b284a9be75205bac8de4ff96b1e9a907f231",
+      "oldRow": 282,
+      "currentRow": 284,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    },
+    {
+      "id": "c06437a5013769114df307ad463adacb933275c1a93f65aa3e70822675a25674",
+      "oldRow": 334,
+      "currentRow": 336,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "c07e8f2e282797a42fa135d45a70778b13efdfd1f1d55c92accca00da104513f",
+      "oldRow": 664,
+      "currentRow": 668,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "c1447a1d4f71659cc19ef307d22a30397a2ee333b4202d2a7d8f41474db87973",
+      "oldRow": 426,
+      "currentRow": 428,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "c30fc20be5f6d751ef0701c24998eecc7d04023f634ce8c5c90e26fc96d9a613",
+      "oldRow": 306,
+      "currentRow": 308,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "c8a9d85e0619efca43e75386b8d1cbb158533ed37d534e1d9c393f1a219bc22b",
+      "oldRow": 116,
+      "currentRow": 116,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "cb459fbc84bef66b44b60a0685de2a61db759ba586ecc0b27f6ddf185f9d1b93",
+      "oldRow": 304,
+      "currentRow": 306,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "cc002a8bfa20dc733c11e02b2350ed3ebf9a7d2f2661257a0e5f1cf1fa7ed2d8",
+      "oldRow": 594,
+      "currentRow": 597,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "DraftMemberReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "cc864355b18da8f880a025e0da609f8ebf001883ec9d7dfca26ab506b021d98f",
+      "oldRow": 673,
+      "currentRow": 677,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "cddd56a17be0e0acaf745dae8714866274d7671479ca48146c3dc05cb8820a69",
+      "oldRow": 339,
+      "currentRow": 341,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "cff293479ca4fcc5784b17fac41da96d63b603f62027d9c2f1b87b129d5d22cb",
+      "oldRow": 355,
+      "currentRow": 357,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d256cbea740a326fb870a7df353f45fcc5437a74c6aa4d8d4044200452902fb6",
+      "oldRow": 561,
+      "currentRow": 563,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d2892baf71c85ada5ce1e5df51e7039c91ac37dd578fae3a93448a6ebfb17fd9",
+      "oldRow": 113,
+      "currentRow": 113,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d3dda174c58cb36cac967ddf93d02c995df64d3cf74e58a9c710d198c0861b88",
+      "oldRow": 671,
+      "currentRow": 675,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d63a59b36b851611febe1eb7947a23fe50c98d05ba2965371d3bb03939676350",
+      "oldRow": 432,
+      "currentRow": 434,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d8ba8197a9ec333bd7a1ecba7235f83aeeb89e020b1f86c0752948ef04d9eed0",
+      "oldRow": 418,
+      "currentRow": 420,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d9120cbc390ce2bc3e8658d6d7921243d68b9fb3b49561c435ece8bf3b33e3e9",
+      "oldRow": 663,
+      "currentRow": 667,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "d96ed24f989218370f8f4d9f7f366a23d6bdeb947d4bee7327161f1d2783205b",
+      "oldRow": 684,
+      "currentRow": 688,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "db08f72b471a66de0a2051cf6945d5cbfec6b119418b2b68c0e8e1255023ff9c",
+      "oldRow": 343,
+      "currentRow": 345,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "dc2a5440239586153bd9cc9a90d19c6a3895c1f6788f9d965248dfd9bc2f7351",
+      "oldRow": 744,
+      "currentRow": 748,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "dca9578302d61bda9d43f539d7f18f232b9d6ddcf6936887d8efc6b55dccc6f2",
+      "oldRow": 330,
+      "currentRow": 332,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "dd73f061e037695f59dfab00e7257c635ee7383ef569df7ebe3e362aada669b9",
+      "oldRow": 667,
+      "currentRow": 671,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "e1cf9eba43c05c4dfa08987301d5e8dbffbc0e7284983534084024cad669d0aa",
+      "oldRow": 681,
+      "currentRow": 685,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "e4fcdab1ccd9952b6e23355956d4e9318be8a9b4bad5219260de40c006995be1",
+      "oldRow": 351,
+      "currentRow": 353,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "e55ab4cc01dfbc876b466a0543034c427c0172b4039bcd168d10a94fdf22ec85",
+      "oldRow": 685,
+      "currentRow": 689,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "SchemaContractReview",
+      "evidenceOnly": false
+    },
+    {
+      "id": "e9da149d8effb752b2affb7604d6b866bbfd2f8e875e5ed27052b589a4f32ec3",
+      "oldRow": 100,
+      "currentRow": 100,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    },
+    {
+      "id": "ee099080711640ba5438664e76d720b89effc0388398de121198e9593592ac34",
+      "oldRow": 402,
+      "currentRow": 404,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "efbf0d37a74262194e46a1ffd5123f83af69461b5af55e65749faa9b825e4ea2",
+      "oldRow": 309,
+      "currentRow": 311,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f04bbde25d530f3d151a1c69f50ca3ce882049d6182c8a0f8ee2da2f4924d79e",
+      "oldRow": 352,
+      "currentRow": 354,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f19df53b08e14a5ed601e2329269d71edaa0a1fbacf51bcdf9f56951de3f4d40",
+      "oldRow": 634,
+      "currentRow": 638,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f1a698f8dd504527137d47217851e8c791867a1bcd97b925adfd3a159201bd34",
+      "oldRow": 412,
+      "currentRow": 414,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f2441d9f9977495605b234aab7874457ca116f6471ca161688b2fb0d4797d613",
+      "oldRow": 348,
+      "currentRow": 350,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f2c73336e8ac52abf20eba5355029478e79fa5ccc71c4a98586418ed4321eb11",
+      "oldRow": 346,
+      "currentRow": 348,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f4091aa542509de133b2605198baf4a303bf18aaab9946c47d778035813c3b2f",
+      "oldRow": 769,
+      "currentRow": 773,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f5c036300034df61985c70f04bba76c98fd784243176a6be5e38c7ff3a1fc8a3",
+      "oldRow": 332,
+      "currentRow": 334,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f7127fb21e327e93efc55bf8bbe739e62c6de53c19deb30bb32ec8d9acccff4d",
+      "oldRow": 683,
+      "currentRow": 687,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "f8673a64b323706292c4955a66c1983743b4331ae2a247d8df202a01bbc6d397",
+      "oldRow": 632,
+      "currentRow": 636,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "fa4843f10f3fb9da612c3262ecf85f4c5f7d284c9f1a56019180745448639d4a",
+      "oldRow": 341,
+      "currentRow": 343,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "fa7859a986066e425171536ca81b7f207e73f21f05c74df4a3789dc8aabf9b5a",
+      "oldRow": 541,
+      "currentRow": 543,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "fb0c5137edf9258d1c33e465adad7b816e432aba37aa453258aa68e69e6cb0ef",
+      "oldRow": 114,
+      "currentRow": 114,
+      "assembly": "Bosak.XPath.Api",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "fdac97ecad2f37c94363a61575bf03bccaf63c61a25c6af71c72ab58c8315f74",
+      "oldRow": 333,
+      "currentRow": 335,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "fedfe92c8741cfbb5ab40dc967250e050bc83ce8d89cdcfbfa3b38b668fbe2f9",
+      "oldRow": 680,
+      "currentRow": 684,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": false
+    },
+    {
+      "id": "ff7738616d21705dae43013776dd054bc5f33dc1dfb849e147e6e4cef6950eb2",
+      "oldRow": 384,
+      "currentRow": 386,
+      "assembly": "Bosak.XPath.Core",
+      "reviewGroup": "FoundationCandidate",
+      "evidenceOnly": true
+    }
+  ],
+  "policySha256": "a0b29a27182e25d366429b5cbf2e82500f4b3282cade4030026fbb6242c24fdd",
+  "classificationAccepted": false
+}

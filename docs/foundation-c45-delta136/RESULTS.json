@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-31",
+  "version": "1.36.0",
+  "assemblies": 11,
+  "exportedTypes": 270,
+  "inventoryEntries": 5770,
+  "priorEntries": 5766,
+  "preservedIds": 5766,
+  "addedMethodEntries": 2,
+  "addedAttributeEvidenceEntries": 2,
+  "removedEntries": 0,
+  "xmlDbMappingsPreserved": 176,
+  "tenQualifiedEngineHashesUnchanged": true,
+  "languageServerRebuilt": true,
+  "newProductionExports": 0,
+  "proposalPublicTypes": 40,
+  "proposalTypesByAssembly": {
+    "Bosak.XPath.Api.C45Proposal": 4,
+    "Bosak.XPath.Core.C45Proposal": 36
+  },
+  "proposalDeclarationRows": 554,
+  "proposedBodiesExecuted": false,
+  "runtimeTestsRun": false,
+  "consumerRuns": "NotRun",
+  "completeObservedInventoryRefreshed": true,
+  "stableManifestAccepted": false,
+  "c45Accepted": false,
+  "apiFreezeAccepted": false
+}
