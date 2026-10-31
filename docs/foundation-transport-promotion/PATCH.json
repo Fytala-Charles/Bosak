@@ -1,0 +1,53 @@
+{
+  "baseRevision": "f2831379819d4f97c4dfd0ab058449b72ae06526",
+  "proposedVersion": "1.36.0",
+  "liveVersion": "1.35.0",
+  "livePatchApplied": false,
+  "qualifiedBodies": {
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+      "qualifiedSourceSha256": "164e7ca0e555e0af70a2e1d10362ee74527b3ef7061640ab4e7fe1578d0b1f69",
+      "significantLinesSha256": "414d6bec9f5774b9b52ce169836931bcc23f818bc28664e7029f0c925c69d562"
+    },
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": {
+      "qualifiedSourceSha256": "4c231d2f35237304291182ed366617567c5a945bac2a85a147f976cef052231e",
+      "significantLinesSha256": "f59825da4dfceabe288fb7b47ec41034af2f3001fc41410c333d0f1d1a46163f"
+    },
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+      "qualifiedSourceSha256": "56125c4b3456dcf10dad3db3d8b7e280a7792dd98fbadfedb0bacbe8f676c2a2",
+      "significantLinesSha256": "c3cd65aa2b2ef03d5495a5505fa84b840584f2f4cde3cfb07f332837ebd8f819"
+    }
+  },
+  "files": {
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+      "file": "files/src/Bosak.XPath.Core/Xdm/XdmValue.cs.txt",
+      "beforeSha256": "d213cdd9be7434a8e86d70504a59b5673d520c70d4cab0a1c88418373e65fd22",
+      "afterSha256": "d59207c30e1f2a3d2d3a1085bd5bce2e085f3ab7095bb10b231e6fa1954aa35e"
+    },
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": {
+      "file": "files/src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs.txt",
+      "beforeSha256": "34832ea2d3d82f365c257792eda885d5010fa5caec42cd97545944dc37344623",
+      "afterSha256": "a143845618d0020fb63fc0b2bb2099463249d81e50acbc5d295afef8a8dfb06d"
+    },
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+      "file": "files/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs.txt",
+      "beforeSha256": "274cc044f6181bcef3adc8ecbcdc4e6d05ab05d85476bc898a4ef8f01368bca4",
+      "afterSha256": "9550849d4ee630de863e0250d3aca33cde40635acf33f0509ae682c29a582818"
+    },
+    "src/Directory.Build.props": {
+      "file": "files/src/Directory.Build.props.txt",
+      "beforeSha256": "df241d603c2b37e9d0bec79c87d2138efac06437f22c53eec581f3d008fe381a",
+      "afterSha256": "f4b6fad3f15497268ad38b85a02b28b508cdaa3f289ba7ff8c7f989040cdc52e"
+    },
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": {
+      "file": "files/tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs.txt",
+      "beforeSha256": null,
+      "afterSha256": "a2997404d8e40bbeba63ed170aa8675d8744052d2392c2b41be158b37f1854d0"
+    },
+    "tests/Bosak.XPath.Runtime.Tests/SchemaValueTransportTests.cs": {
+      "file": "files/tests/Bosak.XPath.Runtime.Tests/SchemaValueTransportTests.cs.txt",
+      "beforeSha256": null,
+      "afterSha256": "a0fb0dbed27f20d1e29729afc31618ebf0f47b81207617030b6180bec2f2a162"
+    }
+  },
+  "patchSha256": "3c13c1a37720d8f055b8aeb24d05b1c88eb8a72a69f42921a8dd3357346938ac"
+}

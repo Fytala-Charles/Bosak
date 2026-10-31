@@ -1,0 +1,37 @@
+[
+    {
+        "name":  "Bosak.XPath.Api",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Compiler",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Core",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Parser",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Providers",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Runtime",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    },
+    {
+        "name":  "Bosak.XPath.Standard",
+        "assemblyVersion":  "1.36.0.0",
+        "fileVersion":  "1.36.0.0"
+    }
+]

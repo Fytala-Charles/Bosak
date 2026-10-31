@@ -12,6 +12,8 @@ Atomic transport/cost qualification (31 October 2026): the isolated candidate co
 
 Full isolated transport qualification (31 October 2026): a complete rebuilt cohort passes all ten unit projects (24,245 tests; database listener sandbox failures retained, full rerun 47/0), QT3 31,397/0/424 and gated qt4 8,941/0/1,918 with 11 experimental passes. Skip maps and actual loaded hashes are verified; retained caller 20/0, native 121 and atomic 376 pass. Public metadata keeps 78 types but gains two declared equality overrides (1,199 to 1,201); inherited signatures/base slots stay unchanged. Production remains 1.35.0. Next: a production promotion patch with explicit override disposition; C45/API freeze pending. See [full qualification and API review](docs/foundation-transport-full-gates/README.md).
 
+Private transport promotion patch prepared (31 October 2026): six-file proposal for 1.36.0 retains the qualified implementation bodies, records the paired equality-override disposition and adds 22 regressions. Isolated preflight passes Core 162/Runtime 281 (443 total), zero-warning builds, seven versioned 1.36.0.0 assemblies, matching public metadata and unchanged caller 20/0. Live source stays 1.35.0; full 1.36 solution/gates remain NotRun. Next: apply and qualify the final-version patch; C45/API freeze pending. See [promotion patch and disposition](docs/foundation-transport-promotion/README.md).
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.

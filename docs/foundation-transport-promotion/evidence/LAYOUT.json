@@ -1,0 +1,11 @@
+{
+  "seven": {
+    "Bosak.XPath.Api.dll": "19f14870df4a75a95be87a61c338e9a4061d2ea259c1f866beff278e6c2ca1c1",
+    "Bosak.XPath.Compiler.dll": "588835b244b9f0fc3d287e09f05d151958c4b72711b17b3b2929bc645f8a982d",
+    "Bosak.XPath.Core.dll": "64944c9bbb2734c72d7c85b061371ff557ff07f570143063035721e3556da66c",
+    "Bosak.XPath.Parser.dll": "aa02b53e17c2b61c9f67f220e372df38632f50cd752629d08905292143bc4ffc",
+    "Bosak.XPath.Providers.dll": "70836fd6c1863bcdc49be4f1f9efff71b72587f70b81a09a6d5e97be03137a13",
+    "Bosak.XPath.Runtime.dll": "167784aafddfe137dc9381adb5c24c3a13b2cfb04ad2fb901b28bf4585e4e98a",
+    "Bosak.XPath.Standard.dll": "0ae6fdd5ffcca31656b089ba9b71ad3f3cd76c98397ba85c32571d25424b9897"
+  }
+}

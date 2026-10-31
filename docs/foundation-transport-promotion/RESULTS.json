@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-31",
+  "baseRevision": "f2831379819d4f97c4dfd0ab058449b72ae06526",
+  "liveVersion": "1.35.0",
+  "proposedVersion": "1.36.0",
+  "productionApplied": false,
+  "patchTargets": 6,
+  "implementationBodiesUnchanged": 3,
+  "newRegressionCases": 22,
+  "preflightTests": {
+    "passed": 443,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Runtime.Tests": 281
+    }
+  },
+  "preflightBuildWarnings": 0,
+  "preflightBuildErrors": 0,
+  "assemblyVersions": "Seven foundation assemblies are 1.36.0.0.",
+  "metadata": {
+    "exportedTypes": 78,
+    "declaredMembers": 1201,
+    "xdmValueSizeX64": 48,
+    "sameAsQualifiedCandidateExceptAssemblyIdentity": true
+  },
+  "retainedCaller": {
+    "passed": 20,
+    "failed": 0,
+    "unchangedBytes": true
+  },
+  "liveApplyCheckExitCode": 0,
+  "fullVersion136SolutionGate": "NotRun",
+  "fullVersion136Qt3Gate": "NotRun",
+  "fullVersion136Qt4Gate": "NotRun",
+  "c45Accepted": false,
+  "apiFreezeAccepted": false
+}

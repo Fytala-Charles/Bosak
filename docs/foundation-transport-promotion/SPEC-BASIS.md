@@ -1,0 +1,7 @@
+# Private transport promotion patch — pre-execution basis
+
+31 October 2026. Prepare a patch against checkpoint f2831379 using the qualified source overlays from 83341091 and full-cohort evidence sealed in docs/foundation-transport-full-gates. Live product source remains 8080b18b/1.35.0. Proposed feature version is 1.36.0; no package publication, public Schema provider API, C45 or API freeze acceptance is included.
+
+Immutable normative pins remain XPath 3.1 REC-xpath-31-20170321 sections 2.1.1, 2.4.2, 3.14.2; XDM 3.1 REC-xpath-datamodel-31-20170321 sections 3.3.1.1–3 and 5.14; F&O 3.1 REC-xpath-functions-31-20170321 sections 18.1, 19, 19.1. No new normative behavior or intentional deviation is introduced. Promotion changes only comments/headers relative to the three qualified implementation bodies, proposes the minor version bump and adds durable unit regressions for the existing isolated behavior.
+
+The patch retains both Equals(object)/GetHashCode overrides as a paired technical disposition. Declared public reflection members rise 1,199 to 1,201; inherited signatures/base slots remain unchanged. This is a proposal for production promotion, not an owner acceptance record. Apply/check it only in a separate source materialization, build and run the affected Core/Runtime unit projects, recheck versioned metadata and the unchanged retained caller. Full final-version solution/conformance qualification remains a subsequent promotion step; historical 1.35.0 candidate gates are not relabeled as 1.36.0 results.

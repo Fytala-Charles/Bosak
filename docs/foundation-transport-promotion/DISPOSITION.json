@@ -1,0 +1,14 @@
+{
+  "technicalRecommendation": "Retain Equals(object) and GetHashCode() overrides together.",
+  "proposedVersion": "1.36.0",
+  "ownerPublicManifestAccepted": false,
+  "c45Accepted": false,
+  "apiFreezeAccepted": false,
+  "productionApplied": false,
+  "exportedTypes": 78,
+  "baselineDeclaredMembers": 1199,
+  "proposedDeclaredMembers": 1201,
+  "inheritedSignaturesUnchanged": true,
+  "baseVirtualSlotsUnchanged": true,
+  "declaringTypeChange": "System.ValueType -> Bosak.XPath.Core.Xdm.XdmValue"
+}

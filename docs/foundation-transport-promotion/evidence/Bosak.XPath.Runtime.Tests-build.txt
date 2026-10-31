@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj (in 130 ms).
+  7 of 8 projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XPath.Runtime.Tests -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.00
