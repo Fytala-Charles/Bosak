@@ -22,5 +22,10 @@
   "productAdoptionImplied": false,
   "fullXsd11ConformanceClaimed": false,
   "braidFoundationEvidence": null,
-  "braidOwnerSignoff": null
+  "braidOwnerSignoff": null,
+  "performanceBudgetsAndWorkloads": null,
+  "performanceBaselineAndCandidateEvidence": null,
+  "performanceOwnerDispositions": null,
+  "apiLongevityReview": null,
+  "finalBreakingFoundationChangeIntended": true
 }

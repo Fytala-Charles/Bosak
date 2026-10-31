@@ -16,6 +16,10 @@ Bosak.Schema remains the implementation owner for full XSD 1.1 validation. Its c
 
 Keep core independent of both concrete providers and private licensing. Schema depends on the core foundation; XmlDb's Xdm adapter depends on Core/Storage and Bosak's XDM contract, while storage metadata/formats retain their own boundaries. Braid is a required foundation design/integration consumer. Its adapters and worker protocol may change to support the selected Schema/XmlDb foundation; its unrelated D02/native/product release gates do not block this work. See [BF140-01–05](braid-foundation-requirements/README.md).
 
+## Performance and API stability intent
+
+The owner intends this to be the final breaking change to the named stable shared foundation. [PF-01–09](foundation-performance/README.md) makes upfront performance design and final-candidate measurement mandatory for Core, Schema, XmlDb and Braid. Resolve known batching/dispatch, allocation/value-carrier, streaming, semantic-cache, persistent-read, snapshot/lease and worker/serialization needs before signatures are frozen. Budgets, representative baseline/target workloads and explicit owner dispositions are required; no numeric performance or future-change guarantee is inferred. Compatible implementation optimizations remain possible after freeze; any unavoidable later break requires explicit major-version/migration review.
+
 ## Coordinated owner queue
 
 | Package | Deliverable | Readiness / dependency |
@@ -23,7 +27,8 @@ Keep core independent of both concrete providers and private licensing. Schema d
 | F140-01 Joint contract and scope inventory | One mapping from full-XSD-1.1 Schema, real XmlDb provider and Braid integration requirements to existing/needed public signatures, invariants, errors, ownership and versioning. Identify the exact freeze surface and all unresolved contract gaps. | Ready now with Schema, XmlDb and Braid owners. Reuse [REQ-139 C139-01](REQ-139-OWNER-WORK-PACKAGES.md); the C45 decision is still required for its permanent schema shape. |
 | F140-02 Missing foundation implementation | Implement only explicitly accepted gaps through REQ-139 and any individually registered XmlDb findings. Preserve no-provider/legacy behavior, XML kind numeric values, source/snapshot identity, original PSVI, lazy/container ownership and existing contracts. | After the corresponding owner scope/adoption decisions. Never make plain XmlDb nodes implement schema contracts merely to satisfy a core default. |
 | F140-03 Required three-consumer qualification | Build and execute actual Schema, XmlDb and Braid consumers against one exact candidate/package set. Cover source/API and unchanged-binary replacement, behavior, layout, provenance, copies, nested/deferred values, disposal/cancellation and supported concurrency. Include Braid typed/persistent inputs, semantic environment, worker ownership and fingerprint/currentness evidence. Preserve existing Braid regression evidence as a separate baseline. | Fixtures and audits ready now; final execution follows the accepted candidate. Required contract gaps in any consumer keep freeze pending. |
-| F140-04 Publish and freeze foundation v1 | Deliver qualified immutable core source/packages and a reviewed public-surface manifest; record explicit Core, Schema, XmlDb and Braid owner disposition for the named stable scope/version and its compatibility policy. | Only after F140-01–03 and fresh engine/gate qualification. Publication and freeze require their own explicit release/disposition; registration is not either action. |
+| F140-04 Publish and freeze foundation v1 | Deliver qualified immutable core source/packages and a reviewed public-surface manifest; record explicit Core, Schema, XmlDb and Braid owner disposition for the named stable scope/version and its compatibility policy. | Only after F140-01–03, F140-05 and fresh engine/gate qualification. Publication and freeze require their own explicit release/disposition; registration is not either action. |
+| F140-05 Performance and API longevity qualification | Execute [PF-01–09](foundation-performance/README.md) on actual representative consumer workloads; compare equivalent baselines/candidate profiles, choose measured budgets and resolve performance-driven signature needs before freeze. | Design/fixture/baseline preparation ready now; exact final candidate reports and all affected owner dispositions required before F140-04. All scenarios currently NotRun. |
 
 ## Required consumer evidence
 
@@ -36,6 +41,9 @@ Keep core independent of both concrete providers and private licensing. Schema d
 The [existing consumer matrix](compatibility/xdm40-2026-10-29/CONSUMER-MATRIX.md) and current [REQ-139 review](REQ-139-OWNER-WORK-PACKAGES.md) are inputs, not a replacement for execution. Refresh exact consumer revisions and requirements before implementation; historical source inspections do not certify current APIs or the moving XDM draft.
 
 ## Freeze acceptance checklist
+
+- [ ] Agree representative workload targets/budgets and qualify PF-01–09 for the exact candidate/profile, including default-path regression, allocations/retained memory, streaming/read amplification, lease/cancellation boundaries and Braid worker costs. Record all four owner dispositions; unresolved required performance-driven contract needs block freeze.
+- [ ] Review the full required functional/performance evolution against the final signature manifest, recording how future backend implementation can proceed without required-member/layout/identity breaks. Final-breaking-change intent is recorded; no absolute future guarantee is claimed.
 
 - [ ] Enumerate exact assemblies, public types/members, required interface members, overload/default behavior, enum values, managed layout and error/ownership/resource contracts in an immutable manifest.
 - [ ] Core and all three consumer owners agree the known required foundation needs are represented; no unresolved required gap is hidden as an implicit future breaking change.

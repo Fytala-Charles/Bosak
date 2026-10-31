@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+Treat the shared freeze as the intended final breaking foundation API change. [PF-01–09](docs/foundation-performance/README.md) requires upfront performance design, representative budgets and final-candidate measurement for Core, Schema, XmlDb and Braid; unresolved performance-driven contract gaps block freeze.
+
 Braid is now a required pre-freeze integration consumer: [BF140-01–05](docs/braid-foundation-requirements/README.md) covers semantic environment, typed/persistent inputs, worker ownership, versioned run identity and real-provider qualification. Core, Schema, XmlDb and Braid must dispose the exact shared scope; unrelated Braid native/trust rollout stays separate.
 
 Both owners have returned requirements, and bounded XmlDb candidate characterization is delivered. The [31 October reconciliation](docs/foundation-owner-reconciliation/README.md) proposes answers to Schema’s four questions and XmlDb’s six return items. Next select exact authority/annotation/session/value-transport signatures and immutable semantic adoption; do not repeat the missing-requirements inventory.
