@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+The [V4 Core candidate](docs/foundation-granularity-experiment/README.md) now has 33 review types, excluding two unused host-operation interfaces. Synthetic E-03 results favor retaining complete bulk closure with bounded internal reuse; no new public batch/cursor/scalar-dependency API is selected. Next map retained members to actual owner call sites/workloads and finalize the finite implementation disposition.
+
 The [V3 assessment/advisor and compatible-view proposal](docs/foundation-advisor-contract/README.md) now compiles with 54 passing synthetic boundary controls. Reconcile its 35-type inventory against actual provider/consumer needs and run the bulk/cursor/per-call-cost experiment before selecting the stable public surface; test-double success is not production acceptance.
 
 [Provenance and operation ownership](docs/foundation-provenance-lifetime/README.md) now has ten proposed transition rules, a compiled V2 atomic-evidence amendment and controlled file-lifetime evidence. Keep raw-operation ownership out of canceled waiting scopes. Next reconcile these rules with real providers and finish advisor/compatible-view signatures before final scope.

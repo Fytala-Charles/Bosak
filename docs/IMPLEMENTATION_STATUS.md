@@ -26,6 +26,8 @@ C139-01 provenance/lifetime review — 31 October 2026: [PL-01–10 and V2 decla
 
 C139-01 advisor/compatible-view proposal — 31 October 2026: [V3 declarations and 54 controls](foundation-advisor-contract/README.md) add captured query/static context, provider-prepared assessor/advisor, assessment episode/input/evidence, bounded/location-aware diagnostics, fresh simple construction and directional source/target/profile-bound compatibility. Three synthetic protocol runs and XML-doc/warnings-as-errors compilation pass. The 35-type surface is a review inventory, not blanket Core API acceptance; actual compiler capture, provider assessment/compatibility, carrier/performance and host mapping remain open. Full N1–N8/XmlDb/Braid trace retained. No production source/pin/gate or freeze change. Delivery: `git log -1 --format=%H -- docs/foundation-advisor-contract/README.md`.
 
+C139-01 granularity and Core-scope reduction — 31 October 2026: [E-03/V4 return](foundation-granularity-experiment/README.md) compares scalar/bulk/cache/certified-cursor and lookup strategies on 64/4096/65536 synthetic components. Three runs pass 38 controls and 99 size/mode groups; replayed prior54 protocol controls pass. Keep bulk closure as candidate, avoid new public scalar-dependency/batch/cursor APIs without actual demand, and prefer bounded internal metadata reuse. V4 excludes two unused host-operation interfaces: 35 to33 review types, all retained members unchanged. No real-provider performance, signature acceptance, production/pin or freeze change. Delivery: `git log -1 --format=%H -- docs/foundation-granularity-experiment/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

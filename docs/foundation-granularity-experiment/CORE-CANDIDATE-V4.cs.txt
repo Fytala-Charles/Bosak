@@ -1,0 +1,424 @@
+// Generated V4 Core-candidate isolated API-shape proposal, 31 October 2026. Not production implementation.
+// AUTHOR: Charles Korthout; COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System;
+using System.Collections.Immutable;
+using System.Threading;
+using Bosak.XPath.Core.Xdm;
+namespace C13901.Draft;
+
+/// <summary>Provider-created original component identity; owner verifies membership.</summary>
+public interface ISchemaComponentHandle
+{
+    /// <summary>The admitted authority, not a QName or digest.</summary>
+    ISchemaAuthority Authority { get; }
+}
+/// <summary>Opaque identity of original assessment/source binding; no lease is implied.</summary>
+public interface ISchemaAssessmentOrigin
+{
+    /// <summary>The original host source binding, never a component authority or live lease.</summary>
+    ISchemaSourceBinding Source { get; }
+}
+/// <summary>Opaque original source identity; current copied snapshot identity stays provider-owned.</summary>
+public interface ISchemaSourceBinding { }
+/// <summary>Current atomic type evidence and optional original assessment; not audit lineage.</summary>
+public interface ISchemaAtomicProvenance
+{
+    /// <summary>The current declared/governing type; user-defined types require authority evidence.</summary>
+    ISchemaComponentHandle DeclaredType { get; }
+    /// <summary>The actual selected atomic type, including union member selection.</summary>
+    ISchemaComponentHandle ActualType { get; }
+    /// <summary>The original assessment when present; casts/computed values need not have one.</summary>
+    ISchemaAssessmentOrigin? OriginalAssessment { get; }
+}
+/// <summary>Authority-issued typed value metadata; no ownership transfer.</summary>
+public interface ISchemaTypedValue
+{
+    /// <summary>The governing type, retaining list/union boundaries.</summary>
+    ISchemaComponentHandle GoverningType { get; }
+    /// <summary>Whether the schema value is a list, even for zero or one member.</summary>
+    bool IsList { get; }
+    /// <summary>Atomics in order; each value must retain its own atomic provenance.</summary>
+    XdmSequence Atomics { get; }
+}
+/// <summary>Optional schema channel; existing node implementers are unaffected.</summary>
+public interface ISchemaAnnotatedNode : IXdmNode
+{
+    /// <summary>The original component/assessment view; never rewritten by admission.</summary>
+    ISchemaNodeFacts OriginalSchemaFacts { get; }
+}
+/// <summary>Original node facts, distinct from an authority-compatible view.</summary>
+public interface ISchemaNodeFacts
+{
+    /// <summary>The original governing type.</summary>
+    ISchemaComponentHandle Type { get; }
+    /// <summary>The governing declaration where present.</summary>
+    ISchemaComponentHandle? Declaration { get; }
+    /// <summary>The original assessment/source binding.</summary>
+    ISchemaAssessmentOrigin Origin { get; }
+    /// <summary>True when atomization must report no typed value.</summary>
+    bool HasNoTypedValue { get; }
+    /// <summary>Whether the original assessment is nilled.</summary>
+    bool IsNilled { get; }
+    /// <summary>Reads the actual typed value under the caller-held execution lifetime.</summary>
+    /// <param name="cancellationToken">Cancellation of this read, not owner disposal.</param>
+    /// <returns>The actual typed value, or an explicit unsupported result.</returns>
+    SchemaResult<ISchemaTypedValue> ReadTypedValue(CancellationToken cancellationToken);
+}
+/// <summary>Neutral owned-unsupported versus successful authority outcome.</summary>
+public enum SchemaResultKind
+{
+    /// <summary>A complete supported answer, including false or empty answers.</summary>
+    Supported,
+    /// <summary>A supported lookup found no component.</summary>
+    NotFound,
+    /// <summary>The authority cannot answer the owned capability.</summary>
+    Unsupported,
+    /// <summary>Owned simple-value construction proved the input invalid.</summary>
+    Invalid
+}
+/// <summary>Explicit authority result; construction/invariants remain part of review.</summary>
+/// <typeparam name="T">The supported payload type.</typeparam>
+public abstract class SchemaResult<T>
+{
+    /// <summary>The outcome category.</summary>
+    public abstract SchemaResultKind Kind { get; }
+    /// <summary>The supported payload.</summary>
+    public abstract T Value { get; }
+    /// <summary>The optional provider diagnostic identifier.</summary>
+    public abstract string? DiagnosticCode { get; }
+}
+/// <summary>Provider-owned authority operations; no issuer factories on the public host.</summary>
+public interface ISchemaAuthority
+{
+    /// <summary>Checks actual membership, not the handle's own claimed Authority.</summary>
+    /// <param name="component">The purported component.</param>
+    /// <returns>True only for a component issued by this authority.</returns>
+    bool Owns(ISchemaComponentHandle component);
+    /// <summary>Resolves a type by name without treating that name as authority.</summary>
+    /// <param name="name">The expanded lookup name.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>An owned handle, NotFound, or Unsupported.</returns>
+    SchemaResult<ISchemaComponentHandle> ResolveType(SchemaExpandedName name, CancellationToken cancellationToken);
+    /// <summary>Resolves a element declaration by name without treating that name as authority.</summary>
+    /// <param name="name">The expanded lookup name.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>An owned handle, NotFound, or Unsupported.</returns>
+    SchemaResult<ISchemaComponentHandle> ResolveElementDeclaration(SchemaExpandedName name, CancellationToken cancellationToken);
+    /// <summary>Resolves a attribute declaration by name without treating that name as authority.</summary>
+    /// <param name="name">The expanded lookup name.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>An owned handle, NotFound, or Unsupported.</returns>
+    SchemaResult<ISchemaComponentHandle> ResolveAttributeDeclaration(SchemaExpandedName name, CancellationToken cancellationToken);
+
+    /// <summary>Compares component identity using authority, without mandated handle interning.</summary>
+    /// <param name="first">First owned component.</param>
+    /// <param name="second">Second owned component.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>The authoritative identity comparison or unsupported outcome.</returns>
+    SchemaResult<bool> IsSameComponent(ISchemaComponentHandle first, ISchemaComponentHandle second, CancellationToken cancellationToken);
+    /// <summary>Queries an actual derivation relation.</summary>
+    /// <param name="actual">Original candidate type.</param>
+    /// <param name="expected">Expected governing type.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A supported relation or explicit unsupported outcome.</returns>
+    SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle actual, ISchemaComponentHandle expected, CancellationToken cancellationToken);
+    /// <summary>Queries substitution affiliation without treating names as authority.</summary>
+    /// <param name="member">Candidate declaration.</param>
+    /// <param name="head">Expected head declaration.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A supported relation or explicit unsupported outcome.</returns>
+    SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle member, ISchemaComponentHandle head, CancellationToken cancellationToken);
+    /// <summary>Returns complete declared reachable components, without silent truncation.</summary>
+    /// <param name="governingType">The governing original type.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>The complete closure or explicit unsupported outcome.</returns>
+    SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle governingType, CancellationToken cancellationToken);
+}
+/// <summary>Proposed atomic channel; bodies are intentionally not implemented.</summary>
+public static class SchemaAtomics
+{
+    /// <summary>Observes type evidence and optional original assessment without acquiring a lease.</summary>
+    /// <param name="value">The atomic carrier.</param>
+    /// <param name="provenance">Original provenance if present.</param>
+    /// <returns>True if original atomic provenance is attached.</returns>
+    public static bool TryGetProvenance(in XdmValue value, out ISchemaAtomicProvenance? provenance) => throw new NotSupportedException("Shape only");
+}
+
+/// <summary>Query host, separate from schema and data-model versions.</summary>
+public enum QueryHostLanguage
+{
+    /// <summary>XPath host.</summary>
+    XPath,
+    /// <summary>XQuery host.</summary>
+    XQuery,
+    /// <summary>XSLT host.</summary>
+    Xslt,
+}
+
+/// <summary>Language of the compiled schema universe.</summary>
+public enum SchemaLanguageVersion
+{
+    /// <summary>XML Schema 1.0.</summary>
+    Xsd10,
+    /// <summary>XML Schema 1.1.</summary>
+    Xsd11,
+}
+
+/// <summary>Immutable normalized static query context captured by the engine.</summary>
+public interface IQueryStaticContext
+{
+    /// <summary>Captured namespace bindings; no caller aliases.</summary>
+    ImmutableDictionary<string, string> Namespaces { get; }
+    /// <summary>Captured lexical static variable declarations.</summary>
+    ImmutableDictionary<string, string> StaticVariableTypes { get; }
+    /// <summary>Captured enumeration item declarations.</summary>
+    ImmutableDictionary<string, string> EnumerationItemTypes { get; }
+    /// <summary>Expanded-name resolution default.</summary>
+    string DefaultElementNamespace { get; }
+    /// <summary>Defining-context default captured separately.</summary>
+    string DefiningElementDefaultNamespace { get; }
+    /// <summary>Host-defined default function namespace.</summary>
+    string DefaultFunctionNamespace { get; }
+    /// <summary>Captured static base URI.</summary>
+    Uri? BaseUri { get; }
+    /// <summary>Captured static collation selection.</summary>
+    string DefaultCollation { get; }
+    /// <summary>Host backwards-compatibility semantics.</summary>
+    bool BackwardsCompatible { get; }
+    /// <summary>Selected static typing policy.</summary>
+    bool StrictStaticTyping { get; }
+    /// <summary>Selected source normalization behavior.</summary>
+    bool Xml11LineEndings { get; }
+}
+
+/// <summary>Engine-issued semantic environment; descriptive equality does not authenticate it.</summary>
+public interface IQuerySemanticEnvironment
+{
+    /// <summary>Actual compiling host language.</summary>
+    QueryHostLanguage HostLanguage { get; }
+    /// <summary>Actual host language version.</summary>
+    string HostVersion { get; }
+    /// <summary>Immutable adopted data-model revision.</summary>
+    Uri XdmSpecificationRevision { get; }
+    /// <summary>Exact accepted semantic/feature profile.</summary>
+    string BehaviorProfile { get; }
+    /// <summary>Frozen normalized static context.</summary>
+    IQueryStaticContext StaticContext { get; }
+}
+
+/// <summary>Host/provider-captured constants for one assessment episode.</summary>
+public interface ISchemaAssessmentEpisode
+{
+    /// <summary>Constant assessment date/time, independent of ambient clock reads.</summary>
+    DateTimeOffset CurrentDateTime { get; }
+    /// <summary>Constant assessment timezone in supported bounds.</summary>
+    int ImplicitTimezoneOffsetMinutes { get; }
+}
+
+/// <summary>Opaque current snapshot/version identity; not component authority or a lease.</summary>
+public interface ISchemaSnapshotBinding
+{
+}
+
+/// <summary>Borrowed immutable/version-guarded input from trusted host/provider composition.</summary>
+public interface ISchemaAssessmentInput
+{
+    /// <summary>The actual candidate root.</summary>
+    IXdmNode Root { get; }
+    /// <summary>Original input source binding.</summary>
+    ISchemaSourceBinding Source { get; }
+    /// <summary>Current input snapshot/version, distinct from source identity.</summary>
+    ISchemaSnapshotBinding Snapshot { get; }
+    /// <summary>Checks live resource and unchanged snapshot under the admitted host operation.</summary>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    void ThrowIfUnavailable(CancellationToken cancellationToken);
+}
+
+/// <summary>Host-selected assessment request; normative host mapping remains separately adopted.</summary>
+public enum SchemaAssessmentMode
+{
+    /// <summary>Require strict assessment.</summary>
+    Strict,
+    /// <summary>Request lax assessment.</summary>
+    Lax,
+    /// <summary>Assess against an explicit governing type.</summary>
+    Type,
+}
+
+/// <summary>Lookup data only, never an identity issuer.</summary>
+/// <param name="NamespaceUri">Expanded namespace URI.</param>
+/// <param name="LocalName">Nonempty local name.</param>
+public readonly record struct SchemaExpandedName(string NamespaceUri, string LocalName);
+
+/// <summary>Caller-tightened diagnostic budgets; finite provider defaults apply when omitted.</summary>
+/// <param name="MaxDiagnostics">Positive maximum number of returned diagnostics.</param>
+/// <param name="MaxDiagnosticCharacters">Positive aggregate returned diagnostic-text bound.</param>
+public sealed record SchemaAssessmentLimits(int MaxDiagnostics, long MaxDiagnosticCharacters);
+/// <summary>Request data validated by an already-bound advisor.</summary>
+/// <param name="Input">Trusted borrowed input.</param>
+/// <param name="Mode">Selected assessment mode.</param>
+/// <param name="RequestedType">Owned type for Type mode only.</param>
+/// <param name="GoverningDeclaration">Optional owned declaration.</param>
+/// <param name="Episode">Constant assessment context.</param>
+/// <param name="Limits">Optional tightened diagnostic budgets; no permission to relax provider policy.</param>
+public sealed record SchemaAssessmentRequest(ISchemaAssessmentInput Input, SchemaAssessmentMode Mode, ISchemaComponentHandle? RequestedType, ISchemaComponentHandle? GoverningDeclaration, ISchemaAssessmentEpisode Episode, SchemaAssessmentLimits? Limits = null);
+
+/// <summary>Assessment validity/coverage outcome, separate from operation faults.</summary>
+public enum SchemaAssessmentStatus
+{
+    /// <summary>Supported complete validation succeeded.</summary>
+    Valid,
+    /// <summary>An assessed constraint proved invalid.</summary>
+    Invalid,
+    /// <summary>Required assessment coverage is unavailable.</summary>
+    Unsupported,
+}
+
+/// <summary>Optional descriptive input location; never edit or assessment authority.</summary>
+/// <param name="Source">Exact original source binding.</param>
+/// <param name="Snapshot">Exact source snapshot/version binding.</param>
+/// <param name="Node">Original node when available; borrowed, not detached.</param>
+/// <param name="SourceUri">Descriptive source URI subject to host disclosure policy.</param>
+/// <param name="LineNumber">Optional one-based source line.</param>
+/// <param name="LinePosition">Optional one-based source column.</param>
+/// <param name="ByteStart">Optional zero-based original-byte offset.</param>
+/// <param name="ByteLength">Optional byte length; paired with ByteStart.</param>
+public sealed record SchemaDiagnosticLocation(ISchemaSourceBinding Source, ISchemaSnapshotBinding Snapshot, IXdmNode? Node, Uri? SourceUri, int? LineNumber, int? LinePosition, long? ByteStart, long? ByteLength);
+/// <summary>Provider diagnostic; no invented W3C code mapping.</summary>
+/// <param name="Code">Provider diagnostic identifier.</param>
+/// <param name="Message">Human-readable diagnostic.</param>
+/// <param name="Location">Optional original input location; no fabricated range is permitted.</param>
+public sealed record SchemaAssessmentDiagnostic(string Code, string Message, SchemaDiagnosticLocation? Location = null);
+
+/// <summary>Retained original complete or partial provider assessment, not a validator model.</summary>
+public interface ISchemaAssessmentEvidence
+{
+    /// <summary>Original assessment binding.</summary>
+    ISchemaAssessmentOrigin Origin { get; }
+    /// <summary>Original outcome, never rewritten by a view.</summary>
+    SchemaAssessmentStatus Status { get; }
+    /// <summary>Whether all requested coverage was assessed.</summary>
+    bool IsComplete { get; }
+}
+
+/// <summary>Outcome with optional retained evidence; only complete Valid can publish a validated root.</summary>
+public interface ISchemaAssessmentResult
+{
+    /// <summary>Assessment outcome.</summary>
+    SchemaAssessmentStatus Status { get; }
+    /// <summary>Original evidence, including partial/invalid evidence when available.</summary>
+    ISchemaAssessmentEvidence? Evidence { get; }
+    /// <summary>Non-null only for complete Valid; never an invalid/partial ordinary-query root.</summary>
+    IXdmNode? ValidatedRoot { get; }
+    /// <summary>Immutable diagnostics for this input binding.</summary>
+    ImmutableArray<SchemaAssessmentDiagnostic> Diagnostics { get; }
+    /// <summary>Whether diagnostics were truncated; independent of validation coverage/completeness.</summary>
+    bool DiagnosticsTruncated { get; }
+}
+
+/// <summary>Provider-compiled schema closure; acquisition/compilation stay with the provider.</summary>
+public interface ISchemaAssessor
+{
+    /// <summary>Original component universe authority.</summary>
+    ISchemaAuthority Authority { get; }
+    /// <summary>Selected schema language.</summary>
+    SchemaLanguageVersion SchemaLanguage { get; }
+    /// <summary>Exact provider-supported coverage, not a conformance claim.</summary>
+    string AssessmentProfile { get; }
+    /// <summary>Binds to one actual captured query environment without recompiling by default.</summary>
+    /// <param name="environment">Engine-issued immutable environment.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A bound advisor or explicit Unsupported.</returns>
+    SchemaResult<ISchemaAssessmentAdvisor> Bind(IQuerySemanticEnvironment environment, CancellationToken cancellationToken);
+}
+
+/// <summary>Bound borrowed advisor; does not own caller snapshots or host operation control.</summary>
+public interface ISchemaAssessmentAdvisor
+{
+    /// <summary>Exact compiled schema endpoint.</summary>
+    ISchemaAssessor Assessor { get; }
+    /// <summary>Exact environment captured at binding.</summary>
+    IQuerySemanticEnvironment QueryEnvironment { get; }
+    /// <summary>Verifies actual issuance for this bound advisor.</summary>
+    /// <param name="origin">Original assessment to verify.</param>
+    /// <returns>True only for original evidence issued within this endpoint binding.</returns>
+    bool OwnsAssessment(ISchemaAssessmentOrigin origin);
+    /// <summary>Verifies original node facts, not a caller object copying valid handles.</summary>
+    /// <param name="facts">The purported original facts.</param>
+    /// <returns>True only for immutable facts issued by this bound advisor.</returns>
+    bool OwnsNodeFacts(ISchemaNodeFacts facts);
+
+    /// <summary>Checks live borrowed advisor resources before an operation.</summary>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    void ThrowIfUnavailable(CancellationToken cancellationToken);
+    /// <summary>Performs provider-owned assessment and retains original evidence.</summary>
+    /// <param name="request">Validated mode, input, governing handles and episode.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>A Valid, Invalid or Unsupported result; cancellation throws.</returns>
+    ISchemaAssessmentResult Assess(SchemaAssessmentRequest request, CancellationToken cancellationToken);
+    /// <summary>Constructs a simple typed value with fresh target evidence, not inherited validation authority.</summary>
+    /// <param name="input">Atomic/lexical input under the adopted constructor profile.</param>
+    /// <param name="targetType">Owned simple target type.</param>
+    /// <param name="episode">Constant schema episode.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>Supported typed value, Invalid or Unsupported; no fabricated original assessment.</returns>
+    SchemaResult<ISchemaTypedValue> ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode, CancellationToken cancellationToken);
+}
+
+/// <summary>Directional proof outcome, independent of validation.</summary>
+public enum SchemaCompatibilityDecision
+{
+    /// <summary>Endpoints/profile have an explicit admitted proof.</summary>
+    Compatible,
+    /// <summary>A supported proof determines incompatibility.</summary>
+    Incompatible,
+    /// <summary>No supported complete proof is available.</summary>
+    Unsupported,
+}
+
+/// <summary>Admission result; only Compatible contains a view.</summary>
+public interface ISchemaCompatibilityResult
+{
+    /// <summary>Proof outcome.</summary>
+    SchemaCompatibilityDecision Decision { get; }
+    /// <summary>Non-null only for Compatible.</summary>
+    ISchemaCompatibilityView? View { get; }
+    /// <summary>Immutable proof diagnostics.</summary>
+    ImmutableArray<SchemaAssessmentDiagnostic> Diagnostics { get; }
+}
+
+/// <summary>Provider-qualified directional compatibility; never inferred from names/digests.</summary>
+public interface ISchemaCompatibilityAuthority
+{
+    /// <summary>Admits exact source/target/profile endpoints without instance reassessment.</summary>
+    /// <param name="source">Original assessment endpoint.</param>
+    /// <param name="target">Consuming endpoint.</param>
+    /// <param name="executionEnvironment">Exact target environment.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>Compatible view, Incompatible or Unsupported.</returns>
+    ISchemaCompatibilityResult Establish(ISchemaAssessmentAdvisor source, ISchemaAssessmentAdvisor target, IQuerySemanticEnvironment executionEnvironment, CancellationToken cancellationToken);
+}
+
+/// <summary>Endpoint/profile-bound view preserving original provenance.</summary>
+public interface ISchemaCompatibilityView
+{
+    /// <summary>Original source binding.</summary>
+    ISchemaAssessmentAdvisor Source { get; }
+    /// <summary>Consuming target binding.</summary>
+    ISchemaAssessmentAdvisor Target { get; }
+    /// <summary>Exact captured target environment.</summary>
+    IQuerySemanticEnvironment ExecutionEnvironment { get; }
+    /// <summary>Queries a source actual type against an owned target type under admitted proof.</summary>
+    /// <param name="actual">Source-issued type.</param>
+    /// <param name="expected">Target-issued type.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>Supported relation or Unsupported; foreign handles reject.</returns>
+    SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle actual, ISchemaComponentHandle expected, CancellationToken cancellationToken);
+    /// <summary>Checks original source facts against the target declaration without rewriting PSVI.</summary>
+    /// <param name="original">Source-issued original assessment facts.</param>
+    /// <param name="expectedDeclaration">Target-issued element/attribute declaration.</param>
+    /// <param name="cancellationToken">Operation cancellation.</param>
+    /// <returns>Supported match or Unsupported; foreign origins reject.</returns>
+    SchemaResult<bool> MatchesDeclaration(ISchemaNodeFacts original, ISchemaComponentHandle expectedDeclaration, CancellationToken cancellationToken);
+}

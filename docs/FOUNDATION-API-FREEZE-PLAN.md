@@ -115,3 +115,7 @@ The [C139-01 first signature slice](foundation-contract-design/README.md) replac
 ## Assessment/advisor and compatible-view signature proposal — 31 October 2026
 
 [V3 declarations](foundation-advisor-contract/README.md) add the previously missing proposed signature families with explicit query/schema context separation, input/source/snapshot guards, validity/evidence/diagnostic bounds and endpoint-bound compatibility. Three repeats of 54 synthetic controls and zero-warning XML-doc builds pass. Actual provider algorithms, compiler capture, performance/descriptor selection and real consumer/gate qualification remain required; the 35 review types are not an accepted freeze manifest.
+
+## Granularity and reduced Core candidate — 31 October 2026
+
+[E-03/V4](foundation-granularity-experiment/README.md) supplies synthetic scalar/bulk/cache/cursor and lookup evidence, with complete/unsupported/freshness controls. Keep bulk as candidate; internal reuse does not require new public batch/cursor APIs. V4 removes two unreferenced host-operation interfaces from Core placement (35 to33 review types), retaining every other declaration unchanged. Ownership obligations remain with host/provider integration. Real workloads, final member selection, provider/capture/semantic/ABI/consumer gates and four-owner acceptance remain pending.
