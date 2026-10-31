@@ -1,0 +1,19 @@
+{
+  "targetType": "Bosak.XPath.Core.Xdm.XdmValue",
+  "productionMembersAdded": false,
+  "compileWitness": "proposal/ExactNumeric.cs.txt:IXdmValueNumericMemberWitness",
+  "members": [
+    "static XdmValue FromInteger(BigInteger value)",
+    "static XdmValue FromInteger(BigInteger value, string schemaTypeName, string? userSchemaTypeName = null)",
+    "BigInteger BigIntegerValue { get; }",
+    "static XdmValue FromDecimal(XdmExactDecimal value)",
+    "static XdmValue FromDecimal(XdmExactDecimal value, string schemaTypeName, string? userSchemaTypeName = null)",
+    "XdmExactDecimal ExactDecimalValue { get; }"
+  ],
+  "legacySignaturesRetained": true,
+  "legacyNarrowing": "Existing integer/decimal accessors preserve wrong-kind checks and must refuse out-of-range or inexact values rather than round.",
+  "bigIntegerAccess": "Accept Kind.Integer and recognized legacy decimal-backed integer values; reject ordinary decimal kind values without integer classification.",
+  "exactDecimalAccess": "Accept Kind.Decimal, including existing integer-tagged decimal representations; preserve wrong-kind refusal for Kind.Integer.",
+  "annotationStrings": "Ordinary schema-name annotation overloads do not authenticate authority, provenance or assessment.",
+  "quotaBoundary": "Already-created BigInteger input does not bound caller allocation; admission, parsing and arithmetic must enforce session limits separately."
+}

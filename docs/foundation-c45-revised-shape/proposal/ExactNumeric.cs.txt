@@ -1,0 +1,47 @@
+// Generated isolated declaration proposal; not production implementation.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Numerics;
+namespace Bosak.XPath.Core.Xdm;
+/// <summary>An exact finite decimal represented by a normalized coefficient and nonnegative scale.</summary>
+public readonly struct XdmExactDecimal : IEquatable<XdmExactDecimal>
+{
+    /// <summary>Checks supplied limits before normalization; zero normalizes to scale zero.</summary>
+    /// <param name="coefficient">Signed arbitrary precision coefficient already owned by the caller.</param>
+    /// <param name="scale">Nonnegative power of ten dividing the coefficient.</param>
+    /// <param name="maxCoefficientDigits">Positive bound on supplied coefficient digits, before normalization.</param>
+    /// <param name="maxScale">Nonnegative bound on supplied scale.</param>
+    /// <exception cref="ArgumentOutOfRangeException">A bound or scale is invalid.</exception>
+    /// <exception cref="NotSupportedException">The supplied representation exceeds capacity.</exception>
+    public XdmExactDecimal(BigInteger coefficient, int scale, int maxCoefficientDigits, int maxScale) => throw new NotSupportedException("Proposal only");
+    /// <summary>The normalized coefficient; default represents zero.</summary>
+    public BigInteger Coefficient => throw new NotSupportedException("Proposal only");
+    /// <summary>The normalized nonnegative scale.</summary>
+    public int Scale => throw new NotSupportedException("Proposal only");
+    /// <summary>Formats a normalized numeric string only within the supplied output capacity.</summary>
+    /// <param name="maxCharacters">Positive output character limit, including sign and decimal point.</param>
+    /// <returns>Invariant numeric text; not an XSD canonical-lexical serializer.</returns>
+    /// <exception cref="NotSupportedException">Output exceeds capacity.</exception>
+    public string ToInvariantString(int maxCharacters) => throw new NotSupportedException("Proposal only");
+    /// <summary>Compares numeric normalized coefficient and scale.</summary>
+    /// <param name="other">Other exact value.</param>
+    /// <returns>Whether values are numerically equal.</returns>
+    public bool Equals(XdmExactDecimal other) => throw new NotSupportedException("Proposal only");
+    /// <summary>Compares an exact decimal with an object.</summary>
+    /// <param name="obj">Other value.</param>
+    /// <returns>Whether the other value is an equal exact decimal.</returns>
+    public override bool Equals(object? obj) => throw new NotSupportedException("Proposal only");
+    /// <summary>Hashes the normalized numeric value.</summary>
+    /// <returns>A hash consistent with numeric equality.</returns>
+    public override int GetHashCode() => throw new NotSupportedException("Proposal only");
+}
+// This internal interface checks intended signatures only. It does not add members to XdmValue.
+internal interface IXdmValueNumericMemberWitness
+{
+    static abstract XdmValue FromInteger(BigInteger value);
+    static abstract XdmValue FromInteger(BigInteger value, string schemaTypeName, string? userSchemaTypeName = null);
+    BigInteger BigIntegerValue { get; }
+    static abstract XdmValue FromDecimal(XdmExactDecimal value);
+    static abstract XdmValue FromDecimal(XdmExactDecimal value, string schemaTypeName, string? userSchemaTypeName = null);
+    XdmExactDecimal ExactDecimalValue { get; }
+}

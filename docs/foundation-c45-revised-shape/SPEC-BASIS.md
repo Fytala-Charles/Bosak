@@ -1,0 +1,7 @@
+# Revised C45 declaration basis
+
+31 October 2026, before declaration compilation. Inherit the immutable sources and affected sections in the [numeric/host basis](../foundation-c45-domains-hosts/SPEC-BASIS.md) and [exact numeric experiment](../foundation-exact-numeric-prototype/SPEC-BASIS.md). This step proposes signatures, not new production semantic adoption or API acceptance.
+
+Preserve the previous provider/lifetime declarations. Add explicit coefficient-digit and scale limits; declare exact numeric representation/access and host-specific compilation/invocation. Keep Core free of Runtime/API/host dependencies, API free of concrete XQuery/XSLT dependencies, and host producers above API. Bodies refuse execution. Existing XdmValue cannot be extended across assemblies: compile an internal member witness and retain an explicit intended-member ledger rather than pretending new members exist on the actual product type.
+
+Selected finite XSLT profile admits document roots as initial-match/global-context inputs through identified snapshots; arbitrary item/sequence initial selection, atomic global context and streaming are explicitly outside this proposal profile and must return Unsupported without implicit materialization. Full profile coverage remains an owner decision before freeze. The earlier named-template focus observation requires these inputs to remain separate. No private authority attachment or public arbitrary-executable producer is added.

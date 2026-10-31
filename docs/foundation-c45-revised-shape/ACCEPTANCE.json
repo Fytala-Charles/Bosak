@@ -1,0 +1,19 @@
+{
+  "accepted": false,
+  "productionImplemented": false,
+  "cases": [
+    {"id":"RS-01","status":"NotRun","case":"Numeric factories/accessors preserve large positive/negative integers and exact decimals, reject wrong kinds, and preserve legacy decimal-backed integer classification."},
+    {"id":"RS-02","status":"NotRun","case":"Legacy narrowing rejects overflow and inexact decimals; no rounding or double fallback in the opt-in exact lane."},
+    {"id":"RS-03","status":"NotRun","case":"Digit/scale/output limits reject before oversized parsing/arithmetic/formatting allocations; default limits reject and scale zero succeeds."},
+    {"id":"RS-04","status":"NotRun","case":"Exact payload storage coexists with authenticated evidence, scalar equality/hash, revocation and snapshot lifetime; preserve measured 48-byte layout and inline path."},
+    {"id":"RS-05","status":"NotRun","case":"XQuery producer freezes effective prolog/module context; later compiler mutation cannot alter binding or execution; Evaluate runs inside the actual operation."},
+    {"id":"RS-06","status":"NotRun","case":"XSLT freezes compiler options, static parameters, package closure and selected resolver/resource policy; unsupported mutable capabilities refuse without legacy fallback."},
+    {"id":"RS-07","status":"NotRun","case":"Named-template initial match and global context remain separate, including source-free work, absent-context errors and two distinct admitted snapshots."},
+    {"id":"RS-08","status":"NotRun","case":"Transform rejects foreign/closed operations and unadmitted input/context node graphs; typed values survive raw results without serialize/reparse."},
+    {"id":"RS-09","status":"NotRun","case":"Arbitrary initial item sequences, atomic global context and streaming reject explicitly in this bounded profile; owners decide whether broader signatures are needed before freeze."},
+    {"id":"RS-10","status":"NotRun","case":"All three hosts enforce exact numeric and dynamic-input policies, constructor/assessment dispatch, multi-source lease ordering, cancellation, close/drain and deferred consumption."}
+  ],
+  "priorCases": "../foundation-c45-delta136/ACCEPTANCE.json",
+  "priorRequirementMapping": "../foundation-c45-delta136/evidence/REQUIREMENT-MAPPING.json",
+  "ownerDisposition": "Pending"
+}
