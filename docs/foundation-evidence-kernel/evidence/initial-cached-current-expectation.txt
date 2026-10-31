@@ -1,0 +1,4 @@
+System.Exception: K22-deferred-current-refused
+   at Program.<>c__DisplayClass0_0.<<Main>$>g__Check|0(String id, Boolean ok) in D:\Development\Bosak\.guard-tmp\evidence-kernel\kernel\Runner\Program.cs:line 19
+   at KernelChecks.Run(Action`2 check, XsdDocumentAssessor compiled, NativeAdapter owner, NativeView original, NativeNode first) in D:\Development\Bosak\.guard-tmp\evidence-kernel\kernel\Runner\Program.cs:line 284
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\evidence-kernel\kernel\Runner\Program.cs:line 55

@@ -1,0 +1,103 @@
+// Generated private evidence-kernel diagnostic; no production API or lifetime adoption.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
+using C13901.Draft;
+using Bosak.XPath.Core.Xdm;
+
+static class EvidenceKernel {
+ static readonly ConditionalWeakTable<NativeAdapter,Registration> registrations=new();
+ public static int ConstructorCalls=0,NoOpReuses=0,FreshInteger=0,UnknownTargets=0,UnissuedMarkers=0;
+ public static Registration For(NativeAdapter owner)=>registrations.GetValue(owner,o=>new Registration(o));
+ public static XdmValue Attach(NativeAdapter owner,ISchemaTypedValue value){
+  // Issuance precedes every untrusted getter; the source snapshot is checked separately.
+  if(!owner.TryGetValueView(value,out var view))throw new ArgumentException("Unissued container");
+  var scope=For(owner).Get(view);scope.Check();
+  return scope.CachedOrCreate(value,()=>{
+   var cells=owner.Read(value);if(cells.Length!=1)throw new ArgumentException("Native scalar boundary");
+  var cell=cells[0];var evidence=cell.TypeEvidence;
+  if(evidence is null||!owner.Owns(evidence.DeclaredType)||!owner.Owns(evidence.ActualType)||!ReferenceEquals(evidence.OriginalAssessment,view.Origin)||!owner.OwnsOrigin(evidence.OriginalAssessment!))throw new ArgumentException("Unissued evidence");
+  if(cell.Value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)throw new ArgumentException("Non-atomic cell");
+   return Store(cell.Value,new Carrier(owner,scope,cell.Value,evidence));
+  });
+ }
+ static XdmValue Store(XdmValue value,Carrier carrier){
+#if GUARDED
+  return XdmValue.PrototypeAttach(value,carrier);
+#else
+  return value;
+#endif
+ }
+ public static ISchemaAtomicProvenance? ReadEvidence(XdmValue value){
+#if GUARDED
+  if(XdmValue.PrototypeMarker(value) is not Carrier carrier)return null;
+  carrier.Scope?.Check();
+  var plain=XdmValue.PrototypeStrip(value);
+  if(plain.Kind!=carrier.Plain.Kind||plain.SchemaTypeName!=carrier.Plain.SchemaTypeName||plain.UserSchemaTypeName!=carrier.Plain.UserSchemaTypeName||!XdmValueEqualityComparer.Instance.Equals(plain,carrier.Plain))throw new ArgumentException("Carrier rebound to changed payload");
+  return carrier.Evidence;
+#else
+  return null;
+#endif
+ }
+ public static XdmValue AfterCast(XdmValue before,string target,XdmValue after){
+#if GUARDED
+  var marker=XdmValue.PrototypeMarker(before);
+  if(marker is null)return after;
+  ConstructorCalls++;
+  var plain=XdmValue.PrototypeStrip(after);
+  if(marker is not Carrier carrier){UnissuedMarkers++;return plain;}
+  _=ReadEvidence(before); // Checks current snapshot and unchanged marker payload before use.
+  var decimalTarget=target is "decimal" or "xs:decimal" or "xsd:decimal";
+  var integerTarget=target is "integer" or "xs:integer" or "xsd:integer";
+  if(decimalTarget){
+   var expected=carrier.Owner?.DecimalHandle??BuiltinAuthority.Decimal;var e=carrier.Evidence;var authority=expected.Authority;
+   bool exact=authority.Owns(e.DeclaredType)&&authority.Owns(e.ActualType)&&authority.IsSameComponent(e.DeclaredType,expected,default).Value&&authority.IsSameComponent(e.ActualType,expected,default).Value;
+   if(exact&&plain.Kind==carrier.Plain.Kind&&plain.SchemaTypeName==carrier.Plain.SchemaTypeName&&plain.UserSchemaTypeName==carrier.Plain.UserSchemaTypeName&&XdmValueEqualityComparer.Instance.Equals(plain,carrier.Plain)){NoOpReuses++;return before;}
+   if(plain.Kind!=XdmValueKind.Decimal)throw new ArgumentException("Unexpected decimal cast result");
+   var fresh=new NativeEvidence(BuiltinAuthority.Decimal,BuiltinAuthority.Decimal,null);return Store(plain,new Carrier(null,null,plain,fresh));
+  }
+  if(integerTarget&&plain.Kind==XdmValueKind.Integer){var e=carrier.Evidence;if(ReferenceEquals(e.DeclaredType,BuiltinAuthority.Integer)&&ReferenceEquals(e.ActualType,BuiltinAuthority.Integer)&&plain.Kind==carrier.Plain.Kind&&plain.SchemaTypeName==carrier.Plain.SchemaTypeName&&plain.UserSchemaTypeName==carrier.Plain.UserSchemaTypeName&&XdmValueEqualityComparer.Instance.Equals(plain,carrier.Plain)){NoOpReuses++;return before;}
+   FreshInteger++;var fresh=new NativeEvidence(BuiltinAuthority.Integer,BuiltinAuthority.Integer,null);return Store(plain,new Carrier(null,null,plain,fresh));}
+  UnknownTargets++;return plain;
+#else
+  return after;
+#endif
+ }
+ sealed record Carrier(NativeAdapter? Owner,SnapshotScope? Scope,XdmValue Plain,ISchemaAtomicProvenance Evidence);
+ internal sealed class Registration(NativeAdapter owner):IDisposable {
+  readonly object gate=new();readonly Dictionary<NativeView,SnapshotScope> scopes=new(ReferenceEqualityComparer.Instance);bool disposed;
+  public int ActiveSnapshots{get{lock(gate)return scopes.Count;}}
+  public SnapshotScope Open(NativeView view){lock(gate){if(disposed)throw new ObjectDisposedException("issuer");if(scopes.Count>=owner.SnapshotLimit)throw new InvalidOperationException("Snapshot admission limit");var scope=new SnapshotScope(()=>{lock(gate)scopes.Remove(view);owner.Release(view);});scopes.Add(view,scope);return scope;}}
+  public SnapshotScope Get(NativeView view){lock(gate){if(disposed||!scopes.TryGetValue(view,out var scope))throw new ObjectDisposedException("snapshot");return scope;}}
+  public void Close(NativeView view)=>Get(view).Dispose();
+  public void Dispose(){SnapshotScope[] active;lock(gate){if(disposed)return;disposed=true;active=scopes.Values.ToArray();}foreach(var scope in active)scope.Dispose();}
+ }
+ internal sealed class SnapshotScope:IDisposable {
+  readonly object gate=new();readonly Dictionary<ISchemaTypedValue,XdmValue> cached=new(ReferenceEqualityComparer.Instance);Action? cleanup;int operations;bool closing,cleaned;
+  public SnapshotScope(Action release){cleanup=release;}
+  public int CachedCount{get{lock(gate)return cached.Count;}}
+  public XdmValue CachedOrCreate(ISchemaTypedValue key,Func<XdmValue> create){using var operation=Enter();lock(gate)if(cached.TryGetValue(key,out var existing))return existing;var value=create();lock(gate){if(closing)throw new ObjectDisposedException("snapshot");if(cached.TryGetValue(key,out var existing))return existing;cached.Add(key,value);return value;}}
+  public bool Released{get{lock(gate)return cleaned;}}
+  public bool CleanupReferenceCleared{get{lock(gate)return cleanup is null;}}
+  public void Check(){lock(gate)if(closing)throw new ObjectDisposedException("snapshot");}
+  public IDisposable Enter(){lock(gate){if(closing)throw new ObjectDisposedException("snapshot");operations++;return new Operation(this);}}
+  Action? TakeCleanup(){if(!closing||operations!=0||cleaned)return null;cleaned=true;cached.Clear();var callback=cleanup;cleanup=null;return callback;}
+  public void Dispose(){Action? callback;lock(gate){closing=true;callback=TakeCleanup();}callback?.Invoke();}
+  void Leave(){Action? callback;lock(gate){operations--;callback=TakeCleanup();}callback?.Invoke();}
+  sealed class Operation(SnapshotScope scope):IDisposable {int done;public void Dispose(){if(Interlocked.Exchange(ref done,1)==0)scope.Leave();}}
+ }
+ sealed class BuiltinAuthority:ISchemaAuthority {
+  static readonly BuiltinAuthority instance=new();public static ISchemaComponentHandle Integer{get;}=new BuiltinHandle(instance);public static ISchemaComponentHandle Decimal{get;}=new BuiltinHandle(instance);
+  sealed class BuiltinHandle(ISchemaAuthority authority):ISchemaComponentHandle {public ISchemaAuthority Authority=>authority;}
+  public bool Owns(ISchemaComponentHandle value)=>ReferenceEquals(value,Integer)||ReferenceEquals(value,Decimal);
+  void Guard(CancellationToken t,params ISchemaComponentHandle[] values){t.ThrowIfCancellationRequested();if(values.Any(v=>!Owns(v)))throw new ArgumentException("Foreign builtin handle");}
+  public SchemaResult<bool> IsSameComponent(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Supported,ReferenceEquals(a,b));}
+  public SchemaResult<ISchemaComponentHandle> ResolveType(SchemaExpandedName name,CancellationToken t){t.ThrowIfCancellationRequested();return new NativeResult<ISchemaComponentHandle>(SchemaResultKind.Unsupported);}
+  public SchemaResult<ISchemaComponentHandle> ResolveElementDeclaration(SchemaExpandedName name,CancellationToken t)=>ResolveType(name,t);
+  public SchemaResult<ISchemaComponentHandle> ResolveAttributeDeclaration(SchemaExpandedName name,CancellationToken t)=>ResolveType(name,t);
+  public SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Unsupported);}
+  public SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Unsupported);}
+  public SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle value,CancellationToken t){Guard(t,value);return new NativeResult<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Unsupported);}
+ }
+}

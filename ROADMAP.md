@@ -10,7 +10,9 @@ V5 boundary diagnostics now pass 75 controls. The subsequent native adapter tria
 
 The [native decimal adapter trial](docs/foundation-native-adapter/README.md) passes 61 controls in four real API/VM runs. The subsequent whole-snapshot trial supplies a candidate no-op disposition and navigation evidence; production integration remains pending.
 
-The [whole-snapshot trial](docs/foundation-snapshot-navigation/README.md) passes 162 controls in four runs without changing V5 signatures. Next: private trusted-issuer/evidence-read kernel, authoritative constructor guard and explicit snapshot/cache ownership before full binding and product qualification.
+The [whole-snapshot trial](docs/foundation-snapshot-navigation/README.md) passes 162 controls in four runs without changing V5 signatures. The subsequent private kernel trial supplies constructor and cleanup diagnostics; direct production composition, full binding and product qualification remain pending.
+
+The [private evidence kernel trial](docs/foundation-evidence-kernel/README.md) passes 205 guarded controls twice and retains all 162 prior controls in four runs. Next: direct private Core/runtime composition replacing diagnostic hooks, full advisor/environment and whole-operation qualification, and required product gates.
 
 ## Immediate foundation work
 

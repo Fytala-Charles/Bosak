@@ -1,0 +1,1006 @@
+{
+  "mode": "baseline",
+  "scope": "Unchanged selected native source \u002B V5 adapter \u002B actual package API/VM; holder replaces Core only; whole-snapshot adapter, not full provider acceptance",
+  "checks": [
+    {
+      "id": "N01-native-profile",
+      "passed": true
+    },
+    {
+      "id": "N02-native-valid",
+      "passed": true
+    },
+    {
+      "id": "N03-original-local-components",
+      "passed": true
+    },
+    {
+      "id": "N04-distinct-occurrence-state",
+      "passed": true
+    },
+    {
+      "id": "N05-absent-declaration-retained",
+      "passed": true
+    },
+    {
+      "id": "N06-copy-snapshot",
+      "passed": true
+    },
+    {
+      "id": "N07-copy-original-state",
+      "passed": true
+    },
+    {
+      "id": "N08-anonymous-root",
+      "passed": true
+    },
+    {
+      "id": "N09-original-declaration-handle",
+      "passed": true
+    },
+    {
+      "id": "N10-shared-type-handle",
+      "passed": true
+    },
+    {
+      "id": "N11-copy-type-origin",
+      "passed": true
+    },
+    {
+      "id": "N12-plain-decimal",
+      "passed": true
+    },
+    {
+      "id": "N13-real-original-evidence",
+      "passed": true
+    },
+    {
+      "id": "N14-scalar-no-enumeration",
+      "passed": true
+    },
+    {
+      "id": "N15-equal-digest-distinct-authority",
+      "passed": true
+    },
+    {
+      "id": "N16-foreign-document",
+      "passed": true
+    },
+    {
+      "id": "N17-unissued-value",
+      "passed": true
+    },
+    {
+      "id": "N18-input-mutation-isolated",
+      "passed": true
+    },
+    {
+      "id": "N19-export-mutation-isolated",
+      "passed": true
+    },
+    {
+      "id": "N20-invalid-no-document",
+      "passed": true
+    },
+    {
+      "id": "N21-unsupported-no-document",
+      "passed": true
+    },
+    {
+      "id": "N22-native-cancellation",
+      "passed": true
+    },
+    {
+      "id": "N24-assertion-invalid",
+      "passed": true
+    },
+    {
+      "id": "N25-exactness-unsupported",
+      "passed": true
+    },
+    {
+      "id": "N26-independent-origin",
+      "passed": true
+    },
+    {
+      "id": "N27-actual-component-identity",
+      "passed": true
+    },
+    {
+      "id": "N28-foreign-identity-refused",
+      "passed": true
+    },
+    {
+      "id": "VM-value-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-type-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-value-let",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-let",
+      "passed": true
+    },
+    {
+      "id": "VM-type-let",
+      "passed": true
+    },
+    {
+      "id": "VM-value-array",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-array",
+      "passed": true
+    },
+    {
+      "id": "VM-type-array",
+      "passed": true
+    },
+    {
+      "id": "VM-value-map",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-map",
+      "passed": true
+    },
+    {
+      "id": "VM-type-map",
+      "passed": true
+    },
+    {
+      "id": "VM-value-function",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-function",
+      "passed": true
+    },
+    {
+      "id": "VM-type-function",
+      "passed": true
+    },
+    {
+      "id": "VM-value-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-type-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-value-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-type-copied-node-data",
+      "passed": true
+    },
+    {
+      "id": "VM-value-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-type-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-value-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-type-decimal-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-value-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-type-integer-cast",
+      "passed": true
+    },
+    {
+      "id": "VM-value-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-marker-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-type-sum",
+      "passed": true
+    },
+    {
+      "id": "N23-root-FOTY0012",
+      "passed": true
+    },
+    {
+      "id": "R01-exact-noop",
+      "passed": true
+    },
+    {
+      "id": "R02-changed-value",
+      "passed": true
+    },
+    {
+      "id": "R03-changed-kind-equal-number",
+      "passed": true
+    },
+    {
+      "id": "R04-foreign-target",
+      "passed": true
+    },
+    {
+      "id": "R05-governing-boundary-mismatch",
+      "passed": true
+    },
+    {
+      "id": "R06-actual-type-mismatch",
+      "passed": true
+    },
+    {
+      "id": "T01-cached-first-node",
+      "passed": true
+    },
+    {
+      "id": "T02-parent-wrapper",
+      "passed": true
+    },
+    {
+      "id": "T03-document-wrapper",
+      "passed": true
+    },
+    {
+      "id": "T04-copy-node-identity",
+      "passed": true
+    },
+    {
+      "id": "T05-distinct-occurrences",
+      "passed": true
+    },
+    {
+      "id": "T06-original-facts-reachable",
+      "passed": true
+    },
+    {
+      "id": "T07-namespace-owner",
+      "passed": true
+    },
+    {
+      "id": "T08-namespace-identity",
+      "passed": true
+    },
+    {
+      "id": "T09-non-element-not-assessed",
+      "passed": true
+    },
+    {
+      "id": "T10-mixed-node-coverage",
+      "passed": true
+    },
+    {
+      "id": "Axis-Ancestor",
+      "passed": true
+    },
+    {
+      "id": "Axis-AncestorOrSelf",
+      "passed": true
+    },
+    {
+      "id": "Axis-Attribute",
+      "passed": true
+    },
+    {
+      "id": "Axis-Child",
+      "passed": true
+    },
+    {
+      "id": "Axis-Descendant",
+      "passed": true
+    },
+    {
+      "id": "Axis-DescendantOrSelf",
+      "passed": true
+    },
+    {
+      "id": "Axis-Following",
+      "passed": true
+    },
+    {
+      "id": "Axis-FollowingSibling",
+      "passed": true
+    },
+    {
+      "id": "Axis-Namespace",
+      "passed": true
+    },
+    {
+      "id": "Axis-Parent",
+      "passed": true
+    },
+    {
+      "id": "Axis-Preceding",
+      "passed": true
+    },
+    {
+      "id": "Axis-PrecedingSibling",
+      "passed": true
+    },
+    {
+      "id": "Axis-Self",
+      "passed": true
+    },
+    {
+      "id": "T11-foreign-snapshot-refused",
+      "passed": true
+    },
+    {
+      "id": "T12-copy-snapshot-refused",
+      "passed": true
+    },
+    {
+      "id": "Path-value-child",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-child",
+      "passed": true
+    },
+    {
+      "id": "Path-type-child",
+      "passed": true
+    },
+    {
+      "id": "Path-value-descendant",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-descendant",
+      "passed": true
+    },
+    {
+      "id": "Path-type-descendant",
+      "passed": true
+    },
+    {
+      "id": "Path-value-following-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-following-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-type-following-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-value-preceding-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-preceding-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-type-preceding-sibling",
+      "passed": true
+    },
+    {
+      "id": "Path-value-following",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-following",
+      "passed": true
+    },
+    {
+      "id": "Path-type-following",
+      "passed": true
+    },
+    {
+      "id": "Path-value-preceding",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-preceding",
+      "passed": true
+    },
+    {
+      "id": "Path-type-preceding",
+      "passed": true
+    },
+    {
+      "id": "Path-value-parent",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-parent",
+      "passed": true
+    },
+    {
+      "id": "Path-type-parent",
+      "passed": true
+    },
+    {
+      "id": "Path-value-ancestor",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-ancestor",
+      "passed": true
+    },
+    {
+      "id": "Path-type-ancestor",
+      "passed": true
+    },
+    {
+      "id": "Path-value-document",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-document",
+      "passed": true
+    },
+    {
+      "id": "Path-type-document",
+      "passed": true
+    },
+    {
+      "id": "Path-value-self",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-self",
+      "passed": true
+    },
+    {
+      "id": "Path-type-self",
+      "passed": true
+    },
+    {
+      "id": "Path-value-ancestor-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-ancestor-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-type-ancestor-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-value-descendant-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-descendant-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-type-descendant-or-self",
+      "passed": true
+    },
+    {
+      "id": "Path-value-union-identity",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-union-identity",
+      "passed": true
+    },
+    {
+      "id": "Path-type-union-identity",
+      "passed": true
+    },
+    {
+      "id": "Path-value-attribute",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-attribute",
+      "passed": true
+    },
+    {
+      "id": "Path-type-attribute",
+      "passed": true
+    },
+    {
+      "id": "Path-value-namespace",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-namespace",
+      "passed": true
+    },
+    {
+      "id": "Path-type-namespace",
+      "passed": true
+    },
+    {
+      "id": "Path-value-text",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-text",
+      "passed": true
+    },
+    {
+      "id": "Path-type-text",
+      "passed": true
+    },
+    {
+      "id": "Path-value-comment",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-comment",
+      "passed": true
+    },
+    {
+      "id": "Path-type-comment",
+      "passed": true
+    },
+    {
+      "id": "Path-value-processing-instruction",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-processing-instruction",
+      "passed": true
+    },
+    {
+      "id": "Path-type-processing-instruction",
+      "passed": true
+    },
+    {
+      "id": "Path-value-copy-data",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-copy-data",
+      "passed": true
+    },
+    {
+      "id": "Path-type-copy-data",
+      "passed": true
+    },
+    {
+      "id": "Path-value-copy-distinct",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-copy-distinct",
+      "passed": true
+    },
+    {
+      "id": "Path-type-copy-distinct",
+      "passed": true
+    },
+    {
+      "id": "Path-value-same-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-same-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-type-same-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-value-cross-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-cross-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-type-cross-type-constructor",
+      "passed": true
+    },
+    {
+      "id": "Path-value-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "Path-origin-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "Path-type-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "T13-navigated-root-FOTY0012",
+      "passed": true
+    }
+  ],
+  "checkCount": 162,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "map",
+      "expression": "map{\u0027a\u0027:$v}?a",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "node-data",
+      "expression": "data($n)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "copied-node-data",
+      "expression": "data($copy)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v \u002B 1",
+      "value": "11",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "decimal-cast",
+      "expression": "xs:decimal($v)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "integer-cast",
+      "expression": "xs:integer($v)",
+      "value": "10",
+      "markerPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "sum",
+      "expression": "$v \u002B $w",
+      "value": "15",
+      "markerPreserved": false,
+      "typePreserved": false
+    }
+  ],
+  "navigation": [
+    {
+      "id": "child",
+      "expression": "data($d/invoice/amount)",
+      "values": [
+        "10",
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "descendant",
+      "expression": "data($d//amount)",
+      "values": [
+        "10",
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "following-sibling",
+      "expression": "data($a/following-sibling::amount[1])",
+      "values": [
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "preceding-sibling",
+      "expression": "data($b/preceding-sibling::amount[1])",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "following",
+      "expression": "data($a/following::amount[1])",
+      "values": [
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "preceding",
+      "expression": "data($b/preceding::amount[1])",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "parent",
+      "expression": "data($a/parent::invoice/amount[2])",
+      "values": [
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "ancestor",
+      "expression": "($a/ancestor::invoice) is ($d/invoice)",
+      "values": [
+        "true"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "document",
+      "expression": "root($a) is $d",
+      "values": [
+        "true"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "self",
+      "expression": "data($a/self::amount)",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "ancestor-or-self",
+      "expression": "data($a/ancestor-or-self::amount)",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "descendant-or-self",
+      "expression": "data($a/parent::invoice/descendant-or-self::amount)",
+      "values": [
+        "10",
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "union-identity",
+      "expression": "count(($d//amount | $d/invoice/amount))",
+      "values": [
+        "2"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "attribute",
+      "expression": "count($d/invoice/attribute::*)",
+      "values": [
+        "0"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "namespace",
+      "expression": "string($a/namespace::p)",
+      "values": [
+        "urn:p"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "text",
+      "expression": "string($a/text())",
+      "values": [
+        "10.00"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "comment",
+      "expression": "count($d/invoice/comment())",
+      "values": [
+        "1"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "processing-instruction",
+      "expression": "count($d/processing-instruction())",
+      "values": [
+        "1"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "copy-data",
+      "expression": "data($copy/invoice/amount)",
+      "values": [
+        "10",
+        "5"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "copy-distinct",
+      "expression": "not($d is $copy)",
+      "values": [
+        "true"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "same-type-constructor",
+      "expression": "xs:decimal(data($d/invoice/amount[1]))",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "cross-type-constructor",
+      "expression": "xs:integer(data($d/invoice/amount[1]))",
+      "values": [
+        "10"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    },
+    {
+      "id": "arithmetic",
+      "expression": "sum($d/invoice/amount)",
+      "values": [
+        "15"
+      ],
+      "originPreserved": false,
+      "typePreserved": false
+    }
+  ],
+  "kernelChecks": {
+    "enabled": false
+  },
+  "snapshotMetrics": {
+    "original": {
+      "elementFacts": 3,
+      "regularWrappers": 9,
+      "namespaceWrappers": 6
+    },
+    "copy": {
+      "elementFacts": 3,
+      "regularWrappers": 7,
+      "namespaceWrappers": 0
+    }
+  },
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d",
+      "context": "Default",
+      "collectible": false
+    }
+  ]
+}
