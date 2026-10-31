@@ -1,0 +1,69 @@
+from pathlib import Path
+import json,subprocess,hashlib
+E=Path('docs/conformance/k03-unicode-names/evidence');D=Path('.guard-tmp/k03-driver');E.mkdir(parents=True,exist_ok=True);D.mkdir(exist_ok=True)
+fixtures=['tests/qt4tests/fn/map-to-element.xml']
+pin=dict(date='2026-10-27',sourceBase=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),scope='Read-only K03 trace: original map-to-element-053, public XPath conversion controls, platform and existing provider codec/serialization controls. No source, fixture, assertion, baseline or version change.',specifications=['https://www.w3.org/TR/2008/REC-xml-20081126/#NT-NameStartChar','https://www.w3.org/TR/2006/REC-xml11-20060816/#NT-NameStartChar'],fixtures={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in fixtures},qt4Revision=subprocess.check_output(['git','-C','tests/qt4tests','rev-parse','HEAD']).decode().strip())
+(E/'AUDIT-PIN.json').write_text(json.dumps(pin,indent=2)+'\n',encoding='utf-8')
+rows=[dict(id='original-map-to-element-053',kind='harness',case='map-to-element-053')]
+for cp in [65,960,0x3001,0x200c,0x10000,119070,0xeffff,0xf0000,0x10ffff]:
+ rows.append(dict(id='map-name-'+hex(cp),kind='query',expression=f"string-to-codepoints(name(map-to-element(map {{ codepoints-to-string({cp}): 'x' }})))",contract='Accepted scalar NCName' if cp<=0xeffff else 'FOJS0009 invalid NCName'))
+rows += [dict(id=i,kind='query',expression=q) for i,q in [
+ ('supplementary-child',"name(map-to-element(map{'r': map{codepoints-to-string(119070): 'x'}})/*)"),
+ ('supplementary-attribute',"name(map-to-element(map{'r': map{'@' || codepoints-to-string(119070): 'x'}})/@*)"),
+ ('supplementary-qname',"local-name(map-to-element(map{'Q{urn:k03}' || codepoints-to-string(119070): 'x'}))"),
+ ('ascii-serialize',"serialize(map-to-element(map{'r': 'x'}))"),
+ ('literal-sentinel-text',"string(map-to-element(map{'r': 'ǀ0041ǁ'}))"),
+ ('literal-sentinel-serialize',"serialize(map-to-element(map{'r': 'ǀ0041ǁ'}))"),
+ ('literal-sentinel-name',"name(map-to-element(map{'ǀ0041ǁ': 'x'}))"),
+ ('invalid-digit-start',"map-to-element(map{'1bad': 'x'})"),
+ ('invalid-empty',"map-to-element(map{'': 'x'})"),
+ ('invalid-space',"map-to-element(map{'a b': 'x'})")]]
+for name in ['A','π','、',chr(119070),chr(983040)]:
+ rows.append(dict(id='platform-'+str(ord(name)),kind='platform',name=name))
+for xml11 in [False,True]:
+ for name in ['A',chr(119070)]:
+  rows.append(dict(id='provider-'+str(ord(name))+'-'+str(xml11),kind='provider',name=name,xml11=xml11,text='ǀ0041ǁ'))
+rows.append(dict(id='codec-roundtrip',kind='codec',name=chr(119070),text='ǀ0041ǁ'))
+(E/'requests.json').write_text(json.dumps(rows,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+source='''// Generated read-only K03 harness, public-API and provider mechanism diagnostics.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+var directory=Path.GetFullPath(".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release");
+AssemblyLoadContext.Default.Resolving+=(context,name)=>{var file=Path.Combine(directory,name.Name+".dll");return File.Exists(file)?Assembly.LoadFrom(file):null;};
+var row=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement.EnumerateArray().Single(q=>q.GetProperty("id").GetString()==args[1]);
+string S(string key)=>row.GetProperty(key).GetString()!;
+object? detail=null;string? error=null,type=null,stack=null;
+try{
+ switch(S("kind")){
+ case "query":detail=new{value=XPath31Expression.Compile(S("expression"),new CompileOptions{Compatibility=XPathCompatibility.XPath40}).Evaluate(new EvaluationContext()).ToString()};break;
+ case "harness":{
+  var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Conformance40.dll"));var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+  Type T(string name)=>assembly.GetType("Bosak.XPath.Conformance."+name,true)!;
+  object Deps(IEnumerable<XElement> elements){var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;foreach(var e in elements)list.GetType().GetMethod("Add")!.Invoke(list,new[]{T("Dependency").GetMethod("FromElement",flags)!.Invoke(null,new object[]{e})});return list;}
+  XNamespace ns="http://www.w3.org/2010/09/qt-fots-catalog";var path=Path.GetFullPath("tests/qt4tests/fn/map-to-element.xml");var doc=XDocument.Load(path);var e=doc.Descendants(ns+"test-case").Single(e=>(string?)e.Attribute("name")==S("case"));
+  var test=T("TestCase").GetMethod("FromElement",flags)!.Invoke(null,new object?[]{e,ns,Deps(doc.Root!.Elements(ns+"dependency")),Path.GetDirectoryName(path)})!;
+  var executor=Activator.CreateInstance(T("TestExecutor40"))!;var outcome=T("TestExecutor40").GetMethod("Execute",flags)!.Invoke(executor,new object?[]{test,null})!;
+  detail=new{kind=outcome.GetType().GetProperty("Kind")!.GetValue(outcome)!.ToString(),message=outcome.GetType().GetProperty("Message")!.GetValue(outcome),expression=e.Element(ns+"test")!.Value,assertion=e.Element(ns+"result")!.ToString()};break;}
+ case "platform":{
+  string? verifyError=null,xnameError=null;try{XmlConvert.VerifyNCName(S("name"));}catch(Exception e){verifyError=e.Message;}try{_ = XName.Get(S("name"));}catch(Exception e){xnameError=e.Message;}detail=new{verifyError,xnameError};break;}
+ case "provider":{
+  var node=XDocumentProvider.ConstructElement(new XdmElementSpec(S("name"),null,null,Array.Empty<XdmAttributeValue>(),new[]{new XdmContentItem(XdmContentKind.Text,S("text"))},Xml11Mode:row.GetProperty("xml11").GetBoolean()));
+  detail=new{localName=node.LocalName,stringValue=node.StringValue,serialized=node.ToXmlString()};break;}
+ case "codec":detail=new{encoded=Xml11NameCodec.EncodeName(S("name")),decoded=Xml11NameCodec.DecodeName(Xml11NameCodec.EncodeName(S("name"))),literalDecoded=Xml11NameCodec.DecodeName(S("text"))};break;
+ default:throw new ArgumentException("Unknown probe kind");
+ }
+}catch(Exception e){error=e.Message;type=e.GetType().Name;stack=e.StackTrace;}
+Console.WriteLine(JsonSerializer.Serialize(new{id=S("id"),kind=S("kind"),detail,error,exceptionType=type,stack}));
+'''
+(D/'Program.cs').write_text(source,encoding='utf-8');(E/'driver.cs.txt').write_text(source,encoding='utf-8')
+base=Path('.guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release').resolve()
+refs=''.join('<Reference Include="'+n+'"><HintPath>'+str(base/(n+'.dll'))+'</HintPath></Reference>' for n in ['Bosak.XPath.Api','Bosak.XPath.Core','Bosak.XPath.Runtime','Bosak.XPath.Providers'])
+project='<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup>'+refs+'</ItemGroup></Project>'
+(D/'Probe.csproj').write_text(project,encoding='utf-8');(E/'driver.csproj.txt').write_text(project,encoding='utf-8');print('Prepared',len(rows),'probes')

@@ -1,0 +1,172 @@
+{
+  "reviewDate": "2026-10-26",
+  "documentationBase": "06b533490080129f7d513e26e5b25bfeb39863cd",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "tools": {
+    "docs/xpath40-catalog/build-c10-review.py": "9d4b7fb9c36cebb38a755d466dad497263de6db9",
+    "docs/xpath40-catalog/build-closure-plan.py": "1d11adb83d8d54f31ba06b606aec1f4aa9e2f40d",
+    "docs/xpath40-catalog/C10-REVIEW-DECISIONS.json": "0355766d332a6e45c8d27be5a4f6adb70bb11aed",
+    "docs/xpath40-catalog/evidence/c10-semantic-batch2/validate-evidence.py": "9936f1241b606993a19014d1cb60d8ec68cab3fd"
+  },
+  "priorCheckpoints": {
+    "evidence/closure-triage/manifest.json": "e9905cc92e3f6eb741642aad26889a5ffd2c5dd08863dd74e1629a0b8e593e74",
+    "evidence/closure-triage/validate-evidence.py": "d442aa5316c187884b7ff76d5b8030ee4af8b42a6b481b38828b8a35fb53fe00",
+    "evidence/c01-inventory/manifest.json": "3ce7cb8104e69d3984aa559ee962c4019bb2ac72c7b36f52449bf6dbcafd5129",
+    "evidence/c01-inventory/validate-evidence.py": "7f8e2c6163c5026d8cef7aceef6f568fcc1ebb085ddff907e71be2607716d94c",
+    "evidence/c02-function-review/manifest.json": "eac6aa3be196acb8c59b4f9c7f88a9755a3e6137f97b2a951d23d1d209181021",
+    "evidence/c02-function-review/validate-evidence.py": "e8779489be0f3d118f65ce4a377eba8f3dbaf1332d2afc94b281725c502ed1f3",
+    "evidence/c03-type-review/manifest.json": "46b18732d693f888f5fca623f5cf03eadaec53959e221565877afd03a5be9ab4",
+    "evidence/c03-type-review/validate-evidence.py": "4fb36d1c680f28667cd6497810bb24f16f6cedb12576c9313a62c0478686a11b",
+    "evidence/c04-expression-review/manifest.json": "bec98f373f95cad9e5157400d3a1f284559759b896cc0ba94d96fa2d2417cfad",
+    "evidence/c04-expression-review/validate-evidence.py": "084d79a0f95366f7f044a18a8ae12d18ac4382a61ec754af736cca3362868d67",
+    "evidence/c05-collection-pattern-review/manifest.json": "d8abe7b6588736e59ab2535f5937a3dd517408d4ac166ed8a1b84571095331ee",
+    "evidence/c05-collection-pattern-review/validate-evidence.py": "baba0e1cc3a551c07ce125a0e5c3c8451ea0befd1186b3df304cbdf8a6de44fb",
+    "evidence/c06-host-profile-review/manifest.json": "025c2676d8df5758cdd0354c9d0516bc9cc0b64ca472ab4e1a8c18201833b0aa",
+    "evidence/c06-host-profile-review/validate-evidence.py": "7dd70d1e9f558fdf34246104a390d890961f194d0cb38dc6353340c42edc88db",
+    "evidence/c07-lifecycle-review/manifest.json": "b4a8aa0913265a2ba149ce5f5b8a861e25d76a0b001882f6e1ec74d14902528d",
+    "evidence/c07-lifecycle-review/validate-evidence.py": "767dcc99422c3bad4c49205706f6e7a8d60bcfcd0020b5595febaa6c5791e9f6",
+    "evidence/c08-adoption-research/manifest.json": "0d414afe90b12c1c5441de17a280f5d8f0854f56761317c52906040f95e405df",
+    "evidence/c08-adoption-research/validate-evidence.py": "156039f6f72eefd2b1fda69969c8224ea355775df94582e551f01efd661690fe",
+    "evidence/c09-semantic-batch1/manifest.json": "63b4612c271f6238f19fa9838abf9ab04834b4037b07288c3e6c9b90bb2e1fc2",
+    "evidence/c09-semantic-batch1/validate-evidence.py": "02e814ca10fa79efb80528690c580e3a16b06e5ec03ac6718b3f7b1e5cf7b5a6"
+  },
+  "files": {
+    "applicable-cases.json": "fc93949d70020495939240ffd5ef9b7682a6c2a3855d828ee349ed4db576228b",
+    "authoring-corrections.json": "b24a374c65bb14f186516ae1e9a2d1b49240ce0d8ce30b2913e6d4522904d841",
+    "baseline-sample-audit.json": "5c1edc3d6c0a3c46320d415a0fdfdd12423b0a69ecb2b97f5eaaefca60d6ce6c",
+    "catalog-tests.log": "033025f44f95f6bbe7f038bf45b524c86a262ddec499d06ac541e7fb768b8e4d",
+    "catalog.trx": "bd8db3b47b0318ae2830a498509c9d32576248c13516fac9354549d8e3686cd2",
+    "compiled-assets.json": "343c98c0cf20b659e8fb30ef68928d10959f83ec43a79066bb6b243834ed9ab1",
+    "documentation-corrections.json": "e648acbc3a360acc6b2cdbd1dfa250cc88198420103e9fd1a572a89a2fefde6f",
+    "entry-sources.json": "ec71d07c72eaac5a8f72665bfb9a9b9c902678af450dcc3d582ae0b507793819",
+    "evidence-program.py.txt": "a4729f6800c56345a004879a3bf6854f82e6690cc044fb02d5d8356b0f9ba507",
+    "gated-sets.json": "8ae7b1a9d030ed0a6090d458949b33236b4cdf285a2a205564c8db95488dd77d",
+    "initial-probe-requests.json": "ae27acc36f77013467493bb65d5d5e6651c9c558c045a396e9ddc75140bce718",
+    "initial-probe-results.jsonl": "0a85a4385ba8daa5e26f7e2ffc0d43c0c3c6a9fd1518e40e2bd6eba8cb52fd3a",
+    "probe-build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "probe-program.cs.txt": "6f3e6976a37056cadd959f2bdaf8d9abe694c74cd1271a9886ef1bd0e4ba58e7",
+    "probe-project.csproj.txt": "78c8243a2c5883ea715aabff837cbb0472622b698363008e7246ffabe79558d5",
+    "probe-requests.json": "afc1c48c956cad763c876b1a221624ef56cafb7d749dd59310c528e25ed15cc0",
+    "probe-results.jsonl": "cb07751042dca253b095bdddb7e19989be4f44c264b562df392b89ceb9863a11",
+    "python-oracle.json": "3f0fbc853a018a4f218a74f66e5532430070059726d7a2bcca2f013bcec1df37",
+    "render-program.cjs.txt": "a11273aaf8a7c571df261c57031b609cb7098f7436dc7bf0f1108adcc896ec5d",
+    "render-receipts.json": "d28587aae19ea35fe64ec2cfa740260799ab4098abdda8b569760eea2e3c0209",
+    "review-sources.json": "678d197d179e82e61ef486a6673c7ebeac398f27e397626da813460c37e28616",
+    "sample-audit-program.py.txt": "3c60711a2d0c7d4ff8752de9eed65761bb1cf5bbb79f7bbbe214814487d20254",
+    "sample-audit.json": "b1bc3698cd5618c549d51808451f320f3d87fdcec424a57673883a75c0c3184b",
+    "source-files.json": "430a574eb39f983c5a5f9513923725a9936cb57e72872f6e6d2f01e327b1f27e",
+    "standard-tests.log": "48d7459d940fe12de7c52803a24025909e206a3783a2f859cb2a54d332b9ac42"
+  },
+  "outputs": {
+    "SEMANTIC-REVIEW-BATCH-2.json": "0c7f9aad3046400786059228eb45d8fc219b4cf4fdfd422fcc09fc262efd9bcd",
+    "CLOSURE-PLAN.json": "58312c81ce912350cf19f0481cadc484bc599e75fcffa88c710136cdc158b486",
+    "CONFORMANCE-SKIP-TRIAGE.json": "b2b4fa5925928081caf25480530eb0ac98244ee04b2567c7d54414be18761138",
+    "GRAMMAR-COVERAGE-MATRIX.json": "d0d9ceb88e6701f4ad513dd88eea1d24a1188526ffbaa696dc367c91c9fac5e6"
+  },
+  "localBinaryIdentities": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "f6098101b6f71785d50deb2a6c9f1e96d9d083df87ce538e4efb64e46e8344df",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c10-probe\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "5446c39647a6eb4af23ff3f741cbc0d7124a37005a745769d8bb2c0d80af385e",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    }
+  ],
+  "validation": {
+    "entries": 19,
+    "contractGroups": 55,
+    "scopedCases": 892,
+    "compiledAssets": 893,
+    "sampleBlocks": 82,
+    "pythonOracles": 1,
+    "supplemental": {
+      "expressions": 37,
+      "observations": 74,
+      "matching": 60,
+      "currentDraftUnmet": 10,
+      "disputedExampleUnmet": 2,
+      "contextObservations": 2
+    },
+    "freshTests": {
+      "catalog": 3148,
+      "standard": 321,
+      "total": 3469,
+      "failed": 0,
+      "skipped": 0
+    },
+    "renderedHTMLPages": 30,
+    "inheritedSolution": {
+      "evidence": "../c02-function-review/manifest.json",
+      "passed": 21798,
+      "failed": 0,
+      "skipped": 0
+    },
+    "inheritedGates": {
+      "evidence": "../closure-triage/gate-receipts.json",
+      "qt3": [
+        31142,
+        0,
+        679
+      ],
+      "qt4": [
+        8436,
+        0,
+        1894
+      ]
+    }
+  },
+  "freshTestCommands": [
+    {
+      "project": "tests/Bosak.Xslt.Tests",
+      "flags": "-c Release --no-build --no-restore",
+      "filter": "FullyQualifiedName~Documentation.CatalogExampleTests",
+      "log": "catalog-tests.log",
+      "trx": "catalog.trx"
+    },
+    {
+      "project": "tests/Bosak.XPath.Standard.Tests",
+      "flags": "-c Release --no-build --no-restore",
+      "filter": "FullyQualifiedName~XPath40FunctionTests|FullyQualifiedName~AtomicEqualTests|FullyQualifiedName~NumericFunctionTests|FullyQualifiedName~MapToElement|FullyQualifiedName~ElementToMap",
+      "log": "standard-tests.log"
+    }
+  ],
+  "policy": "No engine/test/executable fixture/profile/gate/version change. Preserve10 current-draft unmet requirements and2 source/example mismatches separately; the latter alone do not diagnose an engine defect. URI diagnostics retain unresolved typed-option classification. Three packages and final semantic acceptance remain open; C00-C09 preserved."
+}

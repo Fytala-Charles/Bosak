@@ -1,0 +1,674 @@
+{
+  "entries": {
+    "functions/consecutive-partition.md": {
+      "functions": [
+        "fn:partition"
+      ],
+      "contracts": [
+        "Consecutive partition arrays preserve source order and nonadjacent groups",
+        "Split callback receives current partition, next item and original one-based position",
+        "Empty/singleton input avoids unnecessary predicate invocation"
+      ],
+      "limitations": [
+        "Not SQL grouping or a two-way filter; callback conversion beyond the tested signature remains a separate boundary."
+      ],
+      "tickets": [
+        "F08"
+      ]
+    },
+    "experimental/fn-scan.md": {
+      "functions": [
+        "fn:scan"
+      ],
+      "contracts": [
+        "N+1 accumulator states retain single-member array boundaries",
+        "Empty input retains the initial state",
+        "Position-aware callback; Experimental-only availability"
+      ],
+      "limitations": [
+        "No frozen-profile adoption or constant-memory guarantee; generic function coercion beyond verified callbacks is not certified."
+      ],
+      "tickets": []
+    },
+    "functions/atomic-equal.md": {
+      "functions": [
+        "fn:atomic-equal"
+      ],
+      "contracts": [
+        "Atomic equality distinguishes value-family policy and NaN",
+        "Atomic input/type errors remain distinct from deep node/map equality"
+      ],
+      "limitations": [
+        "Representative atomic families only; do not generalize the sample to structural equality or every derived atomic type."
+      ],
+      "tickets": [
+        "F08"
+      ]
+    },
+    "functions/batch-extrema.md": {
+      "functions": [
+        "fn:min",
+        "fn:max"
+      ],
+      "contracts": [
+        "Empty input, atomization, numeric/string and QName extrema",
+        "Omitted/empty collation and values keyword",
+        "NaN contamination and incomparable-family errors"
+      ],
+      "limitations": [
+        "Use homogeneous validated atomic inputs and explicit collation; remaining coercion/mixed-family combinations require targeted review."
+      ],
+      "tickets": [
+        "F06",
+        "F08"
+      ]
+    },
+    "functions/bounded-retries.md": {
+      "functions": [
+        "fn:while-do",
+        "fn:do-until"
+      ],
+      "contracts": [
+        "Before-versus-after predicate timing and callback argument order",
+        "Whole-sequence state, one-based iteration positions and empty results",
+        "Boolean/empty predicate result, callback errors and finite example termination"
+      ],
+      "limitations": [
+        "No implicit timeout, retry delay or iteration ceiling; only bounded terminating examples are supplied."
+      ],
+      "tickets": []
+    },
+    "functions/configured-label-callbacks.md": {
+      "functions": [
+        "fn:partial-apply",
+        "fn:identity"
+      ],
+      "contracts": [
+        "One-based binding, residual argument order, all-bound and empty-map identity",
+        "Callable maps/arrays and bound-value conversion",
+        "String/nonpositive/out-of-arity key boundaries in the released profile"
+      ],
+      "limitations": [
+        "Current draft permits nonpositive integer keys and ignores them; the frozen positive-key refusal remains explicit."
+      ],
+      "tickets": [
+        "F01",
+        "F02",
+        "F08"
+      ]
+    },
+    "functions/csv-parsing.md": {
+      "functions": [
+        "fn:parse-csv",
+        "fn:csv-doc",
+        "fn:csv-to-xml"
+      ],
+      "contracts": [
+        "Absence versus empty/blank text and returned row/column records",
+        "Separator, quote, comment, trim, header and selection options",
+        "Local-resource base URI, encoding, errors and callback get bounds"
+      ],
+      "limitations": [
+        "Frozen positive selection/get indices differ from the current draft; unknown namespaced options remain unsupported; no remote-resource or schema-completeness claim."
+      ],
+      "tickets": [
+        "F03",
+        "F12"
+      ]
+    },
+    "functions/customer-reference-matching.md": {
+      "functions": [
+        "fn:distinct-values",
+        "fn:index-of",
+        "fn:deep-equal",
+        "fn:compare",
+        "fn:contains-token"
+      ],
+      "contracts": [
+        "Explicit collations, duplicate representatives and one-based matching positions",
+        "Sequence-order-sensitive deep equality and NaN behavior",
+        "Empty index-of collation correction and compare keyword boundary"
+      ],
+      "limitations": [
+        "Deep-equal map options are unsupported; supported collations do not imply normalization or complete UCA behavior."
+      ],
+      "tickets": [
+        "F01",
+        "F09"
+      ]
+    },
+    "functions/customer-text-cleanup.md": {
+      "functions": [
+        "fn:trim-space",
+        "fn:pad-string",
+        "fn:characters",
+        "fn:graphemes",
+        "fn:char"
+      ],
+      "contracts": [
+        "XML boundary whitespace, interior preservation, nontruncating codepoint padding",
+        "Character/entity conversion and supported grapheme clusters",
+        "Defaults, empty values, side options and invalid input"
+      ],
+      "limitations": [
+        "Grapheme segmentation is approximate; missing keywords, implicit trim focus and unknown-option validation are not supported contracts."
+      ],
+      "tickets": [
+        "F01",
+        "F02",
+        "F03",
+        "F13"
+      ]
+    },
+    "functions/element-to-map.md": {
+      "functions": [
+        "fn:element-to-map",
+        "fn:element-to-map-plan"
+      ],
+      "contracts": [
+        "Simple-content XML-to-map shape",
+        "Plans/layout/name policy are explicit conversion choices",
+        "Wrong input, option and keyword boundaries"
+      ],
+      "limitations": [
+        "The published simple-content example does not certify every conversion-plan record, name collision, namespace, schema annotation or option; use only tested layouts/options.",
+        "Current-draft escape-names decoding is unsupported; the new option is not adopted automatically into frozen or Experimental profiles."
+      ],
+      "tickets": [
+        "F01",
+        "F14"
+      ]
+    },
+    "functions/higher-order-selection.md": {
+      "functions": [
+        "fn:some",
+        "fn:every",
+        "fn:index-where"
+      ],
+      "contracts": [
+        "Any/all/position selection and vacuous empty results",
+        "Item and one-based position callbacks",
+        "Boolean/empty result conversion and invalid callback arity"
+      ],
+      "limitations": [
+        "Callable/subtyping combinations beyond the verified signatures remain unsupported in this consumer reference."
+      ],
+      "tickets": [
+        "F08"
+      ]
+    },
+    "functions/import-array-batches.md": {
+      "functions": [
+        "array:build",
+        "array:empty",
+        "array:items",
+        "array:slice"
+      ],
+      "contracts": [
+        "One callback result per member and one-level item concatenation",
+        "Zero members versus empty/nested members",
+        "Inclusive/negative slice bounds, default/zero step and empty direction result"
+      ],
+      "limitations": [
+        "array:members/of-members are JNode functions owned by C05, not replacements for member/item concatenation."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/import-file-names.md": {
+      "functions": [
+        "fn:substring-before-last",
+        "fn:substring-after-last",
+        "fn:index-of-substring"
+      ],
+      "contracts": [
+        "Last delimiter, overlap and one-based codepoint positions",
+        "Empty needle/source, default collation and malformed collation",
+        "Experimental absent-pattern correction with frozen refusal retained"
+      ],
+      "limitations": [
+        "Do not rely on tolerated typed-numeric string arguments; no grapheme-position or path-authorization contract."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/invoice-api-uris.md": {
+      "functions": [
+        "fn:parse-uri",
+        "fn:build-uri",
+        "fn:decode-from-uri"
+      ],
+      "contracts": [
+        "Raw and decoded URI fields, repeated query keys and plus/percent behavior",
+        "Structured segment/query precedence and non-byte-preserving roundtrip",
+        "One-pass UTF-8 decoding, absence and malformed syntax"
+      ],
+      "limitations": [
+        "Use validated typed Boolean options and remove raw query when deliberately supplying an empty query map."
+      ],
+      "tickets": [
+        "F01",
+        "F04"
+      ]
+    },
+    "functions/map-to-element.md": {
+      "functions": [
+        "fn:map-to-element"
+      ],
+      "contracts": [
+        "Single tested map-to-XML conversion shape",
+        "QName/name/layout, nested content and option boundaries are distinct"
+      ],
+      "limitations": [
+        "The reduced example does not certify the whole conversion-plan/record/namespaces space; supplementary provider Unicode limits belong to the deferred skip queue.",
+        "Current-draft escape-names encoding is unsupported; use XML-compatible field names and verified conversion options."
+      ],
+      "tickets": [
+        "F01",
+        "F14"
+      ]
+    },
+    "functions/measurement-comparison.md": {
+      "functions": [
+        "fn:compare"
+      ],
+      "contracts": [
+        "Exact cross-numeric comparison, NaN ordering and empty comparands",
+        "Atomic family comparison and incomparable-family error",
+        "Default/explicit collation and released versus draft keyword labels"
+      ],
+      "limitations": [
+        "Do not substitute this comparator for engineering tolerance, generalized numeric conversion or automatic unit normalization."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/month-end-cutoffs.md": {
+      "functions": [
+        "fn:days-in-month",
+        "fn:build-dateTime"
+      ],
+      "contracts": [
+        "Local Gregorian month/leap rules and supported partial Gregorian values",
+        "Timezone presence, field-set, calendar and offset errors",
+        "Fractional components and declared singleton/type boundaries"
+      ],
+      "limitations": [
+        "Millisecond precision loss, permissive malformed/multi-item input and interop calendar bounds remain explicit; arbitrary extended-year operations are not certified."
+      ],
+      "tickets": [
+        "F01",
+        "F10"
+      ]
+    },
+    "functions/numeric-import-diagnostics.md": {
+      "functions": [
+        "fn:is-NaN",
+        "fn:atomic-type-annotation",
+        "fn:op"
+      ],
+      "contracts": [
+        "Numeric NaN versus lexical NaN and single-value atomization",
+        "Atomic annotation record and callable operator reflection",
+        "Operator errors propagate; annotation is not business or schema validation"
+      ],
+      "limitations": [
+        "No complete derived-type reflection/function-conversion audit; C03 owns constructor/type/coercion coverage.",
+        "atomic-type-annotation(()) incorrectly returns a type record in both 4.0 profiles. Required empty-input refusal is explicitly unsupported; bounded correction F08-atomic-annotation-empty retains the independent XPTY0004 expectation."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/order-sequence-selection.md": {
+      "functions": [
+        "fn:replicate",
+        "fn:slice",
+        "fn:items-at",
+        "fn:foot",
+        "fn:trunk",
+        "fn:insert-separator"
+      ],
+      "contracts": [
+        "Whole-sequence repetition and separator insertion",
+        "One-based positions, duplicates, inclusive/negative/default slice bounds",
+        "Empty/singleton input, negative counts and invalid positions"
+      ],
+      "limitations": [
+        "Integral-decimal tolerance is not the declared integer-position contract; repeat counts must remain bounded."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/ordered-queue-prefix.md": {
+      "functions": [
+        "fn:take-while",
+        "fn:drop-while"
+      ],
+      "contracts": [
+        "Prefix-only selection with first nonmatch excluded/included",
+        "Original input positions and empty/all-match queues",
+        "Boolean/empty predicates and tested callable maps"
+      ],
+      "limitations": [
+        "Not an arbitrary filter or partition; no operational side effects or general callable-subtyping promise."
+      ],
+      "tickets": [
+        "F08"
+      ]
+    },
+    "functions/payload-fingerprints.md": {
+      "functions": [
+        "fn:hash"
+      ],
+      "contracts": [
+        "UTF-8 string versus binary octets and absent versus empty payload",
+        "Default/explicit algorithm and unsupported-algorithm errors",
+        "Keyword/default/map-shape boundaries; extension parameters are implementation-defined"
+      ],
+      "limitations": [
+        "BLAKE3 and CRC-32 remain unsupported FOHA0001; opaque hash options do not establish a missing standard named parameter."
+      ],
+      "tickets": [
+        "F01",
+        "F11"
+      ]
+    },
+    "functions/product-dependency-closure.md": {
+      "functions": [
+        "fn:transitive-closure"
+      ],
+      "contracts": [
+        "One-or-more-step reachability and identity deduplication",
+        "Finite cycles may include the initial node; document-order results",
+        "Empty start, singleton/node typing and callback errors"
+      ],
+      "limitations": [
+        "Only XML nodes in one document are covered; no JNode/cross-document ordering, topological installation order or quantity explosion."
+      ],
+      "tickets": [
+        "F08"
+      ]
+    },
+    "functions/product-map-index.md": {
+      "functions": [
+        "map:build",
+        "map:entries",
+        "map:filter",
+        "map:items"
+      ],
+      "contracts": [
+        "Duplicate combine/use-first/use-last/reject and custom combining policies",
+        "Single-entry-map sequence and concatenated item result shapes",
+        "Entry-position callbacks, empty values, nesting and node identity"
+      ],
+      "limitations": [
+        "map:filter currently accepts nonboolean truthy predicate results; do not use them. Map enumeration is not portable business order."
+      ],
+      "tickets": [
+        "F01",
+        "F07",
+        "F08"
+      ]
+    },
+    "functions/sequence-distinctness.md": {
+      "functions": [
+        "fn:all-different",
+        "fn:duplicate-values"
+      ],
+      "contracts": [
+        "Atomic duplicate classes, second-occurrence representatives and order",
+        "Empty/singleton input, NaN grouping and explicit collations",
+        "Typed/atomized source and unknown-collation boundaries"
+      ],
+      "limitations": [
+        "Maps do not satisfy the declared atomic input contract despite current tolerance; no implicit case folding or normalization."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/shipment-event-sequences.md": {
+      "functions": [
+        "fn:all-equal",
+        "fn:contains-subsequence",
+        "fn:starts-with-subsequence",
+        "fn:ends-with-subsequence"
+      ],
+      "contracts": [
+        "Contiguous segment/prefix/suffix matching with order and duplicates",
+        "Deep-equal default, asymmetric custom comparators and argument order",
+        "Empty requirements, boolean/empty callback conversion and atomic all-equal"
+      ],
+      "limitations": [
+        "Use explicit presence/count guards for missing IDs; no complete carrier-state machine or unverified coercion contract."
+      ],
+      "tickets": [
+        "F01",
+        "F08"
+      ]
+    },
+    "functions/sort-with.md": {
+      "functions": [
+        "fn:sort-with",
+        "array:sort-with"
+      ],
+      "contracts": [
+        "Comparator-driven numeric ordering and array member boundaries",
+        "Empty input, comparator result/arity and consistency requirements"
+      ],
+      "limitations": [
+        "Comparator consistency and arbitrary result/coercion combinations are not certified; avoid NaN/mixed-family business order."
+      ],
+      "tickets": [
+        "F06",
+        "F08"
+      ]
+    },
+    "functions/supplier-offer-ranking.md": {
+      "functions": [
+        "fn:highest",
+        "fn:lowest",
+        "fn:sort-by",
+        "fn:collation-available"
+      ],
+      "contracts": [
+        "Stable multi-key sorting with major-to-minor key definitions",
+        "Boundary-item equality for highest/lowest and source identity",
+        "Collation recognition, key defaults and invalid definitions"
+      ],
+      "limitations": [
+        "Equal keys do not imply all distinct records are extrema; NaN/exact mixed-number ordering and unverified record fields remain limits."
+      ],
+      "tickets": [
+        "F01",
+        "F05",
+        "F06"
+      ]
+    },
+    "functions/timestamp-deadlines.md": {
+      "functions": [
+        "fn:unix-dateTime",
+        "fn:seconds",
+        "fn:duration-to-seconds"
+      ],
+      "contracts": [
+        "Epoch milliseconds, omitted/empty zero and UTC subtype",
+        "Experimental signed epochs with frozen negative refusal",
+        "Duration total seconds, signs/fractions and bounded-calendar errors"
+      ],
+      "limitations": [
+        "Published wide-integer/range fixes are delivered; permissive scalar/cardinality conversion and bounded DateTimeOffset calendar remain separate."
+      ],
+      "tickets": [
+        "F01",
+        "F02",
+        "F08",
+        "F10"
+      ]
+    },
+    "functions/uri-option-policy.md": {
+      "functions": [
+        "fn:parse-uri",
+        "fn:build-uri"
+      ],
+      "contracts": [
+        "Boolean deprecated/default-port/UNC policies",
+        "Structured versus raw authority/path/query precedence",
+        "Nonmap option and malformed authority errors"
+      ],
+      "limitations": [
+        "String false currently enables a Boolean option; empty query map currently falls back to raw query. Raw-authority bypass itself is draft-defined."
+      ],
+      "tickets": [
+        "F01",
+        "F04"
+      ]
+    },
+    "functions/warehouse-pick-sorting.md": {
+      "functions": [
+        "fn:sort",
+        "array:sort"
+      ],
+      "contracts": [
+        "Stable lexicographic keys with sequence items versus whole array members",
+        "Omitted versus explicit-empty keys and explicit data#1 workaround",
+        "Known collation, mixed-type errors, NaN and exact cross-numeric order"
+      ],
+      "limitations": [
+        "Explicit empty keys, unknown collations, NaN and promoted mixed-number ties remain unsupported draft contracts; use validated homogeneous keys."
+      ],
+      "tickets": [
+        "F05",
+        "F06"
+      ]
+    }
+  },
+  "tickets": {
+    "F01": {
+      "title": "Keyword metadata and label compatibility",
+      "disposition": "Existing limitation; reconcile parser binding per family, retain positional alternatives and profile refusals. No blanket rename or metadata inference.",
+      "exitCriteria": "Add family-specific success/refusal/default/type tests before changing metadata.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F02": {
+      "title": "Current-draft declaration adoption boundaries",
+      "disposition": "Owner policy required for zero-arity trim, ignored nonpositive partial bindings and char integer/error boundary. Signed Unix epochs already delivered only in Experimental.",
+      "exitCriteria": "Choose frozen/Experimental policy explicitly, then test each contract separately without changing frozen fixtures.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F03": {
+      "title": "Option-key and value validation",
+      "disposition": "Shared option conventions apply only where adopted explicitly. Unknown JSON options are ignored in 3.1 by design; current 4.0 rules reject unrecognized non-namespaced keys. CSV refuses unknown namespaced extension options; text/JSON tolerate unknown string keys. Coercion and optional error-eagerness require per-function review.",
+      "exitCriteria": "Separate functions, declared option types, QName-extension policy and permitted error latitude; no blanket eager-validation rule.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F04": {
+      "title": "URI Boolean options and empty-query precedence",
+      "disposition": "Reproduced limits; use Boolean values and remove stale raw query when supplying an empty query map. Raw authority bypass is conforming behavior.",
+      "exitCriteria": "Add positional/reference/keyword and input-presence regressions; isolate Boolean typing from map presence.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F05": {
+      "title": "Sort default-on-empty and collation/record validation",
+      "disposition": "Reproduced explicit-empty-key failures and tolerated unknown collation; sort-by is a distinct record surface.",
+      "exitCriteria": "Preserve 3.1 behavior, test empty/nonempty paths and verify sort-key record definitions before changing validation.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F06": {
+      "title": "Exact numeric and NaN ordering across sort/extrema",
+      "disposition": "Reproduced input-direction-sensitive NaN and mixed double/decimal ordering; exact compare does not repair other comparers.",
+      "exitCriteria": "One shared-comparer investigation with independent fn:sort/array:sort/highest/lowest controls and exact-number expectations.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F07": {
+      "title": "Map merge/build options and input conversion",
+      "disposition": "map:merge explicit-empty options, non-map input and duplicate-policy cardinality remain limits; map:build has distinct combine default.",
+      "exitCriteria": "Separate input conversion, default-on-empty and duplicate-option cardinality; preserve valid merge/build policies.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F08": {
+      "title": "Atomic/callback/cardinality conversion boundaries",
+      "disposition": "Typed atomic input, boolean callback results and invocation timing need independent family tests; map:filter string result is a reproduced gap.",
+      "exitCriteria": "Do not infer generic conversion support from fixed numeric functions; separate input, callback argument and result coercion.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "boundedCorrections": [
+        {
+          "id": "F08-atomic-annotation-empty",
+          "status": "Reproduced defect; not fixed",
+          "owner": "Bosak standard-library maintainer",
+          "expression": "atomic-type-annotation(())",
+          "profiles": [
+            "XPath40",
+            "XPath40Experimental"
+          ],
+          "required": "XPTY0004: required xs:anyAtomicType argument is empty",
+          "observed": "Returns a map/type record",
+          "source": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+          "spec": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+          "exitCriteria": "Preserve normal atomic records; reject empty cardinality through direct/reference/lookup/partial calls in both 4.0 profiles, retain XPath31 refusal, and run frozen gates before merging an engine fix."
+        }
+      ]
+    },
+    "F09": {
+      "title": "Deep-equal 4.0 map options",
+      "disposition": "Reproduced FOTY0013 for supported-draft option map; legacy string collation remains usable.",
+      "exitCriteria": "Implement or explicitly disposition options grammar/validation per profile with sequence/map/node equality regressions.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F10": {
+      "title": "Gregorian construction precision and input validation",
+      "disposition": "Reproduced seconds truncation to milliseconds and malformed/multi-item days-in-month tolerance. Unix wide-range error correction is delivered.",
+      "exitCriteria": "Separate fractional component storage, field validation and cardinality; do not expand all extended-year operations.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F11": {
+      "title": "Mandatory hash algorithms capability",
+      "disposition": "BLAKE3 and CRC-32 remain unsupported FOHA0001; SHA-256/default/empty controls pass.",
+      "exitCriteria": "Choose dependency/algorithm implementation with independent vectors and CRC byte-order checks; no claim that opaque options are missing standard options.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F12": {
+      "title": "CSV current-index contract adoption",
+      "disposition": "Frozen positive-index refusals remain intentional; upstream already corrected seven selection/get expectations.",
+      "exitCriteria": "Explicitly adopt the current contract in the chosen profile with existing pinned comparison evidence; no duplicate upstream issue or fixture edit.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F13": {
+      "title": "Full grapheme segmentation capability",
+      "disposition": "Approximate documented segmentation remains unsupported for complete Unicode grapheme-break conformance.",
+      "exitCriteria": "Choose supported Unicode version and test against the corresponding conformance data; retain codepoint/display-width distinction.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    },
+    "F14": {
+      "title": "XML/map conversion plans and options",
+      "disposition": "The new escape-names option is absent from the released conversion implementation and is explicitly unsupported in both profiles. Current map-to-element prose/error changes and plan/name/layout combinations require scoped review; a passing simple-content example does not certify them.",
+      "exitCriteria": "Review current element/map changes and named ElementMap tests per option; C03/C05 own record/JNode types and the skip queue remains deferred.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02"
+    }
+  }
+}

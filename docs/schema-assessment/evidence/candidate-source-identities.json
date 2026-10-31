@@ -1,0 +1,154 @@
+[
+  {
+    "path": "examples/Bosak.Schema.Assessment.Example/Program.cs",
+    "sha256": "5b90eb08c8c9f252ff3103ad7c03df29a5e11a4a1647167c947f0a4ed4dfc369"
+  },
+  {
+    "path": "src/Bosak.Schema/ActivatedLicense.cs",
+    "sha256": "24f17e74adff9bdd682b841b92a684b746e0cfc68cbe1576ab674476079331d3"
+  },
+  {
+    "path": "src/Bosak.Schema/AssemblyInfo.cs",
+    "sha256": "865e48ecc9ea09f78cbc5208adc64b5fee7816909f81a15225f44f88e27e01e4"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+    "sha256": "3d0ee1b480cad7155f16ea927d45eb8585a285ab18e9f23d3389f9044eec3856"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sha256": "7226d8e4e8b88e0b4e8a9c87e93afdcec7d146f1c2b3059145f951076d910d6b"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+    "sha256": "4ece4387c908b73cd5da79c00f8ba5c7fc03fbf53c8dd94171afcad430926336"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sha256": "bfd2b8b96f18f8e2c69422799b8aa2f887d291701348efa9a15bbb3c01d89ee0"
+  },
+  {
+    "path": "src/Bosak.Schema/Compilation/SchemaCompileOptions.cs",
+    "sha256": "7a2445f11bab2446b16b22260ca1bbdefa9ff8c278bf56569dfb33567713111e"
+  },
+  {
+    "path": "src/Bosak.Schema/Compilation/SchemaCompiler.cs",
+    "sha256": "c49da2651c7ed04a5a0d84e9f9c174cebc2395268f561818d028680c877b6c13"
+  },
+  {
+    "path": "src/Bosak.Schema/Compilation/SchemaResolution.cs",
+    "sha256": "da8662cd0f10412578c48291cf3f862c3cdc526450ab5b649ae139e338dc0ddb"
+  },
+  {
+    "path": "src/Bosak.Schema/License.cs",
+    "sha256": "2fd3fac43ebf5b69cfe8b9850ea41c506579dfb4d5c95355e0143bac8259dc68"
+  },
+  {
+    "path": "src/Bosak.Schema/LicenseTier.cs",
+    "sha256": "7eb0f6d75ceb02e9f3498493880b3b3effe3fc4a7fcb4e4f38ef744d929ea0ed"
+  },
+  {
+    "path": "src/Bosak.Schema/LicenseValidationException.cs",
+    "sha256": "6ac5bdaa049a94856c01dd6304867c304e0ff11285d5cc67a02a30a8e343825f"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/AssertionDefinition.cs",
+    "sha256": "07167ef0c02b6fa64816b567beab73a034e51b95e1914c024e6b639fe8dcdaf6"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/CompiledSchema.cs",
+    "sha256": "076fb215bbe59fd5a943c68723a53b59b212986d81cf47eef1d1a4d313f73336"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/DefaultAttributesDefinition.cs",
+    "sha256": "3b9e8ebfa334a2263a3bf9b691afb3dcbefcb9c5e1cff5bcaf9ebbc21067a701"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/ElementDeclaration.cs",
+    "sha256": "80ba0b93731397f68614e3d47022fb3dc90e8306ce1d4d7759ffc356369f97c2"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/OpenContentDefinition.cs",
+    "sha256": "9f6d3304b4c297c74b60933f8a1a2ab772f62c2d7a732af81f83b98a7bdcccdb"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/SchemaDiagnostic.cs",
+    "sha256": "ec2678dc44c0f370c30e7e795bd02b775d622320fda50546d94716f7d7bbeec0"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/SimpleTypeDeclaration.cs",
+    "sha256": "97081a6323259a0680c1e4eb947c4e7a9c13a5d55dfb5daed5e59af751208d34"
+  },
+  {
+    "path": "src/Bosak.Schema/Model/XsdLanguageVersion.cs",
+    "sha256": "46492c27207405cc2532daa10d040689596abcd8180dd82b9e6aa77cb240b2d7"
+  },
+  {
+    "path": "src/Bosak.Schema/SchemaAwareXslt.cs",
+    "sha256": "3a690217b31ab1222b40863cd8fa66368650ee6392abb6c3be5ad500e58fab9c"
+  },
+  {
+    "path": "src/Bosak.Schema/SchemaServices.cs",
+    "sha256": "e4f3da62eb88979fb518c62356a23d9b7c17cad433aeb3c590649e9ffb7ed346"
+  },
+  {
+    "path": "src/Bosak.Schema/Validation/SchemaValidationResult.cs",
+    "sha256": "7f97982eb642cb0c87b31f419974eb4edf71559f7bc24035e5a7b0ec9187ee39"
+  },
+  {
+    "path": "src/Bosak.Schema/Validation/XsdValidationService.cs",
+    "sha256": "c9f523db3f42b5f24c0dcd8b02a5685a311600bcb63c876a076a69a0a7fd3ae8"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/ApacheLicenseTests.cs",
+    "sha256": "9c3e7ab3c8cdfa0a13a80d391e021ac9681cd1896e50311074729eef90049c49"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/ComplexTypeValidationTests.cs",
+    "sha256": "c4b27096228a585f05caa9e5bc59f84a77611cb0c0cf9ce08a2d4a2dc4979fb0"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/ImportSchemaSliceTests.cs",
+    "sha256": "e410977b8bbf07c2746c70a2467600d0ef7fa311429438c2a63696dcacc49beb"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeApplicabilityTests.cs",
+    "sha256": "9fa43333cf9872e9418863e71762a7e85693281b8cb55cd5f38cfaa25990cdcf"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeCompileTests.cs",
+    "sha256": "a57ef8616b2c75508ee35dae7d174f0a6aedd7cff70e5361bb7f3f6c3df67898"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/AssertionEvaluationTests.cs",
+    "sha256": "a28ab154db28ef2b7cbcb6d78d1666118999d690dc3ddcab61e38b5a801ab023"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/AssertionFacetTests.cs",
+    "sha256": "8fca48010fe804b0d403a28363a9bc4079bbac58bb7081350873b05b1bbe786b"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/CompatibilityTests.cs",
+    "sha256": "42c57746c6d0605d142b51fdeb28dc05b69855bab41f0d55238b2ede6fb3431e"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/DefaultAttributesTests.cs",
+    "sha256": "b892176f768886f2d42e259af27b0ec5c05995ae02ef4221307db47d17b811eb"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+    "sha256": "6fd85df221d8e76e6f07866327bb568d89aa24fae95fd33c4a2ae653140aac59"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/OpenContentTests.cs",
+    "sha256": "9a4431883a8acf97be8801284737c9f208210ec739a953f50804ce8153032e08"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/SchemaComponentTests.cs",
+    "sha256": "8f71206874d51d9d69e9b1080daf6af2b46e56d7736efc01304cf35e3c322ae0"
+  },
+  {
+    "path": "tests/Bosak.Schema.Tests/Xsd11/SecurityTests.cs",
+    "sha256": "4fbc1a424fbbe1e34ada44e50052cc032eda8875a7cb74637437034cb9f6fcae"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29",
+  "scope": "Consumer engine identity/adoption policy proposal and bounded prototype scope",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/consumer-source-identities.json",
+      "bytes": 1904,
+      "sha256": "74d98722170c689bc548763ed2b9515309da753168af7b24be20c5a6b55b2d97"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4267,
+      "sha256": "4b0556b478bcbdddd27058ab2435a014f07e020ef4e25d2704720867c8adf478"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1014,
+      "sha256": "1d01b75563d08becb9fecaab05d2357c36914a29ce28b46f447f6d2d4683e91a"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8617,
+      "sha256": "158b053303f02775ca5f9e02504e7ebaf4b5ade7faa0048edfd957567ed0e448"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 403,
+      "sha256": "fc67c54550f77fc748560cb006b694c12095d7d8244c417f75239bd4c6abe1dc"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "slice": "K04-C37",
+  "base": "5ba5528c",
+  "implementationComplete": true,
+  "candidate": "1.33.0",
+  "published": "1.26.3",
+  "recognizedPragmaNamespaces": [],
+  "regressions": {
+    "passed": 82,
+    "oldFailed": 55,
+    "oldPassed": 27
+  },
+  "solutionPassed": 24164,
+  "normalQt3": [
+    31340,
+    0,
+    481
+  ],
+  "isolatedQt3": [
+    31395,
+    0,
+    426
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "originals": {
+    "total": 60,
+    "prototypePassed": 59,
+    "prototypeFailed": 1,
+    "failedExcludedCase": "K-ExtensionExpression-4",
+    "eligiblePassed": 55
+  },
+  "publicControlsPassed": 24,
+  "normalBaselineChanged": false,
+  "next": "C38 separate pragma admission qualification",
+  "releaseApproved": false
+}

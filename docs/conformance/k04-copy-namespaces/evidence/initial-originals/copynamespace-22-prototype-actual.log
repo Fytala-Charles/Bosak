@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"copynamespace-22","kind":"Failed","message":"assert-string-value failed. Expected: \u0027namespace2 xml\u0027, Got: \u0027namespace2 namespace3 xml\u0027"}

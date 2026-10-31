@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "64170263da581a6f81f57e737792b6fffee18b27",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-runtime-review/README.md",
+  "reviewedDossier": "braid-runtime-admission",
+  "productionChanged": false,
+  "actualBraidIntegration": false
+}

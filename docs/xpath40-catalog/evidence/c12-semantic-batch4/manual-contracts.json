@@ -1,0 +1,211 @@
+{
+  "rejected/obsolete-quantifier-functions.md": [
+    "Verified rejected names and quantified alternative",
+    [
+      "all and some-of are absent rather than aliases",
+      "Every predicate match differs from all-values-equal",
+      "The supplied every alternative has an explicit XPath40 context"
+    ],
+    [
+      "No cross-language alias or universal duplicate/partition contract is adopted."
+    ]
+  ],
+  "rejected/xpath-switch-expression.md": [
+    "Verified XPath refusal and conditional alternative",
+    [
+      "XPath refuses the XQuery-style switch expression",
+      "The portable conditional alternative returns the declared dispatch value",
+      "XSLT switch is a separate instruction with value comparisons"
+    ],
+    [
+      "Host grammar acceptance does not transfer to standalone XPath; XQuery4 remains outside this contract."
+    ]
+  ],
+  "type-system/choice-types.md": [
+    "Limited membership/cast; matching-coercion blocker",
+    [
+      "Membership and cardinality differ from converting alternatives",
+      "Explicit cast tries alternatives in order",
+      "Already-matching typed let, argument and return values must retain the matching alternative"
+    ],
+    [
+      "C05-K02: six fresh controls still convert an already-matching string to an earlier integer alternative; explicit-cast success does not resolve this."
+    ]
+  ],
+  "type-system/enum-types.md": [
+    "Verified bounded enumeration",
+    [
+      "Allowed string values match case-sensitively",
+      "Invalid lexical values differ from a permitted business payload",
+      "Cast and castable have independently retained results"
+    ],
+    [
+      "Not complete schema-union, collation, nested function/record or error-precedence acceptance."
+    ]
+  ],
+  "type-system/nominative-records.md": [
+    "Verified bounded XSLT nominal identity",
+    [
+      "Declarations establish identity in the compiled stylesheet context",
+      "Own versus other nominal types differ despite matching fields",
+      "Standalone structural alternatives do not register nominal names"
+    ],
+    [
+      "Package visibility, transitive imports, complete static/default field combinations and arbitrary host registration remain bounded by C03/C05/C06."
+    ]
+  ],
+  "type-system/record-updates.md": [
+    "Verified bounded annotated reconstruction",
+    [
+      "but with constructs a new annotated value and preserves the original",
+      "Unknown fields and noncoercible replacements refuse; optional empty values remain present entries",
+      "Complete before/after reports retain input order and invalid-delta errors"
+    ],
+    [
+      "No persistence, concurrency or nonnegative-stock business validation; nested/schema/nominal combinations remain bounded. C05-K03 annotated-record destructuring remains a distinct defect."
+    ]
+  ],
+  "type-system/structural-records.md": [
+    "Verified bounded conversion and annotation",
+    [
+      "Plain map membership differs from an annotated record",
+      "Cast may discard extra fields and lexically convert; coercion refuses them",
+      "Required, optional-empty and unknown-field lookup have separate errors"
+    ],
+    [
+      "No full schema/type-context acceptance. C05-K03 still affects destructuring unknown annotated fields; ordinary-map empty lookup is separate."
+    ]
+  ],
+  "type-system/typed-let-coercion.md": [
+    "Limited typed binding; choice blocker retained",
+    [
+      "Typed binding applies coercion rather than numeric truncation",
+      "Untyped lexical conversion and permitted numeric promotion differ from fractional-to-integer refusal",
+      "Choice matching rules are required separately from ordinary scalar examples"
+    ],
+    [
+      "C05-K02 remains for choice-typed let/argument/return; passing scalar examples do not certify all declared types or error precedence."
+    ]
+  ],
+  "xslt-instructions/compound-patterns.md": [
+    "Verified bounded pattern sets and priorities",
+    [
+      "Pattern membership and template priority are separate",
+      "Grouping changes union/intersect/except interpretation",
+      "Delivered union-minimum and explicit-priority controls retain normal/empty/reordered reports"
+    ],
+    [
+      "The delivered minimum-priority correction remains closed. Complete current pattern/model combinations, schema and generic JNode semantics remain outside this bounded review."
+    ]
+  ],
+  "xslt-instructions/instruction-separators.md": [
+    "Verified bounded iteration separators",
+    [
+      "Separator insertion is between iterations",
+      "Empty iteration bodies do not redefine iteration count",
+      "for-each and apply-templates have separate named host controls"
+    ],
+    [
+      "No universal streaming, arbitrary serialization or callback/sequence-constructor combination claim."
+    ]
+  ],
+  "xslt-instructions/module-profiles.md": [
+    "Verified bounded direct module policy",
+    [
+      "Includes, imports and use-package retain child versions and the selected host",
+      "Legacy uses effective local version; Draft supplies frozen XPath40 independently",
+      "Complete reports retain dependency locations, package registrations and invalid input errors"
+    ],
+    [
+      "Direct nonconflicting examples do not establish arbitrary transitive graphs, import precedence, package versions, override/accept/expose or full lexical defaults. C06 complete static-detection mode remains unproved."
+    ]
+  ],
+  "xslt-instructions/processor-profiles.md": [
+    "Verified bounded frozen host policy",
+    [
+      "Legacy is the preserved version-sensitive compatibility policy",
+      "Draft uses frozen XPath40 in effective3.0 and4.0 contexts; serialization version does not promote XPath",
+      "Local resets, forward fallback and Experimental scan refusal remain explicit"
+    ],
+    [
+      "Neither profile implements all current draft syntax or enables Experimental scan. C06-H01 requires a complete static-detection mode; lazy timing alone is not classified as a defect."
+    ]
+  ],
+  "xslt-instructions/structured-value-patterns.md": [
+    "Verified bounded structured matching",
+    [
+      "Pattern syntax differs from sequence types and constructors",
+      "Present-empty map fields differ from missing fields",
+      "Vacuous arrays differ from arrays containing empty members; matching does not coerce"
+    ],
+    [
+      "C05-K01 generic model/JNode and complete nested schema/nominal pattern combinations remain limited; no universal generic-node promotion."
+    ]
+  ],
+  "xslt-instructions/xsl-array.md": [
+    "Verified bounded sequence-valued members",
+    [
+      "select alone creates a member per item",
+      "for-each plus select and explicit array-member preserve whole sequences including empty ones",
+      "Select/content and fallback ordering retain independent native boundary checks"
+    ],
+    [
+      "No full instruction-combination, streamability or host/package/type acceptance."
+    ]
+  ],
+  "xslt-instructions/xsl-if.md": [
+    "Verified bounded conditional instruction",
+    [
+      "Effective Boolean value selects then or else",
+      "Unselected dynamic errors remain lazy",
+      "Then/content exclusivity and invalid EBV retain errors"
+    ],
+    [
+      "The synthetic priority example does not validate an application vocabulary; full static-detection mode remains a separate C06 boundary."
+    ]
+  ],
+  "xslt-instructions/xsl-map.md": [
+    "Verified bounded merge policies",
+    [
+      "duplicates selects use-first, use-last, combine or reject",
+      "Default duplicates and non-map inputs retain explicit errors",
+      "Select/content interaction is distinct from duplicate resolution"
+    ],
+    [
+      "use-last is an explicit override policy, not broad payload validation; no universal nested type/collation/map contract."
+    ]
+  ],
+  "xslt-instructions/xsl-note.md": [
+    "Verified inert authoring content",
+    [
+      "Notes produce no result text",
+      "Their contained expressions do not execute",
+      "Source parsing and declared host/version remain part of the context"
+    ],
+    [
+      "No arbitrary extension instruction or complete forwards-compatible authoring validation is inferred."
+    ]
+  ],
+  "xslt-instructions/xsl-select.md": [
+    "Verified bounded XPath body instruction",
+    [
+      "Text or CDATA contains XPath rather than a sequence constructor",
+      "Raw item/node identity differs from explicitly constructed text",
+      "Optional as, required-empty errors and invalid children retain separate checks"
+    ],
+    [
+      "CDATA is an XML authoring mechanism; complete schema/static/package/resource combinations and global static-detection mode remain unaccepted."
+    ]
+  ],
+  "xslt-instructions/xsl-switch.md": [
+    "Limited selection; incomparable-comparison blocker",
+    [
+      "When test values use general comparison with the singleton selector",
+      "A selected empty branch terminates dispatch; later branches stay lazy",
+      "Incomparable numeric/Boolean operands require XPTY0004 rather than empty output"
+    ],
+    [
+      "C06-H02: both fresh host controls still return empty instead of XPTY0004. Ordinary dispatch success does not certify full general-comparison semantics."
+    ]
+  ]
+}

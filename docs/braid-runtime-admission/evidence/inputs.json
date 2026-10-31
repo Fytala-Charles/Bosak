@@ -1,0 +1,138 @@
+{
+  "baseline": {
+    "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "members": [
+      {
+        "name": "Bosak.XPath.Api",
+        "identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Api.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Compiler",
+        "identity": "Bosak.XPath.Compiler, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "c8e42d149b6caa4399536df9cc773c173bd64268fa49da66e12035a5bb0175bf",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Compiler.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Core",
+        "identity": "Bosak.XPath.Core, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Core.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Parser",
+        "identity": "Bosak.XPath.Parser, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Parser.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Providers",
+        "identity": "Bosak.XPath.Providers, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "786a7c17ed847976031439fef2b9e57a7fbc9f24a774819a9757fea90834407f",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Providers.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Runtime",
+        "identity": "Bosak.XPath.Runtime, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Runtime.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Standard",
+        "identity": "Bosak.XPath.Standard, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "cc22d4e34b2ddf2b16068478026375274e7e5811548b25700992ad754548d7d5",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Standard.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XQuery",
+        "identity": "Bosak.XQuery, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "8389fe47a4f7af09dc88ff03bda5b6e56ce06b97b165675c284e2c4656ad5950",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XQuery.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.Xslt",
+        "identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.Xslt.dll",
+        "readable": true
+      }
+    ]
+  },
+  "candidate": {
+    "revision": "2e33d3b7c02eb20a1bfe757a73bb78ebb034c980",
+    "members": [
+      {
+        "name": "Bosak.XPath.Api",
+        "identity": "Bosak.XPath.Api, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "63a4eb2599f72673fd931b12b2e345340d3e0b2f47bec4418e9cddc21b470fa7",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Api.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Compiler",
+        "identity": "Bosak.XPath.Compiler, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "285d8dbaa2a3fb8647793712ac27bfc44c532eec0b694d6ab40ee500b9093028",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Compiler.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Core",
+        "identity": "Bosak.XPath.Core, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "5d806074c7f66bf438667c5398b04cd13df5b6def358b2c1bebb0bf81aea3816",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Core.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Parser",
+        "identity": "Bosak.XPath.Parser, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "836abeb13412c323e2050a6fef855df193e595c910b4d657a2bf7b87b849942c",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Parser.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Providers",
+        "identity": "Bosak.XPath.Providers, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "e08d3d8672968424e187dd43724958e5928facc8c1d539471b2fe61656e06b0c",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Providers.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Runtime",
+        "identity": "Bosak.XPath.Runtime, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "4ed5be3f0cdd07b7cbbd78853205a630b10d3a286c58c6c6444ffc2e545a6606",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Runtime.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XPath.Standard",
+        "identity": "Bosak.XPath.Standard, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "1d460f9b5f2cad75bd893290d13034a5160d5c0a53818cc58c339ed43802c184",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XPath.Standard.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.XQuery",
+        "identity": "Bosak.XQuery, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "38e026c6278cc71b7163f904865b56b890b04762c8152d62e903dc02397122d5",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.XQuery.dll",
+        "readable": true
+      },
+      {
+        "name": "Bosak.Xslt",
+        "identity": "Bosak.Xslt, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+        "sha256": "f243dc0c205d7af2e85792bd689f890fa7d14bfa14fcd21fddb4af3b5281010e",
+        "path": "D:/Development/Bosak/.guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0/Bosak.Xslt.dll",
+        "readable": true
+      }
+    ]
+  }
+}

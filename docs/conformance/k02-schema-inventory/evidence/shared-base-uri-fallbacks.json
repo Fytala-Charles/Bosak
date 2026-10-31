@@ -1,0 +1,15 @@
+{
+  "empty": "file:///D:/Development/Bosak/tests/qt3tests/fn/abs.xml",
+  "map": "file:///D:/Development/Bosak/tests/qt3tests/fn/analyze-string.xml",
+  "works-mod": "file:///D:/Development/Bosak/tests/qt3tests/fn/avg.xml",
+  "auction": "file:///D:/Development/Bosak/tests/qt3tests/fn/boolean.xml",
+  "qname": "file:///D:/Development/Bosak/tests/qt3tests/fn/data.xml",
+  "math": "file:///D:/Development/Bosak/tests/qt3tests/fn/function-arity.xml",
+  "atomic": "file:///D:/Development/Bosak/tests/qt3tests/fn/local-name.xml",
+  "atomic-xq": "file:///D:/Development/Bosak/tests/qt3tests/fn/serialize.xml",
+  "array": "file:///D:/Development/Bosak/tests/qt3tests/array/append.xml",
+  "array-and-map": "file:///D:/Development/Bosak/tests/qt3tests/array/sort.xml",
+  "works": "file:///D:/Development/Bosak/tests/qt3tests/op/concatenate.xml",
+  "works-and-staff": "file:///D:/Development/Bosak/tests/qt3tests/op/concatenate.xml",
+  "staff": "file:///D:/Development/Bosak/tests/qt3tests/op/is-same-node.xml"
+}

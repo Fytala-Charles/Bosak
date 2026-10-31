@@ -1,0 +1,92 @@
+"""Rebuild the bounded closure plan from retained inventory and diagnostic receipts."""
+from pathlib import Path
+import collections,json
+
+CATALOG=Path(__file__).resolve().parent
+EVIDENCE=CATALOG/'evidence/closure-triage'
+def load(name):return json.loads((EVIDENCE/name).read_text(encoding='utf-8'))
+def write(name,data):(CATALOG/name).write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
+inventory=load('catalog-inventory.json');suites=load('suite-inventory.json');cases=load('skip-cases.json');diagnostics=load('diagnostic-receipts.json');routing=load('routing-summary.json')
+assert len(inventory['entries'])==76 and len(inventory['missingAdoptedSpecPins'])==28
+def work(id,title,criteria,scope,done,depends=()):return dict(id=id,title=title,status='Complete' if id in ['C01','C02','C03','C04','C05','C06','C07','C08','C09','C10','C11','C12'] else 'Open',acceptanceCriteria=criteria,scope=scope,doneWhen=done,dependsOn=list(depends))
+workpackages=[
+ work('C01','Refresh function/signature/default/keyword inventory',['AC-01'],dict(registeredNames=117,nonConstructorNames=68,focusConstructorNames=49,existingFunctionNames=197,records=['audit-function-inventory.json','audit-signature-contracts.json','CHANGED-31-CONTRACT-INVENTORY.md']),['Pin actual current review sources and distinguish them from historical adoption.','Refresh live 1.26.3 registration/arity/parameter/return/default/keyword and omitted/empty/error mappings; classify deltas rather than treating declaration text differences as semantic changes.','Record explicit remaining contract gaps and owners; do not reimplement every draft addition.']),
+ work('C02','Reconcile function/options behavior and semantic drift',['AC-01','AC-04'],dict(entries=[x['entry'] for x in inventory['entries'] if x['entry'].startswith(('functions/','experimental/'))]),['Reconcile retained option/default/atomic-family findings against published fixes and pinned intended profiles.','For each documented contract, link normal/empty/error evidence or an explicit unsupported/deferred boundary.','Separate newly reproduced engine defects into independently bounded correction tickets.'],['C01']),
+ work('C03','Reconcile constructor, type and coercion boundaries',['AC-01','AC-04'],dict(focusConstructorNames=49,entries=[x['entry'] for x in inventory['entries'] if x['entry'].startswith('type-system/') or x['entry'].endswith(('focus-functions.md','numeric-literals.md'))]),['Refresh lexical/value-space/context/type/error coverage without inferring arbitrary-precision or generic-cast support from numeric fixes.','Record schema-list, nominal/structural-record, function-signature and BC boundaries explicitly.','Close documentation discrepancies with verified examples or truthful limitation records.'],['C01']),
+]
+grammarGroups={
+ 'C04':('Expression/call/focus grammar deltas',['S1-S2-S5','S3-otherwise','S3-keywords','S3-lexical','S4-focus','REQ123-scan']),
+ 'C05':('Type/collection/pattern grammar deltas',['S4-iteration','S6-types','S6-record-conversion','S6-update','S8-patterns','S8-compound','REQ123-constructors','REQ123-destructuring','REQ123-jnode']),
+ 'C06':('Host/declaration/package/profile deltas',['S0','S7','S8-dispatch']),
+}
+assert sorted(k for _,keys in grammarGroups.values() for k in keys)==sorted(x['key'] for x in inventory['grammarRows'])
+for id,(title,keys) in grammarGroups.items():
+ workpackages.append(work(id,title,['AC-01','AC-04'],dict(grammarRows=keys,retainedRows=[x for x in inventory['grammarRows'] if x['key'] in keys]),['Review remaining productions and profile/error/host boundaries against current implementation and pinned language policy.','Retain already supplied examples; explicitly identify residual gaps rather than restarting completed slices.','Map each production to catalog/sample/named tests or an explicit disposition.'],['C01']))
+workpackages += [
+ work('C07','Lifecycle/disposition and supported-alternative reconciliation',['AC-02','AC-04'],dict(entries=[x['entry'] for x in inventory['entries']],source='COVERAGE-RECONCILIATION.md#d4---decision-lifecycle-reconciliation'),['Reconcile all 76 current classifications with source, delivery history and original moving/rejected groups.','Validate superseded/deferred/rejected alternatives and versioned refusals; preserve historical URLs and original receipts.','No deferred feature must be implemented solely to manufacture gate evidence.']),
+ work('C08','Resolve or explicitly disposition historical adoption pins',['AC-01','AC-02'],dict(entries=[x['entry'] for x in inventory['missingAdoptedSpecPins']],records=inventory['missingAdoptedSpecPins']),['Research all 28 recorded missing historically adopted specification revisions against original delivery evidence.','Use recovered immutable historical evidence where available; never substitute a current review pin for adoption history.','Apply the explicitly owner-approved28-record legacy policy while retaining original null fields; no future-work or semantic-defect exception follows.']),
+]
+for i in range(4):
+ members=[x['entry'] for x in inventory['entries'][i*19:(i+1)*19]]
+ workpackages.append(work(f'C{9+i:02d}',f'Applicable-evidence and semantic review batch {i+1}',['AC-03','AC-04'],dict(entries=members,entryCount=19),['Review every listed entry contract by contract: Known Uses, verbatim Sample Code, context/input/output/profile/edge cases and Language Alignment drift.','Use applicable XPath gates, named engine/XSLT tests or versioned refusal/alternative evidence; explicitly state non-applicability/missing gate.','Produce a per-entry acceptance/limitation/blocker receipt. Literal links and generic headings are not acceptance.'],['C02','C03','C04','C05','C06','C07']))
+workpackages.append(work('C13','Final closure review and owner acceptance',['AC-01','AC-02','AC-03','AC-04','AC-05'],dict(entries=76,featureChecks=3148,chapterChecks=24),['Resolve every blocking receipt from C01-C12, including any required historical-pin policy decision.','Verify current examples, source/contract/lifecycle/semantic evidence, all canonical links and registry counts.','Record explicit owner acceptance of AC-01 through AC-04; AC-05 remains maintained. Passing tests alone do not close REQ-126.'],[f'C{x:02d}' for x in range(1,13)]))
+assert len(workpackages)==13 and len({x['id'] for x in workpackages})==13
+batchEntries=[x for p in workpackages if p['id'] in ['C09','C10','C11','C12'] for x in p['scope']['entries']]
+assert sorted(batchEntries)==sorted(x['entry'] for x in inventory['entries']) and len(set(batchEntries))==76
+workpackages[0]['scope'].update(registeredNames=119,nonConstructorNames=70,liveInventory='CURRENT-FUNCTION-INVENTORY.json')
+workpackages[0]['completionEvidence']='FUNCTION-INVENTORY-REFRESH.md'
+workpackages[1]['completionEvidence']='FUNCTION-OPTIONS-RECONCILIATION.md'
+workpackages[2]['completionEvidence']='CONSTRUCTOR-TYPE-RECONCILIATION.md'
+workpackages[3]['completionEvidence']='EXPRESSION-CALL-FOCUS-RECONCILIATION.md'
+workpackages[4]['completionEvidence']='TYPE-COLLECTION-PATTERN-RECONCILIATION.md'
+workpackages[5]['completionEvidence']='HOST-PROFILE-RECONCILIATION.md'
+workpackages[6]['completionEvidence']='LIFECYCLE-RECONCILIATION.md'
+workpackages[7]['completionEvidence']='ADOPTION-HISTORY-RESEARCH.md'
+workpackages[7].update(researchEvidence='ADOPTION-HISTORY-RESEARCH.md',researchStatus='Complete bounded search; zero recovered adoption pins',ownerDisposition='Explicitly approved 2026-10-26:26 legacy exceptions and2 non-adoptions; original null fields retained',approvedPolicy='LEGACY-ADOPTION-POLICY-PROPOSAL.md',approvalReceipt='evidence/c08-adoption-research/owner-approval.json',originalMissingRecords=28,recoveredAdoptionPins=0)
+workpackages[8]['completionEvidence']='SEMANTIC-REVIEW-BATCH-1.md'
+workpackages[9]['completionEvidence']='SEMANTIC-REVIEW-BATCH-2.md'
+workpackages[10]['completionEvidence']='SEMANTIC-REVIEW-BATCH-3.md'
+workpackages[11]['completionEvidence']='SEMANTIC-REVIEW-BATCH-4.md'
+plan=dict(date='2026-10-26',baseline='closure-plan-v1-c12',sourceBase=inventory['base'],publishedVersion='1.26.3',requirement='REQ-126',status='In Progress',acceptance=dict(AC01='Open/partial',AC02='Open/partial',AC03='Open/partial',AC04='Open/partial',AC05='Met for current scope; maintain'),completedBaselineWork='C00 decomposition, C01 live inventory and C02 function/options, C03 constructor/type, C04 expression/call/focus, C05 type/collection/pattern, C06 host/profile, C07 lifecycle/disposition, C08 historical research/approved disposition, C09 first19-entry, C10 second19-entry, C11 third19-entry and C12 final19-entry semantic reviews complete; no acceptance criterion closed',openClosureWorkpackages=1,workpackages=workpackages,scopeControl='C12 completes the fourth 19-entry batch: all 76 now reviewed with explicit limitations; 8 fresh unmet controls remain. C13 final disposition/acceptance is open. C11 reviews19 entries/56 groups with20 unmet requirements and2 URI observations; no final acceptance. C10 reviews19 entries/55 contract groups;10 required draft controls and2 disputed source-example controls remain unmet, separately from2 context observations. C09 reviews19 entries/67 contract groups with explicit blockers and8 unmet current-draft controls; no final acceptance. C08 research recovered zero adoption pins. Explicit owner approval accepts26 scoped legacy exceptions and2 non-adoption dispositions, retaining all original null fields. 13 planned review/closure workpackages, with C01-C12 complete and 1 open. C06 retains a switch comparison mismatch and explicit static-mode/loader boundaries. C05 retains choice-coercion/record-destructuring gaps and known generic-model limits. C04 retains syntax/placeholder/mapping-focus gaps. C02 retains explicit limitations and an unmet atomic annotation contract; no semantic acceptance follows. Finish REQ-126 before skip fixes, Braid or VS Code extension work. Newly discovered defects receive separate tickets; no automatic implementation commitment for every unsupported proposal.',unrecoverableHistoryPolicy='Explicit owner approval on2026-10-26 accepts only the original28 records:26 legacy provenance exceptions and2 non-adoptions. All original nulls remain; future work requires immutable source pins, and C09-C13 semantic/defect acceptance remains open.',catalogSummary=inventory['summary'])
+# Explicit C13 owner acceptance supersedes the historical open-state decomposition above.
+acceptance=json.loads((CATALOG/'CATALOG-ACCEPTANCE.json').read_text(encoding='utf-8'))
+approval=json.loads((CATALOG/acceptance['ownerApproval']).read_text(encoding='utf-8'))
+assert approval['decision']=='Approved' and approval['proposalId']==acceptance['proposalId']
+workpackages[12].update(status='Complete',completionEvidence='CATALOG-ACCEPTANCE.md',ownerApproval=acceptance['ownerApproval'],acceptedScope=acceptance['scope'])
+plan.update(baseline='closure-plan-v1-c13-accepted',status='Complete',openClosureWorkpackages=0,
+ acceptance={id.replace('-',''):v['status'] for id,v in acceptance['criteria'].items()},
+ completedBaselineWork='C00 decomposition and C01-C13 complete; AC-01 through AC-04 explicitly accepted for the bounded catalog, AC-05 maintained.',
+ scopeControl=acceptance['policy'],ownerApproval=acceptance['ownerApproval'],completionEvidence='CATALOG-ACCEPTANCE.md',
+ unrecoverableHistoryPolicy='Original C08 approval remains exactly26 legacy provenance exceptions and two non-adoptions. All28 adoption fields stay null. C13 accepts the documented bounded catalog without resolving technical findings or expanding that history exception.')
+write('CLOSURE-PLAN.json',plan)
+counts=collections.Counter()
+for row in cases:
+ reason=row['SkipReason']
+ if reason=='Unsupported dependency':group='dependency-filtered'
+ elif 'benchmark' in reason or 'Demo applications' in reason or 'Catalog consistency' in reason:group='heavy-set-policy'
+ elif reason.startswith('Harness error: XmlSchemaException'):group='schema-harness-capability'
+ elif reason.startswith('Engine gap:'):group='documented-schema-list'
+ elif reason.startswith('Unexpected error: XmlException'):group='supplementary-xml-name'
+ elif 'billions' in reason:group='dangerous-range-guard'
+ elif reason.startswith(('Platform limitation:','Implementation-defined range limit:')):group='numeric-calendar-range-boundary'
+ elif reason.startswith('Upstream defect:'):group='upstream-assertion'
+ elif reason.startswith('External resource blocked:'):group='external-service'
+ else:raise AssertionError(reason)
+ row['TriageGroup']=group;counts[group]+=1
+assert sum(counts.values())==2573 and counts['dependency-filtered']==2512
+outcomes=collections.Counter(x['result']['kind'] if x.get('result') else 'ExecutionFailure' for x in diagnostics)
+assert len(diagnostics)==26 and outcomes==dict(Passed=6,Failed=8,HarnessException=7,Skipped=5)
+assert all(not x['timeout'] and x['exitCode']==0 for x in diagnostics)
+followups=[
+ dict(id='K01',title='Schema-list stale skip and error-code correction',cases=['qt3:CastAs-ListType-28','qt3:CastAs-ListType-20'],priority='First bounded implementation/skip-review candidate',observed='28 already passes in released executor; 20 still expects XPST0051 but receives XPTY0004.',exit='Add targeted public regressions and verify schema-awareness/profile behavior; remove only justified skip entries after a separately reviewed baseline-policy update. No skip removed in this triage.'),
+ dict(id='K02',title='Schema-loader capability boundaries',cases=['qt3:substitution-020','qt3:substitution-021','qt3:substitution-022','qt3:substitution-023','qt3:substitution-024','qt3:substitution-025','qt3:validateexpr-28'],priority='Capability/design investigation; split duration and multi-affiliation work if implemented',observed='Seven schema exceptions reproduced: six multi-QName substitutionGroup failures and one missing xs:dayTimeDuration schema type.',exit='Determine supported XSD subset and loader/model requirements; preserve schema assertions and do not simplify valid XSD 1.1 input to claim support.'),
+ dict(id='K03',title='Supplementary XML-name construction',cases=['qt4:map-to-element-053'],priority='Provider/XML representation investigation',observed='Released qt4 executor reproduces XmlException for U+1D11E.',exit='Trace QName/XDM/provider/serialization boundaries against XML 1.1 name rules; do not replace the test name with ASCII or suppress validation.'),
+ dict(id='K04',title='Dependency and routing applicability review',caseCount=2512,priority='High-value harness inventory; incremental probes, not blanket unskip',observed='Actual released filters checked for all 619 QT3 and 1,893 gated qt4 dependency skips. 1,873 qt4 cases contain a positive XQuery-only spec clause, including 106 XQ40+; none is blocked only by typedData. QT3 has 246 dependency-admitted but syntax/routing-refused cases.',exit='Review negative/unknown capability declarations, exact-version semantics and routing separately. Keep XPath4, legacy XQuery and unsupported XQuery4 scopes distinct. Bound any wider exploratory sweep per case; do not route XQ40 tests into XQuery3.1 and report conformance.'),
+ dict(id='K05',title='Dangerous range error/termination guard',cases=['qt3:cbcl-codepoints-to-string-021'],priority='Bounded engine safety investigation before original test execution',observed='Documented range can enumerate billions of integers; original case deliberately not executed.',exit='Design a spec-correct early bound/error guard and a bounded reproducer before running the original case under an external watchdog. A longer timeout is not a fix.'),
+ dict(id='K06',title='Heavy suite policy and resource-bounded coverage',caseCount=40,priority='Separate opt-in harness work',observed='14 catalog consistency, 5 demos and 21 benchmark cases are intentionally excluded from unattended QT3 sweeps.',exit='Plan isolated resource-bounded runs with explicit coverage/timeout receipts; do not admit all heavy cases into the fast frozen gate merely to reduce skip totals.'),
+]
+triage=dict(date='2026-10-26',publishedVersion='1.26.3',sourceBase=inventory['base'],scope='Fresh full QT3 and frozen-gated qt4 runs; full frozen qt4 catalog statically inventoried, not fully executed.',frozenResults=dict(qt3=[31142,0,679],qt4=[8436,0,1894]),suites={k:{x:v[x] for x in ['fixtureRevision','catalogSha256','allCatalogSets','allCatalogCases','frozenScopeSets','frozenScopeCases','skipped','reasons']} for k,v in suites.items()},skipGroups=dict(counts),dependencyAssessment=load('dependency-summary.json'),routing=routing,boundedDiagnosticCount=26,diagnosticOutcomes=dict(outcomes),diagnosticInterpretation='Bypassed runner-level admission only in isolated released-executor diagnostic processes. Six passes are investigation leads, not six automatically removable skips; conditional-dependency and language-profile applicability still govern.',followups=followups,openConformanceInvestigationClusters=6,deferredNonEngineOrLargerBoundaries=dict(numericCalendarRangeCases=8,upstreamAssertionCases=1,externalServiceCases=1),baselinePolicy='AGENTS.md still requires exact frozen totals. This triage changes no gate/filter/fixture/retry policy or expected count. Future removal/fix requires explicit reviewed baseline-policy reconciliation, with original receipts preserved.',upstreamContributionPolicy='Before any upstream correction: fetch current upstream default, branch/rebase on it, record exact base, refresh immediately before submission and retain original receipts.',fullQt4Boundary=dict(totalCases=46985,gatedCases=10330,unexecutedOutsideGates=36655,unexecutedSetsOutsideGates=514,noFullExploratoryConformanceClaim=True))
+triage['caseGroups']={group:[row['Suite']+':'+row['Name'] for row in cases if row['TriageGroup']==group] for group in counts}
+assert sum(len(v) for v in triage['caseGroups'].values())==2573
+write('CONFORMANCE-SKIP-TRIAGE.json',triage)
+print(json.dumps(dict(openClosureWorkpackages=plan['openClosureWorkpackages'],evidenceBatches=[p['scope']['entryCount'] for p in workpackages if p['id'] in ['C09','C10','C11','C12']],skipGroups=dict(counts),diagnosticOutcomes=dict(outcomes),conformanceClusters=6)))

@@ -1,0 +1,18 @@
+ec79355936a29ac70eeea3ae47e4c4e2ee00d813
+2026-10-08T13:52:31+02:00
+2026-10-08T13:52:31+02:00
+feat(xpath40): REQ-118 4.0-S4 — pipeline/mapping arrows, focus functions, member/key bindings (#87)
+
+* feat(xpath40): REQ-118 4.0-S4 — pipeline '->' + mapping arrow '=!>' + focus functions + for member/for key value bindings
+
+* test(xpath40): REQ-118 4.0-S4 gate tests — pipeline, mapping arrow, focus functions, member/entry bindings
+
+* docs(xpath40): REQ-118 4.0-S4 — registry, integration, handover
+
+* docs(xpath40): REQ-118 4.0-S4 handover hash tail
+
+* docs(xpath40): REQ-118 4.0-S4 handover hash tail (final)
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

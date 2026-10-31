@@ -1,0 +1,947 @@
+{
+  "auditDate": "2026-10-12",
+  "sourceRevision": "126ac117b46fc914f1ad3fcf193477fb9616fbc8",
+  "enginePackageVersion": "1.1.2",
+  "engineRevision": "3aebf76a24b28af7d40aa42e6eaf714b3a596838",
+  "scope": "Registered 4.0-only namespace/local-name pairs; not an arity, grammar, or changed-3.1-function inventory",
+  "functionNames": [
+    {
+      "name": "array:build",
+      "namespace": "http://www.w3.org/2005/xpath-functions/array",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "array-build"
+    },
+    {
+      "name": "array:empty",
+      "namespace": "http://www.w3.org/2005/xpath-functions/array",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "array:items",
+      "namespace": "http://www.w3.org/2005/xpath-functions/array",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "array-items"
+    },
+    {
+      "name": "array:slice",
+      "namespace": "http://www.w3.org/2005/xpath-functions/array",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-array-batches.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "array-slice"
+    },
+    {
+      "name": "array:sort-with",
+      "namespace": "http://www.w3.org/2005/xpath-functions/array",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/sort-with.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "array-sort-with"
+    },
+    {
+      "name": "fn:all-different",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:all-equal",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Dedicated shipment-event family; verified normal/edge/callback examples, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:atomic-equal",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/atomic-equal.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-atomic-equal"
+    },
+    {
+      "name": "fn:atomic-type-annotation",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:build-dateTime",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:build-uri",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:char",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:characters",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-characters"
+    },
+    {
+      "name": "fn:collation-available",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-collation-available"
+    },
+    {
+      "name": "fn:contains-subsequence",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Dedicated shipment-event family; verified normal/edge/callback examples, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-contains-subsequence"
+    },
+    {
+      "name": "fn:csv-doc",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-csv-doc"
+    },
+    {
+      "name": "fn:csv-to-xml",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-csv-to-xml"
+    },
+    {
+      "name": "fn:days-in-month",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/month-end-cutoffs.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:decode-from-uri",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:do-until",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-do-until"
+    },
+    {
+      "name": "fn:drop-while",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/ordered-queue-prefix.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:duplicate-values",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/sequence-distinctness.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:duration-to-seconds",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:element-to-map",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/element-to-map.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-element-to-map"
+    },
+    {
+      "name": "fn:element-to-map-plan",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/element-to-map.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-element-to-map-plan"
+    },
+    {
+      "name": "fn:ends-with-subsequence",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Dedicated shipment-event family; verified normal/edge/callback examples, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:every",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:foot",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-foot"
+    },
+    {
+      "name": "fn:graphemes",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:hash",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/payload-fingerprints.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:highest",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:identity",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-identity"
+    },
+    {
+      "name": "fn:index-of-substring",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-index-of-substring"
+    },
+    {
+      "name": "fn:index-where",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:insert-separator",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-insert-separator"
+    },
+    {
+      "name": "fn:is-NaN",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:items-at",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-items-at"
+    },
+    {
+      "name": "fn:jkey",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-jkey"
+    },
+    {
+      "name": "fn:jtree",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-jtree"
+    },
+    {
+      "name": "fn:jvalue",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "data-model/jnode-navigation.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-jvalue"
+    },
+    {
+      "name": "fn:lowest",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:map-to-element",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/map-to-element.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:op",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/numeric-import-diagnostics.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-op"
+    },
+    {
+      "name": "fn:pad-string",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:parse-csv",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/csv-parsing.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-parse-csv"
+    },
+    {
+      "name": "fn:parse-uri",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/invoice-api-uris.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:partial-apply",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/configured-label-callbacks.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:partition",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/consecutive-partition.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": "fn-partition"
+    },
+    {
+      "name": "fn:replicate",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-replicate"
+    },
+    {
+      "name": "fn:scan",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Experimental",
+      "catalogEntry": "experimental/fn-scan.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-scan"
+    },
+    {
+      "name": "fn:seconds",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:slice",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:some",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/higher-order-selection.md",
+      "assessment": "Family entry and published main/edge examples supplied; supplementary signatures still require review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:sort-by",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/supplier-offer-ranking.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:sort-with",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/sort-with.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "fn-sort-with"
+    },
+    {
+      "name": "fn:starts-with-subsequence",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/shipment-event-sequences.md",
+      "assessment": "Dedicated shipment-event family; verified normal/edge/callback examples, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:substring-after-last",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:substring-before-last",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/import-file-names.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:take-while",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/ordered-queue-prefix.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-take-while"
+    },
+    {
+      "name": "fn:transitive-closure",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/product-dependency-closure.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:trim-space",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/customer-text-cleanup.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "fn:trunk",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/order-sequence-selection.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-trunk"
+    },
+    {
+      "name": "fn:unix-dateTime",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/timestamp-deadlines.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-unix-dateTime"
+    },
+    {
+      "name": "fn:while-do",
+      "namespace": "http://www.w3.org/2005/xpath-functions",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/bounded-retries.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": "fn-while-do"
+    },
+    {
+      "name": "map:build",
+      "namespace": "http://www.w3.org/2005/xpath-functions/map",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "map:entries",
+      "namespace": "http://www.w3.org/2005/xpath-functions/map",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in published 1.1.2; not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "map:filter",
+      "namespace": "http://www.w3.org/2005/xpath-functions/map",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; verified examples and limitations, not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "map:items",
+      "namespace": "http://www.w3.org/2005/xpath-functions/map",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "functions/product-map-index.md",
+      "assessment": "Dedicated family entry; 1.1.1 shape difference corrected in published 1.1.2; not exhaustive signature coverage",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:ENTITIES",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:ENTITY",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:ID",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:IDREF",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:IDREFS",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:NCName",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:NMTOKEN",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:NMTOKENS",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:Name",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:QName",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:anyURI",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:base64Binary",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:boolean",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:byte",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:date",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:dateTime",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:dateTimeStamp",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:dayTimeDuration",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:decimal",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:double",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:duration",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:error",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:float",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:gDay",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:gMonth",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:gMonthDay",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:gYear",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:gYearMonth",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:hexBinary",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:int",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:integer",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:language",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:long",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:negativeInteger",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:nonNegativeInteger",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:nonPositiveInteger",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:normalizedString",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "xs-normalizedString"
+    },
+    {
+      "name": "xs:numeric",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "xs-numeric"
+    },
+    {
+      "name": "xs:positiveInteger",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:short",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:string",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:time",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:token",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": "xs-token"
+    },
+    {
+      "name": "xs:unsignedByte",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:unsignedInt",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:unsignedLong",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:unsignedShort",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:untypedAtomic",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    },
+    {
+      "name": "xs:yearMonthDuration",
+      "namespace": "http://www.w3.org/2001/XMLSchema",
+      "tier": "Frozen 4.0",
+      "catalogEntry": "operators-and-syntax/focus-functions.md",
+      "assessment": "Family entry exists; signatures/forms and evidence still need review",
+      "matchingGatedSet": null
+    }
+  ],
+  "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be",
+  "sourceCorrectionVersion": "1.1.2 (published)"
+}

@@ -1,0 +1,14 @@
+{
+  "qt3": {
+    "retainedGateNamesAndReasons": 657,
+    "normalizationSkipNamesAndReasons": 6,
+    "removed": {},
+    "added": {}
+  },
+  "qt4": {
+    "retainedGateNamesAndReasons": 1914,
+    "normalizationSkipNamesAndReasons": 6,
+    "removed": {},
+    "added": {}
+  }
+}

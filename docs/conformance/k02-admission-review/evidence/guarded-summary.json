@@ -1,0 +1,11 @@
+{
+  "mode": "guarded",
+  "defaultGuarded": false,
+  "selectedGuarded": true,
+  "total": 31821,
+  "passed": 31145,
+  "failed": 0,
+  "skipped": 676,
+  "skipDump": "docs\\conformance\\k02-admission-review\\evidence\\guarded-skips.txt",
+  "binary": "D:\\Development\\Bosak\\.guard-tmp\\c02-artifacts\\bin\\Bosak.XPath.Conformance\\release\\Bosak.XPath.Conformance.dll"
+}

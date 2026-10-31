@@ -1,0 +1,41 @@
+  Bosak.Schema -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\src\Bosak.Schema\bin\Release\net10.0\Bosak.Schema.dll
+  Bosak.Schema.Tests -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+dotnet : [xUnit.net 00:00:01.42]
+Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies [FAIL]
+At line:2 char:47
++ ... t-tests.py; dotnet test .guard-tmp/schema-assessment-worktree/Bosak.S ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([xUnit.net 00:0...ipCopies [FAIL]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  Failed Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies [20 ms]
+  Error Message:
+   System.InvalidOperationException : XPDY0002: The context item is absent.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, IXdmNode currentNode)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteSequenceConstructorDirect(XElement parent, XdmValue contextItem, XContainer outputContainer)
+   at Bosak.Xslt.Runtime.TransformEngine.EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, Boolean wrapInDocumentNode, Boolean preserveEmptySequencePositions, Boolean rejectDocumentNamespaceNodes)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule)
+   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0()
+   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action)
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule)
+   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams)
+   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem)
+   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0()
+   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0()
+--- End of stack trace from previous location ---
+   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize)
+   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams)
+   at Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies() in D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\Xsd11\DocumentAssessmentTests.cs:line 262
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: D:\Development\Bosak\.guard-tmp\schema-assessment-tests\charl_CHARLES_2026-10-29_13_02_25_net10.0.trx
+
+Failed!  - Failed:     1, Passed:   171, Skipped:     0, Total:   172, Duration: 1 s - Bosak.Schema.Tests.dll (net10.0)

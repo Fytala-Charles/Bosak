@@ -1,0 +1,13 @@
+// Generated read-only function-lookup probe for REQ-126 C01.
+using Bosak.XPath.Api;
+using System.Text.Json;
+using var output=new StreamWriter(args[1]);
+foreach(var request in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!)
+foreach(var profile in new[]{XPathCompatibility.XPath31,XPathCompatibility.XPath40,XPathCompatibility.XPath40Experimental})
+{
+ string? result=null,error=null;
+ try { result=XPath31Expression.Compile(request.GetProperty("expression").GetString()!,new CompileOptions{Compatibility=profile}).Evaluate(new Bosak.XPath.Runtime.Vm.EvaluationContext()).ToString(); }
+ catch(Exception ex){error=ex.Message;}
+ output.WriteLine(JsonSerializer.Serialize(new{name=request.GetProperty("name").GetString(),arity=request.GetProperty("arity").GetInt32(),profile=profile.ToString(),result,error}));
+}
+

@@ -1,0 +1,37 @@
+{"id":"qt3-spec-XP31\u002B-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-spec-XP31\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-spec-XP40\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-spec-XP40\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-spec-XQ31\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":true,"revisedXPath":false,"revisedXQuery":true}
+{"id":"qt3-spec-XQ31\u002B-False","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":false}
+{"id":"qt3-spec-XQ10-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-spec-XQ10-False","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-spec-XP31\u002B XQ31\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":true,"revisedXPath":false,"revisedXQuery":true}
+{"id":"qt3-spec-XP31\u002B XQ31\u002B-False","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":false}
+{"id":"qt3-spec-XP31\u002B XQ10-True","suite":"qt3","xpathSupported":false,"xquerySupported":true,"revisedXPath":false,"revisedXQuery":true}
+{"id":"qt3-spec-XP31\u002B XQ10-False","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":false}
+{"id":"qt3-spec-XQ40\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-spec-XQ40\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-default-language-en-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-default-language-en-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-default-language-fr-CA-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-default-language-fr-CA-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-feature-static-typing-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-feature-static-typing-False","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-feature-serialization-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-feature-serialization-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-feature-unknown-k04-control-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-feature-unknown-k04-control-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xsd-version-1.0-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xsd-version-1.0-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xsd-version-1.1-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-xsd-version-1.1-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xml-version-1.0-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xml-version-1.0-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-xml-version-1.1-True","suite":"qt3","xpathSupported":true,"xquerySupported":true,"revisedXPath":true,"revisedXQuery":true}
+{"id":"qt3-xml-version-1.1-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-unicode-version-15.0-True","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-unicode-version-15.0-False","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-contradiction-XQ31\u002B","suite":"qt3","xpathSupported":false,"xquerySupported":true,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-contradiction-XP31\u002B","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}
+{"id":"qt3-contradiction-fr-CA","suite":"qt3","xpathSupported":false,"xquerySupported":false,"revisedXPath":false,"revisedXQuery":false}

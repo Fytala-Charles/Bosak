@@ -1,0 +1,10 @@
+﻿from pathlib import Path
+import json,re,subprocess,hashlib
+E=Path('docs/xpath40-catalog/evidence/c08-adoption-research');lines=(E/'preledger-all-head-history.txt').read_text(encoding='utf-8').splitlines();pat=re.compile('qtspecs|qt4cg.org/specifications|adoptedSpec|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in|[Cc]ommit|[Hh]ash)');records=[]
+for line in lines:
+ rev=line.split(' ')[0];raw=subprocess.check_output(['git','show','--format=','--unified=0',rev,'--','docs','src','tests']);text=raw.decode('utf-8');selected=[v for v in text.splitlines() if v.startswith(('+','-')) and pat.search(v)];records.append(dict(revision=rev,logRecord=line,diffSha256=hashlib.sha256(raw).hexdigest(),matchingChangedLines=selected))
+(E/'historical-change-receipts.json').write_text(json.dumps(records,indent=2)+'\n',encoding='utf-8')
+for r in records:
+ for line in r['matchingChangedLines']:
+  if 'qtspecs' in line or re.search(r'\b[0-9a-f]{40}\b',line):print(r['revision'][:8],line[:280].encode('ascii','backslashreplace').decode())
+print('Verified',len(records),'historical change receipts')

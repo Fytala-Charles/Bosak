@@ -1,0 +1,97 @@
+{
+  "scope": "Metadata for next review;no current-draft semantic adoption",
+  "count": 15,
+  "gated": false,
+  "cases": [
+    {
+      "name": "format-integer-40-001",
+      "message": "Unexpected error: FODF1310",
+      "expression": "format-integer(255, '16^xxxx')",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"00ff\"</ns0:assert-eq>\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-002",
+      "message": "Unexpected error: FODF1310",
+      "expression": "format-integer(65535, '16^XX:XX')",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"FF:FF\"</ns0:assert-eq>\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-003",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer(0, $r || '^X') = \"0\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-004",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer(1, $r || '^X') = \"1\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-005",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer(-1, $r || '^X') = \"-1\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-006",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r, $r || '^X') = \"10\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-007",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r+1, $r || '^X') = \"11\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-008",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r*$r, $r || '^XXXX') = \"0100\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-009",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r*$r*$r, $r || '^X_XXX') = \"1_000\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-010",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r*$r*$r, $r || '^XX_X_XXX') = \"00_1_000\"",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-011",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36) satisfies format-integer($r - 1, $r || '^x') = \n            substring(\"0123456789abcdefghijklmnopqrstuvwxyz\", $r, 1)",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-012",
+      "message": "Unexpected error: FODF1310",
+      "expression": "every $r in (2 to 36), \n                    $n in (0, 1, 7, 23, 86, 159, 2134672, 105093381562) \n                    satisfies (format-integer($n, $r || '^X') => parse-integer($r)) eq $n\n        ",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-013",
+      "message": "Unexpected error: FODF1310",
+      "expression": "format-integer(999, \"8^#:#:#:#:XX\")",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"1:7:47\"</ns0:assert-eq>\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-016",
+      "message": "Unexpected error: FODF1310",
+      "expression": "format-integer(65535, \"16^xx^xx\")",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"ff^ff\"</ns0:assert-eq>\n        </ns0:result>    \n    "
+    },
+    {
+      "name": "format-integer-40-017",
+      "message": "Unexpected error: FODF1310",
+      "expression": "format-integer(21, \"16^xx;o\")",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"15st\"</ns0:assert-eq>\n        </ns0:result>    \n    "
+    }
+  ]
+}

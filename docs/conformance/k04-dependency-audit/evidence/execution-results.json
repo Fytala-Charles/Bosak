@@ -1,0 +1,754 @@
+[
+  {
+    "name": "K2-DirectConElemAttr-8",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\K2-DirectConElemAttr-8.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7847687000175938,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "K2-DirectConElemAttr-8-actual.log"
+  },
+  {
+    "name": "K2-DirectConElemAttr-8",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\K2-DirectConElemAttr-8.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7939336999843363,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "<foo attr=\"\"\"/>",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K2-DirectConElemAttr-8-public-xquery.log"
+  },
+  {
+    "name": "Constr-attr-syntax-5",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\Constr-attr-syntax-5.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7067734000156634,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-attr-syntax-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "Constr-attr-syntax-5-actual.log"
+  },
+  {
+    "name": "Constr-attr-syntax-5",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\Constr-attr-syntax-5.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2547605999861844,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-attr-syntax-5",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "<elem attr=\"\"\"\"/>",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<elem attr=\"&quot;\"/>]]></assert-xml>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "Constr-attr-syntax-5-public-xquery.log"
+  },
+  {
+    "name": "DirectConElemAttr-1",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\DirectConElemAttr-1.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18009440001333132,
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemAttr-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "DirectConElemAttr-1-actual.log"
+  },
+  {
+    "name": "DirectConElemAttr-1",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\DirectConElemAttr-1.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25731819999055006,
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemAttr-1",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "<shoe name=\" \"\"\"\" \"/>",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<shoe name=\" &#34;&#34; \"/>]]></assert-xml>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "DirectConElemAttr-1-public-xquery.log"
+  },
+  {
+    "name": "K2-DirectConElemAttr-29",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\K2-DirectConElemAttr-29.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20405580001533963,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-29",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K2-DirectConElemAttr-29-actual.log"
+  },
+  {
+    "name": "K2-DirectConElemAttr-29",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\K2-DirectConElemAttr-29.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2680631999974139,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-29",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "string(<foo attr=\"\"\"\"/>/@attr)",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>\"</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "K2-DirectConElemAttr-29-public-xquery.log"
+  },
+  {
+    "name": "Literals069",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\Literals069.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19120210001710802,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "Literals069-actual.log"
+  },
+  {
+    "name": "Literals069",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\Literals069.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2471862000238616,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "text{ \"He said, \"\"I don't like it.\"\"\" }",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>He said, \"I don't like it.\"</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "Literals069-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-028",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-028.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18232600000919774,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-028-actual.log"
+  },
+  {
+    "name": "contextDecl-028",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-028.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18859589999192394,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item := 3; . + 4 ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-028-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-018",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-018.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19664800001191907,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-018-actual.log"
+  },
+  {
+    "name": "contextDecl-018",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-018.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1960842000262346,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item := last() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-018-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-032",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-032.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19210620000376366,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-032-actual.log"
+  },
+  {
+    "name": "contextDecl-032",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-032.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2004190000006929,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := (1 to 17)[20]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-032-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-019",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-019.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19845389999682084,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-019-actual.log"
+  },
+  {
+    "name": "contextDecl-019",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-019.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1978227999934461,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item := position() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-019-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-022",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-022.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1966930000053253,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-022-actual.log"
+  },
+  {
+    "name": "contextDecl-022",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-022.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19931560000986792,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item as xs:string := 2; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPTY0004\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-022-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-020",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-020.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28220330001204275,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-020-actual.log"
+  },
+  {
+    "name": "contextDecl-020",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-020.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27071059998706914,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:integer external; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-020-public-xquery.log"
+  },
+  {
+    "name": "contextDecl-021",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-021.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21804979999433272,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "contextDecl-021-actual.log"
+  },
+  {
+    "name": "contextDecl-021",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\contextDecl-021.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19771579999360256,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:integer := 'London'; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "contextDecl-021-public-xquery.log"
+  },
+  {
+    "name": "Axes102",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\Axes102.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1946567999839317,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Axes102",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "Axes102-actual.log"
+  },
+  {
+    "name": "Axes102",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\Axes102.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19060430000536144,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Axes102",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare namespace ns1 = \"http://www.example.org/ns1\"; \n        declare namespace ns2 = \"http://www.example.org/ns2\"; \n        declare construction strip; \n        let $element as element(*, xs:untyped) := <e>test</e> \n        let $element as element(*, xs:untyped) := $element/self::* \n        return count($element)",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "Axes102-public-xquery.log"
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\K-CopyNamespacesProlog-3.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.190035200008424,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "log": "K-CopyNamespacesProlog-3-actual.log"
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\K-CopyNamespacesProlog-3.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18881909997435287,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare copy-namespaces preserve, inherit; 1 eq 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "K-CopyNamespacesProlog-3-public-xquery.log"
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\K-CopyNamespacesProlog-5.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19125309999799356,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "K-CopyNamespacesProlog-5-actual.log"
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\K-CopyNamespacesProlog-5.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18557989998953417,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces inherit, preserve; 1 eq 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "K-CopyNamespacesProlog-5-public-xquery.log"
+  },
+  {
+    "name": "K-ExtensionExpression-4a",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-executor\\requests\\K-ExtensionExpression-4a.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2041161999804899,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    },
+    "log": "K-ExtensionExpression-4a-actual.log"
+  },
+  {
+    "name": "K-ExtensionExpression-4a",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-executor/bin/Release/net10.0/Probe.dll",
+      "public-xquery",
+      ".guard-tmp\\k04-executor\\requests\\K-ExtensionExpression-4a.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19022280001081526,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0.",
+      "expression": "(#name content #) {1}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    },
+    "log": "K-ExtensionExpression-4a-public-xquery.log"
+  }
+]

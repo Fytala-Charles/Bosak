@@ -1,0 +1,20 @@
+{
+  "Suite": "qt3",
+  "SuiteRoot": "tests/qt3tests",
+  "SetFile": "tests/qt3tests/fn/format-date.xml",
+  "Name": "format-date-en152",
+  "Expression": "format-date($b, '[M01]', 'en', 'CB', ())",
+  "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert>matches($result, \"AD\")</ns0:assert>\n            <ns0:assert>matches($result, \"03\")</ns0:assert>\n         </ns0:all-of>\n      </ns0:result>\n   ",
+  "Dependencies": [
+    {
+      "Type": "spec",
+      "Value": "XP30+ XQ30+",
+      "Satisfied": true
+    },
+    {
+      "Type": "calendar",
+      "Value": "CB",
+      "Satisfied": false
+    }
+  ]
+}

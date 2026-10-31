@@ -1,0 +1,23 @@
+Bosak XPath 3.1 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt3tests\catalog.xml
+Test-set filter:  prod-ContextItemDecl
+
+Discovered 428 test sets.
+  Starting: prod-ContextItemDecl ...
+  Done: prod-ContextItemDecl (44 tests total)
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   44
+Passed:  4
+Failed:  0
+Skipped: 40
+
+Pass rate: 9.09%
+
+Skip reasons (grouped):
+     40  Unsupported dependency
+
+Elapsed: 0.27s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-main-context\evidence\qt3-normal-skips.txt

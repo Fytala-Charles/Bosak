@@ -1,0 +1,4 @@
+{
+  "change": "Only independent-probe observation formatting was refined: explicit QName strings and local/global declaration identity were added. Initial source/results/receipt retained separately; expected/actual boolean outcomes unchanged.",
+  "normalSourceChanged": false
+}

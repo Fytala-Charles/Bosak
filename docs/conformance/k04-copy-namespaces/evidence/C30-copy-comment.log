@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"C30-copy-comment","mode":"public-xquery","kind":"Passed","message":null,"expression":"declare(:a:)copy-namespaces(:b:)preserve,(:c:)inherit; 1","assertion":"\u003Cresult xmlns=\u0022http://www.w3.org/2010/09/qt-fots-catalog\u0022\u003E\r\n  \u003Cassert-eq\u003E1\u003C/assert-eq\u003E\r\n\u003C/result\u003E","exceptionType":null,"error":null}

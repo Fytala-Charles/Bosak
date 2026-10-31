@@ -1,0 +1,17 @@
+{
+  "name": "qt3-inventory",
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-inventory\\bin\\Release\\net10.0\\Probe.dll",
+    "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0",
+    "qt3",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\qt3",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\review-names.json",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\polarity-requests.json"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 60,
+  "wallSeconds": 0.7877514000283554,
+  "log": "qt3-inventory.log"
+}

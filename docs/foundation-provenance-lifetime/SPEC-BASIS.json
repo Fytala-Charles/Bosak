@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-31",
+  "status": "Proposed design basis; not production semantic adoption",
+  "implementationScope": "Standalone host-composition lifetime diagnostic only; no XPath/XDM/validator behavior changes",
+  "sources": [
+    {
+      "title": "XPath 3.1 W3C Recommendation",
+      "immutableRevision": "REC-xpath-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+      "sections": [
+        "2.4.2 Atomization",
+        "3.14.2 Cast"
+      ]
+    },
+    {
+      "title": "XQuery and XPath Data Model 3.1 W3C Recommendation",
+      "immutableRevision": "REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "3.3.1.1 Element and Attribute Node Types",
+        "3.3.1.2 Typed Value Determination",
+        "3.3.1.3 Relationship Between Typed-Value and String-Value",
+        "5.14 typed-value Accessor"
+      ]
+    }
+  ],
+  "intentionalDeviations": [],
+  "extensions": [
+    "Provider authority/provenance and optional audit lineage are Bosak design dimensions, not W3C-defined capabilities",
+    "Operation admission/drain/borrowed ownership is host composition, not an XDM value property"
+  ],
+  "notAdopted": [
+    "Any new production propagation rule",
+    "Full XSD 1.1 coverage",
+    "Cross-universe admission or serialization authority",
+    "General concurrency/worker/process cleanup guarantee"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "tests/qt3tests/docs/works-mod.xml": "8882a703b39ce6dff1ba206a56b7c1e5c8e3a94213c768e7ea9207f4efba6be3",
+  "tests/qt3tests/prod/ContextItemDecl/libmodule-2.xq": "da4d5c53a39a9ff3d3f7f51aa5682f8b0c8ab9fe158cd79f783c259f0ef57893",
+  "tests/qt3tests/prod/ContextItemDecl/libmodule-1.xq": "d4f760fedfab2bbe59f39dd4b6e43f90ca495de61f774cba48a7753198cfbdf6",
+  "tests/qt3tests/prod/ContextItemDecl/libmodule-3.xq": "5c35e5322d1d855ea2383ce51d7b9461e0f1d4699e64fdcaa5dbdf1df1e7ba69",
+  "tests/qt3tests/prod/SchemaImport/unionListDefined.xsd": "daf031c7fe6f080bd9c72292d59487f8d16295bf9a02d7ddfc3c78a217c3d861",
+  "tests/qt3tests/prod/ContextItemDecl/libmodule-4.xq": "22cfc367c7194fc5a103da5247295781325ff94816916d0653210c18b18ad254",
+  "tests/qt3tests/prod/ContextItemDecl/libmodule-5.xq": "ca07583d5e78956639436f7c1b2061ed988a46f5af9cb7e794c166a320662fb2",
+  "tests/qt3tests/catalog.xml": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+  "tests/qt3tests/prod/ContextItemDecl.xml": "98b1d2ede825fb9fe8ed5cfd974d90b528e3853c0f8b31036d2f3e0199db362f",
+  "docs/conformance/k04-context-resource-review/evidence/controls/alias.xq": "0f2ee3d0009e837a04c74482f3ba033344c40ba28b630d645269f118295a30e9",
+  "docs/conformance/k04-context-resource-review/evidence/controls/builtin.xq": "daa3221703a2108e434990e94fd0cbc947b5ba3be0c2defba5ed0843b3d7239a",
+  "docs/conformance/k04-context-resource-review/evidence/controls/schema-distinct.xq": "dbcf4fbfa786da3cf7f8079f898785c00d73be777a757b11732ecb127974dc2f",
+  "docs/conformance/k04-context-resource-review/evidence/controls/schema.xq": "b582c24d559ae919a5db8b1415ffabc7c506093a3ade5b53034471fe18279e7a",
+  "docs/conformance/k04-context-resource-review/evidence/controls/types.xsd": "0fbf1913f3fa1aea437892197fb8ae5fe5df182530ba955f9c117040b4d62152",
+  "docs/conformance/k04-context-resource-review/evidence/controls/union-distinct.xq": "411b110e8566f46c384e70d60ed1aa83c64a43fc4ddfef31d8e46df0afd218eb",
+  "docs/conformance/k04-context-resource-review/evidence/controls/union-left.xq": "95a8587252293f0c87d2217e1ec0ea69461454aded40c101d057e4d17e715f60",
+  "docs/conformance/k04-context-resource-review/evidence/controls/union-left.xsd": "d2a5a06618bc05db87e07663946dcd6c3f585e4610062486fe1c562a739f35e3",
+  "docs/conformance/k04-context-resource-review/evidence/controls/union-right.xq": "b9daa5d3d9dd28b2472a2141dbb1221297649ea7183ab20c586953c5a8bef460",
+  "docs/conformance/k04-context-resource-review/evidence/controls/union-right.xsd": "b77f77488c7ef5ef8cb4f4293b9ba01c344b0a57af94ab9c86831161795171e0"
+}

@@ -1,0 +1,35 @@
+# Braid shared-foundation work packages — 31 October 2026
+
+Registered under Braid REQ-122 and Core REQ-140 / C139-01 by the shared owner’s instruction to review and adjust Braid before the Bosak API freeze. Accountable owner role: Braid maintainers. Status: requirements registered; implementation and qualification pending. No new upstream request number is allocated.
+
+Braid is a required design and integration consumer alongside Schema and XmlDb. Its current adapters may change to support the shared foundation. Preserve supported source/edit/preview behavior rather than treating the existing adapter shape as a freeze constraint. Core remains independent of concrete providers and Braid; Braid Application/Core remain engine-free. Unrelated D02–D07 trust/native rollout is not a prerequisite, while required foundation contract gaps and representative Braid integration evidence block the shared freeze.
+
+## Source-backed gaps
+
+The original Braid checkout is at `0f1d949`; this isolated registration starts at `afb8e92` on `feature/readonly-inspection-session`. Product engine pin remains Bosak 1.26.2. The read-only D01 acceptance applies to its recorded old cohort only.
+
+- `BosakPreviewExecutor.Execute` reloads fixture bytes into an untyped `XDocumentNode`, creates a default compiler and a separate EvaluationContext. It has no current schema authority or persistent-node input route.
+- `PreviewRunConfiguration` fingerprints byte fixtures, engine revision/profile and limits; it has no schema semantic environment or database snapshot/version identity. Its remarks already require a new fingerprint schema for future profiles.
+- `PreviewWorkerProtocol` v1 carries SourceDocument byte envelopes and rejects unknown JSON fields. The worker constructs its own executor. A protocol extension needs explicit version/mixed-version behavior; process-local PSVI authority, sessions and database leases cannot be serialized as live objects.
+- `WorkerProcessPreviewExecutor` kills the child process on timeout. Parent/session/snapshot cleanup, in-flight ownership and result publication therefore require an explicit cross-process design.
+- The current source validation path is stylesheet validation. It must remain distinct from schema assessment of the input instance and from actual typed execution.
+
+These observations identify integration work, not defects in the existing restricted untyped preview.
+
+## Owner queue
+
+| Package | Deliverable | Completion evidence / dependency |
+|---|---|---|
+| BF140-01 Semantic environment and identity | Map actual inspection, validation, compilation, preview and deferred-use call sites to the accepted neutral environment: query/XDM version, XSD language, provider/component authority, original assessment and source/database snapshot identities. Keep these separate from engine artifact, source revision and licensing identities. | Exact member/use-case mapping and explicit unsupported outcomes against Schema N1–N8 and XmlDb FXR-01–15; answer whether settings survive lazy/nested operations. Requirements/design can start now; production binding follows C139-01. |
+| BF140-02 Typed and persistent input adapters | Design explicit Schema-assessed and XmlDb-backed input routes through engine-free Braid ports. Preserve original node/type/list/union provenance where supported; materialization or serialization must not silently convert typed/persistent inputs into equivalent-looking untyped XML. | Supported and refused cases for actual typed values, element-only atomization, preserve/strip/copies, nested results and snapshot-relative identity/order. Keep the existing untyped byte-fixture profile available. No Schema or XmlDb dependency in Braid Core/Application. |
+| BF140-03 Preview worker and resource ownership | Select one explicit process boundary: acquire/reopen authorized resources in the worker, use an approved broker, or define a separately controlled in-process profile. Do not assume any option is accepted. Version transport and artifact/profile admission; retain strict mixed-version refusal and resource denial/budgets. | Actual cancellation, timeout/child kill, worker failure, callback, deferred/nested result and owner-close fixtures. Keep snapshot/session ownership until all admitted work ends. Do not equate a retained CLR reference with a live lease, or cache schema authority by QName/digest. |
+| BF140-04 Fingerprints, currentness and historical evidence | Extend versioned run/configuration identities for selected schema resources/profile and approved database snapshot/version descriptors. Descriptors identify inputs; they do not issue authority. Bind results to the environment actually used. | A changed schema/profile/snapshot invalidates reuse even with identical stylesheet/XML bytes. Old reports/cases remain readable as historical evidence without silently authorizing new execution; no destructive migration or history deletion. Define reconnect/restore/currentness explicitly. |
+| BF140-05 Representative integration and freeze disposition | Prove actual Braid adapters with the agreed Bosak candidate and actual Schema/XmlDb providers in isolated fixtures. Return required contract gaps and a dated disposition for the exact shared manifest/profile. | At least one schema-aware typed preview and one ordinary persistent-XML preview, supported/refused/error/copy and lifetime cases, matching validation/compile/runtime environments, exact source/package/assembly identities and full affected consumer regression. Exercise the selected worker/process design and negative identities. Source/binary compatibility scope and intentional adapter changes must be explicit. This is not full backend XSD conformance or unrelated native UI/trust approval. |
+
+## Start and acceptance rules
+
+BF140-01–04 requirements/design are ready now and can run alongside Core/Schema/XmlDb work. Final implementations bind only accepted Core signatures and corresponding adopted semantics. BF140-05 executes on the resulting exact candidate; existing untyped 1.26.2 regressions or read-only D01 evidence alone cannot complete it. Known Braid foundation needs must be represented and qualified before freeze, even if full product UX and backend coverage continue later.
+
+The Braid owner supplies the mapping, adapter/protocol design and actual integration evidence; Core supplies neutral APIs and engine behavior; Schema supplies assessment authority; XmlDb supplies snapshot/lease semantics. Register any demonstrated missing Core operation under existing REQ-140/C139-01 before implementation, with precise acceptance cases. No reflection/private-engine bypass or parser replacement is authorized.
+
+Registration does not accept C45, adopt a package/pin, enable a host, authorize publication or record a freeze sign-off. Before new semantic implementation, record immutable normative revisions, sections and deviations. All current source, original checkout, credentials, stores and sealed D01/readiness receipts stay unchanged.

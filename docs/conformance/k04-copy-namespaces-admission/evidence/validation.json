@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checksBeforeManifest": 70733,
+  "catalogCases": 31821,
+  "admissions": 49,
+  "retainedSkipCount": 564,
+  "retainedReasonsUnchanged": true,
+  "lexicalControls": 37,
+  "processes": 152,
+  "productionUnchanged": true,
+  "approvalPending": true
+}

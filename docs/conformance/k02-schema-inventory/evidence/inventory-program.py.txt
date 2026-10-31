@@ -1,0 +1,31 @@
+from pathlib import Path
+import json,hashlib,subprocess,xml.etree.ElementTree as ET,collections
+R=Path.cwd();S=Path('tests/qt3tests');E=Path('docs/conformance/k02-schema-inventory/evidence');E.mkdir(parents=True,exist_ok=True);N='{http://www.w3.org/2010/09/qt-fots-catalog}'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def save(n,v):(E/n).write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+catalog=ET.parse(S/'catalog.xml').getroot();shared={e.get('name'):e for e in catalog.iter(N+'environment') if e.get('name')};skips=json.loads(Path('docs/conformance/k01-schema-list/baseline-adoption/skip-delta.json').read_text(encoding='utf-8'))['current'];rows=[];allCases=[];files={'tests/qt3tests/catalog.xml':sha(S/'catalog.xml')};seen=set()
+runner=Path('tests/Bosak.XPath.Conformance/ConformanceRunner.cs').read_text(encoding='utf-8');early=set();sharedFallback={}
+import re
+for dictionary in ['DocumentedSkips','KnownXQueryGaps']:
+ body=runner.split(dictionary+' =',1)[1].split('};',1)[0];early.update(re.findall(r'^\s*\["([^"\n]+)"\]\s*=',body,re.M))
+for record in catalog.iter(N+'test-set'):
+ path=S/record.get('file');root=ET.parse(path).getroot();files[path.as_posix()]=sha(path);local={e.get('name'):e for e in root.iter(N+'environment') if e.get('name')}
+ for case in root.iter(N+'test-case'):
+  name=case.get('name');assert name not in seen,name;seen.add(name);allCases.append(dict(name=name,setFile=path.as_posix(),baseline='Skipped' if name in skips else 'Passed',skipReason=skips.get(name)))
+  reference=case.find(N+'environment');ref=reference.get('ref') if reference is not None else None;source='inline';definition=reference
+  if ref is not None:
+   if ref in local:definition=local[ref];source='local'
+   else:definition=shared.get(ref);source='shared'
+  skippedBeforeEnvironment=record.get('name') in ['app-CatalogCheck','app-Demos','app-XMark'] or name in early
+  if source=='shared' and definition is not None and not skippedBeforeEnvironment:
+   declared=definition.find(N+'static-base-uri');value=declared.get('uri') if declared is not None else None
+   if not value:sharedFallback.setdefault(ref,path.resolve().as_uri())
+  if definition is None or not definition.findall(N+'schema'):continue
+  baselineSkipped=name in skips;knownSchemaException=baselineSkipped and skips[name].startswith('Harness error: XmlSchemaException:')
+  row=dict(id=name,kind='original',name=name,set=record.get('name'),setFile=str(path.resolve()),relativeSetFile=path.as_posix(),environmentKind=source,environmentRef=ref,normalFallbackBaseUri=sharedFallback.get(ref,path.resolve().as_uri()) if source=='shared' else path.resolve().as_uri(),environmentXml=ET.tostring(definition,encoding='unicode'),caseXml=ET.tostring(case,encoding='unicode'),expression=case.findtext(N+'test') or '',baseline='Skipped' if baselineSkipped else 'Passed',skipReason=skips.get(name),inspectPolicy=not baselineSkipped or knownSchemaException,modes=['current','guarded'])
+  rows.append(row)
+assert len(allCases)==31821 and len(seen)==31821 and sum(v['baseline']=='Skipped' for v in allCases)==677
+save('all-cases.json',allCases);save('schema-cases.json',rows);save('fixture-files.json',files)
+save('shared-base-uri-fallbacks.json',sharedFallback)
+save('inventory-scope.json',dict(date='2026-10-27',sourceBase=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),fixtureRevision=subprocess.check_output(['git','-C',str(S),'rev-parse','HEAD']).decode().strip(),catalogSha256=sha(S/'catalog.xml'),totalCases=len(allCases),schemaCases=len(rows),baselineCounts=dict(collections.Counter(v['baseline'] for v in rows)),metadataCandidates=sum(v['inspectPolicy'] for v in rows),excludedSkipped=sum(not v['inspectPolicy'] for v in rows),policy='Inventory all cases/environments. Inspect actual guard only for baseline-passing schema cases plus seven known schema-preparation exceptions. Do not execute other skipped/inapplicable/heavy cases or infer XQuery4 routing. All diagnostic outcomes remain outside gate accounting.'))
+print('Schema cases',len(rows),'baseline',collections.Counter(v['baseline'] for v in rows),'metadata candidates',sum(v['inspectPolicy'] for v in rows))

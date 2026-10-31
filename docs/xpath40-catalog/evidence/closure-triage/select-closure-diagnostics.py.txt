@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,collections
+e=Path('D:/Development/Bosak/docs/xpath40-catalog/evidence/closure-triage');rows=json.loads((e/'skip-cases.json').read_text());selected=[]
+for row in rows:
+ if row['SkipReason'].startswith(('Engine gap:','Harness error:','Unexpected error:')):selected.append(row)
+route=[r for r in rows if r['Suite']=='qt3' and r.get('FilterAssessment',{}).get('xqueryDependenciesSupported') and not r['FilterAssessment']['canRouteXquery']]
+print('Shortest routing refusals:')
+seen=set()
+for row in sorted(route,key=lambda x:len(x['Expression'])):
+ if row['Set'] in seen:continue
+ seen.add(row['Set']);print(json.dumps({k:row[k] for k in ['Name','Set','Expression']}))
+ if len(seen)==8:break
+qt4=[r for r in rows if r['Suite']=='qt4' and r['SkipReason']=='Unsupported dependency']
+def onlyXq(row):return any(d['Type']=='spec' and d['Satisfied'] and all(t.startswith('XQ') for t in d['Value'].split()) for d in row['Dependencies'])
+print('qt4 with positive XQuery-only specification clause',sum(onlyXq(r) for r in qt4))
+summary=dict(qt4PositiveXQueryOnlySpecificationCases=sum(onlyXq(r) for r in qt4),qt4XQuery40OnlyCases=sum(any(d['Type']=='spec' and d['Satisfied'] and d['Value']=='XQ40+' for d in r['Dependencies']) for r in qt4),qt3AdmittedXQueryDependenciesButRoutingRefused=len(route),nonDependencyDiagnosticCases=len(selected))
+(e/'routing-summary.json').write_text(json.dumps(summary,indent=2)+'\n',encoding='utf-8');(e/'diagnostic-selection.json').write_text(json.dumps(selected,indent=2)+'\n',encoding='utf-8');print(json.dumps(summary))

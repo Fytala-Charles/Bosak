@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C16",
+  "status": "Pending exact owner baseline approval",
+  "decisionId": "K04-CB-calendar-adoption-v1",
+  "ownerApproved": false,
+  "sourceBase": "870dd2755605242bb7407cb94a8f66cc99fc77d5",
+  "candidateVersion": "1.28.1",
+  "publishedVersion": "1.26.3",
+  "inventoryCases": 78806,
+  "calendarDeclarations": 4,
+  "originalDirectPasses": 4,
+  "originalNormalSkips": 4,
+  "originalPrototypePasses": 4,
+  "filterControls": 364,
+  "profileOutcomesPerPhase": 538,
+  "changedProfileOutcomes": 28,
+  "projectionControls": 40,
+  "mechanismObservations": 16,
+  "qt3Normal": [
+    31162,
+    0,
+    659
+  ],
+  "qt3Rehearsal": [
+    31164,
+    0,
+    657
+  ],
+  "qt4GatedNormalAndRehearsal": [
+    8587,
+    0,
+    1892
+  ],
+  "qt4ExploratoryCombinedBefore": [
+    206,
+    6,
+    20
+  ],
+  "qt4ExploratoryCombinedAfter": [
+    208,
+    6,
+    18
+  ],
+  "gatedSets": 226,
+  "experimentalPasses": 11,
+  "processes": 25,
+  "timeouts": 0,
+  "inheritedSolutionPassed": 22579,
+  "inheritedRegressionRows": 381,
+  "inheritedValidation": "docs/conformance/k04-calendar-fix/evidence/validation.json",
+  "baselineChanged": false,
+  "engineChanged": false,
+  "releaseApproved": false
+}

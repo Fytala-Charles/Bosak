@@ -1,0 +1,4 @@
+Unhandled exception. System.InvalidOperationException: real-read-only-target-obtained
+   at Program.<>c__DisplayClass7_0.<Main>g__Check|1(String name, Boolean pass) in D:\Development\Bosak\.guard-tmp\typed-inspector\Program.cs:line 51
+   at Program.Main(String[] args)
+   at Program.<Main>(String[] args)

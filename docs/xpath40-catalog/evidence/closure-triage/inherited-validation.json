@@ -1,0 +1,10 @@
+{
+  "source": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "proof": "docs/RELEASE-1.26.3-PUBLICATION.json",
+  "sha256": "15b2a41d31724b1f5c2f3bc17d973f8ba77063682cfd51b9f88ffd85d426789d",
+  "gitBlob": "7bbe2e4c93fe3fc8773f5b9bf988764a3660a07a",
+  "solutionPassed": 21798,
+  "integrationLspPassed": 84,
+  "fullUnitRerunInThisTask": false,
+  "scope": "Published/CI evidence inherited because all engine/test/harness source is unchanged; this task freshly runs frozen gates and diagnostics."
+}

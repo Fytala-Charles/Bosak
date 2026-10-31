@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-27",
+  "finding": "Initial nine empty-value expectations exposed pre-existing XPTY0004 from sequence-wrapper handling, before calendar parsing.",
+  "disposition": "Retain observed error as bounded no-change control; correct empty-sequence semantics remain an open independent defect.",
+  "initialBaseline": {
+    "failed": 249,
+    "passed": 132,
+    "total": 381
+  },
+  "initialAfter": {
+    "failed": 9,
+    "passed": 372,
+    "total": 381
+  },
+  "calendarRegressions": 240,
+  "expectedCorrectEmptySequenceBehavior": "Empty result; not implemented by this calendar slice"
+}

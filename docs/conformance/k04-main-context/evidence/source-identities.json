@@ -1,0 +1,12 @@
+{
+  "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "8b824e553e7b4c2730e77f0daab2b5f98bfbf1c5",
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "25a8da7a28cbd4e0e56c81efcbcbe8e28418b81f",
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "2ca7690f82df3d169cc24f2a6c1b75cb1d70bc38",
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": "b06194ac56159d9624d9a5d469c3ff77968dc910",
+  "src/Bosak.XQuery/Compiler/XQueryStaticContext.cs": "e76222014918328056b04af83f8af634ef035bed",
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": "5afe32dd10176a73fe2d6a4c56b79063ec468b24",
+  "src/Bosak.XQuery/Api/XQueryExecutable.cs": "f93748b15c776d9c39fcb8207cc6d73d2d169486",
+  "src/Directory.Build.props": "d404ce087ed1cc2e52e463a299b811d4db6b019c",
+  "tests/Bosak.XQuery.Tests/MainContextDeclarationTests.cs": "f7c05aacced07375e1a8b9d60421ef6f703e3c41",
+  "tests/Bosak.XQuery.Tests/ContextDeclarationErrorTests.cs": "b0b968a30af03386792cc9aad07ee82b433398a0"
+}

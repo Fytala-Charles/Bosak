@@ -1,0 +1,25 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Processor profile: Legacy
+Test sets: 234
+Filter: strip-space
+Mode: schema-aware (schema_aware / schema-import features un-gated)
+
+  Starting: strip-space ...
+  RUN  strip-space-009
+  SKIP strip-space-009: environment schema requires XSD 1.1 (engine supports XSD 1.0 only)
+  Done: strip-space (1 tests, 0 passed, 0 failed, 1 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   30
+Passed:  0
+Failed:  0
+Skipped: 30
+Unselected: 29
+Selected: 1
+Selected skipped: 1
+Missing test sets: 0
+
+Pass rate: 0.0%

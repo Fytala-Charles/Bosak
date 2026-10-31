@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-render/README.md.html",
+      "sha256": "67f6d5ea141de09a63d797cb816142c70955c3b8ecd45ce842345f0d3b6a20c1"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-render/docs_ARCHITECTURE.md.html",
+      "sha256": "d7f4818799176df93bb020c661e810442324c3fb367231d2d4ad7576cec2d9cc"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "f6fef7098c774e705db9eec06e49d4a3e5710b2ef9b214008256454c11b07b54"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-render/docs_INTEGRATION.md.html",
+      "sha256": "178b3567f7ecdd43f6a5f2a5e0965e5b7bad360677b76ae29bca3793bdb51b4c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "9446a7af07d5f02805ef0fdc1affd12f20dfb7f4b86a177cc3761545de0ec319"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "394ec9f4b80b561bb8643ace3fbcb7fc0e9417b630d40e75041d16467b3a74a0"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "0dd736fa998bb939c9b36e516fcd65bd9c9962d8cd3d897c3fb14771982f992f"
+    },
+    {
+      "source": "docs/conformance/k03-name-storage/README.md",
+      "html": ".guard-tmp/k04-render/docs_conformance_k03-name-storage_README.md.html",
+      "sha256": "dd30e6868057dbcc0884dfc18782bfa3c056513b9bea0c4cd01b20999433357c"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "18442f4bf956c5590a389758a08f1ddfbdb2ef5244931ef78bf810c68d3812f8"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-render/docs_conformance_k04-dependency-audit_NEXT-SLICE.md.html",
+      "sha256": "404dee0f81fe57c7122a86d0a660b09a08c9445c48479e03e4af997155365ec2"
+    }
+  ]
+}

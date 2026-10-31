@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-27",
+  "approvedBy": "User; explicit conversation approval",
+  "questionItemId": "[\"request_user_input_async\",\"call_5877764c0ce9469680f1dbb060ab2cae\",0]",
+  "question": "Approve the K01 baseline proposal at docs/conformance/k01-schema-list/BASELINE-UPDATE-PROPOSAL.md (commit 3f0aed6b)? This authorizes removing only CastAs-ListType-20 and CastAs-ListType-28 from known skips, updating AGENTS.md's QT3 expectation from 31,142/0/679 to 31,144/0/677, and rerunning the full QT3 gate. Both original cases pass directly; all 21,816 solution tests and current frozen gates pass. No fixture, assertion, dependency filter or qt4 baseline changes. Explicit approval is needed because AGENTS.md requires the existing exact totals.",
+  "answer": "Approve the exact two-case baseline update (Recommended)",
+  "decision": "Approved",
+  "presentedCommit": "3f0aed6b4444424e2acc8ce69ade16eedeeaa71a",
+  "proposal": "BASELINE-UPDATE-PROPOSAL.md",
+  "proposalSnapshot": "proposal-as-presented.md",
+  "proposalSha256": "f7d9e7c06a9081e8aef32517a1d44e250683f82f6b995a897441404804726ed9",
+  "proposalGitBlob": "368f8fc237493fadec7b607d552cb6b5cc064caf",
+  "removedKnownSkips": [
+    "CastAs-ListType-20",
+    "CastAs-ListType-28"
+  ],
+  "previousQt3": [
+    31142,
+    0,
+    679
+  ],
+  "approvedQt3": [
+    31144,
+    0,
+    677
+  ],
+  "unchangedQt4": [
+    8436,
+    0,
+    1894
+  ],
+  "conditions": [
+    "Remove only the two named known-skip entries.",
+    "Update AGENTS.md QT3 requirement and verify the full QT3 run before adopting the result.",
+    "Preserve fixtures, assertions, dependencies, routing, timeout/retry policy and original receipts.",
+    "No qt4 baseline, tag, push, publication or upstream change."
+  ]
+}

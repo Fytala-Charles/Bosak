@@ -1,0 +1,220 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 28 October 2026
+// PURPOSE              : Verify XQuery namespace-copy modes, module scope, source isolation and static errors.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XQuery.Api;
+using Xunit;
+
+namespace Bosak.XQuery.Tests;
+
+/// <summary>Verify namespace-copy modes, module scope, source isolation and static errors.</summary>
+public sealed class CopyNamespacesTests
+{
+    private const string Source = "<a xmlns:u='urn:c31:unused'><p:x xmlns:p='urn:c31:used' p:k='v'/></a>";
+    private static string Mode(bool preserve, bool inherit) => $"declare copy-namespaces {(preserve ? "preserve" : "no-preserve")}, {(inherit ? "inherit" : "no-inherit")}; ";
+    private static string Body(bool computed = false, bool document = false) => "let $s := " + Source +
+        " return " + (computed ? "element root { namespace r {'urn:c31:parent'}, " : "<root xmlns:r='urn:c31:parent'>{") +
+        (document ? "document {$s}" : "$s") + (computed ? "}" : "}</root>") + "/*";
+    private static string Check(string expression, bool preserve, bool inherit) =>
+        "let $c := (" + expression + ") return " +
+        $"string(namespace-uri-for-prefix('u',$c)) = '{(preserve ? "urn:c31:unused" : "")}' and " +
+        $"string(namespace-uri-for-prefix('r',$c)) = '{(inherit ? "urn:c31:parent" : "")}' and " +
+        "namespace-uri($c/*) = 'urn:c31:used' and namespace-uri($c/*/@*) = 'urn:c31:used'";
+
+    /// <summary>Supplies all copy modes across direct/computed elements and document content.</summary>
+    /// <returns>Preservation, inheritance, computed constructor and document-content flags.</returns>
+    public static IEnumerable<object[]> Modes()
+    {
+        foreach (bool preserve in new[] {false,true})
+        foreach (bool inherit in new[] {false,true})
+        foreach (bool computed in new[] {false,true})
+        foreach (bool document in new[] {false,true})
+            yield return new object[] {preserve,inherit,computed,document};
+    }
+
+    /// <summary>Applies both options to copied element trees through every constructor path.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    /// <param name="computed">Whether the outer element is computed.</param>
+    /// <param name="document">Whether content first passes through a document constructor.</param>
+    [Theory, MemberData(nameof(Modes))]
+    public void ConstructorModes(bool preserve, bool inherit, bool computed, bool document)
+        => Assert.True(new XQueryCompiler().Compile(Mode(preserve,inherit)+Check(Body(computed,document),preserve,inherit)).Evaluate(new XQueryContext()).BooleanValue);
+
+    /// <summary>Supplies mode pairs for namespace fixup and library/caller scope.</summary>
+    /// <returns>Preservation and inheritance flags.</returns>
+    public static IEnumerable<object[]> ModePairs()
+    {
+        foreach (bool preserve in new[] {false,true})
+        foreach (bool inherit in new[] {false,true}) yield return new object[] {preserve,inherit};
+    }
+
+    /// <summary>Keeps required bindings, avoids default-name changes, and leaves original nodes untouched.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void SourceAndRequiredBindings(bool preserve, bool inherit)
+    {
+        string query=Mode(preserve,inherit)+"let $s := <p:a xmlns:p='urn:c31:used' xmlns:u='urn:c31:unused' p:k='v'><z/></p:a> " +
+            "let $c := <root xmlns:p='urn:c31:conflict' xmlns:r='urn:c31:parent'>{$s}</root>/* " +
+            "return not($s is $c) and namespace-uri-for-prefix('p',$c) = 'urn:c31:used' and namespace-uri($c/@*) = 'urn:c31:used' " +
+            "and namespace-uri-for-prefix('u',$s) = 'urn:c31:unused' and empty(namespace-uri-for-prefix('r',$s)) " +
+            "and string(namespace-uri-for-prefix('r',$c)) = '"+(inherit ? "urn:c31:parent" : "")+"'";
+        Assert.True(new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+        string defaultQuery=Mode(preserve,inherit)+"let $s := <a/> let $r := <root xmlns='urn:c31:default'>{$s}</root> " +
+            "return namespace-uri($r/*) = '' and empty(namespace-uri-for-prefix('', $r/*))";
+        Assert.True(new XQueryCompiler().Compile(defaultQuery).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>Supplies module modes and exported values, functions, closures and dynamic functions.</summary>
+    /// <returns>Preservation, inheritance and export selection.</returns>
+    public static IEnumerable<object[]> ModuleCases()
+    {
+        foreach (var pair in ModePairs())
+        foreach (int access in new[] {0,1,2,3}) yield return new object[] {pair[0],pair[1],access};
+    }
+
+    /// <summary>Retains lexical modes across imported functions, variables, closures and dynamic loading.</summary>
+    /// <param name="preserve">The library preservation mode.</param>
+    /// <param name="inherit">The library inheritance mode.</param>
+    /// <param name="access">The exported value or function selection.</param>
+    [Theory, MemberData(nameof(ModuleCases))]
+    public void ModuleScope(bool preserve, bool inherit, int access)
+    {
+        string library="module namespace m='urn:c31:m'; "+Mode(preserve,inherit)+
+            "declare variable $m:v := ("+Body()+"); declare function m:make(){ "+Body()+" }; declare function m:closure(){ function(){ "+Body()+" } };";
+        var compiler=new XQueryCompiler().WithModule("urn:c31:m",library);
+        string value=access switch {0=>"m:make()",1=>"$m:v",2=>"m:closure()()",_=>"load-xquery-module('urn:c31:m')('functions')(QName('urn:c31:m','make'))(0)()"};
+        string query="import module namespace m='urn:c31:m'; "+Mode(!preserve,!inherit)+Check(value,preserve,inherit);
+        Assert.True(compiler.Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>A callback uses its caller module's lexical policy while executing inside a library.</summary>
+    /// <param name="preserve">The callback's preservation mode.</param>
+    /// <param name="inherit">The callback's inheritance mode.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void CallbackScope(bool preserve, bool inherit)
+    {
+        string library="module namespace m='urn:c31:m'; "+Mode(!preserve,!inherit)+"declare function m:invoke($f){$f()};";
+        string query="import module namespace m='urn:c31:m'; "+Mode(preserve,inherit)+"declare function local:make(){ "+Body()+" }; "+Check("m:invoke(local:make#0)",preserve,inherit);
+        Assert.True(new XQueryCompiler().WithModule("urn:c31:m",library).Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>Reports static errors for duplicate, malformed and misplaced declarations.</summary>
+    /// <param name="query">The invalid query.</param>
+    /// <param name="code">The required error code.</param>
+    [Theory]
+    [InlineData("declare copy-namespaces preserve, inherit; declare copy-namespaces no-preserve, no-inherit; 1", "XQST0055")]
+    [InlineData("declare copy-namespaces invalid, inherit; 1", "XPST0003")]
+    [InlineData("declare copy-namespaces preserve, invalid; 1", "XPST0003")]
+    [InlineData("declare copy-namespaces preserve inherit; 1", "XPST0003")]
+    [InlineData("declare copy-namespaces preserve, inherit 1", "XPST0003")]
+    [InlineData("declare variable $v := 1; declare copy-namespaces preserve, inherit; $v", "XPST0003")]
+    [InlineData("declare function local:f(){1}; declare copy-namespaces preserve, inherit; local:f()", "XPST0003")]
+    [InlineData("declare context item := 1; declare copy-namespaces preserve, inherit; .", "XPST0003")]
+    [InlineData("declare construction strip; 1", "XPST0003")]
+    public void StaticErrors(string query, string code)
+        => Assert.Contains(code,Assert.ThrowsAny<Exception>(()=>new XQueryCompiler().Compile(query)).Message);
+
+    /// <summary>Preserves the declaration through later context clones and nested-comment spellings.</summary>
+    [Fact]
+    public void ContextClonesAndComments()
+    {
+        string query="declare(:outer(:nested:) :)copy-namespaces(:a:)no-preserve,(:b:)no-inherit; declare namespace t='urn:c31:t'; declare default element namespace ''; "+Check(Body(),false,false);
+        Assert.True(new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+    /// <summary>Applies the same copied namespaces to prefix enumeration and QName resolution.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void NamespaceInspection(bool preserve, bool inherit)
+    {
+        string prefix=Mode(preserve,inherit)+"let $c := ("+Body()+") return ";
+        string check=$"exists(index-of(in-scope-prefixes($c),'u')) = {preserve.ToString().ToLowerInvariant()}() and exists(index-of(in-scope-prefixes($c),'r')) = {inherit.ToString().ToLowerInvariant()}()";
+        Assert.True(new XQueryCompiler().Compile(prefix+check).Evaluate(new XQueryContext()).BooleanValue);
+        var executable=new XQueryCompiler().Compile(prefix+"namespace-uri-from-QName(resolve-QName('r:item',$c))");
+        if (inherit) Assert.Equal("urn:c31:parent",executable.Evaluate(new XQueryContext()).StringValue);
+        else Assert.Contains("FONS0004",Assert.ThrowsAny<Exception>(()=>executable.Evaluate(new XQueryContext())).Message);
+    }
+
+    /// <summary>Copies a host-supplied node without altering its namespace bindings across evaluations.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void HostNodeIsolation(bool preserve, bool inherit)
+    {
+        var source=new XQueryCompiler().Compile(Source).Evaluate(new XQueryContext());
+        var context=new XQueryContext().WithVariable("input",source);
+        context.EvaluationContext.WithNamespace("host","urn:c31:host");
+        string query=Mode(preserve,inherit)+"declare variable $input external; "+Check("<root xmlns:r='urn:c31:parent'>{$input}</root>/*",preserve,inherit);
+        var executable=new XQueryCompiler().Compile(query);
+        Assert.True(executable.Evaluate(context).BooleanValue);
+        Assert.True(executable.Evaluate(context).BooleanValue);
+        Assert.True(context.EvaluationContext.TryResolveNamespace("host",out var host));
+        Assert.Equal("urn:c31:host",host);
+        Assert.Equal("urn:c31:unused",new XQueryCompiler().Compile("declare variable $input external; string(namespace-uri-for-prefix('u',$input))").Evaluate(context).StringValue);
+        Assert.True(new XQueryCompiler().Compile("declare variable $input external; empty(namespace-uri-for-prefix('r',$input))").Evaluate(context).BooleanValue);
+    }
+
+    /// <summary>Unspecified main-module modes remain preserve/inherit.</summary>
+    [Fact]
+    public void DefaultMainMode()
+        => Assert.True(new XQueryCompiler().Compile(Check(Body(),true,true)).Evaluate(new XQueryContext()).BooleanValue);
+
+    /// <summary>A library with no declaration keeps its defaults under an inverse caller policy.</summary>
+    [Fact]
+    public void DefaultLibraryMode()
+    {
+        var compiler=new XQueryCompiler().WithModule("urn:c31:m","module namespace m='urn:c31:m'; declare function m:make(){ "+Body()+" };");
+        Assert.True(compiler.Compile("import module namespace m='urn:c31:m'; "+Mode(false,false)+Check("m:make()",true,true)).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>Lazy globals use their declaration scope even when first requested in element content.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void LazyGlobalScope(bool preserve, bool inherit)
+    {
+        string query=Mode(preserve,inherit)+"declare variable $v := <a xmlns:u='urn:c31:unused'/>; " +
+            "declare variable $r := <root xmlns='urn:c31:outer' xmlns:r='urn:c31:parent'>{$v}</root>; " +
+            "exists($r/a) and namespace-uri($v) = '' and empty(namespace-uri-for-prefix('r',$v)) and string(namespace-uri-for-prefix('r',$r/a)) = '" +
+            (inherit ? "urn:c31:parent" : "")+"'";
+        Assert.True(new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>Lexical child markup keeps its declarations while enclosed-expression copies apply the mode.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void LiteralVersusEnclosedContent(bool preserve, bool inherit)
+    {
+        string query=Mode(preserve,inherit)+"let $d := <doc><a>{<b xmlns:p='urn:c31:p'/>}</a><a><b xmlns:p='urn:c31:p'/></a></doc> return " +
+            "string(namespace-uri-for-prefix('p',$d/a[1]/b)) = '"+(preserve ? "urn:c31:p" : "")+"' and namespace-uri-for-prefix('p',$d/a[2]/b) = 'urn:c31:p'";
+        Assert.True(new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+    /// <summary>Caller constructor declarations do not become a named library function's lexical declarations.</summary>
+    /// <param name="preserve">Whether source namespaces are retained.</param>
+    /// <param name="inherit">Whether constructor namespaces are inherited.</param>
+    [Theory, MemberData(nameof(ModePairs))]
+    public void FunctionConstructorScope(bool preserve, bool inherit)
+    {
+        string library="module namespace m='urn:c31:m'; "+Mode(preserve,inherit)+"declare function m:make(){ <a/> };";
+        string query="import module namespace m='urn:c31:m'; "+Mode(preserve,inherit)+
+            "let $r := <root xmlns='urn:c31:outer' xmlns:r='urn:c31:parent'>{m:make()}</root> return exists($r/a) and string(namespace-uri-for-prefix('r',$r/a)) = '"+(inherit ? "urn:c31:parent" : "")+"'";
+        Assert.True(new XQueryCompiler().WithModule("urn:c31:m",library).Compile(query).Evaluate(new XQueryContext()).BooleanValue);
+    }
+
+}

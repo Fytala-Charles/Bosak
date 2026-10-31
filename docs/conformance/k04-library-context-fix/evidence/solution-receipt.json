@@ -1,0 +1,17 @@
+{
+  "command": "dotnet test Bosak.sln -c Release --no-build",
+  "exitCode": 0,
+  "projects": {
+    "Bosak.XPath.Parser.Tests": 202,
+    "Bosak.XPath.Compiler.Tests": 66,
+    "Bosak.XQuery.Tests": 535,
+    "Bosak.XPath.Runtime.Tests": 269,
+    "Bosak.XPath.Core.Tests": 132,
+    "Bosak.XPath.Api.Tests": 489,
+    "Bosak.XPath.Standard.Tests": 13797,
+    "Bosak.XPath.Providers.Database.Tests": 47,
+    "Bosak.XPath.Providers.Tests": 201,
+    "Bosak.Xslt.Tests": 8196
+  },
+  "total": 23934
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "baseline",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 134.232,
+    "externalTimeoutSeconds": 300
+  },
+  {
+    "mode": "candidate",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 134.234,
+    "externalTimeoutSeconds": 300
+  }
+]

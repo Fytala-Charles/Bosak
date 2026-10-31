@@ -1,0 +1,10 @@
+=== 5 skipped: Unsupported dependency ===
+cbcl-fn-normalize-unicode-001a
+cbcl-fn-normalize-unicode-006a
+fn-normalize-unicode-11
+fn-normalize-unicode-11-6-0
+fn-normalize-unicode-11-6-2
+
+=== 1 skipped: Upstream defect: expected value has an artifactual leading space ===
+cbcl-fn-normalize-unicode-006
+

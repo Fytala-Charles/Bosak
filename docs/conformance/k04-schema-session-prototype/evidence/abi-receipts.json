@@ -1,0 +1,56 @@
+[
+  {
+    "name": "abi-consumer-build",
+    "command": [
+      "dotnet",
+      "build",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-abi\\consumer\\OldConsumer.csproj",
+      "-c",
+      "Release"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 1.3550641000038013,
+    "log": "abi-consumer-build.log"
+  },
+  {
+    "name": "abi-v2-build",
+    "command": [
+      "dotnet",
+      "build",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-abi\\v2\\CarrierAbi.csproj",
+      "-c",
+      "Release"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.9950754000456072,
+    "log": "abi-v2-build.log"
+  },
+  {
+    "name": "abi-v1",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-abi\\consumer\\bin\\Release\\net10.0\\OldConsumer.dll"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10739750001812354,
+    "log": "abi-v1.log"
+  },
+  {
+    "name": "abi-v2",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-abi\\upgraded\\OldConsumer.dll"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13474839995615184,
+    "log": "abi-v2.log"
+  }
+]

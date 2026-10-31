@@ -1,0 +1,7 @@
+{
+  "source": "docs/conformance/k04-construction-admission/adoption/solution-receipt.json",
+  "receiptSha256": "65a2f18d789bcc2552afc1f8539a6a253fcb006a69df5317d237407e517be267",
+  "solutionPassed": 24082,
+  "constructionRegressions": 73,
+  "disposition": "Inherited from adopted C35. No implementation or normal binary changes; no new solution build/test run in C36."
+}

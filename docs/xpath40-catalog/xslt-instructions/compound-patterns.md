@@ -4,6 +4,10 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded pattern sets and priorities**. The delivered minimum-priority correction remains closed. Complete current pattern/model combinations, schema and generic JNode semantics remain outside this bounded review. Final owner acceptance remains C13; earlier checkpoints are historical.
+
+**C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
+
 **Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.
 
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](../EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
@@ -12,7 +16,7 @@
 
 ## 1. Name and Classification
 
-**Implemented bounded XSLT4.0 compound contexts, with an explicit current-draft union-priority gap.** Public/source1.23.2 unchanged. [Pinned review](../COMPOUND-PATTERN-GRAMMAR.md) distinguishes observed behavior from normative expectation.
+**Implemented bounded XSLT 4.0 compound contexts in public 1.26.3.** The union-minimum, EQName URI-priority and opening-bracket parsing corrections are delivered. [C05 review](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) retains their verified scope and the remaining pattern/model limits. [The original review](../COMPOUND-PATTERN-GRAMMAR.md) and dated 1.23.x observations remain historical.
 
 ## 2. Intent
 
@@ -55,6 +59,9 @@ Combine rule membership with explicit priority, modes, sorted apply-templates an
 Grouping can change membership;4.0 node unions have a single rule identity in the tested chains. Source1.23.3 uses the pinned minimum alternative priority; public1.23.2 retains maximum. An explicit priority is an application policy, not a conformance fix for the engine.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-compound. Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical. Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 New manifest cases use default Legacy host with root/local effective3.0/4.0 versions. Local template overrides are tested. No new complete host/module/package/authoring context matrix or gate promotion is claimed.
 

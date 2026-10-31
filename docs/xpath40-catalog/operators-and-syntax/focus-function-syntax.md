@@ -4,6 +4,8 @@
   <p>Frozen XPath 4.0 - bounded executable reference</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded focus-function syntax**. No arbitrary callback/constructor/package context acceptance; C04 mapping-extra-focus and C06 host/static-mode limits remain distinct. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Focus-function syntax** - **Frozen 4.0**, REQ-118 S4. `fn { E }` and `function { E }` omit the signature and take one `item()*` argument, bound as the whole context value. `fn($x) { E }` abbreviates an ordinary explicit-signature inline function; it is not a focus function. This entry is distinct from the [zero-argument focus constructors](focus-functions.md).
@@ -55,6 +57,9 @@ The report's `$amount` focus function reads the supplied line; `$format` uses th
 A callback argument containing two items is not two calls. A callback invoked from a simple map sees its own position/size 1/1, not the caller's 1/N, 2/N positions. An axis such as `@qty` requires an appropriate node context; the implicit signature alone does not validate the report's line schema. Wrong lexical decimals raise FORG0001 in both report versions. Values are formatted to two display decimals, without claiming a general accounting model.
 
 ## 12. Implementation
+
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S4-focus. Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus. Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
 
 Thirty new manifest cases use the existing CatalogExampleTests public execution path: 18 focused values/grammar/focus probes, four explicit 3.1 refusals and eight complete stylesheet reports. Sixteen successful XPath cases also assert a 3.1 refusal; two compatible forms retain baseline results. No engine, test runner, compatibility level or gate is changed. The reports use the default Legacy host with effective stylesheet versions 3.0/4.0, not an exhaustive host/module/package matrix.
 

@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Callable/subtyping combinations beyond the verified signatures remain unsupported in this consumer reference. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Higher-order selection — Frozen 4.0.** [Bosak PR #88](https://github.com/Fytala-Charles/Bosak/pull/88) / [immutable revision `0a928bb8`](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790). This is the shipped engine delivery.
@@ -57,6 +59,8 @@ The routing planner passes an XDM map to portable XSLT through a required parame
 some/every test whether any/all items satisfy a predicate; index-where returns one-based matching positions. The two-argument callbacks receive item and position. Empty predicate results mean false; arbitrary nonboolean callback results are errors. Empty input gives some=false, every=true and no positions. An explicit existence check is needed when an empty order is invalid. Do not confuse fn:some/fn:every function calls with the XPath 3.1 quantified-expression grammar. Callback positions refer to the input sequence, not document sibling positions.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Any/all/position selection and vacuous empty results; Item and one-based position callbacks; Boolean/empty result conversion and invalid callback arity. **Boundaries:** Callable/subtyping combinations beyond the verified signatures remain unsupported in this consumer reference. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 

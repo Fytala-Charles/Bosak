@@ -1,0 +1,18 @@
+{
+  "kind": "Additional read-only contract review; no semantic adoption",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "additionalSections": [
+    "2.1.1 Static Context (module namespace bindings)",
+    "2.5.5 SequenceType matching (union membership and module type constraints)"
+  ],
+  "findingScope": "Each module constrains the initial context item using its own declaration context; lexical type text alone is insufficient identity"
+}

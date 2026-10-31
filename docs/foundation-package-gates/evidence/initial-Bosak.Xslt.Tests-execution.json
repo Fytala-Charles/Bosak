@@ -1,0 +1,13 @@
+{
+  "runner": "Bosak.Xslt.Tests",
+  "argv": [
+    "dotnet",
+    "vstest",
+    "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\runners\\Bosak.Xslt.Tests\\Bosak.Xslt.Tests.dll",
+    "/Logger:trx;LogFileName=results.trx",
+    "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\unit-results\\Bosak.Xslt.Tests"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 244.08,
+  "hookSha256": "ff6ea2ed45faf1d2179ae091b31ad529cc8f7efecd45041ddc9c3d1264f68db2"
+}

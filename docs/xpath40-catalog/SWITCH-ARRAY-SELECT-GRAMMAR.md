@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C06 host/profile review — 26 October 2026:** [Bounded reconciliation](HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
+
 **Type/pattern follow-up supplied — 21 October 2026:** The [next bounded inventory](TYPE-PATTERN-GRAMMAR.md) now maps aliases, named/structural record identity and map/array patterns. Original counts and queue below describe this earlier switch/array/select checkpoint; original audit/receipts remain unchanged.
 
 

@@ -1,0 +1,28 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Proves a real consumer inspector across an isolated shared-contract boundary.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated runtime admission experiment                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using Bosak.Braid.Application;
+using Bosak.Braid.Infrastructure;
+/// <summary>Creates the actual inspector through public consumer APIs.</summary>
+public static class Factory
+{
+    /// <summary>Creates an inspector with the supplied shared resource contract.</summary>
+    /// <param name="reader">Host-owned resource reader.</param>
+    /// <param name="maximumModules">Module budget.</param>
+    /// <returns>The actual inspector implementing the shared host interface.</returns>
+    public static ISourceInspector Create(IResourceReader? reader,int maximumModules) => new BosakSourceInspector(reader,maximumModules:maximumModules);
+}

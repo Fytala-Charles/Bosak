@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified bounded consecutive partition contract**. No arbitrary callback conversion or stable grouping after prefiltering guarantee. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Consecutive partitioning — Frozen 4.0.** [Bosak PR #88](https://github.com/Fytala-Charles/Bosak/pull/88) / [immutable revision `0a928bb8`](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790). This is the shipped engine delivery.
@@ -57,6 +59,8 @@ The routing planner passes an XDM map to portable XSLT through a required parame
 partition returns a sequence of arrays. Its split callback receives the current nonempty partition sequence, next item and one-based input position. A true result starts the next partition before that item. Empty input returns no partitions; a singleton returns one array and the callback is not invoked for its first item. The worked chapter combines capacity and route-change boundaries. This is consecutive splitting, not SQL GROUP BY and not a two-way accepted/rejected partition. Nonadjacent equal routes remain separate; filtering before splitting changes which boundaries are visible.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Consecutive partition arrays preserve source order and nonadjacent groups; Split callback receives current partition, next item and original one-based position; Empty/singleton input avoids unnecessary predicate invocation. **Boundaries:** Not SQL grouping or a two-way filter; callback conversion beyond the tested signature remains a separate boundary. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 

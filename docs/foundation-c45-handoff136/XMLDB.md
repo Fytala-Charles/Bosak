@@ -1,0 +1,11 @@
+# XmlDb owner review — FX009-01–03
+
+The current requirements checkout is 280f7064b5ef; captured requirement files match that commit. The matrix still identifies consumer execution revision 2f9a36b and candidate 1.34.2. Keep checkout, document, execution, product pin and candidate identities separate.
+
+The prior bounded Windows/Linux 1.34.2 return (27 cases/37 observations, repeated across source/package/frozen/replacement modes) remains attached to its original scope. This handoff does not replay its underlying artifacts and does not request that work again unchanged. Refresh FXR-01–15 for the changed 1.36 cohort, retaining original case IDs, baseline differences, actual loaded hashes and all six FXG dispositions. The legacy 176 mappings target an eleven-assembly 5,766-entry draft baseline; the new seven-assembly reflection snapshot is not a replacement member-ID inventory. Core must refresh the complete named manifest before joint stable-member acceptance.
+
+Start ordinary XML source compatibility and supported unchanged-binary comparison in isolated copies; source 1.36 is available, a published 1.36 package/feed is not. Package checks follow a separately selected exact package cohort. Leave production 1.26.2 pins and existing stores/history intact. Use disposable owned copies for reopen checks, with no format rewrite and CanReclaim=false retained.
+
+Return exact atomization/types/errors and constants/default dispatch (FXG-01/04), cached Current/nested/map/array escapes and detached scalars (FXG-02), reader/generation lease cleanup on break/abandon/fault/cancel (FXG-03), and supported context/cancellation/reentry/concurrent-close limits (FXG-05). The private Core scalar lease does not itself qualify persistent-node lifetime or universal all-access invalidation. FXG-06 remains joint manifest/profile acceptance.
+
+Ordinary persistent XML remains independent of optional Schema integration and JSON persistence. All fifteen rows and six gap IDs, original contract text and requested follow-up are in [MATRIX.json](MATRIX.json). Return any demonstrated missing Core operation with a precise actual-provider case; do not infer a new mandatory node/sequence member from this handoff.

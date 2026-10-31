@@ -4,9 +4,6 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
-Bosak 1.26.3 is available on NuGet, including abs, floor and ceiling integer-preservation corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.3-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
-
-
 ---
 
 <details>
@@ -48,32 +45,20 @@ Above all, FYTALA is about keeping the desire to discover alive—and passing th
 
 ---
 
-**Bosak brings XPath 3.1, XSLT 3.0 and XQuery 3.1 to .NET 10**, on one shared XQuery Data Model (XDM). Embed queries and transformations in your application, work in VS Code, or explore the visual-authoring foundation in Bosak.Braid.
+**XPath 3.1, XSLT 3.0 and XQuery 3.1 for .NET 10**, with a shared data model and APIs for embedding queries and transformations in your applications.
 
-The engine is **free and open source under Apache-2.0**. Optional commercial products extend the ecosystem: **Bosak.Schema** adds XSD complex-type schema awareness, and **Bosak.Braid** is developing a bidirectional visual/source XSLT builder.
+Bosak and [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) are **Apache-2.0**. Schema compilation and validation require no activation or subscription. Schema's XSD 1.1 implementation is staged; complete structural validation and full engine integration remain in development.
 
-[Get started](#quick-start) | [Integration guide](docs/INTEGRATION.md) | [Worked examples](docs/xpath40-catalog/worked-examples/README.md) | [Latest release](https://github.com/Fytala-Charles/Bosak/releases/latest)
-
-## Why and when to use XSLT
-
-Keep document-mapping rules together, test them against real inputs and reuse them across your .NET applications.
-
-| Your task | What you can build |
-|---|---|
-| Business document exchange | Map supplier invoices into ERP XML, validate fields and produce exception reports. |
-| Publishing | Transform XML manuals into HTML while retaining headings, inline content and cross-references. |
-| Reporting and migration | Group records, calculate totals and move older XML vocabularies to new formats. |
-| Data interchange | Query XML and produce XML, HTML, JSON or text through explicit transformation rules. |
-
-Start with the [invoice-to-ERP walkthrough](docs/xpath40-catalog/worked-examples/invoice-to-erp/README.md), [manual publishing](docs/xpath40-catalog/worked-examples/manual-to-html/README.md) or [order reconciliation](docs/xpath40-catalog/worked-examples/order-reconciliation/README.md). They include source documents, stylesheets, expected output and executable checks. PDF output from XSL-FO requires a separate formatter.
+[Quick start](#quick-start) | [Integration](docs/INTEGRATION.md) | [Worked examples](docs/xpath40-catalog/worked-examples/README.md) | [Roadmap](ROADMAP.md)
 
 ## Why Bosak
 
-- **One engine for three languages.** XPath, XSLT and XQuery share the same XDM types and expression runtime. Maps, arrays, higher-order functions and JSON processing fit alongside XML.
-- **Compile once, evaluate repeatedly.** Reuse compiled expressions and transformations; connect existing XML or custom `IXdmNode` providers through the layered .NET APIs.
-- **Control execution and resources.** Supported preview/capture APIs provide explicit resource policies, output capture, provenance and cooperative execution limits. See the [integration guide](docs/INTEGRATION.md) for supported profiles and boundaries.
-- **Preserve source while authoring.** Engine-issued inspection and edit candidates retain original bytes outside declared changes, supporting reviewable visual-authoring workflows. Create bounded output containers, populate them through reviewed text/value-of operations, replace an existing literal text body, delete a supported text instruction, or create, update and delete supported literal result attributes; see the [authoring guide](docs/REQ-135-IMPLEMENTATION.md).
-- **Explore newer language features explicitly.** XPath/XSLT 4.0 support is opt-in and bounded to the documented implemented draft features; default XPath compilation remains 3.1. See [4.0 coverage](docs/REQ-118-xpath-xslt-40.md).
+- Query XML, transform business documents, and produce XML, HTML, JSON or text.
+- Compile expressions and stylesheets once, then reuse them with different inputs.
+- Use explicit resource policies and supported source-preserving authoring APIs.
+- Explore documented 4.0 draft features through opt-in language profiles.
+
+Try the [invoice-to-ERP](docs/xpath40-catalog/worked-examples/invoice-to-erp/README.md), [manual publishing](docs/xpath40-catalog/worked-examples/manual-to-html/README.md) or [order reconciliation](docs/xpath40-catalog/worked-examples/order-reconciliation/README.md) walkthroughs.
 
 ## Quick start
 
@@ -96,67 +81,49 @@ var result = expression.Evaluate(new EvaluationContext());
 Console.WriteLine(result.IntegerValue); // 60
 ```
 
-Run it with `dotnet run`. Reuse `expression` for subsequent evaluations. For transformation or query applications, choose the matching package:
+Run `dotnet run`. For other languages, use the matching package:
 
-| Package | Use it for |
+| Package | Purpose |
 |---|---|
 | [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.3) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.3) | Compile stylesheets and transform documents. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.3) | Compile XSLT and transform documents. |
 | [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.3) | Compile and evaluate XQuery. |
 
-Continue with the [API integration guide](docs/INTEGRATION.md) and [feature catalog](docs/xpath40-catalog/README.md).
-
-## Bosak.Schema: let your schemas guide transformations
-
-**Bosak.Schema is the optional commercial add-on for XSD complex-type schema awareness.** It plugs into the core's schema extension interfaces, adding schema import and typed validation without maintaining a separate engine fork.
-
-Use named complex types with `instance of` and `treat as`, import schemas with `xsl:import-schema`, and construct schema-validated output in the supported profile. That helps catch structural mistakes at a schema boundary and lets transformations work with typed XML rather than relying entirely on manual field checks. The free core retains its built-in simple-type support and works without activating the add-on.
-
-See the [Schema integration and licensing guide](https://fytala-charles.github.io/Bosak.Docs/) or [request a trial](https://licensing.fytala.com/api/trial). Confirm package access and compatibility for your Bosak version with [Fytala](mailto:charles.korthout@fytala.com); the add-on has its own release and licensing lifecycle.
-
-## Bosak.Braid: a visual/source XSLT builder taking shape
-
-**Development of the bidirectional GUI/source XSLT builder has started.** Bosak.Braid connects the source, a visual containment view and engine-owned editing operations so you can inspect a transformation and review a change before applying it.
-
-The delivered foundation includes source/outline navigation in both directions, highlighted source review, reviewed expression edits, bounded `xsl:value-of` and literal `xsl:text` insertion, value-of deletion, and one-step Undo/Redo. Validation, preview, restricted new-file export and reopen workflows support checking the result against expected output.
-
-The larger goal is synchronized free-form source editing and richer visual composition. Full live bidirectional editing and arbitrary structural construction are still under development; the current workflow uses individually supported, reviewed operations. Braid is a separate application with its own licensing and delivery gates. Read the [ecosystem and builder overview](docs/ECOSYSTEM.md), explore the [engine authoring roadmap](docs/STRUCTURAL-AUTHORING-ROADMAP.md), or [contact Fytala](mailto:charles.korthout@fytala.com) about Braid.
+Version 1.26.3 is the [verified published baseline](docs/RELEASE-1.26.3-PUBLICATION.md). Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
 <a id="bosak-ecosystem"></a>
 
-```mermaid
-flowchart LR
-    Apps[".NET applications and VS Code"] --> Core["Bosak: XPath / XSLT / XQuery"]
-    Schema["Bosak.Schema: optional commercial add-on"] -->|Schema awareness| Core
-    Braid["Bosak.Braid: visual builder in development"] -->|Source-preserving authoring and execution| Core
+## Ecosystem and licensing
 
-    classDef current fill:#F0FFF0,stroke:#518D8F,color:#2F4F4F,stroke-width:2px
-    classDef platform fill:#E8F4EE,stroke:#5178A8,color:#2F4F4F
-    classDef external fill:#FFFFFF,stroke:#293F5F,color:#2F4F4F
-    classDef planned fill:#FDF2CF,stroke:#556B2F,color:#2F4F4F,stroke-dasharray:5 5
-    class Core current
-    class Schema platform
-    class Apps external
-    class Braid planned
-```
+| Component | Role | License |
+|---|---|---|
+| Bosak | XPath, XSLT and XQuery engine | [Apache-2.0](license.md) |
+| [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) | Optional schema integration and staged XSD 1.1 services | Apache-2.0; no activation |
+| Bosak.Braid | Visual/source XSLT authoring application in development | Commercial; separate product terms |
+| Bosak.Folio | XSL-FO-to-PDF formatter in development | Proprietary; separate product terms |
 
-<p class="fytala-figure-caption"><strong>The Bosak ecosystem.</strong> The open-source engine supports applications, the Schema add-on and Braid's developing visual-authoring workflow.</p>
+Schema's public source has its own version and compatibility lifecycle; the Apache transition did not publish a new Schema NuGet package. See its [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md) and the [ecosystem overview](docs/ECOSYSTEM.md).
+
+Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
+
+An unpublished [native XSD 1.1 assessment candidate](docs/schema-assessment/README.md) adds a bounded structurally checked document result and typed decimal exports.
 
 ## Work in VS Code
 
-Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) for syntax highlighting, diagnostics, completion, hover, navigation and evaluate/run commands. The extension has its own bundled-engine release cycle; consult the [extension guide](vscode-bosak/README.md) for installation and version details.
+Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) for diagnostics, completion, navigation and evaluate/run commands. See the [extension guide](vscode-bosak/README.md) for its bundled-engine release cycle.
 
 ## Documentation and development
 
-| Start here | What you will find |
+| Guide | Contents |
 |---|---|
+| [Integration](docs/INTEGRATION.md) | Public APIs and supported usage profiles. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
-| [Integration](docs/INTEGRATION.md) | Public APIs, supported profiles and consumer guidance. |
-| [Roadmap](ROADMAP.md) and [feature requests](docs/FEATURE_REQUESTS.md) | Planned work and current delivery status. |
-| [1.26.3 release notes](docs/RELEASE-NOTES-1.26.3.md) | Release scope, compatibility and limitations. |
-| [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived implementation checkpoints and the former README reference material. |
+| [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
+| [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
+| [Foundation integration readiness](docs/foundation-readiness/README.md) | Qualified candidate identities, integration evidence and pending consumer acceptance. |
+| [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived checkpoints and earlier roadmap snapshots. |
 
-Build and test from a source checkout with the .NET 10 SDK:
+Build and test a source checkout:
 
 ```bash
 git submodule update --init --recursive
@@ -164,10 +131,72 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-Selected XSLT 4.0 native runs support a configurable Windows timeout and retained receipts; see the [harness guide](docs/XSLT40-HARNESS-HARDENING.md).
-
-Language-server tests and manual conformance gates have separate commands in [AGENTS.md](AGENTS.md). Use the [release verification record](docs/RELEASE-1.19.0-PUBLICATION.md) for exact test counts and artifact provenance.
+See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XSLT test workaround.
 
 ## Support and contribute
 
-Ask questions in [Discussions](https://github.com/Fytala-Charles/Bosak/discussions), report bugs in [Issues](https://github.com/Fytala-Charles/Bosak/issues), or support development through [GitHub Sponsors](https://github.com/sponsors/Fytala-Charles). [Commercial support](COMMERCIAL.md) is available through Fytala. The engine remains [Apache-2.0](license.md); commercial add-ons have their own terms.
+Use [Discussions](https://github.com/Fytala-Charles/Bosak/discussions) for questions and [Issues](https://github.com/Fytala-Charles/Bosak/issues) for bugs. [Commercial support](COMMERCIAL.md) and [GitHub Sponsors](https://github.com/sponsors/Fytala-Charles) support development; schema access and conformance fixes are not paywalled.
+
+The unpublished [native whole-document assessment candidate](docs/schema-document-bridge/README.md) documents the optional Schema/provider integration and local source-build commands.
+
+The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.
+
+The unpublished [optional decimal assessment candidate](docs/schema-optional-implementation/README.md) extends the finite Schema profile while preserving original assessed state through engine copies.
+
+The [optional assessment review checkpoint](docs/schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.
+
+The unpublished [bounded repeated-decimal candidate](docs/schema-repeated-implementation/README.md) supports finite repetitions with original occurrence state and explicit cardinality/projection behavior.
+
+The [bounded repetition review checkpoint](docs/schema-repetition-review/README.md) records current implementation review and paired delivery identity.
+
+The unpublished [count assertion candidate](docs/schema-count-implementation/README.md) adds finite cardinality assertions while preserving native validation and existing child-name semantics.
+
+[Bounded Schema assessment review and next scope](docs/schema-count-review/README.md).
+
+The [bounded presence assertion candidate](docs/schema-presence-implementation/README.md) adds exists/empty predicates while preserving count and typed-copy behavior.
+
+[Presence assertion implementation review](docs/schema-presence-review/README.md).
+
+[Consumer compatibility and native Schema priorities](docs/schema-consumer-priorities/README.md).
+
+[Isolated persistent-provider compatibility qualification](docs/xmldb-compatibility/README.md).
+
+[Isolated authoring/preview source compatibility qualification](docs/braid-compatibility/README.md).
+
+[Consumer qualification review](docs/consumer-qualification-review/README.md).
+
+[Unchanged-binary compatibility qualification plan](docs/binary-compatibility-scope/README.md).
+
+[Unchanged-binary qualification and runtime identity limits](docs/binary-compatibility-execution/README.md).
+
+[Unchanged-binary qualification review](docs/binary-compatibility-review/README.md).
+
+[Consumer engine identity and reviewed adoption policy](docs/braid-engine-identity-policy/README.md).
+
+[Isolated consumer identity-policy prototype](docs/braid-identity-prototype/README.md).
+
+[Identity-policy prototype review](docs/braid-identity-review/README.md).
+
+[Isolated actual-runtime identity admission experiment](docs/braid-runtime-admission/README.md).
+
+[Actual-runtime admission experiment review](docs/braid-runtime-review/README.md).
+
+[Consumer engine-session integration boundary design](docs/braid-integration-design/README.md).
+
+[Real consumer inspector typed-boundary proof](docs/braid-typed-inspector/README.md).
+
+[Typed-inspector proof and integration review](docs/braid-typed-inspector-review/README.md).
+
+[Isolated guarded authoring-port facade proof](docs/braid-guarded-ports/README.md).
+
+[Guarded authoring-port facade review](docs/braid-guarded-ports-review/README.md).
+
+[Consumer facade and lifecycle contract scope](docs/braid-facade-lifecycle-contract/README.md).
+
+[Deterministic consumer facade lifecycle proof](docs/braid-lifecycle-proof/README.md).
+
+[Facade lifecycle contract and proof review](docs/braid-lifecycle-review/README.md).
+
+[Finite consumer read-only session adoption proposal](docs/braid-readonly-adoption/README.md).
+
+[Read-only consumer adoption proposal review](docs/braid-readonly-adoption-review/README.md).

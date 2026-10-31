@@ -1,0 +1,48 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Core\Bosak.Braid.Core.csproj (in 164 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Infrastructure\Bosak.Braid.Infrastructure.csproj (in 166 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Application\Bosak.Braid.Application.csproj (in 174 ms).
+  Restored D:\Development\Bosak\src\Bosak.XQuery\Bosak.XQuery.csproj (in 164 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj (in 220 ms).
+  Restored D:\Development\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj (in 222 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Workbench.Tests\Bosak.Braid.Workbench.Tests.csproj (in 294 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Application.Tests\Bosak.Braid.Application.Tests.csproj (in 295 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Core.Tests\Bosak.Braid.Core.Tests.csproj (in 290 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Infrastructure.Tests\Bosak.Braid.Infrastructure.Tests.csproj (in 293 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Desktop\Bosak.Braid.Desktop.csproj (in 600 ms).
+  7 of 18 projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.Braid.Core -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Core\bin\Release\net10.0\Bosak.Braid.Core.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.Braid.Core.Tests -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Core.Tests\bin\Release\net10.0\Bosak.Braid.Core.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Core.Tests\bin\Release\net10.0\Bosak.Braid.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+  Bosak.Braid.Application -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Application\bin\Release\net10.0\Bosak.Braid.Application.dll
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018: The "AvaloniaStatsTask" task failed unexpectedly. [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018: System.UnauthorizedAccessException: Access to the path 'C:\Users\charl\AppData\Local\AvaloniaUI\BuildServices\buildtasks.log' is denied. [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Avalonia.Telemetry.Logger.AppendLine(String path, String line) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Avalonia.Telemetry.Logger.LogException(Exception exception, String message) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Avalonia.Telemetry.AvaloniaStatsTask.WriteTelemetry(TelemetryPayload telemetryData) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Avalonia.Telemetry.AvaloniaStatsTask.Execute() [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Microsoft.Build.BackEnd.TaskExecutionHost.Execute() [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+C:\Users\charl\.nuget\packages\avalonia.buildservices\11.3.2\buildTransitive\Avalonia.BuildServices.targets(9,9): error MSB4018:    at Microsoft.Build.BackEnd.TaskBuilder.ExecuteInstantiatedTask(TaskExecutionHost taskExecutionHost, TaskLoggingContext taskLoggingContext, TaskHost taskHost, ItemBucket bucket, TaskExecutionMode howToExecuteTask) [D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj]
+Results File: D:\Development\Bosak\.guard-tmp\schema-consumer-results\Braid\charl_CHARLES_2026-10-29_11_50_09_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 232 ms - Bosak.Braid.Core.Tests.dll (net10.0)
+  Bosak.Braid.Application.Tests -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Application.Tests\bin\Release\net10.0\Bosak.Braid.Application.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Application.Tests\bin\Release\net10.0\Bosak.Braid.Application.Tests.dll (.NETCoreApp,Version=v10.0)
+  Bosak.Braid.Infrastructure -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Infrastructure\bin\Release\net10.0\Bosak.Braid.Infrastructure.dll
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-consumer-results\Braid\charl_CHARLES_2026-10-29_11_50_16_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   514, Skipped:     0, Total:   514, Duration: 526 ms - Bosak.Braid.Application.Tests.dll (net10.0)

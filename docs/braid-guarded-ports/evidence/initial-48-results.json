@@ -1,0 +1,273 @@
+{
+  "checks": [
+    {
+      "name": "actual-inspection-succeeds",
+      "passed": true
+    },
+    {
+      "name": "retained-bytes-identical",
+      "passed": true
+    },
+    {
+      "name": "projected-entry-data-identical",
+      "passed": true
+    },
+    {
+      "name": "all-nine-existing-port-properties-inventoried",
+      "passed": true
+    },
+    {
+      "name": "unsupported-eight-ports-removed",
+      "passed": true
+    },
+    {
+      "name": "only-returned-port-is-host-facade",
+      "passed": true
+    },
+    {
+      "name": "no-public-result-port-has-raw-context-type",
+      "passed": true
+    },
+    {
+      "name": "all-mutation-capability-flags-disabled",
+      "passed": true
+    },
+    {
+      "name": "raw-engine-capabilities-not-mutated",
+      "passed": true
+    },
+    {
+      "name": "real-target-is-wrapped",
+      "passed": true
+    },
+    {
+      "name": "wrapped-target-data-matches",
+      "passed": true
+    },
+    {
+      "name": "target-has-no-public-raw-object-accessor",
+      "passed": true
+    },
+    {
+      "name": "nochange-returns-same-wrapped-target",
+      "passed": true
+    },
+    {
+      "name": "nochange-does-not-publish-review",
+      "passed": true
+    },
+    {
+      "name": "unsupported-operation-refused-Delete",
+      "passed": true
+    },
+    {
+      "name": "unsupported-operation-refused-MoveUp",
+      "passed": true
+    },
+    {
+      "name": "unsupported-operation-refused-MoveDown",
+      "passed": true
+    },
+    {
+      "name": "unsupported-operation-refused-Wrap",
+      "passed": true
+    },
+    {
+      "name": "unsupported-operation-refused-Unwrap",
+      "passed": true
+    },
+    {
+      "name": "changed-name-refused",
+      "passed": true
+    },
+    {
+      "name": "null-name-refused",
+      "passed": true
+    },
+    {
+      "name": "unsupported-intents-never-forwarded",
+      "passed": true
+    },
+    {
+      "name": "raw-target-not-accepted-by-facade",
+      "passed": true
+    },
+    {
+      "name": "different-snapshot-port-refuses-target",
+      "passed": true
+    },
+    {
+      "name": "different-session-refuses-target",
+      "passed": true
+    },
+    {
+      "name": "pre-cancellation-propagates",
+      "passed": true
+    },
+    {
+      "name": "faulty-underlying-response-suppressed-wrong-nochange",
+      "passed": true
+    },
+    {
+      "name": "faulty-underlying-response-suppressed-candidate",
+      "passed": true
+    },
+    {
+      "name": "underlying-session-released-when-idle",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-Operation",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-MoveContext",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-ConditionalParentId",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-ModuleUri",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-NodeId",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-Range",
+      "passed": true
+    },
+    {
+      "name": "closed-target-getter-refused-LocalName",
+      "passed": true
+    },
+    {
+      "name": "closed-inspector-capability-getter-refused",
+      "passed": true
+    },
+    {
+      "name": "closed-inspector-returns-no-authority",
+      "passed": true
+    },
+    {
+      "name": "closed-port-target-discovery-refused",
+      "passed": true
+    },
+    {
+      "name": "closed-port-proposal-refused",
+      "passed": true
+    },
+    {
+      "name": "no-postclose-forwarding",
+      "passed": true
+    },
+    {
+      "name": "historical-byte-data-remains-readable",
+      "passed": true
+    },
+    {
+      "name": "raw-control-still-reproduces-old-gap",
+      "passed": true
+    },
+    {
+      "name": "inflight-close-defers-underlying-release",
+      "passed": true
+    },
+    {
+      "name": "closing-refuses-new-work",
+      "passed": true
+    },
+    {
+      "name": "inflight-result-does-not-publish-raw-ports",
+      "passed": true
+    },
+    {
+      "name": "release-after-inflight-completion",
+      "passed": true
+    },
+    {
+      "name": "no-default-engine-or-adapter-fallback",
+      "passed": true
+    }
+  ],
+  "underlyingRuntimeLedger": [
+    {
+      "Name": "Bosak.Braid.Infrastructure",
+      "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+      "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.Braid.Infrastructure.dll",
+      "Location": ""
+    },
+    {
+      "Name": "Bosak.Xslt",
+      "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+      "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.Xslt.dll",
+      "Location": ""
+    },
+    {
+      "Name": "Bosak.XPath.Api",
+      "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+      "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.XPath.Api.dll",
+      "Location": ""
+    },
+    {
+      "Name": "Bosak.XPath.Runtime",
+      "Identity": "Bosak.XPath.Runtime, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9",
+      "Mvid": "bb2f1325-7b42-4c78-95a2-572e024b9f95",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.XPath.Runtime.dll",
+      "Location": ""
+    },
+    {
+      "Name": "Bosak.XPath.Core",
+      "Identity": "Bosak.XPath.Core, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a",
+      "Mvid": "d64bde03-cadb-4a9c-868e-60ab4191a1e7",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.XPath.Core.dll",
+      "Location": ""
+    },
+    {
+      "Name": "Bosak.XPath.Parser",
+      "Identity": "Bosak.XPath.Parser, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+      "SnapshotSha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc",
+      "Mvid": "0833e8e5-ec84-4ce1-8582-c13655cc254f",
+      "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\guarded-ports\\work-5f747e0b0205439f878db1a1e1589325\\primary\\Bosak.XPath.Parser.dll",
+      "Location": ""
+    }
+  ],
+  "portProperties": [
+    "ExpressionEditor",
+    "ValueOfInserter",
+    "ValueOfDeleter",
+    "TextDeleter",
+    "TextInserter",
+    "LiteralElementInserter",
+    "TextBodyReplacer",
+    "LiteralAttributeEditor",
+    "LiteralElementEditor"
+  ],
+  "targetProperties": [
+    "Operation",
+    "MoveContext",
+    "ConditionalParentId",
+    "ModuleUri",
+    "NodeId",
+    "Range",
+    "LocalName"
+  ],
+  "primaryForwardedCalls": 10,
+  "rawControlStillCallable": true,
+  "facadeNoChangeOnly": true,
+  "actualBraidProductionModified": false,
+  "allReturnedPortsGuardedOrRemoved": true,
+  "controlledInflightCloseQualified": true,
+  "arbitraryConcurrencyQualified": false
+}

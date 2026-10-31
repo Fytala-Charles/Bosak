@@ -1,0 +1,23 @@
+{
+  "slice": "K04-C38 adoption",
+  "proposalCommit": "124a73d1",
+  "ownerApproval": "approved exact 55-case pragma adoption",
+  "solutionPassed": 24164,
+  "qt3Normal": [
+    31395,
+    0,
+    426
+  ],
+  "qt4Normal": [
+    8939,
+    0,
+    1920
+  ],
+  "removedSkips": 55,
+  "retainedReasonsUnchanged": true,
+  "remainingIndependentDependencySkips": 370,
+  "candidate": "1.33.0",
+  "published": "1.26.3",
+  "releaseApproved": false,
+  "next": "C39 read-only dependency-profile review"
+}

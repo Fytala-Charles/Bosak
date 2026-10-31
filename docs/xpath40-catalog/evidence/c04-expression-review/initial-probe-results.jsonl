@@ -1,0 +1,205 @@
+{"id":"otherwise-empty","profile":"XPath40","phase":"success","result":"4","error":null,"exceptionType":null}
+{"id":"otherwise-empty","profile":"XPath40Experimental","phase":"success","result":"4","error":null,"exceptionType":null}
+{"id":"otherwise-zero","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"otherwise-zero","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"otherwise-false","profile":"XPath40","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"otherwise-false","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"otherwise-empty-string","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"otherwise-empty-string","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"otherwise-all-items","profile":"XPath40","phase":"success","result":"1,2","error":null,"exceptionType":null}
+{"id":"otherwise-all-items","profile":"XPath40Experimental","phase":"success","result":"1,2","error":null,"exceptionType":null}
+{"id":"otherwise-chain","profile":"XPath40","phase":"success","result":"4","error":null,"exceptionType":null}
+{"id":"otherwise-chain","profile":"XPath40Experimental","phase":"success","result":"4","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-comparison","profile":"XPath40","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-comparison","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-arithmetic","profile":"XPath40","phase":"success","result":"3","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-arithmetic","profile":"XPath40Experimental","phase":"success","result":"3","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-concat","profile":"XPath40","phase":"success","result":"ab","error":null,"exceptionType":null}
+{"id":"otherwise-precedence-concat","profile":"XPath40Experimental","phase":"success","result":"ab","error":null,"exceptionType":null}
+{"id":"otherwise-guard-divide","profile":"XPath40","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-guard-divide","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-guard-type","profile":"XPath40","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-guard-type","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-selected-error","profile":"XPath40","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"otherwise-selected-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"otherwise-left-error","profile":"XPath40","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"otherwise-left-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"otherwise-outer-focus","profile":"XPath40","phase":"success","result":"8:1:2|9:2:2","error":null,"exceptionType":null}
+{"id":"otherwise-outer-focus","profile":"XPath40Experimental","phase":"success","result":"8:1:2|9:2:2","error":null,"exceptionType":null}
+{"id":"otherwise-static-unknown-var","profile":"XPath40","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-static-unknown-var","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-static-unknown-function","profile":"XPath40","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-static-unknown-function","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"otherwise-static-syntax","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 10: XPST0003: Unexpected token RParen in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-static-syntax","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 10: XPST0003: Unexpected token RParen in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-old-profile","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-old-profile","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-current-spelling","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token Name","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-current-spelling","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token Name","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-current-guard","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: Unexpected token Name","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"otherwise-current-guard","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: Unexpected token Name","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"guard-if","profile":"XPath30","phase":"success","result":"7","error":null,"exceptionType":null}
+{"id":"guard-if","profile":"XPath31","phase":"success","result":"7","error":null,"exceptionType":null}
+{"id":"guard-if","profile":"XPath40","phase":"success","result":"7","error":null,"exceptionType":null}
+{"id":"guard-if","profile":"XPath40Experimental","phase":"success","result":"7","error":null,"exceptionType":null}
+{"id":"guard-and","profile":"XPath30","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"guard-and","profile":"XPath31","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"guard-and","profile":"XPath40","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"guard-and","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"exceptionType":null}
+{"id":"guard-or","profile":"XPath30","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"guard-or","profile":"XPath31","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"guard-or","profile":"XPath40","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"guard-or","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"guard-empty-map","profile":"XPath30","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-map","profile":"XPath31","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-map","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-map","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-filter","profile":"XPath30","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-filter","profile":"XPath31","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-filter","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-empty-filter","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"guard-selected-map","profile":"XPath30","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"guard-selected-map","profile":"XPath31","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"guard-selected-map","profile":"XPath40","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"guard-selected-map","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOAR0001: Division by zero.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-reorder","profile":"XPath40","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-reorder","profile":"XPath40Experimental","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-mixed","profile":"XPath40","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-mixed","profile":"XPath40Experimental","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-default","profile":"XPath40","phase":"success","result":"42","error":null,"exceptionType":null}
+{"id":"keyword-default","profile":"XPath40Experimental","phase":"success","result":"42","error":null,"exceptionType":null}
+{"id":"keyword-empty-vs-omitted","profile":"XPath40","phase":"success","result":"BCD","error":null,"exceptionType":null}
+{"id":"keyword-empty-vs-omitted","profile":"XPath40Experimental","phase":"success","result":"BCD","error":null,"exceptionType":null}
+{"id":"keyword-duplicate","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Keyword argument \u0027start\u0027 in call of substring matches a parameter that is already filled.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-duplicate","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Keyword argument \u0027start\u0027 in call of substring matches a parameter that is already filled.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-positional-collision","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Keyword argument \u0027value\u0027 in call of substring matches a parameter that is already filled.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-positional-collision","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Keyword argument \u0027value\u0027 in call of substring matches a parameter that is already filled.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-positional-after","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 26: XPST0003: Positional arguments must not follow keyword arguments in a function call.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-positional-after","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 26: XPST0003: Positional arguments must not follow keyword arguments in a function call.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-unknown","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Unknown keyword argument \u0027bogus\u0027 in call of substring.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-unknown","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Unknown keyword argument \u0027bogus\u0027 in call of substring.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-missing-required","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Required parameter $start is not supplied in call of substring.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-missing-required","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Required parameter $start is not supplied in call of substring.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-dynamic","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 29: XPST0017: Keyword arguments can only be used in calls of statically-known functions.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-dynamic","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 29: XPST0017: Keyword arguments can only be used in calls of statically-known functions.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-no-metadata","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-no-metadata","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.","exceptionType":"System.InvalidOperationException"}
+{"id":"keyword-expanded-names","profile":"XPath40","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-expanded-names","profile":"XPath40Experimental","phase":"success","result":"BC","error":null,"exceptionType":null}
+{"id":"keyword-partial","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 30: XPST0003: Expected lookup key","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-partial","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 30: XPST0003: Expected lookup key","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-old-profile","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 10: XPST0003: Keyword arguments (\u0027name := value\u0027) are an XPath 4.0 feature and are not available in XPath 3.1.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"keyword-old-profile","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 10: XPST0003: Keyword arguments (\u0027name := value\u0027) are an XPath 4.0 feature and are not available in XPath 3.1.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-hex","profile":"XPath40","phase":"success","result":"256","error":null,"exceptionType":null}
+{"id":"literal-hex","profile":"XPath40Experimental","phase":"success","result":"256","error":null,"exceptionType":null}
+{"id":"literal-binary","profile":"XPath40","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-binary","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-separator","profile":"XPath40","phase":"success","result":"3000","error":null,"exceptionType":null}
+{"id":"literal-separator","profile":"XPath40Experimental","phase":"success","result":"3000","error":null,"exceptionType":null}
+{"id":"literal-double-separator","profile":"XPath40","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-double-separator","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-wide","profile":"XPath40","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-wide","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"exceptionType":null}
+{"id":"literal-leading-separator","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-leading-separator","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-trailing-separator","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-trailing-separator","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-bad-radix","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Unexpected token IntegerLiteral","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-bad-radix","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Unexpected token IntegerLiteral","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-adjacent-name","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"literal-adjacent-name","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"template-fixed","profile":"XPath40","phase":"success","result":"hello","error":null,"exceptionType":null}
+{"id":"template-fixed","profile":"XPath40Experimental","phase":"success","result":"hello","error":null,"exceptionType":null}
+{"id":"template-empty","profile":"XPath40","phase":"success","result":"","error":null,"exceptionType":null}
+{"id":"template-empty","profile":"XPath40Experimental","phase":"success","result":"","error":null,"exceptionType":null}
+{"id":"template-values","profile":"XPath40","phase":"success","result":"x1 2 3y","error":null,"exceptionType":null}
+{"id":"template-values","profile":"XPath40Experimental","phase":"success","result":"x1 2 3y","error":null,"exceptionType":null}
+{"id":"template-empty-value","profile":"XPath40","phase":"success","result":"ab","error":null,"exceptionType":null}
+{"id":"template-empty-value","profile":"XPath40Experimental","phase":"success","result":"ab","error":null,"exceptionType":null}
+{"id":"template-escaped","profile":"XPath40","phase":"success","result":"a{b}c\u0060d","error":null,"exceptionType":null}
+{"id":"template-escaped","profile":"XPath40Experimental","phase":"success","result":"a{b}c\u0060d","error":null,"exceptionType":null}
+{"id":"template-nested","profile":"XPath40","phase":"success","result":"outer inner 2","error":null,"exceptionType":null}
+{"id":"template-nested","profile":"XPath40Experimental","phase":"success","result":"outer inner 2","error":null,"exceptionType":null}
+{"id":"template-node","profile":"XPath40","phase":"success","result":"x2y","error":null,"exceptionType":null}
+{"id":"template-node","profile":"XPath40Experimental","phase":"success","result":"x2y","error":null,"exceptionType":null}
+{"id":"template-comment","profile":"XPath40","phase":"success","result":"x1y","error":null,"exceptionType":null}
+{"id":"template-comment","profile":"XPath40Experimental","phase":"success","result":"x1y","error":null,"exceptionType":null}
+{"id":"template-map-error","profile":"XPath40","phase":"evaluate","result":null,"error":"FOTY0013","exceptionType":"System.InvalidOperationException"}
+{"id":"template-map-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOTY0013","exceptionType":"System.InvalidOperationException"}
+{"id":"template-unterminated","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"template-unterminated","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"template-unclosed-expression","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"template-unclosed-expression","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-literal","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-literal","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-separator","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-separator","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-template","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-template","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"pipeline-whole","profile":"XPath40","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"pipeline-whole","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"pipeline-fixed-focus","profile":"XPath40","phase":"success","result":"2:1:1","error":null,"exceptionType":null}
+{"id":"pipeline-fixed-focus","profile":"XPath40Experimental","phase":"success","result":"2:1:1","error":null,"exceptionType":null}
+{"id":"pipeline-empty","profile":"XPath40","phase":"success","result":"0:1:1","error":null,"exceptionType":null}
+{"id":"pipeline-empty","profile":"XPath40Experimental","phase":"success","result":"0:1:1","error":null,"exceptionType":null}
+{"id":"pipeline-chain","profile":"XPath40","phase":"success","result":"n=2","error":null,"exceptionType":null}
+{"id":"pipeline-chain","profile":"XPath40Experimental","phase":"success","result":"n=2","error":null,"exceptionType":null}
+{"id":"pipeline-flwor","profile":"XPath40","phase":"success","result":"10,20","error":null,"exceptionType":null}
+{"id":"pipeline-flwor","profile":"XPath40Experimental","phase":"success","result":"10,20","error":null,"exceptionType":null}
+{"id":"pipeline-bare-flwor","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 13: XPST0003: Unexpected token Dollar","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"pipeline-bare-flwor","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 13: XPST0003: Unexpected token Dollar","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"pipeline-restoration","profile":"XPath40","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"pipeline-restoration","profile":"XPath40Experimental","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"sequence-arrow-whole","profile":"XPath40","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"sequence-arrow-whole","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"mapping-each","profile":"XPath40","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"mapping-each","profile":"XPath40Experimental","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"mapping-empty","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"mapping-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"mapping-wrong-spelling","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected function name, variable reference, or parenthesized expression after =\u003E","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"mapping-wrong-spelling","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected function name, variable reference, or parenthesized expression after =\u003E","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"focus-whole","profile":"XPath40","phase":"success","result":"2:1:1","error":null,"exceptionType":null}
+{"id":"focus-whole","profile":"XPath40Experimental","phase":"success","result":"2:1:1","error":null,"exceptionType":null}
+{"id":"focus-empty","profile":"XPath40","phase":"success","result":"0:1:1","error":null,"exceptionType":null}
+{"id":"focus-empty","profile":"XPath40Experimental","phase":"success","result":"0:1:1","error":null,"exceptionType":null}
+{"id":"focus-argument-overrides","profile":"XPath40","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"focus-argument-overrides","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"exceptionType":null}
+{"id":"focus-lexical-capture","profile":"XPath40","phase":"success","result":"10","error":null,"exceptionType":null}
+{"id":"focus-lexical-capture","profile":"XPath40Experimental","phase":"success","result":"10","error":null,"exceptionType":null}
+{"id":"focus-nested","profile":"XPath40","phase":"success","result":"10,20","error":null,"exceptionType":null}
+{"id":"focus-nested","profile":"XPath40Experimental","phase":"success","result":"10,20","error":null,"exceptionType":null}
+{"id":"focus-short-explicit","profile":"XPath40","phase":"success","result":"3","error":null,"exceptionType":null}
+{"id":"focus-short-explicit","profile":"XPath40Experimental","phase":"success","result":"3","error":null,"exceptionType":null}
+{"id":"focus-wrong-arity","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Wrong number of arguments for dynamic call of an inline function.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-wrong-arity","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Wrong number of arguments for dynamic call of an inline function.","exceptionType":"System.InvalidOperationException"}
+{"id":"mapping-containing-focus","profile":"XPath40","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"mapping-containing-focus","profile":"XPath40Experimental","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"mapping-containing-position","profile":"XPath40","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"mapping-containing-position","profile":"XPath40Experimental","phase":"success","result":"(sequence)","error":null,"exceptionType":null}
+{"id":"old-pipeline","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: The pipeline operator \u0027-\u003E\u0027 requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-pipeline","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: The pipeline operator \u0027-\u003E\u0027 requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-mapping","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: The mapping arrow operator \u0027=!\u003E\u0027 requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-mapping","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 2: XPST0003: The mapping arrow operator \u0027=!\u003E\u0027 requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-focus","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token LBrace","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-focus","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token LBrace","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-short-fn","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: The \u0027fn\u0027 inline function keyword requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"old-short-fn","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: The \u0027fn\u0027 inline function keyword requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"hof-normal","profile":"XPath30","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"hof-normal","profile":"XPath31","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"hof-normal","profile":"XPath40","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"hof-normal","profile":"XPath40Experimental","phase":"success","result":"2,4","error":null,"exceptionType":null}
+{"id":"hof-callback-error","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"hof-callback-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"hof-arity","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Wrong number of arguments for dynamic call of an inline function.","exceptionType":"System.InvalidOperationException"}
+{"id":"hof-arity","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Wrong number of arguments for dynamic call of an inline function.","exceptionType":"System.InvalidOperationException"}
+{"id":"hof-unavailable-old","profile":"XPath30","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}some is defined in XPath 4.0 and is not available when targeting XPath 30; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"hof-unavailable-old","profile":"XPath31","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}some is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"scan-visible-XPath30","profile":"XPath30","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"scan-visible-XPath31","profile":"XPath31","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"scan-visible-XPath40","profile":"XPath40","phase":"success","result":"0","error":null,"exceptionType":null}
+{"id":"scan-visible-XPath40Experimental","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"exceptionType":null}
+{"id":"scan-normal","profile":"XPath40Experimental","phase":"success","result":"0,1,3","error":null,"exceptionType":null}
+{"id":"scan-empty","profile":"XPath40Experimental","phase":"success","result":"10","error":null,"exceptionType":null}
+{"id":"scan-frozen-refusal","profile":"XPath30","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath 30; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental.","exceptionType":"System.InvalidOperationException"}
+{"id":"scan-frozen-refusal","profile":"XPath31","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental.","exceptionType":"System.InvalidOperationException"}
+{"id":"scan-frozen-refusal","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath 40; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental.","exceptionType":"System.InvalidOperationException"}

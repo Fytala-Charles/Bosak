@@ -1,0 +1,23 @@
+﻿"""Rebuild the K03 boundary trace without treating expected diagnostic errors as gate passes."""
+from pathlib import Path
+import json,collections
+C=Path(__file__).resolve().parent;E=C/'evidence'
+def load(n):return json.loads((E/n).read_text(encoding='utf-8-sig'))
+rows=load('results.json');requests=load('requests.json');assert len(rows)==len(requests)==30
+assert {r['id'] for r in rows}=={r['id'] for r in requests}
+for r in rows:assert r['exitCode']==0 and not r['timeout'] and r['watchdogSeconds']==20 and r['result']
+p={r['id']:r['result'] for r in rows};assert p['original-map-to-element-053']['detail']['kind']=='Skipped'
+assert '0x1D11E' in p['original-map-to-element-053']['detail']['message'] and '119070' in p['original-map-to-element-053']['detail']['assertion']
+for name in ['map-name-0x3001','map-name-0x200c']:assert p[name]['exceptionType']=='InvalidOperationException' and p[name]['error'].startswith('FOJS0009:')
+for name in ['map-name-0x10000','map-name-0x1d11e','map-name-0xeffff','map-name-0xf0000','map-name-0x10ffff','supplementary-child','supplementary-attribute','supplementary-qname']:assert p[name]['exceptionType']=='XmlException'
+for name in ['invalid-digit-start','invalid-empty','invalid-space']:assert p[name]['error'].startswith('FOJS0009:')
+for name in ['map-name-0x41','map-name-0x3c0','ascii-serialize','literal-sentinel-text','literal-sentinel-serialize','literal-sentinel-name']:assert p[name]['error'] is None
+literal=chr(0x1c0)+'0041'+chr(0x1c1);supp=chr(119070)
+assert p['provider-119070-False']['detail']['localName']!=supp
+for name in ['provider-65-True','provider-119070-True']:
+ assert p[name]['detail']['stringValue']==literal and literal not in p[name]['detail']['serialized'] and '>A<' in p[name]['detail']['serialized']
+assert p['provider-119070-True']['detail']['localName']==supp and p['codec-roundtrip']['detail']['decoded']==supp
+summary=dict(processes=30,timeouts=0,processFailures=0,originalHarnessCases=1,publicQueryControls=19,platformControls=5,providerControls=4,codecControls=1,queryReturns=6,queryXmlExceptions=8,queryFojsErrors=5,sourceChanged=False,baselineChanged=False,candidate='1.26.8',published='1.26.3')
+findings=[dict(id='K03-F01',status='Open',area='ElementMap scalar NCName validation',observations='Valid XML name starts U+200C and U+3001 receive FOJS0009; all surrogate pairs are accepted before XName, including U+F0000/U+10FFFF outside the XML name range.',next='K03-C01: scalar-aware XML NameStartChar/NameChar validation, NCName excluding colon; preserve FOJS0009 and existing option semantics.'),dict(id='K03-F02',status='Open',area='Map builder and provider name storage',observations='Original U+1D11E and valid supplementary boundary names pass the map validator, then XName construction throws. Child, attribute and URI-qualified paths reproduce the same boundary. Existing default-mode provider construction leaks encoded local names.',next='After scalar validation and serialization preservation, integrate a reversible provider representation across element/attribute names, prefixes, namespaces, copies and map round trips without altering node content.'),dict(id='K03-F03',status='Open',area='Annotated provider serialization',observations='Public ConstructElement in Xml11Mode retains literal sentinel text in StringValue, but ToXmlString changes that literal into A through whole-output DecodeName. ASCII and supplementary named controls both reproduce it.',next='K03-C02: restrict name decoding to name tokens during serialization; preserve literal text/attribute/comment/PI content, escaping and namespace identity. Do not blanket-annotate map trees as a shortcut.')]
+out=dict(date='2026-10-27',sourceBase=load('AUDIT-PIN.json')['sourceBase'],status='Bounded K03 trace complete; implementation remains open',summary=summary,findings=findings,probes=rows,validation='Fresh30 isolated20-second process diagnostics; no timeouts. No new unit or gate run: unchanged engine inherits21842 solution passes, normal QT3 31145/0/676 and qt4 gated8436/0/1894 (224 sets/11 Experimental passes).',policy='Original Unicode query/assertion preserved. No engine/provider source, fixture, assertion, baseline, package version, REQ-126 disposition or XSD1.1 ownership change. No release or upstream submission.',next='Implement K03-C01 scalar NCName validation with happy-path and invalid-boundary regressions; then serialization preservation before integrating map name storage. Keep original qt4 skip until the complete node/name/content/serialization contract is verified.')
+(C/'RESULTS.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8');print(json.dumps(summary))

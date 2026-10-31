@@ -1,0 +1,128 @@
+[
+  {
+    "name": "substitution-020",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-020-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19000239996239543,
+    "log": "substitution-020.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-020",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-021",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-021-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19018719997256994,
+    "log": "substitution-021.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-021",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-022",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-022-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18975680001312867,
+    "log": "substitution-022.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-022",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-023",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-023-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.17985050001880154,
+    "log": "substitution-023.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-023",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-024",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-024-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18449359998339787,
+    "log": "substitution-024.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-024",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-025",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-advisor-proposal\\evidence\\substitution-025-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1839274000376463,
+    "log": "substitution-025.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-025",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  }
+]

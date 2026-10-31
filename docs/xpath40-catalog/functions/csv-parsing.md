@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited frozen CSV/options contract**. C02-F03/F12: namespaced unknown options and newer index/get policy remain unsupported/not adopted; no remote/schema completeness. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **CSV parsing** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 CSV cluster; local FunctionLibrary CSV implementation. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -62,6 +64,8 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: Use the parsed row array rather than splitting on commas, which would split a quoted product name. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. This reduced example has one data row and no header. Validate numeric quantities separately; parsing CSV is not business validation.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Absence versus empty/blank text and returned row/column records; Separator, quote, comment, trim, header and selection options; Local-resource base URI, encoding, errors and callback get bounds. **Boundaries:** Frozen positive selection/get indices differ from the current draft; unknown namespaced options remain unsupported; no remote-resource or schema-completeness claim. Follow-up groups: F03, F12. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. The baseline starts with a host-parsed array; it is not a replacement CSV parser. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

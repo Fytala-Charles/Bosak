@@ -1,0 +1,806 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="67292a73-6295-48be-8f21-9434268ed330" name="charl@CHARLES 2026-10-29 18:49:08" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-29T18:49:08.5526558+01:00" queuing="2026-10-29T18:49:08.5526559+01:00" start="2026-10-29T18:49:07.7863086+01:00" finish="2026-10-29T18:49:09.2042468+01:00" />
+  <TestSettings name="default" id="c45e63e7-a1ce-4ab6-9cd7-8a17cf965992">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-29_18_49_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="490c0e57-d3b4-4b49-b620-7966524b5a83" testId="827b415d-4a97-18e0-5865-13e92279ead9" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(missing)&quot;)" computerName="CHARLES" duration="00:00:00.0000186" startTime="2026-10-29T18:49:08.5320040+01:00" endTime="2026-10-29T18:49:08.5320207+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="490c0e57-d3b4-4b49-b620-7966524b5a83" />
+    <UnitTestResult executionId="68094aee-ff13-40ab-a1d8-8ef43911e3d9" testId="7b23f19c-c2d5-b31a-0172-4293912de712" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;fn:exists(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000173" startTime="2026-10-29T18:49:08.5332037+01:00" endTime="2026-10-29T18:49:08.5332309+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68094aee-ff13-40ab-a1d8-8ef43911e3d9" />
+    <UnitTestResult executionId="7821dff1-d732-42b1-b6f1-902f79e0443e" testId="045723f9-27ff-0c55-47e8-a0377b73e96a" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;a&quot;)" computerName="CHARLES" duration="00:00:00.0000171" startTime="2026-10-29T18:49:08.5332795+01:00" endTime="2026-10-29T18:49:08.5332974+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7821dff1-d732-42b1-b6f1-902f79e0443e" />
+    <UnitTestResult executionId="c0c772e7-fafd-4909-b350-076a18f68f12" testId="5e642e88-ed56-5a3a-8a9c-c25708a7b94a" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty()&quot;)" computerName="CHARLES" duration="00:00:00.0000172" startTime="2026-10-29T18:49:08.5335232+01:00" endTime="2026-10-29T18:49:08.5335401+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0c772e7-fafd-4909-b350-076a18f68f12" />
+    <UnitTestResult executionId="37d8eaa2-56fc-4204-9f0f-898a6c0a116e" testId="39dc51b4-8777-f9a3-220c-513c0fc8e8b2" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;true()&quot;)" computerName="CHARLES" duration="00:00:00.0000230" startTime="2026-10-29T18:49:08.5103364+01:00" endTime="2026-10-29T18:49:08.5103521+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="37d8eaa2-56fc-4204-9f0f-898a6c0a116e" />
+    <UnitTestResult executionId="fc2afa9f-5aa2-48d0-84de-a4c6e083cde7" testId="8af4e566-ab5e-c132-2bd2-29e3b299058f" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.FunctionAndChildNames_AreDisambiguatedStructurally" computerName="CHARLES" duration="00:00:00.0001762" startTime="2026-10-29T18:49:09.1580634+01:00" endTime="2026-10-29T18:49:09.1581054+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc2afa9f-5aa2-48d0-84de-a4c6e083cde7">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.FunctionAndChildNames_AreDisambiguatedStructurally() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 116&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a5192f74-cc0b-4f9d-acaf-4d892c48d845" testId="8a1b3795-6b86-01c5-6ed3-c23b291f2d40" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;1 eq 1 or exists(b)&quot;)" computerName="CHARLES" duration="00:00:00.0000844" startTime="2026-10-29T18:49:09.1545901+01:00" endTime="2026-10-29T18:49:09.1546750+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5192f74-cc0b-4f9d-acaf-4d892c48d845">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b52c00ca-74b4-4f1e-850b-ac209e8c5d33" testId="fd41b3d4-4556-e03a-6388-89bfa0fdc216" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;(exists(a) and empty(b)) or count(a) eq 0&quot;)" computerName="CHARLES" duration="00:00:00.0002928" startTime="2026-10-29T18:49:09.1537645+01:00" endTime="2026-10-29T18:49:09.1538348+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b52c00ca-74b4-4f1e-850b-ac209e8c5d33">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="769bc06e-742c-4742-86ee-cc4771d0ef01" testId="58ac40aa-92bd-50bd-6958-90b3b43d7298" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: False)" computerName="CHARLES" duration="00:00:00.0000703" startTime="2026-10-29T18:49:08.5509232+01:00" endTime="2026-10-29T18:49:08.5509559+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="769bc06e-742c-4742-86ee-cc4771d0ef01">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9783be6f-eb6f-4d23-a5ca-be4ede29aa32" testId="1e6f5776-9eea-afda-fa48-acfdff903463" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(missing)&quot;)" computerName="CHARLES" duration="00:00:00.0000430" startTime="2026-10-29T18:49:08.5102289+01:00" endTime="2026-10-29T18:49:08.5102488+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9783be6f-eb6f-4d23-a5ca-be4ede29aa32" />
+    <UnitTestResult executionId="61be58f7-050a-4148-8c6f-6ed016ac9dd0" testId="45c486c0-69c1-c9ac-773e-68c2dbd43160" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(count(a))&quot;)" computerName="CHARLES" duration="00:00:00.0000173" startTime="2026-10-29T18:49:08.5334348+01:00" endTime="2026-10-29T18:49:08.5334513+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="61be58f7-050a-4148-8c6f-6ed016ac9dd0" />
+    <UnitTestResult executionId="4466643a-e6b0-48d0-b218-a66d0f502656" testId="5a29691d-28eb-a8d4-5af7-b36f85edb762" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;bad&quot;, expected: Invalid)" computerName="CHARLES" duration="00:00:00.0000609" startTime="2026-10-29T18:49:09.1571578+01:00" endTime="2026-10-29T18:49:09.1572040+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4466643a-e6b0-48d0-b218-a66d0f502656">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 167&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="44dde30f-900b-43c4-b09a-c29e5e2e09be" testId="4b277095-3b1f-91e7-d445-dbe9f16894ec" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True)" computerName="CHARLES" duration="00:00:00.0002902" startTime="2026-10-29T18:49:08.7438359+01:00" endTime="2026-10-29T18:49:08.7439028+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44dde30f-900b-43c4-b09a-c29e5e2e09be">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 222&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cd772ff7-3191-474d-86d8-d60d5e6ccefa" testId="d7bdcaaa-23d3-16bc-184d-c32f42e03069" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False)" computerName="CHARLES" duration="00:00:00.1950450" startTime="2026-10-29T18:49:08.5524851+01:00" endTime="2026-10-29T18:49:08.7428892+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd772ff7-3191-474d-86d8-d60d5e6ccefa">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 222&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bdd1ebff-af2b-4439-8ef6-8cec38975c00" testId="6d430be8-f50e-19de-5568-dc940173b3c1" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: True)" computerName="CHARLES" duration="00:00:00.0000570" startTime="2026-10-29T18:49:08.5521802+01:00" endTime="2026-10-29T18:49:08.5522054+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdd1ebff-af2b-4439-8ef6-8cec38975c00">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="89273056-a0bd-4d44-889d-4be60334d6bb" testId="432c80f5-7856-0a9c-1292-523e577c8271" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.SyntaxBudgets_AreEnforcedBeforeCompilation" computerName="CHARLES" duration="00:00:00.0003331" startTime="2026-10-29T18:49:09.1574683+01:00" endTime="2026-10-29T18:49:09.1575094+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89273056-a0bd-4d44-889d-4be60334d6bb">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.SyntaxBudgets_AreEnforcedBeforeCompilation() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 148&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="461f1cda-9d9f-4425-9100-0c3fc982404c" testId="bc69dfcf-ad9f-b204-58a1-f5abf8244e66" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: True)" computerName="CHARLES" duration="00:00:00.0003441" startTime="2026-10-29T18:49:08.5501317+01:00" endTime="2026-10-29T18:49:08.5501895+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="461f1cda-9d9f-4425-9100-0c3fc982404c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b569f289-f121-4d47-b203-9ec6ffa69dc2" testId="8536b775-4986-14a5-ae91-b34f142df065" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.StructureAndScalarCardinality_AreNotMaskedByPresence" computerName="CHARLES" duration="00:00:00.0001978" startTime="2026-10-29T18:49:09.1577597+01:00" endTime="2026-10-29T18:49:09.1578005+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b569f289-f121-4d47-b203-9ec6ffa69dc2">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.StructureAndScalarCardinality_AreNotMaskedByPresence() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 178&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1c14b545-2475-4da1-a9d3-8a7747f9e0fb" testId="7e8f1665-7897-0547-1f49-fcd0f0cd9c30" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) or unknown(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000174" startTime="2026-10-29T18:49:08.5334795+01:00" endTime="2026-10-29T18:49:08.5334960+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c14b545-2475-4da1-a9d3-8a7747f9e0fb" />
+    <UnitTestResult executionId="4a391ce5-514f-48d9-affa-27c7caaa20ce" testId="de73f450-7dd4-c6fa-2b26-ff0e4e735ac8" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;not(exists(a))&quot;)" computerName="CHARLES" duration="00:00:00.0000183" startTime="2026-10-29T18:49:08.5320941+01:00" endTime="2026-10-29T18:49:08.5321111+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a391ce5-514f-48d9-affa-27c7caaa20ce" />
+    <UnitTestResult executionId="473642fd-a716-4940-a4db-129b10b3c59c" testId="fd7a209e-0a4f-3a70-e0e9-99a101b56bae" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;exists(a) and count(a) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000568" startTime="2026-10-29T18:49:09.1556341+01:00" endTime="2026-10-29T18:49:09.1556746+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="473642fd-a716-4940-a4db-129b10b3c59c">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d41145aa-cc03-4b33-8a4a-dd6d56a8d7a8" testId="15b158f6-5c17-f03f-50cb-458ac00bc63f" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: False)" computerName="CHARLES" duration="00:00:00.0364901" startTime="2026-10-29T18:49:08.5340716+01:00" endTime="2026-10-29T18:49:08.5469498+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d41145aa-cc03-4b33-8a4a-dd6d56a8d7a8">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4e255770-4b0e-4c6a-9633-9e151d52e04f" testId="98c69461-f454-7a52-ab74-2b95fc3b7b57" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: True)" computerName="CHARLES" duration="00:00:00.0000459" startTime="2026-10-29T18:49:08.5516809+01:00" endTime="2026-10-29T18:49:08.5517080+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e255770-4b0e-4c6a-9633-9e151d52e04f">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cf0e7a8f-6e83-4e50-95c3-8a5074c75d7d" testId="25d7bd3f-b39f-3d5e-c12a-65e6927c22dd" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;count(exists(a)) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000193" startTime="2026-10-29T18:49:08.5321820+01:00" endTime="2026-10-29T18:49:08.5321982+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf0e7a8f-6e83-4e50-95c3-8a5074c75d7d" />
+    <UnitTestResult executionId="f175dcac-ce7a-44c2-89db-3de16de5f74d" testId="a86a97e0-c632-9cf4-77f2-0b751ec4fb0b" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: False)" computerName="CHARLES" duration="00:00:00.0000458" startTime="2026-10-29T18:49:08.5514369+01:00" endTime="2026-10-29T18:49:08.5514621+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f175dcac-ce7a-44c2-89db-3de16de5f74d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d2b3aaa7-71c4-4cff-8afe-6a123e9fbe4d" testId="fad9af87-8a6d-4d08-d037-96d7e8091fba" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;1 eq 1 or fn:exists(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000305" startTime="2026-10-29T18:49:08.5103789+01:00" endTime="2026-10-29T18:49:08.5103950+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d2b3aaa7-71c4-4cff-8afe-6a123e9fbe4d" />
+    <UnitTestResult executionId="198d2067-e195-4db4-b574-2de894be3196" testId="e73a26f5-f463-3ec8-4b36-0efcd08601b1" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000180" startTime="2026-10-29T18:49:08.5333286+01:00" endTime="2026-10-29T18:49:08.5333457+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198d2067-e195-4db4-b574-2de894be3196" />
+    <UnitTestResult executionId="c4e3bbe7-d7e0-4eb2-b6a5-fe7b1815a5c0" testId="1833082a-c406-fdd2-f901-1a57fb80ab13" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedDocument_PreservesTypedCopySemantics" computerName="CHARLES" duration="00:00:00.2642903" startTime="2026-10-29T18:49:08.8896129+01:00" endTime="2026-10-29T18:49:09.1530047+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c4e3bbe7-d7e0-4eb2-b6a5-fe7b1815a5c0">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedDocument_PreservesTypedCopySemantics() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 190&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="01335763-a01b-4796-b4e9-8ab33d0bd756" testId="5c1b71bb-0c9a-c2d6-1715-1b19d8c5932f" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists()&quot;)" computerName="CHARLES" duration="00:00:00.0000197" startTime="2026-10-29T18:49:08.5105034+01:00" endTime="2026-10-29T18:49:08.5105238+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="01335763-a01b-4796-b4e9-8ab33d0bd756" />
+    <UnitTestResult executionId="16de125a-01a3-43de-8128-de1e8b187433" testId="cc5385c4-72a3-1561-ca7e-60bd4010ffd2" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;count(a) eq 2 and (empty(b) or exists(b))&quot;)" computerName="CHARLES" duration="00:00:00.0002882" startTime="2026-10-29T18:49:09.1542454+01:00" endTime="2026-10-29T18:49:09.1542894+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="16de125a-01a3-43de-8128-de1e8b187433">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f69d6737-9c68-40fe-86d2-3f0b3205c389" testId="990893ea-2aa0-2819-1b29-1e1dd50ba0f9" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: True)" computerName="CHARLES" duration="00:00:00.0000503" startTime="2026-10-29T18:49:08.5511899+01:00" endTime="2026-10-29T18:49:08.5512159+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f69d6737-9c68-40fe-86d2-3f0b3205c389">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f3b502df-5bc8-422c-84ab-c66337c60e44" testId="8642ca3d-86b4-7f6f-118d-8b3f7026e053" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: False)" computerName="CHARLES" duration="00:00:00.0000455" startTime="2026-10-29T18:49:08.5519361+01:00" endTime="2026-10-29T18:49:08.5519630+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3b502df-5bc8-422c-84ab-c66337c60e44">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 67&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6501065a-66be-4c94-89f3-03d57d5dd425" testId="378b3c94-2029-670f-0794-ff9b58f927e0" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;79228162514264337593543950336&quot;, expected: Unsupported)" computerName="CHARLES" duration="00:00:00.0002265" startTime="2026-10-29T18:49:09.1562101+01:00" endTime="2026-10-29T18:49:09.1562509+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6501065a-66be-4c94-89f3-03d57d5dd425">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 167&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9e87930f-78c8-4baa-8266-2e1da1faa22b" testId="13fbf619-5f8b-d751-fe53-a75c74ca911b" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;1 eq exists(a)&quot;)" computerName="CHARLES" duration="00:00:00.1317324" startTime="2026-10-29T18:49:08.3665765+01:00" endTime="2026-10-29T18:49:08.5036084+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9e87930f-78c8-4baa-8266-2e1da1faa22b" />
+    <UnitTestResult executionId="1f141a29-ffd7-4f36-9fdc-3b5c4fbf9e4b" testId="4334b066-37a9-c3c9-2868-d24f47bbf346" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a/b)&quot;)" computerName="CHARLES" duration="00:00:00.0000183" startTime="2026-10-29T18:49:08.5318918+01:00" endTime="2026-10-29T18:49:08.5319126+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f141a29-ffd7-4f36-9fdc-3b5c4fbf9e4b" />
+    <UnitTestResult executionId="4d53fdf0-c1cd-44b0-ba6e-902b3f9e2836" testId="297f2e13-2706-6dd5-bde6-0fea7b1e26d1" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;fn:empty(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000255" startTime="2026-10-29T18:49:08.5102892+01:00" endTime="2026-10-29T18:49:08.5103063+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4d53fdf0-c1cd-44b0-ba6e-902b3f9e2836" />
+    <UnitTestResult executionId="8a65f48d-d1fe-4f91-84f4-09846cc8fb6b" testId="9ea9dd48-98fe-c030-162b-420fa839d0cc" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;empty ( b ) and exists ( a )&quot;)" computerName="CHARLES" duration="00:00:00.0000666" startTime="2026-10-29T18:49:09.1550528+01:00" endTime="2026-10-29T18:49:09.1551004+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a65f48d-d1fe-4f91-84f4-09846cc8fb6b">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3e0fcad5-7be3-4057-a535-a269e9c1705c" testId="c6b9875a-f28e-2413-3c8b-b5cc6dfb54a8" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;empty(b) or b le a&quot;)" computerName="CHARLES" duration="00:00:00.0000612" startTime="2026-10-29T18:49:09.1553633+01:00" endTime="2026-10-29T18:49:09.1554014+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e0fcad5-7be3-4057-a535-a269e9c1705c">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 97&#xD;
+   at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="807d08ee-27fb-4fe3-9543-2db404baee6f" testId="b1151189-adc9-a3f8-c55a-e8b296514b63" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(a) + 1&quot;)" computerName="CHARLES" duration="00:00:00.0000217" startTime="2026-10-29T18:49:08.5322269+01:00" endTime="2026-10-29T18:49:08.5322429+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="807d08ee-27fb-4fe3-9543-2db404baee6f" />
+    <UnitTestResult executionId="281d07ce-d11c-4015-9af8-70e813645699" testId="389ad1b8-0be6-e809-39eb-97d00e3e73af" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;count(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000179" startTime="2026-10-29T18:49:08.5333784+01:00" endTime="2026-10-29T18:49:08.5333952+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="281d07ce-d11c-4015-9af8-70e813645699" />
+    <UnitTestResult executionId="5c4831be-dd30-4df8-a3ec-28dd362c2ed3" testId="0d4d043d-8ecd-9564-5ee9-573b7cc3ed00" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) trailing&quot;)" computerName="CHARLES" duration="00:00:00.0000176" startTime="2026-10-29T18:49:08.5320504+01:00" endTime="2026-10-29T18:49:08.5320661+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c4831be-dd30-4df8-a3ec-28dd362c2ed3" />
+    <UnitTestResult executionId="9d0f8f3e-c5dd-483a-810e-35d423db9126" testId="d7b6606f-24bd-df18-39e9-d2cefd40e529" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(a[1])&quot;)" computerName="CHARLES" duration="00:00:00.0000191" startTime="2026-10-29T18:49:08.5104214+01:00" endTime="2026-10-29T18:49:08.5104362+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d0f8f3e-c5dd-483a-810e-35d423db9126" />
+    <UnitTestResult executionId="0b6059d5-8cc4-4049-ac54-4145b2f77b91" testId="c737877f-7ca7-892f-c95a-0173561d338f" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(1)&quot;)" computerName="CHARLES" duration="00:00:00.0000191" startTime="2026-10-29T18:49:08.5104620+01:00" endTime="2026-10-29T18:49:08.5104776+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b6059d5-8cc4-4049-ac54-4145b2f77b91" />
+    <UnitTestResult executionId="6ecf965c-a673-49b4-a082-d3bb935209bb" testId="afd368c7-3e18-c97b-cd40-885f06f47dd4" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;EXISTS(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000220" startTime="2026-10-29T18:49:08.5316863+01:00" endTime="2026-10-29T18:49:08.5317269+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ecf965c-a673-49b4-a082-d3bb935209bb" />
+    <UnitTestResult executionId="e500e336-421e-45f8-8a49-0bfb659135fc" testId="dfe21e0e-05d8-55ec-92da-bbb8fbf67033" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a,a)&quot;)" computerName="CHARLES" duration="00:00:00.0003314" startTime="2026-10-29T18:49:08.5099044+01:00" endTime="2026-10-29T18:49:08.5099467+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e500e336-421e-45f8-8a49-0bfb659135fc" />
+    <UnitTestResult executionId="0e44ab3a-93d0-4715-9bf7-80e0c312df3e" testId="21001f28-0a84-f58e-4bfc-4455381fc201" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;0.00000000000000000000000000001&quot;, expected: Unsupported)" computerName="CHARLES" duration="00:00:00.0002396" startTime="2026-10-29T18:49:09.1559537+01:00" endTime="2026-10-29T18:49:09.1559946+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e44ab3a-93d0-4715-9bf7-80e0c312df3e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 167&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="80e6ff8e-ffc8-404e-a5e1-10f4e520fd53" testId="5bd2e683-4c4d-88d9-d3fa-99ed159b31f6" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.MultipleAssertions_RecordAllAdmittedFeatures" computerName="CHARLES" duration="00:00:00.1450286" startTime="2026-10-29T18:49:08.7445164+01:00" endTime="2026-10-29T18:49:08.8884464+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80e6ff8e-ffc8-404e-a5e1-10f4e520fd53">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.MultipleAssertions_RecordAllAdmittedFeatures() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs:line 106&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c543f049-8af9-412f-b142-04816757fd3c" testId="a029f3a4-2082-f9b5-5ad1-ab9ab149aa6d" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) eq empty(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000188" startTime="2026-10-29T18:49:08.5319522+01:00" endTime="2026-10-29T18:49:08.5319692+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c543f049-8af9-412f-b142-04816757fd3c" />
+    <UnitTestResult executionId="e7d0db38-6804-4384-ba58-3d9e21e8a5b0" testId="64fc30a1-c04d-485b-968f-6a786b51eeb5" testName="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists((a))&quot;)" computerName="CHARLES" duration="00:00:00.0000174" startTime="2026-10-29T18:49:08.5321381+01:00" endTime="2026-10-29T18:49:08.5321539+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7d0db38-6804-4384-ba58-3d9e21e8a5b0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;count(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="389ad1b8-0be6-e809-39eb-97d00e3e73af">
+      <Execution id="281d07ce-d11c-4015-9af8-70e813645699" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(missing)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="827b415d-4a97-18e0-5865-13e92279ead9">
+      <Execution id="490c0e57-d3b4-4b49-b620-7966524b5a83" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(missing)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1e6f5776-9eea-afda-fa48-acfdff903463">
+      <Execution id="9783be6f-eb6f-4d23-a5ca-be4ede29aa32" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(a) + 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b1151189-adc9-a3f8-c55a-e8b296514b63">
+      <Execution id="807d08ee-27fb-4fe3-9543-2db404baee6f" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="4b277095-3b1f-91e7-d445-dbe9f16894ec">
+      <Execution id="44dde30f-900b-43c4-b09a-c29e5e2e09be" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;empty ( b ) and exists ( a )&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="9ea9dd48-98fe-c030-162b-420fa839d0cc">
+      <Execution id="8a65f48d-d1fe-4f91-84f4-09846cc8fb6b" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.StructureAndScalarCardinality_AreNotMaskedByPresence" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8536b775-4986-14a5-ae91-b34f142df065">
+      <Execution id="b569f289-f121-4d47-b203-9ec6ffa69dc2" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="StructureAndScalarCardinality_AreNotMaskedByPresence" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;bad&quot;, expected: Invalid)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5a29691d-28eb-a8d4-5af7-b36f85edb762">
+      <Execution id="4466643a-e6b0-48d0-b218-a66d0f502656" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="NativeValues_PrecedeAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="6d430be8-f50e-19de-5568-dc940173b3c1">
+      <Execution id="bdd1ebff-af2b-4439-8ef6-8cec38975c00" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists((a))&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="64fc30a1-c04d-485b-968f-6a786b51eeb5">
+      <Execution id="e7d0db38-6804-4384-ba58-3d9e21e8a5b0" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;count(exists(a)) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="25d7bd3f-b39f-3d5e-c12a-65e6927c22dd">
+      <Execution id="cf0e7a8f-6e83-4e50-95c3-8a5074c75d7d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.SyntaxBudgets_AreEnforcedBeforeCompilation" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="432c80f5-7856-0a9c-1292-523e577c8271">
+      <Execution id="89273056-a0bd-4d44-889d-4be60334d6bb" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="SyntaxBudgets_AreEnforcedBeforeCompilation" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;1 eq 1 or exists(b)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8a1b3795-6b86-01c5-6ed3-c23b291f2d40">
+      <Execution id="a5192f74-cc0b-4f9d-acaf-4d892c48d845" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="58ac40aa-92bd-50bd-6958-90b3b43d7298">
+      <Execution id="769bc06e-742c-4742-86ee-cc4771d0ef01" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;1 eq 1 or fn:exists(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fad9af87-8a6d-4d08-d037-96d7e8091fba">
+      <Execution id="d2b3aaa7-71c4-4cff-8afe-6a123e9fbe4d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;exists(a) and count(a) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fd7a209e-0a4f-3a70-e0e9-99a101b56bae">
+      <Execution id="473642fd-a716-4940-a4db-129b10b3c59c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) trailing&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="0d4d043d-8ecd-9564-5ee9-573b7cc3ed00">
+      <Execution id="5c4831be-dd30-4df8-a3ec-28dd362c2ed3" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;0.00000000000000000000000000001&quot;, expected: Unsupported)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="21001f28-0a84-f58e-4bfc-4455381fc201">
+      <Execution id="0e44ab3a-93d0-4715-9bf7-80e0c312df3e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="NativeValues_PrecedeAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a/b)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="4334b066-37a9-c3c9-2868-d24f47bbf346">
+      <Execution id="1f141a29-ffd7-4f36-9fdc-3b5c4fbf9e4b" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) or unknown(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="7e8f1665-7897-0547-1f49-fcd0f0cd9c30">
+      <Execution id="1c14b545-2475-4da1-a9d3-8a7747f9e0fb" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;EXISTS(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="afd368c7-3e18-c97b-cd40-885f06f47dd4">
+      <Execution id="6ecf965c-a673-49b4-a082-d3bb935209bb" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) eq empty(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="a029f3a4-2082-f9b5-5ad1-ab9ab149aa6d">
+      <Execution id="c543f049-8af9-412f-b142-04816757fd3c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;a&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="045723f9-27ff-0c55-47e8-a0377b73e96a">
+      <Execution id="7821dff1-d732-42b1-b6f1-902f79e0443e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="bc69dfcf-ad9f-b204-58a1-f5abf8244e66">
+      <Execution id="461f1cda-9d9f-4425-9100-0c3fc982404c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: &quot;79228162514264337593543950336&quot;, expected: Unsupported)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="378b3c94-2029-670f-0794-ff9b58f927e0">
+      <Execution id="6501065a-66be-4c94-89f3-03d57d5dd425" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="NativeValues_PrecedeAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="15b158f6-5c17-f03f-50cb-458ac00bc63f">
+      <Execution id="d41145aa-cc03-4b33-8a4a-dd6d56a8d7a8" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="d7bdcaaa-23d3-16bc-184d-c32f42e03069">
+      <Execution id="cd772ff7-3191-474d-86d8-d60d5e6ccefa" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.MultipleAssertions_RecordAllAdmittedFeatures" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5bd2e683-4c4d-88d9-d3fa-99ed159b31f6">
+      <Execution id="80e6ff8e-ffc8-404e-a5e1-10f4e520fd53" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="MultipleAssertions_RecordAllAdmittedFeatures" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="990893ea-2aa0-2819-1b29-1e1dd50ba0f9">
+      <Execution id="f69d6737-9c68-40fe-86d2-3f0b3205c389" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;(exists(a) and empty(b)) or count(a) eq 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fd41b3d4-4556-e03a-6388-89bfa0fdc216">
+      <Execution id="b52c00ca-74b4-4f1e-850b-ac209e8c5d33" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8642ca3d-86b4-7f6f-118d-8b3f7026e053">
+      <Execution id="f3b502df-5bc8-422c-84ab-c66337c60e44" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(1)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c737877f-7ca7-892f-c95a-0173561d338f">
+      <Execution id="0b6059d5-8cc4-4049-ac54-4145b2f77b91" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedDocument_PreservesTypedCopySemantics" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1833082a-c406-fdd2-f901-1a57fb80ab13">
+      <Execution id="c4e3bbe7-d7e0-4eb2-b6a5-fe7b1815a5c0" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="PresenceValidatedDocument_PreservesTypedCopySemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;fn:empty(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="297f2e13-2706-6dd5-bde6-0fea7b1e26d1">
+      <Execution id="4d53fdf0-c1cd-44b0-ba6e-902b3f9e2836" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(count(a))&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="45c486c0-69c1-c9ac-773e-68c2dbd43160">
+      <Execution id="61be58f7-050a-4148-8c6f-6ed016ac9dd0" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists()&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5c1b71bb-0c9a-c2d6-1715-1b19d8c5932f">
+      <Execution id="01335763-a01b-4796-b4e9-8ab33d0bd756" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="e73a26f5-f463-3ec8-4b36-0efcd08601b1">
+      <Execution id="198d2067-e195-4db4-b574-2de894be3196" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;not(exists(a))&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="de73f450-7dd4-c6fa-2b26-ff0e4e735ac8">
+      <Execution id="4a391ce5-514f-48d9-affa-27c7caaa20ce" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;true()&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="39dc51b4-8777-f9a3-220c-513c0fc8e8b2">
+      <Execution id="37d8eaa2-56fc-4204-9f0f-898a6c0a116e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;empty(b) or b le a&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c6b9875a-f28e-2413-3c8b-b5cc6dfb54a8">
+      <Execution id="3e0fcad5-7be3-4057-a535-a269e9c1705c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;1 eq exists(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="13fbf619-5f8b-d751-fe53-a75c74ca911b">
+      <Execution id="9e87930f-78c8-4baa-8266-2e1da1faa22b" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty()&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5e642e88-ed56-5a3a-8a9c-c25708a7b94a">
+      <Execution id="c0c772e7-fafd-4909-b350-076a18f68f12" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;fn:exists(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="7b23f19c-c2d5-b31a-0172-4293912de712">
+      <Execution id="68094aee-ff13-40ab-a1d8-8ef43911e3d9" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.FunctionAndChildNames_AreDisambiguatedStructurally" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8af4e566-ab5e-c132-2bd2-29e3b299058f">
+      <Execution id="fc2afa9f-5aa2-48d0-84de-a4c6e083cde7" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="FunctionAndChildNames_AreDisambiguatedStructurally" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="a86a97e0-c632-9cf4-77f2-0b751ec4fb0b">
+      <Execution id="f175dcac-ce7a-44c2-89db-3de16de5f74d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: &quot;count(a) eq 2 and (empty(b) or exists(b))&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="cc5385c4-72a3-1561-ca7e-60bd4010ffd2">
+      <Execution id="16de125a-01a3-43de-8128-de1e8b187433" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="BooleanPredicates_ComposeWithoutChangingScalarGrammar" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="98c69461-f454-7a52-ab74-2b95fc3b7b57">
+      <Execution id="4e255770-4b0e-4c6a-9633-9e151d52e04f" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="Presence_UsesNodesRatherThanDecimalValues" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;exists(a,a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="dfe21e0e-05d8-55ec-92da-bbb8fbf67033">
+      <Execution id="e500e336-421e-45f8-8a49-0bfb659135fc" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.PresenceAssertionAssessmentTests.WiderGrammar_RemainsUnsupported(expression: &quot;empty(a[1])&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="d7b6606f-24bd-df18-39e9-d2cefd40e529">
+      <Execution id="9d0f8f3e-c5dd-483a-810e-35d423db9126" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.PresenceAssertionAssessmentTests" name="WiderGrammar_RemainsUnsupported" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="827b415d-4a97-18e0-5865-13e92279ead9" executionId="490c0e57-d3b4-4b49-b620-7966524b5a83" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b23f19c-c2d5-b31a-0172-4293912de712" executionId="68094aee-ff13-40ab-a1d8-8ef43911e3d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="045723f9-27ff-0c55-47e8-a0377b73e96a" executionId="7821dff1-d732-42b1-b6f1-902f79e0443e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e642e88-ed56-5a3a-8a9c-c25708a7b94a" executionId="c0c772e7-fafd-4909-b350-076a18f68f12" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39dc51b4-8777-f9a3-220c-513c0fc8e8b2" executionId="37d8eaa2-56fc-4204-9f0f-898a6c0a116e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8af4e566-ab5e-c132-2bd2-29e3b299058f" executionId="fc2afa9f-5aa2-48d0-84de-a4c6e083cde7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a1b3795-6b86-01c5-6ed3-c23b291f2d40" executionId="a5192f74-cc0b-4f9d-acaf-4d892c48d845" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fd41b3d4-4556-e03a-6388-89bfa0fdc216" executionId="b52c00ca-74b4-4f1e-850b-ac209e8c5d33" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="58ac40aa-92bd-50bd-6958-90b3b43d7298" executionId="769bc06e-742c-4742-86ee-cc4771d0ef01" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e6f5776-9eea-afda-fa48-acfdff903463" executionId="9783be6f-eb6f-4d23-a5ca-be4ede29aa32" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45c486c0-69c1-c9ac-773e-68c2dbd43160" executionId="61be58f7-050a-4148-8c6f-6ed016ac9dd0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a29691d-28eb-a8d4-5af7-b36f85edb762" executionId="4466643a-e6b0-48d0-b218-a66d0f502656" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b277095-3b1f-91e7-d445-dbe9f16894ec" executionId="44dde30f-900b-43c4-b09a-c29e5e2e09be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7bdcaaa-23d3-16bc-184d-c32f42e03069" executionId="cd772ff7-3191-474d-86d8-d60d5e6ccefa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d430be8-f50e-19de-5568-dc940173b3c1" executionId="bdd1ebff-af2b-4439-8ef6-8cec38975c00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="432c80f5-7856-0a9c-1292-523e577c8271" executionId="89273056-a0bd-4d44-889d-4be60334d6bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc69dfcf-ad9f-b204-58a1-f5abf8244e66" executionId="461f1cda-9d9f-4425-9100-0c3fc982404c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8536b775-4986-14a5-ae91-b34f142df065" executionId="b569f289-f121-4d47-b203-9ec6ffa69dc2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e8f1665-7897-0547-1f49-fcd0f0cd9c30" executionId="1c14b545-2475-4da1-a9d3-8a7747f9e0fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de73f450-7dd4-c6fa-2b26-ff0e4e735ac8" executionId="4a391ce5-514f-48d9-affa-27c7caaa20ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fd7a209e-0a4f-3a70-e0e9-99a101b56bae" executionId="473642fd-a716-4940-a4db-129b10b3c59c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15b158f6-5c17-f03f-50cb-458ac00bc63f" executionId="d41145aa-cc03-4b33-8a4a-dd6d56a8d7a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="98c69461-f454-7a52-ab74-2b95fc3b7b57" executionId="4e255770-4b0e-4c6a-9633-9e151d52e04f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25d7bd3f-b39f-3d5e-c12a-65e6927c22dd" executionId="cf0e7a8f-6e83-4e50-95c3-8a5074c75d7d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a86a97e0-c632-9cf4-77f2-0b751ec4fb0b" executionId="f175dcac-ce7a-44c2-89db-3de16de5f74d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fad9af87-8a6d-4d08-d037-96d7e8091fba" executionId="d2b3aaa7-71c4-4cff-8afe-6a123e9fbe4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e73a26f5-f463-3ec8-4b36-0efcd08601b1" executionId="198d2067-e195-4db4-b574-2de894be3196" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1833082a-c406-fdd2-f901-1a57fb80ab13" executionId="c4e3bbe7-d7e0-4eb2-b6a5-fe7b1815a5c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c1b71bb-0c9a-c2d6-1715-1b19d8c5932f" executionId="01335763-a01b-4796-b4e9-8ab33d0bd756" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cc5385c4-72a3-1561-ca7e-60bd4010ffd2" executionId="16de125a-01a3-43de-8128-de1e8b187433" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="990893ea-2aa0-2819-1b29-1e1dd50ba0f9" executionId="f69d6737-9c68-40fe-86d2-3f0b3205c389" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8642ca3d-86b4-7f6f-118d-8b3f7026e053" executionId="f3b502df-5bc8-422c-84ab-c66337c60e44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="378b3c94-2029-670f-0794-ff9b58f927e0" executionId="6501065a-66be-4c94-89f3-03d57d5dd425" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13fbf619-5f8b-d751-fe53-a75c74ca911b" executionId="9e87930f-78c8-4baa-8266-2e1da1faa22b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4334b066-37a9-c3c9-2868-d24f47bbf346" executionId="1f141a29-ffd7-4f36-9fdc-3b5c4fbf9e4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="297f2e13-2706-6dd5-bde6-0fea7b1e26d1" executionId="4d53fdf0-c1cd-44b0-ba6e-902b3f9e2836" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ea9dd48-98fe-c030-162b-420fa839d0cc" executionId="8a65f48d-d1fe-4f91-84f4-09846cc8fb6b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6b9875a-f28e-2413-3c8b-b5cc6dfb54a8" executionId="3e0fcad5-7be3-4057-a535-a269e9c1705c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b1151189-adc9-a3f8-c55a-e8b296514b63" executionId="807d08ee-27fb-4fe3-9543-2db404baee6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="389ad1b8-0be6-e809-39eb-97d00e3e73af" executionId="281d07ce-d11c-4015-9af8-70e813645699" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d4d043d-8ecd-9564-5ee9-573b7cc3ed00" executionId="5c4831be-dd30-4df8-a3ec-28dd362c2ed3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7b6606f-24bd-df18-39e9-d2cefd40e529" executionId="9d0f8f3e-c5dd-483a-810e-35d423db9126" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c737877f-7ca7-892f-c95a-0173561d338f" executionId="0b6059d5-8cc4-4049-ac54-4145b2f77b91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="afd368c7-3e18-c97b-cd40-885f06f47dd4" executionId="6ecf965c-a673-49b4-a082-d3bb935209bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dfe21e0e-05d8-55ec-92da-bbb8fbf67033" executionId="e500e336-421e-45f8-8a49-0bfb659135fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21001f28-0a84-f58e-4bfc-4455381fc201" executionId="0e44ab3a-93d0-4715-9bf7-80e0c312df3e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bd2e683-4c4d-88d9-d3fa-99ed159b31f6" executionId="80e6ff8e-ffc8-404e-a5e1-10f4e520fd53" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a029f3a4-2082-f9b5-5ad1-ab9ab149aa6d" executionId="c543f049-8af9-412f-b142-04816757fd3c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64fc30a1-c04d-485b-968f-6a786b51eeb5" executionId="e7d0db38-6804-4384-ba58-3d9e21e8a5b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="49" executed="49" passed="25" failed="24" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.16]   Discovering: Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.23]   Discovered:  Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.25]   Starting:    Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.45]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.45]       Expected: True&#xD;
+[xUnit.net 00:00:00.45]       Actual:   False&#xD;
+[xUnit.net 00:00:00.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.45]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.45]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.45]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.45]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.46]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.46]       Expected: True&#xD;
+[xUnit.net 00:00:00.46]       Actual:   False&#xD;
+[xUnit.net 00:00:00.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(67,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Int32 count, Boolean exists)&#xD;
+[xUnit.net 00:00:00.46]            at InvokeStub_PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.65]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.65]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.65]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.65]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(222,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve)&#xD;
+[xUnit.net 00:00:00.65]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.65]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.65]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.65]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.65]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.65]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(222,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve)&#xD;
+[xUnit.net 00:00:00.65]            at InvokeStub_PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.65]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.79]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.79]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.79]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.79]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(106,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.MultipleAssertions_RecordAllAdmittedFeatures()&#xD;
+[xUnit.net 00:00:00.79]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.79]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(190,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedDocument_PreservesTypedCopySemantics()&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(97,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(String expression)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.06]       Expected: True&#xD;
+[xUnit.net 00:00:01.06]       Actual:   False&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(167,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.06]       Expected: True&#xD;
+[xUnit.net 00:00:01.06]       Actual:   False&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(167,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.06]       Expected: True&#xD;
+[xUnit.net 00:00:01.06]       Actual:   False&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(167,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.06]            at InvokeStub_PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.06]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.06]       Expected: True&#xD;
+[xUnit.net 00:00:01.06]       Actual:   False&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(148,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.SyntaxBudgets_AreEnforcedBeforeCompilation()&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.06]       Expected: True&#xD;
+[xUnit.net 00:00:01.06]       Actual:   False&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(178,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.StructureAndScalarCardinality_AreNotMaskedByPresence()&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]       BSK-XSD-016: An assertion exceeds the bounded child/decimal/count comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.06]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.06]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\PresenceAssertionAssessmentTests.cs(116,0): at Bosak.Schema.Tests.PresenceAssertionAssessmentTests.FunctionAndChildNames_AreDisambiguatedStructurally()&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.06]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.06]   Finished:    Bosak.Schema.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5571324+01:00">
+        <Text>[xUnit.net 00:00:00.45]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5572987+01:00">
+        <Text>[xUnit.net 00:00:00.45]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 1, exists: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5577472+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5577680+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 0, exists: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5577925+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5578122+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 2, exists: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5578289+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.5578496+01:00">
+        <Text>[xUnit.net 00:00:00.46]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.Presence_UsesNodesRatherThanDecimalValues(count: 16, exists: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.7435552+01:00">
+        <Text>[xUnit.net 00:00:00.65]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.7440798+01:00">
+        <Text>[xUnit.net 00:00:00.65]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:08.8888644+01:00">
+        <Text>[xUnit.net 00:00:00.79]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.MultipleAssertions_RecordAllAdmittedFeatures [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1534456+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.PresenceValidatedDocument_PreservesTypedCopySemantics [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1539703+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "(exists(a) and empty(b)) or count(a) eq 0") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1543963+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "count(a) eq 2 and (empty(b) or exists(b))") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1549441+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "1 eq 1 or exists(b)") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1553324+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "empty ( b ) and exists ( a )") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1554899+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "empty(b) or b le a") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1558905+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.BooleanPredicates_ComposeWithoutChangingScalarGrammar(expression: "exists(a) and count(a) eq 2") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1560761+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: "0.00000000000000000000000000001", expected: Unsupported) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1563181+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: "79228162514264337593543950336", expected: Unsupported) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1587437+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.NativeValues_PrecedeAssertions(lexical: "bad", expected: Invalid) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1587646+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.SyntaxBudgets_AreEnforcedBeforeCompilation [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1587789+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.StructureAndScalarCardinality_AreNotMaskedByPresence [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:49:09.1587911+01:00">
+        <Text>[xUnit.net 00:00:01.06]     Bosak.Schema.Tests.PresenceAssertionAssessmentTests.FunctionAndChildNames_AreDisambiguatedStructurally [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

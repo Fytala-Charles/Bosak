@@ -1,0 +1,11 @@
+# K04-C43 — Concrete schema-advisor compatibility proposal
+
+C42 closes the bounded existing XSD 1.0 matching/subtype repair with unchanged normal gates. Keep those repaired contracts distinct from the six XSD 1.1 multi-affiliation preparation errors and Schema's separately documented 30-case XSLT cohort.
+
+1. Read the current Bosak.Schema documents and source without editing the sibling repository. Refresh exact source/document identities and its implementation/readiness status; preserve original receipts and distinguish proposals from adopted contracts.
+2. Reconcile ADR-006 and pending REQ-139 against the real heterogeneous surfaces: XmlSchemaSet/component operations, stream-based IXsdValidator, QName-based IXdmNode annotations, compilation/import, validation and copied-node lifetime. Identify exactly which operations an optional advisor would need to supply, their authority order and explicit unsupported behavior.
+3. Map all six unchanged QT3 multi-affiliation originals and the separate XSLT cohort to that proposed seam. Determine whether the add-on can supply the affiliation list, actual membership, annotation typing and subtype relation; do not infer this from a schema parser or from C42's single-head fix. Preserve every original assertion and preparation outcome.
+4. Prepare a concrete compatibility contract and acceptance matrix, including current no-advisor gates **31,397/0/424** and **8,941/0/1,918**, candidate **1.33.1**, 230 gated sets and 11 experimental passes. Pin registration, ownership, refusal behavior, schema/component lifetimes, core independence and existing license boundaries. Explicitly identify the historical baseline in the unchanged REQ-139 draft rather than silently treating it as current evidence.
+5. Present any required ADR-006/core-owner acceptance only after the proposal and evidence are reviewable. No advisor implementation, sibling change, dependency/filter/baseline change, fixture rewrite or release follows automatically from the review.
+
+Bosak.Schema retains XSD 1.1 ownership. REQ-126 bounded closure and all historical unmet observations remain unchanged. Existing local engine correctness work does not approve a backend, package or public API design.

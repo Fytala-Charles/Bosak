@@ -1,0 +1,18 @@
+from pathlib import Path
+import json,subprocess,time,concurrent.futures,collections
+E=Path('docs/conformance/k02-schema-inventory/evidence');P=Path('.guard-tmp/k02-wide/requests');rows=json.loads((E/'metadata-results.json').read_text(encoding='utf-8'));groups=collections.defaultdict(list)
+for v in rows:
+ if not v['result']['deferred']:groups[v['result']['decision']].append(v)
+selected=[]
+for reason,values in groups.items():
+ selected.extend(values if reason.startswith('CompileMetadata') or reason=='DeclaredXsdProfileNotReviewed' else [values[0],values[-1]])
+unique={v['id']:v for v in selected};selected=list(unique.values());(E/'boundary-selection.json').write_text(json.dumps(selected,indent=2)+'\n',encoding='utf-8')
+def run(item):
+ v,mode=item;request=P/(str(v['index'])+'.json');log=E/('boundary-'+str(v['index'])+'-'+mode+'.log');command=['dotnet','.guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll',str(request),v['id'],mode];start=time.monotonic()
+ with log.open('wb') as output:
+  try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+  except subprocess.TimeoutExpired:code=None;timeout=True
+ result=json.loads(log.read_text(encoding='utf-8-sig').splitlines()[-1]) if code==0 else None
+ return dict(index=v['index'],id=v['id'],mode=mode,exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result)
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:out=list(pool.map(run,[(v,m) for v in selected for m in ['current','guarded']]))
+(E/'boundary-results.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8');print(len(selected),'cases',len(out),'processes',collections.Counter((v['mode'],v['result']['kind'] if v['result'] else 'ProcessFailure') for v in out))

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build"
+  ],
+  "execution": "Approved unsandboxed execution for database loopback HttpListener, as established by C35 adoption",
+  "exitCode": 0,
+  "passed": 24164,
+  "failed": 0,
+  "skipped": 0,
+  "projects": 10,
+  "applicationControlWorkaroundUsed": false
+}

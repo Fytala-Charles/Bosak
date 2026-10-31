@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Bosak.XPath.Runtime" />
+    <InternalsVisibleTo Include="Bosak.XPath.Api" />
     <InternalsVisibleTo Include="Bosak.XPath.Standard" />
     <InternalsVisibleTo Include="Bosak.XPath.Providers" />
     <InternalsVisibleTo Include="Bosak.XPath.Compiler" />

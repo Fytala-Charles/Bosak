@@ -86,6 +86,7 @@ vscode-bosak/*.vsix
 # Local scratch/debug directories (never commit)
 /.Temp/
 /.guard-tmp/
+/.worktrees/
 tmp/
 tmpdebug/
 mult/

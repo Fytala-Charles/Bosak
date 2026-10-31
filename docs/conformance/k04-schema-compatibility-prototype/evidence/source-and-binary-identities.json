@@ -1,0 +1,60 @@
+{
+  "finalSources": {
+    "Contracts.cs": "5071d49436cb2e5b5d6c48e829974c38ed84bfa10dc9f05548674c9e98df99db",
+    "Model.cs": "e3e938db8e625765599c0e6b777ca716a548296005fd36c634333b2b768e8c5a",
+    "Program.cs": "37ab1c303edb70a22580e5e4855dc4b4d823000110aa580ae184d5d97fc95af1",
+    "Contracts.csproj": "65c499de78d1992f1a3c00512cd416076d94f18fec37696eec354cba7b9ec76b",
+    "Prototype.csproj": "2947e8e1de07850c5d1d03665124f0949d9eb200c99f9f251dda2d36c3a3ed8b"
+  },
+  "executedBinaries": [
+    {
+      "identity": "Bosak.XPath.Core, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "E5329CC3F7CAFB462C29EFF9B500B9ED1A8564D40DD22B1B2CEB4676DA39B6D8"
+    },
+    {
+      "identity": "C44R2.Prototype, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "sha256": "6F8388C247B84E2BEEF4AEA12C7B6E89C9D22C10882ADE94218C3F62B6F57D35"
+    },
+    {
+      "identity": "C44R2.SchemaContracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.SchemaContracts.dll",
+      "sha256": "FF899F0781AB9873F8FC3A9FE354821A3B2921995659572BF41F3A9CF1D88CED"
+    }
+  ],
+  "unchangedProductAssemblies": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "7eb6b7c37f0ab970414172bf1e032eb070954bf19e153449d9c486140ade6068"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "8816d7ee6daef99ff94ad4af3549ce0f5b46bedf7e8ec9ec690ddde338befdee"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "e5329cc3f7cafb462c29eff9b500b9ed1a8564d40dd22b1b2ceb4676da39b6d8"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "29296a8014cf6c2118dc48812adebedfd55af9c92baec366c70b9d89b10cf692"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "c957609860e87ef6049a91bbbc44ae52cb46ab1c3e225a01da32b0191734877a"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "c89e63e5f1603edf7690ad6b949813ecafc35ffa51f088fc62131ea1d6232e2e"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "df0c40c6d7fd61a1b8166cf48f79ed0f27b4fc5cc3f49f2ae62f1a2806d56d68"
+    }
+  ],
+  "preservedPriorFiles": 141,
+  "productionSourceDiff": "empty",
+  "candidate": "1.33.1 unpublished",
+  "public": "1.26.3"
+}

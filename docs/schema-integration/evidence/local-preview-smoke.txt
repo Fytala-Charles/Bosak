@@ -1,0 +1,1 @@
+<result declared-type="true" atomic-decimal="true" amount="12.5" total="15"/>

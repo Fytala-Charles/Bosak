@@ -1,0 +1,42 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Records actual assembly loads for isolated binary compatibility qualification.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated XmlDb provider compatibility diagnostic                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+
+/// <summary>Records engine and consumer assembly loads without referencing their APIs.</summary>
+public static class StartupHook
+{
+    private static readonly object Gate = new();
+    /// <summary>Registers a per-process metadata-only assembly-load observer.</summary>
+    public static void Initialize()
+    {
+        AppDomain.CurrentDomain.AssemblyLoad += (_, args) => Record(args.LoadedAssembly);
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) Record(assembly);
+    }
+    private static void Record(Assembly assembly)
+    {
+        var name = assembly.GetName();
+        if (!(name.Name?.StartsWith("Bosak.", StringComparison.Ordinal) ?? false)) return;
+        var directory = Environment.GetEnvironmentVariable("BINARY_QUAL_TRACE_DIR");
+        if (directory is null || assembly.IsDynamic || assembly.Location.Length == 0) return;
+        Directory.CreateDirectory(directory);
+        var row = JsonSerializer.Serialize(new { processId=Environment.ProcessId, processPath=Environment.ProcessPath, fullName=name.FullName, location=assembly.Location, sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(assembly.Location))).ToLowerInvariant() });
+        lock(Gate) File.AppendAllText(Path.Combine(directory, Environment.ProcessId + ".jsonl"), row + "\n");
+    }
+}

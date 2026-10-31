@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-29",
+  "head": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "status": [],
+  "method": "Read-only consumer source inspection; no implementation or fixture execution",
+  "files": [
+    {
+      "path": "eng/Bosak.Dependency.props",
+      "sha256": "70d7f31e049da218c2468ef056ccd8648f4fd188745a0cf98e23f037bdce28d6"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+      "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+      "sha256": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/WorkerProcessPreviewExecutor.cs",
+      "sha256": "85e8e241609625c11c982be7a8c13d502c865ea4adb7f6bae9ab0ad84d9df0a9"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/RestrictedExportSession.cs",
+      "sha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/Testing/PreviewExecutionSession.cs",
+      "sha256": "bdea1cd273bfa6ba46976be9a05bd311ce29578ff480cb2bbf021ae74848e0fa"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs",
+      "sha256": "d404e35739a173ef73951b4b018a6f1eeacb01113b762ad37be3c063a1ad48a3"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/Testing/RegressionBatchSession.cs",
+      "sha256": "7feeca4a6f367c35244c2010732c804804df77ca7ace876f445ddf837d789a38"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/LocalRegressionCaseStore.cs",
+      "sha256": "974d9a3b0c1ca511ad0629f8c7b04c9bae2d6d2b37ef47e62a17f329f2bf50a7"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/LocalRegressionBatchReportStore.cs",
+      "sha256": "fb776e1078d153eb9d89ddf81bc980bc43ee9eea149b31665a11d7b0d0c3417e"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "src/Bosak.XQuery/Api/XQueryExecutable.cs": "042b194ce956587201a874dafc0cee968b629261",
+  "src/Bosak.XQuery/Bosak.XQuery.csproj": "c4a7a61ac5fe3a32dd6d7f2c3f5b8dac8ca5b38a",
+  "src/Directory.Build.props": "af50ac70c708084002f8e842fcbd70f5a2f008d7",
+  "tests/Bosak.XPath.Conformance/TestExecutor.cs": "6408b902af84f561dcd31311dcf90dfc5ab6484e",
+  "tests/Bosak.XPath.Conformance/TestEnvironment.cs": "8ef6198afd2882534264cb1e92a5612eb87b4ee6",
+  "docs/conformance/k02-schema-loader/build-review.py": "1f373484313ac74edf2e7ae6dac30214bd881d7c",
+  "docs/conformance/k02-schema-loader/evidence/validate-evidence.py": "33bc560bf50529e2d48681587d4c44005cd344e4"
+}

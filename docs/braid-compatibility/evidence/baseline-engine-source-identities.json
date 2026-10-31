@@ -1,0 +1,970 @@
+{
+  "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+  "allArchiveSourceUnchanged": true,
+  "files": [
+    {
+      "path": "src/Bosak.LanguageServer/Bosak.LanguageServer.csproj",
+      "sha256": "07eaf871b711253c59bf95e60b343ae61632ef75f6e43a83756448baf8b6dacf"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/CodeActionHandler.cs",
+      "sha256": "90a7c5be99aefd93ad030c1b15138d2a3610268a13d5f6740f43e1dc7ac4f1cc"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/CodeLensHandler.cs",
+      "sha256": "5a2bed75f82a36df0654f48e830713e387c0c65e567f2ae21987e06ce5067402"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/CompletionHandler.cs",
+      "sha256": "cd29bba435d83a6d501773c821886adcd2e9906c8574d61373f31f6ca38142ac"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/DefinitionHandler.cs",
+      "sha256": "74b5c56e8ce51b9994782ab15b384e4869e8d8e11570a370710fac4938a456ee"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/DiagnosticsHandler.cs",
+      "sha256": "7bce8f986b8ed3cf08ac0b0e77fb00f636b248a3f7e08d635d04076cf65a0c9d"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/DocumentManager.cs",
+      "sha256": "1aff99efed300b6d0d3f70d230409a512511b9fa27a5b91025a058cb82376227"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/DocumentSymbolHandler.cs",
+      "sha256": "ef538c2715a7d71a143032d4d37b1ceab213d122c65f84c90fc0759e60c32fc9"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/EvaluationHandler.cs",
+      "sha256": "93054c6bf41a507a06815036cfb1b86c6b34d42e992cd4cb6dac2198cf65de7c"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/ExecuteCommandHandler.cs",
+      "sha256": "675e811f6567cd2ffcb4550ca032400e272bee708708da1e32453b1e4e6eefb8"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/HoverHandler.cs",
+      "sha256": "49661702e4eca26df5af7f9ad01d01e7c4185c634d0412b38b4fd98089ae4029"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/Program.cs",
+      "sha256": "120b49b1a9125f1b854d26a4f7079f5cfe75fdf46ffc233245da54547bc9d60b"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/SemanticTokensHandler.cs",
+      "sha256": "2fd9905aed354e1d0a9d962942aafd41b7630995356cb73d7272081a65d546ab"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/SerializableDiagnosticReport.cs",
+      "sha256": "3e394cb111a66a36064306a7cdc47bb9539e0beac0d3f716606aa5140611748b"
+    },
+    {
+      "path": "src/Bosak.LanguageServer/TextDocumentSyncHandler.cs",
+      "sha256": "6a821b419f17349ad53623a516c6a87a750a3ef4922b9c2667361b59e94cc9a6"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Bosak.XPath.Api.csproj",
+      "sha256": "53f71a88bdc3df50feee1fd02c773caeb01938238e3977f22959ea4276d5137d"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/CompileOptions.cs",
+      "sha256": "5d0f992155004935d9ae971eacfda5e7e23af423c890dbe238bb0656d9d37a65"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs",
+      "sha256": "99e12e65ad254034c9a638777ec78c4a30df2a6bc60e919ba185eea1f90ba7ec"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/XPath31Expression.cs",
+      "sha256": "3214a568d94f1d87e2af4f92a3b550dc2ab8a68120054b7febd65122543abc41"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/XPathCompatibility.cs",
+      "sha256": "dfcce00c0fd48b8b1cef222a9eb17aa505a59af873510ec370e08f88f7d64838"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/XPathExpression.cs",
+      "sha256": "1009ed642fdbf89138dcd5213e49e70a816ff7ed10c638b11188c08a4308c173"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Xsd/IXsdValidator.cs",
+      "sha256": "7718bf901cd046ae9cb7de244fab1904e003e9a5210fa3690df748d7e531d4e6"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Xsd/XsdValidationError.cs",
+      "sha256": "113fa76eb775800140ea7f9370cd02ceffe1c652efa539f6a62f3a16d68958bc"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Xsd/XsdValidationResult.cs",
+      "sha256": "a29b66d764607f9ee256e845ca06c5e8784c606012faa49bcefb47cd16f9d7f4"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Xsd/XsdValidator.cs",
+      "sha256": "d1bc0f7f9c35e1b0b79a1e4573ce84e0555d6e9110a47ae2cb8ea532352a6f74"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/Xsd/XsdValidatorOptions.cs",
+      "sha256": "668deefa7f7ebd5e3cb43662ecb9d7b8cadc130a0fe7e012125c426ebd5d8aa5"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Bosak.XPath.Compiler.csproj",
+      "sha256": "be21c2f901adb1ee41158aa03d698691568895644a1cbbbe688307db73ceccda"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Ir/CompilerInlineFunction.cs",
+      "sha256": "0076d1cf989b03278cc0db4bd697c449815ea5c22e5519fc7d0d0190d541e1c1"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Ir/IrInstruction.cs",
+      "sha256": "c70a88ed7ad0ad399c9720e994d1a16ed0d92d1eae4b016345e1f2c1eb2da154"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+      "sha256": "f36073839226cdf5d31f851dd78eb87ac37c31c7f96d248697f8f2c37ac666d6"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Ir/IrOpCode.cs",
+      "sha256": "9f6fa9b993095c1a99b3c2ac0d7296f78ff04a8fbda06c7af8bb50f171039a76"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs",
+      "sha256": "3b210e27490a43063c0075d3f507252f4bd6a24a7b3f221f2937c700c803d1a6"
+    },
+    {
+      "path": "src/Bosak.XPath.Compiler/StaticNameTestValidator.cs",
+      "sha256": "a6e71b2eb9f560e0f8eeebd12737dd78af92135c1ce3384c101c4079f02cd1ef"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Bosak.XPath.Core.csproj",
+      "sha256": "6407f3a17dd482ecf0c093455d9f481e3f2fee23d6156ea36ea37a73fd1fa238"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/DecimalRangeSequence.cs",
+      "sha256": "1e7ae4c530e701056e44e5c808f9590319117ffc6f2197785958c1d6d975ab10"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/EnumerableXdmSequence.cs",
+      "sha256": "384a583a5fef29b9c333ec750617d5543b828e4654d5512c802cda06840e8c8a"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/FunctionItem.cs",
+      "sha256": "a76e01adcd717d6d276bbb346e48f8b1eed16eea2c9d6d0426e6c71971750feb"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/ISinglePassSequence.cs",
+      "sha256": "0521ab391014540ca25e9de2bb0291b6191203ab1996573f7a79b169376d4c8f"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+      "sha256": "8f0cea9732117e65dafbdeaff30b3d8df1a0272b63d2b24c326ad62bc296a7a8"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "sha256": "f9a2dbe24d6684948cbd739bd8e785f71d81e00faa0448102916b863b6bfe983"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IntegerRangeSequence.cs",
+      "sha256": "8a8b38f4edfdad3b35a7a7f56468ff093010eddb6edb03dc9950fac3f125b6aa"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/MaterializedSequence.cs",
+      "sha256": "b655a03dcfc1b296742dcac02fa3850e9a08376ed51bd997843c04e6e3a2e475"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/OccurrenceIndicator.cs",
+      "sha256": "3f1c98f7b98fa84e9d4a3ea631aad1cabf8b4da24cd13b10b0ba17dfb7696523"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XPathDateTime.cs",
+      "sha256": "b5a6be4d1f5cc935fd75f1c0380159454b1462d2293c66bb66acb049aacd0796"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XPathDateTimeHelper.cs",
+      "sha256": "9a7e5f1fd600f7740a00a06d8a522b58cd60fd9265419cada75a6d41f64d05d3"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmArray.cs",
+      "sha256": "fd53e1fb5cbd038e462e5ad36c031a841f95f978efcac59280b6f64398a7fcd3"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmAxis.cs",
+      "sha256": "232c792e4624da7ab9b79b8b7ef3d111ac3f53dad74e5dc2f57a4eb677a491a9"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmElementSpec.cs",
+      "sha256": "fdce1a8d24114e7108147434fbfed241d8032e76ec0f92d92cb2952109eed24e"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmJNode.cs",
+      "sha256": "27697b9d814093d965b61e9071d8ec42dd22188b27a486d04c9aeaf536e9eec6"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmMap.cs",
+      "sha256": "52fa2b45504a427bb52e0770483c28ab558b703fd3883932567700eaf0f052a4"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmNodeKind.cs",
+      "sha256": "e12dfa2f787bbbda7f9172178b479fb77b82f7bb4cabaa3974307527005244e6"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmRecordField.cs",
+      "sha256": "bb3469d3854607926e078bae623882e014254daa57a92e9618eb822d587000ff"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmRecordType.cs",
+      "sha256": "3026ff25adb8799dc4532d619bd18505a3ccba2debf407b48df751e39d3b6775"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmSequence.cs",
+      "sha256": "5e6456db11bf16309a7a48b74168e7493a662460db6eae9b7766fd90e5f33660"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "sha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs",
+      "sha256": "2685bce4e594d0d2965bfd2776ef7139a340a2efd362e76b26cd84eeb07e915b"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValueKind.cs",
+      "sha256": "919c96e9e3b852af8d5775a20b6bddd9cc410dbf67cbf30a0f2fd2dc74818963"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XsQName.cs",
+      "sha256": "5d9e93eea740d4bc5d0633913f95900cf38b89781af2526794e14f1419278be7"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Ast/XPathAstNode.cs",
+      "sha256": "c005981b2528d361b9a7029624d430cd62e57ae78501dcc8e11cc5dcb249b4b9"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+      "sha256": "bf0bdcc22bd97bf86d98386410c493f19bf824d7d8ca06d6dbcd532340495d1a"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Bosak.XPath.Parser.csproj",
+      "sha256": "cc514083e7c053c6f4148081a8d2b1319d8eddbc9c82cdb4ee971685c287dcd6"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Lexer/Token.cs",
+      "sha256": "4a91c0a9c1c75ce9e9b1ea9e4591b6cd250500e567cce239a39fef1c9111591b"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Lexer/TokenKind.cs",
+      "sha256": "a255362f3018baf9261b2c7addc04e003d2177d2d70454f0ac6a0b2837a35c8a"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
+      "sha256": "e01c23bd009ce4e1c79b3bbc10923064d2d51a89065a8020e0c84deb5e38ee72"
+    },
+    {
+      "path": "src/Bosak.XPath.Parser/XPathParseException.cs",
+      "sha256": "6a06f0ea048a15402a337909ee894a889cb7df1111e631f94fc649095d9c099d"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj",
+      "sha256": "c0c83968a463c096330f3e18247a25c226a9e2025e8b56ccdf4d6f4f71363a61"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers.Database/DatabaseDocumentLoader.cs",
+      "sha256": "f19beb9b841cbed3f8ec590e30685e52a7daacc139246205a7cda520c3f3f3ce"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers.Database/DatabaseLoaderOptions.cs",
+      "sha256": "2a213cabb0e8a1da6caa53cfee320e91020c5d0c573969189e224f32d5f18413"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers.Database/DatabaseScheme.cs",
+      "sha256": "f343b247ecba53c4d102ac45ccb10688b7b31ad2034ecdac0fa459f5b8be25f0"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers.Database/ResponseBoundStream.cs",
+      "sha256": "42e495dd21713075047d0330dea860231d2bebd6a13df84eb9af1db242c9fa6f"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj",
+      "sha256": "7c915e7854c6cb1036204c73b18bdecf35b2cf3133d7cf9dff3f5ad68561cdbb"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/IStreamingDocument.cs",
+      "sha256": "a360512c03ab103c410c99e2044e78669d1bc66619223bacb424cdada39974de"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/IStreamingNode.cs",
+      "sha256": "c510b95f2fcc230d8ca1010a5634070fd69b3b1e471abf29d54580d472303ce7"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingDocumentNode.cs",
+      "sha256": "6a55a881280e821be8d92483e9ce88fe54fe923af854ea3c264fca6ec069fff9"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingException.cs",
+      "sha256": "b0ae7caf0516dbb8ebff635f050967705d83d1f09884f8bc89307c8abd371e66"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingLoadOptions.cs",
+      "sha256": "fbd8de4b78b12c97fa4a2c487bc28b4f58c55d37e13c4a46c067de3dbcec8cbd"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingNode.cs",
+      "sha256": "79b01c31d3c4fcdb27779a8f84581b017a3d840500e4aedf2d6a1a3eddd248d0"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSinglePassSequence.cs",
+      "sha256": "8842b41929058edfca2bda7106721d805b61898d91cbd874310b8db50ae3b651"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSource.cs",
+      "sha256": "01260e6e3d160e0e618980a2eb62808f448a50e005aba62ea6263c622537ae21"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/XmlStreamingProvider.cs",
+      "sha256": "65e19ae58652b2523d8ccbe6db197a36706ec087195263dbe8b4b48060e9c504"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/ConstructedElementAnnotation.cs",
+      "sha256": "de870e39198683b54a7fd50080dfe5ff2fdfed7636571385d00bb0f9bccacb96"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/ExcludedNamespaceUris.cs",
+      "sha256": "a983dd8137c4f27c5bd70021cf9f016cfe2f04e22cec3f745ddd364770bc2a59"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/NamespaceInheritanceBarrier.cs",
+      "sha256": "ff021d3e7028e45bac203ebd6ef27c79b92ce12305f501a27167575741656da4"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/NamespaceInheritanceContext.cs",
+      "sha256": "f2a54e81158116a9856f73e3052ced439c147c490451ff4ed3b7c4486a328c44"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/NamespaceInheritanceExplicitYes.cs",
+      "sha256": "0212ba2baca69ea339ea3e2cea7a41d1be8300d49cc536ec53e27ed5ea24cdb0"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/NonPropagatingNamespaceBinding.cs",
+      "sha256": "9ba911dd1e48d1e691b2ebb703e2345ccf9b4997bfa945fcf8ff6b01547b0195"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/OriginalPrefixAnnotation.cs",
+      "sha256": "687be26f11e6f40244cb05ec98ecb6b97eda43d2a0ed118a66ccc71e486c9f50"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/ParentlessNamespaceNode.cs",
+      "sha256": "87d78839264be570999cbffea463d796fb4121191ff9095cf62627cb9a7e070c"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/PrefixedNamespaceUndeclarations.cs",
+      "sha256": "ba46844103da632a8c1aa6e981c37b8594eb34d648eef6ae633704238077a75c"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs",
+      "sha256": "3bc9432e475d8bbbe2ceac2784e8aea4bcb351bc247ac635f447faa738c2c18a"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs",
+      "sha256": "f670c4171771205dec7ad4e08c95baa54ed89f8734806343f94382a3ab44b1da"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmIdProperties.cs",
+      "sha256": "bd242bb01e704bee8277ed67362be360c86a4df7c2e76b815cb95b6de995f763"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.Validation.cs",
+      "sha256": "9abb36d2a3123c5f17efa2bb3685d8e11589a57c121f110360b9d19e1c4e7c0b"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.cs",
+      "sha256": "ec8aa31acd70ce841d25ff2ee9a9c352ba33e60f81393eebc5599524f81540c5"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmSubtreeValidationResult.cs",
+      "sha256": "893c20ede49440daa42dc40620cae8500e10df25218da998c9f38f7c6b867390"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmValidationMode.cs",
+      "sha256": "8728df46a226413081ea8770e7ec426e8a3dbd66dbcc648694f9696c3a6c0318"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmValidationOptions.cs",
+      "sha256": "4c7fd412fd69172803b4ef1ab2d62354b18db7378abbe0d90e0867ff3dc46ec5"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/DtdElementOnlyAnnotation.cs",
+      "sha256": "5dbdd0db265636f3d871033e932178682c418f5cfac2cf9eb8acad98eb6abfef"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/UnparsedEntityAnnotation.cs",
+      "sha256": "5436c4bb8d58518c632990c38c5f027a9b51a2aa8c8624366c2909408a9b0522"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/Xml11Annotation.cs",
+      "sha256": "68dee0c3f3fd157bc58e7f09588ce4917953a286fb8fcfb6cf73da43ffca5657"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/Xml11Attribute.cs",
+      "sha256": "d20f099847e3c5b1868272fa399a1b0104c9d164e1bc578d49af464c7c78c9d8"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/Xml11Loader.cs",
+      "sha256": "01db9ba14119e771661ebe906b89a71264e5c3e2f47f6767ff431209e9863879"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Xml11/Xml11NameCodec.cs",
+      "sha256": "6db93a9f83958a38ba151907ddf30fa100fc82e29ea1e8d2a5ae8fe25d013764"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Bosak.XPath.Runtime.csproj",
+      "sha256": "72b16a89c6a192566a6441fdd792b921026a2ffb3b6c81ee1db46d0c174615c4"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/ExecutionGate.cs",
+      "sha256": "371cee85435390c45827c83ff8ebe33d82d85d9b52ed9403f246af53c214cddc"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Functions/CoercedFunctionItem.cs",
+      "sha256": "afbe9328b47348e255af80552262e42128e838ae278fa0bcdfb2271f15e4f29e"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Functions/DelegateFunctionItem.cs",
+      "sha256": "15979628fff26b9f1b7b998d4fcd6347a249aecab6cab82545b7282cd07008c2"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Functions/InlineFunctionItem.cs",
+      "sha256": "b1c8cc21542d0025b4a7210e8d37f402eeb3fcdc83a55065eb639354a2901d4f"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Functions/XPathFunction.cs",
+      "sha256": "2cf269387d9c6472fb1c498e54bb7c8b894fb0e3d90a3ea23c997ee243ce6561"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledResourcePolicy.cs",
+      "sha256": "10ff8d6fd67e2a29b36af79f058d449bbe6a69afcd0936f936cb5eb9db33a0d3"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledResourceReceipt.cs",
+      "sha256": "07ed8852ac18fb620107816dc2cbcbb5912f386d3bf229918bcb61179299569f"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledResourceRequest.cs",
+      "sha256": "c167ae4937642b0a23030c7663e145d9815b916d3f11597ca06fefc836634480"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledResourceResponse.cs",
+      "sha256": "027407cca3e660430cb0f4378e4296274b620936801bf448b393a75e5557c374"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledResourceRoute.cs",
+      "sha256": "54a23f43c4de254fa553e7c846ee9f8b7cc8672198020f1afae7712a50f5494c"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/ControlledSchemaResolver.cs",
+      "sha256": "6f12975449da6aa21eaf324354f2cc913b6261de787c0ccb735795cdbca0bd67"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Resources/IControlledResourceAuthority.cs",
+      "sha256": "0432edc1c7f2f7f9fb8dc83813ece6d1229593c1a4746689cbeda8461cacd09b"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/DecimalFormat.cs",
+      "sha256": "1026fa9b5d0030ecfd9e75983b921b6629a9d4b56e270773c98c6e8f57805f01"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs",
+      "sha256": "94df83fa36fa50177a1dc49de5227a81047010dab23e0e238168b0e43c044073"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/SinglePassXdmSequence.cs",
+      "sha256": "d784c0b0685a861827f5c2b2a130a7cac1b2ebf7a150e260e298ee253c2a0fcf"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "sha256": "8444d8e3bb5e9098d209e9f7f5b030dd590d34ec8a89bdbd8c77bf0404955793"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/XPathError.cs",
+      "sha256": "833c657e86464d74d7b8c34a8205ad02d424ac7b144f3e9652b37f4bcba6efcc"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/XdmConversions.cs",
+      "sha256": "6c020c88bb0f706c153935c5988071408c93a0dab9ff3b8f26f8b32c34ce64f8"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Xdm/XdmValueComparer.cs",
+      "sha256": "cae0ba88d6cf2e4dace850b30c89efab2e3632c817301d3f9aaea5591990eb02"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj",
+      "sha256": "5819886b9ccb908c56dca8b17517d8e31d768e153f4546ce5ec2449bd226eafe"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/Csv.cs",
+      "sha256": "4e5ab4d8b83b3f21460a0bd74eaa4789d9569b10d4181b9bcb1e385d6e767a11"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/ElementMap.cs",
+      "sha256": "93c8e94a1242fa2c817b02712256a0c8d5070235bdc53f0fdcfda26bb60e8c4d"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs",
+      "sha256": "efb548379e98f4fd192274266c55f92bfb94ac054775218e5c8c93447d6cdebd"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs",
+      "sha256": "188b56beb3791db96fd0804ac5f51960eaedbc40feb6b6f2450cb0e8e2a163f7"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FormatNumberEngine.cs",
+      "sha256": "6971e7f672eb886789b7a813d3602828801e1bc1b5380ba6c0426ea1dc3c9108"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+      "sha256": "61b8a04af33cf3c0d0b5fbfeeb183b7e8cedeafa82a48da3b82fa5aeb60b71af"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/Html5CharacterReferences.cs",
+      "sha256": "c40fba58b21ea30abd201cee74e74bc38832445a7841cba608c20127c050ed61"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/RegexHelper.cs",
+      "sha256": "56360466689848aeef119cd18467c1566bc8517124514d675dd60d7e36c972b3"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/UnicodeData90.cs",
+      "sha256": "a4743e9613de2984724abae8541903ed5a0c8f2e6bebeecce261177c4d2abb82"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/XdmSerializer.cs",
+      "sha256": "21fc6ebd4ac3f56340fcd575775db90c0154b6dcb877f4647d09d0b0d60915c3"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/XsdCharClasses.cs",
+      "sha256": "070be0ba9d51016b401db9fcada9110f5d64cff4745349019873cb0fb0a8fa39"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs",
+      "sha256": "2aa64c3c9d994e9d0604ebc17fc8eb8d1d6a06460819b97dff3e3b004603edff"
+    },
+    {
+      "path": "src/Bosak.XQuery/Api/XQueryCompiler.cs",
+      "sha256": "3015fbe4fb8ff8428fe7dd5d56dd5e56cf428c6f6c4e7aef7bc6974e04f01f0c"
+    },
+    {
+      "path": "src/Bosak.XQuery/Api/XQueryContext.cs",
+      "sha256": "a2e06a80369366906c7a302b4481ca733ad01bb40ec5e794a16d1a2109510485"
+    },
+    {
+      "path": "src/Bosak.XQuery/Api/XQueryExecutable.cs",
+      "sha256": "a5b96735e80cc3e44f82806f1c1594e374f7cd5b765c5cd428b79692a6120b2c"
+    },
+    {
+      "path": "src/Bosak.XQuery/Api/XQueryModuleLoader.cs",
+      "sha256": "d1a5840512a48981686ce48d41b3f3e1a6f28aad7a851d07115aa6b32def46f2"
+    },
+    {
+      "path": "src/Bosak.XQuery/Bosak.XQuery.csproj",
+      "sha256": "8ded847ce193f9807e8f871bfb1cf61e46a062f1bbf474f69dc0d8e8a9deeae8"
+    },
+    {
+      "path": "src/Bosak.XQuery/Compiler/ModuleVisibilityValidator.cs",
+      "sha256": "bce5ea226c55bb004f79998fe4b2c45594a29bd71982c6c106fbacc6b903e185"
+    },
+    {
+      "path": "src/Bosak.XQuery/Compiler/XQueryStaticContext.cs",
+      "sha256": "589e539de064c0a7f0f2f0993bb4e373b5e32789b9d38817b426615af0977c8e"
+    },
+    {
+      "path": "src/Bosak.XQuery/Parser/XQueryParser.cs",
+      "sha256": "986fc96e9b17f1054d263ba0bc75a6b473d3e2cb17f0074e1714d35b3038a5c2"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/FileSystemUriResolver.cs",
+      "sha256": "1bbe586fe7ed233118f428111b1e8efdb67ffe8ecbaf9fe500393323fa401993"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/IXsltMessageListener.cs",
+      "sha256": "b9f8e4d663c8be98edbecbdb30140e70a90c1fd503e33fc79714d8319de9f3a1"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/IXsltUriResolver.cs",
+      "sha256": "903cfdd4e7d16fe35a778629b6b490ed8ed1bb1a64eaded557e764f6eef8f1d0"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/StreamingTransformOptions.cs",
+      "sha256": "c17fa93580baebedee95760b399ce2225978fac719bf1ddee53b78522bd2c1bf"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/XsltCompiler.cs",
+      "sha256": "5da9f528ce80fed32dae2cd432e387e7a53975ebd3b0442a1f566bfd1084f0bb"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/XsltExecutable.cs",
+      "sha256": "dd4a7188b7531563fefcf071d808a9ead4cc079c6cf5272097376aa6f20ad29f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs",
+      "sha256": "b5a4f83be404c1cd6e62902437729a8b32b5b1dfa939c0978149dbb35d94622b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/XsltProcessorProfile.cs",
+      "sha256": "f862a45af2e74bc02ba17efcb74c34bd37a83531b070a3c4f8fc0df8bdfa4057"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs",
+      "sha256": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringAttributeDescriptor.cs",
+      "sha256": "39189eea04136effb6fdacb8b9433acd03804d907b3b3a15e38206910d0317f8"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs",
+      "sha256": "b8bd97004f4c0cf60a239d289a7b24991c36adfee5320cab4f9baa5561728f53"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringConditionalWrapper.cs",
+      "sha256": "e0d246b3daa461214735de7fe8de24df6b63e6a5bf3c3e92b4dde37793f2d1d3"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringEdit.cs",
+      "sha256": "9a05e6551495cd83662f7cf9cfd7980ce3d783731f08b324f5f5cc488bff01a1"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringFailure.cs",
+      "sha256": "ac484de436b62026860293c495230ece205c8677da50d44ea6b349d54074a2ba"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringFunctionSignatures.cs",
+      "sha256": "3fd53d8174da7a77fb16a82de5202a33b22b48a6a9a90bfbf5b3d18706da2e90"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringInspector.cs",
+      "sha256": "1e792d4e90fb27052685f4937d7e72b4406e13f29e148c0cb8b2919e26a49146"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringLiteralAttributeLifecycle.cs",
+      "sha256": "ab734db21f453e6ce614bab4aff3b35bbaa5cd0177c85aec032cef1bb5ae5789"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringLiteralElementInsertion.cs",
+      "sha256": "75d688e056ac8ef4059926eddb1a21cf8f9b4573e9f10e62e00058c60990416d"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringLiteralElementLifecycle.cs",
+      "sha256": "98d76eb00f2feb6f2f81cea55f427ef632fbb73b42b649ffc3ddd1289c7d637f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringLiteralElementReordering.cs",
+      "sha256": "8ca3c8a49f4e16552089edb8a0a0679455d81e7c4f34c4dccdd89953c825b929"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringModuleDescriptor.cs",
+      "sha256": "4a97b3d55dbfa62f315c5ff9d0ee405673d07d7a1bb9737c35f92858b3e4664a"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringModuleUriResolverBridge.cs",
+      "sha256": "20c37a7e265af4247cdd1e01e1f67e92e530ade42e707015c64fd4f90bf313b8"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringNamedTypes.cs",
+      "sha256": "af6a965a7702058f910fe1e540c911a5d1aa1dc77860161e3b7f2748483e5481"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringNodeDescriptor.cs",
+      "sha256": "fb7bf92887f744cb7ad16b07f9393c69c1018ffc799eecb9b7f28fe457ea8acd"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs",
+      "sha256": "d4cd377f3f041cc7666780ae5f46e56d03efbd966c3e767f2dcbb0ed48d0bbdb"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringSource.cs",
+      "sha256": "fb2515302c222b9c0d621658a673719ecede0cd62016464eefdb372bcc175b27"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringTextBodyReplacement.cs",
+      "sha256": "bc018c42520668211ae9e8c6893d373cf39871b7fe0c39cf7b2b971333e16182"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringTextDeletion.cs",
+      "sha256": "54343d65710c29ef445d5fbd91eaa71926782e410edeacc0f5d464a13d6e8462"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringTextInsertion.cs",
+      "sha256": "bd9d0aa288c04a57e99eab2930bba90abc8b09c923a503ce35d288c7454b0921"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringValueOfDeletion.cs",
+      "sha256": "9b471b2fb4a5c0cf30cb48061a6bf1fa27192e20af147d13455edecdaacf4361"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringValueOfInsertion.cs",
+      "sha256": "950733cc6e333add81faaa1bf3cb633154f9ea086949bc0660acc6e624c450de"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/BoundedExpressionEditPipeline.cs",
+      "sha256": "d5a22727bc5018c67d5015e4bfc019aaf631bcd2129f12c9228c14db56f17475"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ConditionalProof.cs",
+      "sha256": "bcb8ddba2ea9d02c8818b596d2358156f3ae8d4b948a44ceaafdcf75832bd316"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ConditionalWrapperPipeline.cs",
+      "sha256": "4cc57f788badf0dc9c0113261bb8eb3aaaece479e39d834a1e5ef307ad293f5b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs",
+      "sha256": "400855a70b84803790bb3f34154b402681d848a8fdbd216bb5a254ef8748c57c"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ExpressionSlotContext.cs",
+      "sha256": "d8e39dddff9764a05d70835163356d5615ec80ddbc760f9874ba5f4624e8b22b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/IAuthoringModuleResolver.cs",
+      "sha256": "b94807cc19f4e0d10104edc3e8bc86d6f668d988d51f11b727eb0d6907ef2c52"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/InsertionExpressionCoverage.cs",
+      "sha256": "0b4e4b116a25d99a49d724cb652d9fefef0129dceaa939afeb13b88e60bfeaf2"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/LiteralAttributeLifecyclePipeline.cs",
+      "sha256": "8a0b8eca10d2efd33e380ef6d18db5fff86027a426ba70d5fe128fcf345f655c"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/LiteralElementInsertionPipeline.cs",
+      "sha256": "f7cc3d97dacb7cd7b3a05f313432a352835caf731f8b0cedc2162778c3b95a70"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/LiteralElementLifecyclePipeline.cs",
+      "sha256": "c762f2859e2abdaad2230d4ce31d649225cb041dcd6abc7e292c1ef6c00a205b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/LiteralElementReorderPipeline.cs",
+      "sha256": "df652f6efb359b8e106396a39600ec9ec9f8ba36324f2a7942989ff510f9cb42"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/SourceRange.cs",
+      "sha256": "58fecd8a92a311c90f2c1e9578e44364bcf05cbbc2fab6de85b5cfecf3861f29"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/SourceTagScanner.cs",
+      "sha256": "20c4f021c8573518d2632ccf63fa2a5aad531af52cd0e5ca8d6ab06c009900bd"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/TextBodyReplacementPipeline.cs",
+      "sha256": "40747eb7708e750cc7f6084bae198db767797cfcc12dc6b3939ee4e6346b6241"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/TextDeletionPipeline.cs",
+      "sha256": "5f6340b5795431deb5815870fcd50789a8eed67c380df78e23e92e5ec9eed911"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/TextInsertionPipeline.cs",
+      "sha256": "4d20949dc25941051a9b34a96ec4d7568dffcd808a5fad076c5da66a4a74f73e"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ValueOfDeletionPipeline.cs",
+      "sha256": "f3d25c986382a894c36724874ddce66bb1bcb7f4a03843237aa6f6f90b7d2370"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ValueOfInsertionLayout.cs",
+      "sha256": "fde2d325c300bccf0743ecd36d59319d5d7d8b23fb81de1c70de447831d0f07f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs",
+      "sha256": "efd52ccef858ddb53a72b30e2fd033996e970115fcb7d2191a9280b71b42886f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/XsltAuthoring.cs",
+      "sha256": "29cd5284b03dc9b315c3f03437ad4a393f525c09c2728058e694bedcc460ea49"
+    },
+    {
+      "path": "src/Bosak.Xslt/Bosak.Xslt.csproj",
+      "sha256": "0edf9681db165377565932d23e992dd52e6cb1740f3e8d4a7de5c61f6755dd98"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureFailure.cs",
+      "sha256": "3bfcc22fa1c7e0e5d13d790dd8d13ec0e1cf22fa391f070ff6132e56b466dd87"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureFailureKind.cs",
+      "sha256": "f139d5c1c42deaadf2ea25eccbde12017248bed05f1afa459a2b604bb9d5cf8f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureLimitException.cs",
+      "sha256": "2ba70b62630de01f9129c3d58386401d9170b9fa01b574b534d475195b60add2"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureOptions.cs",
+      "sha256": "7c7662562434085e826040198e06c55a272c939479b0e31d94ee0995fb216595"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureOutcome.cs",
+      "sha256": "57e0cd61a4d3d7988ee36e78750c93eecb9461173e34c4e672d947fc5c1923f0"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureResult.cs",
+      "sha256": "1aa67b3cb60ed54ca821c728241029af38d0628942e0317c0dd83645b1e114ab"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCaptureSession.cs",
+      "sha256": "89fb54e650f2e7ae7f5c88ff49b3f1f6f4d9a7fdfd82d56e2a8e5cd00fd5e9f4"
+    },
+    {
+      "path": "src/Bosak.Xslt/Capture/XsltCapturedOutput.cs",
+      "sha256": "ef4d4b181e2ed9ee6b7af230993d238e879cea7e61fd98d87895c53fff2d48fc"
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/ArrayPattern.cs",
+      "sha256": "1948ba7c2eb40a608a93a29bdb897bcdcf16543456d31c3e27a01195b3154fc0"
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/AtomicPattern.cs",
+      "sha256": "76773ce6a0a2ce6f2975a7ed172c88e59cb8b4334e479d02a05acbb72dfad4e3"
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+      "sha256": "c4c966e9ca283aa0d7c9b8a475022a2bd6c926f6e796bd6cc98fd05b12ee918f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/RecordPattern.cs",
+      "sha256": "c120d6847ca4ac216da8ca9b51fc798bc4071e294a24123eb6da85e813446890"
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+      "sha256": "84eaa7ccb6e93cfb680cfe0c456f807b3995837e1caa9976623d7ac711b32e7a"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/BoundedSerializationWriter.cs",
+      "sha256": "be430e01d71478edb8c433204992d9aa4a9eae6b3eb8aab35b5c051b9d47b97e"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/CaptureMarkupWriter.cs",
+      "sha256": "7b778b7628f7622256ac1e12a7c84ec27a7f7483805b5f7c354a485fb8f2a4b5"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/ElementPrefixHint.cs",
+      "sha256": "9c71866d6f901609b774ef922c5574fce0fa4e3685d1d5c18b0a21eaaf2fd3a2"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/KeyIndex.cs",
+      "sha256": "649ad8f909dfe9f205986a9c307b2caa9535be21ecce54e788752531f5183490"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/ResultTreeSerializer.Capture.cs",
+      "sha256": "c61ada4210c1eb272f3f40eb8ec163e003df9cf44263bce66e67d02fc58d9876"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs",
+      "sha256": "f512c822dfdd069a2608fe5a256be03208fd78a1c49e09d252b7cf75e82a89bd"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/TransformEngine.cs",
+      "sha256": "49da7315cbd5a3cda67987704a0eba5f7e4e3b46c0cda58369783d7d3aa55151"
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/XRawText.cs",
+      "sha256": "07efbc9f739daf1d85680402cdfe07deb1133c5180e9bd249e7e9a77525b227b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/AbstractOriginalReferenceValidator.cs",
+      "sha256": "bf5a2612266817118695cc1054a594c863d17dbe3df274068dabe8b9780ec0d3"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/AccumulatorDefinition.cs",
+      "sha256": "8cdfe0ecdec5f5cca647e76b742a6229b81e53fe5e5b781f1ec67ed166ee145b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/AttributeSetDefinition.cs",
+      "sha256": "45870d4f28975aac717f0911b48338438d05481a01e8e7f00df7d839790c6501"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/CharacterMapDefinition.cs",
+      "sha256": "9377d1c0f98a890fa8114a15f42b282ff1bdd01b0b7b34cb22103876c53b67a3"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/ContextItemDeclaration.cs",
+      "sha256": "931308f1ab78107b532c4215d1ae0547a9398ec8f2893b992c7fadc5871f646f"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/KeyDefinition.cs",
+      "sha256": "4027b9292f8b80e2fae8f5f712aaff33f4c8c8438eb3351efbd0d6de147bc58a"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/ModeDefinition.cs",
+      "sha256": "4a2f384adde3ff49feb71ef9bcd8785130fd926f83aa25cebffe227566eb8111"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/NamespaceAliasDefinition.cs",
+      "sha256": "089a2a4a7ae40bab21200b85b71e50546866d4af7687441171261b6130ff8451"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/OutputProperties.cs",
+      "sha256": "a08b131724eba16926d8919a42b7fa4738d69a08abd74c0ecb6aa85223075c6d"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/SchemaImportState.cs",
+      "sha256": "3eecfef117b988bfee821a8db154172de61445b4d0ce938a73902c34b3c935ae"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/SchemaSetBuilder.cs",
+      "sha256": "a8cb35c1d24e974645f3a05bc8fbf6dcc9980cd34df5b1093380f6812ca245f9"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/StreamabilityAnalyzer.cs",
+      "sha256": "21ccdf18a889adc3a389b9bcfde14aba975ee1590bcaf1327ed75038bba3ed79"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+      "sha256": "42a4f4d1f6b0d642609a94207731b159979ffd81b9495cfdb01e4862ea7ef277"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+      "sha256": "d1fd33b2a56f5e10d2b1ca50b386677346af3a2756832d1301a33722857b6ff7"
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs",
+      "sha256": "03f81945918cbbb4846199d11b19c5e4fa9a1722501ffb11e406ab226416dd7b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/FreeVariableCollector.cs",
+      "sha256": "774166b664af77e4b962626c7d95d2dc26ea83bbff1e22c9d4d2cd646016080b"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidation.cs",
+      "sha256": "515f46a10d711d35f4dbf8111f05fbb304066394fed77f856a3b6b1dcb4a4da7"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationCoverageGap.cs",
+      "sha256": "2f681797426e312c99f166063cf22a197d3ec5080ec3e0522a651513adfb4a58"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationDiagnostic.cs",
+      "sha256": "b9270a1a1a8c478c4c2d62d7b16de8488e1012bd0867bebb0e81986f13b1334e"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationEngine.cs",
+      "sha256": "233d005430f3600da48ee0e25eb6145b1313e7a028d3f1fbf93f38bc50c00149"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationOptions.cs",
+      "sha256": "f61245640ddefcb554df9488610d362b8c8db2de56df13a36b6938828da0e389"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationOutcome.cs",
+      "sha256": "cc1496a9d5da8a22144e1608e5f21ae4cf740ff17a04baa8236481d8152c0390"
+    },
+    {
+      "path": "src/Bosak.Xslt/Validation/XsltValidationResult.cs",
+      "sha256": "f1149053b1ba0ac9e16d437c3e3d7abcf5b57d82fbd511a7750c440d97482b2b"
+    },
+    {
+      "path": "src/Directory.Build.props",
+      "sha256": "2589e3e4629b7963b9040b0bb23ac914e0a83f3906d168f19919613409383060"
+    }
+  ]
+}

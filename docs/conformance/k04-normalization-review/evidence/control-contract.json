@@ -1,0 +1,212 @@
+[
+  {
+    "name": "full-301",
+    "expression": "normalize-unicode(codepoints-to-string((769)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \u0301"
+  },
+  {
+    "name": "full-34F",
+    "expression": "normalize-unicode(codepoints-to-string((847)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u034f"
+  },
+  {
+    "name": "full-903",
+    "expression": "normalize-unicode(codepoints-to-string((2307)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u0903"
+  },
+  {
+    "name": "full-9BE",
+    "expression": "normalize-unicode(codepoints-to-string((2494)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \u09be"
+  },
+  {
+    "name": "full-1161",
+    "expression": "normalize-unicode(codepoints-to-string((4449)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \u1161"
+  },
+  {
+    "name": "full-11A8",
+    "expression": "normalize-unicode(codepoints-to-string((4520)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \u11a8"
+  },
+  {
+    "name": "full-1100",
+    "expression": "normalize-unicode(codepoints-to-string((4352)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u1100"
+  },
+  {
+    "name": "full-20DD",
+    "expression": "normalize-unicode(codepoints-to-string((8413)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u20dd"
+  },
+  {
+    "name": "full-1D165",
+    "expression": "normalize-unicode(codepoints-to-string((119141)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \ud834\udd65"
+  },
+  {
+    "name": "full-1D167",
+    "expression": "normalize-unicode(codepoints-to-string((119143)), 'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": " \ud834\udd67"
+  },
+  {
+    "name": "ascii",
+    "expression": "normalize-unicode('blah','FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "blah"
+  },
+  {
+    "name": "empty",
+    "expression": "normalize-unicode((),'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": ""
+  },
+  {
+    "name": "empty-string",
+    "expression": "normalize-unicode('','FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": ""
+  },
+  {
+    "name": "compose-A-dot",
+    "expression": "normalize-unicode(codepoints-to-string((65,775)),'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u0226"
+  },
+  {
+    "name": "compose-bengali",
+    "expression": "normalize-unicode(codepoints-to-string((2503,2494)),'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\u09cb"
+  },
+  {
+    "name": "compose-Hangul-LV",
+    "expression": "normalize-unicode(codepoints-to-string((4352,4449)),'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\uac00"
+  },
+  {
+    "name": "compose-Hangul-LVT",
+    "expression": "normalize-unicode(codepoints-to-string((44032,4520)),'FULLY-NORMALIZED')",
+    "kind": "string",
+    "expected": "\uac01"
+  },
+  {
+    "name": "nfc-A-dot",
+    "expression": "normalize-unicode(codepoints-to-string((65,775)),'NFC')",
+    "kind": "string",
+    "expected": "\u0226"
+  },
+  {
+    "name": "nfc-bengali",
+    "expression": "normalize-unicode(codepoints-to-string((2503,2494)),'NFC')",
+    "kind": "string",
+    "expected": "\u09cb"
+  },
+  {
+    "name": "nfc-Hangul-LV",
+    "expression": "normalize-unicode(codepoints-to-string((4352,4449)),'NFC')",
+    "kind": "string",
+    "expected": "\uac00"
+  },
+  {
+    "name": "nfc-Hangul-LVT",
+    "expression": "normalize-unicode(codepoints-to-string((44032,4520)),'NFC')",
+    "kind": "string",
+    "expected": "\uac01"
+  },
+  {
+    "name": "unknown-form",
+    "expression": "normalize-unicode('blah','UNSUPPORTED-C20')",
+    "kind": "error",
+    "expected": "FOCH0003"
+  },
+  {
+    "name": "form-trim-case",
+    "expression": "normalize-unicode('blah',' fully-normalized ')",
+    "kind": "string",
+    "expected": "blah"
+  },
+  {
+    "name": "empty-form",
+    "expression": "normalize-unicode(codepoints-to-string((65,775)),'')",
+    "kind": "string",
+    "expected": "A\u0307"
+  },
+  {
+    "name": "wrong-value-type",
+    "expression": "normalize-unicode(42,'FULLY-NORMALIZED')",
+    "kind": "error",
+    "expected": "XPTY0004"
+  },
+  {
+    "name": "wrong-form-type",
+    "expression": "normalize-unicode('blah',42)",
+    "kind": "error",
+    "expected": "XPTY0004"
+  },
+  {
+    "name": "form-XML-whitespace",
+    "expression": "normalize-unicode(codepoints-to-string((65,775)),concat(codepoints-to-string(9),'nfc',codepoints-to-string(10)))",
+    "kind": "string",
+    "expected": "\u0226"
+  },
+  {
+    "name": "form-NBSP",
+    "expression": "normalize-unicode('blah',concat(codepoints-to-string(160),'NFC'))",
+    "kind": "error",
+    "expected": "FOCH0003"
+  },
+  {
+    "name": "qt3-default-form-empty",
+    "expression": "normalize-unicode('',())",
+    "kind": "error",
+    "expected": "XPTY0004",
+    "suite": "qt3"
+  },
+  {
+    "name": "qt3-default-form-compose",
+    "expression": "normalize-unicode(codepoints-to-string((65,778)),())",
+    "kind": "error",
+    "expected": "XPTY0004",
+    "suite": "qt3"
+  },
+  {
+    "name": "qt4-default-form-empty",
+    "expression": "normalize-unicode('',())",
+    "kind": "string",
+    "expected": "",
+    "suite": "qt4"
+  },
+  {
+    "name": "qt4-default-form-compose",
+    "expression": "normalize-unicode(codepoints-to-string((65,778)),())",
+    "kind": "string",
+    "expected": "\u00c5",
+    "suite": "qt4"
+  },
+  {
+    "name": "qt3-keyword-form",
+    "suite": "qt3",
+    "expression": "normalize-unicode(form := 'NFC', value := codepoints-to-string((65,775)))",
+    "kind": "error",
+    "expected": "XPST0003"
+  },
+  {
+    "name": "qt4-keyword-form",
+    "suite": "qt4",
+    "expression": "normalize-unicode(form := 'NFC', value := codepoints-to-string((65,775)))",
+    "kind": "string",
+    "expected": "\u0226"
+  }
+]

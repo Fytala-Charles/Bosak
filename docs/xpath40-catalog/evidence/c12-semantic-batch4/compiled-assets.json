@@ -1,0 +1,1062 @@
+{
+  "manifestSha256": "f3dff996b11691c80ac50f564cba7c865200e61a7854395380c1eba081d95df9",
+  "compiledManifest": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/cases.json",
+  "files": {
+    "docs/xpath40-catalog/examples/choice-types/before.xpath": {
+      "sha256": "d447a38e9c192fcf17118c524b860a47d1d06181f333c93d9a1964dda9acc4c8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/choice-types/before.xpath"
+    },
+    "docs/xpath40-catalog/examples/choice-types/edge.xpath": {
+      "sha256": "4f58baec5dc636016034a015f03e3c55e284ff1bb54fb2875514eb14fe7cca22",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/choice-types/edge.xpath"
+    },
+    "docs/xpath40-catalog/examples/choice-types/main.xpath": {
+      "sha256": "957c3a782fcd5ec28661ab0a17b6b63e8fa7f9af9f328fe52f526a474c6ca544",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/choice-types/main.xpath"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/array-empty.xsl": {
+      "sha256": "a6976353f3c8ea56487c23d39ba13eb755e42cc80959cda9d8fdbcc4b10eed8b",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/array-empty.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/normal.xml": {
+      "sha256": "aee411555d89c72f2561af2b2e670d49412f20a4ce315bafe974f3c65161975a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/array-empty-member.xsl": {
+      "sha256": "583409ac7e20ad1af32a45f07e16e6741e78944c4b7d0cdfaa94ea60b8801cd2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/array-empty-member.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/array-per-item.xsl": {
+      "sha256": "4418bc2714f2e1d90d25f37f303c7a82dd46a25e943da7bbdf53f53e13236e6c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/array-per-item.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/array-per-sequence.xsl": {
+      "sha256": "4f973e9c2878b0562aa530c8be37b257093442f64572a2ccb868a2fafeb1902e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/array-per-sequence.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/array-select-content.xsl": {
+      "sha256": "fe45600c17fe8ab8121867b224345f5e8adf3b98367ed4d4c16d2a6778fb6cf0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/array-select-content.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/expression-local30.xsl": {
+      "sha256": "f38929c6e60e4e7d86afa61231a00ac69c8e46cc3e438bf420cb6d4e82af5cb9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/expression-local30.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/expression-local40.xsl": {
+      "sha256": "0d417b2d138cf3104fd96c232fef1cb7b111dc85b03ac1c0c65984081e154cf6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/expression-local40.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/expression-root30.xsl": {
+      "sha256": "2adc3e1e5a0bb8f2ccf96d9ffc7ebe7fa9449b52ede363df19b5fb44bf291fe0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/expression-root30.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/expression-root40.xsl": {
+      "sha256": "f8a28bbfa3ef824f440cf5b862c80b93c81f3fd9b6b4028c54bfa272b8c95b42",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/expression-root40.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/member-select-content.xsl": {
+      "sha256": "c43fdb89acbdd47f5047ecc683f09c5bc95ba63662950e126c24aa14a82693c5",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/member-select-content.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-array-3.xsl": {
+      "sha256": "5be404ebc1e25aaa3da724399a083b192b6bd915b00f856e9a156ec769e16cb9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-array-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-array-4.xsl": {
+      "sha256": "920ea4e29c0f8742cf419facd8c643004d622c485c17ffafc947d1db97e89354",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-array-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-select-3.xsl": {
+      "sha256": "275e2458723e1b76ef9981b87fcc1420a92c7a60b9da9e06321a52da38f63767",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-select-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-select-4.xsl": {
+      "sha256": "08ebc1ef448501adda76e7523cfcdb8a704e293aed8682987e59eb248e79e258",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-select-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-switch-3.xsl": {
+      "sha256": "9f539f99dff25d39c7e21d8cf56021292197fa1e6a86e02227f5a83df56b4398",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-switch-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/recognized-switch-4.xsl": {
+      "sha256": "455d2f0c855c095f94786e2547757af8379124038d98035e786f43a735f85cae",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/recognized-switch-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/report-3.xsl": {
+      "sha256": "dcc0c9fae03176f33bf7ab48a1e017e834149385c80bcef37aaf68a13382a4e1",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/report-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/empty.xml": {
+      "sha256": "0356a54003934f469d8276039a96bcec69f02d01c885690774faba1c45ed21ba",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/reordered.xml": {
+      "sha256": "2a317dbc63f1f175c1918ebe459b2db1b36a343d838be39e440a439d0e7682a0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/report-4.xsl": {
+      "sha256": "392e57604d3c015dc1d88ac750a85ba304312dc90c8d137475584c4f15d59276",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/report-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-cdata.xsl": {
+      "sha256": "2fc696b59dd9636bd9cc440968fe70522241b43efc0cc9590020b41702075676",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-cdata.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-child.xsl": {
+      "sha256": "6dbcf49836200ff3098f93c6cc374dcd64a4a87d227e4146811d28393eda1b9b",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-child.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-coercion.xsl": {
+      "sha256": "4e44a0da0c334da78217ede1a2781b4a334ce53ed8de98011aa4b7cf6a7e69ec",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-coercion.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-focus.xsl": {
+      "sha256": "08a1a065b774dada90798e956b4bdabcc581664e29667fffa68555a8286cdc06",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-focus.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-focus-text.xsl": {
+      "sha256": "8c5d5222b5d59ef8398750b64fb9ff2d515e0bd6c9ff3551bb91744aa1bf7f36",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-focus-text.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-late-fallback.xsl": {
+      "sha256": "7fdaae3b63c288641fc589a5b6b8edd2ea29fedbf4f8c5698922dbb19821b27c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-late-fallback.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-required-empty.xsl": {
+      "sha256": "9dde5acc0d2dbc014ceecca2615d8078151895300a64326c0731b323ed17f152",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-required-empty.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/select-type-error.xsl": {
+      "sha256": "31cf3d97c53078da312bdaba75ebef28adfe4c93a8bc20d63e53ad159e32a5bc",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/select-type-error.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-duplicate-otherwise.xsl": {
+      "sha256": "21d4a9c4e7ec87327b48321d6818e3c9c92c270da8241056de51117e553355b6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-duplicate-otherwise.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-empty-selector.xsl": {
+      "sha256": "e06c27a3e74affedb08f04f79da665c69d3c1a85023cdcb36b7f83bf65622feb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-empty-selector.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-late-when.xsl": {
+      "sha256": "224b47e87b6fb540cdb565e4e19edb467a2546b7dccd2f7687cc72369e5d7b31",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-late-when.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-no-selector.xsl": {
+      "sha256": "6196db4608d1110419f489da264ef801cc6a0cd02a1c77f62de87d1d9807ddc2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-no-selector.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-no-when.xsl": {
+      "sha256": "2812eb195b1c152e1dd7e77f137b23306a40af398632c4c4d101e4a4e039e838",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-no-when.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-node-identity.xsl": {
+      "sha256": "56abe4bb1691ef02946170b01f332017458121b672cec29ffb11d846862b4537",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-node-identity.xsl"
+    },
+    "docs/xpath40-catalog/examples/dispatch-grammar/switch-select-content.xsl": {
+      "sha256": "6ffd4e1b5627204d28f6ecc73cc508506eb438edb25d12ef58b979434d3b99a6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/dispatch-grammar/switch-select-content.xsl"
+    },
+    "docs/xpath40-catalog/examples/enum-types/before.xpath": {
+      "sha256": "65ece3344437aeeba3193aec58afc03925cb6ac8c7b0e4cfbcc64e3e492b7f61",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/enum-types/before.xpath"
+    },
+    "docs/xpath40-catalog/examples/enum-types/edge.xpath": {
+      "sha256": "0036e53842855b79a997198834e800c7d6cf73e86dfd721d2a7494883de130b2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/enum-types/edge.xpath"
+    },
+    "docs/xpath40-catalog/examples/enum-types/main.xpath": {
+      "sha256": "d6e17c534dfefa271a2eb58d53754696a283c21146b8b049bcb7a509e4164970",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/enum-types/main.xpath"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/ancestor-root3-wrapper4.xsl": {
+      "sha256": "7c39e2cdbde18a9262e8cbc6b66ef948beaba7810aad4f1f59e54a7f13e9c91f",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/ancestor-root3-wrapper4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/probe.xml": {
+      "sha256": "bf6ac2ee2744f09421b4612f10e243c0c6dcd84bb47fedc2ebfd650a860265d7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/probe.xml"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/ancestor-root3-wrapper4-local3.xsl": {
+      "sha256": "4d8ff7b636238866f2a6d0b4ea14cd927090fdc83aa89966332ab32052d84bc6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/ancestor-root3-wrapper4-local3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/ancestor-root4-wrapper3.xsl": {
+      "sha256": "b0b53ff991df49fb2aec81680ae58a8bdcd3ecc5cd46338c9090f47c0e7af9d5",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/ancestor-root4-wrapper3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/ancestor-root4-wrapper3-local4.xsl": {
+      "sha256": "d58243443feb1458c9878c6208ed9e95527257f10d20ed88a383691f5c127e3d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/ancestor-root4-wrapper3-local4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/avt-root3.xsl": {
+      "sha256": "9e784e36c54d752fe583d79408f58d5c04ec1c6a5bbf429808859b966168ace2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/avt-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/avt-root3-local4.xsl": {
+      "sha256": "7d7b0e5ecbe8966eaa0eba940de70fafdd352fec3f6659ff2a695a5adbe0132e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/avt-root3-local4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/avt-root4.xsl": {
+      "sha256": "ffd692c7153e4bc452f387f2e6d929f58acb7171c0fd9deeee705a58c5a2490f",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/avt-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/avt-root4-local3.xsl": {
+      "sha256": "967dcf2bd3cc8708f6e42fed20cc431ec773ad537a0595604e4806069b553b94",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/avt-root4-local3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/future-attribute-root3.xsl": {
+      "sha256": "420274e285b4ff2e0448b29e047a6d85d8579d8742daad01b3df9e9d4834e6f6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/future-attribute-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/future-attribute-root3-local4_1.xsl": {
+      "sha256": "7a25822473f1ebf8843801fca916436aecdcac77b8d1cd6aa93ae8532fb11cf9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/future-attribute-root3-local4_1.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/future-attribute-root4.xsl": {
+      "sha256": "42e0bfb4219b5df73f4eeeae516d9bf49a4a77ee86b39b2fac6cf038d0354f1d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/future-attribute-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/future-attribute-root5.xsl": {
+      "sha256": "f20722435141e25c0ae70b7af565f6f5b12f2ddb50724d639589cb8dab3e2794",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/future-attribute-root5.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/future-attribute-root5-local3_0.xsl": {
+      "sha256": "ca630d509c34eb1b07fe1726e34c34705c9547529e1f3fa97cbf6b55da916d11",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/future-attribute-root5-local3_0.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/output-version-root3-output4.xsl": {
+      "sha256": "75ba8205874a7ced40415d692eb12e256af74cb60c582e138a5ae735aa809464",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/output-version-root3-output4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/output-version-root4-output3.xsl": {
+      "sha256": "f6f0ac9b71ae3e1898530477a5b258b56a38f22246ec71ed23e86949618bc3f8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/output-version-root4-output3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/report-baseline.xsl": {
+      "sha256": "454b674b81144652cbc2abfc58c1ceee8642815ff74e971b959bcac4a2ccf409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/report-baseline.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/empty.xml": {
+      "sha256": "77ffc5a459dc3d63f18ad89a051d73b874dc46ee5cdc6285ba69908722f5c039",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/invalid.xml": {
+      "sha256": "1e540faaa8f1750446e5141945201ad2cd5ad2e1fa60fc0d33593131f02c4acf",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/invalid.xml"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/normal.xml": {
+      "sha256": "be389392d7b10096e190d41cb09e8a64920c89fa2e1822c9947431b5d87e06ba",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/reordered.xml": {
+      "sha256": "f8f47298e7650f3cf9c447e2d69f6d5ec24bd06d8ca5cef437ee9cc85783bc3d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/report-local40.xsl": {
+      "sha256": "62db47b651a6ce78fd46126797d6289b1eaa84c7f2198e9c9283f9b53a21ba5f",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/report-local40.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/scan-root3.xsl": {
+      "sha256": "920dd0ea662e771307d65857271c7f1dfbcb38c3940904a24d150205a0c9922c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/scan-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/scan-root4.xsl": {
+      "sha256": "0c91a34ba993c3a968ad0ce9b7398f007b9ccfd386572387c037a809c6b845d3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/scan-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/select-root3.xsl": {
+      "sha256": "fbd5a39f6a8c8daf21d3a6212accd9b8a8f902529fadd785de1b3036092c80f9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/select-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/select-root3-local4.xsl": {
+      "sha256": "69b9b14040dab8d33c3d04680f76d9b3f099c613f15a7b58f80f0232e8638b75",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/select-root3-local4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/select-root4.xsl": {
+      "sha256": "3644075446faae8dd188cf99b361c983cee9106c45b291b787d562369ff4854d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/select-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/select-root4-local3.xsl": {
+      "sha256": "22d32166d85e160b6f0dc553a52edf16593cbda6e9968fec4748203aaea4f2f0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/select-root4-local3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/shadow-root3.xsl": {
+      "sha256": "e08764d06b58c9451d783caf40825b3c18abcb60650df6b7470adc12dae50096",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/shadow-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/shadow-root4.xsl": {
+      "sha256": "bdaa1068a78908054f9cd775449eaa74e556c5d272531fc598c1487fe9fbe65d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/shadow-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/use-when-root3.xsl": {
+      "sha256": "13e61ffd6065db55250646f852ed2d97a64b7d011b8a11d350a6e4731dbe1ca2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/use-when-root3.xsl"
+    },
+    "docs/xpath40-catalog/examples/host-profiles/use-when-root4.xsl": {
+      "sha256": "5a3fd89e734ab818a65d21da9c25d8c31384da0e848596b68a6b0c8276c2e32c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/host-profiles/use-when-root4.xsl"
+    },
+    "docs/xpath40-catalog/examples/instruction-separators/before.xsl": {
+      "sha256": "2a1d13a8d514077809c1d1333adb3c688c85db97d7fe2baa072b3f41c5edb014",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/instruction-separators/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/instruction-separators/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/instruction-separators/main.xml"
+    },
+    "docs/xpath40-catalog/examples/instruction-separators/transform.xsl": {
+      "sha256": "564aa4e20f5c01570ae49d87097e83f324e7706bced16f0cc2919f07ae32cb3c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/instruction-separators/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/instruction-separators/edge.xml": {
+      "sha256": "981fa6aa9297d765f6d752c80f882d390e658e6100bfab950bf42c762edf2428",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/instruction-separators/edge.xml"
+    },
+    "docs/xpath40-catalog/examples/intake-types/alias-duplicate.xsl": {
+      "sha256": "12664636224959025554598240a9f0b41565bc472755945743aa8df28346fea1",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/alias-duplicate.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/normal.xml": {
+      "sha256": "3b92edc4719028e44aa0e5391542f694527b174a49b092700285bf9c341b1024",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/intake-types/alias-expanded-name.xsl": {
+      "sha256": "831ad49886964f1efe7956f33774ff4b8ae25d97b8a2dc69173f2b7dbca405ce",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/alias-expanded-name.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/alias-missing-as.xsl": {
+      "sha256": "27b31e61e507cae9dd1d275476900359812b014842a66471e018cee420b43f20",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/alias-missing-as.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/alias-version30.xsl": {
+      "sha256": "3a7aa2317c51d539c4037500a35346577f9c8b4fc5b130ca5a1603735bfbd1e3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/alias-version30.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-empty-member.xsl": {
+      "sha256": "15e3b2b245dbb3902cce204ef7a41d51c3c1b7213a30f2bdc8685c3b4ebfa4d7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-empty-member.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-member-plus.xsl": {
+      "sha256": "a7efbbbae3621540ae7d4743483286ec18baa37b9dc439a1b8a77fc80f00ea0d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-member-plus.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-member-star.xsl": {
+      "sha256": "f674a598a9d44e95e1e2a47bef0df9dd4d259eafe3b3dde4ad58aaeb39adf73a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-member-star.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-not-map.xsl": {
+      "sha256": "0df99f1c7c5a8a0c5a695517484e7b8400cbc8e8e016c6275dd24fed11cdf089",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-not-map.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-pattern-version30.xsl": {
+      "sha256": "4875a8ee3a06c9f271152dfc42080d573e52fe509643d8d80100b7832dabf01c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-pattern-version30.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-singletons.xsl": {
+      "sha256": "19198ac10c345913b2d32c1f46f908049b51dc6a7bc745973d98d4414781e465",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-singletons.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-vacuous.xsl": {
+      "sha256": "d2d23526983b871c7c1de3368fa1d3b54d77563bd3da8c329765adbb432df458",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-vacuous.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-whole-sequence.xsl": {
+      "sha256": "9f5475ef90f9763f4709f5c04db808cc822f151fbe64c2b7b2928cb612765610",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-whole-sequence.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/array-wrong-type.xsl": {
+      "sha256": "1e10a77046ea30526cb8f368e0459a81aa786f759a46c7c27fbc344a6fa5b89c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/array-wrong-type.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/enum-allowed.xsl": {
+      "sha256": "5db62b1bca2f608dc7ce23cd7662075362ffc8842dfb441588cc55e153726cf4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/enum-allowed.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/enum-rejected.xsl": {
+      "sha256": "e10a29dae619c3a9163f6dfd8df37356ff54299b8fa65f23f9c1dc6c3ce8a1fe",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/enum-rejected.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/enum-treat-error.xsl": {
+      "sha256": "2bbd57ba29e6d28d793510f9ebb0a1946e650cc522f0036ef1082aca91448901",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/enum-treat-error.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-closed.xsl": {
+      "sha256": "2aca81c0217228c97585e65f5a8bfa55a037487c958774e1a95099bc02ebb084",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-closed.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-empty-missing.xsl": {
+      "sha256": "852089e78632dc11e368358d3a3fe09891864fc02b5e6b09fe85a8a005091108",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-empty-missing.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-empty-present.xsl": {
+      "sha256": "53549c87bb3a2503a0f74de768f27c17178b5d2448c730bbab4f9d3a0dd1d446",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-empty-present.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-extra-closed.xsl": {
+      "sha256": "b2b4a5d3af8718b403aa6c2e437bbfae6611789d5828050438660efe48f16820",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-extra-closed.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-extra-open.xsl": {
+      "sha256": "688ab71a621337e95901a44a0aa3b13166869a004a2ea7a0338424411f5d3e8c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-extra-open.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-numeric-key.xsl": {
+      "sha256": "836d6d8639bdb05c170342d7a58ba1a5e470bd42aea719aa113ff85280d71d00",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-numeric-key.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-pattern-version30.xsl": {
+      "sha256": "50a818a8acfaab5a3a573594f06b9c2c39d3aa085b4db9e3018d266008f09bc9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-pattern-version30.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-sequence-allowed.xsl": {
+      "sha256": "5c8c0c55812f32822aa589aa5d19996e081592dba50e30bd05d3cf591ba50326",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-sequence-allowed.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/map-singleton-required.xsl": {
+      "sha256": "d7cddd2db271d0d30eb03006964c811a1d0f2365d58a2c8c3923f63e8337826a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/map-singleton-required.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/nominal-no-constructor.xsl": {
+      "sha256": "dc9388ed9d9fd16f9aa53f204e2adc881abd0365289afef1527eaa00f6c35577",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/nominal-no-constructor.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/nominal-other.xsl": {
+      "sha256": "d24b12e323a3462358a9c3f5644e563dd7abe8307eeb4574203882f44cac2350",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/nominal-other.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/nominal-own.xsl": {
+      "sha256": "c43b2ee588508f8ed63938629c4455c2f67dd40d7ec870832fc096c5356739a3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/nominal-own.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/nominal-plain-map.xsl": {
+      "sha256": "98b3dc1404e8bb2a66b1ca32956d168d9a5f08afaf687368e4be61ca8435aad4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/nominal-plain-map.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/report-3.xsl": {
+      "sha256": "90b78e940592e762a876cb515994efe06f2393250c3202aea9b1210fe74b56e0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/report-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/empty.xml": {
+      "sha256": "50e696d7b738c6767c8b2cec16b9a497d5dadf9846e470ed1d64c1e2f7cfcda4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/intake-types/reordered.xml": {
+      "sha256": "4a60b0e396fec35de28602591eaf1c034c90df269f2e057acabdf6bc46aace09",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/intake-types/report-4.xsl": {
+      "sha256": "15ad0d78b71ebb6ea53af03febf815c461b03b7d5ec8235e4a45b46488e7b576",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/report-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/structural-binding.xsl": {
+      "sha256": "69094005caec20f01f3b17fb4623feddbb00458a8b02c949a353e9dc836f6057",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/structural-binding.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/type-nominal-other.xsl": {
+      "sha256": "9801d35b7ff680a8f706f958b1337f84b96f6e1d62b93c937294d38ba4db2a30",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/type-nominal-other.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/type-nominal-own.xsl": {
+      "sha256": "2523303e66c6248f7806f102a753d4651471a26a70d3675f3ef73d7c18ff2906",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/type-nominal-own.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/type-structural-annotated.xsl": {
+      "sha256": "c24a84412056ab1f9a16c83670b8d38dd55da1771c8bba2d20a62a82d0f27fe7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/type-structural-annotated.xsl"
+    },
+    "docs/xpath40-catalog/examples/intake-types/type-structural-map.xsl": {
+      "sha256": "f2b1c7a5b2574c73c1ac9e071ef9cbe3e9fcc1eed2ea63d0c835ccb5943348d1",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/intake-types/type-structural-map.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/axis30.xsl": {
+      "sha256": "1fce8e5840b17e5b465ca48548ca9503d50ac6edc9bebd66ef4ba0d745396e81",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/axis30.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/probe.xml": {
+      "sha256": "5c8ea17eba2ac9369aa7b728c0dda539c1694092619fe02068aa6d7d0217cb84",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/probe.xml"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/axis40.xsl": {
+      "sha256": "6957d97da174eaf885e1f9faffd3d03d26762ef96ada786660e000fed77526ea",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/axis40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/direct-atomic.xsl": {
+      "sha256": "09db53cc7cc6141558e01bdd7a555271de352bc96131167f51d8a575c9316434",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/direct-atomic.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/invalid-item-set.xsl": {
+      "sha256": "3c96c3bdbafb2b07173ff1363010070522d482e864d0312d237ce2347d3808de",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/invalid-item-set.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/missing-operand.xsl": {
+      "sha256": "09381534cb62fc81aa6fcad30c74ebab7a172168391f5425628a7d659aeb56a6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/missing-operand.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/next-local30.xsl": {
+      "sha256": "dad0ae0e15df6b7d8ee038d331a93477e4e10963321a2a22ea11c13e0198d4b7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/next-local30.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/next-local40.xsl": {
+      "sha256": "feb47394de0f1ce5182485806b73da595ac5b19662638e91d875f5eb49a14beb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/next-local40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/next30.xsl": {
+      "sha256": "1bd27743a537cb3bb89e3d865c37bbe0a6d337153319c743bf07125d370fb7e8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/next30.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/next40.xsl": {
+      "sha256": "b02ff363cb0d0cd4da38ed7f9e1ba81f59ce3a2d2ce562bac63106acc2895dcd",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/next40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/parenthesized-atomic.xsl": {
+      "sha256": "4da8e878a4fd5848a300223aca5942e61fb5060f9bd5db8f93c1f97746e72413",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/parenthesized-atomic.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/parenthesized-node.xsl": {
+      "sha256": "e7defe56dd502a54704ea45e159efb41c08d032614f558298bbf4dc4cc9dc9e4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/parenthesized-node.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/quoted-operators.xsl": {
+      "sha256": "a37aa4192707e9f19275c1ea7fb80c96f33141e26fe56632c539f3a08b7d78a7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/quoted-operators.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/report-3.xsl": {
+      "sha256": "424bb871519bbc3aeb76793f40d289ceb7a8dcc9d70b454d1f707020f96afea0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/report-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/empty.xml": {
+      "sha256": "bc56ff8a2092afe4e5dd3f69fe19a07d18a6fcd63d8a27005086bc0c66094a69",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/normal.xml": {
+      "sha256": "0f06a6ce94f5f1a10ed14cbe8a5c89638c56eea133d48ce6358861a7cf81309d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/reordered.xml": {
+      "sha256": "6242e6e7f0b5a151e9435905720b69715dc4c7b3ae7fb988d81613b9ab8df8a9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/report-4.xsl": {
+      "sha256": "cd98c61fc9493d308ef8e1e03fa4bee84c6921ba0291f922a49dd8020dad1cd4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/report-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-earlier30.xsl": {
+      "sha256": "5581a6109135a6caaa4f74505770e1cba1307eed173ce3fce7ded1c0582c841c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-earlier30.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-explicit-left40.xsl": {
+      "sha256": "46f37ed1f50b1cfa1149ce3774edf938ecfdec8682a0c164c5f6a02892223408",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-explicit-left40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-grouped40.xsl": {
+      "sha256": "f931435e863d5ab3b806b46718d04b9051dbdecce01d55a7d454e37efdbaecff",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-grouped40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-left40.xsl": {
+      "sha256": "e842e59c981aee621beb426347842454f5b02b29abddec8693fe187db30e45f2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-left40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-priority-first.xsl": {
+      "sha256": "1af84b843c6e8182dd8e7c84857278279ded2de5001a3be066659440efda5b90",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-priority-first.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-priority-high.xsl": {
+      "sha256": "36d2264c68f7487743c861e94d6f1df2c2bccfa70401424478942d9aa6e66726",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-priority-high.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-priority-low.xsl": {
+      "sha256": "ca3c30d94c2c640e489b3c3744428c1f89d727b484d1a5320a20ce16f6192cd3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-priority-low.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/set-priority-predicate.xsl": {
+      "sha256": "84a71021aa0b4200127e72a886559785ec08ff65905ae0a5a88a77da337652e3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/set-priority-predicate.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/union-earlier30.xsl": {
+      "sha256": "cef3f3ced0fa6d00938d295fffc5c2eb8e65361a3ebce338f29c5747dbd1cbd1",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/union-earlier30.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/union-explicit40.xsl": {
+      "sha256": "56075971ed0effff5e570368698d66d8263d70bdf33dc12ecdf44372e1a0219c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/union-explicit40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/union-max40.xsl": {
+      "sha256": "21c4836b7eefc6b5f0fa38170101fca2e82d21ef40b8de2005af3ded144eba06",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/union-max40.xsl"
+    },
+    "docs/xpath40-catalog/examples/manual-patterns/union-word40.xsl": {
+      "sha256": "ffbad150db563b527134246c2255f328fc67adfcecf1e09313539810b9062e0e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/manual-patterns/union-word40.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/report-baseline/app/main.xsl": {
+      "sha256": "e10df53c60a29160085c0e775b5d0590e4e7d83b915eddf81340947ea61ab534",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/report-baseline/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/empty.xml": {
+      "sha256": "77ffc5a459dc3d63f18ad89a051d73b874dc46ee5cdc6285ba69908722f5c039",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/invalid.xml": {
+      "sha256": "1e540faaa8f1750446e5141945201ad2cd5ad2e1fa60fc0d33593131f02c4acf",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/invalid.xml"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/normal.xml": {
+      "sha256": "be389392d7b10096e190d41cb09e8a64920c89fa2e1822c9947431b5d87e06ba",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/reordered.xml": {
+      "sha256": "f8f47298e7650f3cf9c447e2d69f6d5ec24bd06d8ca5cef437ee9cc85783bc3d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/report-module40/app/main.xsl": {
+      "sha256": "e10df53c60a29160085c0e775b5d0590e4e7d83b915eddf81340947ea61ab534",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/report-module40/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root3-module3/app/main.xsl": {
+      "sha256": "08225c5f62faad534a19327e057add58bdba548168d2605b262182fd75a8c6ea",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root3-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/probe.xml": {
+      "sha256": "bf6ac2ee2744f09421b4612f10e243c0c6dcd84bb47fedc2ebfd650a860265d7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/probe.xml"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root3-module3-local4/app/main.xsl": {
+      "sha256": "08225c5f62faad534a19327e057add58bdba548168d2605b262182fd75a8c6ea",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root3-module3-local4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root3-module4/app/main.xsl": {
+      "sha256": "08225c5f62faad534a19327e057add58bdba548168d2605b262182fd75a8c6ea",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root3-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root4-module3/app/main.xsl": {
+      "sha256": "eddb919729a30ac9f1ac622873e4efdd827f12e4698fa97d80cbde253a40d409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root4-module4/app/main.xsl": {
+      "sha256": "eddb919729a30ac9f1ac622873e4efdd827f12e4698fa97d80cbde253a40d409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/root4-module4-local3/app/main.xsl": {
+      "sha256": "eddb919729a30ac9f1ac622873e4efdd827f12e4698fa97d80cbde253a40d409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/root4-module4-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/scan-root4-module4/app/main.xsl": {
+      "sha256": "eddb919729a30ac9f1ac622873e4efdd827f12e4698fa97d80cbde253a40d409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/scan-root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/static-root4-module3/app/main.xsl": {
+      "sha256": "eddb919729a30ac9f1ac622873e4efdd827f12e4698fa97d80cbde253a40d409",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/static-root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/validation-root3-module5/app/main.xsl": {
+      "sha256": "08225c5f62faad534a19327e057add58bdba548168d2605b262182fd75a8c6ea",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/validation-root3-module5/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/validation-root5-module4/app/main.xsl": {
+      "sha256": "602c7baf1a202bf601c8b52fc5b3db7b7044ee8bdb22bc69f9f3777994f7242e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/validation-root5-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/import/validation-root5-module5-local3/app/main.xsl": {
+      "sha256": "602c7baf1a202bf601c8b52fc5b3db7b7044ee8bdb22bc69f9f3777994f7242e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/import/validation-root5-module5-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/report-baseline/app/main.xsl": {
+      "sha256": "cbcebb5cca851c76338be3a8f6d150ddc2867f482c80756030a9739c8ecc8a98",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/report-baseline/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/report-module40/app/main.xsl": {
+      "sha256": "cbcebb5cca851c76338be3a8f6d150ddc2867f482c80756030a9739c8ecc8a98",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/report-module40/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root3-module3/app/main.xsl": {
+      "sha256": "0d39e31dd620edecfb1c122b72125a66d93170fd766086057f80d1db8a9c7139",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root3-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root3-module3-local4/app/main.xsl": {
+      "sha256": "0d39e31dd620edecfb1c122b72125a66d93170fd766086057f80d1db8a9c7139",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root3-module3-local4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root3-module4/app/main.xsl": {
+      "sha256": "0d39e31dd620edecfb1c122b72125a66d93170fd766086057f80d1db8a9c7139",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root3-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root4-module3/app/main.xsl": {
+      "sha256": "da368ba1849601db4e5af6cc72fd0b9397a3a014d1e1a0587cd369999ed8e717",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root4-module4/app/main.xsl": {
+      "sha256": "da368ba1849601db4e5af6cc72fd0b9397a3a014d1e1a0587cd369999ed8e717",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/root4-module4-local3/app/main.xsl": {
+      "sha256": "da368ba1849601db4e5af6cc72fd0b9397a3a014d1e1a0587cd369999ed8e717",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/root4-module4-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/scan-root4-module4/app/main.xsl": {
+      "sha256": "da368ba1849601db4e5af6cc72fd0b9397a3a014d1e1a0587cd369999ed8e717",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/scan-root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/static-root4-module3/app/main.xsl": {
+      "sha256": "da368ba1849601db4e5af6cc72fd0b9397a3a014d1e1a0587cd369999ed8e717",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/static-root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/validation-root3-module5/app/main.xsl": {
+      "sha256": "0d39e31dd620edecfb1c122b72125a66d93170fd766086057f80d1db8a9c7139",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/validation-root3-module5/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/validation-root5-module4/app/main.xsl": {
+      "sha256": "6045b7bbdcd452f6d0dfc7521eea592905327dfaed7eef1f6a90d124fda5b317",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/validation-root5-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/include/validation-root5-module5-local3/app/main.xsl": {
+      "sha256": "6045b7bbdcd452f6d0dfc7521eea592905327dfaed7eef1f6a90d124fda5b317",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/include/validation-root5-module5-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/report-baseline/app/main.xsl": {
+      "sha256": "70c34709bb076d3a08da2e7271b142fbcbd61c795bd6db261ee4dae625040263",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/report-baseline/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/report-module40/app/main.xsl": {
+      "sha256": "6c014cda1ba737a4306df84c34946c18b93530a7d7220bc964c2fe293b041e75",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/report-module40/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root3-module3/app/main.xsl": {
+      "sha256": "7addb291787ae58e2c1bbc88790aef74bf35df230cbd6318a37b1361d144f7eb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root3-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root3-module3-local4/app/main.xsl": {
+      "sha256": "330ad6cbebc44c60051f67f56b804fc9cfc621cda770a9bf8bfa7ec86a230f4d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root3-module3-local4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root3-module4/app/main.xsl": {
+      "sha256": "66620bdc2512474165597cf0f3144e777305e50b45e8e872c85a99c6a07d79e2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root3-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root4-module3/app/main.xsl": {
+      "sha256": "6e709d5e99cf538b5e1e861653532415fea5fe884bf0e35f767c6a3d36e84cdb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root4-module4/app/main.xsl": {
+      "sha256": "173d6962b7c50d59b255d158b2cf9eff1146771394d608f3aaab1b629a6e52a0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/root4-module4-local3/app/main.xsl": {
+      "sha256": "674725dc506df81693413801978150a5e3eb0625270b76ca4a90052b8738fd4e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/root4-module4-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/scan-root4-module4/app/main.xsl": {
+      "sha256": "5d31a3874077f911425cc97a4df4c1ba526ce37c622910ef02a3ec204500c8d8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/scan-root4-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/static-root4-module3/app/main.xsl": {
+      "sha256": "c2b3e068a1696df74cccb55e9d1cc877d73a3c2556ed6db4420b89bc70b7dff6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/static-root4-module3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/validation-root3-module5/app/main.xsl": {
+      "sha256": "ec8da52460b7cc438c6f6a0c34d4c955647903efbe9d547c64e996bceecfa836",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/validation-root3-module5/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/validation-root5-module4/app/main.xsl": {
+      "sha256": "aad54333933498c6587310cca6227fab195eeb5e45043058df73f7db0c793d4a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/validation-root5-module4/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/module-profiles/package/validation-root5-module5-local3/app/main.xsl": {
+      "sha256": "23d212a76285ea25e83182965c462d5dfd35d8174b522299d540dcc1db897702",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/module-profiles/package/validation-root5-module5-local3/app/main.xsl"
+    },
+    "docs/xpath40-catalog/examples/nominative-records/alternative.xpath": {
+      "sha256": "b078914048be641d35ad3d4d607d412d903dc6eacc10fcae46990abd44d545a4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/nominative-records/alternative.xpath"
+    },
+    "docs/xpath40-catalog/examples/obsolete-quantifier-functions/all.xpath": {
+      "sha256": "5cfb02884e743af422e98f7c3778eddfe7f34bf70ce5a1c6dff00777215dd913",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/obsolete-quantifier-functions/all.xpath"
+    },
+    "docs/xpath40-catalog/examples/obsolete-quantifier-functions/alternative.xpath": {
+      "sha256": "7c29a36239a248b17ffec657b9d907443018c272dc59dfabb8e0147f13435a70",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/obsolete-quantifier-functions/alternative.xpath"
+    },
+    "docs/xpath40-catalog/examples/obsolete-quantifier-functions/some-of.xpath": {
+      "sha256": "9d2343777507c3da4246ef67b95e8cdcbbb9e53d9a413424de1b0e0b5c45516f",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/obsolete-quantifier-functions/some-of.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/cast-extra.xpath": {
+      "sha256": "4a1ccbc47cdc69bbd0ca92fbcee1bb22b668326235df4d09cead85d76c6e9ed7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/cast-extra.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/cast-invalid.xpath": {
+      "sha256": "fffdb53c57ada4e126ac1983f9b5962bcf24b6bb4d0f486924da243546ba4202",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/cast-invalid.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/cast-lexical.xpath": {
+      "sha256": "8b46024df537f6e55543800695bf63e5df72241a5b71df3c364cf45001f161af",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/cast-lexical.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/castable-invalid.xpath": {
+      "sha256": "1a05709b87b497f17a20ba101306fcc03973870dc6727907350dd1eb7a1d99b6",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/castable-invalid.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/castable-plain.xpath": {
+      "sha256": "aba5741927153a8c5097e0f34eec6d4cddd2d879e37f756093cbedd3750fa602",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/castable-plain.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-extra.xpath": {
+      "sha256": "a3c8f9d999e25832dfdb3b24f6125a4e83ae4f40cf17587b109d6e4a74e67dca",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-extra.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-missing.xpath": {
+      "sha256": "74a7d9fd312020a1b3fb57282f2e31828aac3f7fbd4a9f4b56332cc7d49a01a7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-missing.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-nested.xpath": {
+      "sha256": "36ba54e36a012d0b0f7349849edc45fff2133fcb9de652fa6782b11298f61e6c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-nested.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-order.xpath": {
+      "sha256": "724c17bee604b4161f99128c2c37b0eee8b9f4bf838545a0d16a913a533ff86e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-order.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-original.xpath": {
+      "sha256": "28cd6035ddbfa0c809867596da21abd8742966812f4081f5111d535ad0dcc10d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-original.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-promote.xpath": {
+      "sha256": "a5ff1fec8e732938ad7aeabf851c67cf1ad2871c3f0980f5eb307a47bc4ca09c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-promote.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/coerce-string.xpath": {
+      "sha256": "b6b9bbcde96c51bcc82d278d041c30c604ffc40ea3f401ae5a1de5dd2709ef90",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/coerce-string.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/lookup-unknown.xpath": {
+      "sha256": "aaa3e3142152e85db773b2106eedc57f0025785ebe4e4e9da7d328aa268e88ce",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/lookup-unknown.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/map-get-unknown.xpath": {
+      "sha256": "9ea3ee9164600b4593b9664c5619261e6a2b740d66ff7ee97e09ff9553d08b52",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/map-get-unknown.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/missing-empty.xpath": {
+      "sha256": "723f822e247ccd94224b323e3823c8e6ee5c5a774e4025da139907a1d771b5a2",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/missing-empty.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/missing-required.xpath": {
+      "sha256": "540a1a0062461d62566fff6684d1f42860f9bcd1ac0209b6446a4afd4117aceb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/missing-required.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/plain-map.xpath": {
+      "sha256": "3ecf943b3b506487ad11660e1f374b7f027e996f1d6cec3a737c160adb1522e8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/plain-map.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/record-star-assert.xpath": {
+      "sha256": "0dfa3eb5f893364b25c89cf0feae6ce8ca0cc022265573ddf7eecc1e1ba530be",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/record-star-assert.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/record-star-plain.xpath": {
+      "sha256": "051751486fe86b00096ae66aee18de6873ea35a7b0af53f5cc06b74529c7c5cf",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/record-star-plain.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-value.xpath": {
+      "sha256": "f5ac816c871a1211040776abdf80a743c9e53ec37337d47b69a99d5e6a4bbc0e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-value.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/report-3.xsl": {
+      "sha256": "54a4212183981eccd476f02791284c65cd2834e036cf5b3a686159f14f430267",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/report-3.xsl"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/empty.xml": {
+      "sha256": "eed20535a8c755b137757d5e7f60e2bb360013ecb7f57a5e6983f11738a39dd4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/empty.xml"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/invalid.xml": {
+      "sha256": "6daec1cd2200827b3adc7ee2543b3abbdb00d7d7356cb4d5a0fe6584fd8fa394",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/invalid.xml"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/normal.xml": {
+      "sha256": "b9ff808c91b3c2ca0616cbf1b0815d5e9b3e8035b2f0f75dd03ddaf8a72b2fad",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/normal.xml"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/reordered.xml": {
+      "sha256": "89c610b2f06a7e6caa53798046ce55ce74cbb38055504e0668ef9e2cc99637e0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/reordered.xml"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/report-4.xsl": {
+      "sha256": "b34906b1c673b6495341ef3b24c40799d2260b883e501e6aa272ab2fdd4fc10c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/report-4.xsl"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/typed-let-extra.xpath": {
+      "sha256": "95e533b64d33daeb68481e2e1f6be60898566f6bcde37b374e5f10c860b5210a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/typed-let-extra.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/typed-let-promote.xpath": {
+      "sha256": "7a2c88eb5ad3084c2194a4df872839026ad6742b467d4495d6b21577269e39dc",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/typed-let-promote.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-annotation.xpath": {
+      "sha256": "60e2f85438c951703e83538460ef69aad7c9c1075c124fa18cb1181640efe560",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-annotation.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-decimal.xpath": {
+      "sha256": "33dd5dce0c66a5a944cbc4580b039ef734c04d251f74c59ee7900f1fca727f29",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-decimal.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-empty-optional.xpath": {
+      "sha256": "d9c96b590c54ca554cf139fecab3ac11c4bcf1ed8a132c7ca3b73044f811a02b",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-empty-optional.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-empty-required.xpath": {
+      "sha256": "5c5e2cd7c5857ee2897da02b28b5507cb06319a90dc073179ccd8595d3e7576d",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-empty-required.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-extra.xpath": {
+      "sha256": "da9ae38220e39b52d8d91b8426eec9488dde8677c86f8aaab7e23b3ee0981d7e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-extra.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-key-type.xpath": {
+      "sha256": "a41733b26c6cebdc319f91fb511d7b8f7cb00e5b5cb8a8798ec7a4f29f77f1fb",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-key-type.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-nested.xpath": {
+      "sha256": "facb4261f463181c50aab6b937bd74b814ba32fec69b153791686b7a180999ff",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-nested.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-nonmap.xpath": {
+      "sha256": "afb75c67976cd27d0fe7fad80d672e48deeb39cbbe456bf912992d84a0784c1a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-nonmap.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-order.xpath": {
+      "sha256": "1970d16189fd628724bdc9056442b8b7bf48227cad5f9824b5ba6a7828776c9a",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-order.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-original.xpath": {
+      "sha256": "6eb9f466a3e49a0c1478a448beb4fd581e43efbc5ce7b5eb8ad5cf03a7c4d072",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-original.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-plain.xpath": {
+      "sha256": "65c1e832856ac25051608c44fab4b2987d4664967c1d697174ae0a0e4a910eee",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-plain.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-promote.xpath": {
+      "sha256": "80d2a77dd46148c977347a7a136f2cf4e2da384470c24d8ee141a3b2aa553a50",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-promote.xpath"
+    },
+    "docs/xpath40-catalog/examples/record-contracts/probes/update-string.xpath": {
+      "sha256": "5b3f90969b89f6ac7740eef1a738f43f8dc2b38b6d13c2e1726901472d22e8a1",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/record-contracts/probes/update-string.xpath"
+    },
+    "docs/xpath40-catalog/examples/structural-records/before.xpath": {
+      "sha256": "801b928192020911384019c41bcf7a9a3286c3b1e207cfe14b8afcd9426f46c3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/structural-records/before.xpath"
+    },
+    "docs/xpath40-catalog/examples/structural-records/edge.xpath": {
+      "sha256": "36620256063940b3370861130a771be3c3c253c2d9f64415af38f516810ce8c4",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/structural-records/edge.xpath"
+    },
+    "docs/xpath40-catalog/examples/structural-records/main.xpath": {
+      "sha256": "93c1766ad60650eec1960bf83fa64bb55b4bcbef3313f99c9b41c68deece3ee7",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/structural-records/main.xpath"
+    },
+    "docs/xpath40-catalog/examples/typed-let-coercion/before.xpath": {
+      "sha256": "64c7557a82237aa1c6e5f1830afcf588c5e6d84d5635919276ef635c4bc21d64",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/typed-let-coercion/before.xpath"
+    },
+    "docs/xpath40-catalog/examples/typed-let-coercion/edge.xpath": {
+      "sha256": "5bd63e4dbfdb25b4fdd2a4d7ef28ec5c2be7065024173df77bd9bf03befadb05",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/typed-let-coercion/edge.xpath"
+    },
+    "docs/xpath40-catalog/examples/typed-let-coercion/main.xpath": {
+      "sha256": "4e804c1beafbf6051e0605848762caf83b2167eff1df02da505dc2fcc9332866",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/typed-let-coercion/main.xpath"
+    },
+    "docs/xpath40-catalog/examples/xpath-switch-expression/alternative.xpath": {
+      "sha256": "fd16dc4eb201408ae6390438be84931c62126c9b19d8811d46f02581a3956230",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xpath-switch-expression/alternative.xpath"
+    },
+    "docs/xpath40-catalog/examples/xpath-switch-expression/refusal.xpath": {
+      "sha256": "314eba33abadda8583c00487b07bb0d042568db6bae3cca6f209c6911c20dd4c",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xpath-switch-expression/refusal.xpath"
+    },
+    "docs/xpath40-catalog/examples/xsl-array/before.xsl": {
+      "sha256": "d3008989035512deb503cc9bd085ef35e9201af020ec9922c9f9acdac3f602dd",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-array/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-array/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-array/main.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-array/transform.xsl": {
+      "sha256": "95f512e2f3ac3e198134a915dab83f1084248372b7cd14c368c86a4e7b8ff3c9",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-array/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-array/edge.xml": {
+      "sha256": "981fa6aa9297d765f6d752c80f882d390e658e6100bfab950bf42c762edf2428",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-array/edge.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-if/before.xsl": {
+      "sha256": "63f9758b86f9eba939d1b41cb5d14b1bf49f4c56e22762a6e7cd14cccae9248e",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-if/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-if/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-if/main.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-if/transform.xsl": {
+      "sha256": "dcb58870d3533718dd9e8161e1f3190adf4711405471e569905d0e6c278020c0",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-if/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-if/edge.xml": {
+      "sha256": "981fa6aa9297d765f6d752c80f882d390e658e6100bfab950bf42c762edf2428",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-if/edge.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-map/before.xsl": {
+      "sha256": "2e8586b169fc06d2662afc53c8ea2426ac09e12447128b05c3481c4b8cd5e851",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-map/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-map/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-map/main.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-map/transform.xsl": {
+      "sha256": "bde38fdebc487d50250510abadcf16796b8820fe2a5aadcf92ac452a3e0c5ad8",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-map/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-map/edge.xml": {
+      "sha256": "37b601d007680e9da5766ba86ee63005819867c2890bf464d03078fd16b833f3",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-map/edge.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-note/before.xsl": {
+      "sha256": "8486586b33f827cfcf3f9a3895ac328e7a12e51d9055f402bbf474d2452de89f",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-note/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-note/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-note/main.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-note/transform.xsl": {
+      "sha256": "08cafdba1293f2838798877c2a854aed56a3d859c77f27120ac78fa38c052803",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-note/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-note/edge.xml": {
+      "sha256": "981fa6aa9297d765f6d752c80f882d390e658e6100bfab950bf42c762edf2428",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-note/edge.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-switch/before.xsl": {
+      "sha256": "933797f3ae6094352f667c54b4a59bf095b7ae26a9ae203d3aaa449328356a01",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-switch/before.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-switch/main.xml": {
+      "sha256": "3c2b29c32ae1c2bdc0f6aca12a3f61e6f750eca9c16e58e77bb889795fd7d939",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-switch/main.xml"
+    },
+    "docs/xpath40-catalog/examples/xsl-switch/transform.xsl": {
+      "sha256": "6e2e80baec0fd5a76b2ecf6d82b7fe50883016f9377b78707f10f1b5905b4f44",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-switch/transform.xsl"
+    },
+    "docs/xpath40-catalog/examples/xsl-switch/edge.xml": {
+      "sha256": "56e992314ba896bc84831f25f4a8faa3df73ce4a6d64c5329ad335f32e730812",
+      "compiledAsset": "tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog/xsl-switch/edge.xml"
+    }
+  }
+}

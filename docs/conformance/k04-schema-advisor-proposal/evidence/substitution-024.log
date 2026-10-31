@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"substitution-024","kind":"HarnessException","exceptionType":"System.Xml.Schema.XmlSchemaException","message":"The value for the \u0027substitutionGroup\u0027 attribute is invalid - \u0027s:H1 s:H2\u0027 is an invalid value for the \u0027substitutionGroup\u0027 attribute."}

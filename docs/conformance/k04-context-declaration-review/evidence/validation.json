@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C24",
+  "sourceBase": "bf73246818afa76ef111f980f6767c609010f162",
+  "candidateVersion": "1.29.2",
+  "publishedVersion": "1.26.3",
+  "inventoryQt3": 44,
+  "inventoryQt4": 53,
+  "selectedQt3Originals": 31,
+  "declinedQt3": {
+    "Resource-bearing environment": 3,
+    "Module mapping present": 10
+  },
+  "actualOriginals": {
+    "Passed": 1,
+    "Skipped": 30
+  },
+  "publicXQueryOriginals": {
+    "Passed": 1,
+    "Failed": 30
+  },
+  "publicControls": {
+    "Passed": 3,
+    "Failed": 15
+  },
+  "libraryParserControls": {
+    "Passed": 4,
+    "Failed": 1
+  },
+  "normalQt3Set": [
+    4,
+    0,
+    40
+  ],
+  "normalQt4Set": [
+    0,
+    0,
+    53
+  ],
+  "finalBoundedProcesses": 88,
+  "initialSetupTimeouts": 1,
+  "inheritedSolutionPassed": 23746,
+  "inheritedQt3Gate": [
+    31165,
+    0,
+    656
+  ],
+  "inheritedQt4Gate": [
+    8939,
+    0,
+    1920
+  ],
+  "inheritedGatedSets": 230,
+  "engineChanged": false,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false,
+  "freshFullSolutionRun": false,
+  "freshFullGateRun": false
+}

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified integration contracts and limitations</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Blocked empty-annotation contract**. No complete derived-type reflection/function-conversion audit; C03 owns constructor/type/coercion coverage. atomic-type-annotation(()) incorrectly returns a type record in both 4.0 profiles. Required empty-input refusal is explicitly unsupported; bounded correction F08-atomic-annotation-empty retains the independent XPTY0004 expectation. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 Functions: [fn:is-NaN](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-is-NaN), [fn:atomic-type-annotation](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-type-annotation), [fn:op](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-op). Frozen 4.0.
@@ -56,6 +58,8 @@ Check the converted numeric value, not the source string spelling. Start the fol
 Invalid numeric text is reported rather than poisoning this total. Type reflection does not establish business validity. Floating-point precision and the untested infinity/range cases remain outside this sample contract.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Numeric NaN versus lexical NaN and single-value atomization; Atomic annotation record and callable operator reflection; Operator errors propagate; annotation is not business or schema validation. **Boundaries:** No complete derived-type reflection/function-conversion audit; C03 owns constructor/type/coercion coverage. atomic-type-annotation(()) incorrectly returns a type record in both 4.0 profiles. Required empty-input refusal is explicitly unsupported; bounded correction F08-atomic-annotation-empty retains the independent XPTY0004 expectation. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects them. Earlier-version comparisons use Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. All values are inline and deterministic.
 
@@ -137,6 +141,8 @@ Conversion and classification scan the small input, and fold-left accumulates it
 
 Synthetic workflow. Named evidence: [`IsNan_DetectsDoubleAndFloatNaN`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`IsNan_EmptyMultiMapFunction_Raise`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`AtomicTypeAnnotation_PrimitiveBoolean_RecordShape`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`AtomicTypeAnnotation_DerivedDayTimeDuration_HierarchyAndMatches`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), and [`Op_ForEachPair_SpecExample`](../../../tests/Bosak.XPath.Standard.Tests/FnOpTests.cs).
 The [runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs) assigns exact fn-op, not exact is-NaN/atomic-type-annotation sets. These 15 fixtures provide separate evidence; membership is unchanged.
+
+**C13 applicable-evidence placement:** The current XPath gate assignment is `fn-op`; is-NaN and atomic-type-annotation are explicitly unassigned and use the named engine tests and examples. The empty atomic-type-annotation argument remains a known XPTY0004 mismatch (C02-F08). [39 exact case receipts](../SEMANTIC-REVIEW-BATCH-2.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [Op_ForEachPair_SpecExample](../../../tests/Bosak.XPath.Standard.Tests/FnOpTests.cs); [IsNan_DetectsDoubleAndFloatNaN](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
 
 ## 16. Related Features
 

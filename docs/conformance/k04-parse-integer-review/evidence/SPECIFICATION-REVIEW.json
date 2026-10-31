@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "a856dcede3d081f1d9dae36ba39fcabef36b3ed3",
+  "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+  "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+  "kind": "Review pin only;not new semantic adoption",
+  "section": "fn:parse-integer signatures/default-on-empty,rules,error conditions,equivalent expression",
+  "contract": {
+    "arities": [
+      1,
+      2
+    ],
+    "parameterNames": [
+      "value",
+      "radix"
+    ],
+    "parameterTypes": [
+      "xs:string?",
+      "xs:integer?"
+    ],
+    "returnType": "xs:integer?",
+    "defaultRadix": 10,
+    "emptyRadixDefaults": true,
+    "radixRange": [
+      2,
+      36
+    ],
+    "stripCodepoints": [
+      9,
+      10,
+      13,
+      32,
+      95
+    ],
+    "errorCodes": {
+      "radix": "FORG0011",
+      "lexical": "FORG0012",
+      "implementationSize": "FOCA0003"
+    }
+  },
+  "scope": "Frozen catalog contract review;publication/test-fixture/history/adoption revisions remain separate"
+}

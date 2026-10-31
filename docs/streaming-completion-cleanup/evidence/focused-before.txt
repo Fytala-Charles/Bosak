@@ -1,0 +1,99 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XPath.Providers.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+dotnet : [xUnit.net 00:00:00.66]     
+Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.EmptyRoot_CallbackFailureClosesOwnedInput [FAIL]
+At line:202 char:1
++ dotnet test tests/Bosak.XPath.Providers.Tests/Bosak.XPath.Providers.T ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([xUnit.net 00:0...nedInput [FAIL]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[xUnit.net 00:00:00.67]     
+Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackCancellation_PreservesTokenAndClosesOwnedInput 
+[FAIL]
+[xUnit.net 00:00:00.68]     Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackFailure_AttemptsClea
+nupAndDoesNotRepeatCompletion(closeInput: True) [FAIL]
+[xUnit.net 00:00:00.68]     
+Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.ThrowingFirstHandler_SkipsLaterHandlerButStillCleansUp 
+[FAIL]
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.EmptyRoot_CallbackFailureClosesOwnedInput [307 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.EmptyRoot_CallbackFailureClosesOwnedInput() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 156
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackCancellation_PreservesTokenAndClosesOwnedInput [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackCancellation_PreservesTokenAndClosesOwnedInput() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 145
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackFailure_AttemptsCleanupAndDoesNotRepeatCompletion(closeInput: True) [6 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.CallbackFailure_AttemptsCleanupAndDoesNotRepeatCompletion(Boolean closeInput) in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 68
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.ThrowingFirstHandler_SkipsLaterHandlerButStillCleansUp [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.ThrowingFirstHandler_SkipsLaterHandlerButStillCleansUp() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 191
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.70]     
+Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.DualFailure_AggregatesCallbackFirstAndCleanupSecond 
+[FAIL]
+[xUnit.net 00:00:00.70]     Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.RetainedRecords_CallbackFail
+ureAllowsReplayWithoutRepeatingCompletion [FAIL]
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.DualFailure_AggregatesCallbackFirstAndCleanupSecond [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.AggregateException)
+Actual:   typeof(System.InvalidOperationException)
+---- System.InvalidOperationException : callback failure
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.DualFailure_AggregatesCallbackFirstAndCleanupSecond() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 121
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.ThrowCompletion(Exception failure) in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 194
+   at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.<>c__DisplayClass5_0.<DualFailure_AggregatesCallbackFirstAndCleanupSecond>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 120
+   at Bosak.XPath.Providers.Streaming.StreamingSource.FinishPump() in D:\Development\Bosak\src\Bosak.XPath.Providers\Streaming\StreamingSource.cs:line 577
+   at Bosak.XPath.Providers.Streaming.StreamingSource.Pump(XdmNodeKind kind)+MoveNext() in D:\Development\Bosak\src\Bosak.XPath.Providers\Streaming\StreamingSource.cs:line 469
+   at Bosak.XPath.Providers.Streaming.StreamingSource.Drain() in D:\Development\Bosak\src\Bosak.XPath.Providers\Streaming\StreamingSource.cs:line 271
+   at Bosak.XPath.Providers.Streaming.StreamingDocumentNode.Drain() in D:\Development\Bosak\src\Bosak.XPath.Providers\Streaming\StreamingDocumentNode.cs:line 66
+   at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.<>c__DisplayClass5_0.<DualFailure_AggregatesCallbackFirstAndCleanupSecond>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 121
+  Failed Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.RetainedRecords_CallbackFailureAllowsReplayWithoutRepeatingCompletion [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Values differ
+Expected: 1
+Actual:   0
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.Streaming.StreamingCompletionTests.RetainedRecords_CallbackFailureAllowsReplayWithoutRepeatingCompletion() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\StreamingCompletionTests.cs:line 177
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: D:\Development\Bosak\.guard-tmp\streaming-completion-before\before.trx
+
+Failed!  - Failed:     6, Passed:     5, Skipped:     0, Total:    11, Duration: 340 ms - Bosak.XPath.Providers.Tests.dll (net10.0)

@@ -1,0 +1,53 @@
+// Generated read-only catalog and dependency-policy diagnostic; no source or fixture changes.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Security.Cryptography;
+using System.Text;
+using System.Xml.Linq;
+using System.Collections;
+string directory=Path.GetFullPath(args[0]),suite=args[1],output=args[2],root=Path.GetFullPath("tests/"+(suite=="qt3"?"qt3tests":"qt4tests"));
+AssemblyLoadContext.Default.Resolving+=(c,n)=>File.Exists(Path.Combine(directory,n.Name+".dll"))?Assembly.LoadFrom(Path.Combine(directory,n.Name+".dll")):null;
+var assembly=Assembly.LoadFrom(Path.Combine(directory,suite=="qt3"?"Bosak.XPath.Conformance.dll":"Bosak.XPath.Conformance40.dll"));
+var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.Instance;
+Type T(string n)=>assembly.GetType("Bosak.XPath.Conformance."+n,true)!;
+object? Call(Type t,string n,object? o,params object?[] values)=>t.GetMethod(n,flags)!.Invoke(o,values);
+object? Field(object o,string n)=>o.GetType().GetProperty(n,flags)!.GetValue(o);
+var filter=T(suite=="qt3"?"DependencyFilter":"DependencyFilter40");var instance=Activator.CreateInstance(filter,true)!;
+var depType=T("Dependency");var listType=typeof(List<>).MakeGenericType(depType);
+object List(IEnumerable<object> deps){var list=Activator.CreateInstance(listType)!;foreach(var d in deps)listType.GetMethod("Add")!.Invoke(list,new[]{d});return list;}
+bool Supported(object deps,bool xquery)=>suite=="qt3"?(bool)Call(filter,"IsSupported",instance,deps,xquery)!:!xquery&&(bool)Call(filter,"IsSupported",instance,deps)!;
+T("TestCase").GetProperty("DecodeEntitiesInTestExpressions",flags)!.SetValue(null,suite=="qt4");
+HashSet<string> names=JsonSerializer.Deserialize<HashSet<string>>(File.ReadAllText(args[3]))!;
+var gated=suite=="qt4"?((IEnumerable)T("ConformanceRunner40").GetField("GatedSets",flags)!.GetValue(null)!).Cast<string>().ToHashSet():null;
+using var all=new StreamWriter(output+"-catalog.jsonl");using var originals=new StreamWriter(output+"-originals.jsonl");int sets=0,count=0,selected=0;
+var catalog=XDocument.Load(Path.Combine(root,"catalog.xml"));var ns=catalog.Root!.Name.Namespace;
+foreach(var entry in catalog.Root.Elements(ns+"test-set")){
+ var path=Path.Combine(root,(string)entry.Attribute("file")!);var doc=XDocument.Load(path);sets++;
+ var inherited=List(doc.Root!.Elements(ns+"dependency").Select(d=>Call(depType,"FromElement",null,d)!));
+ foreach(var element in doc.Root.Elements(ns+"test-case")){
+  var test=Call(T("TestCase"),"FromElement",null,element,ns,inherited,Path.GetDirectoryName(path))!;
+  var dependencies=Field(test,"Dependencies")!;var deps=((IEnumerable)dependencies).Cast<object>().ToArray();
+  var depRows=deps.Select(d=>new{Type=Field(d,"Type"),Value=Field(d,"Value"),Satisfied=Field(d,"Satisfied"),xpathSupported=Supported(List(new[]{d}),false),xquerySupported=Supported(List(new[]{d}),true)}).ToArray();
+  string name=(string)Field(test,"Name")!,expression=(string)Field(test,"Expression")!;
+  bool routing=suite=="qt3"&&(bool)Call(T("TestExecutor"),"CanHandleAsXQuery",null,expression)!;
+  var row=new{Suite=suite,Set=(string?)entry.Attribute("name"),Name=name,File=Path.GetRelativePath(root,path).Replace('\\','/'),ExpressionSha256=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(expression))).ToLowerInvariant(),routingAllowed=routing,xpathSupported=Supported(dependencies,false),xquerySupported=Supported(dependencies,true),gated=gated is null||gated.Contains((string)entry.Attribute("name")!),Dependencies=depRows};
+  all.WriteLine(JsonSerializer.Serialize(row));count++;
+  if(suite=="qt3"&&names.Contains(name)){
+   originals.WriteLine(JsonSerializer.Serialize(new{row,Expression=expression,Assertion=element.Element(ns+"result")!.ToString(),Modules=Field(test,"Modules"),Environment=element.Element(ns+"environment")?.ToString(),Dependencies=dependencies,OwnDependencies=Field(test,"OwnDependencies")}));selected++;
+  }
+ }
+}
+var policies=new Dictionary<string,object?>();
+foreach(var name in new[]{"UnsupportedFeatures","FrozenAdmittedFeatures","SupportedSpecs","SupportedXQuerySpecs"}){
+ var field=filter.GetField(name,flags);if(field is not null)policies[name]=((IEnumerable)field.GetValue(null)!).Cast<object>().ToArray();
+}
+File.WriteAllText(output+"-policy.json",JsonSerializer.Serialize(policies,new JsonSerializerOptions{WriteIndented=true}));
+using var probes=new StreamWriter(output+"-polarity.jsonl");
+foreach(var p in JsonSerializer.Deserialize<Probe[]>(File.ReadAllText(args[4]))!){
+ var dependency=Activator.CreateInstance(depType,new object[]{p.Type,p.Value,p.Satisfied})!;
+ probes.WriteLine(JsonSerializer.Serialize(new{p.Type,p.Value,p.Satisfied,xpathSupported=Supported(List(new[]{dependency}),false),xquerySupported=Supported(List(new[]{dependency}),true)}));
+}
+File.WriteAllText(output+"-summary.json",JsonSerializer.Serialize(new{suite,sets,count,selected},new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"{suite}: {count} cases / {sets} sets / {selected} original snapshots; actual singleton dependency and polarity observations recorded.");
+record Probe(string Type,string Value,bool Satisfied);

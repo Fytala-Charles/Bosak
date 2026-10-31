@@ -1,0 +1,286 @@
+{
+  "note": "Initial complete solution before four additional edge tests; raw TRX preserved in ignored temporary folder.",
+  "trxDirectory": ".guard-tmp\\k04-schema-element-solution-initial",
+  "projects": [
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_41_net10.0.trx",
+      "sha256": "9a8e93fa8021342f93da17f3e8b20d1efd2ed244e37e75feadd65009f67d65ad",
+      "counters": {
+        "total": "800",
+        "executed": "800",
+        "passed": "800",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:41.0547984+01:00",
+        "queuing": "2026-10-29T05:50:41.0547990+01:00",
+        "start": "2026-10-29T05:50:40.1649945+01:00",
+        "finish": "2026-10-29T05:50:41.4197585+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0.trx",
+      "sha256": "4c4dc808d4499db4cb527b5583b3c63bc245341583f48b5c84d72369cbdebc2d",
+      "counters": {
+        "total": "202",
+        "executed": "202",
+        "passed": "202",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.1301812+01:00",
+        "queuing": "2026-10-29T05:50:42.1301815+01:00",
+        "start": "2026-10-29T05:50:40.2194166+01:00",
+        "finish": "2026-10-29T05:50:42.1729292+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[1].trx",
+      "sha256": "328c18aa084be34e5b6700feb4054cb0ffb774ef13446a502d2c13d5945f74c7",
+      "counters": {
+        "total": "66",
+        "executed": "66",
+        "passed": "66",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.1764026+01:00",
+        "queuing": "2026-10-29T05:50:42.1764028+01:00",
+        "start": "2026-10-29T05:50:40.1893093+01:00",
+        "finish": "2026-10-29T05:50:42.2002964+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[2].trx",
+      "sha256": "7d09a1c4039a4ced1317a46b6574b5d40d015c3f6c2a3d9c9f33148bd0e94761",
+      "counters": {
+        "total": "269",
+        "executed": "269",
+        "passed": "269",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.8766706+01:00",
+        "queuing": "2026-10-29T05:50:42.8766707+01:00",
+        "start": "2026-10-29T05:50:40.2652607+01:00",
+        "finish": "2026-10-29T05:50:43.0387602+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[3].trx",
+      "sha256": "08e383f3e4ab959064807bf78eeeb8d2758b8e917a505fcbb59ca9e63798ce28",
+      "counters": {
+        "total": "132",
+        "executed": "132",
+        "passed": "132",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.2625145+01:00",
+        "queuing": "2026-10-29T05:50:42.2625149+01:00",
+        "start": "2026-10-29T05:50:40.2112303+01:00",
+        "finish": "2026-10-29T05:50:43.1890215+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[4].trx",
+      "sha256": "33c8827869468514b2d88b9c81de4f12c8f20ef76b0a271bc4b2e8eabfcde7bd",
+      "counters": {
+        "total": "489",
+        "executed": "489",
+        "passed": "489",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.6849059+01:00",
+        "queuing": "2026-10-29T05:50:42.6849063+01:00",
+        "start": "2026-10-29T05:50:40.2682454+01:00",
+        "finish": "2026-10-29T05:50:43.1696234+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[5].trx",
+      "sha256": "d4f9ea6b8cac9af6734b58bae7272513c440362d719e3090bd2d9665173e7005",
+      "counters": {
+        "total": "47",
+        "executed": "47",
+        "passed": "47",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.3425555+01:00",
+        "queuing": "2026-10-29T05:50:42.3425558+01:00",
+        "start": "2026-10-29T05:50:40.2405288+01:00",
+        "finish": "2026-10-29T05:50:46.8361238+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_42_net10.0[6].trx",
+      "sha256": "e2e1b961fc482575d514909c787415123d3887838e0b172c9e078457f423f8eb",
+      "counters": {
+        "total": "201",
+        "executed": "201",
+        "passed": "201",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:42.5479207+01:00",
+        "queuing": "2026-10-29T05:50:42.5479210+01:00",
+        "start": "2026-10-29T05:50:40.3401767+01:00",
+        "finish": "2026-10-29T05:50:50.4387913+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_43_net10.0.trx",
+      "sha256": "41a725a2f177ae7868eccf6277ebcbab98c8f34a12514df1f71eab68d40bb3d5",
+      "counters": {
+        "total": "13797",
+        "executed": "13797",
+        "passed": "13797",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:43.9875336+01:00",
+        "queuing": "2026-10-29T05:50:43.9875337+01:00",
+        "start": "2026-10-29T05:50:40.3251149+01:00",
+        "finish": "2026-10-29T05:50:45.5386506+01:00"
+      }
+    },
+    {
+      "file": "charl_CHARLES_2026-10-29_05_50_44_net10.0.trx",
+      "sha256": "e5ee50c1bccbe309be7dbf4fa98d2b8aef2aabe8869e24da73e832e72ead2e83",
+      "counters": {
+        "total": "8196",
+        "executed": "8196",
+        "passed": "8196",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:50:44.4389388+01:00",
+        "queuing": "2026-10-29T05:50:44.4389390+01:00",
+        "start": "2026-10-29T05:50:40.5711660+01:00",
+        "finish": "2026-10-29T05:54:38.5020208+01:00"
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C26",
+  "kind": "Pre-implementation semantic adoption: main-module context item declarations",
+  "sourceBase": "e2034067eb87e8a92ff978eb14c0fab72bb3ac12",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "scope": [
+    "Parse ItemType, value/external/default and duplicate XQST0099 declarations",
+    "Compile initializer with complete main-module namespace/function/global visibility",
+    "Initialize and strictly validate one context item, external override/default and singleton focus",
+    "Integrate lazy globals and context dependency cycle detection XQDY0054",
+    "Retain library XQST0113 restrictions and C25 XQST0099 correction",
+    "Restore host focus; declared-context body sequences stabilized before return"
+  ],
+  "implementationChoices": [
+    "Explicit non-external declaration ignores a supplied host context item",
+    "Initializer focus self-dependencies report XQDY0054; retain original accepted alternatives",
+    "Global lazy cache entries for declared variables refreshed per explicit-context evaluation"
+  ],
+  "limits": [
+    "No routing, dependency, KnownSkips, GatedSets, fixture or AGENTS baseline changes",
+    "Resource/module-bearing original audit remains a separate qualification before admission",
+    "No claim of full schema/XSD1.1 capability; Bosak.Schema owns that track",
+    "No release/publication"
+  ]
+}

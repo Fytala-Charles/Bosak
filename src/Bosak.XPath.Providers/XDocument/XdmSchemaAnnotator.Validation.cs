@@ -46,6 +46,7 @@
 //                      |                  |       |                | validation clone, so prefixes used only in QName-valued attribute values stay           |
 //                      |                  |       |                | resolvable during construction-time validity assessment (error-0950a/b)                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.1   | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -115,6 +116,8 @@ public static partial class XdmSchemaAnnotator
                 return new XdmSubtreeValidationResult(true, []);
         }
 
+        if (element.DescendantsAndSelf().Any(XdmElementAssessment.IsAttached))
+            throw new NotSupportedException("BSK-XSD-016: Native assessment cannot be downgraded to legacy structural/type reassessment.");
         if (options.DocumentLevel && !options.DocumentEpisode)
         {
             // Document-node validation (XSLT 3.0 §25.4.2): the content must comprise exactly
@@ -543,6 +546,7 @@ public static partial class XdmSchemaAnnotator
     /// </summary>
     private static void StripElementAnnotations(XElement element)
     {
+        XdmElementAssessment.Remove(element);
         var info = element.GetSchemaInfo();
         if (info is not null)
         {
@@ -601,7 +605,7 @@ public static partial class XdmSchemaAnnotator
 
         foreach (var node in element.DescendantsAndSelf())
         {
-            if (node.GetSchemaInfo() is null)
+            if (node.GetSchemaInfo() is null && !XdmElementAssessment.IsAttached(node))
                 node.AddAnnotation(new BuiltinTypeSchemaInfo(anyType));
             foreach (var attribute in node.Attributes())
             {
@@ -640,7 +644,7 @@ public static partial class XdmSchemaAnnotator
         var untypedAtomic = XmlSchemaType.GetBuiltInSimpleType(
             new XmlQualifiedName("untypedAtomic", "http://www.w3.org/2003/11/xpath-datatypes"));
 
-        if (element.GetSchemaInfo() is null)
+        if (element.GetSchemaInfo() is null && !XdmElementAssessment.IsAttached(element))
             element.AddAnnotation(new BuiltinTypeSchemaInfo(anyType));
         foreach (var attribute in element.Attributes())
         {

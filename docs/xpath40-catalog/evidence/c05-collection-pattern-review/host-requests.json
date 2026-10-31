@@ -1,0 +1,254 @@
+[
+  {
+    "id": "array-items",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[1,2]\"/></xsl:template><xsl:template match=\"array(atomic(xs:integer))\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-vacuous-empty",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[]\"/></xsl:template><xsl:template match=\"array(atomic(xs:integer))\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-empty-member",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[()]\"/></xsl:template><xsl:template match=\"array(atomic(xs:integer))\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-sequence-members",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[(),(1,2)]\"/></xsl:template><xsl:template match=\"array(atomic(xs:integer)*)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-plus-member",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[(),(1,2)]\"/></xsl:template><xsl:template match=\"array(atomic(xs:integer)+)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-nested",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[[1,2],[]]\"/></xsl:template><xsl:template match=\"array(array(atomic(xs:integer)))\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "array-member-predicate",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"[(1,2),3]\"/></xsl:template><xsl:template match=\"array(.[position()=1 and last()=1]+)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-present-empty",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':()}\"/></xsl:template><xsl:template match=\"{'v':empty-sequence()}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-absent",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{}\"/></xsl:template><xsl:template match=\"{'v':empty-sequence()}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-sequence",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':(1,2)}\"/></xsl:template><xsl:template match=\"{'v':atomic(xs:integer)+}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-sequence-mixed",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':(1,'2')}\"/></xsl:template><xsl:template match=\"{'v':atomic(xs:integer)+}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-surplus-refused",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':1,'extra':2}\"/></xsl:template><xsl:template match=\"{'v':.}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-surplus-wildcard",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':1,'extra':2}\"/></xsl:template><xsl:template match=\"{'v':.,*}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "map-predicate-error",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'v':1}\"/></xsl:template><xsl:template match=\"{'v':.[error()]}\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "structural-record-pattern",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'a':1} cast as record(a as xs:integer)\"/></xsl:template><xsl:template match=\"~record(a as xs:integer)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "plain-map-not-record",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'a':1}\"/></xsl:template><xsl:template match=\"~record(a as xs:integer)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "type-alias",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:item-type name=\"t:r\" as=\"record(a as xs:integer)\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"map{'a':1} cast as record(a as xs:integer)\"/></xsl:template><xsl:template match=\"~t:r\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "nominal-own",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name=\"t:p\" constructor=\"yes\"><xsl:field name=\"a\" as=\"xs:integer\"/></xsl:record-type><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"t:p(7)\"/></xsl:template><xsl:template match=\"~t:p\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "nominal-other",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name=\"t:p\" constructor=\"yes\"><xsl:field name=\"a\" as=\"xs:integer\"/></xsl:record-type><xsl:record-type name=\"t:q\" constructor=\"yes\"><xsl:field name=\"a\" as=\"xs:integer\"/></xsl:record-type><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"t:q(7)\"/></xsl:template><xsl:template match=\"~t:p\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-patterns",
+    "kind": "released-control"
+  },
+  {
+    "id": "set-left",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"root except missing intersect missing\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "F",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "set-grouped",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"root except (missing intersect missing)\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "union-minimum",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"root | missing/child\">M</xsl:template><xsl:template match=\"root\" priority=\"0.25\">C</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "C",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "union-word-minimum",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"root union missing/child\">M</xsl:template><xsl:template match=\"root\" priority=\"0.25\">C</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "C",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "eqname-brackets",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"Q{urn:a[b]}root\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root xmlns=\"urn:a[b]\"/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "eqname-open-bracket",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"Q{urn:a[b}root\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root xmlns=\"urn:a[b\"/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "eqname-with-predicate",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"Q{urn:a[b]}root[true()]\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root xmlns=\"urn:a[b]\"/>",
+    "expected": "M",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "eqname-priority",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"/*\"/></xsl:template><xsl:template match=\"Q{urn:a/b|c(d)}root\">M</xsl:template><xsl:template match=\"*\" priority=\"0.25\">C</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root xmlns=\"urn:a/b|c(d)\"/>",
+    "expected": "C",
+    "error": null,
+    "row": "S8-compound",
+    "kind": "released-control"
+  },
+  {
+    "id": "jnode-pattern",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c05:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:template match=\"/\" priority=\"1000\"><xsl:apply-templates select=\"jtree(map{&apos;a&apos;:7})/a\"/></xsl:template><xsl:template match=\"jnode(&apos;a&apos;,atomic(xs:integer))\">M</xsl:template><xsl:template match=\".\" priority=\"-100\">F</xsl:template></xsl:stylesheet>",
+    "source": "<root/>",
+    "expected": "M",
+    "error": null,
+    "row": "REQ123-jnode",
+    "kind": "current-draft-control"
+  }
+]

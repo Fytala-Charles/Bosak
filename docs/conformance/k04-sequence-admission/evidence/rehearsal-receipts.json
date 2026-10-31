@@ -1,0 +1,31 @@
+[
+  {
+    "suite": "qt3",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-harness-qt3/bin/Release/net10.0/Bosak.XPath.Conformance.dll"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 65.3778152000159,
+    "log": "qt3-rehearsal.log",
+    "skipDump": "qt3-rehearsal-skips.txt",
+    "mode": "Isolated copied complete harness;normal source/AGENTS unchanged"
+  },
+  {
+    "suite": "qt4",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-harness-qt4/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 16.84493960000691,
+    "log": "qt4-rehearsal.log",
+    "skipDump": "qt4-rehearsal-skips.txt",
+    "mode": "Isolated copied complete harness;normal source/AGENTS unchanged"
+  }
+]

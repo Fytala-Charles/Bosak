@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml", "Name": "control-qt3-empty-radix", "case": "empty-radix", "expression": "format-integer((),'16^xx')", "boundary": false, "expected": ""}

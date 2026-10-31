@@ -1,0 +1,1527 @@
+[
+  {
+    "id": "otherwise-empty",
+    "expression": "() ?? 4",
+    "expected": "4",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-zero",
+    "expression": "0 ?? 4",
+    "expected": "0",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-false",
+    "expression": "false() ?? true()",
+    "expected": "false",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-empty-string",
+    "expression": "string-length('' ?? 'fallback')",
+    "expected": "0",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-all-items",
+    "expression": "string-join((1,2) ?? (3,4),',')",
+    "expected": "1,2",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-chain",
+    "expression": "() ?? () ?? 4",
+    "expected": "4",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-precedence-comparison",
+    "expression": "4 = 4 ?? 3",
+    "expected": "true",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-precedence-arithmetic",
+    "expression": "() ?? 1 + 2",
+    "expected": "3",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-precedence-concat",
+    "expression": "() ?? 'a' || 'b'",
+    "expected": "ab",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-guard-divide",
+    "expression": "1 ?? (1 div 0)",
+    "expected": "1",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-guard-type",
+    "expression": "1 ?? xs:integer('bad')",
+    "expected": "1",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-selected-error",
+    "expression": "() ?? (1 div 0)",
+    "expected": null,
+    "error": "FOAR0001",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-left-error",
+    "expression": "(1 div 0) ?? 4",
+    "expected": null,
+    "error": "FOAR0001",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-outer-focus",
+    "expression": "string-join((8,9) ! (() ?? concat(.,':',position(),':',last())),'|')",
+    "expected": "8:1:2|9:2:2",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "otherwise-static-unknown-var",
+    "expression": "1 ?? $missing",
+    "expected": null,
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-observation",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary"
+  },
+  {
+    "id": "otherwise-static-unknown-function",
+    "expression": "1 ?? no-such-function()",
+    "expected": null,
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-observation",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary"
+  },
+  {
+    "id": "otherwise-static-syntax",
+    "expression": "1 ?? (1 + )",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "otherwise-old-profile",
+    "expression": "() ?? 4",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "otherwise-current-spelling",
+    "expression": "() otherwise 4",
+    "expected": "4",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "requiredPhase": null,
+    "ticket": "G01-otherwise-spelling"
+  },
+  {
+    "id": "otherwise-current-guard",
+    "expression": "1 otherwise (1 div 0)",
+    "expected": "1",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "requiredPhase": null,
+    "ticket": "G01-otherwise-spelling"
+  },
+  {
+    "id": "guard-if",
+    "expression": "if (true()) then 7 else (1 div 0)",
+    "expected": "7",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "guard-and",
+    "expression": "false() and (1 div 0 eq 0)",
+    "expected": "false",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "guard-or",
+    "expression": "true() or (1 div 0 eq 0)",
+    "expected": "true",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "guard-empty-map",
+    "expression": "count(() ! (1 div 0))",
+    "expected": "0",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "guard-empty-filter",
+    "expression": "count(()[1 div 0])",
+    "expected": "0",
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "guard-selected-map",
+    "expression": "1 ! (1 div 0)",
+    "expected": null,
+    "error": "FOAR0001",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-reorder",
+    "expression": "substring(length := 2, value := 'ABCD', start := 2)",
+    "expected": "BC",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-mixed",
+    "expression": "substring('ABCD',length := 2,start := 2)",
+    "expected": "BC",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-default",
+    "expression": "replace(value := 'INV-42',pattern := 'INV-')",
+    "expected": "42",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-empty-vs-omitted",
+    "expression": "substring(value := 'ABCD',start := 2,length := ())",
+    "expected": "BCD",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-duplicate",
+    "expression": "substring(value := 'ABCD',start := 1,start := 2)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-positional-collision",
+    "expression": "substring('ABCD',value := 'WXYZ',start := 2)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-positional-after",
+    "expression": "substring(value := 'ABCD',2)",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-unknown",
+    "expression": "substring(value := 'ABCD',start := 2,bogus := 1)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-missing-required",
+    "expression": "substring(value := 'ABCD')",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-dynamic",
+    "expression": "let $f := substring#3 return $f(value := 'ABCD',start := 2,length := 2)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-no-metadata",
+    "expression": "char(value := 65)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "keyword-expanded-names",
+    "expression": "substring(Q{}value := 'ABCD',Q{}start := 2,Q{}length := 2)",
+    "expected": "BC",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "keyword-partial",
+    "expression": "let $f := substring(value := ?,start := 2,length := 2) return $f('ABCD')",
+    "expected": "BC",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "requiredPhase": null,
+    "ticket": "G03-keyword-placeholders"
+  },
+  {
+    "id": "keyword-old-profile",
+    "expression": "substring(value := 'ABCD',start := 2)",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "literal-hex",
+    "expression": "0xFF + 1",
+    "expected": "256",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "literal-binary",
+    "expression": "0b1010 eq 10",
+    "expected": "true",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "literal-separator",
+    "expression": "1_000 + 2_000",
+    "expected": "3000",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "literal-double-separator",
+    "expression": "1_0.2_5e+1 eq 102.5",
+    "expected": "true",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "literal-wide",
+    "expression": "0x8000000000000000 instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "literal-leading-separator",
+    "expression": "0x_FF",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "literal-trailing-separator",
+    "expression": "1_",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "literal-bad-radix",
+    "expression": "0b102",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "literal-adjacent-name",
+    "expression": "123abc",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "template-fixed",
+    "expression": "`hello`",
+    "expected": "hello",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-empty",
+    "expression": "``",
+    "expected": "",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-values",
+    "expression": "`x{(1,2,3)}y`",
+    "expected": "x1 2 3y",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-empty-value",
+    "expression": "`a{}b`",
+    "expected": "ab",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-escaped",
+    "expression": "`a{{b}}c``d`",
+    "expected": "a{b}c`d",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-nested",
+    "expression": "`outer {`inner {2}`}`",
+    "expected": "outer inner 2",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-node",
+    "expression": "`x{parse-xml('<n>2</n>')/n}y`",
+    "expected": "x2y",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-comment",
+    "expression": "`x{(: } ` comment :) 1}y`",
+    "expected": "x1y",
+    "error": null,
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-map-error",
+    "expression": "`{map{}}`",
+    "expected": null,
+    "error": "FOTY0013",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "template-unterminated",
+    "expression": "`abc",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "template-unclosed-expression",
+    "expression": "`x{1`",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-literal",
+    "expression": "0xFF",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-separator",
+    "expression": "1_000",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-template",
+    "expression": "`x{1}`",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-lexical",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "pipeline-whole",
+    "expression": "(1,2) -> count(.)",
+    "expected": "2",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "pipeline-fixed-focus",
+    "expression": "(1,2) -> concat(count(.),':',position(),':',last())",
+    "expected": "2:1:1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "pipeline-empty",
+    "expression": "() -> concat(count(.),':',position(),':',last())",
+    "expected": "0:1:1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "pipeline-chain",
+    "expression": "(1,2) -> count(.) -> concat('n=',.)",
+    "expected": "n=2",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "pipeline-flwor",
+    "expression": "string-join((1,2) -> (for $x in . return $x*10),',')",
+    "expected": "10,20",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "pipeline-bare-flwor",
+    "expression": "(1,2) -> for $x in . return $x",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "pipeline-restoration",
+    "expression": "string-join((100 ! ((1,2) -> count(.) || ':' || string(.))),'|')",
+    "expected": "2:100",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "sequence-arrow-whole",
+    "expression": "(1,2) => count()",
+    "expected": "2",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "mapping-each",
+    "expression": "string-join((1,2) =!> (function($x){$x*2})(),',')",
+    "expected": "2,4",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "mapping-empty",
+    "expression": "count(() =!> string(1 div 0))",
+    "expected": "0",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "mapping-wrong-spelling",
+    "expression": "1 =>> string()",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "focus-whole",
+    "expression": "fn { concat(count(.),':',position(),':',last()) }((1,2))",
+    "expected": "2:1:1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-empty",
+    "expression": "function { concat(count(.),':',position(),':',last()) }(())",
+    "expected": "0:1:1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-argument-overrides",
+    "expression": "string-join((let $f := 100 ! fn { . } return $f(2)) ! string(.),'|')",
+    "expected": "2",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-lexical-capture",
+    "expression": "let $k := 7 return fn { . + $k }(3)",
+    "expected": "10",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-nested",
+    "expression": "fn { (1,2) ! fn { . * 10 }(.) }(99) => string-join(\",\")",
+    "expected": "10,20",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-short-explicit",
+    "expression": "fn($x as xs:integer) as xs:integer {$x+1}(2)",
+    "expected": "3",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "focus-wrong-arity",
+    "expression": "fn {.}(1,2)",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "mapping-containing-focus",
+    "expression": "string-join((100 ! string-join((1,2) =!> concat(':',string(.)),'|')),'|')",
+    "expected": "1:100|2:100",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "requiredPhase": null,
+    "ticket": "G02-mapping-containing-focus"
+  },
+  {
+    "id": "mapping-containing-position",
+    "expression": "string-join((100 ! string-join((1,2) =!> concat(':',position(),'/',last()),'|')),'|')",
+    "expected": "1:1/1|2:1/1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "requiredPhase": null,
+    "ticket": "G02-mapping-containing-focus"
+  },
+  {
+    "id": "old-pipeline",
+    "expression": "1 -> string(.)",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-mapping",
+    "expression": "1 =!> string()",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-focus",
+    "expression": "fn {.}(1)",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "old-short-fn",
+    "expression": "fn($x){$x}(1)",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-focus",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "hof-normal",
+    "expression": "for-each((1,2),function($x){$x*2}) => string-join(\",\")",
+    "expected": "2,4",
+    "error": null,
+    "row": "S1-S2-S5",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "hof-callback-error",
+    "expression": "some((1),function($x){\"yes\"})",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S1-S2-S5",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "hof-arity",
+    "expression": "some((1),function($a,$b,$c){true()})",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S1-S2-S5",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "hof-unavailable-old",
+    "expression": "some((1),function($x){true()})",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S1-S2-S5",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "scan-visible-XPath30",
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath30"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-visible-XPath31",
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-visible-XPath40",
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath40"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-visible-XPath40Experimental",
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "1",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-normal",
+    "expression": "string-join(scan((1,2),0,function($a,$b){$a+$b}) ! string(?1),',')",
+    "expected": "0,1,3",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-empty",
+    "expression": "string-join(scan((),10,function($a,$b){$a+$b}) ! string(?1),',')",
+    "expected": "10",
+    "error": null,
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "scan-frozen-refusal",
+    "expression": "scan((1),0,function($a,$b){$a+$b})",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "REQ123-scan",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "guard-static-unknown-keyword",
+    "expression": "1 ?? substring(value := 'ABCD',wrong := 1)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "guard-static-missing-metadata",
+    "expression": "1 ?? char(value := 65)",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "guard-static-lexical-syntax",
+    "expression": "1 ?? (1 + )",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": "compile",
+    "ticket": null
+  },
+  {
+    "id": "context-unbound-variable",
+    "expression": "$missing",
+    "expected": null,
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-observation",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary"
+  },
+  {
+    "id": "context-unresolved-function",
+    "expression": "no-such-function()",
+    "expected": null,
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-observation",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary"
+  },
+  {
+    "id": "mapping-for-focus",
+    "expression": "string-join((100 ! string-join((for $u in (1,2) return concat($u,':',string(.))),'|')),'|')",
+    "expected": "1:100|2:100",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "id": "mapping-for-position",
+    "expression": "string-join((100 ! string-join((for $u in (1,2) return concat($u,':',position(),'/',last())),'|')),'|')",
+    "expected": "1:1/1|2:1/1",
+    "error": null,
+    "row": "S4-focus",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  },
+  {
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-control",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary",
+    "id": "context-supplied-variable",
+    "expression": "$missing",
+    "expected": "7",
+    "runtimeVariable": 7
+  },
+  {
+    "error": null,
+    "row": "S3-otherwise",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-control",
+    "requiredPhase": null,
+    "ticket": "G04-late-binding-boundary",
+    "id": "context-supplied-function",
+    "expression": "no-such-function()",
+    "expected": "7",
+    "runtimeFunction": true
+  },
+  {
+    "id": "keyword-positional-placeholder-alternative",
+    "expression": "let $f := substring(?,2,2) return $f('ABCD')",
+    "expected": "BC",
+    "error": null,
+    "row": "S3-keywords",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "requiredPhase": null,
+    "ticket": null
+  }
+]

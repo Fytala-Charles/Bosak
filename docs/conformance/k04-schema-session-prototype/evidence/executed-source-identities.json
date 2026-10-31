@@ -1,0 +1,54 @@
+{
+  "prototype-model.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-prototype/Model.cs",
+    "sha256": "6d841bce52cd1888110372bf175ba47f6be889cb69467b994cee10fb08dd7714"
+  },
+  "prototype-program.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-prototype/Program.cs",
+    "sha256": "c17439fdc884fcd879990d5170db681cbb18ed61642fd29809a55564ad313ea0"
+  },
+  "prototype.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-prototype/Prototype.csproj",
+    "sha256": "1e4585b71167196e2cda46b9b070fabc433eb257a1375f94b20858c9113b57cb"
+  },
+  "proposed-contracts.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-contracts/Contracts.cs",
+    "sha256": "8a640f338ddec823f34fd9739452592491bd3144fa9a656599c56ccdd70ac7d9"
+  },
+  "proposed-contracts.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-contracts/Contracts.csproj",
+    "sha256": "ed637373200f5d44dc621f5d500dbdfcdca3fa7194222ab85c5d4b61fc4381e9"
+  },
+  "inspector.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-inspector/Program.cs",
+    "sha256": "8683ee641f0884def159dc7e43b481675149d79bd9dabc4bf26ad419c0ba321b"
+  },
+  "inspector.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-inspector/Inspector.csproj",
+    "sha256": "cb17ecdcb3682f8855f9ffe7c00e67ef3ed75773a2e72b803c538f866af2a193"
+  },
+  "abi-v1.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/v1/Value.cs",
+    "sha256": "2a248d9bb6eb9f20bcbd50a78be83c76e24b251bef64f54bf3c63b01f7325909"
+  },
+  "abi-v2.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/v2/Value.cs",
+    "sha256": "0f840343abc84bdf27635bf9e4900c585d42c9a6b80f38f607975f1f0dc48c45"
+  },
+  "abi-consumer.cs.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/consumer/Program.cs",
+    "sha256": "7e9f6bd5d7618db22c4560a6a5b44a8699ec2efe7b31dcbc517d66ac62ab52ae"
+  },
+  "abi-v1.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/v1/CarrierAbi.csproj",
+    "sha256": "828edee81aed5c3a70cfc217136ee7433c4a6c3f2c950068ed421092d116fe76"
+  },
+  "abi-v2.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/v2/CarrierAbi.csproj",
+    "sha256": "828edee81aed5c3a70cfc217136ee7433c4a6c3f2c950068ed421092d116fe76"
+  },
+  "abi-consumer.csproj.txt": {
+    "path": ".guard-tmp/k04-schema-session-abi/consumer/OldConsumer.csproj",
+    "sha256": "9a55af3395dab59a72753906f76d1b399902db1ee17f151c035464b4dc944286"
+  }
+}

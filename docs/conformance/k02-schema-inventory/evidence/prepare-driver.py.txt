@@ -1,0 +1,33 @@
+from pathlib import Path
+import json
+E=Path('docs/conformance/k02-schema-inventory/evidence');P=Path('.guard-tmp/k02-wide');P.mkdir(exist_ok=True)
+s=Path('docs/conformance/k02-schema-loader/evidence/implemented-driver.cs.txt').read_text(encoding='utf-8')
+s=s.replace('var flags=BindingFlags.Public', 'Environment.SetEnvironmentVariable("QTTEST","42");\nEnvironment.SetEnvironmentVariable("QTTEST2","other");\nEnvironment.SetEnvironmentVariable("QTTESTEMPTY","");\nvar flags=BindingFlags.Public')
+s=s.replace('if(mode is not("current" or "guarded"))','if(mode is not("current" or "guarded" or "metadata"))')
+s=s.replace('definition,suite,suite);','definition,suite,"");')
+s=s.replace('env??=Activator.CreateInstance(T("TestEnvironment"),true)!;','''env??=Activator.CreateInstance(T("TestEnvironment"),true)!;
+if(string.IsNullOrEmpty((string?)Property(env,"BaseUri")))env.GetType().GetProperty("BaseUri",flags)!.SetValue(env,q.GetProperty("normalFallbackBaseUri").GetString());''')
+s=s.replace('mode=="guarded");','mode!="current");')
+marker='string kind,message;string? exceptionType=null;'
+insert='''if(mode=="metadata"){
+ var expression=((string)Property(test,"Expression")!).Trim();
+ bool syntax=(bool)Call(T("TestExecutor"),"LooksLikeXQuery",null,expression)!;
+ bool expectedParse=(bool)Call(T("TestExecutor"),"ExpectsParseError",null,Property(test,"ResultElement"))!;
+ var deps=Property(test,"Dependencies")!;var own=Property(test,"OwnDependencies")!;
+ bool HasXq(object d)=>(bool)Call(T("DependencyFilter"),"HasXQueryOnlySpecDependency",null,d)!;
+ bool ownSpec=((System.Collections.IEnumerable)own).Cast<object>().Any(d=>(string?)Property(d,"Type")=="spec");
+ bool xpathOnly=expectedParse&&ownSpec&&!HasXq(own);
+ bool route=(bool)Call(T("TestExecutor"),"CanHandleAsXQuery",null,expression)!&&!xpathOnly&&(HasXq(deps)||(syntax&&!expectedParse));
+ bool axis=((System.Collections.IEnumerable)deps).Cast<object>().Any(d=>(string?)Property(d,"Type")=="feature"&&(string?)Property(d,"Value")=="namespace-axis")&&expression.Contains("namespace::",StringComparison.Ordinal);
+ bool earlyAxis=route&&axis&&syntax;if(route&&axis&&!syntax)route=false;
+ object? metadataValue=earlyAxis?null:Call(T("TestExecutor"),"DecideSchemaInitialization",executor,route,test,env,expression);
+ bool defer=metadataValue is not null&&(bool)metadataValue.GetType().GetField("Item1")!.GetValue(metadataValue)!;
+ string reason=metadataValue is null?"NamespaceAxisQuerySkipped":(string)metadataValue.GetType().GetField("Item2")!.GetValue(metadataValue)!;
+ object[] Resources(string property,string[] fields)=>((System.Collections.IEnumerable)Property(env,property)!).Cast<object>().Select(v=>(object)fields.ToDictionary(k=>k,k=>Property(v,k))).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),mode,deferred=defer,decision=reason,routeXquery=route,expression=(string)Property(test,"Expression")!,assertion=((XElement)Property(test,"ResultElement")!).ToString(SaveOptions.DisableFormatting),schemas=Resources("Schemas",new[]{"Uri","FilePath","XsdVersion"}),sources=Resources("Sources",new[]{"Role","FilePath","Uri","Validation"})}));
+ return;
+}
+'''
+s=s.replace(marker,insert+marker)
+(P/'Program.cs').write_text(s,encoding='utf-8');(E/'driver.cs.txt').write_text(s,encoding='utf-8')
+project=Path('.guard-tmp/k02-implemented/Probe.csproj').read_text(encoding='utf-8').replace('K02LoaderDiagnostic','K02WideDiagnostic');(P/'Probe.csproj').write_text(project,encoding='utf-8');(E/'driver.csproj.txt').write_text(project,encoding='utf-8')

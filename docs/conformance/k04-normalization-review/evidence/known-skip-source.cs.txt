@@ -1,0 +1,3 @@
+        // Upstream defect: the expected value in the catalog carries an artifactual leading
+        // space (formatting), but U+09BE by itself is the only correct result.
+        ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",

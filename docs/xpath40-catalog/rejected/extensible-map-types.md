@@ -4,6 +4,8 @@
   <p>Rejected proposal; record alternatives shipped</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 2 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified rejected proposal and record alternatives**. Keep structural membership, cast, coercion and annotation-aware lookup separate; C05 defects remain. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Extensible map type proposal — Rejected proposal; record alternatives shipped.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.

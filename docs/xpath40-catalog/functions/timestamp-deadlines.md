@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — epoch milliseconds, duration seconds and elapsed budgets</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded epoch/duration profiles**. Signed epoch support is Experimental only; scalar/cardinality tolerance and bounded DateTimeOffset calendar do not certify arbitrary extended-year operations. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **Unsigned floating truncation — 24 October 2026:** [Correction and limits](../UNSIGNED-FLOATING-TRUNCATION.md) truncate finite float/double operands before unsigned range checks, allowing(-1,0) to become unsigned zero. Adds60 constructor/cast/reference/castable cases; exact overflow thresholds and nonfinite errors remain intact. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
 
 
@@ -75,10 +77,7 @@ component would understate elapsed time. The report exposes both unit conversion
 
 ## 6. Language Alignment
 
-`unix-dateTime` uses **nonnegative epoch milliseconds**, returning a UTC
-`xs:dateTimeStamp` in Bosak. Omitted or empty input means zero (the epoch),
-not the current time. A negative argument raises FOCA0002. Unix time assumes
-86,400-second days and does not account for leap seconds.
+In frozen `XPath40`, `unix-dateTime` uses **nonnegative epoch milliseconds** and returns a UTC `xs:dateTimeStamp`; a negative argument raises `FOCA0002`. `XPath40Experimental` supports signed epoch milliseconds within the existing bounded calendar representation. Omitted or empty input means zero (the epoch), not the current time. Unix time assumes 86,400-second days and does not account for leap seconds.
 
 `seconds` accepts an optional decimal count, returning a day-time duration with
 fractional and negative values preserved. `duration-to-seconds` returns an
@@ -127,6 +126,8 @@ Calling `unix-dateTime()` always returns the epoch, which must not be mistaken
 for a receipt's missing timestamp.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Epoch milliseconds, omitted/empty zero and UTC subtype; Experimental signed epochs with frozen negative refusal; Duration total seconds, signs/fractions and bounded-calendar errors. **Boundaries:** Published wide-integer/range fixes are delivered; permissive scalar/cardinality conversion and bounded DateTimeOffset calendar remain separate. Follow-up groups: F01, F02, F08, F10. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Use `CompileOptions.Compatibility40` for the new calls. The default 3.1 profile
 rejects them; the comparison uses `Compatibility31`. The existing

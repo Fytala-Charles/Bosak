@@ -1,0 +1,42 @@
+// Generated read-only audit invoking actual filter and test-case parser methods.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Xml.Linq;
+var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+var suite=args[0];var directory=Path.GetFullPath("tests/"+(suite=="qt3"?"Bosak.XPath.Conformance":"Bosak.XPath.Conformance40")+"/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(ctx,name)=>{var p=Path.Combine(directory,name.Name+".dll");return File.Exists(p)?Assembly.LoadFrom(p):null;};
+var assembly=Assembly.LoadFrom(Path.Combine(directory,(suite=="qt3"?"Bosak.XPath.Conformance":"Bosak.XPath.Conformance40")+".dll"));
+Type T(string n)=>assembly.GetType("Bosak.XPath.Conformance."+n,true)!;
+object? Call(Type t,string n,object? target,params object?[] a)=>t.GetMethod(n,flags)!.Invoke(target,a);
+object Deps(IEnumerable<XElement> input){var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;foreach(var e in input)list.GetType().GetMethod("Add")!.Invoke(list,new[]{Call(T("Dependency"),"FromElement",null,e)});return list;}
+var filterType=T(suite=="qt3"?"DependencyFilter":"DependencyFilter40");var filter=Activator.CreateInstance(filterType,true)!;
+bool Supported(object deps,bool xq=false)=>(bool)(suite=="qt3"?Call(filterType,"IsSupported",filter,deps,xq):Call(filterType,"IsSupported",filter,deps))!;
+bool Revised(object deps,bool xq=false){
+ foreach(var dep in (System.Collections.IEnumerable)deps){
+  var t=dep.GetType();string kind=(string)t.GetProperty("Type")!.GetValue(dep)!;bool positive=(bool)t.GetProperty("Satisfied")!.GetValue(dep)!;
+  var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;
+  bool invert=!positive&&(kind=="spec"||kind=="default-language");
+  object item=invert?Call(T("Dependency"),"FromElement",null,new XElement("dependency",new XAttribute("type",kind),new XAttribute("value",(string)t.GetProperty("Value")!.GetValue(dep)!),new XAttribute("satisfied","true")))!:dep;
+  list.GetType().GetMethod("Add")!.Invoke(list,new[]{item});bool ok=Supported(list,xq);if(invert?ok:!ok)return false;
+ }return true;
+}
+if(suite=="qt4")T("TestCase").GetProperty("DecodeEntitiesInTestExpressions",flags)!.SetValue(null,true);
+if(args.Length>3&&args[3]=="synthetic"){
+ using var writer=new StreamWriter(args[2]);foreach(var q in JsonDocument.Parse(File.ReadAllText(args[1])).RootElement.EnumerateArray()){
+  if(q.GetProperty("Suite").GetString()!=suite)continue;
+  var elements=q.GetProperty("dependencies").EnumerateArray().Select(d=>new XElement("dependency",new XAttribute("type",d.GetProperty("type").GetString()!),new XAttribute("value",d.GetProperty("value").GetString()!),new XAttribute("satisfied",d.GetProperty("satisfied").GetBoolean()?"true":"false")));
+  var deps=Deps(elements);writer.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),suite,xpathSupported=Supported(deps),xquerySupported=suite=="qt3"?(bool?)Supported(deps,true):null,revisedXPath=Revised(deps),revisedXQuery=suite=="qt3"?(bool?)Revised(deps,true):null}));
+ }return;
+}
+var cache=new Dictionary<string,XDocument>();
+using var output=new StreamWriter(args[2]);
+foreach(var row in JsonDocument.Parse(File.ReadAllText(args[1])).RootElement.EnumerateArray()){
+ if(row.GetProperty("Suite").GetString()!=suite)continue;
+ string name=row.GetProperty("Name").GetString()!;var path=Path.GetFullPath(row.GetProperty("SetFile").GetString()!);if(!cache.TryGetValue(path,out var doc)){doc=XDocument.Load(path,LoadOptions.PreserveWhitespace);cache[path]=doc;}var ns=doc.Root!.Name.Namespace;var element=doc.Descendants(ns+"test-case").Single(e=>(string?)e.Attribute("name")==name);
+ var test=Call(T("TestCase"),"FromElement",null,element,ns,Deps(doc.Root.Elements(ns+"dependency")),Path.GetDirectoryName(path))!;
+ var deps=test.GetType().GetProperty("Dependencies",flags)!.GetValue(test)!;string expression=(string)test.GetType().GetProperty("Expression",flags)!.GetValue(test)!;
+ var assessments=new List<object>();foreach(var dep in (System.Collections.IEnumerable)deps){var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;list.GetType().GetMethod("Add")!.Invoke(list,new[]{dep});var type=dep.GetType();assessments.Add(new{type=type.GetProperty("Type")!.GetValue(dep),value=type.GetProperty("Value")!.GetValue(dep),satisfied=type.GetProperty("Satisfied")!.GetValue(dep),xpath=Supported(list),xquery=suite=="qt3"?(bool?)Supported(list,true):null});}
+ bool xpath=Supported(deps);bool? xquery=suite=="qt3"?Supported(deps,true):null;bool? syntax=suite=="qt3"?(bool)Call(T("TestExecutor"),"CanHandleAsXQuery",null,expression)!:null;
+ output.WriteLine(JsonSerializer.Serialize(new{suite,name,setFile=row.GetProperty("SetFile").GetString(),expression,xpathSupported=xpath,xquerySupported=xquery,xquerySyntaxEligible=syntax,normalAdmitted=xpath||(xquery==true&&syntax==true),revisedXPath=Revised(deps),revisedXQuery=suite=="qt3"?(bool?)Revised(deps,true):null,revisedAdmitted=Revised(deps)||(suite=="qt3"&&Revised(deps,true)&&syntax==true),assessments}));
+}

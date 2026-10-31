@@ -1,0 +1,7 @@
+# Carrier equality qualification basis ? 31 October 2026
+
+Record before execution. This is an isolated representation/CLR compatibility and allocation diagnostic, not production XPath semantic adoption. Immutable references remain XPath 3.1 REC-xpath-31-20170321 sections 2.4.2 and 3.14.2; XDM 3.1 REC-xpath-datamodel-31-20170321 sections 3.3.1.1?3 and 5.14. The candidate private no-op/provenance disposition remains in foundation-snapshot-navigation/DISPOSITION.json. No new normative behavior or deviation is selected. Metadata identity is separate from ordinary CLR value equality and never grants assessment/component authority.
+
+The candidate preserves baseline CLR field equality/hash behavior by stripping only its diagnostic marker and calling ValueType's implementation. It does not substitute XPath numeric equality for CLR equality. Existing kind, payload and legacy type-name distinctions remain. The two inherited-method overrides change declared reflection metadata and require explicit manifest review; no public prototype factory or override is promoted into production. Allocation samples are bounded diagnostics, not final consumer budgets.
+
+The first comparison is retained separately in evidence/initial-comparison.zip. The next execution adds direct payload-access checks and explicit CLR Equals/GetHashCode allocation/time measurements before any representation selection. No production source or semantic policy changes.

@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "fcd11117b12546dccdbe2e2608dbc745ccc011d9",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-typed-inspector-review/README.md",
+  "reviewedDossiers": [
+    "braid-integration-design",
+    "braid-typed-inspector"
+  ],
+  "productionChanged": false,
+  "completeProductionGuard": false
+}

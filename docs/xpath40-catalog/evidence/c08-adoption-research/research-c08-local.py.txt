@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+import json,subprocess,re,hashlib
+C=Path('docs/xpath40-catalog');E=C/'evidence/c08-adoption-research';rows=json.loads((C/'evidence/closure-triage/catalog-inventory.json').read_text(encoding='utf-8'))['missingAdoptedSpecPins'];records=[]
+for rev in sorted({v['bosakRevision'] for v in rows}):
+ short=rev[:8];meta=subprocess.check_output(['git','show','-s','--format=%H%n%aI%n%cI%n%B',rev]);(E/(short+'-commit.txt')).write_bytes(meta)
+ result=subprocess.run(['git','grep','-n','-I','-E','qtspecs|qt4cg.org/specifications|adoptedSpec|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in)',rev,'--','docs','src','tests'],capture_output=True)
+ assert result.returncode in [0,1],result.stderr
+ (E/(short+'-source-search.txt')).write_bytes(result.stdout)
+ tree=subprocess.check_output(['git','ls-tree',rev,'tests/qt4tests','tests/qt3tests']);(E/(short+'-fixture-tree.txt')).write_bytes(tree)
+ records.append(dict(bosakRevision=rev,commitReceipt=short+'-commit.txt',sourceSearch=short+'-source-search.txt',sourceSearchExitCode=result.returncode,fixtureTreeReceipt=short+'-fixture-tree.txt',entryCount=sum(v['bosakRevision']==rev for v in rows)))
+(E/'delivery-research.json').write_text(json.dumps(dict(date='2026-10-26',records=records,search='git grep exact delivery trees across docs/src/tests; retain all matching text. Test fixture gitlinks are separate evidence and never assigned as normative spec revisions.'),indent=2)+'\n',encoding='utf-8');print('Saved',len(records),'delivery-tree searches and fixture receipts')

@@ -1,0 +1,5162 @@
+{
+  "catalogs": {
+    "qt3": {
+      "allCases": 31821,
+      "normalGateCases": 31821,
+      "types": [
+        "calendar",
+        "default-language",
+        "feature",
+        "format-integer-sequence",
+        "language",
+        "limits",
+        "spec",
+        "unicode-normalization-form",
+        "unicode-version",
+        "xml-version",
+        "xsd-version"
+      ],
+      "featureValues": [
+        "advanced-uca-fallback",
+        "arbitraryPrecisionDecimal",
+        "collection-stability",
+        "directory-as-collection-uri",
+        "fn-format-integer-CLDR",
+        "fn-load-xquery-module",
+        "fn-transform-XSLT",
+        "fn-transform-XSLT30",
+        "higherOrderFunctions",
+        "infoset-dtd",
+        "moduleImport",
+        "namespace-axis",
+        "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation",
+        "olson-timezone",
+        "remote_http",
+        "schema-location-hint",
+        "schemaImport",
+        "schemaValidation",
+        "serialization",
+        "simple-uca-fallback",
+        "staticTyping",
+        "typedData",
+        "xpath-1.0-compatibility"
+      ]
+    },
+    "qt4": {
+      "allCases": 46985,
+      "normalGateCases": 10330,
+      "types": [
+        "calendar",
+        "default-language",
+        "feature",
+        "format-integer-sequence",
+        "language",
+        "limits",
+        "revalidation",
+        "spec",
+        "unicode-normalization-form",
+        "unicode-version",
+        "xml-version",
+        "xsd-version"
+      ],
+      "featureValues": [
+        "XQUpdate",
+        "advanced-uca-fallback",
+        "arbitraryPrecisionDecimal",
+        "binary",
+        "collection-stability",
+        "directory-as-collection-uri",
+        "expath-file",
+        "fn-format-integer-CLDR",
+        "fn-load-xquery-module",
+        "fn-transform-XSLT",
+        "fn-transform-XSLT30",
+        "fullText",
+        "fullText-defaults",
+        "fullText-ignore",
+        "fullText-units",
+        "higherOrderFunctions",
+        "infoset-dtd",
+        "moduleImport",
+        "namespace-axis",
+        "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation",
+        "olson-timezone",
+        "remote_http",
+        "schema-location-hint",
+        "schemaImport",
+        "schemaValidation",
+        "serialization",
+        "simple-uca-fallback",
+        "staticTyping",
+        "typedData",
+        "xpath-1.0-compatibility"
+      ]
+    }
+  },
+  "gatedSetCount": 224,
+  "groups": [
+    {
+      "suite": "qt3",
+      "type": "calendar",
+      "value": "CB",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en152",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en152",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "default-language",
+      "value": "en",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 12,
+      "examples": [
+        {
+          "name": "format-integer-016",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-017",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-018",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "default-language",
+      "value": "fr-CA",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "default-language-006",
+          "setFile": "tests/qt3tests/fn/default-language.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "advanced-uca-fallback",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 31,
+      "examples": [
+        {
+          "name": "collation-key-009u",
+          "setFile": "tests/qt3tests/fn/collation-key.xml"
+        },
+        {
+          "name": "collation-key-204",
+          "setFile": "tests/qt3tests/fn/collation-key.xml"
+        },
+        {
+          "name": "compare-031",
+          "setFile": "tests/qt3tests/fn/compare.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "arbitraryPrecisionDecimal",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "same-key-008",
+          "setFile": "tests/qt3tests/op/same-key.xml"
+        },
+        {
+          "name": "same-key-025",
+          "setFile": "tests/qt3tests/op/same-key.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "collection-stability",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "collection-004",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        },
+        {
+          "name": "collection-008",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "directory-as-collection-uri",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "collection-010",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-format-integer-CLDR",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-integer-065",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-066",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-load-xquery-module",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 16,
+      "examples": [
+        {
+          "name": "fn-function-lookup-761",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-764",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-load-xquery-module-901",
+          "setFile": "tests/qt3tests/fn/load-xquery-module.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-load-xquery-module",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 88,
+      "examples": [
+        {
+          "name": "fn-function-lookup-760",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-763",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-load-xquery-module-001",
+          "setFile": "tests/qt3tests/fn/load-xquery-module.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-transform-XSLT",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "fn-function-lookup-766b",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-transform-901",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-902",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-transform-XSLT",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 123,
+      "examples": [
+        {
+          "name": "fn-function-lookup-766a",
+          "setFile": "tests/qt3tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-transform-1",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-1a",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-transform-XSLT30",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-transform-err-14",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-902",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "fn-transform-XSLT30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 18,
+      "examples": [
+        {
+          "name": "fn-transform-27",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-50",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-51",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "higherOrderFunctions",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2293,
+      "examples": [
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-02",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-03",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "infoset-dtd",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 32,
+      "examples": [
+        {
+          "name": "fn-id-dtd-5",
+          "setFile": "tests/qt3tests/fn/id.xml"
+        },
+        {
+          "name": "fn-id-dtd-7",
+          "setFile": "tests/qt3tests/fn/id.xml"
+        },
+        {
+          "name": "fn-id-dtd-8",
+          "setFile": "tests/qt3tests/fn/id.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "moduleImport",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 21,
+      "examples": [
+        {
+          "name": "XQST0036_1",
+          "setFile": "tests/qt3tests/misc/CombinedErrorCodes.xml"
+        },
+        {
+          "name": "XQST0036_2",
+          "setFile": "tests/qt3tests/misc/CombinedErrorCodes.xml"
+        },
+        {
+          "name": "XQST0036_3",
+          "setFile": "tests/qt3tests/misc/CombinedErrorCodes.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "namespace-axis",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 36,
+      "examples": [
+        {
+          "name": "generate-id-007",
+          "setFile": "tests/qt3tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-011",
+          "setFile": "tests/qt3tests/fn/generate-id.xml"
+        },
+        {
+          "name": "fn-has-children-020",
+          "setFile": "tests/qt3tests/fn/has-children.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "non_empty_sequence_collection",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 21,
+      "examples": [
+        {
+          "name": "fn-collection-4",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        },
+        {
+          "name": "fn-collection-4d",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        },
+        {
+          "name": "fn-collection-5",
+          "setFile": "tests/qt3tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "non_unicode_codepoint_collation",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 13,
+      "examples": [
+        {
+          "name": "compare-010",
+          "setFile": "tests/qt3tests/fn/compare.xml"
+        },
+        {
+          "name": "K-SeqDeepEqualFunc-56",
+          "setFile": "tests/qt3tests/fn/deep-equal.xml"
+        },
+        {
+          "name": "K-SeqDeepEqualFunc-57",
+          "setFile": "tests/qt3tests/fn/deep-equal.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "olson-timezone",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 8,
+      "examples": [
+        {
+          "name": "format-dateTime-019a",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        },
+        {
+          "name": "format-dateTime-019b",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        },
+        {
+          "name": "format-dateTime-019c",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "remote_http",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-unparsed-text-054",
+          "setFile": "tests/qt3tests/fn/unparsed-text.xml"
+        },
+        {
+          "name": "fn-unparsed-text-054a",
+          "setFile": "tests/qt3tests/fn/unparsed-text.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "schema-location-hint",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "qischema041",
+          "setFile": "tests/qt3tests/prod/SchemaImport.xml"
+        },
+        {
+          "name": "qischema042",
+          "setFile": "tests/qt3tests/prod/SchemaImport.xml"
+        },
+        {
+          "name": "qischema083",
+          "setFile": "tests/qt3tests/prod/SchemaImport.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "schemaImport",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 804,
+      "examples": [
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-025",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "fn-datacomplextype-1",
+          "setFile": "tests/qt3tests/fn/data.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "schemaValidation",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 162,
+      "examples": [
+        {
+          "name": "analyzeString-020",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-021",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "serialization",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "Serialization-026a",
+          "setFile": "tests/qt3tests/prod/OptionDecl.serialization.xml"
+        },
+        {
+          "name": "Serialization-027a",
+          "setFile": "tests/qt3tests/prod/OptionDecl.serialization.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "serialization",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 236,
+      "examples": [
+        {
+          "name": "serialize-xml-035",
+          "setFile": "tests/qt3tests/fn/serialize.xml"
+        },
+        {
+          "name": "serialize-xml-035b",
+          "setFile": "tests/qt3tests/fn/serialize.xml"
+        },
+        {
+          "name": "serialize-xml-036",
+          "setFile": "tests/qt3tests/fn/serialize.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "simple-uca-fallback",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 17,
+      "examples": [
+        {
+          "name": "fn-deep-equal-arrays-13",
+          "setFile": "tests/qt3tests/fn/deep-equal.xml"
+        },
+        {
+          "name": "UCA-collation-011",
+          "setFile": "tests/qt3tests/misc/UCACollation.xml"
+        },
+        {
+          "name": "UCA-collation-012",
+          "setFile": "tests/qt3tests/misc/UCACollation.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "staticTyping",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "parse-xml-fragment-022",
+          "setFile": "tests/qt3tests/fn/parse-xml-fragment.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "staticTyping",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 75,
+      "examples": [
+        {
+          "name": "ST-Data001",
+          "setFile": "tests/qt3tests/fn/data.xml"
+        },
+        {
+          "name": "fn-filter-006",
+          "setFile": "tests/qt3tests/fn/filter.xml"
+        },
+        {
+          "name": "fn-filter-007",
+          "setFile": "tests/qt3tests/fn/filter.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "K2-DirectConElemContent-35b",
+          "setFile": "tests/qt3tests/prod/DirElemContent.xml"
+        },
+        {
+          "name": "K2-ExternalVariablesWith-22a",
+          "setFile": "tests/qt3tests/prod/VarDecl.external.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "K2-DirectConElemContent-35a",
+          "setFile": "tests/qt3tests/prod/DirElemContent.xml"
+        },
+        {
+          "name": "K2-ExternalVariablesWith-22",
+          "setFile": "tests/qt3tests/prod/VarDecl.external.xml"
+        },
+        {
+          "name": "hof-039",
+          "setFile": "tests/qt3tests/misc/HigherOrderFunctions.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "feature",
+      "value": "xpath-1.0-compatibility",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 5,
+      "examples": [
+        {
+          "name": "numberformat15",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat38",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat41",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u0391",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-049",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u03b1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-050",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u0661",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-integer-014",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-015",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u2460",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-046",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u2474",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-047",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u2488",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-048",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\u4e00",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-052",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "format-integer-sequence",
+      "value": "\ufbf4",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-042",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "language",
+      "value": "de",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 14,
+      "examples": [
+        {
+          "name": "format-date-de101",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-de102",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-de103",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "language",
+      "value": "en",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 33,
+      "examples": [
+        {
+          "name": "format-date-en101",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-en102",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-en103",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "language",
+      "value": "fr",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-032-fr",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "language",
+      "value": "it",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-integer-032-it",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-066",
+          "setFile": "tests/qt3tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "language",
+      "value": "xib",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en151",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en151",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "limits",
+      "value": "year_lt_0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en141",
+          "setFile": "tests/qt3tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en141",
+          "setFile": "tests/qt3tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "function-call-reserved-function-names-034",
+          "setFile": "tests/qt3tests/prod/FunctionCall.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20 XP30 XP31 XQ10 XQ30 XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 7,
+      "examples": [
+        {
+          "name": "fn-codepoints-to-string1args-4",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-1",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-ConcatFunc-1",
+          "setFile": "tests/qt3tests/fn/concat.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20 XP30 XQ10 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 7,
+      "examples": [
+        {
+          "name": "cbcl-doc-available-002",
+          "setFile": "tests/qt3tests/fn/doc-available.xml"
+        },
+        {
+          "name": "K-TokenizeFunc-1",
+          "setFile": "tests/qt3tests/fn/tokenize.xml"
+        },
+        {
+          "name": "K-TraceFunc-2",
+          "setFile": "tests/qt3tests/fn/trace.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20 XQ10",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 15,
+      "examples": [
+        {
+          "name": "K-DataFunc-1",
+          "setFile": "tests/qt3tests/fn/data.xml"
+        },
+        {
+          "name": "K-DocumentURIFunc-2",
+          "setFile": "tests/qt3tests/fn/document-uri.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc021",
+          "setFile": "tests/qt3tests/fn/namespace-uri-from-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20 XQ10 XP30 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-string-join-27",
+          "setFile": "tests/qt3tests/fn/string-join.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 62,
+      "examples": [
+        {
+          "name": "generate-id-007",
+          "setFile": "tests/qt3tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-011",
+          "setFile": "tests/qt3tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-018",
+          "setFile": "tests/qt3tests/fn/generate-id.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP20+ XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 301,
+      "examples": [
+        {
+          "name": "K2-SeqDocAvailableFunc-1",
+          "setFile": "tests/qt3tests/fn/doc-available.xml"
+        },
+        {
+          "name": "LocalNameFromQNameFunc021",
+          "setFile": "tests/qt3tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "fn-sum-12",
+          "setFile": "tests/qt3tests/fn/sum.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP30 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "FunctionCall-044",
+          "setFile": "tests/qt3tests/prod/FunctionCall.xml"
+        },
+        {
+          "name": "inline-fn-006",
+          "setFile": "tests/qt3tests/prod/InlineFunctionExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 41,
+      "examples": [
+        {
+          "name": "K2-DataFunc-6",
+          "setFile": "tests/qt3tests/fn/data.xml"
+        },
+        {
+          "name": "numberformat15",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat38",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP30+ XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 346,
+      "examples": [
+        {
+          "name": "fn-adjust-date-to-timezone-3",
+          "setFile": "tests/qt3tests/fn/adjust-date-to-timezone.xml"
+        },
+        {
+          "name": "fn-adjust-date-to-timezone-4",
+          "setFile": "tests/qt3tests/fn/adjust-date-to-timezone.xml"
+        },
+        {
+          "name": "fn-adjust-date-to-timezone-18",
+          "setFile": "tests/qt3tests/fn/adjust-date-to-timezone.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP30+ XQ30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 4270,
+      "examples": [
+        {
+          "name": "analyzeString-001",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-002",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-002a",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP31 XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 106,
+      "examples": [
+        {
+          "name": "compare-017",
+          "setFile": "tests/qt3tests/fn/compare.xml"
+        },
+        {
+          "name": "compare-018",
+          "setFile": "tests/qt3tests/fn/compare.xml"
+        },
+        {
+          "name": "compare-019",
+          "setFile": "tests/qt3tests/fn/compare.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "fn-innermost-059",
+          "setFile": "tests/qt3tests/fn/innermost.xml"
+        },
+        {
+          "name": "json-to-xml-017",
+          "setFile": "tests/qt3tests/fn/json-to-xml.xml"
+        },
+        {
+          "name": "json-to-xml-037",
+          "setFile": "tests/qt3tests/fn/json-to-xml.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP31+ XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "same-key-027",
+          "setFile": "tests/qt3tests/op/same-key.xml"
+        },
+        {
+          "name": "same-key-028",
+          "setFile": "tests/qt3tests/op/same-key.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP31+ XQ31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2720,
+      "examples": [
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-02",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XP31+ XQ31+ XT30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 337,
+      "examples": [
+        {
+          "name": "map-merge-001",
+          "setFile": "tests/qt3tests/map/merge.xml"
+        },
+        {
+          "name": "map-merge-002",
+          "setFile": "tests/qt3tests/map/merge.xml"
+        },
+        {
+          "name": "map-merge-003-hof",
+          "setFile": "tests/qt3tests/map/merge.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 117,
+      "examples": [
+        {
+          "name": "cbcl-distinct-values-002",
+          "setFile": "tests/qt3tests/fn/distinct-values.xml"
+        },
+        {
+          "name": "Axes127",
+          "setFile": "tests/qt3tests/prod/AxisStep.xml"
+        },
+        {
+          "name": "K-SeqExprCastable-4",
+          "setFile": "tests/qt3tests/prod/CastableExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10 XP20",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 7,
+      "examples": [
+        {
+          "name": "LocalNameFromQNameFunc015",
+          "setFile": "tests/qt3tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc015",
+          "setFile": "tests/qt3tests/fn/namespace-uri-from-QName.xml"
+        },
+        {
+          "name": "K-StringJoinFunc-1",
+          "setFile": "tests/qt3tests/fn/string-join.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10 XP20 XQ30 XP30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "K-ErrorFunc-4",
+          "setFile": "tests/qt3tests/fn/error.xml"
+        },
+        {
+          "name": "XPTY0004_12",
+          "setFile": "tests/qt3tests/misc/CombinedErrorCodes.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 11,
+      "examples": [
+        {
+          "name": "K2-ComputeConComment-4",
+          "setFile": "tests/qt3tests/prod/CompCommentConstructor.xml"
+        },
+        {
+          "name": "K2-ConText-5",
+          "setFile": "tests/qt3tests/prod/CompTextConstructor.xml"
+        },
+        {
+          "name": "Constr-attr-enclexpr-9",
+          "setFile": "tests/qt3tests/prod/DirAttributeList.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 7539,
+      "examples": [
+        {
+          "name": "fn-absint1args-1-dyn",
+          "setFile": "tests/qt3tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-absdec1args-1-dyn",
+          "setFile": "tests/qt3tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-absdbl1args-1-dyn",
+          "setFile": "tests/qt3tests/fn/abs.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10+ XP20+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 15,
+      "examples": [
+        {
+          "name": "fn-nilled-31",
+          "setFile": "tests/qt3tests/fn/nilled.xml"
+        },
+        {
+          "name": "fn-nilled-32",
+          "setFile": "tests/qt3tests/fn/nilled.xml"
+        },
+        {
+          "name": "fn-nilled-33",
+          "setFile": "tests/qt3tests/fn/nilled.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ10+ XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 7,
+      "examples": [
+        {
+          "name": "cbcl-codepoints-to-string-021",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-022",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-count-003",
+          "setFile": "tests/qt3tests/fn/count.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "numberformat127",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ30 XP30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "numberformat128",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1946,
+      "examples": [
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-025",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-026",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ30+ XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 17,
+      "examples": [
+        {
+          "name": "numberformat86",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        },
+        {
+          "name": "LocalNameFromQNameFunc015a",
+          "setFile": "tests/qt3tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc015a",
+          "setFile": "tests/qt3tests/fn/namespace-uri-from-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 151,
+      "examples": [
+        {
+          "name": "xml-to-json-021",
+          "setFile": "tests/qt3tests/fn/xml-to-json.xml"
+        },
+        {
+          "name": "xml-to-json-022",
+          "setFile": "tests/qt3tests/fn/xml-to-json.xml"
+        },
+        {
+          "name": "xml-to-json-023",
+          "setFile": "tests/qt3tests/fn/xml-to-json.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1084,
+      "examples": [
+        {
+          "name": "analyzeString-028",
+          "setFile": "tests/qt3tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "fn-apply-05",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-14",
+          "setFile": "tests/qt3tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "spec",
+      "value": "XQ31+ XP31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 128,
+      "examples": [
+        {
+          "name": "K-ErrorFunc-4a",
+          "setFile": "tests/qt3tests/fn/error.xml"
+        },
+        {
+          "name": "numberformat123",
+          "setFile": "tests/qt3tests/fn/format-number.xml"
+        },
+        {
+          "name": "fn-transform-1",
+          "setFile": "tests/qt3tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-normalization-form",
+      "value": "FULLY-NORMALIZED",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "cbcl-fn-normalize-unicode-001a",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        },
+        {
+          "name": "cbcl-fn-normalize-unicode-006a",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-normalization-form",
+      "value": "FULLY-NORMALIZED",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "cbcl-fn-normalize-unicode-001",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        },
+        {
+          "name": "cbcl-fn-normalize-unicode-006",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-normalization-form",
+      "value": "NFD",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-6",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-normalization-form",
+      "value": "NFKC",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-8",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-normalization-form",
+      "value": "NFKD",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-7",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-version",
+      "value": "5.2",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-version",
+      "value": "6.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11-6-0",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-version",
+      "value": "6.2",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11-6-2",
+          "setFile": "tests/qt3tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "unicode-version",
+      "value": "7.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-lower-case-19",
+          "setFile": "tests/qt3tests/fn/lower-case.xml"
+        },
+        {
+          "name": "fn-upper-case-19",
+          "setFile": "tests/qt3tests/fn/upper-case.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xml-version",
+      "value": "1.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 37,
+      "examples": [
+        {
+          "name": "K-CodepointToStringFunc-8",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-11",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-12",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xml-version",
+      "value": "1.0:4-",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "XML10-4ed-Excluded-char-1",
+          "setFile": "tests/qt3tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "XML11-1ed-Included-char-1",
+          "setFile": "tests/qt3tests/misc/XMLEdition.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xml-version",
+      "value": "1.0:5+ 1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "XML10-4ed-Excluded-char-1-new",
+          "setFile": "tests/qt3tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "XML11-1ed-Included-char-1-new",
+          "setFile": "tests/qt3tests/misc/XMLEdition.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xml-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 33,
+      "examples": [
+        {
+          "name": "K-CodepointToStringFunc-8a",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-11b",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-12b",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xsd-version",
+      "value": "1.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 37,
+      "examples": [
+        {
+          "name": "cbcl-codepoints-to-string-002",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-003",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-004",
+          "setFile": "tests/qt3tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt3",
+      "type": "xsd-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 85,
+      "examples": [
+        {
+          "name": "K2-MatchesFunc-16",
+          "setFile": "tests/qt3tests/fn/matches.xml"
+        },
+        {
+          "name": "re00056a",
+          "setFile": "tests/qt3tests/fn/matches.re.xml"
+        },
+        {
+          "name": "re00086a",
+          "setFile": "tests/qt3tests/fn/matches.re.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "calendar",
+      "value": "CB",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en152",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en152",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "default-language",
+      "value": "en",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 12,
+      "examples": [
+        {
+          "name": "format-integer-016",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-017",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-018",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "default-language",
+      "value": "fr-CA",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "default-language-006",
+          "setFile": "tests/qt4tests/fn/default-language.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "XQUpdate",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 825,
+      "examples": [
+        {
+          "name": "variable-declaration-001",
+          "setFile": "tests/qt4tests/upd/VariableDeclaration.xml"
+        },
+        {
+          "name": "variable-declaration-002",
+          "setFile": "tests/qt4tests/upd/VariableDeclaration.xml"
+        },
+        {
+          "name": "id-function-declaration-001",
+          "setFile": "tests/qt4tests/upd/FunctionDeclaration.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "advanced-uca-fallback",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 14,
+      "examples": [
+        {
+          "name": "fn-contains-21",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        },
+        {
+          "name": "fn-contains-23",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        },
+        {
+          "name": "fn-contains-32",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "advanced-uca-fallback",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 17,
+      "examples": [
+        {
+          "name": "collation-key-009u",
+          "setFile": "tests/qt4tests/fn/collation-key.xml"
+        },
+        {
+          "name": "collation-key-204",
+          "setFile": "tests/qt4tests/fn/collation-key.xml"
+        },
+        {
+          "name": "compare-031",
+          "setFile": "tests/qt4tests/fn/compare.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "arbitraryPrecisionDecimal",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "same-key-008",
+          "setFile": "tests/qt4tests/op/same-key.xml"
+        },
+        {
+          "name": "same-key-025",
+          "setFile": "tests/qt4tests/op/same-key.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "binary",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 672,
+      "examples": [
+        {
+          "name": "EXPath-binary-bitwise-and-001",
+          "setFile": "tests/qt4tests/bin/and.xml"
+        },
+        {
+          "name": "EXPath-binary-bitwise-and-002",
+          "setFile": "tests/qt4tests/bin/and.xml"
+        },
+        {
+          "name": "EXPath-binary-bitwise-and-003",
+          "setFile": "tests/qt4tests/bin/and.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "collection-stability",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "collection-004",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        },
+        {
+          "name": "collection-008",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "directory-as-collection-uri",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "collection-010",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "expath-file",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 270,
+      "examples": [
+        {
+          "name": "EXPath-file-exists-001",
+          "setFile": "tests/qt4tests/file/file.xml"
+        },
+        {
+          "name": "EXPath-file-exists-002",
+          "setFile": "tests/qt4tests/file/file.xml"
+        },
+        {
+          "name": "EXPath-file-exists-003",
+          "setFile": "tests/qt4tests/file/file.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-format-integer-CLDR",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "format-integer-065",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-066",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-076",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-load-xquery-module",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 16,
+      "examples": [
+        {
+          "name": "fn-function-lookup-761",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-764",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-load-xquery-module-901",
+          "setFile": "tests/qt4tests/fn/load-xquery-module.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-load-xquery-module",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 317,
+      "examples": [
+        {
+          "name": "fn-function-lookup-760",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-762",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-763",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-transform-XSLT",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "fn-function-lookup-766b",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-transform-901",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-902",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-transform-XSLT",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 133,
+      "examples": [
+        {
+          "name": "fn-function-lookup-766a",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-transform-1",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-1a",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-transform-XSLT30",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-transform-err-14",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-902",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fn-transform-XSLT30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 21,
+      "examples": [
+        {
+          "name": "fn-transform-27",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-50",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        },
+        {
+          "name": "fn-transform-51",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fullText",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 685,
+      "examples": [
+        {
+          "name": "examples-222-q1",
+          "setFile": "tests/qt4tests/ft/Examples2.2.2.xml"
+        },
+        {
+          "name": "examples-222-q1b",
+          "setFile": "tests/qt4tests/ft/Examples2.2.2.xml"
+        },
+        {
+          "name": "examples-222-q2",
+          "setFile": "tests/qt4tests/ft/Examples2.2.2.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fullText-defaults",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "ft-3.4.1-examples-q1",
+          "setFile": "tests/qt4tests/ft/Examples3.4.1.xml"
+        },
+        {
+          "name": "ft-3.4.3-expressions-q6",
+          "setFile": "tests/qt4tests/ft/FTThesaurus.xml"
+        },
+        {
+          "name": "ft-3.4.7-expressions-q1",
+          "setFile": "tests/qt4tests/ft/FTStopWord.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fullText-ignore",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 14,
+      "examples": [
+        {
+          "name": "FTIgnore-unconstrained-q1",
+          "setFile": "tests/qt4tests/ft/IgnoreUnconstrained.xml"
+        },
+        {
+          "name": "FTIgnore-unconstrained-q2",
+          "setFile": "tests/qt4tests/ft/IgnoreUnconstrained.xml"
+        },
+        {
+          "name": "FTIgnore-unconstrained-q3",
+          "setFile": "tests/qt4tests/ft/IgnoreUnconstrained.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "fullText-units",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 10,
+      "examples": [
+        {
+          "name": "examples-364-2",
+          "setFile": "tests/qt4tests/ft/Examples3.6.4.xml"
+        },
+        {
+          "name": "FTWindow-paragraphs1",
+          "setFile": "tests/qt4tests/ft/FTWindow.xml"
+        },
+        {
+          "name": "FTWindow-paragraphs3",
+          "setFile": "tests/qt4tests/ft/FTWindow.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "higherOrderFunctions",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2667,
+      "examples": [
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-02",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-03",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "higherOrderFunctions",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 241,
+      "examples": [
+        {
+          "name": "fn-available-environment-variables-001",
+          "setFile": "tests/qt4tests/fn/available-environment-variables.xml"
+        },
+        {
+          "name": "fn-available-environment-variables-002",
+          "setFile": "tests/qt4tests/fn/available-environment-variables.xml"
+        },
+        {
+          "name": "fn-available-environment-variables-003",
+          "setFile": "tests/qt4tests/fn/available-environment-variables.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "infoset-dtd",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "functx-functx-id-from-element-1",
+          "setFile": "tests/qt4tests/app/FunctxFunctx.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "infoset-dtd",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 31,
+      "examples": [
+        {
+          "name": "fn-id-dtd-5",
+          "setFile": "tests/qt4tests/fn/id.xml"
+        },
+        {
+          "name": "fn-id-dtd-7",
+          "setFile": "tests/qt4tests/fn/id.xml"
+        },
+        {
+          "name": "fn-id-dtd-8",
+          "setFile": "tests/qt4tests/fn/id.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "moduleImport",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 21,
+      "examples": [
+        {
+          "name": "XQST0036_1",
+          "setFile": "tests/qt4tests/misc/CombinedErrorCodes.xml"
+        },
+        {
+          "name": "XQST0036_2",
+          "setFile": "tests/qt4tests/misc/CombinedErrorCodes.xml"
+        },
+        {
+          "name": "XQST0036_3",
+          "setFile": "tests/qt4tests/misc/CombinedErrorCodes.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "namespace-axis",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 36,
+      "examples": [
+        {
+          "name": "generate-id-007",
+          "setFile": "tests/qt4tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-011",
+          "setFile": "tests/qt4tests/fn/generate-id.xml"
+        },
+        {
+          "name": "fn-has-children-020",
+          "setFile": "tests/qt4tests/fn/has-children.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "non_empty_sequence_collection",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 10,
+      "examples": [
+        {
+          "name": "fn-function-lookup-370",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-372",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-function-lookup-374",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "non_empty_sequence_collection",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 11,
+      "examples": [
+        {
+          "name": "fn-collection-4",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        },
+        {
+          "name": "fn-collection-4d",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        },
+        {
+          "name": "fn-collection-5",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "non_unicode_codepoint_collation",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 12,
+      "examples": [
+        {
+          "name": "K-SeqDeepEqualFunc-56",
+          "setFile": "tests/qt4tests/fn/deep-equal.xml"
+        },
+        {
+          "name": "K-SeqDeepEqualFunc-57",
+          "setFile": "tests/qt4tests/fn/deep-equal.xml"
+        },
+        {
+          "name": "K-SeqDeepEqualFunc-58",
+          "setFile": "tests/qt4tests/fn/deep-equal.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "non_unicode_codepoint_collation",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "compare-010",
+          "setFile": "tests/qt4tests/fn/compare.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "olson-timezone",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 8,
+      "examples": [
+        {
+          "name": "format-dateTime-019a",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        },
+        {
+          "name": "format-dateTime-019b",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        },
+        {
+          "name": "format-dateTime-019c",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "remote_http",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-unparsed-text-054",
+          "setFile": "tests/qt4tests/fn/unparsed-text.xml"
+        },
+        {
+          "name": "fn-unparsed-text-054a",
+          "setFile": "tests/qt4tests/fn/unparsed-text.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schema-location-hint",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "qischema041",
+          "setFile": "tests/qt4tests/prod/SchemaImport.xml"
+        },
+        {
+          "name": "qischema042",
+          "setFile": "tests/qt4tests/prod/SchemaImport.xml"
+        },
+        {
+          "name": "qischema083",
+          "setFile": "tests/qt4tests/prod/SchemaImport.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaImport",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-doc-available-40-070",
+          "setFile": "tests/qt4tests/fn/doc-available.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaImport",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1038,
+      "examples": [
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-025",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-037",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaImport",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 98,
+      "examples": [
+        {
+          "name": "csv-to-xml-202",
+          "setFile": "tests/qt4tests/fn/csv-to-xml.xml"
+        },
+        {
+          "name": "csv-to-xml-203",
+          "setFile": "tests/qt4tests/fn/csv-to-xml.xml"
+        },
+        {
+          "name": "fn-datacomplextype-1",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaValidation",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-json-to-xml-739",
+          "setFile": "tests/qt4tests/fn/json-to-xml.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaValidation",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 341,
+      "examples": [
+        {
+          "name": "analyzeString-020",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-021",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "schemaValidation",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 56,
+      "examples": [
+        {
+          "name": "csv-to-xml-202",
+          "setFile": "tests/qt4tests/fn/csv-to-xml.xml"
+        },
+        {
+          "name": "csv-to-xml-203",
+          "setFile": "tests/qt4tests/fn/csv-to-xml.xml"
+        },
+        {
+          "name": "cbcl-data-002",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "serialization",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "Serialization-026a",
+          "setFile": "tests/qt4tests/prod/OptionDecl.serialization.xml"
+        },
+        {
+          "name": "Serialization-027a",
+          "setFile": "tests/qt4tests/prod/OptionDecl.serialization.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "serialization",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 329,
+      "examples": [
+        {
+          "name": "serialize-xml-035",
+          "setFile": "tests/qt4tests/fn/serialize.xml"
+        },
+        {
+          "name": "serialize-xml-035b",
+          "setFile": "tests/qt4tests/fn/serialize.xml"
+        },
+        {
+          "name": "serialize-xml-036",
+          "setFile": "tests/qt4tests/fn/serialize.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "simple-uca-fallback",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 17,
+      "examples": [
+        {
+          "name": "fn-collation-UCA-011",
+          "setFile": "tests/qt4tests/fn/collation.xml"
+        },
+        {
+          "name": "fn-collation-UCA-012",
+          "setFile": "tests/qt4tests/fn/collation.xml"
+        },
+        {
+          "name": "fn-collation-UCA-013",
+          "setFile": "tests/qt4tests/fn/collation.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "simple-uca-fallback",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 16,
+      "examples": [
+        {
+          "name": "UCA-collation-011",
+          "setFile": "tests/qt4tests/misc/UCACollation.xml"
+        },
+        {
+          "name": "UCA-collation-012",
+          "setFile": "tests/qt4tests/misc/UCACollation.xml"
+        },
+        {
+          "name": "UCA-collation-013",
+          "setFile": "tests/qt4tests/misc/UCACollation.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "staticTyping",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "parse-xml-fragment-022",
+          "setFile": "tests/qt4tests/fn/parse-xml-fragment.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "staticTyping",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 101,
+      "examples": [
+        {
+          "name": "fn-filter-006",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        },
+        {
+          "name": "fn-filter-007",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        },
+        {
+          "name": "fn-filter-008",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "staticTyping",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "ST-Data001",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        },
+        {
+          "name": "fn-function-arity-010",
+          "setFile": "tests/qt4tests/fn/function-arity.xml"
+        },
+        {
+          "name": "fn-function-arity-012",
+          "setFile": "tests/qt4tests/fn/function-arity.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K2-ExternalVariablesWith-22a",
+          "setFile": "tests/qt4tests/prod/VarDecl.external.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": false,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K2-DirectConElemContent-35b",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 24,
+      "examples": [
+        {
+          "name": "atomic-type-annotation-100",
+          "setFile": "tests/qt4tests/fn/atomic-type-annotation.xml"
+        },
+        {
+          "name": "atomic-type-annotation-101",
+          "setFile": "tests/qt4tests/fn/atomic-type-annotation.xml"
+        },
+        {
+          "name": "atomic-type-annotation-102",
+          "setFile": "tests/qt4tests/fn/atomic-type-annotation.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "typedData",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "Constr-cont-constrmod-9",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        },
+        {
+          "name": "Constr-cont-constrmod-10",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        },
+        {
+          "name": "K2-DirectConElemContent-35a",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "feature",
+      "value": "xpath-1.0-compatibility",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 5,
+      "examples": [
+        {
+          "name": "numberformat15",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat38",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat41",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u0391",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-049",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u03b1",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-050",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u0661",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-integer-014",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-015",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u2460",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-046",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u2474",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-047",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u2488",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-048",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\u4e00",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-052",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "format-integer-sequence",
+      "value": "\ufbf4",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-042",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "language",
+      "value": "de",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 16,
+      "examples": [
+        {
+          "name": "format-date-de101",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-de102",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-de103",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "language",
+      "value": "en",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 35,
+      "examples": [
+        {
+          "name": "format-date-en101",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-en102",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-date-en103",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "language",
+      "value": "fr",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "format-integer-032-fr",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "language",
+      "value": "it",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-integer-032-it",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        },
+        {
+          "name": "format-integer-066",
+          "setFile": "tests/qt4tests/fn/format-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "language",
+      "value": "xib",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en151",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en151",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "limits",
+      "value": "big_integer",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "EXPath-binary-unpack-unsigned-integer-013",
+          "setFile": "tests/qt4tests/bin/unpack-unsigned-integer.xml"
+        },
+        {
+          "name": "EXPath-binary-unpack-unsigned-integer-014",
+          "setFile": "tests/qt4tests/bin/unpack-unsigned-integer.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "limits",
+      "value": "year_lt_0",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "format-date-en141",
+          "setFile": "tests/qt4tests/fn/format-date.xml"
+        },
+        {
+          "name": "format-dateTime-en141",
+          "setFile": "tests/qt4tests/fn/format-dateTime.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "revalidation",
+      "value": "lax",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "revalidation-declaration-03-fail",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationLaxUnsupported.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "revalidation",
+      "value": "lax",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 19,
+      "examples": [
+        {
+          "name": "revalidation-declaration-003",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationLax.xml"
+        },
+        {
+          "name": "revalidation-declaration-004",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationLax.xml"
+        },
+        {
+          "name": "revalidate-vallax-del-001",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationLax.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "revalidation",
+      "value": "skip",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "revalidation-declaration-05-fail",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationSkipUnsupported.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "revalidation",
+      "value": "strict",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "revalidation-declaration-01-fail",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationStrictUnsupported.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "revalidation",
+      "value": "strict",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 21,
+      "examples": [
+        {
+          "name": "revalidation-declaration-001",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationStrict.xml"
+        },
+        {
+          "name": "revalidation-declaration-002",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationStrict.xml"
+        },
+        {
+          "name": "revalidate-valstrict-del-001",
+          "setFile": "tests/qt4tests/upd/RevalidationDeclarationStrict.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "function-call-reserved-function-names-034",
+          "setFile": "tests/qt4tests/prod/FunctionCall.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XP31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "K-ForExprWithout-57",
+          "setFile": "tests/qt4tests/prod/ForClause.xml"
+        },
+        {
+          "name": "K-ForExprWithout-58",
+          "setFile": "tests/qt4tests/prod/ForClause.xml"
+        },
+        {
+          "name": "hof-907",
+          "setFile": "tests/qt4tests/misc/HigherOrderFunctions.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XP31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "LetExpr023",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "LetExpr024",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XP31 XQ10 XQ30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 137,
+      "examples": [
+        {
+          "name": "fn-codepoints-to-string1args-4",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-1",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-8",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XP31 XQ10 XQ30 XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "compare-011",
+          "setFile": "tests/qt4tests/fn/compare.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XP31 XQ30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 26,
+      "examples": [
+        {
+          "name": "K-SeqIndexOfFunc-3",
+          "setFile": "tests/qt4tests/fn/index-of.xml"
+        },
+        {
+          "name": "K-MatchesFunc-3",
+          "setFile": "tests/qt4tests/fn/matches.xml"
+        },
+        {
+          "name": "fn-min-8",
+          "setFile": "tests/qt4tests/fn/min.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XQ10 XQ30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 6,
+      "examples": [
+        {
+          "name": "cbcl-doc-available-002",
+          "setFile": "tests/qt4tests/fn/doc-available.xml"
+        },
+        {
+          "name": "K-TokenizeFunc-1",
+          "setFile": "tests/qt4tests/fn/tokenize.xml"
+        },
+        {
+          "name": "function-call-reserved-function-names-041",
+          "setFile": "tests/qt4tests/prod/FunctionCall.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XQ10 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-TraceFunc-2",
+          "setFile": "tests/qt4tests/fn/trace.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XP30 XQ10 XQ30 XP31 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-deep-equal-mix-args-018",
+          "setFile": "tests/qt4tests/fn/deep-equal.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XQ10",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 13,
+      "examples": [
+        {
+          "name": "K-DocumentURIFunc-2",
+          "setFile": "tests/qt4tests/fn/document-uri.xml"
+        },
+        {
+          "name": "K-NilledFunc-1",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        },
+        {
+          "name": "K-NodeNameFunc-1",
+          "setFile": "tests/qt4tests/fn/node-name.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XQ10",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "K-DataFunc-1",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc021",
+          "setFile": "tests/qt4tests/fn/namespace-uri-from-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20 XQ10 XP30 XQ30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-string-join-27",
+          "setFile": "tests/qt4tests/fn/string-join.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 34,
+      "examples": [
+        {
+          "name": "generate-id-007",
+          "setFile": "tests/qt4tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-011",
+          "setFile": "tests/qt4tests/fn/generate-id.xml"
+        },
+        {
+          "name": "generate-id-018",
+          "setFile": "tests/qt4tests/fn/generate-id.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 23,
+      "examples": [
+        {
+          "name": "fn-iri-to-uri-18A",
+          "setFile": "tests/qt4tests/fn/iri-to-uri.xml"
+        },
+        {
+          "name": "fn-resolve-qname-23",
+          "setFile": "tests/qt4tests/fn/resolve-QName.xml"
+        },
+        {
+          "name": "fn-resolve-qname-24",
+          "setFile": "tests/qt4tests/fn/resolve-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20+ XQ10+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 18,
+      "examples": [
+        {
+          "name": "K2-SeqDocAvailableFunc-1",
+          "setFile": "tests/qt4tests/fn/doc-available.xml"
+        },
+        {
+          "name": "fn-sum-12",
+          "setFile": "tests/qt4tests/fn/sum.xml"
+        },
+        {
+          "name": "fn-sum-13",
+          "setFile": "tests/qt4tests/fn/sum.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20+ XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 282,
+      "examples": [
+        {
+          "name": "LocalNameFromQNameFunc021",
+          "setFile": "tests/qt4tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "op-logical-and-038",
+          "setFile": "tests/qt4tests/prod/OrExpr.xml"
+        },
+        {
+          "name": "op-logical-and-039",
+          "setFile": "tests/qt4tests/prod/OrExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP20+ XQ40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "PathExpr-5p",
+          "setFile": "tests/qt4tests/prod/PathExpr.xml"
+        },
+        {
+          "name": "PathExpr-7p",
+          "setFile": "tests/qt4tests/prod/PathExpr.xml"
+        },
+        {
+          "name": "PathExpr-8p",
+          "setFile": "tests/qt4tests/prod/PathExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XP31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "MapConstructor-010",
+          "setFile": "tests/qt4tests/prod/MapConstructor.xml"
+        },
+        {
+          "name": "MapConstructor-011",
+          "setFile": "tests/qt4tests/prod/MapConstructor.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XP31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "LetExpr020a",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XP31 XP30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "analyzeString-903",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XP31 XQ30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 72,
+      "examples": [
+        {
+          "name": "filter-902",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        },
+        {
+          "name": "fn-filter-015",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        },
+        {
+          "name": "fn-filter-026",
+          "setFile": "tests/qt4tests/fn/filter.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XP31 XQ30 XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "treat-as-28",
+          "setFile": "tests/qt4tests/prod/TreatExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XQ30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "FunctionCall-044",
+          "setFile": "tests/qt4tests/prod/FunctionCall.xml"
+        },
+        {
+          "name": "inline-fn-006",
+          "setFile": "tests/qt4tests/prod/InlineFunctionExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30 XQ30 XP31 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "named-function-ref-reserved-function-names-005",
+          "setFile": "tests/qt4tests/prod/NamedFunctionRef.xml"
+        },
+        {
+          "name": "K2-NodeTest-7",
+          "setFile": "tests/qt4tests/prod/NodeTest.xml"
+        },
+        {
+          "name": "K2-NodeTest-14",
+          "setFile": "tests/qt4tests/prod/NodeTest.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 39,
+      "examples": [
+        {
+          "name": "numberformat15",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat38",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "numberformat41",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K2-DataFunc-6",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+ XQ10+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 203,
+      "examples": [
+        {
+          "name": "K2-ContainsFunc-1",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        },
+        {
+          "name": "K2-ContainsFunc-2",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        },
+        {
+          "name": "K2-ContainsFunc-3",
+          "setFile": "tests/qt4tests/fn/contains.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+ XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 156,
+      "examples": [
+        {
+          "name": "fn-adjust-date-to-timezone-3",
+          "setFile": "tests/qt4tests/fn/adjust-date-to-timezone.xml"
+        },
+        {
+          "name": "fn-adjust-date-to-timezone-4",
+          "setFile": "tests/qt4tests/fn/adjust-date-to-timezone.xml"
+        },
+        {
+          "name": "fn-adjust-date-to-timezone-18",
+          "setFile": "tests/qt4tests/fn/adjust-date-to-timezone.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+ XQ30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4690,
+      "examples": [
+        {
+          "name": "analyzeString-001",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-002",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-002a",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP30+ XQ30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 272,
+      "examples": [
+        {
+          "name": "fn-abs-2",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-abs-3",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-abs-4",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 60,
+      "examples": [
+        {
+          "name": "fn-apply-12",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "for-each-pair-903",
+          "setFile": "tests/qt4tests/fn/for-each-pair.xml"
+        },
+        {
+          "name": "for-each-pair-904",
+          "setFile": "tests/qt4tests/fn/for-each-pair.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "json-to-xml-017",
+          "setFile": "tests/qt4tests/fn/json-to-xml.xml"
+        },
+        {
+          "name": "json-to-xml-037",
+          "setFile": "tests/qt4tests/fn/json-to-xml.xml"
+        },
+        {
+          "name": "json-to-xml-038",
+          "setFile": "tests/qt4tests/fn/json-to-xml.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+ XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-innermost-059",
+          "setFile": "tests/qt4tests/fn/innermost.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+ XQ31+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2040,
+      "examples": [
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-01",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-02",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+ XQ31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 615,
+      "examples": [
+        {
+          "name": "boolean-010",
+          "setFile": "tests/qt4tests/fn/boolean.xml"
+        },
+        {
+          "name": "boolean-010b",
+          "setFile": "tests/qt4tests/fn/boolean.xml"
+        },
+        {
+          "name": "boolean-011",
+          "setFile": "tests/qt4tests/fn/boolean.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+ XQ31+ XT30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 188,
+      "examples": [
+        {
+          "name": "map-for-each-001",
+          "setFile": "tests/qt4tests/map/for-each.xml"
+        },
+        {
+          "name": "map-for-each-002",
+          "setFile": "tests/qt4tests/map/for-each.xml"
+        },
+        {
+          "name": "map-for-each-003",
+          "setFile": "tests/qt4tests/map/for-each.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP31+ XQ31+ XT30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 174,
+      "examples": [
+        {
+          "name": "map-contains-001",
+          "setFile": "tests/qt4tests/map/contains.xml"
+        },
+        {
+          "name": "map-contains-002",
+          "setFile": "tests/qt4tests/map/contains.xml"
+        },
+        {
+          "name": "map-contains-003",
+          "setFile": "tests/qt4tests/map/contains.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 5,
+      "examples": [
+        {
+          "name": "expanded-QName-004-XP",
+          "setFile": "tests/qt4tests/fn/expanded-QName.xml"
+        },
+        {
+          "name": "fn-siblings-011",
+          "setFile": "tests/qt4tests/fn/siblings.xml"
+        },
+        {
+          "name": "type-of-007",
+          "setFile": "tests/qt4tests/fn/type-of.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP40+ XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "LetExpr022",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "LetExpr023a",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "LetExpr024a",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP40+ XQ31+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 6,
+      "examples": [
+        {
+          "name": "MapType-093",
+          "setFile": "tests/qt4tests/prod/MapType.xml"
+        },
+        {
+          "name": "MapType-096",
+          "setFile": "tests/qt4tests/prod/MapType.xml"
+        },
+        {
+          "name": "MapType-097",
+          "setFile": "tests/qt4tests/prod/MapType.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP40+ XQ40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 8272,
+      "examples": [
+        {
+          "name": "all-different-001",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        },
+        {
+          "name": "all-different-002",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        },
+        {
+          "name": "all-different-003",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XP40+ XQ40+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1565,
+      "examples": [
+        {
+          "name": "atomic-equal-001",
+          "setFile": "tests/qt4tests/fn/atomic-equal.xml"
+        },
+        {
+          "name": "atomic-equal-002",
+          "setFile": "tests/qt4tests/fn/atomic-equal.xml"
+        },
+        {
+          "name": "atomic-equal-003",
+          "setFile": "tests/qt4tests/fn/atomic-equal.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 116,
+      "examples": [
+        {
+          "name": "cbcl-distinct-values-002",
+          "setFile": "tests/qt4tests/fn/distinct-values.xml"
+        },
+        {
+          "name": "Axes127",
+          "setFile": "tests/qt4tests/prod/AxisStep.xml"
+        },
+        {
+          "name": "K-SeqExprCastable-4",
+          "setFile": "tests/qt4tests/prod/CastableExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K2-DirectConElemContent-35",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XP20",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 5,
+      "examples": [
+        {
+          "name": "K-StringJoinFunc-1",
+          "setFile": "tests/qt4tests/fn/string-join.xml"
+        },
+        {
+          "name": "K-SeqExprCast-422",
+          "setFile": "tests/qt4tests/prod/CastExpr.xml"
+        },
+        {
+          "name": "K-FunctionCallExpr-15",
+          "setFile": "tests/qt4tests/prod/FunctionCall.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XP20",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "LocalNameFromQNameFunc015",
+          "setFile": "tests/qt4tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc015",
+          "setFile": "tests/qt4tests/fn/namespace-uri-from-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XP20 XQ30 XP30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "K-ErrorFunc-4",
+          "setFile": "tests/qt4tests/fn/error.xml"
+        },
+        {
+          "name": "XPTY0004_12",
+          "setFile": "tests/qt4tests/misc/CombinedErrorCodes.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 10,
+      "examples": [
+        {
+          "name": "K2-ComputeConComment-4",
+          "setFile": "tests/qt4tests/prod/CompCommentConstructor.xml"
+        },
+        {
+          "name": "K2-ConText-5",
+          "setFile": "tests/qt4tests/prod/CompTextConstructor.xml"
+        },
+        {
+          "name": "Constr-attr-enclexpr-9",
+          "setFile": "tests/qt4tests/prod/DirAttributeList.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K2-DirectConElemContent-26",
+          "setFile": "tests/qt4tests/prod/DirElemContent.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 104,
+      "examples": [
+        {
+          "name": "K2-BaseURIFunc-29",
+          "setFile": "tests/qt4tests/fn/base-uri.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-002",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-003",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30 XQ31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 31,
+      "examples": [
+        {
+          "name": "fn-namespace-uri-for-prefix-24",
+          "setFile": "tests/qt4tests/fn/namespace-uri-for-prefix.xml"
+        },
+        {
+          "name": "cbcl-value-greater-equal-002",
+          "setFile": "tests/qt4tests/op/dayTimeDuration-greater-than.xml"
+        },
+        {
+          "name": "cbcl-value-greater-equal-004",
+          "setFile": "tests/qt4tests/op/dayTimeDuration-greater-than.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30 XQ31 XP20 XP30 XP31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 30,
+      "examples": [
+        {
+          "name": "re00649",
+          "setFile": "tests/qt4tests/fn/matches.re.xml"
+        },
+        {
+          "name": "re00650",
+          "setFile": "tests/qt4tests/fn/matches.re.xml"
+        },
+        {
+          "name": "re00651",
+          "setFile": "tests/qt4tests/fn/matches.re.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10 XQ30 XQ31 XP20 XP30 XP31",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "hexBinary-gt-25",
+          "setFile": "tests/qt4tests/op/hexBinary-greater-than.xml"
+        },
+        {
+          "name": "hexBinary-lt-25",
+          "setFile": "tests/qt4tests/op/hexBinary-less-than.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 6336,
+      "examples": [
+        {
+          "name": "cbcl-avg-008",
+          "setFile": "tests/qt4tests/fn/avg.xml"
+        },
+        {
+          "name": "fn-base-uri-1",
+          "setFile": "tests/qt4tests/fn/base-uri.xml"
+        },
+        {
+          "name": "fn-base-uri-4",
+          "setFile": "tests/qt4tests/fn/base-uri.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 1608,
+      "examples": [
+        {
+          "name": "fn-absint1args-1-dyn",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-absdec1args-1-dyn",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        },
+        {
+          "name": "fn-absdbl1args-1-dyn",
+          "setFile": "tests/qt4tests/fn/abs.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+ XP20+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 15,
+      "examples": [
+        {
+          "name": "fn-nilled-31",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        },
+        {
+          "name": "fn-nilled-32",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        },
+        {
+          "name": "fn-nilled-33",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+ XP30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "cbcl-codepoints-to-string-021",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-022",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-error-016",
+          "setFile": "tests/qt4tests/fn/error.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+ XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 3,
+      "examples": [
+        {
+          "name": "cbcl-count-003",
+          "setFile": "tests/qt4tests/fn/count.xml"
+        },
+        {
+          "name": "cbcl-condexpr-001",
+          "setFile": "tests/qt4tests/prod/IfExpr.xml"
+        },
+        {
+          "name": "cbcl-condexpr-002",
+          "setFile": "tests/qt4tests/prod/IfExpr.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+ XP40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 532,
+      "examples": [
+        {
+          "name": "Constr-compattr-name-1",
+          "setFile": "tests/qt4tests/prod/CompAttrConstructor.xml"
+        },
+        {
+          "name": "Constr-compattr-name-2",
+          "setFile": "tests/qt4tests/prod/CompAttrConstructor.xml"
+        },
+        {
+          "name": "Constr-compattr-name-3",
+          "setFile": "tests/qt4tests/prod/CompAttrConstructor.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ10+ XP40+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 25,
+      "examples": [
+        {
+          "name": "letexprwith-1",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "letexprwith-2",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "letexprwith-3",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "cbcl-distinct-values-002b",
+          "setFile": "tests/qt4tests/fn/distinct-values.xml"
+        },
+        {
+          "name": "numberformat127",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30 XP30",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "numberformat128",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30 XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 44,
+      "examples": [
+        {
+          "name": "fn-function-lookup-610",
+          "setFile": "tests/qt4tests/fn/function-lookup.xml"
+        },
+        {
+          "name": "fn-matches-50",
+          "setFile": "tests/qt4tests/fn/matches.xml"
+        },
+        {
+          "name": "annotation-33",
+          "setFile": "tests/qt4tests/prod/Annotation.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2895,
+      "examples": [
+        {
+          "name": "analyzeString-024",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-025",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "analyzeString-026",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 29,
+      "examples": [
+        {
+          "name": "fn-available-environment-variables-009",
+          "setFile": "tests/qt4tests/fn/available-environment-variables.xml"
+        },
+        {
+          "name": "K2-DataFunc-3",
+          "setFile": "tests/qt4tests/fn/data.xml"
+        },
+        {
+          "name": "fn-function-arity-022",
+          "setFile": "tests/qt4tests/fn/function-arity.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30+ XP30+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 15,
+      "examples": [
+        {
+          "name": "numberformat86",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "fn-nilled-28",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        },
+        {
+          "name": "fn-nilled-29",
+          "setFile": "tests/qt4tests/fn/nilled.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30+ XP30+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "LocalNameFromQNameFunc015a",
+          "setFile": "tests/qt4tests/fn/local-name-from-QName.xml"
+        },
+        {
+          "name": "NamespaceURIFromQNameFunc015a",
+          "setFile": "tests/qt4tests/fn/namespace-uri-from-QName.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ30+ XP40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 60,
+      "examples": [
+        {
+          "name": "Constr-compelem-name-20",
+          "setFile": "tests/qt4tests/prod/CompElemConstructor.xml"
+        },
+        {
+          "name": "Constr-compelem-name-21",
+          "setFile": "tests/qt4tests/prod/CompElemConstructor.xml"
+        },
+        {
+          "name": "Constr-compelem-name-22",
+          "setFile": "tests/qt4tests/prod/CompElemConstructor.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ31",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 65,
+      "examples": [
+        {
+          "name": "fn-random-number-generator-31",
+          "setFile": "tests/qt4tests/fn/random-number-generator.xml"
+        },
+        {
+          "name": "serialize-xml-120",
+          "setFile": "tests/qt4tests/fn/serialize.xml"
+        },
+        {
+          "name": "serialize-xml-140",
+          "setFile": "tests/qt4tests/fn/serialize.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ31+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1064,
+      "examples": [
+        {
+          "name": "analyzeString-028",
+          "setFile": "tests/qt4tests/fn/analyze-string.xml"
+        },
+        {
+          "name": "fn-apply-05",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        },
+        {
+          "name": "fn-apply-14",
+          "setFile": "tests/qt4tests/fn/apply.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ31+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 97,
+      "examples": [
+        {
+          "name": "atomic-equal-002",
+          "setFile": "tests/qt4tests/fn/atomic-equal.xml"
+        },
+        {
+          "name": "cbcl-collection-002",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        },
+        {
+          "name": "cbcl-collection-003",
+          "setFile": "tests/qt4tests/fn/collection.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ31+ XP31+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 141,
+      "examples": [
+        {
+          "name": "K-ErrorFunc-4a",
+          "setFile": "tests/qt4tests/fn/error.xml"
+        },
+        {
+          "name": "numberformat123",
+          "setFile": "tests/qt4tests/fn/format-number.xml"
+        },
+        {
+          "name": "fn-transform-1",
+          "setFile": "tests/qt4tests/fn/transform.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ31+ XP40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 5,
+      "examples": [
+        {
+          "name": "CastAs695",
+          "setFile": "tests/qt4tests/prod/CastExpr.xml"
+        },
+        {
+          "name": "namespaceDecl-26",
+          "setFile": "tests/qt4tests/prod/NamespaceDecl.xml"
+        },
+        {
+          "name": "namespaceDecl-27",
+          "setFile": "tests/qt4tests/prod/NamespaceDecl.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 3270,
+      "examples": [
+        {
+          "name": "all-different-012",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        },
+        {
+          "name": "all-different-013",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        },
+        {
+          "name": "all-different-014",
+          "setFile": "tests/qt4tests/fn/all-different.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ40+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 106,
+      "examples": [
+        {
+          "name": "characters-006",
+          "setFile": "tests/qt4tests/fn/characters.xml"
+        },
+        {
+          "name": "characters-007",
+          "setFile": "tests/qt4tests/fn/characters.xml"
+        },
+        {
+          "name": "characters-008",
+          "setFile": "tests/qt4tests/fn/characters.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ40+ XP40+",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 339,
+      "examples": [
+        {
+          "name": "fn-build-uri-from-parse-001",
+          "setFile": "tests/qt4tests/fn/build-uri.xml"
+        },
+        {
+          "name": "fn-build-uri-from-parse-002",
+          "setFile": "tests/qt4tests/fn/build-uri.xml"
+        },
+        {
+          "name": "fn-build-uri-from-parse-003",
+          "setFile": "tests/qt4tests/fn/build-uri.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "spec",
+      "value": "XQ40+ XP40+",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 87,
+      "examples": [
+        {
+          "name": "letexprwith-26",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "letexprwith-28",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        },
+        {
+          "name": "letexprwith-30",
+          "setFile": "tests/qt4tests/prod/LetClause.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-normalization-form",
+      "value": "FULLY-NORMALIZED",
+      "satisfied": false,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "cbcl-fn-normalize-unicode-001a",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        },
+        {
+          "name": "cbcl-fn-normalize-unicode-006a",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-normalization-form",
+      "value": "FULLY-NORMALIZED",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "cbcl-fn-normalize-unicode-001",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        },
+        {
+          "name": "cbcl-fn-normalize-unicode-006",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-normalization-form",
+      "value": "NFD",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-6",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-normalization-form",
+      "value": "NFKC",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-8",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-normalization-form",
+      "value": "NFKD",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "K-NormalizeUnicodeFunc-7",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-version",
+      "value": "5.2",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-version",
+      "value": "6.0",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11-6-0",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-version",
+      "value": "6.2",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 1,
+      "examples": [
+        {
+          "name": "fn-normalize-unicode-11-6-2",
+          "setFile": "tests/qt4tests/fn/normalize-unicode.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "unicode-version",
+      "value": "7.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "fn-lower-case-19",
+          "setFile": "tests/qt4tests/fn/lower-case.xml"
+        },
+        {
+          "name": "fn-upper-case-19",
+          "setFile": "tests/qt4tests/fn/upper-case.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.0",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 33,
+      "examples": [
+        {
+          "name": "K-CodepointToStringFunc-8",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-11",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-12",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.0",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 4,
+      "examples": [
+        {
+          "name": "XML10-5ed-Included-char-1",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "line-ending-Q007",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "line-ending-Q008",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.0:4-",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "XML10-4ed-Excluded-char-1",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "XML11-1ed-Included-char-1",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.0:5+ 1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 2,
+      "examples": [
+        {
+          "name": "XML10-4ed-Excluded-char-1-new",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        },
+        {
+          "name": "XML11-1ed-Included-char-1-new",
+          "setFile": "tests/qt4tests/misc/XMLEdition.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 302,
+      "examples": [
+        {
+          "name": "K-CodepointToStringFunc-8a",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-11b",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "K-CodepointToStringFunc-12b",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xml-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 11,
+      "examples": [
+        {
+          "name": "fn-contains-token-20",
+          "setFile": "tests/qt4tests/fn/contains-token.xml"
+        },
+        {
+          "name": "fn-contains-token-50",
+          "setFile": "tests/qt4tests/fn/contains-token.xml"
+        },
+        {
+          "name": "fn-in-scope-prefixes-27",
+          "setFile": "tests/qt4tests/fn/in-scope-prefixes.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xsd-version",
+      "value": "1.0",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 85,
+      "examples": [
+        {
+          "name": "cbcl-codepoints-to-string-002",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-002a",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        },
+        {
+          "name": "cbcl-codepoints-to-string-003",
+          "setFile": "tests/qt4tests/fn/codepoints-to-string.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xsd-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": false,
+      "mentions": 44,
+      "examples": [
+        {
+          "name": "K2-MatchesFunc-16",
+          "setFile": "tests/qt4tests/fn/matches.xml"
+        },
+        {
+          "name": "re00056a",
+          "setFile": "tests/qt4tests/fn/matches.re.xml"
+        },
+        {
+          "name": "re00086a",
+          "setFile": "tests/qt4tests/fn/matches.re.xml"
+        }
+      ]
+    },
+    {
+      "suite": "qt4",
+      "type": "xsd-version",
+      "value": "1.1",
+      "satisfied": true,
+      "gated": true,
+      "mentions": 39,
+      "examples": [
+        {
+          "name": "element-to-map-300",
+          "setFile": "tests/qt4tests/fn/element-to-map.xml"
+        },
+        {
+          "name": "element-to-map-301",
+          "setFile": "tests/qt4tests/fn/element-to-map.xml"
+        },
+        {
+          "name": "element-to-map-302",
+          "setFile": "tests/qt4tests/fn/element-to-map.xml"
+        }
+      ]
+    }
+  ],
+  "countsAreOverlappingMentions": true
+}

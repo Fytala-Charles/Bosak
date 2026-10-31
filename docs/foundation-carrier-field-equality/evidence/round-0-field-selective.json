@@ -1,0 +1,7141 @@
+{
+  "mode": "field-selective",
+  "scope": "Frozen pre-override caller against product/source/diagnostic Core variants; no schema authority or production carrier acceptance",
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "processorCount": 24,
+  "xdmValueSize": 48,
+  "clrEqualsToPlainInteger": true,
+  "xpathEqualsToPlainInteger": true,
+  "xpathHashToPlainInteger": true,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "identity-string",
+      "expression": "$s",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "filter",
+      "expression": "($v,$w)[1]",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "simple-map",
+      "expression": "$v ! .",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-value",
+      "expression": "map{\u0027a\u0027:$v}?a",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-nested",
+      "expression": "map{\u0027a\u0027:[$v]}?a(1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-atomic",
+      "expression": "data($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-node",
+      "expression": "data($n)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-untyped-node",
+      "expression": "data($untyped)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-sequence-node",
+      "expression": "data($list)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        },
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-identity",
+      "expression": "xs:integer($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-decimal",
+      "expression": "xs:decimal($v)",
+      "items": [
+        {
+          "kind": "Decimal",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v \u002B 1",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "43",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "comparison",
+      "expression": "$v = 42",
+      "items": [
+        {
+          "kind": "Boolean",
+          "value": "true",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "distinct",
+      "expression": "distinct-values(($v,$v))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sort",
+      "expression": "sort(($v,$w))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        },
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-conversion",
+      "expression": "string($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "upper-case",
+      "expression": "upper-case($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "ALPHA",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-join",
+      "expression": "string-join(($s,$s),\u0027-\u0027)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha-alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-key",
+      "expression": "map{$v:\u0027hit\u0027}? (42)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "hit",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "serialization",
+      "expression": "serialize(map{\u0027a\u0027:$v},map{\u0027method\u0027:\u0027json\u0027})",
+      "items": [
+        {
+          "kind": "String",
+          "value": "{\u0022a\u0022:42}",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "no-typed-value",
+      "expression": "data($empty)",
+      "items": [],
+      "error": "FOTY0012",
+      "message": "FOTY0012: The argument node does not have a typed value."
+    },
+    {
+      "id": "invalid-cast",
+      "expression": "xs:integer(\u0027not-number\u0027)",
+      "items": [],
+      "error": "FORG0001",
+      "message": "FORG0001: Cannot cast \u0027not-number\u0027 to integer."
+    },
+    {
+      "id": "cardinality-error",
+      "expression": "exactly-one(($v,$w))",
+      "items": [],
+      "error": "FORG0005",
+      "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+    }
+  ],
+  "allocations": [
+    {
+      "items": 1000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 60700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 55800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 41400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 49200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 43100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 42500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 48024,
+          "nanoseconds": 36800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 78900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 60200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 113700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 38500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 36200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 26900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 29400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "kind": "decimal",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 27500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 50300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 47100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 31800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 25900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 30700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 47000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 2685600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 966800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 2111500,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 1011300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 2359300,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 1633400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 4800024,
+          "nanoseconds": 1647900,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 15298300,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000048,
+          "nanoseconds": 14845800,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2165200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000048,
+          "nanoseconds": 13862700,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2488200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 13173400,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1960500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "decimal",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1685400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 14355300,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1484600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 13820600,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1812700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000040,
+          "nanoseconds": 14465400,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1552500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    }
+  ],
+  "equality": {
+    "controls": 828,
+    "checks": [
+      {
+        "id": "C0-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P0-0",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P0-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P0-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P1-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-1",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P1-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P1-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P2-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-2",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P2-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P2-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P3-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-3",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P3-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P3-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P4-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-4",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P4-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P4-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P5-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-5",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P5-6",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P5-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P5-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P6-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-5",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P6-6",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P6-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P6-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P7-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-7",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P7-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P7-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P8-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-8",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P8-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P8-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P9-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-9",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P9-10",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P9-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P9-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P10-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-9",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P10-10",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P10-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P10-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P11-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-11",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P11-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P11-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P12-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-12",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P12-13",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P12-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P12-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P13-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-12",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P13-13",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P13-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P13-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P14-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-14",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P14-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P14-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P15-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-15",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P15-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P15-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P16-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-16",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P16-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P16-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P17-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-17",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P17-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P17-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P18-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-18",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P18-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P18-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P19-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-19",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P19-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P19-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P20-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-20",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P20-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P20-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P21-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P21-21",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P21-22",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-plain-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-tagged-left",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-object-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-generic-equals",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-different-origin",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-generic-hash",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-hashset",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-dictionary",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "P22-0",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-1",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-2",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-3",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-4",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-5",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-6",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-7",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-8",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-9",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-10",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-11",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-12",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-13",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-14",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-15",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-16",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-17",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-18",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-19",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-20",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-21",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "P22-22",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      }
+    ],
+    "atomicFixtures": 23,
+    "plainPairs": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "decoratedPairs": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "equalsDeclaredOn": "Bosak.XPath.Core.Xdm.XdmValue",
+    "hashDeclaredOn": "Bosak.XPath.Core.Xdm.XdmValue"
+  },
+  "equalityCosts": [
+    {
+      "count": 1000,
+      "annotated": false,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 114900
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 114400
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 167200
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 115400
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 119500
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 115900
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 114200
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": false,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38600
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38700
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38000
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38200
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38300
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38900
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38600
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": true,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15700
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15700
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15900
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15400
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15600
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15400
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 15400
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": true,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38600
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38900
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39200
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39500
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39000
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38900
+        },
+        {
+          "checksum": -1591448529000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 38700
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": false,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12370800
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12252000
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12046600
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12346500
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13231400
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12588300
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12782100
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": false,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 4366200
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3805000
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3965800
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3832800
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3848900
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 4250400
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3827200
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": true,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1510800
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1403300
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1827800
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1798500
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1459300
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1911100
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 1435100
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": true,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3774500
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 4683000
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3918100
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3905900
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3872500
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 4051600
+        },
+        {
+          "checksum": -159144852900000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3811700
+        }
+      ]
+    }
+  ],
+  "callerSha256": "91cefc347741a47901cdf34cbbbd6031cf1da5e4293c10af0e8534ecdad93207",
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "b06298a97474cf3b86175646b8eec818599c2aacb84eacc25f1495b53bde15be"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-field-equality\\field-selective\\lib\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+    }
+  ]
+}

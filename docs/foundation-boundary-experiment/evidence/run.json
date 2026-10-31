@@ -1,0 +1,738 @@
+{
+  "scope": "Synthetic protocol guards only: no schema validation, actual compiler capture or compatibility algorithm",
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "checkCount": 75,
+  "checks": [
+    {
+      "id": "C01-static-copy",
+      "passed": true
+    },
+    {
+      "id": "C02-separate-query-schema",
+      "passed": true
+    },
+    {
+      "id": "C03-captured-endpoints",
+      "passed": true
+    },
+    {
+      "id": "C04-unsupported-query-profile",
+      "passed": true
+    },
+    {
+      "id": "C05-lookalike-environment-not-admitted",
+      "passed": true
+    },
+    {
+      "id": "C06-pre-canceled-bind",
+      "passed": true
+    },
+    {
+      "id": "C47-unknown-assessment-mode",
+      "passed": true
+    },
+    {
+      "id": "C07-owned-type-lookup",
+      "passed": true
+    },
+    {
+      "id": "C08-missing-distinct",
+      "passed": true
+    },
+    {
+      "id": "C09-declaration-lookups",
+      "passed": true
+    },
+    {
+      "id": "C10-forged-handle-not-owned",
+      "passed": true
+    },
+    {
+      "id": "C11-forged-relation-refused",
+      "passed": true
+    },
+    {
+      "id": "C12-closure-unsupported-not-empty",
+      "passed": true
+    },
+    {
+      "id": "C13-valid-root-and-evidence",
+      "passed": true
+    },
+    {
+      "id": "C52-location-keeps-source-snapshot",
+      "passed": true
+    },
+    {
+      "id": "C53-invalid-diagnostic-budgets",
+      "passed": true
+    },
+    {
+      "id": "C54-diagnostic-truncation-not-coverage",
+      "passed": true
+    },
+    {
+      "id": "C14-original-evidence-owned",
+      "passed": true
+    },
+    {
+      "id": "C15-source-snapshot-separated",
+      "passed": true
+    },
+    {
+      "id": "C48-requested-type-needs-type-mode",
+      "passed": true
+    },
+    {
+      "id": "C49-governing-handle-role",
+      "passed": true
+    },
+    {
+      "id": "C16-invalid-no-query-root",
+      "passed": true
+    },
+    {
+      "id": "C50-invalid-not-published-as-node-facts",
+      "passed": true
+    },
+    {
+      "id": "C17-unsupported-no-query-root",
+      "passed": true
+    },
+    {
+      "id": "C51-unsupported-not-published-as-node-facts",
+      "passed": true
+    },
+    {
+      "id": "C18-incomplete-valid-refused",
+      "passed": true
+    },
+    {
+      "id": "C19-stale-input-before-assessment",
+      "passed": true
+    },
+    {
+      "id": "C20-stale-not-dispatched",
+      "passed": true
+    },
+    {
+      "id": "C21-changed-input-before-publication",
+      "passed": true
+    },
+    {
+      "id": "C22-foreign-requested-type",
+      "passed": true
+    },
+    {
+      "id": "C23-type-mode-needs-type",
+      "passed": true
+    },
+    {
+      "id": "C24-episode-timezone-bounds",
+      "passed": true
+    },
+    {
+      "id": "C25-episode-snapshotted-once",
+      "passed": true
+    },
+    {
+      "id": "C26-construction-unsupported-explicit",
+      "passed": true
+    },
+    {
+      "id": "C27-construction-invalid-distinct",
+      "passed": true
+    },
+    {
+      "id": "C28-compatible-has-view",
+      "passed": true
+    },
+    {
+      "id": "C29-view-endpoints-exact",
+      "passed": true
+    },
+    {
+      "id": "C30-cross-universe-derived",
+      "passed": true
+    },
+    {
+      "id": "C31-matches-original-declaration",
+      "passed": true
+    },
+    {
+      "id": "C32-original-psvi-not-rewritten",
+      "passed": true
+    },
+    {
+      "id": "C33-no-instance-reassessment",
+      "passed": true
+    },
+    {
+      "id": "C34-no-implied-reverse",
+      "passed": true
+    },
+    {
+      "id": "C35-explicit-incompatibility",
+      "passed": true
+    },
+    {
+      "id": "C36-no-transitive-proof",
+      "passed": true
+    },
+    {
+      "id": "C37-same-description-wrong-token",
+      "passed": true
+    },
+    {
+      "id": "C38-profile-guard-before-proof",
+      "passed": true
+    },
+    {
+      "id": "C39-foreign-source-handle",
+      "passed": true
+    },
+    {
+      "id": "C40-foreign-target-handle",
+      "passed": true
+    },
+    {
+      "id": "C41-forged-facts-valid-fields",
+      "passed": true
+    },
+    {
+      "id": "C42-canceled-view-query",
+      "passed": true
+    },
+    {
+      "id": "C43-supported-negative-relation",
+      "passed": true
+    },
+    {
+      "id": "C44-closed-target-view-refuses",
+      "passed": true
+    },
+    {
+      "id": "C45-closed-view-keeps-original-metadata",
+      "passed": true
+    },
+    {
+      "id": "C46-closed-target-establish-refuses",
+      "passed": true
+    },
+    {
+      "id": "B01-plain-value",
+      "passed": true
+    },
+    {
+      "id": "B02-separate-evidence",
+      "passed": true
+    },
+    {
+      "id": "B03-scalar-no-enumeration",
+      "passed": true
+    },
+    {
+      "id": "B04-computed-no-original",
+      "passed": true
+    },
+    {
+      "id": "B05-empty-list",
+      "passed": true
+    },
+    {
+      "id": "B06-singleton-list",
+      "passed": true
+    },
+    {
+      "id": "B07-ordered-members",
+      "passed": true
+    },
+    {
+      "id": "B08-unissued-before-getter",
+      "passed": true
+    },
+    {
+      "id": "B09-no-untrusted-access",
+      "passed": true
+    },
+    {
+      "id": "B10-copied-cells-not-issued",
+      "passed": true
+    },
+    {
+      "id": "B11-copy-not-enumerated",
+      "passed": true
+    },
+    {
+      "id": "B12-default-cell",
+      "passed": true
+    },
+    {
+      "id": "B13-non-atomic",
+      "passed": true
+    },
+    {
+      "id": "B14-null-evidence",
+      "passed": true
+    },
+    {
+      "id": "B15-foreign-component",
+      "passed": true
+    },
+    {
+      "id": "B16-order-independent-descriptor",
+      "passed": true
+    },
+    {
+      "id": "B17-private-host-revision",
+      "passed": true
+    },
+    {
+      "id": "B18-namespace-snapshot",
+      "passed": true
+    },
+    {
+      "id": "B19-description-equal",
+      "passed": true
+    },
+    {
+      "id": "B20-environment-instance",
+      "passed": true
+    },
+    {
+      "id": "B21-closed-before-read",
+      "passed": true
+    }
+  ],
+  "surface": [
+    {
+      "name": "C13901.Draft.IQuerySemanticEnvironment",
+      "members": [
+        "C13901.Draft.IQueryStaticContext get_StaticContext()",
+        "C13901.Draft.IQueryStaticContext StaticContext",
+        "C13901.Draft.QueryHostLanguage get_HostLanguage()",
+        "C13901.Draft.QueryHostLanguage HostLanguage",
+        "System.String BehaviorProfile",
+        "System.String DescriptorFormatVersion",
+        "System.String get_BehaviorProfile()",
+        "System.String get_DescriptorFormatVersion()",
+        "System.String get_HostVersion()",
+        "System.String get_StaticContextFingerprint()",
+        "System.String HostVersion",
+        "System.String StaticContextFingerprint",
+        "System.Uri get_XdmSpecificationRevision()",
+        "System.Uri XdmSpecificationRevision"
+      ]
+    },
+    {
+      "name": "C13901.Draft.IQueryStaticContext",
+      "members": [
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] get_Namespaces()",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] Namespaces"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAnnotatedNode",
+      "members": [
+        "C13901.Draft.ISchemaNodeFacts get_OriginalSchemaFacts()",
+        "C13901.Draft.ISchemaNodeFacts OriginalSchemaFacts"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentAdvisor",
+      "members": [
+        "Boolean OwnsAssessment(C13901.Draft.ISchemaAssessmentOrigin)",
+        "Boolean OwnsNodeFacts(C13901.Draft.ISchemaNodeFacts)",
+        "Boolean OwnsTypedValue(C13901.Draft.ISchemaTypedValue)",
+        "C13901.Draft.IQuerySemanticEnvironment get_QueryEnvironment()",
+        "C13901.Draft.IQuerySemanticEnvironment QueryEnvironment",
+        "C13901.Draft.ISchemaAssessmentResult Assess(C13901.Draft.SchemaAssessmentRequest, System.Threading.CancellationToken)",
+        "C13901.Draft.ISchemaAssessor Assessor",
+        "C13901.Draft.ISchemaAssessor get_Assessor()",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaTypedValue] ConstructSimpleValue(Bosak.XPath.Core.Xdm.XdmValue, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaAssessmentEpisode, System.Threading.CancellationToken)",
+        "Void ThrowIfUnavailable(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentEpisode",
+      "members": [
+        "Int32 get_ImplicitTimezoneOffsetMinutes()",
+        "Int32 ImplicitTimezoneOffsetMinutes",
+        "System.DateTimeOffset CurrentDateTime",
+        "System.DateTimeOffset get_CurrentDateTime()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentEvidence",
+      "members": [
+        "Boolean get_IsComplete()",
+        "Boolean IsComplete",
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.SchemaAssessmentStatus get_Status()",
+        "C13901.Draft.SchemaAssessmentStatus Status"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentInput",
+      "members": [
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Root()",
+        "Bosak.XPath.Core.Xdm.IXdmNode Root",
+        "C13901.Draft.ISchemaSnapshotBinding get_Snapshot()",
+        "C13901.Draft.ISchemaSnapshotBinding Snapshot",
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source",
+        "Void ThrowIfUnavailable(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentOrigin",
+      "members": [
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentResult",
+      "members": [
+        "Boolean DiagnosticsTruncated",
+        "Boolean get_DiagnosticsTruncated()",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_ValidatedRoot()",
+        "Bosak.XPath.Core.Xdm.IXdmNode ValidatedRoot",
+        "C13901.Draft.ISchemaAssessmentEvidence Evidence",
+        "C13901.Draft.ISchemaAssessmentEvidence get_Evidence()",
+        "C13901.Draft.SchemaAssessmentStatus get_Status()",
+        "C13901.Draft.SchemaAssessmentStatus Status",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] Diagnostics",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] get_Diagnostics()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessor",
+      "members": [
+        "C13901.Draft.ISchemaAuthority Authority",
+        "C13901.Draft.ISchemaAuthority get_Authority()",
+        "C13901.Draft.SchemaLanguageVersion get_SchemaLanguage()",
+        "C13901.Draft.SchemaLanguageVersion SchemaLanguage",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaAssessmentAdvisor] Bind(C13901.Draft.IQuerySemanticEnvironment, System.Threading.CancellationToken)",
+        "System.String AssessmentProfile",
+        "System.String get_AssessmentProfile()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAtomicProvenance",
+      "members": [
+        "C13901.Draft.ISchemaAssessmentOrigin get_OriginalAssessment()",
+        "C13901.Draft.ISchemaAssessmentOrigin OriginalAssessment",
+        "C13901.Draft.ISchemaComponentHandle ActualType",
+        "C13901.Draft.ISchemaComponentHandle DeclaredType",
+        "C13901.Draft.ISchemaComponentHandle get_ActualType()",
+        "C13901.Draft.ISchemaComponentHandle get_DeclaredType()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAuthority",
+      "members": [
+        "Boolean Owns(C13901.Draft.ISchemaComponentHandle)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveAttributeDeclaration(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveElementDeclaration(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveType(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsAffiliatedWith(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsDerivedFrom(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsSameComponent(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.ISchemaComponentHandle]] GetComponentClosure(C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityAuthority",
+      "members": [
+        "C13901.Draft.ISchemaCompatibilityResult Establish(C13901.Draft.ISchemaAssessmentAdvisor, C13901.Draft.ISchemaAssessmentAdvisor, C13901.Draft.IQuerySemanticEnvironment, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityResult",
+      "members": [
+        "C13901.Draft.ISchemaCompatibilityView get_View()",
+        "C13901.Draft.ISchemaCompatibilityView View",
+        "C13901.Draft.SchemaCompatibilityDecision Decision",
+        "C13901.Draft.SchemaCompatibilityDecision get_Decision()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] Diagnostics",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] get_Diagnostics()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityView",
+      "members": [
+        "C13901.Draft.IQuerySemanticEnvironment ExecutionEnvironment",
+        "C13901.Draft.IQuerySemanticEnvironment get_ExecutionEnvironment()",
+        "C13901.Draft.ISchemaAssessmentAdvisor get_Source()",
+        "C13901.Draft.ISchemaAssessmentAdvisor get_Target()",
+        "C13901.Draft.ISchemaAssessmentAdvisor Source",
+        "C13901.Draft.ISchemaAssessmentAdvisor Target",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsDerivedFrom(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] MatchesDeclaration(C13901.Draft.ISchemaNodeFacts, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaComponentHandle",
+      "members": [
+        "C13901.Draft.ISchemaAuthority Authority",
+        "C13901.Draft.ISchemaAuthority get_Authority()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaNodeFacts",
+      "members": [
+        "Boolean get_HasNoTypedValue()",
+        "Boolean get_IsNilled()",
+        "Boolean HasNoTypedValue",
+        "Boolean IsNilled",
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.ISchemaComponentHandle Declaration",
+        "C13901.Draft.ISchemaComponentHandle get_Declaration()",
+        "C13901.Draft.ISchemaComponentHandle get_Type()",
+        "C13901.Draft.ISchemaComponentHandle Type",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaTypedValue] ReadTypedValue(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaSnapshotBinding",
+      "members": []
+    },
+    {
+      "name": "C13901.Draft.ISchemaSourceBinding",
+      "members": []
+    },
+    {
+      "name": "C13901.Draft.ISchemaTypedValue",
+      "members": [
+        "Boolean get_IsList()",
+        "Boolean IsList",
+        "Boolean TryGetSingleAtomic(C13901.Draft.SchemaAtomicItem ByRef)",
+        "C13901.Draft.ISchemaComponentHandle get_GoverningType()",
+        "C13901.Draft.ISchemaComponentHandle GoverningType",
+        "System.Collections.Generic.IEnumerable\u00601[C13901.Draft.SchemaAtomicItem] AtomicItems",
+        "System.Collections.Generic.IEnumerable\u00601[C13901.Draft.SchemaAtomicItem] get_AtomicItems()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.QueryHostLanguage",
+      "members": [
+        "C13901.Draft.QueryHostLanguage XPath",
+        "C13901.Draft.QueryHostLanguage XQuery",
+        "C13901.Draft.QueryHostLanguage Xslt",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentDiagnostic",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentDiagnostic)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentDiagnostic, C13901.Draft.SchemaAssessmentDiagnostic)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentDiagnostic, C13901.Draft.SchemaAssessmentDiagnostic)",
+        "C13901.Draft.SchemaAssessmentDiagnostic \u003CClone\u003E$()",
+        "C13901.Draft.SchemaDiagnosticLocation get_Location()",
+        "C13901.Draft.SchemaDiagnosticLocation Location",
+        "Int32 GetHashCode()",
+        "System.String Code",
+        "System.String get_Code()",
+        "System.String get_Message()",
+        "System.String Message",
+        "System.String ToString()",
+        "Void .ctor(System.String, System.String, C13901.Draft.SchemaDiagnosticLocation)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef, C13901.Draft.SchemaDiagnosticLocation ByRef)",
+        "Void set_Code(System.String)",
+        "Void set_Location(C13901.Draft.SchemaDiagnosticLocation)",
+        "Void set_Message(System.String)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentLimits",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentLimits)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentLimits, C13901.Draft.SchemaAssessmentLimits)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentLimits, C13901.Draft.SchemaAssessmentLimits)",
+        "C13901.Draft.SchemaAssessmentLimits \u003CClone\u003E$()",
+        "Int32 get_MaxDiagnostics()",
+        "Int32 GetHashCode()",
+        "Int32 MaxDiagnostics",
+        "Int64 get_MaxDiagnosticCharacters()",
+        "Int64 MaxDiagnosticCharacters",
+        "System.String ToString()",
+        "Void .ctor(Int32, Int64)",
+        "Void Deconstruct(Int32 ByRef, Int64 ByRef)",
+        "Void set_MaxDiagnosticCharacters(Int64)",
+        "Void set_MaxDiagnostics(Int32)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentMode",
+      "members": [
+        "C13901.Draft.SchemaAssessmentMode Lax",
+        "C13901.Draft.SchemaAssessmentMode Strict",
+        "C13901.Draft.SchemaAssessmentMode Type",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentRequest",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentRequest)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentRequest, C13901.Draft.SchemaAssessmentRequest)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentRequest, C13901.Draft.SchemaAssessmentRequest)",
+        "C13901.Draft.ISchemaAssessmentEpisode Episode",
+        "C13901.Draft.ISchemaAssessmentEpisode get_Episode()",
+        "C13901.Draft.ISchemaAssessmentInput get_Input()",
+        "C13901.Draft.ISchemaAssessmentInput Input",
+        "C13901.Draft.ISchemaComponentHandle get_GoverningDeclaration()",
+        "C13901.Draft.ISchemaComponentHandle get_RequestedType()",
+        "C13901.Draft.ISchemaComponentHandle GoverningDeclaration",
+        "C13901.Draft.ISchemaComponentHandle RequestedType",
+        "C13901.Draft.SchemaAssessmentLimits get_Limits()",
+        "C13901.Draft.SchemaAssessmentLimits Limits",
+        "C13901.Draft.SchemaAssessmentMode get_Mode()",
+        "C13901.Draft.SchemaAssessmentMode Mode",
+        "C13901.Draft.SchemaAssessmentRequest \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.String ToString()",
+        "Void .ctor(C13901.Draft.ISchemaAssessmentInput, C13901.Draft.SchemaAssessmentMode, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaAssessmentEpisode, C13901.Draft.SchemaAssessmentLimits)",
+        "Void Deconstruct(C13901.Draft.ISchemaAssessmentInput ByRef, C13901.Draft.SchemaAssessmentMode ByRef, C13901.Draft.ISchemaComponentHandle ByRef, C13901.Draft.ISchemaComponentHandle ByRef, C13901.Draft.ISchemaAssessmentEpisode ByRef, C13901.Draft.SchemaAssessmentLimits ByRef)",
+        "Void set_Episode(C13901.Draft.ISchemaAssessmentEpisode)",
+        "Void set_GoverningDeclaration(C13901.Draft.ISchemaComponentHandle)",
+        "Void set_Input(C13901.Draft.ISchemaAssessmentInput)",
+        "Void set_Limits(C13901.Draft.SchemaAssessmentLimits)",
+        "Void set_Mode(C13901.Draft.SchemaAssessmentMode)",
+        "Void set_RequestedType(C13901.Draft.ISchemaComponentHandle)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentStatus",
+      "members": [
+        "C13901.Draft.SchemaAssessmentStatus Invalid",
+        "C13901.Draft.SchemaAssessmentStatus Unsupported",
+        "C13901.Draft.SchemaAssessmentStatus Valid",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAtomicItem",
+      "members": [
+        "Bosak.XPath.Core.Xdm.XdmValue get_Value()",
+        "Bosak.XPath.Core.Xdm.XdmValue Value",
+        "C13901.Draft.ISchemaAtomicProvenance get_TypeEvidence()",
+        "C13901.Draft.ISchemaAtomicProvenance TypeEvidence",
+        "Void .ctor(Bosak.XPath.Core.Xdm.XdmValue, C13901.Draft.ISchemaAtomicProvenance)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAtomics",
+      "members": [
+        "Boolean TryGetProvenance(Bosak.XPath.Core.Xdm.XdmValue ByRef, C13901.Draft.ISchemaAtomicProvenance ByRef)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaCompatibilityDecision",
+      "members": [
+        "C13901.Draft.SchemaCompatibilityDecision Compatible",
+        "C13901.Draft.SchemaCompatibilityDecision Incompatible",
+        "C13901.Draft.SchemaCompatibilityDecision Unsupported",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaDiagnosticLocation",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaDiagnosticLocation)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaDiagnosticLocation, C13901.Draft.SchemaDiagnosticLocation)",
+        "Boolean op_Inequality(C13901.Draft.SchemaDiagnosticLocation, C13901.Draft.SchemaDiagnosticLocation)",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Node()",
+        "Bosak.XPath.Core.Xdm.IXdmNode Node",
+        "C13901.Draft.ISchemaSnapshotBinding get_Snapshot()",
+        "C13901.Draft.ISchemaSnapshotBinding Snapshot",
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source",
+        "C13901.Draft.SchemaDiagnosticLocation \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.Nullable\u00601[System.Int32] get_LineNumber()",
+        "System.Nullable\u00601[System.Int32] get_LinePosition()",
+        "System.Nullable\u00601[System.Int32] LineNumber",
+        "System.Nullable\u00601[System.Int32] LinePosition",
+        "System.Nullable\u00601[System.Int64] ByteLength",
+        "System.Nullable\u00601[System.Int64] ByteStart",
+        "System.Nullable\u00601[System.Int64] get_ByteLength()",
+        "System.Nullable\u00601[System.Int64] get_ByteStart()",
+        "System.String ToString()",
+        "System.Uri get_SourceUri()",
+        "System.Uri SourceUri",
+        "Void .ctor(C13901.Draft.ISchemaSourceBinding, C13901.Draft.ISchemaSnapshotBinding, Bosak.XPath.Core.Xdm.IXdmNode, System.Uri, System.Nullable\u00601[System.Int32], System.Nullable\u00601[System.Int32], System.Nullable\u00601[System.Int64], System.Nullable\u00601[System.Int64])",
+        "Void Deconstruct(C13901.Draft.ISchemaSourceBinding ByRef, C13901.Draft.ISchemaSnapshotBinding ByRef, Bosak.XPath.Core.Xdm.IXdmNode ByRef, System.Uri ByRef, System.Nullable\u00601[System.Int32] ByRef, System.Nullable\u00601[System.Int32] ByRef, System.Nullable\u00601[System.Int64] ByRef, System.Nullable\u00601[System.Int64] ByRef)",
+        "Void set_ByteLength(System.Nullable\u00601[System.Int64])",
+        "Void set_ByteStart(System.Nullable\u00601[System.Int64])",
+        "Void set_LineNumber(System.Nullable\u00601[System.Int32])",
+        "Void set_LinePosition(System.Nullable\u00601[System.Int32])",
+        "Void set_Node(Bosak.XPath.Core.Xdm.IXdmNode)",
+        "Void set_Snapshot(C13901.Draft.ISchemaSnapshotBinding)",
+        "Void set_Source(C13901.Draft.ISchemaSourceBinding)",
+        "Void set_SourceUri(System.Uri)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaExpandedName",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaExpandedName)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaExpandedName, C13901.Draft.SchemaExpandedName)",
+        "Boolean op_Inequality(C13901.Draft.SchemaExpandedName, C13901.Draft.SchemaExpandedName)",
+        "Int32 GetHashCode()",
+        "System.String get_LocalName()",
+        "System.String get_NamespaceUri()",
+        "System.String LocalName",
+        "System.String NamespaceUri",
+        "System.String ToString()",
+        "Void .ctor(System.String, System.String)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef)",
+        "Void set_LocalName(System.String)",
+        "Void set_NamespaceUri(System.String)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaLanguageVersion",
+      "members": [
+        "C13901.Draft.SchemaLanguageVersion Xsd10",
+        "C13901.Draft.SchemaLanguageVersion Xsd11",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaResult\u00601",
+      "members": [
+        "C13901.Draft.SchemaResultKind get_Kind()",
+        "C13901.Draft.SchemaResultKind Kind",
+        "System.String DiagnosticCode",
+        "System.String get_DiagnosticCode()",
+        "T get_Value()",
+        "T Value"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaResultKind",
+      "members": [
+        "C13901.Draft.SchemaResultKind Invalid",
+        "C13901.Draft.SchemaResultKind NotFound",
+        "C13901.Draft.SchemaResultKind Supported",
+        "C13901.Draft.SchemaResultKind Unsupported",
+        "Int32 value__"
+      ]
+    }
+  ],
+  "assessmentCalls": 7,
+  "proofDispatches": 4,
+  "originalEvidencePreserved": true
+}

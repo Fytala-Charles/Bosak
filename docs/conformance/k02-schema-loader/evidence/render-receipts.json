@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k02-loader-render/README.md.html",
+      "sha256": "7115f56a74de668e5c53a798e33816b953a8893c4d32cb9cda9891daae87192b"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k02-loader-render/docs_ARCHITECTURE.md.html",
+      "sha256": "f828f65d4976c56681aeca7a4ba65adee570c0bdf0b8f59ba557f86ad0af4230"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k02-loader-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b30ffd9ea1a7cbc3bdad2675a11b9345c09617c926090eeac66eee3302df9e3d"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k02-loader-render/docs_INTEGRATION.md.html",
+      "sha256": "75b180d6ef68be59953b683ee58add7ec691503c3d19791ec33803c596767233"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k02-loader-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "5a4900252fd436e5e7105aa84bebba37e18d04f90930a32993bb3cf8b3829b91"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k02-loader-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "16d46ce86beea37c82e1fae5c2a02a167beb1b0b676979b1d40a4d9d1eb13544"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k02-loader-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "68a2bb9d870ae8fc0eb323cb8231e1c248e8f0b3861f9e7ea5de5e404e2b7592"
+    },
+    {
+      "source": "docs/conformance/k02-schema-duration/README.md",
+      "html": ".guard-tmp/k02-loader-render/docs_conformance_k02-schema-duration_README.md.html",
+      "sha256": "0d20ffb3c4bee4ad8beb84c89d304c0d3ad1d2899d371e5ac1ea8a11ee10c6c9"
+    },
+    {
+      "source": "docs/conformance/k02-schema-loader/README.md",
+      "html": ".guard-tmp/k02-loader-render/docs_conformance_k02-schema-loader_README.md.html",
+      "sha256": "4e6151b19d6641483315ebe25c4190ee701d63af24047528791a261708f7b714"
+    }
+  ]
+}

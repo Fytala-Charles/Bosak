@@ -1,0 +1,62 @@
+{
+  "CURRENT-FUNCTION-INVENTORY.json": {
+    "gitBlob": "f2c7e45833a670278a5b261b9e61bfdd7d76f961",
+    "sha256": "dd43c042ff1c4e41e934a61d187665e88826e55a8046c0a96dbe34f81decefe8"
+  },
+  "GRAMMAR-COVERAGE-MATRIX.json": {
+    "gitBlob": "66b2db9dd828b0cad0ec80845c0268c466145ded",
+    "sha256": "224fd7c9a9b541f44bd2b0a34bba8d90596a19a1d5b8c22d84a11f824e7b05dd"
+  },
+  "LIFECYCLE-RECONCILIATION.json": {
+    "gitBlob": "bcd5f07805137075d2e15162e93774d79abd4683",
+    "sha256": "34d5aa3d6cdaaa91d7d15db7b71cf65a1783adc5abe298244e3feebac040fa0b"
+  },
+  "FUNCTION-OPTIONS-RECONCILIATION.json": {
+    "gitBlob": "0bb796caf350346716ae585451db6aed8c180a39",
+    "sha256": "96eb6f3d3b7eafdb7946957b8c5bdd62953bbc98663d71066e900fc4ec7b029d"
+  },
+  "CONSTRUCTOR-TYPE-RECONCILIATION.json": {
+    "gitBlob": "cfe9386dbd0681e55b226ca1af8db7eab30b6023",
+    "sha256": "15fa960599595c0948efed3730e19c54a13db83a33e73bd6289f027978f78fdd"
+  },
+  "EXPRESSION-CALL-FOCUS-RECONCILIATION.json": {
+    "gitBlob": "e4e6cf09f71bf47f5140a0d470103b2344f1d03f",
+    "sha256": "f4eee57c9057225bd655fccea7015f23d65fce4acfbf72c29f9abc167407842a"
+  },
+  "TYPE-COLLECTION-PATTERN-RECONCILIATION.json": {
+    "gitBlob": "a54e335d1b98542dcbb8d8f4fd8ade8146831e5d",
+    "sha256": "356c59aab12ed8d4fcc1be35570199baf83be85a7b72a8bee71a399c27abec5e"
+  },
+  "HOST-PROFILE-RECONCILIATION.json": {
+    "gitBlob": "5ce64c90a699abe9a7913f4359fc60129bf38372",
+    "sha256": "73a63707cfe8f6907a5af8c7ffdd093f496cb7f97da3572e5c689b8a67dfb0b4"
+  },
+  "ADOPTION-DISPOSITIONS.json": {
+    "gitBlob": "b375f65dacb89b8d982af4455ef903783efeeda2",
+    "sha256": "bc606d07882e3d03196bfade4f5e5bbc6a71e807acdb7b13a1b84d9702147662"
+  },
+  "provenance.json": {
+    "gitBlob": "4bd0d40826092eeb834321016ea098ec6ced01db",
+    "sha256": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41"
+  },
+  "CLOSURE-PLAN.json": {
+    "gitBlob": "4417d6f702a6a2e500562c2887cba6bf33b23dd2",
+    "sha256": "e98632b81133a973a78b8cc227ed5ca4b4829b7f5fc5e29bfcdd8b6f6541ccdf"
+  },
+  "SEMANTIC-REVIEW-BATCH-1.json": {
+    "gitBlob": "6373c64b00ff287fd0e7155398655838d3602f1f",
+    "sha256": "1e83f56f6ba63ce812e0a709590775c5092acf263c3d285e14a285ff3e6803a0"
+  },
+  "SEMANTIC-REVIEW-BATCH-2.json": {
+    "gitBlob": "df39d112f030588bdfb81d6910108cd59255587a",
+    "sha256": "21c010f606b9e18bee254c9c369fecf8542835741900aa871f67add53f6859e0"
+  },
+  "SEMANTIC-REVIEW-BATCH-3.json": {
+    "gitBlob": "35a32338ef6b0cb8087b9d3a740ce9607894f89e",
+    "sha256": "afe6df48042568f507619d698d091d18c7527e2d636af2616366ac35ad54b09f"
+  },
+  "SEMANTIC-REVIEW-BATCH-4.json": {
+    "gitBlob": "22ffb57dfa6c0c14a1c3346058f6ce2603d6a534",
+    "sha256": "108cfbc8e190a7202243944ca082f2455b1d0634e08d23ef9ce20ca9047eb522"
+  }
+}

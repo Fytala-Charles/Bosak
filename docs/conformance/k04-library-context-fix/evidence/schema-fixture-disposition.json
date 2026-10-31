@@ -1,0 +1,15 @@
+{
+  "reason": "Direct module import tests initially supplied a schema resolver but no prepared schema set; normal QT3 prepares these environment schemas eagerly.",
+  "scope": "Test fixture only; no assertion or production/schema-backend change",
+  "directImport": "Prepared matching schema set, as in the normal harness",
+  "dynamicLoader": "Resolver-only setup retained to verify its own schema preparation",
+  "initialAfter": {
+    "passed": 107,
+    "failed": 3
+  },
+  "qualifiedBaseline": "Fresh isolated unit run with the same corrected110 cases and hash-verified original1.30.0 DLLs",
+  "finalQualifiedRows": 112,
+  "qualifiedBaselinePassed": 60,
+  "qualifiedBaselineFailed": 52,
+  "additionalStaticPrefixRows": 2
+}

@@ -1,0 +1,11 @@
+{
+  "currentSource": {
+    "path": "tests/Bosak.XQuery.Tests/SchemaElementMembershipTests.cs",
+    "gitObject": "ed3a99f36e3cb1fbeeaa0654eee9356dfba06060"
+  },
+  "baselineCopy": {
+    "path": ".guard-tmp/k04-schema-element-baseline/SchemaElementMembershipTests.cs",
+    "sha256": "db0f8c9876f508d6c4fa1c67a62a1f4fa6a183ae8569e71e6c80d4085627d1d6"
+  },
+  "note": "Final cleaned regression source rerun over old libraries and full current XQuery test project; initial/final pre-cleanup receipts preserved separately."
+}

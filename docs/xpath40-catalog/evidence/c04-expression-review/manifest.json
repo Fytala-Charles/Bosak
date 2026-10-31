@@ -1,0 +1,140 @@
+{
+  "reviewDate": "2026-10-26",
+  "documentationBase": "bdd303d0fc3c69f7bea78f745445ba6cae204e4a",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "specRevision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "specFiles": {
+    "current-expressions.xml": "1fa994d200e67ff986d4a4787a0ac46b6ee545f4eb5613192cfafc3cde3dabd7",
+    "current-xpath-grammar.xml": "55122f68f6dd89ac5c577205fabf003de66f2d100c758774d27bcc756e2c27bd"
+  },
+  "sourceFiles": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "85383daf06921a46ff81656cce8174ad66a7ae01",
+    "src/Directory.Build.props": "4bbd3394519d40282be0d97700cd9416bde8a400",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "807c85b6a6724beafa3495135fd20260185f4fac",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "4f7681cd78f72d43406ccac47df82d16750bcec1",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "67f10a3a4252ec89e8f7389da94b5006b14fed7b",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "f97a0faf5c5b6ab0b286163dbc7eeb018c8de95c",
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+    "AGENTS.md": "f2362c6510a24b928d330b61aa2fc3d3ce034748",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs": "05a9af36ef1ec9f785ba3c77ccf1b9a743678156",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs": "24ac681bf63cf32cf106ee524ad131eb8dcfd2c9",
+    "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+    "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs": "29a556aa648f365db75ff1f70f36d982561143c8",
+    "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs": "41cbb0fd50f6f334d449b244434db4ef059e9767",
+    "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs": "392ee66e2cdc428c12d74f131e23084693649ef3",
+    "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+    "tests/Bosak.XPath.Parser.Tests/ParserTests.cs": "b8ee6e21626828fbbd423505d134284469e5b8e2",
+    "tests/Bosak.XPath.Parser.Tests/LexerTests.cs": "a950cfb2f6968e3ef0927faf81d428488b7a64b6",
+    "tests/Bosak.XPath.Parser.Tests/InlineFunctionParserTests.cs": "e4de258475bbc0985325557aecc7be5273ff000e"
+  },
+  "tools": {
+    "docs/xpath40-catalog/build-c04-review.py": "dd8393aa4beba9ef6245ae3cb59c494c0610c698",
+    "docs/xpath40-catalog/build-closure-plan.py": "023b854e7812e45330ea1f2bbbc0940ae108c3ed",
+    "docs/xpath40-catalog/C04-REVIEW-DECISIONS.json": "cd4706c910360bf9d0fa83743c9a380f09142aa6"
+  },
+  "files": {
+    "api-tests.log": "a96fe3cce0e363b3f0287a3f8edc638a7f461875dbfa25a3c2afe329e48d6873",
+    "authoring-corrections.json": "d14295a0515198024559e9dfdbb6d50139ad7d9eda66b093f788e9662a80a084",
+    "documentation-encoding-correction.json": "d853d3fb8591fc58e1f8aeac6f00e6236cc21145502d4c3e08953a109985157a",
+    "entry-sources.json": "0f94a72f5fa8d6d188dae3f48b140b1edc56a5904408a7037b09a42240d0c66c",
+    "host-catalog-tests.log": "47219ec8dc7cb750e18afef702d457e7b831e5370ecf01a84e382fc4ac034920",
+    "initial-probe-requests.json": "e24fc3b44a9c0563187c21162fe8f7d082bd98c79ba5eb8870b3004858842aa0",
+    "initial-probe-results.jsonl": "5ee89318a595f0fc54ff1ca6174c1c94daf3a36ffb69bee5970586f8d45e43f1",
+    "named-test-evidence.json": "3b7af5becf642d38518d2c4899607134a7f57628b5036a13b3a3a08360c6094b",
+    "parser-tests.log": "ee25b5e2048db12278e5546075b5b26f969a2f3dc631fb7e2fc1993658e8196a",
+    "probe-program.cs.txt": "8e8e76d2bc8fbab96fa7d3d10355820a4187b2d29157034d08c06fc8c485ca8d",
+    "probe-project.csproj.txt": "8d49bd5a88862a1b8f32f8643065c64ed5700eba35a3c24ea7d94d6795879936",
+    "probe-requests.json": "dc25b1da2673c2d02cd2a07c6fe051122b8e205ce1341f6c3c83db7d700c2582",
+    "probe-results.jsonl": "d39db12c880df052c0a5bc7eda0da7940cd1ecdd644ed1206a693211e0780de7",
+    "production-sources.json": "eeb6e88ef69ad216bbcde82bb59b6a1c82db2f1a3d1edd1f7b68a95171d8c689",
+    "render-program.cjs.txt": "8fdd5d767fdfbc8127a46b42fbcde89f5126aea00f7188c8ab7bdf84046e42f5",
+    "render-receipts.json": "3b1dc9cc44c06f38c542729a870985b7adc9698dc6db20e3904c717523523cd5"
+  },
+  "outputs": {
+    "EXPRESSION-CALL-FOCUS-RECONCILIATION.json": "296533ef8b53c536cdbdcccf4cc979a9df8a514a64bf2de7bf902d0e05f926ac",
+    "CLOSURE-PLAN.json": "95d76f90329c6235c3f869339701d64ea54d45cdb580181d157dffd512931a2e",
+    "CONFORMANCE-SKIP-TRIAGE.json": "b2b4fa5925928081caf25480530eb0ac98244ee04b2567c7d54414be18761138",
+    "GRAMMAR-COVERAGE-MATRIX.json": "2a7f8f47b332ccf477ea92e2dbf29d4c97b5d4833c641497c0146f33df68e69b"
+  },
+  "localBinaryIdentities": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c04-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    }
+  ],
+  "validation": {
+    "probes": {
+      "expressions": 108,
+      "observations": 227,
+      "assertedControls": 219,
+      "matchingControls": 209,
+      "unmetControls": 10,
+      "contextObservations": 8
+    },
+    "focusedTests": {
+      "api": 289,
+      "parser": 202,
+      "hostCatalog": 389,
+      "total": 880,
+      "failed": 0,
+      "skipped": 0
+    },
+    "inheritedSolution": {
+      "evidence": "../c02-function-review/manifest.json",
+      "passed": 21798,
+      "failed": 0,
+      "skipped": 0
+    },
+    "inheritedCatalog": {
+      "evidence": "../c02-function-review/catalog-tests.log",
+      "passed": 3148
+    },
+    "inheritedGates": {
+      "evidence": "../closure-triage/gate-receipts.json",
+      "qt3": [
+        31142,
+        0,
+        679
+      ],
+      "qt4": [
+        8436,
+        0,
+        1894
+      ]
+    }
+  },
+  "policy": "No engine/test/executable example/profile/gate change. Ten current-draft expectations remain unmet, and eight open-context observations are not counted as passing conformance. No acceptance waiver or reconstructed historical adoption."
+}

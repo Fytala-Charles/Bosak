@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-29",
+  "scope": "Isolated Braid source qualification with original failures and distinct identity follow-ups",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/baseline-desktop.deps.json",
+      "bytes": 30685,
+      "sha256": "3c8c0de42c36ceb1a4837aa70227a339c597079d5171d3b49a485b436ecc607d"
+    },
+    {
+      "path": "evidence/baseline-engine-source-identities.json",
+      "bytes": 39361,
+      "sha256": "84c6bba80b8e202a5d00cb80d5fdf1d95b6ad9a651e8d7818fd0553638f0d3d2"
+    },
+    {
+      "path": "evidence/baseline-followup.txt",
+      "bytes": 3563,
+      "sha256": "0737f84d7c1da08f367c4d8e6af8b63f81f1ed20c0a0eebabe7a46588a9bc9f5"
+    },
+    {
+      "path": "evidence/baseline-identity-followup.trx",
+      "bytes": 7828,
+      "sha256": "984ea65596afb3027aae2b135078c674266593cfa63cfe42ab97f86eb2517dac"
+    },
+    {
+      "path": "evidence/baseline-original-0.trx",
+      "bytes": 40778,
+      "sha256": "3d7066949f7d31ccc9a23f8edd62d92f3f6308d5bfe7e7cf268fae64dbeb73e3"
+    },
+    {
+      "path": "evidence/baseline-original-1.trx",
+      "bytes": 777739,
+      "sha256": "27a9aabca08dd23b451707c5c124ef1b728a6c9030b80097e08e62160493e152"
+    },
+    {
+      "path": "evidence/baseline-original-2.trx",
+      "bytes": 1591241,
+      "sha256": "34dfa509225f3bbeaf73a962954ee416516a4ada580de6fbdd489185fbab9315"
+    },
+    {
+      "path": "evidence/baseline-original-3.trx",
+      "bytes": 547101,
+      "sha256": "68106fc26dbd0e12d4f7ae1b59d8ef61d13b6bcb12abd15d29aa66454447e050"
+    },
+    {
+      "path": "evidence/baseline-override.targets",
+      "bytes": 496,
+      "sha256": "efa9bedc504affa2a6b59fcb8989cc4e5b5313fd1504dc08404fd81f5e6bb952"
+    },
+    {
+      "path": "evidence/baseline-tests.txt",
+      "bytes": 11726,
+      "sha256": "c65f37a49a4049facbf63df55139d53f139e2cbcb92c900f40ddc8f72c8c77df"
+    },
+    {
+      "path": "evidence/braid-followup-processes.json",
+      "bytes": 298,
+      "sha256": "481b58259f0653f620cb38d7ece783549e2a36e4bbbe19e1f539f2b502a5f46c"
+    },
+    {
+      "path": "evidence/braid-processes.json",
+      "bytes": 300,
+      "sha256": "dfc320a2dbb46a3f3a1749bf578ef752ceb0424fa578ea18935851782aa2f3da"
+    },
+    {
+      "path": "evidence/candidate-desktop.deps.json",
+      "bytes": 30685,
+      "sha256": "1876759f5ccabc6df18f6767e56a5f16c4b14e16631e07c670ba93951d00aa8f"
+    },
+    {
+      "path": "evidence/candidate-followup.txt",
+      "bytes": 3274,
+      "sha256": "ef8030a0b73b10030ad5f95535dde9592934ea65a96b92ac7ab8e7bc0c3a58a0"
+    },
+    {
+      "path": "evidence/candidate-identity-followup.trx",
+      "bytes": 7836,
+      "sha256": "df4e093ac6c1da5cbe9577ae0559fcf1ce5cd0ee7e398f5ef59e2330577ab34d"
+    },
+    {
+      "path": "evidence/candidate-original-0.trx",
+      "bytes": 40832,
+      "sha256": "bdabb8f25d987951598c2f6e4a2dee31aefa4b256ea17c80f3f0f584f4ee03b9"
+    },
+    {
+      "path": "evidence/candidate-original-1.trx",
+      "bytes": 778767,
+      "sha256": "c7ac844c1c528306607b110479d83d403327814ac468cc3e2a30136f2134c9e6"
+    },
+    {
+      "path": "evidence/candidate-original-2.trx",
+      "bytes": 1593099,
+      "sha256": "1b9977599ab07643ce99435580c1fa014e0df9040bd16ad55a15f20c713d511b"
+    },
+    {
+      "path": "evidence/candidate-original-3.trx",
+      "bytes": 547841,
+      "sha256": "4fe0d570da3ffbffef56b458f8af22a4841fe19766d425e8bab292c018cdf701"
+    },
+    {
+      "path": "evidence/candidate-override.targets",
+      "bytes": 463,
+      "sha256": "26096f10d14160dabf00686c7c22fc2ac5cac7c97b46089eb180c349052641bd"
+    },
+    {
+      "path": "evidence/candidate-tests.txt",
+      "bytes": 10344,
+      "sha256": "b22d2a87eade50e8066a7bc1c5c9b760a2cac015c7202edebdb2573cfeb8357e"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4959,
+      "sha256": "0dc1ff0a9df6c9e6cd4b60765ead68d5d45415213ee1b84253e752395c11e10a"
+    },
+    {
+      "path": "evidence/final-binary-identities.json",
+      "bytes": 2972,
+      "sha256": "5490e892ad3d7d528ed008b270e00748c850203f6a62d9893abd1ff895bcc43e"
+    },
+    {
+      "path": "evidence/identity-failure-classification.json",
+      "bytes": 3540,
+      "sha256": "090e0fc457638707657d928ddc857acad6f2730eaf88f70bd84355b28eb50475"
+    },
+    {
+      "path": "evidence/original-pin-assertion-sha256.txt",
+      "bytes": 66,
+      "sha256": "a50a2fd71101550f2d8cfe1ddcbbc8eb35b2d95c38ba5dc9cbcd34fb34bcd2e2"
+    },
+    {
+      "path": "evidence/pin-expectation-migration.json",
+      "bytes": 387,
+      "sha256": "29abf4b60b3fcd8b90119fac336f2705aa806ccca055517814bd53a299bf6b43"
+    },
+    {
+      "path": "evidence/prepare-braid-qualification.py",
+      "bytes": 2314,
+      "sha256": "dc1e0588600d838b960bdbdc25d009fed7ee3b42ec71edc8f9011c8dc6eaa411"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 827,
+      "sha256": "52baebf2f14b76260aa0b1c03e06f0640dab32d0776e496bfdc687a8d7ccc386"
+    },
+    {
+      "path": "evidence/run-braid-followup.py",
+      "bytes": 2242,
+      "sha256": "995c29cf410a53cbc43dd2878823d6eba153b3506ead10371631fc6364a32dca"
+    },
+    {
+      "path": "evidence/run-braid-qualification.py",
+      "bytes": 923,
+      "sha256": "f84d028458046a1d6ed4be8d706dbe1f5318221b7ef8d1a703ce535210b4bae8"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/source-selection.json",
+      "bytes": 556,
+      "sha256": "417cdaeae62aa14db18f477840bf9b31916931a0dd37f0e58d4b927fccca2dbd"
+    },
+    {
+      "path": "evidence/source-verification.json",
+      "bytes": 46760,
+      "sha256": "6612dc8c12c169e183b18a9fa672981195d7dd4fdf7a0ced5ef0e6669cc27fd6"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4909,
+      "sha256": "b33f08543921af1ba3f8ed89dc9341953243c88c694056fcc0b11045b2072718"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 586797,
+      "sha256": "eeab3529e2272f1837887ae2eae2ac9c33aef15a9f919eb03694ba42df4bbe9e"
+    }
+  ]
+}

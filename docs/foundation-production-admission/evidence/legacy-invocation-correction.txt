@@ -1,0 +1,1 @@
+Initial invocation omitted the required <output-json> argument; no compatibility cases ran. The process did not finish within the 60-second watchdog. Corrected invocation passes the explicit absolute output file and retains the original caller bytes. This is an invocation correction, not an engine/test expectation change.

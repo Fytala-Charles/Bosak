@@ -27,6 +27,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode walk case
+//                      | Charles Korthout | 0.10  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -492,6 +493,9 @@ internal static class ModuleVisibilityValidator
                     break;
                 case ValidateExpressionNode v:
                     Walk(v.Expression);
+                    break;
+                case ExtensionExpressionNode extension:
+                    Walk(extension.Expression);
                     break;
                 case StringConstructorNode sc:
                     foreach (var p in sc.Parts)

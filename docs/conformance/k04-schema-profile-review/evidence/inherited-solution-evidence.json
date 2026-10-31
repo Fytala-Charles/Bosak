@@ -1,0 +1,6 @@
+{
+  "source": "docs/conformance/k04-xib-admission/adoption/solution-receipt.json",
+  "receiptSha256": "8634095315ad722dea52cf254fc82ffb1567a1b54e7e82c2ef44021f5ebd9b38",
+  "passed": 24164,
+  "disposition": "Inherited from adopted C40; C41 changes no implementation or normal binaries and does not rerun unit tests."
+}

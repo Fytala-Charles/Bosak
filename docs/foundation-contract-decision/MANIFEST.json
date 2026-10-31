@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-30",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "c1bd7babc4d3eec3bff04a5de99af6d4fd294da967fe772213b5d6c60441e290"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "29dac85a09bc24f1f4bdbde6a3616e09bd6b457ae054dcade1f9349936d8ed89"
+    },
+    {
+      "path": "DECISION-MATRIX.json",
+      "sha256": "72b88ef7586026b2a915b90d134580a5d7746a79b0be0412fc34f5f24f6d8fd9"
+    },
+    {
+      "path": "DISPOSITION.template.json",
+      "sha256": "a194109c768511047b8b1d253d8cd37d7ca02e5d820c822da4bb433974d167d0"
+    },
+    {
+      "path": "OWNER-INPUTS.json",
+      "sha256": "08443210f78df854248f262e8d01a7e3e7682a409b774c5da1bc484912be25c0"
+    },
+    {
+      "path": "README.md",
+      "sha256": "1861d826e8bc29d5ee9975fe37029dc17c131b7b6203182910ce62d4f02811f9"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "740c83092c46feaf6e1fbcaae274968eded164e65ad7210ba079ceb042eec479"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "b5f5194f3b6195b8d5b6561beaf30f5a9f073baba7af229764ad50d0931c86f6"
+    }
+  ]
+}

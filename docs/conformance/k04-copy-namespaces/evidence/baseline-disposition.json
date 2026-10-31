@@ -1,0 +1,8 @@
+{
+  "initialEmptyDiscovery": "baseline-initial-no-tests.log is not qualification evidence; test source was then copied into the isolated project.",
+  "initial50": "Initial 50 cases found 23 implementation failures; their exact source and logs are retained.",
+  "initial60": "Old-DLL 60-case cohort: 51 failures / 9 passes. Source snapshot retained separately.",
+  "qualified": "Identical final 76-case source: preserved 1.30.1 DLLs produce 67 failures / 9 passes; candidate 1.31.0 passes all 76. Initial empty, 50-case, 60-case and 72-case phases are historical.",
+  "initialSerializationRegression": "Initial full run had two unit failures and 39 QT3 assertion failures from redundant xmlns declarations. An intermediate gate converted four namespace cases to skips. All raw failed gate maps and logs are retained; the final implementation restores exact current normal gates.",
+  "final": "Final normal QT3 31208/0/613 and qt4 8939/0/1920 maps match approved adoption exactly; isolated copy-only gate 31257/0/564; all 24010 solution and 76 focused tests pass."
+}

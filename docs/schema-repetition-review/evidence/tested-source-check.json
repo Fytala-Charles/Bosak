@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-29",
+  "allMatchTestedSource": true,
+  "sourceFiles": 8,
+  "identities": {
+    "examples/Bosak.Schema.Assessment.Example/Program.cs": "0b985a9bad62777e71984fad7fda8a116543c8c58813ba1df094e9d9408b358a",
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs": "9722af5ec6ec36379cc97e20e520ffdf182492e22a78c3ee19dd1897d3b314ba",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "62cba28f4d05556f0a5d21a8774cbbcba78d0ff5ed83593dde4a63e158abe727",
+    "src/Bosak.Schema/Bosak.Schema.csproj": "e03307fe15784403144407b203f2ff7a9c070f947b27485dbc8cc59a11e387c4",
+    "tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs": "dc2bc1ee47acc4d30aaf1340c2d503cdf5ed35a4c6458c598a4d2eead1d75bc6",
+    "tests/Bosak.Schema.Tests/Xsd11/RepeatedDecimalAssessmentTests.cs": "4ab05c059b756180c74ffe4465e14b7961d1a8efb8e44cff1d2acab637795f6b"
+  }
+}

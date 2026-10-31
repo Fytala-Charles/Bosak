@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\transport136-tools\Native\Native.csproj (in 52 ms).
+  Native -> D:\Development\Bosak\.guard-tmp\transport136-tools\Native\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.10

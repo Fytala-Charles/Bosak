@@ -1,0 +1,7 @@
+{
+  "firstBuild": "Initial compile failed because a parser name-start helper did not exist; preserved build-initial-failure.log. Replaced that check with token-offset and NCName validation before successful tests.",
+  "initial68Regressions": "Four module-scope failures exposed missing pragma validation in declaration bodies; fixed with a scoped traversal before optimization. Two incorrect expectations were corrected after specification verification: arrow use is legal; namespace undeclaration yields an unbound prefix (XPST0081), not XQST0085. Original initial logs and generator retained.",
+  "focused76": "All 76 passed before adding six additional unbound/dead-scope regressions.",
+  "final82": "82 pass on new engine; identical source against preserved 1.32.0 binaries has 55 failures / 27 passes.",
+  "originals": "59 pass / one old exact-XQ10 no-namespace expectation fails directly; both independent exact-XQ10 exclusions retained. Every one of the 55 eligible gate additions passes. No original fixture/assertion changed."
+}

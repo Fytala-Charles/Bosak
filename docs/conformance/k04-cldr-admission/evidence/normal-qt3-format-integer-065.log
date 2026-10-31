@@ -1,0 +1,20 @@
+Bosak XPath 3.1 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt3tests\catalog.xml
+Test-set filter:  fn-format-integer
+Test-name filter: format-integer-065
+
+Discovered 428 test sets.
+  Starting: fn-format-integer ...
+  Done: fn-format-integer (1 tests total)
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   1
+Passed:  1
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.00%
+
+Elapsed: 0.32s

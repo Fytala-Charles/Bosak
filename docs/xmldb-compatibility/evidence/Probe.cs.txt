@@ -1,0 +1,69 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Probes persistent XML provider compatibility and snapshot lifetime in isolation.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated XmlDb provider compatibility diagnostic                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XmlDb.Storage;
+using Bosak.XmlDb.Core;
+using Bosak.XmlDb.Xdm;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+var output = args[0];
+var folder = Path.Combine(Path.GetTempPath(), "bosak-xmldb-probe-" + Guid.NewGuid().ToString("N"));
+const string xml = "<root flag='2'><n>2</n><n>3</n><zero>0</zero><bad>x</bad><!--c--><?p v?></root>";
+using (var input = new MemoryStream(Encoding.UTF8.GetBytes(xml))) XmlFragmentImporter.Import(input, folder, documentUri: "https://example.test/probe.xml");
+var observations = new List<object>();
+using var snapshot = ImmutableXmlSnapshot.Open(folder);
+var persistent = new PersistentXdmNode(snapshot);
+IXdmNode memory = new XDocumentNode(XDocument.Parse(xml, LoadOptions.PreserveWhitespace));
+string Run(IXdmNode node, string expression)
+{
+    try { var value = XPath31Expression.Compile(expression).Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(node), 1, 1)); return value.Kind + ":" + value.ToString(); }
+    catch (Exception error) { return "error:" + error.GetType().Name + ":" + error.Message; }
+}
+foreach (var expression in new[] {
+ "count(//*)", "count(//@*)", "count(//text())", "count(//comment())", "count(//processing-instruction())",
+ "string-join(/root/n ! string(.), ',')", "sum(/root/n)", "/root/n[1] + 1", "/root/n[1] eq 2", "/root/n[1] = 2",
+ "data(/root/n[1]) instance of xs:untypedAtomic", "data(/root/@flag) instance of xs:untypedAtomic",
+ "data(/root/n[1]/text()) instance of xs:string", "data(/root/n[1]) instance of xs:string",
+ "/root/bad + 1", "/root/n eq 2", "exists(/root/zero)", "empty(/root/missing)",
+ "count(/root/n[1]/following-sibling::*)", "count(/root/n[2]/preceding-sibling::*)",
+ "count(/root/n/ancestor::*)", "count(/root/n | /root/n)", "/root/n[1] is /root/n[1]", "/root/n[1] << /root/n[2]",
+ "string((/root/n | /root/zero)[last()])", "count(/root/n[2]/preceding::*)" })
+{ var p=Run(persistent, expression); var m=Run(memory, expression); observations.Add(new { kind="differential", expression, persistent=p, memory=m, equal=p==m }); }
+List<IXdmNode> Nodes(XdmSequence sequence) { var result=new List<IXdmNode>(); foreach(var value in sequence) result.Add(value.NodeValue); return result; }
+var root=Nodes(persistent.Children()).Single();
+var a=Nodes(root.Children()).First(); var b=Nodes(root.Children()).First();
+using var other=ImmutableXmlSnapshot.Open(folder);
+observations.Add(new { kind="identity", repeatedWrapper=a.IsSameNode(b), distinctSnapshot=!persistent.IsSameNode(new PersistentXdmNode(other)) });
+foreach(var kind in Enum.GetValues<XdmNodeKind>()) observations.Add(new { kind="enum", name=kind.ToString(), number=(int)kind });
+foreach(var kind in Enum.GetValues<StorageNodeKind>()) observations.Add(new { kind="storage-enum", name=kind.ToString(), storage=(int)kind, engine=(int)Enum.Parse<XdmNodeKind>(kind.ToString()), equal=(int)kind==(int)Enum.Parse<XdmNodeKind>(kind.ToString()) });
+string Check(Action action) { try { action();return "allowed"; } catch(Exception error) { return error.GetType().Name; } }
+XdmValue Single(XdmValue value) { if (value.Kind != XdmValueKind.Sequence) return value; foreach(var item in XdmSequence.FromSource(value.SequenceValue!)) return item; throw new InvalidOperationException("Empty probe result"); }
+IXdmNode MapNode(XdmValue value) { Single(value).MapValue.TryGetValue(XdmValue.FromString("node"), out var child);return Single(child).NodeValue; }
+var lazy=persistent.BindResult(XPath31Expression.Compile("/root/n").EvaluateNodes(persistent));
+var enumerator=lazy.GetEnumerator();enumerator.MoveNext();
+var nested=XPath31Expression.Compile("map{'node': /root/n[1]}").Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(persistent),1,1));
+var nestedArray=XPath31Expression.Compile("[/root/n[1]]").Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(persistent),1,1));
+snapshot.Dispose();
+observations.Add(new { kind="lifetime", node=Check(()=>_ = a.StringValue), startEnumeration=Check(()=> { var next=lazy.GetEnumerator();next.MoveNext(); }), duringEnumeration=Check(()=>enumerator.MoveNext()), independentSnapshot=Check(()=>_ = new PersistentXdmNode(other).StringValue), mapNode=Check(()=>_ = MapNode(nested).StringValue), arrayNode=Check(()=>_ = Single(Single(nestedArray).ArrayValue.Get(1)).NodeValue.StringValue) });
+File.WriteAllText(output, JsonSerializer.Serialize(observations,new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine($"Recorded {observations.Count} observations; temporary isolated store retained at {folder}");

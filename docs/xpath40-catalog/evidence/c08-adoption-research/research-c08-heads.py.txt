@@ -1,0 +1,10 @@
+﻿from pathlib import Path
+import json,re,subprocess,shutil
+E=Path('docs/xpath40-catalog/evidence/c08-adoption-research');heads=[]
+for p in sorted(E.glob('pr-*.json')):
+ d=json.loads(p.read_text(encoding='utf-8'));rev=d['headRefOid'];result=subprocess.run(['git','cat-file','-e',rev+'^{commit}'],capture_output=True);record=dict(pr=d['number'],headRevision=rev,objectRetained=result.returncode==0)
+ if result.returncode==0:
+  meta=subprocess.check_output(['git','show','-s','--format=%H%n%aI%n%cI%n%B',rev]);(E/f'pr-{d["number"]}-head-commit.txt').write_bytes(meta)
+  found=subprocess.run(['git','grep','-n','-I','-E','qtspecs|qt4cg.org/specifications|adoptedSpec|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in)',rev,'--','docs','src','tests'],capture_output=True);assert found.returncode in [0,1];(E/f'pr-{d["number"]}-head-source-search.txt').write_bytes(found.stdout);record['sourceSearchExitCode']=found.returncode
+ heads.append(record)
+(E/'head-research.json').write_text(json.dumps(heads,indent=2)+'\n',encoding='utf-8');shutil.copyfile('.guard-tmp/c08-historical-pin-search.txt',E/'historical-pin-search.txt');print('Checked',len(heads),'PR heads;',sum(v['objectRetained'] for v in heads),'retained locally')

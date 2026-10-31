@@ -1,0 +1,150 @@
+{
+  "legacy": [
+    "K2-MatchesFunc-16a",
+    "K2-SeqExprCast-210",
+    "K2-SeqExprCast-231",
+    "K2-SeqExprCast-232",
+    "K2-SeqExprCast-422",
+    "K2-SeqExprCast-423",
+    "K2-SeqExprCast-424",
+    "K2-SeqExprCast-505",
+    "K2-SeqExprCastable-6",
+    "K2-SeqExprCastable-7",
+    "cbcl-cast-gYear-002",
+    "cbcl-cast-gYear-003",
+    "cbcl-cast-gYearMonth-003",
+    "cbcl-codepoints-to-string-002",
+    "cbcl-codepoints-to-string-003",
+    "cbcl-codepoints-to-string-004",
+    "fn-matches-50",
+    "re00056",
+    "re00086",
+    "re00102a",
+    "substitution-001",
+    "substitution-002",
+    "substitution-003",
+    "substitution-004",
+    "substitution-005",
+    "substitution-006",
+    "substitution-007",
+    "substitution-008",
+    "substitution-009",
+    "substitution-010",
+    "substitution-011",
+    "substitution-030",
+    "substitution-031",
+    "substitution-032",
+    "xs-double-004",
+    "xs-double-005",
+    "xs-float-004"
+  ],
+  "schemaPreparationErrors": [
+    "substitution-020",
+    "substitution-021",
+    "substitution-022",
+    "substitution-023",
+    "substitution-024",
+    "substitution-025"
+  ],
+  "pairs": [
+    {
+      "legacy": "K2-MatchesFunc-16a",
+      "companion": "K2-MatchesFunc-16",
+      "expressionSha256": "76a9ddab3e24aadac0828ebd28334e12950ace6ee255f2077a0c8493e2e1b13c"
+    },
+    {
+      "legacy": "K2-SeqExprCast-231",
+      "companion": "K2-SeqExprCast-231a",
+      "expressionSha256": "4356626724e54ed0a2984fbc77ddd379afdca9c710f977b3bb2f366a577bd456"
+    },
+    {
+      "legacy": "K2-SeqExprCast-232",
+      "companion": "K2-SeqExprCast-232a",
+      "expressionSha256": "ede1ddd00760c378e34eb6bcb254a56feae514205eb9f95bc7e4dc983862f508"
+    },
+    {
+      "legacy": "cbcl-cast-gYear-003",
+      "companion": "cbcl-cast-gYear-003a",
+      "expressionSha256": "1b24cf1c5b188555f42799cbb90e1e4ddfa61398bdf431342aa9305d0d95360c"
+    },
+    {
+      "legacy": "re00056",
+      "companion": "re00056a",
+      "expressionSha256": "c16dfff3b0c1529355e6ef630194e48c615692ab276f4158d50389f3398a568e"
+    },
+    {
+      "legacy": "re00086",
+      "companion": "re00086a",
+      "expressionSha256": "20dc99cb35cb069aa0c31484c4916810cdd3c7bcc25d98ff07b589bc6d1a3ebe"
+    },
+    {
+      "legacy": "re00102a",
+      "companion": "re00102",
+      "expressionSha256": "6f0248120c534c01761797b39431df1e32069b7a4a16c391ad14ca68935f2163"
+    },
+    {
+      "legacy": "xs-double-004",
+      "companion": "xs-double-003",
+      "expressionSha256": "30f8a993ce797bd1d3df5f307464dc8dca9b7c2d7f0e90ebf05640d9e9cbda5b"
+    },
+    {
+      "legacy": "xs-float-004",
+      "companion": "xs-float-003",
+      "expressionSha256": "a946cb6c65b5d3c88c7aede7ae27db92ce50c819f074a057cf1a8621c129ee91"
+    }
+  ],
+  "allDiagnostics": [
+    "K2-MatchesFunc-16a",
+    "K2-SeqExprCast-210",
+    "K2-SeqExprCast-231",
+    "K2-SeqExprCast-232",
+    "K2-SeqExprCast-422",
+    "K2-SeqExprCast-423",
+    "K2-SeqExprCast-424",
+    "K2-SeqExprCast-505",
+    "K2-SeqExprCastable-6",
+    "K2-SeqExprCastable-7",
+    "cbcl-cast-gYear-002",
+    "cbcl-cast-gYear-003",
+    "cbcl-cast-gYearMonth-003",
+    "cbcl-codepoints-to-string-002",
+    "cbcl-codepoints-to-string-003",
+    "cbcl-codepoints-to-string-004",
+    "fn-matches-50",
+    "re00056",
+    "re00086",
+    "re00102a",
+    "substitution-001",
+    "substitution-002",
+    "substitution-003",
+    "substitution-004",
+    "substitution-005",
+    "substitution-006",
+    "substitution-007",
+    "substitution-008",
+    "substitution-009",
+    "substitution-010",
+    "substitution-011",
+    "substitution-030",
+    "substitution-031",
+    "substitution-032",
+    "xs-double-004",
+    "xs-double-005",
+    "xs-float-004",
+    "substitution-020",
+    "substitution-021",
+    "substitution-022",
+    "substitution-023",
+    "substitution-024",
+    "substitution-025",
+    "K2-MatchesFunc-16",
+    "K2-SeqExprCast-231a",
+    "K2-SeqExprCast-232a",
+    "cbcl-cast-gYear-003a",
+    "re00056a",
+    "re00086a",
+    "re00102",
+    "xs-double-003",
+    "xs-float-003"
+  ]
+}

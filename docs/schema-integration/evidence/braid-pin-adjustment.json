@@ -1,0 +1,9 @@
+{
+  "scope": "Isolated test only; original repository untouched",
+  "path": ".guard-tmp\\schema-consumers\\Braid\\tests\\Bosak.Braid.Infrastructure.Tests\\ReadableInsertionIntegrationTests.cs",
+  "beforeSha256": "c4a9b3ea7b185b35f7e93f52820a438055540d07f0f4489031a10fa49a14d9a1",
+  "afterSha256": "807b5b0d3e46031a918c49dc11f97547a8aa173821807f5ae237fa39f4f513e0",
+  "oldExpectedIdentity": "1.26.2+6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+  "newExpectedIdentity": "1.33.1+5f2dec11c16a7287f45f717779d6f9e92534eb30",
+  "behavioralAssertionChanges": 0
+}

@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"K2-CopyNamespacesProlog-9","kind":"Failed","message":"assert-string-value failed. Expected: \u0027namespace1 xml | namespace1 namespace2 namespace3 xml\u0027, Got: \u0027namespace1 namespace2 namespace3 xml | namespace1 namespace2 namespace3 xml\u0027"}

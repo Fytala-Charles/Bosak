@@ -1,0 +1,9 @@
+D:\Development\Bosak\integrations\Schema\Source\Bosak.Schema.Source.csproj(20,5): error : Public Schema source/license pin mismatch: D:/Development/Bosak/.guard-tmp/schema-lf-source/src/Bosak.Schema/SchemaServices.cs. Use the revision in docs/schema-integration/SOURCE-PIN.json.
+
+Build FAILED.
+
+D:\Development\Bosak\integrations\Schema\Source\Bosak.Schema.Source.csproj(20,5): error : Public Schema source/license pin mismatch: D:/Development/Bosak/.guard-tmp/schema-lf-source/src/Bosak.Schema/SchemaServices.cs. Use the revision in docs/schema-integration/SOURCE-PIN.json.
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.37

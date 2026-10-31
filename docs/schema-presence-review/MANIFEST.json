@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed bounded Schema 0.9 presence implementation checkpoint",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 251,
+      "sha256": "0689c79d1c85f5d20c014a229ce1e59a561e250fb94bfaf92b537ec236cd4ef7"
+    },
+    {
+      "path": "evidence/charl_CHARLES_2026-10-29_18_52_43_net10.0.trx",
+      "bytes": 670427,
+      "sha256": "170f37f5d7a8b08ac3ed1f6103691c25b49af3eec53d32a50e5cc500f375fad5"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4613,
+      "sha256": "5c6bac2ad0bb28fa0a87949bd0ee339978327bd4999f2c1431b392a5f48921e4"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 637,
+      "sha256": "dbcaa344ece2671683d3d62e280ab1b237f386275e7e6cd42f230818d2497bff"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/source-verification.json",
+      "bytes": 1003,
+      "sha256": "bc58fa6010d012f1d4edf8c87348d28ba1b4adacabb8654c30115193ca9f574b"
+    },
+    {
+      "path": "evidence/tests.txt",
+      "bytes": 457,
+      "sha256": "77a763aa1ff65ed53f33bcd195b6a3da77cc62ba02264e86f12fabffee5eadd7"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1761,
+      "sha256": "90c4c9d08d8899284548010b6d9348cb32c317ae4b3ad5afa8bbcc1c192963a4"
+    }
+  ]
+}

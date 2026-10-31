@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-29",
+  "scope": "Independent actual runtime snapshot resolver and worker admission experiment; no product integration",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/compiled-identities.json",
+      "bytes": 470,
+      "sha256": "34e770619eaa942452e38c4545746f0b9943bb6a18f3c6141d225bfcc439e52e"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4258,
+      "sha256": "97ee622f44fa0a2d95ba25497ea86f7aacffbb9e7b304ce224f2ecd6cf633f5e"
+    },
+    {
+      "path": "evidence/final-results.json",
+      "bytes": 60196,
+      "sha256": "f6dcbd1f87ed028cd22a903c15298c13a925ddc1d4afe864568fb00f4cd73130"
+    },
+    {
+      "path": "evidence/final-run.txt",
+      "bytes": 98,
+      "sha256": "b46c954c5d00b32dcd89664145db9f6c39d952a7bf4934e8d32a7aec6a0c9ce5"
+    },
+    {
+      "path": "evidence/initial-operations-build.txt",
+      "bytes": 9262,
+      "sha256": "afd58c7d806652e797b54ec4e9df380617aa03706c45441335d32a842dde0661"
+    },
+    {
+      "path": "evidence/initial-process.json",
+      "bytes": 114,
+      "sha256": "4428972d52e9474f66feaa7da95c00a3c7c87be12e04cf08c2374dee8620c245"
+    },
+    {
+      "path": "evidence/initial-runtime-run.txt",
+      "bytes": 348,
+      "sha256": "ae5d2fa55f850f6733542906a8383d37980e220613de4d6cb814b903ef8eb9c7"
+    },
+    {
+      "path": "evidence/inputs.json",
+      "bytes": 7437,
+      "sha256": "f2be354f764f9d1f13aee2c03d141d476744d7912e29cc7c3af206eb2ef045de"
+    },
+    {
+      "path": "evidence/operations-build.txt",
+      "bytes": 556,
+      "sha256": "72e4594472347252ecdef43aca0f37775c4c7f9779f42df2e70efe332f23456a"
+    },
+    {
+      "path": "evidence/Operations.cs.txt",
+      "bytes": 2755,
+      "sha256": "f08a357f9f2b6fc2dcacf41738751d7b73eaadb3abb1300cbd3e94bda4f30802"
+    },
+    {
+      "path": "evidence/Operations.csproj.txt",
+      "bytes": 2124,
+      "sha256": "67419537bb10abb96810394ea734e4f92c87d0919b1e6be3fb2ad416bfc0cadd"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1200,
+      "sha256": "0ee25bc95dac3146dbfca0203738ea057d149faf20f7e02b6b669235940c9a7e"
+    },
+    {
+      "path": "evidence/process.json",
+      "bytes": 106,
+      "sha256": "52dc9d700b5e0d330660d1c26623432e38e7d2f4d2bc363a86ae1a506934d40f"
+    },
+    {
+      "path": "evidence/runtime-build.txt",
+      "bytes": 522,
+      "sha256": "59bc509ce67973541be91ecc3dcb6ebd03d2fd6afcdadf87d4cdb6f198220474"
+    },
+    {
+      "path": "evidence/Runtime.cs.txt",
+      "bytes": 19717,
+      "sha256": "0dadd3760fdfc338e1049180c51dc0e2ef728854f63573f422213bb4453f91ad"
+    },
+    {
+      "path": "evidence/Runtime.csproj.txt",
+      "bytes": 323,
+      "sha256": "65ff889d49c6e228841707dfab0a3b7a96b3fa2024f047bc9c7b6038984ed40d"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6880,
+      "sha256": "6cacee105e4c9846384bff17776e4b8e12993d099641729da3cc1611b7e21e13"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 554,
+      "sha256": "7620e625b1e2e1f3501147f5cd00b922016d41f56ddf210fbf805e6374842b1e"
+    }
+  ]
+}

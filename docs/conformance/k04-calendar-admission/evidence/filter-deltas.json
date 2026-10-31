@@ -1,0 +1,176 @@
+{
+  "controlRows": 364,
+  "profileOutcomesPerPhase": 538,
+  "changedProfileOutcomes": 28,
+  "changedControlRows": 21,
+  "changes": [
+    {
+      "id": "qt3-calendar-CB-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-calendar-CB-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-calendar-CB-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-calendar-CB-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-feature-staticTyping-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-feature-staticTyping-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XQ10-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XQ10-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XP31+-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XP31+-True",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XQ31+-True",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-spec-XQ31+-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-language-xib-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-language-xib-True",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-calendar-ZZ-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-CB-negative-with-calendar-ZZ-True",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-original-format-date-en152",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-original-format-dateTime-en152",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-calendar-CB-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-calendar-CB-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-feature-staticTyping-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-spec-XQ10-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-spec-XP31+-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-spec-XQ31+-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-language-xib-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-CB-negative-with-calendar-ZZ-True",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-original-format-date-en152",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-original-format-dateTime-en152",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    }
+  ]
+}

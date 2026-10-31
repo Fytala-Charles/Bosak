@@ -1,0 +1,1442 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 5367d39..e73c098 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -137,7 +137,7 @@ public CanonicalEvidenceSet Parse(string payload, ParseOptions? options = null)
+ |--------------|---------|
+ | `Bosak.Schema.Tests` | Activation-free factories, schema compilation/validation and legacy API compatibility |
+ 
+-The public schema solution has 114 tests and no licensing-pipeline/Azurite dependency.
++The public publication baseline has 114 tests; the native assessment 0.5 candidate has 191 (77 added) and no licensing-pipeline/Azurite dependency. Native assessment coverage is deliberately finite; preserve the original component state, distinguish invalid/unsupported, and never substitute an assertion-only result or stripped 1.0 schema for structural 1.1 assessment. See docs/DOCUMENT-ASSESSMENT.md and its immutable adoption record.
+ 
+ ### 5.2 Test Patterns
+ 
+diff --git a/Bosak.Schema.slnx b/Bosak.Schema.slnx
+index ee1a1e7..5b88057 100644
+--- a/Bosak.Schema.slnx
++++ b/Bosak.Schema.slnx
+@@ -1,4 +1,5 @@
+ <Solution>
+   <Folder Name="/src/"><Project Path="src/Bosak.Schema/Bosak.Schema.csproj" /></Folder>
+   <Folder Name="/tests/"><Project Path="tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj" /></Folder>
++  <Folder Name="/examples/"><Project Path="examples/Bosak.Schema.Assessment.Example/Bosak.Schema.Assessment.Example.csproj" /></Folder>
+ </Solution>
+diff --git a/README.md b/README.md
+index 42355da..42f7def 100644
+--- a/README.md
++++ b/README.md
+@@ -17,6 +17,8 @@ Bosak.Schema is free, open-source Fytala software under [Apache-2.0](LICENSE.md)
+ 
+ The implementation targets .NET 10 and currently references published Bosak 1.26.3 packages. It provides schema-aware XSLT compiler helpers and a staged XSD 1.1 component/assertion pipeline. Complete XSD 1.1 structural validation and integration of its full component universe into running Bosak expressions are **not yet implemented**. See the [support matrix](docs/FEATURE_REQUESTS.md).
+ 
++The unpublished 0.5 development candidate adds [native document assessment](docs/DOCUMENT-ASSESSMENT.md): a complete structural/decimal/assertion check for one explicit XSD 1.1 profile, an owned result with original declaration/type state, and typed decimal exports for Bosak queries/transforms. Unsupported coverage is refused; full typed-document/root interchange remains pending.
++
+ The initial public source is derived from Fytala's private schema source at `fa0da3e2d9972706a5a86616ef285af4daf5037b`, with the owner-approved Apache transition on 29 October 2026. Billing, key-generation, deployment material and private Git history remain outside this repository. See [provenance](docs/APACHE-TRANSITION.md).
+ 
+ ## 2. Quick Start
+@@ -38,6 +40,7 @@ The `SchemaAwareXslt` helper explicitly enables the existing schema-aware compil
+ ```powershell
+ dotnet build Bosak.Schema.slnx -c Release
+ dotnet test Bosak.Schema.slnx -c Release
++dotnet run --project examples/Bosak.Schema.Assessment.Example -c Release
+ pwsh tools/check-docs.ps1 -ProjectPath .
+ ```
+ 
+@@ -50,6 +53,7 @@ The public solution needs the .NET 10 SDK; it has no Azure, payment-service, key
+ | `src/Bosak.Schema` | Schema compilation, models, validation and activation-free integration |
+ | `tests/Bosak.Schema.Tests` | Schema and Apache compatibility regressions |
+ | `tests/TestData/Schemas` | Locally authored schema fixtures |
++| `examples/Bosak.Schema.Assessment.Example` | Runnable native assessment and typed query/transformation |
+ | `docs` | Architecture, integration, roadmap and transition decisions |
+ | `tools` | Build and documentation checks |
+ 
+diff --git a/ROADMAP.md b/ROADMAP.md
+index 53230ea..4365f4b 100644
+--- a/ROADMAP.md
++++ b/ROADMAP.md
+@@ -13,11 +13,11 @@
+ 
+ ## 1. Current Milestone
+ 
+-The 0.4 development line makes schema services Apache-2.0 and activation-free. Public source contains the schema implementation/tests only; the original commercial infrastructure and full Git history remain private. No NuGet release/tag is included in this migration.
++The public 0.4 baseline makes schema services Apache-2.0 and activation-free. The unpublished 0.5 candidate implements [native bounded document assessment](docs/DOCUMENT-ASSESSMENT.md) with original declaration/type state and explicit typed-value projection; complete XSD 1.1 and anonymous-root interchange remain incomplete. Public source contains the schema implementation/tests only; the original commercial infrastructure and full Git history remain private. No NuGet release/tag is included in this migration.
+ 
+ ## 2. Next Milestones
+ 
+-1. Reassess the smallest useful core/session API now that licensing no longer dictates a proprietary plug-in boundary.
++1. Qualify the smallest anonymous-root/whole-document bridge from the real native assessment result, preserving original type/declaration state and no-typed-value/copy behavior.
+ 2. Qualify complete component/universe identity, compatible-schema handoff, PSVI/atomic flow and bounded resource ownership.
+ 3. Implement or explicitly refuse remaining XSD 1.1 structural/assessment coverage.
+ 4. Build/test real consumers and unchanged binaries, then run the full engine/conformance gates before API freeze or release.
+diff --git a/docs/AGENT_HANDOVER.md b/docs/AGENT_HANDOVER.md
+index ec87241..b92f702 100644
+--- a/docs/AGENT_HANDOVER.md
++++ b/docs/AGENT_HANDOVER.md
+@@ -1,3 +1,15 @@
++# Native document assessment candidate — 29 October 2026
++
++Current feature worktree: `feature/bounded-document-assessment`, based on public `044d2cb2e67decd46e03e0f5ee7cb03029f34bd9`; implementation changes remain uncommitted. This is the 0.5 MinVer development line, with original published Bosak 1.26.3 package pins unchanged. No tag, hosted CI, package publication or core/session API freeze.
++
++What was built: strict finite native XSD 1.1 schema/profile compiler, native structural/exact-decimal checks before assertions, immutable successful document snapshots and original declaration/type/value state, native PSVI-preserving copies, stripped XML copies and explicit decimal-child projections. A full typed anonymous-root export is refused. The [guide](DOCUMENT-ASSESSMENT.md), [adoption record](ASSESSMENT-ADOPTION-2026-10-29.md) and [ADR-008](ADR-008-bounded-native-assessment.md) own the exact boundary.
++
++Fresh qualification: 191 complete Schema cases (114 original plus 77 new), against both published 1.26.3 and current core source, and 114 unchanged original test binaries with only Schema replaced. Example reports valid assessment, decimal typing, total 15 and successful preserve/strip checks. These scopes overlap; no full XSD 1.1 certification or new XmlDb/Braid adoption. The original first fixture failure used a detached initial context; later copy fixtures required the documented empty BCL annotation context. Original receipts remain separate from final passes.
++
++Next: qualify a minimal whole-document/anonymous-root bridge retaining actual components, atomization errors, preserving/stripping copies, cancellation and lifetime. Preserve earlier general-session proposals and pending acceptance records; do not adopt all proposed types by implication. Follow the existing Git rule: no commit/push/tag unless explicitly requested.
++
++## Historical Apache publication checkpoint
++
+ # Bosak.Schema handover — 29 October 2026
+ 
+ **Publication verified — 29 October 2026:** Public GitHub repository and Apache-2.0 detection verified; all 114 tests and the content-commit CI pass. [Publication receipt](PUBLICATION.json). No NuGet release or commercial infrastructure publication.
+diff --git a/docs/ARCHITECTURE.md b/docs/ARCHITECTURE.md
+index 205670a..95232da 100644
+--- a/docs/ARCHITECTURE.md
++++ b/docs/ARCHITECTURE.md
+@@ -22,6 +22,7 @@ One public `Bosak.Schema` assembly references the published Bosak XPath API/prov
+ | `Compilation` | Explicit-version schema descriptor compilation and bounded resolved imports/includes |
+ | `Model` | Staged XSD 1.1 assertions, alternatives, declarations, simple facets, open-content/default-attribute metadata |
+ | `Validation` | Assertion/facet evaluation and supported governing-type applicability through Bosak XPath |
++| `Assessment` | Native finite structural/decimal/assertion assessment, immutable component state and explicit built-in value projection (0.5 candidate) |
+ | `SchemaServices` | Activation-free factories for compiler and validation services |
+ | `SchemaAwareXslt` | Opt-in helper for the existing schema-aware XSLT path |
+ | Legacy license DTO/shim types | API compatibility only; no credential implementation or authority |
+@@ -42,11 +43,18 @@ Schema language version, host/XDM profile, component authority and source/snapsh
+ | Preserve modular package and core dependency direction | Retained |
+ | Require no activation for standards processing | Implemented |
+ | Full XSD 1.1 provider/session integration | Pending; no conformance promotion |
++| [ADR-008: bounded native assessment](ADR-008-bounded-native-assessment.md) | Implemented candidate; public API freeze pending |
+ 
+ ## 5. Validation and Extensibility
+ 
+-All 114 public schema tests pass. Existing assertion, facet, alternative, resource-policy and typed-XSLT regression bodies are retained; commercial credential tests remain with the private infrastructure. New tests cover activation-free factories, valid/invalid assertions, ignored legacy activation, invalid directory input and absence of issuer/credential implementations.
++The publication baseline has 114 tests. The 0.5 native assessment candidate passes 191 tests (114 existing plus 77 new) against published 1.26.3 and current core source; those overlapping scopes are not additive. Existing 114-case test binaries pass with only the Schema assembly replaced. Existing assertion, facet, alternative, resource-policy and typed-XSLT regression bodies are retained; commercial credential tests remain with the private infrastructure. New tests cover activation-free factories, valid/invalid assertions, ignored legacy activation, invalid directory input and absence of issuer/credential implementations.
+ 
+ No new engine implementation, baseline/filter change, storage migration or consumer adoption is included. Registry reclamation, full PSVI/component completeness and real consumer ABI qualification remain future acceptance gates.
+ 
++## 6. Native Assessment Candidate
++
++[ADR-008](ADR-008-bounded-native-assessment.md) separates complete admitted-profile assessment from descriptor assertion success. Compilation captures a closed single-schema model and finite XPath 2.0 assertion plans. Native validation checks structure and exact decimal values before assertions; successful results alone own snapshots and original declaration/type state. Unsupported coverage cannot fall back to XmlSchemaSet or expose a partially assessed document.
++
++Anonymous root authority is retained in the native result, not invented from a QName or digest. Native copies preserve original PSVI; full typed XML projection is refused. Explicit decimal-child projections use the actual built-in type with the legacy provider, without claiming local-declaration interchange. The [profile guide](DOCUMENT-ASSESSMENT.md) documents limits, ownership, cancellation and the next root bridge. No core/session interface, normal engine dependency or global conformance admission changes.
++
+ *Last updated: 2026-10-29*
+diff --git a/docs/FEATURE_REQUESTS.md b/docs/FEATURE_REQUESTS.md
+index a7838d0..4c06acd 100644
+--- a/docs/FEATURE_REQUESTS.md
++++ b/docs/FEATURE_REQUESTS.md
+@@ -18,7 +18,8 @@
+ | Apache/public transition | Implemented and GitHub publication verified | Schema-only Apache-2.0; activation-free services; private infrastructure excluded |
+ | REQ-009 staged XSD 1.1 support | In Progress | Compiled descriptors, assertion/facet evaluation, alternative applicability/filtering and selected metadata |
+ | Core schema-session integration | Pending | Complete component authority, actual PSVI/atomic flow, compatible-schema interchange and real consumer qualification |
+-| Complete XSD 1.1 structural validation | Incomplete | No complete current implementation or blanket conformance claim |
++| Native document assessment (REQ-009, 0.5 candidate) | Implemented candidate | Complete admitted-profile structure, exact decimals and assertions; owned original component state and bounded typed exports |
++| Complete XSD 1.1 structural validation | Incomplete | One native profile does not establish complete coverage or conformance |
+ 
+ ## 2. Implemented Coverage
+ 
+@@ -30,4 +31,10 @@ The Apache transition passed 114 public schema tests with zero failures/skips. C
+ 
+ The transition does not implement the proposed core session API, change frozen W3C gates, admit skipped tests, certify XmlDb/Braid adoption or release a package. Future semantic additions require immutable specification adoption evidence and happy-path/edge regression tests.
+ 
++## 4. Native Assessment Acceptance Scope
++
++The [0.5 candidate](DOCUMENT-ASSESSMENT.md) implements `decimal-sequence-assertions-v1` under [ADR-008](ADR-008-bounded-native-assessment.md) and pre-implementation [immutable normative adoption](ASSESSMENT-ADOPTION-2026-10-29.md). All 191 source cases pass, including 77 new happy/error/unsupported/boundary/copy/concurrency cases, on published and current core. The 114 legacy test binaries pass with the new library. Source/API additions are candidate work, not package publication, native product adoption or general API freeze.
++
++The broader REQ-009 remains In Progress. Anonymous-root projection, general component closure, compatible universes, named/anonymous/list/union derivation and broader structural features remain acceptance work. No core REQ-139 completion or frozen skip removal is inferred.
++
+ *Last updated: 2026-10-29*
+diff --git a/docs/INTEGRATION.md b/docs/INTEGRATION.md
+index 46fffa8..d906337 100644
+--- a/docs/INTEGRATION.md
++++ b/docs/INTEGRATION.md
+@@ -45,9 +45,18 @@ The new package contains no internal HMAC/product key, signing implementation, k
+ 
+ | Date | Change |
+ |---|---|
++| 2026-10-29 | Unpublished 0.5 native assessment candidate: 191 source tests on published/current core and 114 unchanged legacy binary cases; full typed-root projection remains unsupported |
+ | 2026-10-29 | Owner-approved Apache-2.0/public schema-only source, activation-free factories and credential-free compatibility shim; 114 tests pass |
+ | Before transition | Private proprietary development, preserved separately with its original Git history |
+ 
+ Public factory/type signatures are retained, with the intentional licensing behavior change documented above. Real previously compiled consumer replacement tests and full schema-session ABI/provider acceptance are not certified by these source tests.
+ 
++## 6. Native Document Assessment (0.5 Candidate)
++
++Use `SchemaServices.CreateDocumentAssessor(schemaDocument)` when a structurally checked document is needed within the explicit profile. Inspect `IsSupported` and diagnostics, then `Assess(instanceDocument, cancellationToken)`; only `Valid` exposes an owned `AssessedDocument`. This is separate from the assertion-only descriptor service above.
++
++`Elements` retains original root/local declarations, anonymous/built-in types, normalized values and typed/no-typed-value state. `Copy()` preserves the original component authority without revalidation. `CreateDocumentCopy(false)` strips PSVI; its true branch explicitly refuses full anonymous-root projection. `CreateTypedElementCopy(name)` exports only a detached assessed decimal child for real legacy XPath/XSLT processing. For XSLT copy checks, use a document context and an explicit empty SchemaSet as the annotation-copy context; no 1.1 schema is routed through that set.
++
++See [complete profile, example and ownership rules](DOCUMENT-ASSESSMENT.md) and [ADR-008](ADR-008-bounded-native-assessment.md). Library references remain published 1.26.3; no package, tag, core API or consumer pin is changed by this candidate.
++
+ *Last updated: 2026-10-29*
+diff --git a/src/Bosak.Schema/Bosak.Schema.csproj b/src/Bosak.Schema/Bosak.Schema.csproj
+index 00646b5..1514a47 100644
+--- a/src/Bosak.Schema/Bosak.Schema.csproj
++++ b/src/Bosak.Schema/Bosak.Schema.csproj
+@@ -3,7 +3,7 @@
+   <PropertyGroup>
+     <Description>Apache-2.0 schema-aware integration and staged XSD 1.1 compilation/validation for Bosak. No activation required.</Description>
+     <PackageId>Bosak.Schema</PackageId>
+-    <MinVerMinimumMajorMinor>0.4</MinVerMinimumMajorMinor>
++    <MinVerMinimumMajorMinor>0.5</MinVerMinimumMajorMinor>
+     <AssemblyName>Bosak.Schema</AssemblyName>
+     <RootNamespace>Bosak.Schema</RootNamespace>
+   </PropertyGroup>
+diff --git a/src/Bosak.Schema/Model/SchemaDiagnostic.cs b/src/Bosak.Schema/Model/SchemaDiagnostic.cs
+index 40d2df1..cd1eead 100644
+--- a/src/Bosak.Schema/Model/SchemaDiagnostic.cs
++++ b/src/Bosak.Schema/Model/SchemaDiagnostic.cs
+@@ -19,6 +19,7 @@
+ //                      | Charles Korthout | 0.5   | 27-10-2026     | Added BSK-XSD-015 AlternativeNotApplicable (REQ-009 S4b)                                 |
+ 
+ //                      | Charles Korthout | 0.6   | 29-10-2026     | Publish schema-only Apache-2.0 source; remove activation dependency                       |
++//                      | Charles Korthout | 0.7   | 29-10-2026     | Add explicit native assessment coverage and invalid-instance diagnostics                 |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -47,6 +48,12 @@ public sealed record SchemaDiagnostic(string Code, string Message, string? NodeP
+ /// </summary>
+ public static class SchemaDiagnosticCodes
+ {
++    /// <summary>A native document assessment requests unsupported profile or representation coverage.</summary>
++    public const string AssessmentUnsupported = "BSK-XSD-016";
++
++    /// <summary>An instance violates a supported native structural or lexical constraint.</summary>
++    public const string AssessmentInvalidInstance = "BSK-XSD-017";
++
+     /// <summary>The document root is not an <c>xs:schema</c> element in the XML Schema namespace.</summary>
+     public const string RootNotSchema = "BSK-XSD-001";
+ 
+diff --git a/src/Bosak.Schema/SchemaServices.cs b/src/Bosak.Schema/SchemaServices.cs
+index 3c83813..2a73aab 100644
+--- a/src/Bosak.Schema/SchemaServices.cs
++++ b/src/Bosak.Schema/SchemaServices.cs
+@@ -16,9 +16,12 @@
+ //                      | Charles Korthout | 0.3   | 29-10-2026     | Make schema compilation and validation factories activation-free                         |
+ 
+ //                      | Charles Korthout | 0.4   | 29-10-2026     | Publish schema-only Apache-2.0 source; remove activation dependency                       |
++//                      | Charles Korthout | 0.5   | 29-10-2026     | Add native bounded document assessor factory (0.5 development line)                      |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
++using System.Xml.Linq;
++
+ namespace Bosak.Schema;
+ 
+ /// <summary>
+@@ -27,10 +30,18 @@ namespace Bosak.Schema;
+ /// without flowing through the core engine's XSD 1.0-only <c>XmlSchemaSet</c> seam, and an
+ /// <see cref="IXsdValidationService"/> (S2) that evaluates the recorded assertions against
+ /// candidate elements (ADR-005).
++/// A separate <see cref="XsdDocumentAssessor"/> checks structure, exact values and assertions
++/// within an explicit native XSD 1.1 document profile before returning an owned assessment.
+ /// </summary>
+ /// <remarks>Available under Apache-2.0; no license activation is required.</remarks>
+ public static class SchemaServices
+ {
++    /// <summary>Compiles the finite native XSD 1.1 decimal-sequence/assertion assessment profile.</summary>
++    /// <param name="schema">Caller-owned schema XML, captured independently of later edits.</param>
++    /// <returns>An immutable assessor with explicit support diagnostics and no activation requirement.</returns>
++    /// <exception cref="ArgumentNullException"><paramref name="schema"/> is null.</exception>
++    public static XsdDocumentAssessor CreateDocumentAssessor(XDocument schema) => AssessmentProfileParser.Compile(schema);
++
+     /// <summary>
+     /// Creates an <see cref="IXsdSchemaCompiler"/> that parses XSD documents with hardened
+     /// <see cref="System.Xml.XmlReader"/> settings, records XSD 1.1 assertion/alternative
+diff --git a/docs/ADR-008-bounded-native-assessment.md b/docs/ADR-008-bounded-native-assessment.md
+new file mode 100644
+--- /dev/null
++++ b/docs/ADR-008-bounded-native-assessment.md
+@@ -0,0 +1,47 @@
++# ADR-008: Bounded native document assessment
++
++**Status:** Proposed; bounded implementation candidate prepared, public API freeze pending.
++**Date:** 2026-10-29
++**Deciders:** Product owner requested the assessed-document next slice; maintainer/API disposition remains separate.
++
++## Context
++
++The REQ-009 descriptor pipeline evaluates assertions but does not establish complete document structure or export original assessed state. A successful assertion result can therefore accept extra children. The existing core schema seam accepts BCL XSD 1.0 components; removing 1.1 constructs and calling it would not constitute native XSD 1.1 assessment.
++
++## Decision
++
++Prepare a separate immutable `XsdDocumentAssessor` for the explicit `decimal-sequence-assertions-v1` profile. Refuse unsupported schema, expression and representation coverage at compilation/assessment, and check complete admitted structure before assertions. Keep invalid instances distinct from unsupported requests. Do not extend `ICompiledSchema` or `IXsdValidationService`, change core interfaces, or reuse a descriptor result as a structural certificate.
++
++Successful results retain an owned snapshot, original root/local declarations, anonymous/built-in type components, normalized decimal values and no-typed-value/nilled state. Native copies preserve those original components without revalidation. Independent equal schema digests do not authenticate shared authority. Exported XML is a separate caller-owned copy.
++
++Initially project only assessed decimal children into the legacy engine, where the actual type is the universal built-in decimal type. This projection does not convey local declaration authority. Refuse a full typed XML document export because the BCL projection cannot faithfully represent the original anonymous XSD 1.1 root component. A caller can explicitly request an untyped document copy. A future root bridge needs separate capability/ownership qualification.
++
++## Consequences
++
++### Positive
++
++- A real structurally assessed 1.1 document shape and original component state now exist.
++- Invalid content and unsupported coverage cannot yield partial successful documents.
++- Existing factories/interfaces, package pins and ordinary engine behavior remain intact.
++- The typed-value consumer path works with published 1.26.3 and current core source.
++
++### Negative / Accepted Costs
++
++- The first profile excludes namespaces, imports, attributes, occurrences, alternatives, named types, open content and most XPath constructs.
++- Decimal representation is bounded; valid but inexact/out-of-range values are Unsupported.
++- Full typed-document/anonymous-root interchange remains unavailable; a digest or QName cannot supply the missing component contract.
++
++## Alternatives Considered
++
++| Option | Why not used |
++|---|---|
++| Treat descriptor assertion success as assessment | Does not enforce structure or lexical validity. |
++| Remove assertions and validate through XmlSchemaSet | Silently changes the schema language/assessment semantics. |
++| Adopt the entire earlier session proposal immediately | No concrete complete backend exists for that contract; unnecessary for this bounded result. |
++| Pretend the anonymous type is xs:anyType | Loses original type/no-typed-value semantics and component authority. |
++
++## References
++
++- [Pre-implementation normative adoption and limits](ASSESSMENT-ADOPTION-2026-10-29.md)
++- [Assessment API/profile guide](DOCUMENT-ASSESSMENT.md)
++- [REQ-009 registry](FEATURE_REQUESTS.md)
+diff --git a/docs/ASSESSMENT-ADOPTION-2026-10-29.md b/docs/ASSESSMENT-ADOPTION-2026-10-29.md
+new file mode 100644
+--- /dev/null
++++ b/docs/ASSESSMENT-ADOPTION-2026-10-29.md
+@@ -0,0 +1,21 @@
++# Bounded native document assessment adoption — 29 October 2026
++
++Recorded before implementation. Public Schema base: `044d2cb2e67decd46e03e0f5ee7cb03029f34bd9`. Core integration base: `a2ade8fd`. The owner requested continuing the assessed-document next slice. This authorizes preparing this bounded implementation; it does not accept the earlier general session proposal, freeze an API, publish a package or upgrade a consumer.
++
++## Immutable normative editions
++
++- XSD 1.1 Structures, `REC-xmlschema11-1-20120405`, <https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/>: §3.3 element declarations/assessment; §3.4 complex types/element-only content; §3.8 model groups/sequences; §3.13 assertions, especially §3.13.4.1 and §3.13.6.2. Adopt native structural assessment for the profile below, followed by assertion evaluation over validated decimal children with a parentless candidate element.
++- XSD 1.1 Datatypes, `REC-xmlschema11-2-20120405`, <https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/>: §3.3.3 decimal, lexical/value mapping and whiteSpace collapse. No exponent, INF, NaN or non-XML whitespace. Valid decimal values that cannot be represented exactly by .NET decimal are Unsupported, never rounded or reported lexically invalid.
++- XPath 2.0, `REC-xpath20-20101214`, <https://www.w3.org/TR/2010/REC-xpath20-20101214/>: §3.5 comparisons and §3.6 logical expressions. Use Bosak's explicit XPath20 profile for a statically checked finite assertion grammar. No new core language semantics are adopted.
++
++## Profile and deliberate limitations
++
++`decimal-sequence-assertions-v1`: one no-target-namespace global element, one anonymous element-only complex type, one nonempty ordered sequence of uniquely named local xs:decimal elements, all occurring exactly once, followed by at least one xs:assert. Allow namespace declarations and selected informational/schema-profile attributes only. Refuse every other schema construct/attribute, including imports/includes, named types, attributes, occurrences other than one, alternatives, nil/default/fixed/identity constraints, facets and open content. Do not strip 1.1 constructs or use XmlSchemaSet for structural assessment.
++
++Assertions are bounded combinations of declared child names and exactly representable decimal constants using eq/ne/lt/le/gt/ge, and/or and parentheses. Functions, axes, variables, arithmetic and other XPath constructs are Unsupported. This is an intentional restricted service profile, not complete XSD 1.1 conformance. Bounds: sixteen children, eight assertions, 512 assertion characters, 128 tokens, sixteen parenthesis levels, 32 KiB schema XML, 64 KiB instance XML and 256 decimal lexical characters.
++
++The immutable result owns its snapshot and native declaration/type/element state. Root type identity is anonymous and endpoint-scoped; a digest or QName is not interchange authority. Invalid/unsupported results expose no assessed document. Preserve native PSVI on explicit assessment copies; stripped XML copies expose none. Legacy engine consumption initially exports validated decimal children with built-in decimal annotations. A request for a fully typed document copy is explicitly unsupported because the legacy BCL projection cannot faithfully represent the anonymous XSD 1.1 root component. No silent whole-document projection or compatible-schema admission is introduced.
++
++Schema/instance mutation after compilation/assessment must not affect retained state. Exported XML is caller-owned; assessment validity refers to the immutable retained snapshot, not later edits to exports. Cancellation throws OperationCanceledException and never yields a successful partial result. No external resources, license operation, general core/session API, gate admission or release is authorized by this slice.
++
++Implementation scope clarification before qualification: decimal leaves containing comments or processing instructions are explicitly Unsupported. Root-level comments/processing instructions remain ignorable in element-only content. This avoids changing comment/text order when exporting schema-normalized decimal leaves. CDATA is text in the XML data model and remains supported.
+diff --git a/docs/DOCUMENT-ASSESSMENT.md b/docs/DOCUMENT-ASSESSMENT.md
+new file mode 100644
+--- /dev/null
++++ b/docs/DOCUMENT-ASSESSMENT.md
+@@ -0,0 +1,66 @@
++# Native document assessment — 0.5 development candidate
++
++The activation-free `SchemaServices.CreateDocumentAssessor` API provides a **bounded native XSD 1.1 assessment**, separately from the existing assertion-only descriptor service. The source is an unpublished feature candidate; this is not full XSD 1.1 conformance or a general core schema-session API.
++
++## Run the example
++
++```sh
++dotnet run --project examples/Bosak.Schema.Assessment.Example -c Release
++dotnet test Bosak.Schema.slnx -c Release
++```
++
++The example compiles a schema with `amount`/`shipped` decimal children and an assertion, assesses the XML structure and values, then queries/transforms an assessed decimal copy. The output reports a valid assessment, decimal typing, total 15, and successful annotation-preserve/strip checks. The consumer supplies an empty BCL schema set solely as the legacy annotation-copy context; **no XSD 1.1 schema is compiled or validated through it**.
++
++## Use the result
++
++```csharp
++var assessor = SchemaServices.CreateDocumentAssessor(schemaDocument);
++var result = assessor.Assess(instanceDocument, cancellationToken);
++if (result.Outcome == SchemaAssessmentOutcome.Valid)
++{
++    var assessed = result.Document!;
++    var rootState = assessed.Elements[0];
++    var originalComponents = rootState.Declaration;
++    var preserved = assessed.Copy();
++    var untypedXml = assessed.CreateDocumentCopy(preserveTypeAnnotations: false);
++    var decimalLeaf = assessed.CreateTypedElementCopy("amount");
++}
++```
++
++`IsSupported` describes compilation of this finite profile. It does not certify that an arbitrary schema is valid or fully implemented. `Invalid` means a supported structure, lexical constraint or assertion failed. `Unsupported` means coverage/representation was refused. Neither outcome exposes an `AssessedDocument`. Cancellation throws; it does not produce successful partial output.
++
++## Exact profile
++
++| Area | Supported coverage |
++|---|---|
++| Schema | One XML 1.0, DTD-free, no-target-namespace schema; one named global element with one anonymous element-only complex type. |
++| Structure | One sequence of 1–16 unique local xs:decimal declarations, each occurring exactly once, followed by 1–8 assertions. |
++| Attributes | Namespace declarations; schema `version` and `xpathDefaultNamespace="##local"`; documented declaration name/type and occurrence-one attributes; assertion test/local default namespace. Everything else is refused. |
++| Assertions | Declared child names or exact decimal constants compared with eq/ne/lt/le/gt/ge, combined with and/or and parentheses under XPath 2.0. No functions, variables, axes, arithmetic or external access. |
++| Values | XML-whitespace collapse, exact decimal lexical/value assessment. Non-decimal syntax is Invalid; valid values requiring rounding/overflow/underflow are Unsupported. |
++| Instance | Exact root, child count/order/names, element-only root text and decimal leaf content. No application attributes or xsi requests. Root comments/PIs and decimal CDATA are supported; comments/PIs inside decimal leaves are Unsupported. |
++| Bounds | 32 KiB serialized schema, 64 KiB serialized instance, 256 descendant nodes, 256 decimal lexical characters, 512 assertion characters, 128 assertion tokens and sixteen parenthesis levels. |
++
++Imports/includes, named types, attributes, facets, alternatives, nil/default/fixed, identity constraints, wildcards, open content and other constructs are explicitly outside the profile. Unsupported constructs are never dropped and sent to a 1.0 validator. The native implementation uses no `XmlSchemaSet` structural-validation path.
++
++## Ownership and original state
++
++The assessor captures immutable schema text, original declaration/type objects and assertion plans. Each successful assessment owns a separate normalized XML snapshot and immutable element states. The root retains its anonymous complex type and **has no typed value**; decimal children retain their actual built-in type, governing local declaration and exact typed value. This profile never admits nilled elements.
++
++Native `Copy()` preserves original PSVI, component references and `AssessmentIdentity` without revalidation; it creates an independent snapshot and `SnapshotIdentity`. These are process-local instance labels, not persistent source identities or compatibility proofs. Independent compilation creates independent anonymous component authority even when schema digests match.
++
++The result cannot be mutated through the original schema/instance, its read-only collections or exported XML. Exported XML is caller-owned; later edits invalidate any assumptions about that export's assessment and do not modify the retained result. Inputs must not be concurrently edited while being captured. Immutable compiled assessors can process independent documents concurrently; no session/resource is disposed on behalf of the caller.
++
++## Engine projection boundary
++
++`CreateTypedElementCopy` exports a **detached built-in decimal value view**, not local-declaration authority or a complete PSVI document. Use it with `XDocumentNode` for real typed XPath and wrap it in an `XDocument` for the example's XSLT initial-template invocation. Native and engine preserve/strip copies are tested separately.
++
++`CreateDocumentCopy(preserveTypeAnnotations: true)` throws explicit `BSK-XSD-016` unsupported coverage. Its false branch returns a stripped XML snapshot. The service does not pretend the anonymous complex root is `xs:anyType`, synthesize a named type, admit another schema by QName/digest, or silently lose annotations on a requested full typed export.
++
++Before full document integration, define and qualify a minimal bridge that retains original anonymous-root/component state, atomization errors, copy semantics, cancellation and lifetime. Full schema-element matching, independent compatible universes, general PSVI serialization and actual product adoption remain pending.
++
++## Qualification
++
++The complete candidate Schema suite passes **191 cases**: the original 114 plus 77 new assessment cases. It passes against the unchanged published 1.26.3 package pins and against current core source in an isolated source wrapper. Existing 114-case test binaries also pass with only the Schema library replaced by the candidate. These scopes overlap and must not be added together.
++
++The general core production code, frozen conformance gates and consumer dependency pins are unchanged. No new hosted CI result, package/tag publication or public API freeze is claimed. See the [adoption record](ASSESSMENT-ADOPTION-2026-10-29.md) and [ADR-008](ADR-008-bounded-native-assessment.md).
+diff --git a/examples/Bosak.Schema.Assessment.Example/Bosak.Schema.Assessment.Example.csproj b/examples/Bosak.Schema.Assessment.Example/Bosak.Schema.Assessment.Example.csproj
+new file mode 100644
+--- /dev/null
++++ b/examples/Bosak.Schema.Assessment.Example/Bosak.Schema.Assessment.Example.csproj
+@@ -0,0 +1,9 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++    <IsPackable>false</IsPackable>
++  </PropertyGroup>
++  <ItemGroup>
++    <ProjectReference Include="../../src/Bosak.Schema/Bosak.Schema.csproj" />
++  </ItemGroup>
++</Project>
+diff --git a/examples/Bosak.Schema.Assessment.Example/Program.cs b/examples/Bosak.Schema.Assessment.Example/Program.cs
+new file mode 100644
+--- /dev/null
++++ b/examples/Bosak.Schema.Assessment.Example/Program.cs
+@@ -0,0 +1,66 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Runs native XSD 1.1 assessment and consumes a genuinely assessed decimal in Bosak.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Xml.Linq;
++using System.Xml.Schema;
++using Bosak.Schema;
++using Bosak.XPath.Api;
++using Bosak.XPath.Core.Xdm;
++using Bosak.XPath.Providers.Xml;
++using Bosak.XPath.Runtime.Vm;
++
++var schema = XDocument.Parse("""
++    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1">
++      <xs:element name="order"><xs:complexType>
++        <xs:sequence>
++          <xs:element name="amount" type="xs:decimal"/>
++          <xs:element name="shipped" type="xs:decimal"/>
++        </xs:sequence>
++        <xs:assert test="amount gt 0 and shipped le amount"/>
++      </xs:complexType></xs:element>
++    </xs:schema>
++    """);
++var assessor = SchemaServices.CreateDocumentAssessor(schema);
++var assessment = assessor.Assess(XDocument.Parse("<order><amount>12.50</amount><shipped>2</shipped></order>"));
++if (assessment.Outcome != SchemaAssessmentOutcome.Valid)
++{
++    foreach (var diagnostic in assessment.Diagnostics) Console.Error.WriteLine(diagnostic);
++    return 1;
++}
++var document = assessment.Document!;
++var leaf = new XDocumentNode(document.CreateTypedElementCopy("amount"));
++var context = new EvaluationContext().WithFocus(XdmValue.FromNode(leaf), 1, 1);
++Console.WriteLine("Assessment: " + assessment.Outcome);
++Console.WriteLine("Typed decimal: " + XPath31Expression.Compile("data(.) instance of xs:decimal").Evaluate(context).BooleanValue);
++Console.WriteLine("Total: " + XPath31Expression.Compile("data(.) * 1.20").Evaluate(context).DecimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
++
++const string stylesheet = """
++    <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                    xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs">
++      <xsl:template name="main">
++        <xsl:variable name="preserved" as="element()"><xsl:copy-of select="/*" validation="preserve"/></xsl:variable>
++        <xsl:variable name="stripped" as="element()"><xsl:copy-of select="/*" validation="strip"/></xsl:variable>
++        <result total="{data(/*) * 1.20}" preserved="{data($preserved) instance of xs:decimal}" stripped="{data($stripped) instance of xs:untypedAtomic}"/>
++      </xsl:template>
++    </xsl:stylesheet>
++    """;
++var compiler = SchemaAwareXslt.CreateCompiler();
++// Legacy annotation-copy context only: no 1.1 schema is routed through the BCL validator.
++compiler.SchemaSet = new XmlSchemaSet();
++Console.WriteLine(compiler.Compile(stylesheet).TransformToString(
++    new XDocumentNode(new XDocument(document.CreateTypedElementCopy("amount"))), initialTemplate: "main"));
++return 0;
+diff --git a/src/Bosak.Schema/Assessment/AssessedDocument.cs b/src/Bosak.Schema/Assessment/AssessedDocument.cs
+new file mode 100644
+--- /dev/null
++++ b/src/Bosak.Schema/Assessment/AssessedDocument.cs
+@@ -0,0 +1,101 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Owns a validated document snapshot and exports explicitly bounded typed or stripped copies.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      | Charles Korthout | 0.2   | 29-10-2026     | Keep native absence distinct while exporting validated decimal child copies             |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Xml.Linq;
++using System.Xml.Schema;
++using Bosak.XPath.Providers.Xml;
++
++namespace Bosak.Schema;
++
++/// <summary>Owns a successful assessment snapshot and its original endpoint-bound component state.</summary>
++/// <remarks>No caller XML or component collection is retained mutably. Exported XML copies are caller-owned;
++/// their subsequent modification does not alter this assessment. Validity is not a live guarantee for edited copies.</remarks>
++public sealed class AssessedDocument
++{
++    private readonly XDocument _snapshot;
++    internal AssessedDocument(XsdDocumentAssessor schema, XDocument snapshot, IEnumerable<AssessedElement> elements, Guid? assessmentIdentity = null)
++    {
++        Schema = schema;
++        _snapshot = new XDocument(snapshot);
++        Elements = Array.AsReadOnly(elements.ToArray());
++        AssessmentIdentity = assessmentIdentity ?? Guid.NewGuid();
++        SnapshotIdentity = Guid.NewGuid();
++    }
++    /// <summary>The original compiled assessor retaining declaration/type component authority.</summary>
++    public XsdDocumentAssessor Schema { get; }
++    /// <summary>The original assessment-instance label, preserved across explicit assessment copies.</summary>
++    public Guid AssessmentIdentity { get; }
++    /// <summary>The distinct snapshot-instance label; neither label proves cross-schema compatibility.</summary>
++    public Guid SnapshotIdentity { get; }
++    /// <summary>Original root and ordered child PSVI states, including the anonymous root type.</summary>
++    public IReadOnlyList<AssessedElement> Elements { get; }
++    /// <summary>Copies the owned snapshot while retaining original PSVI and schema component authority.</summary>
++    /// <returns>An independent snapshot with the same original assessment and component identities.</returns>
++    public AssessedDocument Copy() => new(Schema, _snapshot, Elements, AssessmentIdentity);
++
++    /// <summary>Creates a stripped XML copy; the legacy projection cannot preserve the anonymous 1.1 root type.</summary>
++    /// <param name="preserveTypeAnnotations">Must be false; true explicitly requests unsupported full PSVI projection.</param>
++    /// <returns>A caller-owned untyped XML copy of the retained snapshot.</returns>
++    /// <exception cref="NotSupportedException">Preservation of the full anonymous-root PSVI is requested.</exception>
++    public XDocument CreateDocumentCopy(bool preserveTypeAnnotations)
++    {
++        if (preserveTypeAnnotations)
++            throw new NotSupportedException("BSK-XSD-016: Full XSD 1.1 anonymous-root projection requires a qualified engine bridge; use the native assessment or explicit decimal leaf projection.");
++        return new XDocument(_snapshot);
++    }
++
++    /// <summary>Exports a detached decimal child copy with its validated built-in type for legacy Bosak queries.</summary>
++    /// <param name="name">The direct child declaration's expanded name.</param>
++    /// <returns>A caller-owned detached element annotated with the built-in decimal type.</returns>
++    /// <exception cref="ArgumentNullException"><paramref name="name"/> is null.</exception>
++    /// <exception cref="NotSupportedException">The requested declaration is not a supported decimal child.</exception>
++    /// <remarks>This is a built-in typed-value projection, not full local-declaration or anonymous-root interchange.</remarks>
++    public XElement CreateTypedElementCopy(XName name)
++    {
++        ArgumentNullException.ThrowIfNull(name);
++        var index = -1;
++        for (var i = 1; i < Elements.Count; i++)
++            if (Elements[i].Declaration.Name == name) { index = i; break; }
++        if (index < 0)
++            throw new NotSupportedException("BSK-XSD-016: Only assessed decimal child declarations can be projected.");
++        var result = new XElement(_snapshot.Root!.Elements().ElementAt(index - 1));
++        result.Value = Elements[index].NormalizedValue!;
++        XdmSchemaAnnotator.Annotate(result, DecimalSchemaInfo.Instance);
++        return result;
++    }
++
++    internal sealed class DecimalSchemaInfo : IXmlSchemaInfo
++    {
++        internal static readonly DecimalSchemaInfo Instance = new();
++        private static readonly XmlSchemaSimpleType DecimalType = XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Decimal);
++        /// <inheritdoc/>
++        public XmlSchemaValidity Validity => XmlSchemaValidity.Valid;
++        /// <inheritdoc/>
++        public bool IsDefault => false;
++        /// <inheritdoc/>
++        public bool IsNil => false;
++        /// <inheritdoc/>
++        public XmlSchemaSimpleType? MemberType => null;
++        /// <inheritdoc/>
++        public XmlSchemaType SchemaType => DecimalType;
++        /// <inheritdoc/>
++        public XmlSchemaElement? SchemaElement => null;
++        /// <inheritdoc/>
++        public XmlSchemaAttribute? SchemaAttribute => null;
++    }
++}
+diff --git a/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs b/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs
+new file mode 100644
+--- /dev/null
++++ b/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs
+@@ -0,0 +1,197 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Compiles only complete finite assessment profiles and exact decimal/assertion lexical forms.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      | Charles Korthout | 0.2   | 29-10-2026     | Bound input capture and refuse malformed type QNames |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Globalization;
++using System.Text.RegularExpressions;
++using System.Xml;
++using System.Xml.Linq;
++using Bosak.XPath.Api;
++
++namespace Bosak.Schema;
++
++internal static class AssessmentProfileParser
++{
++    private static readonly XNamespace Xs = "http://www.w3.org/2001/XMLSchema";
++    private static readonly Regex DecimalLexical = new(@"^[+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)$", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
++    internal static readonly char[] XmlWhitespace = [' ', '\t', '\r', '\n'];
++    internal static bool IsXmlWhitespace(string value) => value.All(c => c is ' ' or '\t' or '\r' or '\n');
++    internal static bool WithinInputBounds(XDocument document, int maximumCharacters)
++    {
++        long characters = 0;
++        var nodes = 0;
++        foreach (var node in document.DescendantNodes())
++        {
++            if (++nodes > 256) return false;
++            if (node is XText text) characters += text.Value.Length;
++            if (node is XComment comment) characters += comment.Value.Length;
++            if (node is XProcessingInstruction instruction) characters += instruction.Data.Length + instruction.Target.Length;
++            if (node is XElement element)
++            {
++                characters += element.Name.LocalName.Length + element.Name.NamespaceName.Length;
++                foreach (var attribute in element.Attributes())
++                {
++                    characters += attribute.Value.Length + attribute.Name.LocalName.Length + attribute.Name.NamespaceName.Length;
++                    if (characters > maximumCharacters) return false;
++                }
++            }
++            if (characters > maximumCharacters) return false;
++        }
++        return true;
++    }
++
++    internal static XsdDocumentAssessor Compile(XDocument schema)
++    {
++        ArgumentNullException.ThrowIfNull(schema);
++        if (schema.DocumentType is not null || schema.Declaration?.Version is not (null or "1.0") || !WithinInputBounds(schema, 32768))
++            return Refused(string.Empty, "Schema DTD, XML version or node-count coverage is unsupported.");
++        var text = schema.ToString(SaveOptions.DisableFormatting);
++        if (text.Length > 32768) return Refused(string.Empty, "Schema size exceeds the profile bound.");
++        var copy = new XDocument(schema);
++        var root = copy.Root;
++        if (root is null || root.Name != Xs + "schema" || !Attributes(root, "version", "xpathDefaultNamespace") || !LocalDefault(root))
++            return Refused(text, "Only a no-target-namespace schema and the documented profile attributes are supported.");
++        var globals = root.Elements().ToArray();
++        if (globals.Length != 1 || globals[0].Name != Xs + "element" || !Attributes(globals[0], "name") || !TryName(globals[0], out var rootName))
++            return Refused(text, "Exactly one named global element with an anonymous type is required.");
++        var types = globals[0].Elements().ToArray();
++        if (types.Length != 1 || types[0].Name != Xs + "complexType" || !Attributes(types[0]))
++            return Refused(text, "Only an anonymous element-only complex type is supported.");
++        var parts = types[0].Elements().ToArray();
++        if (parts.Length is < 2 or > 9 || parts[0].Name != Xs + "sequence" || !Attributes(parts[0], "minOccurs", "maxOccurs") || !ExactlyOne(parts[0]) || parts.Skip(1).Any(p => p.Name != Xs + "assert"))
++            return Refused(text, "Require a single sequence followed by one to eight assertions.");
++        var declarations = parts[0].Elements().ToArray();
++        if (declarations.Length is < 1 or > 16) return Refused(text, "The sequence requires one to sixteen decimal children.");
++        var anonymous = new AssessedSchemaType(null, true);
++        var rootDeclaration = new AssessedElementDeclaration(XName.Get(rootName), anonymous, "/schema/element");
++        var decimalType = new AssessedSchemaType(Xs + "decimal", false);
++        var names = new HashSet<string>(StringComparer.Ordinal);
++        var children = new List<AssessedElementDeclaration>();
++        for (var i = 0; i < declarations.Length; i++)
++        {
++            var declaration = declarations[i];
++            if (declaration.Name != Xs + "element" || !Attributes(declaration, "name", "type", "minOccurs", "maxOccurs") ||
++                declaration.HasElements || !ExactlyOne(declaration) || !TryName(declaration, out var name) || !names.Add(name) || !IsDecimalType(declaration))
++                return Refused(text, "Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.");
++            children.Add(new(XName.Get(name), decimalType, $"/schema/element/complexType/sequence/element[{i + 1}]"));
++        }
++        var plans = new List<XPath31Expression>();
++        foreach (var assertion in parts.Skip(1))
++        {
++            var expression = assertion.Attribute("test")?.Value;
++            if (!Attributes(assertion, "test", "xpathDefaultNamespace") || !LocalDefault(assertion) || assertion.HasElements ||
++                expression is null || !AssertionGrammar.Accepts(expression, names))
++                return Refused(text, "An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.");
++            try { plans.Add(XPath31Expression.Compile(expression, new CompileOptions { Compatibility = XPathCompatibility.XPath20 })); }
++            catch (Exception error) when (error is not OutOfMemoryException and not OperationCanceledException)
++            { return Refused(text, "The XPath 2.0 compiler refused the assertion: " + error.Message); }
++        }
++        return new(text, [], rootDeclaration, children, plans);
++    }
++
++    private static bool Attributes(XElement element, params string[] permitted) =>
++        element.Attributes().All(a => a.IsNamespaceDeclaration || a.Name.NamespaceName.Length == 0 && permitted.Contains(a.Name.LocalName, StringComparer.Ordinal)) &&
++        element.Nodes().OfType<XText>().All(t => IsXmlWhitespace(t.Value));
++    private static bool LocalDefault(XElement element) => element.Attribute("xpathDefaultNamespace") is not { } a || a.Value.Trim(XmlWhitespace) == "##local";
++    private static bool ExactlyOne(XElement element) => new[] { "minOccurs", "maxOccurs" }.All(name => element.Attribute(name) is not { } a || a.Value.Trim(XmlWhitespace).TrimStart('0') == "1");
++    private static bool TryName(XElement element, out string name)
++    {
++        name = element.Attribute("name")?.Value.Trim(XmlWhitespace) ?? string.Empty;
++        try { XmlConvert.VerifyNCName(name); return true; }
++        catch (XmlException) { return false; }
++    }
++    private static bool IsDecimalType(XElement element)
++    {
++        var lexical = element.Attribute("type")?.Value.Trim(XmlWhitespace);
++        if (lexical is null) return false;
++        var parts = lexical.Split(':');
++        if (parts.Length == 1) return parts[0] == "decimal" && element.GetDefaultNamespace() == Xs;
++        if (parts.Length != 2 || parts[1] != "decimal" || parts[0].Length == 0) return false;
++        try { XmlConvert.VerifyNCName(parts[0]); }
++        catch (XmlException) { return false; }
++        return element.GetNamespaceOfPrefix(parts[0]) == Xs;
++    }
++    private static XsdDocumentAssessor Refused(string xml, string message) => new(xml,
++        [new SchemaDiagnostic(SchemaDiagnosticCodes.AssessmentUnsupported, message, null)], null, [], []);
++
++    internal static SchemaAssessmentOutcome ParseDecimal(string lexical, out decimal value, out string normalized)
++    {
++        normalized = lexical.Trim(XmlWhitespace);
++        value = default;
++        if (!DecimalLexical.IsMatch(normalized)) return SchemaAssessmentOutcome.Invalid;
++        if (!decimal.TryParse(normalized, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out value))
++            return SchemaAssessmentOutcome.Unsupported;
++        return Canonical(normalized) == Canonical(value.ToString(CultureInfo.InvariantCulture))
++            ? SchemaAssessmentOutcome.Valid : SchemaAssessmentOutcome.Unsupported;
++    }
++    private static string Canonical(string lexical)
++    {
++        var negative = lexical.StartsWith('-');
++        var parts = lexical.TrimStart('+', '-').Split('.');
++        var integer = parts[0].TrimStart('0');
++        if (integer.Length == 0) integer = "0";
++        var fraction = parts.Length == 2 ? parts[1].TrimEnd('0') : string.Empty;
++        return (negative && (integer != "0" || fraction.Length != 0) ? "-" : "") + integer + (fraction.Length == 0 ? "" : "." + fraction);
++    }
++
++    private sealed class AssertionGrammar
++    {
++        private readonly string[] _tokens;
++        private readonly HashSet<string> _names;
++        private int _position;
++        private AssertionGrammar(string[] tokens, HashSet<string> names) { _tokens = tokens; _names = names; }
++        internal static bool Accepts(string expression, HashSet<string> names)
++        {
++            if (expression.Length is 0 or > 512 || expression.Any(c => char.IsWhiteSpace(c) && c is not (' ' or '\t' or '\r' or '\n'))) return false;
++            var tokens = expression.Replace("(", " ( ", StringComparison.Ordinal).Replace(")", " ) ", StringComparison.Ordinal)
++                .Split(XmlWhitespace, StringSplitOptions.RemoveEmptyEntries);
++            if (tokens.Length is 0 or > 128) return false;
++            var parser = new AssertionGrammar(tokens, names);
++            return parser.Or(0) && parser._position == tokens.Length;
++        }
++        private bool Or(int depth)
++        {
++            if (!And(depth)) return false;
++            while (Take("or")) if (!And(depth)) return false;
++            return true;
++        }
++        private bool And(int depth)
++        {
++            if (!Comparison(depth)) return false;
++            while (Take("and")) if (!Comparison(depth)) return false;
++            return true;
++        }
++        private bool Comparison(int depth)
++        {
++            if (depth > 16) return false;
++            if (Take("(")) return Or(depth + 1) && Take(")");
++            if (!Operand() || _position >= _tokens.Length || _tokens[_position++] is not ("eq" or "ne" or "lt" or "le" or "gt" or "ge")) return false;
++            return Operand();
++        }
++        private bool Operand()
++        {
++            if (_position >= _tokens.Length) return false;
++            var token = _tokens[_position++];
++            return _names.Contains(token) || ParseDecimal(token, out _, out _) == SchemaAssessmentOutcome.Valid;
++        }
++        private bool Take(string token)
++        {
++            if (_position >= _tokens.Length || _tokens[_position] != token) return false;
++            _position++; return true;
++        }
++    }
++}
+diff --git a/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs b/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs
+new file mode 100644
+--- /dev/null
++++ b/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs
+@@ -0,0 +1,89 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Immutable outcomes and original declaration/type state for native document assessment.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      | Charles Korthout | 0.2   | 29-10-2026     | Expose the supported non-nilled state explicitly |
++//                      | Charles Korthout | 0.3   | 29-10-2026     | Preserve absence of a root normalized value and original no-typed-value state           |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Xml.Linq;
++using Bosak.XPath.Core.Xdm;
++
++namespace Bosak.Schema;
++
++/// <summary>The outcome of native assessment within an explicitly supported profile.</summary>
++public enum SchemaAssessmentOutcome
++{
++    /// <summary>Structure, exact decimal values and every assertion passed.</summary>
++    Valid,
++    /// <summary>The instance violates a supported structural, lexical or assertion constraint.</summary>
++    Invalid,
++    /// <summary>The request exceeds implemented schema, instance, expression or representation coverage.</summary>
++    Unsupported,
++}
++
++/// <summary>Original type component identity, scoped to the compiling assessor for anonymous types.</summary>
++public sealed class AssessedSchemaType
++{
++    internal AssessedSchemaType(XName? name, bool isComplex) { Name = name; IsComplex = isComplex; }
++    /// <summary>The expanded type name, or null for the anonymous root complex type.</summary>
++    public XName? Name { get; }
++    /// <summary>Whether this is the element-only anonymous root complex type.</summary>
++    public bool IsComplex { get; }
++    /// <summary>Whether elements of this type have a typed value.</summary>
++    public bool HasTypedValue => !IsComplex;
++}
++
++/// <summary>Original element declaration identity; equal names do not imply shared component authority.</summary>
++public sealed class AssessedElementDeclaration
++{
++    internal AssessedElementDeclaration(XName name, AssessedSchemaType type, string schemaPath)
++    { Name = name; Type = type; SchemaPath = schemaPath; }
++    /// <summary>The expanded element name.</summary>
++    public XName Name { get; }
++    /// <summary>The actual declared type component.</summary>
++    public AssessedSchemaType Type { get; }
++    /// <summary>The declaration's location in the retained single-document schema.</summary>
++    public string SchemaPath { get; }
++}
++
++/// <summary>Immutable original assessment state for one element in the owned snapshot.</summary>
++public sealed class AssessedElement
++{
++    internal AssessedElement(AssessedElementDeclaration declaration, string? normalizedValue, XdmValue? typedValue)
++    { Declaration = declaration; NormalizedValue = normalizedValue; TypedValue = typedValue; }
++    /// <summary>The governing original declaration and its actual type component.</summary>
++    public AssessedElementDeclaration Declaration { get; }
++    /// <summary>The schema-normalized decimal lexical value, or null for the element-only root.</summary>
++    public string? NormalizedValue { get; }
++    /// <summary>The exact typed decimal value, or null for the element-only root (not an empty typed sequence).</summary>
++    public XdmValue? TypedValue { get; }
++    /// <summary>Whether atomization must fail because the element has no typed value.</summary>
++    public bool HasNoTypedValue => !Declaration.Type.HasTypedValue;
++    /// <summary>Whether this element is nilled; nil requests are explicitly refused by this profile.</summary>
++    public bool IsNilled => false;
++}
++
++/// <summary>A complete profile assessment outcome; unsuccessful outcomes expose no assessed document.</summary>
++public sealed class SchemaDocumentAssessment
++{
++    internal SchemaDocumentAssessment(SchemaAssessmentOutcome outcome, IEnumerable<SchemaDiagnostic> diagnostics, AssessedDocument? document = null)
++    { Outcome = outcome; Diagnostics = Array.AsReadOnly(diagnostics.ToArray()); Document = document; }
++    /// <summary>The successful, invalid or explicitly unsupported outcome.</summary>
++    public SchemaAssessmentOutcome Outcome { get; }
++    /// <summary>Immutable findings; unsupported coverage is distinct from invalid XML.</summary>
++    public IReadOnlyList<SchemaDiagnostic> Diagnostics { get; }
++    /// <summary>The immutable owned document and original PSVI, available only on success.</summary>
++    public AssessedDocument? Document { get; }
++}
+diff --git a/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs b/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs
+new file mode 100644
+--- /dev/null
++++ b/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs
+@@ -0,0 +1,126 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Natively assesses one bounded XSD 1.1 structure before evaluating its decimal assertions.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      | Charles Korthout | 0.2   | 29-10-2026     | Bound input capture and refuse unsupported leaf node kinds |
++//                      | Charles Korthout | 0.3   | 29-10-2026     | Retain absent root normalized value in native assessment state                          |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Security.Cryptography;
++using System.Text;
++using System.Xml.Linq;
++using Bosak.XPath.Api;
++using Bosak.XPath.Core.Xdm;
++using Bosak.XPath.Providers.Xml;
++using Bosak.XPath.Runtime.Vm;
++
++namespace Bosak.Schema;
++
++/// <summary>Immutable compiled decimal-sequence-assertions-v1 assessor; not a complete XSD 1.1 processor.</summary>
++public sealed class XsdDocumentAssessor
++{
++    private readonly IReadOnlyList<XPath31Expression> _assertions;
++    internal XsdDocumentAssessor(string schemaXml, IEnumerable<SchemaDiagnostic> diagnostics,
++        AssessedElementDeclaration? root, IEnumerable<AssessedElementDeclaration> children, IEnumerable<XPath31Expression> assertions)
++    {
++        SchemaXml = schemaXml;
++        SchemaDigest = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(schemaXml))).ToLowerInvariant();
++        Diagnostics = Array.AsReadOnly(diagnostics.ToArray());
++        RootDeclaration = root;
++        ChildDeclarations = Array.AsReadOnly(children.ToArray());
++        _assertions = Array.AsReadOnly(assertions.ToArray());
++    }
++    /// <summary>The exact finite supported profile identifier.</summary>
++    public string Profile => "decimal-sequence-assertions-v1";
++    /// <summary>The explicit schema language version assessed by this service.</summary>
++    public XsdLanguageVersion LanguageVersion => XsdLanguageVersion.Xsd11;
++    /// <summary>The retained single-document schema XML; imports/includes are never accepted.</summary>
++    public string SchemaXml { get; }
++    /// <summary>A content label only; equal digests do not admit independent schema authorities.</summary>
++    public string SchemaDigest { get; }
++    /// <summary>Whether compilation established complete coverage for this finite profile.</summary>
++    public bool IsSupported => Diagnostics.Count == 0;
++    /// <summary>Immutable compile diagnostics, including every encountered unsupported request.</summary>
++    public IReadOnlyList<SchemaDiagnostic> Diagnostics { get; }
++    /// <summary>The original global root declaration and anonymous element-only type, or null after refusal.</summary>
++    public AssessedElementDeclaration? RootDeclaration { get; }
++    /// <summary>The original local declarations, in required sequence order.</summary>
++    public IReadOnlyList<AssessedElementDeclaration> ChildDeclarations { get; }
++
++    /// <summary>Checks native structure and exact decimal values, then evaluates every supported assertion.</summary>
++    /// <param name="document">Caller-owned instance document, copied before assessment.</param>
++    /// <param name="cancellationToken">Cancellation checked before snapshot capture and between bounded operations.</param>
++    /// <returns>An outcome exposing an owned assessed document only after every check passes.</returns>
++    /// <exception cref="ArgumentNullException"><paramref name="document"/> is null.</exception>
++    /// <exception cref="OperationCanceledException">Cancellation is requested.</exception>
++    public SchemaDocumentAssessment Assess(XDocument document, CancellationToken cancellationToken = default)
++    {
++        ArgumentNullException.ThrowIfNull(document);
++        cancellationToken.ThrowIfCancellationRequested();
++        if (!IsSupported) return new(SchemaAssessmentOutcome.Unsupported, Diagnostics);
++        if (document.DocumentType is not null || document.Declaration?.Version is not (null or "1.0") ||
++            !AssessmentProfileParser.WithinInputBounds(document, 65536) || document.ToString(SaveOptions.DisableFormatting).Length > 65536)
++            return Refuse("The instance exceeds this profile's XML version, DTD or size coverage.");
++        var snapshot = new XDocument(document);
++        var root = snapshot.Root;
++        if (root is null || root.Name != RootDeclaration!.Name) return Invalid("The instance root does not match its declaration.");
++        var all = root.DescendantsAndSelf().ToArray();
++        if (all.Any(e => e.Attributes().Any(a => !a.IsNamespaceDeclaration && a.Name.NamespaceName == "http://www.w3.org/2001/XMLSchema-instance")))
++            return Refuse("xsi:type, nil and schema-location requests are not supported by this profile.");
++        if (all.Any(e => e.Attributes().Any(a => !a.IsNamespaceDeclaration))) return Invalid("This profile declares no instance attributes.");
++        if (root.Nodes().OfType<XText>().Any(t => !AssessmentProfileParser.IsXmlWhitespace(t.Value))) return Invalid("The root permits element-only content.");
++        var children = root.Elements().ToArray();
++        if (children.Length != ChildDeclarations.Count || children.Where((child, index) => child.Name != ChildDeclarations[index].Name).Any())
++            return Invalid("Child count, names or sequence order violate the declarations.");
++        var states = new List<AssessedElement> { new(RootDeclaration, null, null) };
++        for (var index = 0; index < children.Length; index++)
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            var child = children[index];
++            if (child.HasElements) return Invalid("A decimal child cannot contain child elements.");
++            if (child.Nodes().Any(node => node is not XText)) return Refuse("Comments and processing instructions inside decimal leaves are outside this projection profile.");
++            if (child.Value.Length > 256) return Refuse("A decimal lexical value exceeds the profile bound.");
++            var outcome = AssessmentProfileParser.ParseDecimal(child.Value, out var value, out var normalized);
++            if (outcome == SchemaAssessmentOutcome.Invalid) return Invalid("A decimal child has an invalid XSD decimal lexical value.");
++            if (outcome == SchemaAssessmentOutcome.Unsupported) return Refuse("A valid XSD decimal cannot be represented exactly; no rounding is permitted.");
++            states.Add(new(ChildDeclarations[index], normalized, XdmValue.FromDecimal(value)));
++            child.Value = normalized;
++            XdmSchemaAnnotator.Annotate(child, AssessedDocument.DecimalSchemaInfo.Instance);
++        }
++        // A parentless assertion candidate sees only the assessed element, not document ancestors.
++        var candidate = new XElement(root);
++        for (var index = 0; index < ChildDeclarations.Count; index++)
++            XdmSchemaAnnotator.Annotate(candidate.Elements().ElementAt(index), AssessedDocument.DecimalSchemaInfo.Instance);
++        var context = new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(candidate)), 1, 1);
++        var findings = new List<SchemaDiagnostic>();
++        foreach (var assertion in _assertions)
++        {
++            cancellationToken.ThrowIfCancellationRequested();
++            try
++            {
++                if (!assertion.Evaluate(context).BooleanValue)
++                    findings.Add(new(SchemaDiagnosticCodes.AssertionViolated, "An assessed-document assertion was false.", null));
++            }
++            catch (Exception error) when (error is not OperationCanceledException and not OutOfMemoryException)
++            { return Refuse("The assertion engine could not evaluate the supported request: " + error.Message); }
++        }
++        cancellationToken.ThrowIfCancellationRequested();
++        if (findings.Count != 0) return new(SchemaAssessmentOutcome.Invalid, findings);
++        return new(SchemaAssessmentOutcome.Valid, [], new AssessedDocument(this, snapshot, states));
++    }
++    private static SchemaDocumentAssessment Invalid(string message) => new(SchemaAssessmentOutcome.Invalid,
++        [new SchemaDiagnostic(SchemaDiagnosticCodes.AssessmentInvalidInstance, message, null)]);
++    private static SchemaDocumentAssessment Refuse(string message) => new(SchemaAssessmentOutcome.Unsupported,
++        [new SchemaDiagnostic(SchemaDiagnosticCodes.AssessmentUnsupported, message, null)]);
++}
+diff --git a/tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs b/tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs
+new file mode 100644
+--- /dev/null
++++ b/tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs
+@@ -0,0 +1,426 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 29 October 2026
++// PURPOSE              : Tests native structural assessment, exact values, retained snapshots and real engine projections.
++// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : LICENSE.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
++//                      | Charles Korthout | 0.2   | 29-10-2026     | Add boundary controls and explicit legacy annotation context                           |
++//                      | Charles Korthout | 0.3   | 29-10-2026     | Check exact assertion constants and absent root normalized value                        |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++
++using System.Xml.Linq;
++using System.Xml.Schema;
++using Bosak.XPath.Api;
++using Bosak.XPath.Core.Xdm;
++using Bosak.XPath.Providers.Xml;
++using Bosak.XPath.Runtime.Vm;
++using Bosak.Xslt.Api;
++using Xunit;
++
++namespace Bosak.Schema.Tests;
++
++/// <summary>Qualifies the finite native XSD 1.1 document assessment and its explicit legacy projection.</summary>
++public sealed class DocumentAssessmentTests
++{
++    private const string SchemaText = """
++        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1">
++          <xs:element name="order"><xs:complexType>
++            <xs:sequence>
++              <xs:element name="amount" type="xs:decimal"/>
++              <xs:element name="shipped" type="xs:decimal"/>
++            </xs:sequence>
++            <xs:assert test="amount gt 0 and (shipped le amount or shipped eq 0)"/>
++          </xs:complexType></xs:element>
++        </xs:schema>
++        """;
++    private const string Instance = "<order><amount>12.50</amount><shipped>2</shipped></order>";
++    private static XsdDocumentAssessor Compile(string? xml = null) => SchemaServices.CreateDocumentAssessor(XDocument.Parse(xml ?? SchemaText));
++    private static AssessedDocument Valid(XsdDocumentAssessor? assessor = null, string? xml = null)
++    {
++        var schema = assessor ?? Compile();
++        Assert.True(schema.IsSupported, string.Join(";", schema.Diagnostics));
++        var result = schema.Assess(XDocument.Parse(xml ?? Instance));
++        Assert.Equal(SchemaAssessmentOutcome.Valid, result.Outcome);
++        Assert.Empty(result.Diagnostics);
++        return Assert.IsType<AssessedDocument>(result.Document);
++    }
++
++    /// <summary>Structural validation and assertions yield complete original state for the admitted shape.</summary>
++    [Fact]
++    public void ValidDocument_RetainsRootAndChildPsvi()
++    {
++        var document = Valid();
++        Assert.Equal(3, document.Elements.Count);
++        var root = document.Elements[0];
++        Assert.Same(document.Schema.RootDeclaration, root.Declaration);
++        Assert.True(root.Declaration.Type.IsComplex);
++        Assert.Null(root.Declaration.Type.Name);
++        Assert.True(root.HasNoTypedValue);
++        Assert.Null(root.TypedValue);
++        Assert.Null(root.NormalizedValue);
++        Assert.Equal(XName.Get("decimal", XmlSchema.Namespace), document.Elements[1].Declaration.Type.Name);
++        Assert.Equal(12.5m, document.Elements[1].TypedValue!.Value.DecimalValue);
++        Assert.Equal(XsdLanguageVersion.Xsd11, document.Schema.LanguageVersion);
++    }
++
++    /// <summary>Supported structural and lexical errors are invalid, not assertion-only successes.</summary>
++    /// <param name="xml">The invalid instance.</param>
++    [Theory]
++    [InlineData("<wrong><amount>1</amount><shipped>0</shipped></wrong>")]
++    [InlineData("<order><amount>1</amount></order>")]
++    [InlineData("<order><shipped>0</shipped><amount>1</amount></order>")]
++    [InlineData("<order><amount>1</amount><shipped>0</shipped><extra/></order>")]
++    [InlineData("<order><amount>1</amount><amount>2</amount></order>")]
++    [InlineData("<order attr='x'><amount>1</amount><shipped>0</shipped></order>")]
++    [InlineData("<order>text<amount>1</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount><extra/></amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount bad='x'>1</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>not-a-decimal</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>1e2</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>INF</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>NaN</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>1 2</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>1 </amount><shipped>0</shipped></order>")]
++    public void InvalidInstance_NeverExposesAssessedDocument(string xml)
++    {
++        var result = Compile().Assess(XDocument.Parse(xml));
++        Assert.Equal(SchemaAssessmentOutcome.Invalid, result.Outcome);
++        Assert.Contains(result.Diagnostics, d => d.Code == "BSK-XSD-017");
++        Assert.Null(result.Document);
++    }
++
++    /// <summary>Assertion failure is distinguished from lexical and structural errors.</summary>
++    [Fact]
++    public void AssertionFailure_IsInvalidAndDoesNotEscapeTypedDocument()
++    {
++        var result = Compile().Assess(XDocument.Parse("<order><amount>1</amount><shipped>2</shipped></order>"));
++        Assert.Equal(SchemaAssessmentOutcome.Invalid, result.Outcome);
++        Assert.Contains(result.Diagnostics, d => d.Code == SchemaDiagnosticCodes.AssertionViolated);
++        Assert.Null(result.Document);
++    }
++
++    /// <summary>Valid decimal values outside exact CLR representation are refused without rounding.</summary>
++    /// <param name="lexical">The valid but unrepresentable decimal.</param>
++    [Theory]
++    [InlineData("79228162514264337593543950336")]
++    [InlineData("0.00000000000000000000000000001")]
++    [InlineData("1.00000000000000000000000000001")]
++    [InlineData("0.12345678901234567890123456789")]
++    public void UnrepresentableDecimal_IsUnsupported(string lexical)
++    {
++        var result = Compile().Assess(XDocument.Parse($"<order><amount>{lexical}</amount><shipped>0</shipped></order>"));
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, result.Outcome);
++        Assert.Null(result.Document);
++    }
++
++    /// <summary>Exact lexical boundaries, XML whitespace and decimal normalization are retained.</summary>
++    /// <param name="lexical">A supported positive decimal.</param>
++    /// <param name="expected">Its exact CLR value.</param>
++    [Theory]
++    [InlineData("+0012.500", "12.5")]
++    [InlineData(".50", "0.5")]
++    [InlineData("12.", "12")]
++    [InlineData(" 12.50 ", "12.5")]
++    [InlineData("79228162514264337593543950335", "79228162514264337593543950335")]
++    [InlineData("0.0000000000000000000000000001", "0.0000000000000000000000000001")]
++    public void ExactDecimals_KeepTheirValues(string lexical, string expected)
++    {
++        var doc = Valid(xml: $"<order><amount>{lexical}</amount><shipped>0</shipped></order>");
++        Assert.Equal(decimal.Parse(expected, System.Globalization.CultureInfo.InvariantCulture), doc.Elements[1].TypedValue!.Value.DecimalValue);
++    }
++
++    /// <summary>Unsupported schema requests cannot be compiled as a partially supported profile.</summary>
++    /// <param name="before">Supported source text to replace.</param>
++    /// <param name="after">Unsupported replacement.</param>
++    [Theory]
++    [InlineData("version=\"1.1\"", "targetNamespace=\"urn:test\"")]
++    [InlineData("<xs:element name=\"order\">", "<xs:element name=\"order\" nillable=\"true\">")]
++    [InlineData("<xs:complexType>", "<xs:complexType mixed=\"true\">")]
++    [InlineData("<xs:sequence>", "<xs:sequence minOccurs=\"0\">")]
++    [InlineData("type=\"xs:decimal\"", "type=\"xs:string\"")]
++    [InlineData("name=\"shipped\"", "name=\"amount\"")]
++    [InlineData("<xs:element name=\"amount\" type=\"xs:decimal\"/>", "<xs:element name=\"amount\" type=\"xs:decimal\" maxOccurs=\"unbounded\"/>")]
++    [InlineData("<xs:sequence>", "<xs:sequence><xs:any/>")]
++    [InlineData("<xs:element name=\"order\">", "<xs:import namespace=\"urn:other\" schemaLocation=\"https://example.invalid/schema\"/><xs:element name=\"order\">")]
++    public void UnsupportedSchema_RefusesBeforeAssessingInstances(string before, string after)
++    {
++        var schema = Compile(SchemaText.Replace(before, after, StringComparison.Ordinal));
++        Assert.False(schema.IsSupported);
++        Assert.Null(schema.RootDeclaration);
++        var result = schema.Assess(XDocument.Parse(Instance));
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, result.Outcome);
++        Assert.Null(result.Document);
++    }
++
++    /// <summary>The finite assertion grammar excludes functions, variables, axes and unknown names.</summary>
++    /// <param name="expression">An expression outside the documented profile.</param>
++    [Theory]
++    [InlineData("doc('https://example.invalid/')")]
++    [InlineData("alias:doc('file:///not-allowed')")]
++    [InlineData("environment-variable('HOME')")]
++    [InlineData("amount + 1 gt 0")]
++    [InlineData("$value gt 0")]
++    [InlineData("unknown gt 0")]
++    [InlineData("../amount gt 0")]
++    [InlineData("amount gt 0 trailing")]
++    [InlineData("amount gt")]
++    [InlineData("amount gt 0 or")]
++    [InlineData("(amount gt 0")]
++    [InlineData("amount eq 1.00000000000000000000000000001")]
++    public void UnsupportedAssertion_IsNotExecuted(string expression)
++    {
++        var source = XDocument.Parse(SchemaText);
++        source.Descendants(XName.Get("assert", XmlSchema.Namespace)).Single().SetAttributeValue("test", expression);
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++    }
++
++    /// <summary>Unsupported instance features are refused explicitly.</summary>
++    /// <param name="xml">An instance requesting unsupported coverage.</param>
++    [Theory]
++    [InlineData("<order xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'><amount>1</amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>1<!--keep--></amount><shipped>0</shipped></order>")]
++    [InlineData("<order><amount>1<?inside data?></amount><shipped>0</shipped></order>")]
++    [InlineData("<!DOCTYPE order [<!ENTITY x '1'>]><order><amount>1</amount><shipped>0</shipped></order>")]
++    public void UnsupportedInstance_DoesNotProducePartialSuccess(string xml)
++    {
++        var result = Compile().Assess(XDocument.Parse(xml));
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, result.Outcome);
++        Assert.Null(result.Document);
++    }
++
++    /// <summary>Snapshots, declarations and outcome lists cannot be changed through caller-owned XML.</summary>
++    [Fact]
++    public void CallerMutationAndExportMutation_DoNotChangeOriginalPsvi()
++    {
++        var source = XDocument.Parse(SchemaText);
++        var schema = SchemaServices.CreateDocumentAssessor(source);
++        var instance = XDocument.Parse(Instance);
++        var original = instance.ToString();
++        var result = schema.Assess(instance);
++        var document = Assert.IsType<AssessedDocument>(result.Document);
++        Assert.Equal(original, instance.ToString());
++        Assert.All(instance.Root!.DescendantsAndSelf(), e => Assert.Null(e.GetSchemaInfo()));
++        source.Root!.RemoveAll(); instance.Root!.RemoveAll();
++        var export = document.CreateTypedElementCopy("amount"); export.Value = "edited";
++        Assert.Equal(12.5m, document.Elements[1].TypedValue!.Value.DecimalValue);
++        Assert.Equal("12.50", document.CreateTypedElementCopy("amount").Value);
++        Assert.Throws<NotSupportedException>(() => ((IList<AssessedElement>)document.Elements).Clear());
++        Assert.True(schema.IsSupported);
++    }
++
++    /// <summary>Native copies preserve original PSVI while stripped XML loses all schema annotations.</summary>
++    [Fact]
++    public void CopyAndStrip_AreExplicitAndKeepOriginalAuthority()
++    {
++        var document = Valid(); var copy = document.Copy();
++        Assert.NotSame(document, copy);
++        Assert.Same(document.Schema, copy.Schema);
++        Assert.Same(document.Elements[0], copy.Elements[0]);
++        Assert.Equal(document.AssessmentIdentity, copy.AssessmentIdentity);
++        Assert.NotEqual(document.SnapshotIdentity, copy.SnapshotIdentity);
++        Assert.Equal(12.5m, copy.Elements[1].TypedValue!.Value.DecimalValue);
++        var stripped = copy.CreateDocumentCopy(preserveTypeAnnotations: false);
++        Assert.All(stripped.Root!.DescendantsAndSelf(), e => Assert.Null(e.GetSchemaInfo()));
++        Assert.Throws<NotSupportedException>(() => copy.CreateDocumentCopy(preserveTypeAnnotations: true));
++        Assert.Throws<NotSupportedException>(() => copy.CreateTypedElementCopy("order"));
++    }
++
++    /// <summary>Equal schema labels do not conflate independently compiled anonymous component identities.</summary>
++    [Fact]
++    public void IndependentCompiles_DoNotShareAuthority()
++    {
++        var first = Compile(); var second = Compile();
++        Assert.Equal(first.SchemaDigest, second.SchemaDigest);
++        Assert.NotSame(first.RootDeclaration, second.RootDeclaration);
++        Assert.NotSame(first.RootDeclaration!.Type, second.RootDeclaration!.Type);
++    }
++
++    /// <summary>Real Bosak queries atomize only the genuinely assessed decimal export.</summary>
++    [Fact]
++    public void TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies()
++    {
++        var document = Valid();
++        var input = new XDocumentNode(document.CreateTypedElementCopy("amount"));
++        var expression = XPath31Expression.Compile("data(.) instance of xs:decimal and data(.) eq 12.5");
++        Assert.True(expression.Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(input), 1, 1)).BooleanValue);
++        const string stylesheet = """
++            <xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs">
++              <xsl:template name="main">
++                <xsl:variable name="preserved" as="element()"><xsl:copy-of select="/*" validation="preserve"/></xsl:variable>
++                <xsl:variable name="stripped" as="element()"><xsl:copy-of select="/*" validation="strip"/></xsl:variable>
++                <result total="{data(/*) * 1.2}" preserved="{data($preserved) instance of xs:decimal}" stripped="{data($stripped) instance of xs:untypedAtomic}"/>
++              </xsl:template>
++            </xsl:stylesheet>
++            """;
++        var compiler = SchemaAwareXslt.CreateCompiler();
++        // The legacy copy seam needs an explicit annotation context, even with no imported schema.
++        // No XSD 1.1 document is compiled or validated through this empty set.
++        compiler.SchemaSet = new XmlSchemaSet();
++        var executable = compiler.Compile(stylesheet);
++        var transformInput = new XDocumentNode(new XDocument(document.CreateTypedElementCopy("amount")));
++        var output = XElement.Parse(executable.TransformToString(transformInput, initialTemplate: "main"));
++        Assert.Equal("15", (string?)output.Attribute("total"));
++        Assert.Equal("true", (string?)output.Attribute("preserved"));
++        Assert.Equal("true", (string?)output.Attribute("stripped"));
++    }
++
++    /// <summary>Cancellation produces no partial result, including for an unsupported schema.</summary>
++    [Fact]
++    public void Cancellation_IsObservedBeforeAssessment()
++    {
++        using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
++        Assert.Throws<OperationCanceledException>(() => Compile().Assess(XDocument.Parse(Instance), cancellation.Token));
++        Assert.Throws<OperationCanceledException>(() => Compile("<other/>").Assess(XDocument.Parse(Instance), cancellation.Token));
++    }
++
++    /// <summary>One immutable compiled endpoint can assess independent snapshots concurrently.</summary>
++    [Fact]
++    public async Task ConcurrentAssessment_DoesNotMixValuesOrSnapshotIdentities()
++    {
++        var schema = Compile();
++        var documents = await Task.WhenAll(Enumerable.Range(1, 20).Select(i => Task.Run(() => Valid(schema, $"<order><amount>{i}</amount><shipped>0</shipped></order>"))));
++        Assert.Equal(20, documents.Select(d => d.AssessmentIdentity).Distinct().Count());
++        Assert.Equal(20, documents.Select(d => d.SnapshotIdentity).Distinct().Count());
++        for (var i = 0; i < 20; i++) Assert.Equal((decimal)(i + 1), documents[i].Elements[1].TypedValue!.Value.DecimalValue);
++    }
++
++    /// <summary>Parenthesized grammar reaches the documented bound and refuses deeper input.</summary>
++    [Fact]
++    public void AssertionDepthLimit_IsEnforcedBeforeExecution()
++    {
++        var source = XDocument.Parse(SchemaText);
++        var assertion = source.Descendants(XName.Get("assert", XmlSchema.Namespace)).Single();
++        assertion.SetAttributeValue("test", new string('(', 16) + "amount gt 0" + new string(')', 16));
++        Assert.True(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        assertion.SetAttributeValue("test", new string('(', 17) + "amount gt 0" + new string(')', 17));
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++    }
++
++    /// <summary>Oversized expressions cannot compile or execute unbounded plans.</summary>
++    [Fact]
++    public void AssertionTokenAndCharacterLimits_RefuseLargePlans()
++    {
++        var source = XDocument.Parse(SchemaText);
++        var assertion = source.Descendants(XName.Get("assert", XmlSchema.Namespace)).Single();
++        assertion.SetAttributeValue("test", string.Join(" and ", Enumerable.Repeat("0 eq 0", 32)));
++        Assert.True(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        assertion.SetAttributeValue("test", string.Join(" and ", Enumerable.Repeat("0 eq 0", 33)));
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        assertion.SetAttributeValue("test", new string(' ', 513));
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++    }
++
++    /// <summary>The compiler refuses excessive children or assertions instead of truncating coverage.</summary>
++    [Fact]
++    public void ComponentBounds_DoNotTruncateTheSchema()
++    {
++        var source = XDocument.Parse(SchemaText);
++        XNamespace xs = XmlSchema.Namespace;
++        var sequence = source.Descendants(xs + "sequence").Single();
++        sequence.ReplaceNodes(Enumerable.Range(0, 16).Select(i => new XElement(xs + "element", new XAttribute("name", "n" + i), new XAttribute("type", "xs:decimal"))));
++        var assertion = source.Descendants(xs + "assert").Single(); assertion.SetAttributeValue("test", "n0 eq n0");
++        Assert.True(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        sequence.Add(new XElement(xs + "element", new XAttribute("name", "extra"), new XAttribute("type", "xs:decimal")));
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        source = XDocument.Parse(SchemaText);
++        var type = source.Descendants(xs + "complexType").Single();
++        for (var i = 0; i < 7; i++) type.Add(new XElement(xs + "assert", new XAttribute("test", "amount gt 0")));
++        Assert.True(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        type.Add(new XElement(xs + "assert", new XAttribute("test", "amount gt 0")));
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++    }
++
++    /// <summary>Large schema/instance payloads and lexical padding produce Unsupported, not rounded success.</summary>
++    [Fact]
++    public void InputSizeLimits_ProduceNoAssessedDocument()
++    {
++        var schema = XDocument.Parse(SchemaText); schema.Root!.Add(new XComment(new string('x', 32769)));
++        Assert.False(SchemaServices.CreateDocumentAssessor(schema).IsSupported);
++        var document = XDocument.Parse(Instance); document.Root!.Add(new XComment(new string('x', 65537)));
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, Compile().Assess(document).Outcome);
++        document = XDocument.Parse(Instance); document.Root!.Element("amount")!.Value = new string('0', 257) + "1";
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, Compile().Assess(document).Outcome);
++        document = XDocument.Parse(Instance);
++        for (var i = 0; i < 257; i++) document.Root!.Add(new XComment("x"));
++        Assert.Equal(SchemaAssessmentOutcome.Unsupported, Compile().Assess(document).Outcome);
++    }
++
++    /// <summary>Empty documents, malformed declaration names and unbound QNames never succeed or crash.</summary>
++    /// <param name="type">An unsupported type QName.</param>
++    [Theory]
++    [InlineData("xs:")]
++    [InlineData(":decimal")]
++    [InlineData("unbound:decimal")]
++    [InlineData("bad?:decimal")]
++    [InlineData("xs:xs:decimal")]
++    public void MalformedTypeNames_AreExplicitlyUnsupported(string type)
++    {
++        var source = XDocument.Parse(SchemaText);
++        source.Descendants(XName.Get("element", XmlSchema.Namespace)).First(e => (string?)e.Attribute("name") == "amount").SetAttributeValue("type", type);
++        Assert.False(SchemaServices.CreateDocumentAssessor(source).IsSupported);
++        Assert.False(SchemaServices.CreateDocumentAssessor(new XDocument()).IsSupported);
++        Assert.Equal(SchemaAssessmentOutcome.Invalid, Compile().Assess(new XDocument()).Outcome);
++    }
++
++    /// <summary>XML text normalization accepts XML whitespace and CDATA without mutating the caller.</summary>
++    [Fact]
++    public void CdataAndRootComments_KeepTheirIntendedAssessment()
++    {
++        var source = XDocument.Parse("<order><!--root--><amount><![CDATA[ 12.50 ]]></amount><?root note?><shipped>0</shipped></order>");
++        var result = Compile().Assess(source);
++        var document = Assert.IsType<AssessedDocument>(result.Document);
++        Assert.Equal("12.50", document.Elements[1].NormalizedValue);
++        Assert.Contains("root", document.CreateDocumentCopy(false).ToString(), StringComparison.Ordinal);
++        Assert.Equal(" 12.50 ", source.Root!.Element("amount")!.Value);
++    }
++
++    /// <summary>Valid signed zero and negative decimals are assessed exactly under an admitting assertion.</summary>
++    /// <param name="lexical">The exact decimal lexical form.</param>
++    [Theory]
++    [InlineData("-0")]
++    [InlineData("+0.000")]
++    [InlineData("-0.5")]
++    [InlineData("-79228162514264337593543950335")]
++    public void SignedDecimalDomain_IsNotConfusedWithTheDefaultPositiveAssertion(string lexical)
++    {
++        var source = XDocument.Parse(SchemaText);
++        source.Descendants(XName.Get("assert", XmlSchema.Namespace)).Single().SetAttributeValue("test", "amount le 0");
++        var schema = SchemaServices.CreateDocumentAssessor(source);
++        Assert.Equal(SchemaAssessmentOutcome.Valid, schema.Assess(XDocument.Parse($"<order><amount>{lexical}</amount><shipped>0</shipped></order>")).Outcome);
++    }
++
++    /// <summary>Null arguments are rejected before any snapshot, interpretation or projection.</summary>
++    [Fact]
++    public void NullArguments_AreRejected()
++    {
++        Assert.Throws<ArgumentNullException>(() => SchemaServices.CreateDocumentAssessor(null!));
++        Assert.Throws<ArgumentNullException>(() => Compile().Assess(null!));
++        Assert.Throws<ArgumentNullException>(() => Valid().CreateTypedElementCopy(null!));
++    }
++
++    /// <summary>Assertion constants preserve exact native values at decimal precision and range boundaries.</summary>
++    /// <param name="lexical">An exactly representable decimal used both as input and as an assertion constant.</param>
++    [Theory]
++    [InlineData("79228162514264337593543950335")]
++    [InlineData("-79228162514264337593543950335")]
++    [InlineData("0.1234567890123456789012345678")]
++    [InlineData("0.0000000000000000000000000001")]
++    public void AssertionConstants_AreComparedExactly(string lexical)
++    {
++        var source = XDocument.Parse(SchemaText);
++        source.Descendants(XName.Get("assert", XmlSchema.Namespace)).Single().SetAttributeValue("test", "amount eq " + lexical);
++        var schema = SchemaServices.CreateDocumentAssessor(source);
++        Assert.True(schema.IsSupported, string.Join(";", schema.Diagnostics));
++        var result = schema.Assess(XDocument.Parse($"<order><amount>{lexical}</amount><shipped>0</shipped></order>"));
++        Assert.Equal(SchemaAssessmentOutcome.Valid, result.Outcome);
++    }
++}

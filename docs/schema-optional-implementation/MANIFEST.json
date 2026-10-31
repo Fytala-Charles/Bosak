@@ -1,0 +1,251 @@
+{
+  "date": "2026-10-29",
+  "scope": "Uncommitted optional decimal Schema 0.6/core 1.34.1 candidate qualification",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "ADOPTION.md",
+      "bytes": 2116,
+      "sha256": "1fb341e748bee800855d28c23843ef0f8396abf868c4a2a95f52f2e790284a8a"
+    },
+    {
+      "path": "ASSESSMENT-GUIDE.md",
+      "bytes": 12568,
+      "sha256": "fa39fa78cf3ea105c97c70280612ec44854f5666104dbe4429961e5331ac55ac"
+    },
+    {
+      "path": "evidence/before45-charl_CHARLES_2026-10-29_15_42_27_net10.0.trx",
+      "bytes": 144204,
+      "sha256": "21069f743bcfd6d0fdd42831b7e2a24f2328a81c54718d6ee243de9c4b8c8982"
+    },
+    {
+      "path": "evidence/before45.txt",
+      "bytes": 78110,
+      "sha256": "158a28cc583e9861d6cb521381976957425ea13e4b386a2f5427333073953cd3"
+    },
+    {
+      "path": "evidence/build-warnings.json",
+      "bytes": 1997,
+      "sha256": "2a7646108e4ced185cf30a968d63e2480a60145d085bacd281c74c185c547294"
+    },
+    {
+      "path": "evidence/cohort-comparison.json",
+      "bytes": 9312,
+      "sha256": "80d2e9ef8c76cab684bdc8c730930d114e448d10caeba4b212e7024d27e1be2f"
+    },
+    {
+      "path": "evidence/core-build.txt",
+      "bytes": 11322,
+      "sha256": "b8321164ac85675a92e849df432dccd59f77b7c027e6dcbb74d8e95597e2b6e7"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_46_net10.0.trx",
+      "bytes": 266959,
+      "sha256": "cb530f00b9ed12110afca973a87a98124613fcea409c5619a7afa4d70527b531"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0.trx",
+      "bytes": 87702,
+      "sha256": "ddff78b65e31c8dec748a3a85b3c20239a595e23c0c0abb498c532df24813fe9"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[1].trx",
+      "bytes": 170173,
+      "sha256": "3c86dd99616a4d67ebd925a1190790bb7a658dbe4e922cdde9e6a6f866a63501"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[2].trx",
+      "bytes": 368219,
+      "sha256": "3a4b7e74456c805898c81a98f57d6e4f7165990fa639959bae844d5b94e41e20"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[3].trx",
+      "bytes": 675476,
+      "sha256": "cec4e5d59f31bfba083b4fce10c475d2e75d417968e6c5df3a839e86fd4d13b7"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[4].trx",
+      "bytes": 1107011,
+      "sha256": "e01f162c07c56244266fffdd95cb66b10fc3dfd28ec56e5e377ae9362a8f31b1"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[5].trx",
+      "bytes": 71532,
+      "sha256": "3509b05702e840269d9cb6e47dea12732790623a83cd80c7cdb681c706bfb140"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[6].trx",
+      "bytes": 301589,
+      "sha256": "2fdb37a2aac96866b580a75505f645df3e10562bd51e20e94991a9a056b766df"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_48_net10.0.trx",
+      "bytes": 21518843,
+      "sha256": "65b20330ff1ff69842b5cba51e8468ae39f91fcc8e61fc607c900e6f3813bc71"
+    },
+    {
+      "path": "evidence/core-charl_CHARLES_2026-10-29_15_45_49_net10.0.trx",
+      "bytes": 11509656,
+      "sha256": "44591d1fcb5a4da0056179db2e5f83a5ea75cf7dc554fee2c767a49b0540e63b"
+    },
+    {
+      "path": "evidence/core-final.txt",
+      "bytes": 4597,
+      "sha256": "e06c8019986b4e54f5e5e5ea3702b4703b2224cdfc0fb453fcc8a4a5a951a0fc"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 3920,
+      "sha256": "8b593850b72cae0b5f5f3074578ee3a22de5826c6a33f39bda668c2c26771dae"
+    },
+    {
+      "path": "evidence/example.txt",
+      "bytes": 504,
+      "sha256": "52f1ef4b8b2ad97441f1e7f06fb1cc7945266681bfba634579ea62bbad8f4ffe"
+    },
+    {
+      "path": "evidence/initial-249-pass.txt",
+      "bytes": 2211,
+      "sha256": "4e9a7cde9c55cea2d78ec2faea7e2963fbeb27d80c88e153c9399314d34137c5"
+    },
+    {
+      "path": "evidence/initial-fixture-compile.txt",
+      "bytes": 3178,
+      "sha256": "95b77b5757121008e4e018d27be086e352e8d2d046f2fc855cab55cc63982cad"
+    },
+    {
+      "path": "evidence/initial-sandbox-nuget-audit.txt",
+      "bytes": 4780,
+      "sha256": "716a6d653948de6eebdfd47d4ffa6db62ece3b418100867c44f1fe12fdf953c6"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 318,
+      "sha256": "1e9a04ae99bbba2cbc917998383be2f42c40375f6cf6bed5a0ea8add00ed8e1c"
+    },
+    {
+      "path": "evidence/qt3-skips.txt",
+      "bytes": 9815,
+      "sha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187"
+    },
+    {
+      "path": "evidence/qt3.txt",
+      "bytes": 73046,
+      "sha256": "bd5bd9ad09cd36b453c472f9c27a3ee6257db78c7194bec445fb915fd94550d8"
+    },
+    {
+      "path": "evidence/qt4-skips.txt",
+      "bytes": 41479,
+      "sha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a"
+    },
+    {
+      "path": "evidence/qt4.txt",
+      "bytes": 46432,
+      "sha256": "6d9ff21759ddd0110cc31336e6b267a902a14b26e0fab94d4d645f191707f7f6"
+    },
+    {
+      "path": "evidence/README.md",
+      "bytes": 1989,
+      "sha256": "40f4d90427e572da71a78e4fbfc3e80c5779ae2bc1abdcdd317fad1abd0a334c"
+    },
+    {
+      "path": "evidence/schema-charl_CHARLES_2026-10-29_15_45_04_net10.0.trx",
+      "bytes": 384125,
+      "sha256": "e170a85ddcce79e827482de31970231cdf87a409f4bbf026eadb4c14807d04c7"
+    },
+    {
+      "path": "evidence/schema-charl_CHARLES_2026-10-29_15_51_14_net10.0.trx",
+      "bytes": 384125,
+      "sha256": "3666be481b6612b9112efebc77a41d0e4d83fdb0df79c23aaf06ec0585e0f826"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/schema-final.txt",
+      "bytes": 3434,
+      "sha256": "625f5a5a1a6449aa2a1596f4ed7075e4d81c20e8cdc1652f007c7cf3c00db5f0"
+    },
+    {
+      "path": "evidence/source/core/src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs.txt",
+      "bytes": 8695,
+      "sha256": "293e5202d6caa6620e2a573ef1776b0663d7e6c294c91a963ea145f3014c6b13"
+    },
+    {
+      "path": "evidence/source/core/src/Directory.Build.props.txt",
+      "bytes": 1363,
+      "sha256": "fff68d162b9a5c63cdf273d056ad608abece494ffbb30074f980bc1e5a58c972"
+    },
+    {
+      "path": "evidence/source/core/tests/Bosak.XPath.Providers.Tests/XdmElementAssessmentTests.cs.txt",
+      "bytes": 7657,
+      "sha256": "85c8b2f5558c52ae58076bd70c955b5b6eb2bc13774698843477d5417b3a23ff"
+    },
+    {
+      "path": "evidence/source/schema/examples/Bosak.Schema.Assessment.Example/Program.cs.txt",
+      "bytes": 4986,
+      "sha256": "2de5df871ab21f9ce02041eaf4d185415b28b8b3b16bb591f3dc464c6d810521"
+    },
+    {
+      "path": "evidence/source/schema/src/Bosak.Schema/Assessment/AssessedDocument.cs.txt",
+      "bytes": 7164,
+      "sha256": "459a026e81dbc79789a8202d6339bff8a436a0a48a8fb735a0a42b2515e158b7"
+    },
+    {
+      "path": "evidence/source/schema/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs.txt",
+      "bytes": 13162,
+      "sha256": "810c1c9e31a01bbbbd0557364e7f85dae3492fba35d598f0997c4df6ba5997e5"
+    },
+    {
+      "path": "evidence/source/schema/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs.txt",
+      "bytes": 6200,
+      "sha256": "effc0e63b0f470bba1ce022ab05b3aeb84f08d90e97acb329301ab401321d3d7"
+    },
+    {
+      "path": "evidence/source/schema/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs.txt",
+      "bytes": 10695,
+      "sha256": "15cb7122c82ec40309198c3f78a173225eb3b3d0e864739bba61a89bc911abb4"
+    },
+    {
+      "path": "evidence/source/schema/src/Bosak.Schema/Bosak.Schema.csproj.txt",
+      "bytes": 1212,
+      "sha256": "4b46886b2a16aae32f25530f80439e8dd63f88767cab5bcbfc1c9674a3c8dafd"
+    },
+    {
+      "path": "evidence/source/schema/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj.txt",
+      "bytes": 1324,
+      "sha256": "7fce28751fd10032b5c13ee9c51dc95f7042ea427de70dea19bc5d6bbdfe96aa"
+    },
+    {
+      "path": "evidence/source/schema/tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs.txt",
+      "bytes": 17837,
+      "sha256": "3dc3e43467afff66af141bfa39349ae720e2d40e97f00dd0bb814be227bd0e62"
+    },
+    {
+      "path": "evidence/source-identities.json",
+      "bytes": 1441,
+      "sha256": "4fccfdad2df2c6cab3279a9646cc869d3e8b1eb2abf26793f4df4fb5021b33f8"
+    },
+    {
+      "path": "GUIDE.md",
+      "bytes": 4761,
+      "sha256": "d6265873e39f800d330408289a5c73fade387f6dc0f0a57fc1f4f2fe5df3de76"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2991,
+      "sha256": "6987872e5c831073b1220d5540ba8e6050b20eba23b99875b4e875d04d70c39e"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 4796,
+      "sha256": "ebc3f628fcebf58a89d7564f82b99ce8a7405f2a0b1561c2f3c7b8d448180c85"
+    }
+  ]
+}

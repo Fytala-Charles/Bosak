@@ -1,0 +1,15 @@
+e0024f5d1d00c410e65ebf04f4caf89e770eb8ec
+2026-10-09T19:16:19+02:00
+2026-10-09T19:16:19+02:00
+feat(req123): fn:parse-csv/fn:csv-to-xml/fn:csv-doc — F&O 4.0 §17.5 CSV functions (frozen level) + bare {…} map constructor + multi-clause 4.0 FLWOR (#104)
+
+- new Csv.cs: shared options/parse/analyze/record/xml pipeline (FOCV0001/0002/0004, FORG0001)
+- FunctionLibrary 5.134: 6 registrations (4.0-only), keyword rows, wrappers, FF FF BOM -> FOUT1200
+- XPathParser 1.68: bare {…} map constructor (PR2778, 4.0-gated), consecutive for/let FLWOR clauses
+- ResultComparer 3.0: AssertCompatibility static + CompileAssert (shared comparer, per-level asserts)
+- ConformanceRunner40 0.6: sets AssertCompatibility=XPath40; GatedSets += fn-csv-doc/fn-csv-to-xml/fn-parse-csv (gate now 207)
+- new CsvTests.cs (~50 tests); VersionGateTests 0.13 (4 frozen-level rows + works test)
+
+Gates: build 0 errors; unit all green (Standard 1171, Api 301); QT3 31,142/0/679; XSLT smoke 162/0/26; qt4 fn-parse-csv 124/0/0, fn-csv-to-xml 68/0/2, fn-csv-doc 20/0/0; gate-only exit 0 (207 sets)
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

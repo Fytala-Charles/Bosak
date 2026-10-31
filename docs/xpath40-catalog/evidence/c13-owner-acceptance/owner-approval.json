@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-26",
+  "approvedBy": "User; explicit conversation approval",
+  "questionItemId": "[\"request_user_input_async\",\"call_a705f88fddb74a099864de1a9775ad85\",0]",
+  "question": "Approve the C13 proposal in docs/xpath40-catalog/C13-ACCEPTANCE-PROPOSAL.md (commit 1d13230b)? Approval would accept AC-01–04 and the 38 proposed dispositions for the documented bounded catalog, then close C13/REQ-126. Known technical gaps and all 48 unmet batch observations remain open; this does not certify full current-draft compliance or approve a release. The closure plan explicitly requires owner acceptance.",
+  "answer": "Approve bounded catalog closure (Recommended)",
+  "decision": "Approved",
+  "proposalId": "REQ-126-C13-bounded-catalog-acceptance-v1",
+  "presentedCommit": "1d13230b6e3d7c3eb88eac2fb5b1a2d413406deb",
+  "approvedArtifacts": {
+    "C13-ACCEPTANCE-PROPOSAL.md": {
+      "snapshot": "approved-C13-ACCEPTANCE-PROPOSAL.md",
+      "sha256": "c15539c32c2d966b6d616becc3ece45cd0d047586779c26f4e22a58d6faf46de",
+      "gitBlob": "20d827ccbc9c3019600c80e082cc558570e6ce7c"
+    },
+    "C13-ACCEPTANCE-PROPOSAL.json": {
+      "snapshot": "approved-C13-ACCEPTANCE-PROPOSAL.json",
+      "sha256": "d099859220e3dfd50665ea7f5d6dbbcdc4742f9789ac111284e78c3ae7d0d578",
+      "gitBlob": "cd9d2e62849649805016ac00f08aa71c3e51150e"
+    },
+    "FINAL-CLOSURE-REVIEW.json": {
+      "snapshot": "approved-FINAL-CLOSURE-REVIEW.json",
+      "sha256": "21cbce5cc5a12c2d4be8596c465165f887e7aa98586676a2e554ebfdf8941a25",
+      "gitBlob": "d9dfeab581bcbb38314183a6c535ce3bdd2d2abc"
+    }
+  },
+  "acceptanceCriteria": [
+    "AC-01",
+    "AC-02",
+    "AC-03",
+    "AC-04"
+  ],
+  "maintainedCriterion": "AC-05",
+  "dispositionRecords": 38,
+  "unmetObservationsRetained": 48,
+  "conditions": [
+    "Close C13 and REQ-126 for the exact documented bounded catalog.",
+    "Preserve every technical finding, independent expectation and unmet control; no defect is fixed or waived.",
+    "Do not claim full current-draft compliance or exhaustive semantic certification of all316 inventoried names.",
+    "Keep C08 approval exactly its original28 records and all null adoption fields.",
+    "No release, tag, push, upstream contribution or new engine implementation is authorized by this acceptance."
+  ]
+}

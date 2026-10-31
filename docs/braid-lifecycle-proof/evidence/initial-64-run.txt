@@ -1,0 +1,1 @@
+64 lifecycle controls passed across 13 isolated cases; all leases balanced and contexts released once.

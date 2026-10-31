@@ -473,6 +473,15 @@
 //                      | Charles Korthout | 5.153 | 26-10-2026     | Preserve abs integer results and widen Int64.MinValue within existing storage (1.26.3).   |
 //                      | Charles Korthout | 5.154 | 26-10-2026     | Retain decimal-backed integer identity in floor and ceiling (1.26.3).                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.155 | 27-10-2026     | Reuse schema constructor registration after query-owned imports (1.26.7).              |
+//                      | Charles Korthout | 5.156 | 27-10-2026     | Add bounded XPath4 parse-integer signatures, defaults, keywords and errors (1.28.0).    |
+//                      | Charles Korthout | 5.157 | 28-10-2026     | Return true empty date-formatting results with optional string metadata (1.28.2).        |
+//                      | Charles Korthout | 5.158 | 28-10-2026     | Add typed XPath4 date-formatting arities3/4 and keyword defaults (1.29.0).                 |
+//                      | Charles Korthout | 5.159 | 28-10-2026     | Convert FULLY-NORMALIZED strings with a coherent pinned Unicode17 backend (1.29.1).      |
+//                      | Charles Korthout | 5.160 | 28-10-2026     | Fix normalization XML whitespace, XPath4 empty-form defaults and keywords (1.29.2).     |
+//                      | Charles Korthout | 5.161 | 28-10-2026     | Resolve pending XQuery initial focus for implicit-context standard functions (1.30.0).   |
+//                      | Charles Korthout | 5.162 | 28-10-2026     | Honor XQuery namespace-copy boundaries in prefix inspection functions (1.31.0). |
+// ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -2573,6 +2582,26 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.DateTime,
                 Implementation = ParseIetfDate
             },
+            [(Namespaces.Fn, "parse-integer", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-integer", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ParameterTypeNames = ["xs:string?"],
+                ReturnType = XdmValueKind.Integer,
+                ReturnTypeName = "xs:integer?",
+                IsXPath40Only = true,
+                Implementation = ParseInteger
+            },
+            [(Namespaces.Fn, "parse-integer", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-integer", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Integer],
+                ParameterTypeNames = ["xs:string?", "xs:integer?"],
+                ReturnType = XdmValueKind.Integer,
+                ReturnTypeName = "xs:integer?",
+                IsXPath40Only = true,
+                Implementation = ParseInteger
+            },
             [(Namespaces.Fn, "format-integer", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-integer", Arity = 2,
@@ -2607,43 +2636,103 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 2,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:date?", "xs:string"],
                 Implementation = FormatDate_2
+            },
+            [(Namespaces.Fn, "format-date", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 3,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateWithOptions
+            },
+            [(Namespaces.Fn, "format-date", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 4,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateWithOptions
             },
             [(Namespaces.Fn, "format-date", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatDate_5
+                Implementation = FormatDateWithOptions
             },
             [(Namespaces.Fn, "format-time", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 2,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:time?", "xs:string"],
                 Implementation = FormatTime_2
+            },
+            [(Namespaces.Fn, "format-time", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 3,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatTimeWithOptions
+            },
+            [(Namespaces.Fn, "format-time", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 4,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatTimeWithOptions
             },
             [(Namespaces.Fn, "format-time", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatTime_5
+                Implementation = FormatTimeWithOptions
             },
             [(Namespaces.Fn, "format-dateTime", 2)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 2,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:dateTime?", "xs:string"],
                 Implementation = FormatDateTime_2
+            },
+            [(Namespaces.Fn, "format-dateTime", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 3,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateTimeWithOptions
+            },
+            [(Namespaces.Fn, "format-dateTime", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 4,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateTimeWithOptions
             },
             [(Namespaces.Fn, "format-dateTime", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatDateTime_5
+                Implementation = FormatDateTimeWithOptions
             },
 
             // ----- fn:adjust-date-to-timezone ---------------------------------
@@ -4637,6 +4726,26 @@ public static class FunctionLibrary
         };
         context.InstallStandardFunctionTable(template.Value);
 
+        RegisterSchemaConstructors(context);
+
+        // Set up default document loader if not already configured
+        if (context.DocumentLoader is null)
+        {
+            context.DocumentLoader = XDocumentProvider.LoadFile;
+        }
+
+        // Provide the default collation-aware string comparer used by XPath value
+        // and general comparison operators. Consumers may override this after Populate.
+        if (context.CollationComparer is null)
+        {
+            context.CollationComparer = CompareStrings;
+        }
+    }
+
+    /// <summary>Registers missing constructors from the current compiled schema set.</summary>
+    /// <param name="context">The context whose existing function bindings are preserved.</param>
+    internal static void RegisterSchemaConstructors(EvaluationContext context)
+    {
         // Register constructor functions for simple types declared in imported schemas.
         // XSD-derived simple types (e.g. hat:hatsize) are available as Q{uri}local#1
         // constructors just like the built-in xs:* constructors (qischema030).
@@ -4669,19 +4778,6 @@ public static class FunctionLibrary
                     Implementation = (ctx, args) => UserDefinedTypeConstructor(ctx, args, typeName)
                 });
             }
-        }
-
-        // Set up default document loader if not already configured
-        if (context.DocumentLoader is null)
-        {
-            context.DocumentLoader = XDocumentProvider.LoadFile;
-        }
-
-        // Provide the default collation-aware string comparer used by XPath value
-        // and general comparison operators. Consumers may override this after Populate.
-        if (context.CollationComparer is null)
-        {
-            context.CollationComparer = CompareStrings;
         }
     }
 
@@ -4724,6 +4820,11 @@ public static class FunctionLibrary
         var table = new Dictionary<(string Ns, string Local), KeywordSignatureInfo>
         {
             [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
+            [(Namespaces.Fn, "parse-integer")] = new(["value", "radix"], [null, "10"]),
+            [(Namespaces.Fn, "normalize-unicode")] = new(["value", "form"], [null, "'NFC'"]),
+            [(Namespaces.Fn, "format-date")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
+            [(Namespaces.Fn, "format-dateTime")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
+            [(Namespaces.Fn, "format-time")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
             [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
             [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
@@ -4796,7 +4897,7 @@ public static class FunctionLibrary
 
     private static XdmValue String_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:string() called with no context item.");
         if (item.IsFunction || item.IsArray || item.IsMap)
@@ -5510,7 +5611,7 @@ public static class FunctionLibrary
     /// <summary>F&amp;O 4.0 §17.7 fn:jkey#0 — the entry key of the context-item JNode.</summary>
     private static XdmValue JKey_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:jkey() requires a context item");
         return JKey(item);
@@ -5533,7 +5634,7 @@ public static class FunctionLibrary
     /// <summary>F&amp;O 4.0 §17.7 fn:jvalue#0 — the wrapped value of the context-item JNode.</summary>
     private static XdmValue JValue_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:jvalue() requires a context item");
         return JValue(item);
@@ -5988,7 +6089,7 @@ public static class FunctionLibrary
     private static XdmValue Snapshot_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         // fn:snapshot() with no argument is fn:snapshot(.); an absent context item is XPDY0002.
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         return Snapshot(ctx, new[] { item });
@@ -6698,14 +6799,14 @@ public static class FunctionLibrary
 
     private static XdmValue Position(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:position() called with no context item.");
         return XdmValue.FromInteger(ctx.ContextPosition);
     }
 
     private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:last() called with no context item.");
         if (ctx.ContextSize < 0)
         {
@@ -6752,7 +6853,7 @@ public static class FunctionLibrary
 
     private static XdmValue StringLength_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:string-length() called with no context item.");
         // fn:string-length() is equivalent to fn:string-length(fn:string(.))
@@ -7864,7 +7965,7 @@ public static class FunctionLibrary
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: Context item is absent for fn:has-children().");
         return HasChildren(item);
@@ -7916,7 +8017,7 @@ public static class FunctionLibrary
 
     private static XdmValue Path_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         return Path_1(ctx, new[] { item });
@@ -9068,7 +9169,7 @@ public static class FunctionLibrary
 
     private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:normalize-space() called with no context item.");
         return XdmValue.FromString(NormalizeSpaceString(AtomizedString(item)));
@@ -9089,13 +9190,14 @@ public static class FunctionLibrary
         => NormalizeUnicode(RequireString(args[0]), "NFC");
 
     private static XdmValue NormalizeUnicode_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => NormalizeUnicode(RequireString(args[0]), RequireStringRequired(args[1]));
+        => NormalizeUnicode(RequireString(args[0]),
+            ctx.IsXPath40 && IsEmptySequence(args[1]) ? "NFC" : RequireStringRequired(args[1]));
 
     private static XdmValue NormalizeUnicode(string input, string form)
     {
-        // The form name is matched case-insensitively after stripping whitespace; the
-        // zero-length form performs no normalization (fn-normalize-unicode-1/2args-2/4).
-        switch (form.Trim().ToUpperInvariant())
+        // Effective form is upper-case(normalize-space(form)): XML whitespace only.
+        // A zero-length string form performs no normalization in every profile.
+        switch (NormalizeSpaceString(form).ToUpperInvariant())
         {
             case "":
                 return XdmValue.FromString(input);
@@ -9108,14 +9210,7 @@ public static class FunctionLibrary
             case "NFKD":
                 return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKD));
             case "FULLY-NORMALIZED":
-                // XML 1.1 full normalization: NFC and not starting with a non-starter
-                // (combining mark; spacing marks such as U+09BE are starters).
-                if (!input.IsNormalized(System.Text.NormalizationForm.FormC) ||
-                    (input.Length > 0 && char.GetUnicodeCategory(input, 0) is
-                        System.Globalization.UnicodeCategory.NonSpacingMark or
-                        System.Globalization.UnicodeCategory.EnclosingMark))
-                    throw new InvalidOperationException("FOCH0003");
-                return XdmValue.FromString(input);
+                return XdmValue.FromString(FullNormalizationEngine.Normalize(input));
             default:
                 throw new InvalidOperationException("FOCH0003");
         }
@@ -9457,7 +9552,7 @@ public static class FunctionLibrary
     // namespace-aware arity-1 constructor.
     private static XdmValue XsFocusCtor(EvaluationContext ctx, string typeName)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException($"XPDY0002: xs:{typeName}() called with no context item.");
         if (typeName == "QName")
@@ -9965,7 +10060,7 @@ public static class FunctionLibrary
 
     private static XdmValue Id_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:id() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:id");
@@ -10012,7 +10107,7 @@ public static class FunctionLibrary
 
     private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:element-with-id() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:element-with-id");
@@ -10128,7 +10223,7 @@ public static class FunctionLibrary
 
     private static XdmValue Idref_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:idref() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:idref");
@@ -11485,7 +11580,7 @@ public static class FunctionLibrary
 
     private static XdmValue BaseUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:base-uri() called with no context item.");
         if (!item.IsNode)
@@ -11530,7 +11625,7 @@ public static class FunctionLibrary
 
     private static XdmValue DocumentUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:document-uri() called with no context item.");
         if (!item.IsNode)
@@ -11572,7 +11667,7 @@ public static class FunctionLibrary
 
     private static XdmValue Nilled_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:nilled() called with no context item.");
         if (!item.IsNode || item.NodeValue == null)
@@ -15231,7 +15326,7 @@ public static class FunctionLibrary
 
     private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15247,7 +15342,7 @@ public static class FunctionLibrary
 
     private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15263,7 +15358,7 @@ public static class FunctionLibrary
 
     private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15288,7 +15383,7 @@ public static class FunctionLibrary
 
     private static XdmValue Lang_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:lang() called with no context item.");
         if (!item.IsNode)
@@ -15675,6 +15770,75 @@ public static class FunctionLibrary
             || name.Equals("PDT", StringComparison.OrdinalIgnoreCase);
     }
 
+    private static XdmValue ParseInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // Dispatch performs the declared optional-argument conversion before this body.
+        var input = AtomizeSingleton(args[0]);
+        if (input.IsUndefined)
+            return XdmValue.Undefined;
+        string text = RequireString(input);
+        int radix = 10;
+        if (args.Length > 1)
+        {
+            var supplied = AtomizeSingleton(args[1]);
+            if (!supplied.IsUndefined)
+            {
+                if (!VmEngine.ValueMatchesType(supplied, "xs:integer", ctx))
+                    throw new InvalidOperationException("XPTY0004: parse-integer radix must be an integer.");
+                decimal domain = supplied.Kind == XdmValueKind.Integer
+                    ? supplied.IntegerValue : supplied.DecimalValue;
+                if (domain is < 2m or > 36m)
+                    throw new InvalidOperationException("FORG0011: parse-integer radix must be between 2 and 36.");
+                radix = (int)domain;
+            }
+        }
+
+        bool first = true;
+        bool negative = false;
+        bool sawDigit = false;
+        bool overflow = false;
+        ulong magnitude = 0;
+        ulong limit = long.MaxValue;
+        foreach (char ch in text)
+        {
+            if (ch is '\t' or '\n' or '\r' or ' ' or '_')
+                continue;
+            if (first)
+            {
+                first = false;
+                if (ch is '+' or '-')
+                {
+                    negative = ch == '-';
+                    if (negative)
+                        limit = 1UL << 63;
+                    continue;
+                }
+            }
+            int digit = ch is >= '0' and <= '9' ? ch - '0'
+                : ch is >= 'a' and <= 'z' ? ch - 'a' + 10
+                : ch is >= 'A' and <= 'Z' ? ch - 'A' + 10 : -1;
+            if (digit < 0 || digit >= radix)
+                throw new InvalidOperationException("FORG0012: Invalid parse-integer lexical value.");
+            sawDigit = true;
+            // Continue lexical validation after overflow so bad trailing digits retain their error.
+            if (!overflow)
+            {
+                if (magnitude > (limit - (uint)digit) / (uint)radix)
+                    overflow = true;
+                else
+                    magnitude = magnitude * (uint)radix + (uint)digit;
+            }
+        }
+        if (!sawDigit)
+            throw new InvalidOperationException("FORG0012: parse-integer requires at least one digit.");
+        if (overflow)
+            throw new InvalidOperationException("FOCA0003: parse-integer result exceeds the Int64 implementation limit.");
+        long result = negative
+            ? magnitude == (1UL << 63) ? long.MinValue : -(long)magnitude
+            : (long)magnitude;
+        return XdmValue.FromInteger(result);
+    }
+
     private static XdmValue FormatInteger_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatInteger(ctx, args[0], AtomizedString(args[1]), null);
 
@@ -15709,20 +15873,20 @@ public static class FunctionLibrary
     private static XdmValue FormatDate_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date, ctx.IsXsltMode);
 
-    private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
+    private static XdmValue FormatDateWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time, ctx.IsXsltMode);
 
-    private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
+    private static XdmValue FormatTimeWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
-    private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
+    private static XdmValue FormatDateTimeWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
     // The $language/$calendar/$place arguments are xs:string?: a non-string atomic value
     // (xs:integer, ...) is a type error (XPTY0004) checked before the picture string is
@@ -15739,8 +15903,8 @@ public static class FunctionLibrary
 
     private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode)
     {
-        if (value.IsUndefined)
-            return XdmValue.FromString(string.Empty);
+        if (value.IsUndefined || IsEmptySequence(value))
+            return XdmValue.Undefined;
 
         XPathDateTime xdt = value.Kind switch
         {
@@ -16115,7 +16279,7 @@ public static class FunctionLibrary
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -16143,7 +16307,7 @@ public static class FunctionLibrary
 
     private static XdmValue Number_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:number() called with no context item.");
         return Number(ctx.ContextItem);
     }
@@ -16171,7 +16335,7 @@ public static class FunctionLibrary
     private static XdmValue Data_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         // fn:data() is fn:data(.); an absent context item is XPDY0002 (K2-DataFunc-4).
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:data() called with no context item.");
         return Data(ctx.ContextItem);
     }
@@ -16283,7 +16447,7 @@ public static class FunctionLibrary
 
     private static XdmValue Root_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -17251,7 +17415,7 @@ public static class FunctionLibrary
 
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         // XPDY0002 when the context item is absent; XPTY0004 when it is not a node
         // (generate-id-901).
         if (item.IsUndefined)
@@ -19477,7 +19641,7 @@ public static class FunctionLibrary
 
     private static XdmValue CopyOf_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: copy-of() requires a context item.");
         return CopyOf(ctx, item);
@@ -19845,6 +20009,7 @@ public static class FunctionLibrary
 
         var prefixes = new List<XdmValue>();
         var seen = new HashSet<string>();
+        if (node.NamespaceUri.Length == 0) seen.Add(string.Empty);
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
@@ -19854,6 +20019,7 @@ public static class FunctionLibrary
             while (current != null)
             {
                 path.Add(current);
+                if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null) break;
                 current = current.Parent;
 
                 // Stop at namespace inheritance barrier (inherit-namespaces="no").
@@ -19868,6 +20034,7 @@ public static class FunctionLibrary
             bool isTargetElement = true;
             foreach (var el in path)
             {
+                if (el.Annotation<XQueryDefaultNamespaceAbsence>() is not null) seen.Add(string.Empty);
                 if (el.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
                     foreach (var undeclaredPrefix in undeclarations.Prefixes)
                         undeclared.Add(undeclaredPrefix);
@@ -19914,6 +20081,8 @@ public static class FunctionLibrary
 
         if (prefix == "xml")
             return XdmValue.FromString("http://www.w3.org/XML/1998/namespace", "anyURI");
+        if (prefix.Length == 0 && node.NamespaceUri.Length == 0)
+            return XdmValue.Undefined;
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
@@ -19922,6 +20091,8 @@ public static class FunctionLibrary
             bool isTargetElement = true;
             while (current != null)
             {
+                if (prefix.Length == 0 && current.Annotation<XQueryDefaultNamespaceAbsence>() is not null)
+                    return XdmValue.Undefined;
                 // XML 1.1 prefixed namespace undeclarations hide the same prefixes
                 // declared at or above them.
                 if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
@@ -19947,6 +20118,7 @@ public static class FunctionLibrary
                         }
                     }
                 }
+                if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null) break;
                 isTargetElement = false;
                 current = current.Parent;
 

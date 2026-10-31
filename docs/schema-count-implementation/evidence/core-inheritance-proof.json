@@ -1,0 +1,27 @@
+{
+  "qualifiedCoreCommit": "5e277c6a8233dc63af350c4485cc87609c132643",
+  "currentCoreCommit": "da6c08141c03af34b537599b3ff5eadb77240ac9",
+  "committedSourceAndConfigurationDiff": [],
+  "workingSourceAndConfigurationDiff": [],
+  "untrackedSourceFiles": [],
+  "qualifiedSourceIdentities": {
+    "src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs": "293e5202d6caa6620e2a573ef1776b0663d7e6c294c91a963ea145f3014c6b13",
+    "src/Directory.Build.props": "fff68d162b9a5c63cdf273d056ad608abece494ffbb30074f980bc1e5a58c972",
+    "tests/Bosak.XPath.Providers.Tests/XdmElementAssessmentTests.cs": "85c8b2f5558c52ae58076bd70c955b5b6eb2bc13774698843477d5417b3a23ff"
+  },
+  "sourceIdentical": true,
+  "inheritedCorePasses": 24214,
+  "inheritedQT3": [
+    31397,
+    0,
+    424
+  ],
+  "inheritedQT4": [
+    8941,
+    0,
+    1918
+  ],
+  "gatedSets": 230,
+  "newFullRuns": false,
+  "note": "Tracked engine/test/harness/fixture references/configuration are identical; this is not a global cleanliness claim for historical nested fixture checkouts."
+}

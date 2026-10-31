@@ -1,0 +1,256 @@
+{
+  "date": "2026-10-28",
+  "sourceBase": "ace5f2bf1884a23b38a2e9dbd5005064f46acf27",
+  "manifest": "docs/xpath40-catalog/examples/cases.json",
+  "beforeSha256": "f3dff996b11691c80ac50f564cba7c865200e61a7854395380c1eba081d95df9",
+  "afterSha256": "6c2a57d7b3df09a0072d63f1ace441726b0aa3a87bfde42ace44ec7851bb5046",
+  "scope": "Twelve live example expectations only; unchanged original XPath files and 3.1 refusal/absence checks. Frozen REQ126 observations/dispositions remain historical.",
+  "updates": [
+    {
+      "id": "changed31-inventory-fn-format-date-3",
+      "before": {
+        "id": "changed31-inventory-fn-format-date-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-date-3.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-date-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-date-3.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 3))\n",
+      "fileSha256": "ea4cbd98778548d0f41a86ea16aaaf5c35382a9cd23a5b42bd76c323553c8adf"
+    },
+    {
+      "id": "changed31-inventory-fn-format-date-4",
+      "before": {
+        "id": "changed31-inventory-fn-format-date-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-date-4.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-date-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-date-4.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 4))\n",
+      "fileSha256": "05bdd6e2d6392d972c6d75aa3fbf26fbfe183bdd05117bf0e83f19ae7fbff110"
+    },
+    {
+      "id": "changed31-inventory-fn-format-dateTime-3",
+      "before": {
+        "id": "changed31-inventory-fn-format-dateTime-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-dateTime-3.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-dateTime-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-dateTime-3.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 3))\n",
+      "fileSha256": "565ec824ebad33f3efb3be4f04fcd46271aed34408187b1c3a4a6a587b33b54c"
+    },
+    {
+      "id": "changed31-inventory-fn-format-dateTime-4",
+      "before": {
+        "id": "changed31-inventory-fn-format-dateTime-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-dateTime-4.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-dateTime-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-dateTime-4.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 4))\n",
+      "fileSha256": "800078274de809423fd788b5170cd308f47823741fd706d81819c0e83db63ad6"
+    },
+    {
+      "id": "changed31-inventory-fn-format-time-3",
+      "before": {
+        "id": "changed31-inventory-fn-format-time-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-time-3.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-time-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-time-3.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 3))\n",
+      "fileSha256": "83f22da1e463f7b5c45460721b3129d3bda09bd1da84056b9d9166debfe3a8e7"
+    },
+    {
+      "id": "changed31-inventory-fn-format-time-4",
+      "before": {
+        "id": "changed31-inventory-fn-format-time-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-time-4.xpath",
+        "expected": "0",
+        "baselineExpected": "0"
+      },
+      "after": {
+        "id": "changed31-inventory-fn-format-time-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/inventory-fn-format-time-4.xpath",
+        "expected": "1",
+        "baselineExpected": "0"
+      },
+      "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 4))\n",
+      "fileSha256": "bf25c52cc84330db6c5d1ea3ab2b5cab1bd66cc7de0ab530a5418cdd5ff3c40e"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-date-3",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-date-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-date-3.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-date-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-date-3.xpath",
+        "expected": "3",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-date#3)\n",
+      "fileSha256": "74ef7d9e53d1a68a4e399104c9c9787b09021ac34cae67a687f8016e7bafbb9f"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-date-4",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-date-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-date-4.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-date-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-date-4.xpath",
+        "expected": "4",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-date#4)\n",
+      "fileSha256": "2128969118eefdae0dbcb59945a41d8bc832faf60d5304ca6a31e987e88f2cd5"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-dateTime-3",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-dateTime-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-dateTime-3.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-dateTime-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-dateTime-3.xpath",
+        "expected": "3",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-dateTime#3)\n",
+      "fileSha256": "0f529a91519559e927e1dedd2c4dc095df15894f5fb0ad333d0a1bced20caa0f"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-dateTime-4",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-dateTime-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-dateTime-4.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-dateTime-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-dateTime-4.xpath",
+        "expected": "4",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-dateTime#4)\n",
+      "fileSha256": "a7a03c4d4eeb585a5d1d52b529f4a0881632965e0a8dadc94ab6aea83e79c2ca"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-time-3",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-time-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-time-3.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-time-3",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-time-3.xpath",
+        "expected": "3",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-time#3)\n",
+      "fileSha256": "c0ebe0376343da960c426de72557f4c1cf15029b25e6e7ab54659b6f61116dcd"
+    },
+    {
+      "id": "changed31-contract-reference-fn-format-time-4",
+      "before": {
+        "id": "changed31-contract-reference-fn-format-time-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-time-4.xpath",
+        "error": "XPST0017"
+      },
+      "after": {
+        "id": "changed31-contract-reference-fn-format-time-4",
+        "kind": "xpath",
+        "mode": "40",
+        "file": "changed31-contracts/reference-fn-format-time-4.xpath",
+        "expected": "4",
+        "baselineError": "XPST0017"
+      },
+      "expression": "function-arity(fn:format-time#4)\n",
+      "fileSha256": "c0df12733ea89cefba71406693f4a4fe4f7e45ad8a57dfb5a826844c63f6b530"
+    }
+  ]
+}

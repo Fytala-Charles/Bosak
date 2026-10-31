@@ -1,0 +1,1616 @@
+{
+  "date": "2026-10-26",
+  "baseline": "closure-plan-v1-c13-accepted",
+  "sourceBase": "927d7a458dd90a8b506840c045808f4f27e3c8d1",
+  "publishedVersion": "1.26.3",
+  "requirement": "REQ-126",
+  "status": "Complete",
+  "acceptance": {
+    "AC01": "Accepted bounded catalog",
+    "AC02": "Accepted bounded catalog",
+    "AC03": "Accepted bounded catalog",
+    "AC04": "Accepted bounded catalog",
+    "AC05": "Met; maintained"
+  },
+  "completedBaselineWork": "C00 decomposition and C01-C13 complete; AC-01 through AC-04 explicitly accepted for the bounded catalog, AC-05 maintained.",
+  "openClosureWorkpackages": 0,
+  "workpackages": [
+    {
+      "id": "C01",
+      "title": "Refresh function/signature/default/keyword inventory",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01"
+      ],
+      "scope": {
+        "registeredNames": 119,
+        "nonConstructorNames": 70,
+        "focusConstructorNames": 49,
+        "existingFunctionNames": 197,
+        "records": [
+          "audit-function-inventory.json",
+          "audit-signature-contracts.json",
+          "CHANGED-31-CONTRACT-INVENTORY.md"
+        ],
+        "liveInventory": "CURRENT-FUNCTION-INVENTORY.json"
+      },
+      "doneWhen": [
+        "Pin actual current review sources and distinguish them from historical adoption.",
+        "Refresh live 1.26.3 registration/arity/parameter/return/default/keyword and omitted/empty/error mappings; classify deltas rather than treating declaration text differences as semantic changes.",
+        "Record explicit remaining contract gaps and owners; do not reimplement every draft addition."
+      ],
+      "dependsOn": [],
+      "completionEvidence": "FUNCTION-INVENTORY-REFRESH.md"
+    },
+    {
+      "id": "C02",
+      "title": "Reconcile function/options behavior and semantic drift",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "experimental/fn-scan.md",
+          "functions/atomic-equal.md",
+          "functions/batch-extrema.md",
+          "functions/bounded-retries.md",
+          "functions/configured-label-callbacks.md",
+          "functions/consecutive-partition.md",
+          "functions/csv-parsing.md",
+          "functions/customer-reference-matching.md",
+          "functions/customer-text-cleanup.md",
+          "functions/element-to-map.md",
+          "functions/higher-order-selection.md",
+          "functions/import-array-batches.md",
+          "functions/import-file-names.md",
+          "functions/invoice-api-uris.md",
+          "functions/map-to-element.md",
+          "functions/measurement-comparison.md",
+          "functions/month-end-cutoffs.md",
+          "functions/numeric-import-diagnostics.md",
+          "functions/order-sequence-selection.md",
+          "functions/ordered-queue-prefix.md",
+          "functions/payload-fingerprints.md",
+          "functions/product-dependency-closure.md",
+          "functions/product-map-index.md",
+          "functions/sequence-distinctness.md",
+          "functions/shipment-event-sequences.md",
+          "functions/sort-with.md",
+          "functions/supplier-offer-ranking.md",
+          "functions/timestamp-deadlines.md",
+          "functions/uri-option-policy.md",
+          "functions/warehouse-pick-sorting.md"
+        ]
+      },
+      "doneWhen": [
+        "Reconcile retained option/default/atomic-family findings against published fixes and pinned intended profiles.",
+        "For each documented contract, link normal/empty/error evidence or an explicit unsupported/deferred boundary.",
+        "Separate newly reproduced engine defects into independently bounded correction tickets."
+      ],
+      "dependsOn": [
+        "C01"
+      ],
+      "completionEvidence": "FUNCTION-OPTIONS-RECONCILIATION.md"
+    },
+    {
+      "id": "C03",
+      "title": "Reconcile constructor, type and coercion boundaries",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-04"
+      ],
+      "scope": {
+        "focusConstructorNames": 49,
+        "entries": [
+          "operators-and-syntax/focus-functions.md",
+          "operators-and-syntax/numeric-literals.md",
+          "type-system/choice-types.md",
+          "type-system/enum-types.md",
+          "type-system/nominative-records.md",
+          "type-system/record-updates.md",
+          "type-system/structural-records.md",
+          "type-system/typed-let-coercion.md"
+        ]
+      },
+      "doneWhen": [
+        "Refresh lexical/value-space/context/type/error coverage without inferring arbitrary-precision or generic-cast support from numeric fixes.",
+        "Record schema-list, nominal/structural-record, function-signature and BC boundaries explicitly.",
+        "Close documentation discrepancies with verified examples or truthful limitation records."
+      ],
+      "dependsOn": [
+        "C01"
+      ],
+      "completionEvidence": "CONSTRUCTOR-TYPE-RECONCILIATION.md"
+    },
+    {
+      "id": "C04",
+      "title": "Expression/call/focus grammar deltas",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-04"
+      ],
+      "scope": {
+        "grammarRows": [
+          "S1-S2-S5",
+          "S3-otherwise",
+          "S3-keywords",
+          "S3-lexical",
+          "S4-focus",
+          "REQ123-scan"
+        ],
+        "retainedRows": [
+          {
+            "key": "S1-S2-S5",
+            "area": "Function waves and HOF contracts",
+            "entries": [
+              "SIGNATURE-CONTRACT-AUDIT.md",
+              "CHANGED-31-CONTRACT-INVENTORY.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_HigherOrderFunctions_DefaultOptions_ThrowXpst0017"
+              }
+            ],
+            "remaining": "D2 signature/default/options and callback conversion remain open; registered names are not grammar completeness.",
+            "source": [
+              "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S3-otherwise",
+            "area": "Otherwise and guarded focus",
+            "entries": [
+              "operators-and-syntax/otherwise-operator.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Otherwise_RightOperandGetsContainingFocus"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Otherwise_RightOperandIsGuarded"
+              }
+            ],
+            "remaining": "Complete guarded-expression/type/error timing matrix; distinguish empty sequence from truthiness.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S3-keywords",
+            "area": "Keyword arguments",
+            "entries": [
+              "operators-and-syntax/keyword-arguments.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_PositionalAfterKeyword_XPath40Mode_ThrowsXpst0003"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_UnknownKeyword_XPath40Mode_ThrowsXpst0017"
+              }
+            ],
+            "remaining": "D2 per-function keyword metadata/defaults and known spelling drift remain separate.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S3-lexical",
+            "area": "Binary literals, separators and string templates",
+            "entries": [
+              "operators-and-syntax/string-templates.md",
+              "operators-and-syntax/numeric-literals.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_HexBinaryLiterals_XPath40Mode_Work"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_StringTemplate_31Mode_ThrowsXpst0003"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs",
+                "method": "Compile_InvalidDigitGroup_ThrowsXpst0003"
+              }
+            ],
+            "remaining": "Dedicated numeric entry and50 bounded cases supplied; broader numeric adjacency/range and host contexts remain separate. No feature-specific gate assignment or promotion.",
+            "source": [
+              "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S4-focus",
+            "area": "Pipeline, mapping arrow and focus-function syntax",
+            "entries": [
+              "operators-and-syntax/pipeline-operator.md",
+              "operators-and-syntax/mapping-arrow.md",
+              "operators-and-syntax/focus-functions.md",
+              "operators-and-syntax/focus-function-syntax.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Pipeline_SetsFixedFocusPositionOneSizeOne"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Pipeline_FocusRestoredAfterEvaluation"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_FocusFunction_BindsArgumentAsWholeContextValue"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_FocusFunction_31Mode_ThrowsXpst0003"
+              }
+            ],
+            "remaining": "Dedicated fn { ... } / fn abbreviation entry, 30 public examples and paired business reports supplied. Constructor page remains separate; exhaustive focus/coercion/callback/host combinations are not certified.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "REQ123-scan",
+            "area": "Experimental scan visibility and set membership",
+            "entries": [
+              "experimental/fn-scan.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Scan_XPath40Experimental_Works"
+              }
+            ],
+            "remaining": "fn-scan is gated with experimental retry; gate membership is not frozen API promotion.",
+            "source": [
+              "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          }
+        ]
+      },
+      "doneWhen": [
+        "Review remaining productions and profile/error/host boundaries against current implementation and pinned language policy.",
+        "Retain already supplied examples; explicitly identify residual gaps rather than restarting completed slices.",
+        "Map each production to catalog/sample/named tests or an explicit disposition."
+      ],
+      "dependsOn": [
+        "C01"
+      ],
+      "completionEvidence": "EXPRESSION-CALL-FOCUS-RECONCILIATION.md"
+    },
+    {
+      "id": "C05",
+      "title": "Type/collection/pattern grammar deltas",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-04"
+      ],
+      "scope": {
+        "grammarRows": [
+          "S4-iteration",
+          "S6-types",
+          "S6-record-conversion",
+          "S6-update",
+          "S8-patterns",
+          "S8-compound",
+          "REQ123-constructors",
+          "REQ123-destructuring",
+          "REQ123-jnode"
+        ],
+        "retainedRows": [
+          {
+            "key": "S4-iteration",
+            "area": "Member/key iteration including sequences of containers",
+            "entries": [
+              "operators-and-syntax/array-member-iteration.md",
+              "operators-and-syntax/map-entry-iteration.md",
+              "operators-and-syntax/sequence-collection-iteration.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_ForMember_31Mode_ThrowsXpst0003"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_ForMember_SequenceOfArraysCountsPositionsAcrossArrays"
+              }
+            ],
+            "remaining": "Complete position/cardinality/coercion and per-production mapping; older moving-draft deferral is superseded only within delivered scope.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S6-types",
+            "area": "Enums and choice item types",
+            "entries": [
+              "type-system/enum-types.md",
+              "type-system/choice-types.md",
+              "TYPE-PATTERN-GRAMMAR.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Enum_Castable_ReportsMembership"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+              }
+            ],
+            "remaining": "Casting versus in-order coercion, cardinality, nested values and namespace/type aliases need systematic contract coverage.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S6-record-conversion",
+            "area": "Record casts, coercion and lookup",
+            "entries": [
+              "type-system/structural-records.md",
+              "type-system/typed-let-coercion.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "Cast_DiscardsSurplusKeys"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "Coercion_SurplusKeys_XPTY0004"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "Coercion_PromotesFieldValuesRecursively"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                "method": "RecordSignatures"
+              }
+            ],
+            "remaining": "Bounded cast/coercion/lookup comparisons, 46 public cases and paired stock reports supplied. Full composite/nominal/static/default-field and host coverage remain unclaimed.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S6-update",
+            "area": "Record but-with updates",
+            "entries": [
+              "type-system/structural-records.md",
+              "type-system/record-updates.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "ButWith_ResultKeepsRecordAnnotation"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "ButWith_UnknownField_XPTY0004"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                "method": "ButWith_CoercesRhsValuesToFieldTypes"
+              }
+            ],
+            "remaining": "Dedicated entry and complete stock task supplied; recursive/optional/order/annotation cases are bounded, not exhaustive named-record or host contracts.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S8-patterns",
+            "area": "Aliases, records and map/array patterns",
+            "entries": [
+              "TYPE-PATTERN-GRAMMAR.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                "method": ""
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                "method": ""
+              }
+            ],
+            "remaining": "Do not infer full named-type declaration/module/package or Draft-host coverage.",
+            "source": [
+              "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+              "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S8-compound",
+            "area": "Compound patterns, priorities and EQNames",
+            "entries": [
+              "COMPOUND-PATTERN-GRAMMAR.md",
+              "UNION-MINIMUM-PRIORITY.md",
+              "EQNAME-BRACKET-PARSING.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs",
+                "method": "NamespaceBrackets"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs",
+                "method": "NamedElementPriority"
+              }
+            ],
+            "remaining": "PR409 merged parsing correction and 4.0 priority checks; exhaustive earlier-profile URI-punctuation priorities remain unclaimed.",
+            "source": [
+              "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+              "src/Bosak.Xslt/Stylesheet/TemplateRule.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "REQ123-constructors",
+            "area": "Zero-argument focus constructors",
+            "entries": [
+              "operators-and-syntax/focus-functions.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/FocusConstructorTests.cs",
+                "method": "Evaluate_FocusConstructor_NoContextItem_ThrowsXpdy0002"
+              }
+            ],
+            "remaining": "All 49 names have representative coverage; not all casting/focus-function grammar.",
+            "source": [
+              "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "REQ123-destructuring",
+            "area": "Typed let and sequence/array/map destructuring",
+            "entries": [
+              "operators-and-syntax/destructuring-let.md",
+              "type-system/typed-let-coercion.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_TypedLet_FrozenXPath40_Coerces"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+              }
+            ],
+            "remaining": "Per-shape cardinality, scope and conversion/error matrix remains partial.",
+            "source": [
+              "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+              "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+              "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "REQ123-jnode",
+            "area": "JNode navigation and deferred model remainder",
+            "entries": [
+              "data-model/jnode-navigation.md",
+              "data-model/jnode-template-boundary.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+              }
+            ],
+            "remaining": "Navigation delivery does not establish complete GNode/JNode model/template rules.",
+            "source": [
+              "src/Bosak.XPath.Core/Xdm/XdmJNode.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          }
+        ]
+      },
+      "doneWhen": [
+        "Review remaining productions and profile/error/host boundaries against current implementation and pinned language policy.",
+        "Retain already supplied examples; explicitly identify residual gaps rather than restarting completed slices.",
+        "Map each production to catalog/sample/named tests or an explicit disposition."
+      ],
+      "dependsOn": [
+        "C01"
+      ],
+      "completionEvidence": "TYPE-COLLECTION-PATTERN-RECONCILIATION.md"
+    },
+    {
+      "id": "C06",
+      "title": "Host/declaration/package/profile deltas",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-04"
+      ],
+      "scope": {
+        "grammarRows": [
+          "S0",
+          "S7",
+          "S8-dispatch"
+        ],
+        "retainedRows": [
+          {
+            "key": "S0",
+            "area": "Compatibility, host/local versions and arity-sensitive visibility",
+            "entries": [
+              "README.md",
+              "experimental/fn-scan.md",
+              "xslt-instructions/processor-profiles.md",
+              "xslt-instructions/module-profiles.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+              },
+              {
+                "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                "method": "DraftXPathIndependentOfVersion"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                "method": "PublishedExample_MatchesDeclaredOutcome"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                "method": "ModulesInheritProfile"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                "method": "ModuleValidationInheritsProfile"
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                "method": "UsedPackageInheritsProfile"
+              }
+            ],
+            "remaining": "66 ordinary +114 direct module/include/import/used-package cases supplied; transitive graphs, override/visibility/version resolution, schema/static/authoring/resource and full lexical default-mode contexts remain separate. No experimental XPath promotion.",
+            "source": [
+              "src/Bosak.XPath.Api/CompileOptions.cs",
+              "src/Bosak.XPath.Api/XPathCompatibility.cs",
+              "src/Bosak.Xslt/Api/XsltProcessorProfile.cs",
+              "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+              "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S7",
+            "area": "XSLT note/if/map and instruction separators",
+            "entries": [
+              "xslt-instructions/xsl-note.md",
+              "xslt-instructions/xsl-if.md",
+              "xslt-instructions/xsl-map.md",
+              "xslt-instructions/instruction-separators.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                "method": ""
+              }
+            ],
+            "remaining": "Complete instruction forms, static errors, module/package/authoring contexts and version/host combinations.",
+            "source": [
+              "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          },
+          {
+            "key": "S8-dispatch",
+            "area": "XSLT array, switch and select",
+            "entries": [
+              "SWITCH-ARRAY-SELECT-GRAMMAR.md"
+            ],
+            "testEvidence": [
+              {
+                "file": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+                "method": ""
+              },
+              {
+                "file": "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs",
+                "method": ""
+              }
+            ],
+            "remaining": "Bounded mapping is supplied; independent upstream review, full host/profile and all native/fallback cases remain separate.",
+            "source": [
+              "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+            ],
+            "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+          }
+        ]
+      },
+      "doneWhen": [
+        "Review remaining productions and profile/error/host boundaries against current implementation and pinned language policy.",
+        "Retain already supplied examples; explicitly identify residual gaps rather than restarting completed slices.",
+        "Map each production to catalog/sample/named tests or an explicit disposition."
+      ],
+      "dependsOn": [
+        "C01"
+      ],
+      "completionEvidence": "HOST-PROFILE-RECONCILIATION.md"
+    },
+    {
+      "id": "C07",
+      "title": "Lifecycle/disposition and supported-alternative reconciliation",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-02",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "data-model/jnode-navigation.md",
+          "data-model/jnode-template-boundary.md",
+          "deferred/capturing-accumulators.md",
+          "deferred/computed-node-constructors.md",
+          "deferred/enclosing-modes.md",
+          "deferred/external-input-functions.md",
+          "deferred/fn-apply-templates.md",
+          "deferred/language-streaming-scope.md",
+          "deferred/serialization-parameters.md",
+          "deferred/xslt-item-type.md",
+          "deferred/xslt-record-type.md",
+          "experimental/fn-scan.md",
+          "functions/atomic-equal.md",
+          "functions/batch-extrema.md",
+          "functions/bounded-retries.md",
+          "functions/configured-label-callbacks.md",
+          "functions/consecutive-partition.md",
+          "functions/csv-parsing.md",
+          "functions/customer-reference-matching.md",
+          "functions/customer-text-cleanup.md",
+          "functions/element-to-map.md",
+          "functions/higher-order-selection.md",
+          "functions/import-array-batches.md",
+          "functions/import-file-names.md",
+          "functions/invoice-api-uris.md",
+          "functions/map-to-element.md",
+          "functions/measurement-comparison.md",
+          "functions/month-end-cutoffs.md",
+          "functions/numeric-import-diagnostics.md",
+          "functions/order-sequence-selection.md",
+          "functions/ordered-queue-prefix.md",
+          "functions/payload-fingerprints.md",
+          "functions/product-dependency-closure.md",
+          "functions/product-map-index.md",
+          "functions/sequence-distinctness.md",
+          "functions/shipment-event-sequences.md",
+          "functions/sort-with.md",
+          "functions/supplier-offer-ranking.md",
+          "functions/timestamp-deadlines.md",
+          "functions/uri-option-policy.md",
+          "functions/warehouse-pick-sorting.md",
+          "operators-and-syntax/array-member-iteration.md",
+          "operators-and-syntax/destructuring-let.md",
+          "operators-and-syntax/focus-function-syntax.md",
+          "operators-and-syntax/focus-functions.md",
+          "operators-and-syntax/keyword-arguments.md",
+          "operators-and-syntax/map-entry-iteration.md",
+          "operators-and-syntax/mapping-arrow.md",
+          "operators-and-syntax/method-call-operator.md",
+          "operators-and-syntax/numeric-literals.md",
+          "operators-and-syntax/otherwise-operator.md",
+          "operators-and-syntax/pipeline-operator.md",
+          "operators-and-syntax/sequence-collection-iteration.md",
+          "operators-and-syntax/string-templates.md",
+          "rejected/directional-scan.md",
+          "rejected/extensible-map-types.md",
+          "rejected/mapping-arrow-gtgt.md",
+          "rejected/obsolete-quantifier-functions.md",
+          "rejected/xpath-switch-expression.md",
+          "type-system/choice-types.md",
+          "type-system/enum-types.md",
+          "type-system/nominative-records.md",
+          "type-system/record-updates.md",
+          "type-system/structural-records.md",
+          "type-system/typed-let-coercion.md",
+          "xslt-instructions/compound-patterns.md",
+          "xslt-instructions/instruction-separators.md",
+          "xslt-instructions/module-profiles.md",
+          "xslt-instructions/processor-profiles.md",
+          "xslt-instructions/structured-value-patterns.md",
+          "xslt-instructions/xsl-array.md",
+          "xslt-instructions/xsl-if.md",
+          "xslt-instructions/xsl-map.md",
+          "xslt-instructions/xsl-note.md",
+          "xslt-instructions/xsl-select.md",
+          "xslt-instructions/xsl-switch.md"
+        ],
+        "source": "COVERAGE-RECONCILIATION.md#d4---decision-lifecycle-reconciliation"
+      },
+      "doneWhen": [
+        "Reconcile all 76 current classifications with source, delivery history and original moving/rejected groups.",
+        "Validate superseded/deferred/rejected alternatives and versioned refusals; preserve historical URLs and original receipts.",
+        "No deferred feature must be implemented solely to manufacture gate evidence."
+      ],
+      "dependsOn": [],
+      "completionEvidence": "LIFECYCLE-RECONCILIATION.md"
+    },
+    {
+      "id": "C08",
+      "title": "Resolve or explicitly disposition historical adoption pins",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-02"
+      ],
+      "scope": {
+        "entries": [
+          "operators-and-syntax/array-member-iteration.md",
+          "operators-and-syntax/destructuring-let.md",
+          "operators-and-syntax/focus-functions.md",
+          "operators-and-syntax/keyword-arguments.md",
+          "operators-and-syntax/map-entry-iteration.md",
+          "operators-and-syntax/mapping-arrow.md",
+          "operators-and-syntax/method-call-operator.md",
+          "operators-and-syntax/otherwise-operator.md",
+          "operators-and-syntax/pipeline-operator.md",
+          "operators-and-syntax/string-templates.md",
+          "functions/atomic-equal.md",
+          "functions/csv-parsing.md",
+          "functions/element-to-map.md",
+          "functions/map-to-element.md",
+          "functions/sort-with.md",
+          "type-system/choice-types.md",
+          "type-system/enum-types.md",
+          "type-system/structural-records.md",
+          "type-system/typed-let-coercion.md",
+          "data-model/jnode-navigation.md",
+          "xslt-instructions/instruction-separators.md",
+          "xslt-instructions/xsl-array.md",
+          "xslt-instructions/xsl-if.md",
+          "xslt-instructions/xsl-map.md",
+          "xslt-instructions/xsl-note.md",
+          "xslt-instructions/xsl-switch.md",
+          "experimental/fn-scan.md",
+          "rejected/mapping-arrow-gtgt.md"
+        ],
+        "records": [
+          {
+            "entry": "operators-and-syntax/array-member-iteration.md",
+            "bosakPr": 87,
+            "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_ForMember_31Mode_ThrowsXpst0003",
+              "Evaluate_ForMember_IteratesMembers",
+              "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/destructuring-let.md",
+            "bosakPr": 129,
+            "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+              "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+              "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/focus-functions.md",
+            "bosakPr": 110,
+            "bosakRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+              "Evaluate_FocusConstructors_FrozenXPath40_Works"
+            ],
+            "namedPromotedSets": [
+              "xs-normalizedString",
+              "xs-numeric",
+              "xs-token"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/keyword-arguments.md",
+            "bosakPr": 86,
+            "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+              "Evaluate_KeywordArgs_FullyKeyworded_Works",
+              "Evaluate_KeywordArgs_MixedWithPositionals_Works"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-static-functions"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/map-entry-iteration.md",
+            "bosakPr": 87,
+            "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+              "Evaluate_ForKeyValue_IteratesEntries",
+              "Evaluate_ForKeyValue_PositionalCountsAcrossMaps"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/mapping-arrow.md",
+            "bosakPr": 87,
+            "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+              "Evaluate_MappingArrow_AppliesFunctionPerItem",
+              "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/method-call-operator.md",
+            "bosakPr": 77,
+            "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+              "Evaluate_MappingArrow_AppliesFunctionPerItem",
+              "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/otherwise-operator.md",
+            "bosakPr": 85,
+            "bosakRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+              "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+              "Evaluate_Otherwise_EmptyLeftYieldsRight"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise",
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/pipeline-operator.md",
+            "bosakPr": 87,
+            "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+              "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+              "Evaluate_Pipeline_SpecExample_SumOfPowers"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-pipeline-operator"
+            ]
+          },
+          {
+            "entry": "operators-and-syntax/string-templates.md",
+            "bosakPr": 86,
+            "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+              "Evaluate_StringTemplate_FixedOnly_Works",
+              "Evaluate_StringTemplate_Interpolation_Works"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-string-templates"
+            ]
+          },
+          {
+            "entry": "functions/atomic-equal.md",
+            "bosakPr": 108,
+            "bosakRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+              "Evaluate_AtomicEqual_FrozenXPath40_Works"
+            ],
+            "namedPromotedSets": [
+              "fn-atomic-equal"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-equal"
+            ]
+          },
+          {
+            "entry": "functions/csv-parsing.md",
+            "bosakPr": 104,
+            "bosakRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+            "deliveryDate": "2026-10-09",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+              "Evaluate_ParseCsv_FrozenXPath40_Works"
+            ],
+            "namedPromotedSets": [
+              "fn-csv-doc",
+              "fn-csv-to-xml",
+              "fn-parse-csv"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-csv",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-doc",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-to-xml"
+            ]
+          },
+          {
+            "entry": "functions/element-to-map.md",
+            "bosakPr": 106,
+            "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+            "deliveryDate": "2026-10-09",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Evaluate_ElementToMap_FrozenXPath40_Works"
+            ],
+            "namedPromotedSets": [
+              "fn-element-to-map",
+              "fn-element-to-map-plan"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan"
+            ]
+          },
+          {
+            "entry": "functions/map-to-element.md",
+            "bosakPr": 106,
+            "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+            "deliveryDate": "2026-10-09",
+            "testFile": "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs",
+            "namedTests": [
+              "MapToElement_SingleEntryMap_BuildsElement",
+              "MapToElement_EmptySequence_ReturnsEmpty",
+              "MapToElement_NonMapInput_Xpty0004"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-to-element"
+            ]
+          },
+          {
+            "entry": "functions/sort-with.md",
+            "bosakPr": 112,
+            "bosakRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+              "Compile_SortWithCluster_3Point1Functions_StillWork",
+              "Evaluate_SortWithCluster_FrozenXPath40_Works"
+            ],
+            "namedPromotedSets": [
+              "array-sort-with",
+              "fn-sort-with"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-with",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort-with"
+            ]
+          },
+          {
+            "entry": "type-system/choice-types.md",
+            "bosakPr": 89,
+            "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+              "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+              "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types"
+            ]
+          },
+          {
+            "entry": "type-system/enum-types.md",
+            "bosakPr": 89,
+            "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_EnumType_31Mode_ThrowsXpst0003",
+              "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+              "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-enumeration-types"
+            ]
+          },
+          {
+            "entry": "type-system/structural-records.md",
+            "bosakPr": 90,
+            "bosakRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+            "namedTests": [
+              "Coercion_BuildsAnnotatedRecord",
+              "Coercion_MissingFieldBecomesEmptyEntry",
+              "Coercion_SurplusKeys_XPTY0004"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types",
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules",
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression"
+            ]
+          },
+          {
+            "entry": "type-system/typed-let-coercion.md",
+            "bosakPr": 129,
+            "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Evaluate_TypedLet_FrozenXPath40_Coerces"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions",
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules"
+            ]
+          },
+          {
+            "entry": "data-model/jnode-navigation.md",
+            "bosakPr": 116,
+            "bosakRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+            "deliveryDate": "2026-10-10",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+              "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+            ],
+            "namedPromotedSets": [
+              "fn-jkey",
+              "fn-jtree",
+              "fn-jvalue"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey",
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue",
+              "https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/instruction-separators.md",
+            "bosakPr": 91,
+            "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+            "namedTests": [
+              "ForEach_Separator_BetweenItems",
+              "ForEach_Separator_WithSort",
+              "ForEach_Separator_EmptyAndSingleItem_NoSeparator"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#for-each-separator",
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#apply-templates-separator"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/xsl-array.md",
+            "bosakPr": 92,
+            "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+            "namedTests": [
+              "Array_Select_OneSingletonMemberPerItem",
+              "Array_Select_TokenizedString",
+              "Array_ForEachSelect_MemberIsWholeSequence"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/xsl-if.md",
+            "bosakPr": 91,
+            "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+            "namedTests": [
+              "If_ThenElse_TrueBranch",
+              "If_ThenElse_FalseBranch",
+              "If_ThenOnly_FalseIsEmpty"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-if"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/xsl-map.md",
+            "bosakPr": 91,
+            "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+            "namedTests": [
+              "Map_Select_MergesInputMaps",
+              "Map_Select_DuplicatesDefault_XTDE3365",
+              "Map_Select_DuplicatesUseFirst"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/xsl-note.md",
+            "bosakPr": 91,
+            "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+            "namedTests": [
+              "Note_InTemplate_IsDiscarded",
+              "Note_AtTopLevel_IsDiscarded",
+              "Note_ContentIsNotValidated"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-note-elements"
+            ]
+          },
+          {
+            "entry": "xslt-instructions/xsl-switch.md",
+            "bosakPr": 92,
+            "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+            "namedTests": [
+              "Switch_LookupTable_SelectBranches",
+              "Switch_TestSequences_DaysInMonth",
+              "Switch_GeneralComparison_NumericPromotion"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch"
+            ]
+          },
+          {
+            "entry": "experimental/fn-scan.md",
+            "bosakPr": 98,
+            "bosakRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+            "deliveryDate": "2026-10-09",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Evaluate_Scan_XPath40Experimental_Works"
+            ],
+            "namedPromotedSets": [
+              "fn-scan"
+            ],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan"
+            ]
+          },
+          {
+            "entry": "rejected/mapping-arrow-gtgt.md",
+            "bosakPr": 77,
+            "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+            "deliveryDate": "2026-10-08",
+            "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+            "namedTests": [
+              "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+              "Evaluate_MappingArrow_AppliesFunctionPerItem",
+              "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+            ],
+            "namedPromotedSets": [],
+            "adoptedSpecRevision": null,
+            "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+            "currentSpecificationSections": [
+              "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+            ]
+          }
+        ]
+      },
+      "doneWhen": [
+        "Research all 28 recorded missing historically adopted specification revisions against original delivery evidence.",
+        "Use recovered immutable historical evidence where available; never substitute a current review pin for adoption history.",
+        "Apply the explicitly owner-approved28-record legacy policy while retaining original null fields; no future-work or semantic-defect exception follows."
+      ],
+      "dependsOn": [],
+      "completionEvidence": "ADOPTION-HISTORY-RESEARCH.md",
+      "researchEvidence": "ADOPTION-HISTORY-RESEARCH.md",
+      "researchStatus": "Complete bounded search; zero recovered adoption pins",
+      "ownerDisposition": "Explicitly approved 2026-10-26:26 legacy exceptions and2 non-adoptions; original null fields retained",
+      "approvedPolicy": "LEGACY-ADOPTION-POLICY-PROPOSAL.md",
+      "approvalReceipt": "evidence/c08-adoption-research/owner-approval.json",
+      "originalMissingRecords": 28,
+      "recoveredAdoptionPins": 0
+    },
+    {
+      "id": "C09",
+      "title": "Applicable-evidence and semantic review batch 1",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-03",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "data-model/jnode-navigation.md",
+          "data-model/jnode-template-boundary.md",
+          "deferred/capturing-accumulators.md",
+          "deferred/computed-node-constructors.md",
+          "deferred/enclosing-modes.md",
+          "deferred/external-input-functions.md",
+          "deferred/fn-apply-templates.md",
+          "deferred/language-streaming-scope.md",
+          "deferred/serialization-parameters.md",
+          "deferred/xslt-item-type.md",
+          "deferred/xslt-record-type.md",
+          "experimental/fn-scan.md",
+          "functions/atomic-equal.md",
+          "functions/batch-extrema.md",
+          "functions/bounded-retries.md",
+          "functions/configured-label-callbacks.md",
+          "functions/consecutive-partition.md",
+          "functions/csv-parsing.md",
+          "functions/customer-reference-matching.md"
+        ],
+        "entryCount": 19
+      },
+      "doneWhen": [
+        "Review every listed entry contract by contract: Known Uses, verbatim Sample Code, context/input/output/profile/edge cases and Language Alignment drift.",
+        "Use applicable XPath gates, named engine/XSLT tests or versioned refusal/alternative evidence; explicitly state non-applicability/missing gate.",
+        "Produce a per-entry acceptance/limitation/blocker receipt. Literal links and generic headings are not acceptance."
+      ],
+      "dependsOn": [
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07"
+      ],
+      "completionEvidence": "SEMANTIC-REVIEW-BATCH-1.md"
+    },
+    {
+      "id": "C10",
+      "title": "Applicable-evidence and semantic review batch 2",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-03",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "functions/customer-text-cleanup.md",
+          "functions/element-to-map.md",
+          "functions/higher-order-selection.md",
+          "functions/import-array-batches.md",
+          "functions/import-file-names.md",
+          "functions/invoice-api-uris.md",
+          "functions/map-to-element.md",
+          "functions/measurement-comparison.md",
+          "functions/month-end-cutoffs.md",
+          "functions/numeric-import-diagnostics.md",
+          "functions/order-sequence-selection.md",
+          "functions/ordered-queue-prefix.md",
+          "functions/payload-fingerprints.md",
+          "functions/product-dependency-closure.md",
+          "functions/product-map-index.md",
+          "functions/sequence-distinctness.md",
+          "functions/shipment-event-sequences.md",
+          "functions/sort-with.md",
+          "functions/supplier-offer-ranking.md"
+        ],
+        "entryCount": 19
+      },
+      "doneWhen": [
+        "Review every listed entry contract by contract: Known Uses, verbatim Sample Code, context/input/output/profile/edge cases and Language Alignment drift.",
+        "Use applicable XPath gates, named engine/XSLT tests or versioned refusal/alternative evidence; explicitly state non-applicability/missing gate.",
+        "Produce a per-entry acceptance/limitation/blocker receipt. Literal links and generic headings are not acceptance."
+      ],
+      "dependsOn": [
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07"
+      ],
+      "completionEvidence": "SEMANTIC-REVIEW-BATCH-2.md"
+    },
+    {
+      "id": "C11",
+      "title": "Applicable-evidence and semantic review batch 3",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-03",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "functions/timestamp-deadlines.md",
+          "functions/uri-option-policy.md",
+          "functions/warehouse-pick-sorting.md",
+          "operators-and-syntax/array-member-iteration.md",
+          "operators-and-syntax/destructuring-let.md",
+          "operators-and-syntax/focus-function-syntax.md",
+          "operators-and-syntax/focus-functions.md",
+          "operators-and-syntax/keyword-arguments.md",
+          "operators-and-syntax/map-entry-iteration.md",
+          "operators-and-syntax/mapping-arrow.md",
+          "operators-and-syntax/method-call-operator.md",
+          "operators-and-syntax/numeric-literals.md",
+          "operators-and-syntax/otherwise-operator.md",
+          "operators-and-syntax/pipeline-operator.md",
+          "operators-and-syntax/sequence-collection-iteration.md",
+          "operators-and-syntax/string-templates.md",
+          "rejected/directional-scan.md",
+          "rejected/extensible-map-types.md",
+          "rejected/mapping-arrow-gtgt.md"
+        ],
+        "entryCount": 19
+      },
+      "doneWhen": [
+        "Review every listed entry contract by contract: Known Uses, verbatim Sample Code, context/input/output/profile/edge cases and Language Alignment drift.",
+        "Use applicable XPath gates, named engine/XSLT tests or versioned refusal/alternative evidence; explicitly state non-applicability/missing gate.",
+        "Produce a per-entry acceptance/limitation/blocker receipt. Literal links and generic headings are not acceptance."
+      ],
+      "dependsOn": [
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07"
+      ],
+      "completionEvidence": "SEMANTIC-REVIEW-BATCH-3.md"
+    },
+    {
+      "id": "C12",
+      "title": "Applicable-evidence and semantic review batch 4",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-03",
+        "AC-04"
+      ],
+      "scope": {
+        "entries": [
+          "rejected/obsolete-quantifier-functions.md",
+          "rejected/xpath-switch-expression.md",
+          "type-system/choice-types.md",
+          "type-system/enum-types.md",
+          "type-system/nominative-records.md",
+          "type-system/record-updates.md",
+          "type-system/structural-records.md",
+          "type-system/typed-let-coercion.md",
+          "xslt-instructions/compound-patterns.md",
+          "xslt-instructions/instruction-separators.md",
+          "xslt-instructions/module-profiles.md",
+          "xslt-instructions/processor-profiles.md",
+          "xslt-instructions/structured-value-patterns.md",
+          "xslt-instructions/xsl-array.md",
+          "xslt-instructions/xsl-if.md",
+          "xslt-instructions/xsl-map.md",
+          "xslt-instructions/xsl-note.md",
+          "xslt-instructions/xsl-select.md",
+          "xslt-instructions/xsl-switch.md"
+        ],
+        "entryCount": 19
+      },
+      "doneWhen": [
+        "Review every listed entry contract by contract: Known Uses, verbatim Sample Code, context/input/output/profile/edge cases and Language Alignment drift.",
+        "Use applicable XPath gates, named engine/XSLT tests or versioned refusal/alternative evidence; explicitly state non-applicability/missing gate.",
+        "Produce a per-entry acceptance/limitation/blocker receipt. Literal links and generic headings are not acceptance."
+      ],
+      "dependsOn": [
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07"
+      ],
+      "completionEvidence": "SEMANTIC-REVIEW-BATCH-4.md"
+    },
+    {
+      "id": "C13",
+      "title": "Final closure review and owner acceptance",
+      "status": "Complete",
+      "acceptanceCriteria": [
+        "AC-01",
+        "AC-02",
+        "AC-03",
+        "AC-04",
+        "AC-05"
+      ],
+      "scope": {
+        "entries": 76,
+        "featureChecks": 3148,
+        "chapterChecks": 24
+      },
+      "doneWhen": [
+        "Resolve every blocking receipt from C01-C12, including any required historical-pin policy decision.",
+        "Verify current examples, source/contract/lifecycle/semantic evidence, all canonical links and registry counts.",
+        "Record explicit owner acceptance of AC-01 through AC-04; AC-05 remains maintained. Passing tests alone do not close REQ-126."
+      ],
+      "dependsOn": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C11",
+        "C12"
+      ],
+      "completionEvidence": "CATALOG-ACCEPTANCE.md",
+      "ownerApproval": "evidence/c13-owner-acceptance/owner-approval.json",
+      "acceptedScope": "Owner-accepted bounded documentation catalog; not full current-draft conformance"
+    }
+  ],
+  "scopeControl": "All thirteen REQ-126 workpackages are complete for the explicitly accepted bounded catalog. Earlier proposals/reviews remain immutable historical checkpoints. All technical statuses, expectations and independent correction requirements remain in force; this is not an implementation or conformance promotion.",
+  "unrecoverableHistoryPolicy": "Original C08 approval remains exactly26 legacy provenance exceptions and two non-adoptions. All28 adoption fields stay null. C13 accepts the documented bounded catalog without resolving technical findings or expanding that history exception.",
+  "catalogSummary": {
+    "entries": 76,
+    "featureChecks": 3148,
+    "chapterChecks": 24,
+    "gates": 224,
+    "entriesMentioningGate": 26,
+    "entriesWithoutLiteralGate": 50,
+    "entriesWithManifestIds": 41,
+    "missingAdoptedSpecPins": 28
+  },
+  "ownerApproval": "evidence/c13-owner-acceptance/owner-approval.json",
+  "completionEvidence": "CATALOG-ACCEPTANCE.md"
+}

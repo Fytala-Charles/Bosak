@@ -1,0 +1,577 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C08",
+  "status": "Read-only review complete;formatter implementation and parse-integer dependency remain open",
+  "sourceBase": "65d1a731a5bf2cf994f8b0230c105c0acfeeca02",
+  "specificationReview": "evidence/SPECIFICATION-REVIEW.json",
+  "summary": {
+    "originalRadixCases": 17,
+    "originalPassed": 2,
+    "originalFailed": 15,
+    "formatterOnlyFailures": 14,
+    "dependentRoundTripFailures": 1,
+    "controls": 34,
+    "qt3ControlsPassed": 17,
+    "qt4ControlsPassed": 8,
+    "qt4ControlsFailed": 9,
+    "exploratorySet": [
+      102,
+      86,
+      15,
+      1
+    ],
+    "smallWatchdogProcesses": 52,
+    "timeouts": 0,
+    "sourceChanged": false,
+    "baselineChanged": false,
+    "inheritedSolutionPassed": 22043,
+    "inheritedNormalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "inheritedQt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "candidateVersion": "1.26.12",
+    "publishedVersion": "1.26.3"
+  },
+  "findings": [
+    {
+      "id": "RADIX-01",
+      "observation": "FormatIntegerEngine has no radix-picture path;leading ASCII radix digits enter the decimal-pattern validator and x/X raises FODF1310.",
+      "scope": "14 formatter-only failures;radix2..36,padding,casing,optional/regular/irregular/caret grouping"
+    },
+    {
+      "id": "RADIX-02",
+      "observation": "ToOrdinal currently classifies formatted text and derives numeric suffix from rendered decimal digits. Hexadecimal21 renders15 but original case017 expects15st,using the original integer.",
+      "scope": "Radix implementation must avoid changing existing3.1 decimal/word ordinal behavior"
+    },
+    {
+      "id": "RADIX-03",
+      "observation": "Standalone parse-integer calls raise XPST0017 and function-lookup#2 is empty in the reviewed frozen4.0 profile. Case012 currently masks this dependency behind FODF1310.",
+      "scope": "Separate parser-function contract;formatter alone must not claim case012 closed"
+    },
+    {
+      "id": "RADIX-04",
+      "observation": "Caret decimal-grouping originals014/015 and cross-profile controls already pass;radix recognition must require an eligible prefix and x/X later in the primary token.",
+      "scope": "Preserve3.1 interpretation and4.0 backwards compatibility"
+    },
+    {
+      "id": "RADIX-05",
+      "observation": "FunctionLibrary.FormatInteger narrows through ToIntegerValue to long before calling the BigInteger-capable helper.",
+      "scope": "First slice targets the existing Int64 public path;do not infer arbitrary-precision formatting from the helper signature"
+    }
+  ],
+  "formatterCandidates": [
+    "format-integer-40-001",
+    "format-integer-40-002",
+    "format-integer-40-003",
+    "format-integer-40-004",
+    "format-integer-40-005",
+    "format-integer-40-006",
+    "format-integer-40-007",
+    "format-integer-40-008",
+    "format-integer-40-009",
+    "format-integer-40-010",
+    "format-integer-40-011",
+    "format-integer-40-013",
+    "format-integer-40-016",
+    "format-integer-40-017"
+  ],
+  "roundTripDependency": "format-integer-40-012",
+  "retainedOriginalFailures": [
+    {
+      "name": "qt4-format-integer-40-001",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-001-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.32458409998798743,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-001",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-001.log"
+    },
+    {
+      "name": "qt4-format-integer-40-002",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-002-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.32742090002284385,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-002",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-002.log"
+    },
+    {
+      "name": "qt4-format-integer-40-003",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-003-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3337708000035491,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-003",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-003.log"
+    },
+    {
+      "name": "qt4-format-integer-40-004",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-004-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.34386530000483617,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-004",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-004.log"
+    },
+    {
+      "name": "qt4-format-integer-40-005",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-005-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.34523589999298565,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-005",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-005.log"
+    },
+    {
+      "name": "qt4-format-integer-40-006",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-006-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3407411999942269,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-006",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-006.log"
+    },
+    {
+      "name": "qt4-format-integer-40-007",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-007-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.321447199996328,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-007",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-007.log"
+    },
+    {
+      "name": "qt4-format-integer-40-008",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-008-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.31707389999064617,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-008",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-008.log"
+    },
+    {
+      "name": "qt4-format-integer-40-009",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-009-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.31490559998201206,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-009",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-009.log"
+    },
+    {
+      "name": "qt4-format-integer-40-010",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-010-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.31370779999997467,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-010",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-010.log"
+    },
+    {
+      "name": "qt4-format-integer-40-011",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-011-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3134063000034075,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-011",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-011.log"
+    },
+    {
+      "name": "qt4-format-integer-40-012",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-012-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3166342999902554,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-012",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-012.log"
+    },
+    {
+      "name": "qt4-format-integer-40-013",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-013-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.29188459998113103,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-013",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-013.log"
+    },
+    {
+      "name": "qt4-format-integer-40-016",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-016-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3140205999952741,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-016",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-016.log"
+    },
+    {
+      "name": "qt4-format-integer-40-017",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-format-integer-40-017-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.29983120001270436,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-017",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-40-017.log"
+    }
+  ],
+  "retainedControlFailures": [
+    {
+      "name": "qt4-control-qt4-hex-lower",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-hex-lower-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.2790574000100605,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-hex-lower",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-hex-lower.log"
+    },
+    {
+      "name": "qt4-control-qt4-hex-upper-group",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-hex-upper-group-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.2977960999996867,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-hex-upper-group",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-hex-upper-group.log"
+    },
+    {
+      "name": "qt4-control-qt4-hex-original-ordinal",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-hex-original-ordinal-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.29852830001618713,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-hex-original-ordinal",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-hex-original-ordinal.log"
+    },
+    {
+      "name": "qt4-control-qt4-hex-alpha-ordinal",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-hex-alpha-ordinal-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.32717869998305105,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-hex-alpha-ordinal",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-hex-alpha-ordinal.log"
+    },
+    {
+      "name": "qt4-control-qt4-parse-hex",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-parse-hex-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.29312230000505224,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-parse-hex",
+        "kind": "Failed",
+        "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+      },
+      "log": "qt4-control-qt4-parse-hex.log"
+    },
+    {
+      "name": "qt4-control-qt4-parse-binary",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-parse-binary-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.29366749999462627,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-parse-binary",
+        "kind": "Failed",
+        "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+      },
+      "log": "qt4-control-qt4-parse-binary.log"
+    },
+    {
+      "name": "qt4-control-qt4-lookup-parse",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-lookup-parse-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.30315589997917414,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-lookup-parse",
+        "kind": "Failed",
+        "message": "assert-true failed. Got: false"
+      },
+      "log": "qt4-control-qt4-lookup-parse.log"
+    },
+    {
+      "name": "qt4-control-qt4-int64-max",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-int64-max-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3246357000025455,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-int64-max",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-int64-max.log"
+    },
+    {
+      "name": "qt4-control-qt4-int64-min",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-review\\evidence\\qt4-control-qt4-int64-min-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3518649000034202,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-qt4-int64-min",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-qt4-int64-min.log"
+    }
+  ],
+  "next": "Record explicit adoption and implement a4.0-only radix formatter for the14 pure failures with original-integer ordinal suffixes;leave parse-integer#2 and case012 open;run full gates before any set promotion.",
+  "limits": [
+    "Spec record is a review pin,not semantic adoption",
+    "No engine,harness,fixture,assertion,version,admission or baseline change",
+    "Full solution/frozen-gate evidence inherited explicitly;fresh102-case exploratory run retained15failures",
+    "Invalid-radix/mixed-case negative assertions pass before implementation and do not prove correct radix validation",
+    "Bosak.Schema retains XSD1.1 ownership;REQ-126 remains Complete;no release or upstream contribution"
+  ]
+}

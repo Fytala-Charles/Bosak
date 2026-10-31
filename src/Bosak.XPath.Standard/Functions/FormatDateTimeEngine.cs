@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.9   | 01-08-2026     | [z] with explicit width drops whole-hour minutes when full form exceeds max width  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.0   | 07-08-2026     | [ZN] timezone names, $place Olson timezone adjustment, [f] optional-digit zero strip |
+//                      | Charles Korthout | 1.1   | 27-10-2026     | Distinguish unsupported listed calendars; identify AD fallback once per output.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -37,11 +38,22 @@ internal enum DateTimeComponents { Date, Time, DateTime }
 
 internal static class FormatDateTimeEngine
 {
+    // F&O 3.1 §9.8.4.8 and the pinned 4.0 lang-cal-place table identify valid
+    // unqualified designators; membership does not imply calendar implementation.
+    private static readonly HashSet<string> ListedCalendars = new(StringComparer.Ordinal)
+    {
+        "AD", "AH", "AME", "AM", "AP", "AS", "BE", "CB", "CE", "CL", "CS", "EE", "FE",
+        "ISO", "JE", "KE", "KY", "ME", "MS", "NS", "OS", "RS", "SE", "SH", "SS", "TE", "VE", "VS"
+    };
+
     public static string Format(XPathDateTime value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode = false)
     {
         value = AdjustToPlace(value, place, components);
+        bool calendarFallback = ValidateCalendar(calendar, isXsltMode);
         bool hasEra = ContainsEraMarker(picture);
         var sb = new StringBuilder();
+        if (calendarFallback)
+            sb.Append("[Calendar: AD]");
         int pos = 0;
 
         while (pos < picture.Length)
@@ -71,7 +83,7 @@ internal static class FormatDateTimeEngine
                 throw FormatError("FOFD1340");
 
             string marker = picture[(bracket + 1)..close];
-            sb.Append(FormatMarker(value, marker, components, language, calendar, hasEra, isXsltMode));
+            sb.Append(FormatMarker(value, marker, components, language, calendarFallback, hasEra));
             pos = close + 1;
         }
 
@@ -121,7 +133,7 @@ internal static class FormatDateTimeEngine
         return new InvalidOperationException(code);
     }
 
-    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components, string? language, string? calendar, bool hasEra, bool isXsltMode)
+    private static string FormatMarker(XPathDateTime value, string marker, DateTimeComponents components, string? language, bool calendarFallback, bool hasEra)
     {
         // Remove all whitespace from the marker content (whitespace within a variable marker is ignored)
         marker = new string(marker.Where(c => !char.IsWhiteSpace(c)).ToArray());
@@ -161,10 +173,6 @@ internal static class FormatDateTimeEngine
 
         bool languageFallback = !IsLanguageSupported(language);
 
-        // Validate calendar argument (invalid/unknown EQName is an error in XPath mode;
-        // in XSLT mode an unknown bare calendar falls back to AD with a marker).
-        bool calendarFallback = ValidateCalendar(calendar, isXsltMode);
-
         // Validate component is available for the value type
         ValidateComponentAvailable(component, components);
 
@@ -185,13 +193,10 @@ internal static class FormatDateTimeEngine
             'P' => FormatAmPm(value, presentation, minWidth, maxWidth),
             'Z' => FormatTimezone(value, presentation, minWidth, maxWidth),
             'z' => FormatTimezoneGmt(value, presentation, minWidth, maxWidth, widthSpec is not null),
-            'C' => "ISO",
+            'C' => calendarFallback ? "AD" : "ISO",
             'E' => value.Year > 0 ? "AD" : "BC",
             _ => throw FormatError("FOFD1340")
         };
-
-        if (calendarFallback)
-            result = $"[Calendar: AD]{result}";
 
         if (languageFallback)
             result = $"[Language: en]{result}";
@@ -278,18 +283,17 @@ internal static class FormatDateTimeEngine
                           localName.Equals("Gregorian", StringComparison.OrdinalIgnoreCase) ||
                           localName.Equals("ISO", StringComparison.OrdinalIgnoreCase) ||
                           localName.Equals("ISO8601", StringComparison.OrdinalIgnoreCase);
-        // Unknown calendars in no namespace: XSLT 2.0 §16.5.2 requires falling back to
-        // the default (AD) calendar with a [Calendar: AD] marker (format-date-en-033);
-        // in XPath/XQuery mode the same argument is an error (QT3 format-date-en155).
-        // Calendars with a namespace URI are accepted as an implementation-defined
-        // fallback to the default (Gregorian) calendar.
-        if (string.IsNullOrEmpty(ns) && !knownLocal)
-        {
-            if (!isXsltMode)
-                throw FormatError("FOFD1340");
+        // Namespaced identifiers retain the implementation-defined AD fallback,
+        // now with an indication of the calendar actually used.
+        if (!string.IsNullOrEmpty(ns))
             return true;
-        }
-        return false;
+        if (knownLocal)
+            return false;
+        // A listed but unsupported calendar is valid and falls back. Unlisted bare
+        // names remain errors in XPath; preserve the existing XSLT fallback policy.
+        if (ListedCalendars.Contains(localName) || isXsltMode)
+            return true;
+        throw FormatError("FOFD1340");
     }
 
     private static void ValidateComponentAvailable(char component, DateTimeComponents components)

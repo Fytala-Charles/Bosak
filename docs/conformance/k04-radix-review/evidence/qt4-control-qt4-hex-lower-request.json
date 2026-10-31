@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml", "Name": "control-qt4-hex-lower", "case": "hex-lower", "expression": "format-integer(255,'16^xx')", "boundary": true, "expected": "ff"}

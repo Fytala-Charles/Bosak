@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml", "Name": "control-qt3-mixed-case", "case": "mixed-case", "expression": "format-integer(255,'16^xX')", "boundary": false, "expected": "FODF1310"}

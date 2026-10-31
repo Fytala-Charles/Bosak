@@ -1,0 +1,122 @@
+{
+  "kind": "HTML render only; no screenshot/PDF acceptance",
+  "date": "2026-10-29",
+  "unchangedSelectedFileHashesVerified": 57,
+  "concurrentDocumentationChanges": [
+    {
+      "repository": "XmlDb",
+      "path": "docs/AGENT_HANDOVER.md",
+      "initialSha256": "795888b9d3a6a6693337fdd10202665d11640c81f2bdc1a642b0123590a26f1f",
+      "finalSha256": "abbaa6dd069ad37cf595498eaebf23e307ed86eb5573db086a13530f958fc635"
+    }
+  ],
+  "finalRepositories": [
+    {
+      "name": "Bosak",
+      "revision": "4e523082dea931d9377f34672ff63c57eb5dbd7b",
+      "status": "M README.md\n M docs/AGENT_HANDOVER.md\n M docs/ARCHITECTURE.md\n M docs/DOCUMENTATION_RENDERER_TEST.md\n M docs/FEATURE_REQUESTS.md\n M docs/INTEGRATION.md\n M docs/RESTART-2026-10-29.md\n M docs/XDM40-COMPATIBILITY-REVIEW-PLAN.md\n?? docs/compatibility/"
+    },
+    {
+      "name": "XmlDb",
+      "revision": "4598346e324a4385381aa31a68d565bcdee9c479",
+      "status": "M README.md\n M ROADMAP.md\n M docs/AGENT_HANDOVER.md\n M docs/ARCHITECTURE.md\n M docs/FEATURE_REQUESTS.md\n M docs/INTEGRATION.md\n M docs/implementation/M2_EMBEDDED_HOST_PROFILE.md\n?? docs/implementation/M2_POST_EP6_READINESS_REVIEW.md\n?? docs/implementation/m2-post-ep6-readiness-results.json"
+    },
+    {
+      "name": "Schema",
+      "revision": "fa0da3e2d9972706a5a86616ef285af4daf5037b",
+      "status": ""
+    },
+    {
+      "name": "Braid",
+      "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "status": ""
+    },
+    {
+      "name": "Braid pinned engine checkout",
+      "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+      "status": ""
+    }
+  ],
+  "repositoryRevisionsVerified": 5,
+  "specSourceFilesVerified": 5,
+  "observations": 62,
+  "assembliesUnchanged": 7,
+  "localLinksVerified": 26,
+  "jsonAndAuthoredMarkdownWhitespaceChecked": true,
+  "threeRawReceiptValuesPreserved": true,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "667399576c07111a8431201fc039156f5d5c00668092c7a96799bba8af2a294f",
+      "html": ".guard-tmp/xdm40-compatibility-render/README.md.html",
+      "htmlSha256": "4acae538722d71ca6601ff0484b4bb79c2dfd37d503675c157276367eb434fdb"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "e47999c141533a49f2a28de344f7b1d31da9b511c9a1d33682906701b361644f",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_ARCHITECTURE.md.html",
+      "htmlSha256": "267b83f67441081040a8a884f152dff0c4405a6636e633bcfefcced90551b5c8"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "3700f070f20f746f6869d5f1fb102485347940f0df90cece25dd43e1bf0fd7df",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_FEATURE_REQUESTS.md.html",
+      "htmlSha256": "49975d735e500edf2f8b31e249620e79fec248ef56133b83b089ed785d8b23bb"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "bc1d4cc589a83b93d8754b989d829dd04ba447e15908ab9fdba4e89ea6842da1",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_INTEGRATION.md.html",
+      "htmlSha256": "8e3bc48aa18b35cc1480540b7a628ec0cc5499210384d21721fe5d0cbbba136d"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "e137f002e8ae8a91a9011d6afe37c61077952255b675c49247626a3a9ebd093b",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_AGENT_HANDOVER.md.html",
+      "htmlSha256": "b6490f3229e679bc4e2ac2d28f02bd376ec1f3efd62fc07157fbb0c473d6c348"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "ceb2b57fdc252d18bfab8f2aa034031c0ae3dc1ccfadbdb5acc962084f8e2133",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "htmlSha256": "8affb0ced365da314d24aa58e836a9df5b6653bbb08a9737d031012123d189d2"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "sourceSha256": "d30a98af6f8def4502010da6fd0d48a13c6bd701c2a69ba55fc860ee0528c9f1",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_RESTART-2026-10-29.md.html",
+      "htmlSha256": "fb0f9719fbdba4745e0cf4d75dd17c2535243e5ec6f3b9c2e956a3deb0ba477a"
+    },
+    {
+      "source": "docs/XDM40-COMPATIBILITY-REVIEW-PLAN.md",
+      "sourceSha256": "d838bc4ed849e9f928d28a143ad12786787312a99d5d7ae52b75d4626d756d8a",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_XDM40-COMPATIBILITY-REVIEW-PLAN.md.html",
+      "htmlSha256": "0831ab93914ad1420a74da97d9e1f59d5afca70b2cbe1d5d4487454a9cbca4b4"
+    },
+    {
+      "source": "docs/compatibility/xdm40-2026-10-29/README.md",
+      "sourceSha256": "5e04288e344777d6e80c76a8a1bf3ee34c950dc495ee983fd48f53b8f2f30cea",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_compatibility_xdm40-2026-10-29_README.md.html",
+      "htmlSha256": "2496971b289df1f61bbbeb1eb1b0b59c6bbe7ffe5b4b0d28b9c48fabde1a5c40"
+    },
+    {
+      "source": "docs/compatibility/xdm40-2026-10-29/SPEC-REVIEW.md",
+      "sourceSha256": "104d0eca15b173607a223f1caa73d460782c2334a3f3118eeeff1108821c08b6",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_compatibility_xdm40-2026-10-29_SPEC-REVIEW.md.html",
+      "htmlSha256": "c29c572f07f35d4f9d885ff04818408968489b0ee3c1837e01759e9cb7f66b83"
+    },
+    {
+      "source": "docs/compatibility/xdm40-2026-10-29/CONSUMER-MATRIX.md",
+      "sourceSha256": "7fb79955b139049217f49d253e24e8367e08946c9bcd77c0295c43ebc1f760fd",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_compatibility_xdm40-2026-10-29_CONSUMER-MATRIX.md.html",
+      "htmlSha256": "d542314a8243b8e208142c0fe20b363ffa91b7e36a0676bb5922a6b48172af71"
+    },
+    {
+      "source": "docs/compatibility/xdm40-2026-10-29/NEXT-SLICE.md",
+      "sourceSha256": "9f600a8579cfb59a2133a6ef351fe2dcb767f957ed45a66726fd99a9f30ea8e8",
+      "html": ".guard-tmp/xdm40-compatibility-render/docs_compatibility_xdm40-2026-10-29_NEXT-SLICE.md.html",
+      "htmlSha256": "9316e987994a541fae7e288746e5195f3c2c982a42e67bd87c02859903a8e0b5"
+    }
+  ]
+}

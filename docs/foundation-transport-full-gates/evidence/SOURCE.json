@@ -1,0 +1,31 @@
+{
+  "revision": "83341091118034cf3abf4e6f3169e026196cb5b4",
+  "archiveSha256": "5282170b80e16e318b7ceb1f1522a080ad543ff127cdda744ef504bf8ae269d3",
+  "archivePaths": [
+    "src",
+    "tests",
+    "Bosak.sln",
+    "README.md",
+    "license.md",
+    "NOTICE",
+    "assets",
+    "docs/xpath40-catalog/worked-examples",
+    "docs/xpath40-catalog/examples"
+  ],
+  "overlays": {
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "164e7ca0e555e0af70a2e1d10362ee74527b3ef7061640ab4e7fe1578d0b1f69",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "4c231d2f35237304291182ed366617567c5a945bac2a85a147f976cef052231e",
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "56125c4b3456dcf10dad3db3d8b7e280a7792dd98fbadfedb0bacbe8f676c2a2"
+  },
+  "corpora": {
+    "qt3tests": {
+      "revision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+      "statusBefore": ""
+    },
+    "qt4tests": {
+      "revision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+      "statusBefore": ""
+    }
+  },
+  "productionModified": false
+}

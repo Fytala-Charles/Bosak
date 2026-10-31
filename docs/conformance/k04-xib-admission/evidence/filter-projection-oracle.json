@@ -1,0 +1,3320 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "empty",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "empty"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "single-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-2",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-2"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-3",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-3"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-4",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-4"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-5",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-5"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-6",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-6"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-7",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-7"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-8",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-8"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-9",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-9"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-10",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-10"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-11",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-11"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-12",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-12"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-13",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-13"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-14",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-14"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-15",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-15"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-16",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-16"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-17",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-17"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-18",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-18"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-19",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-19"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-20",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-20"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-21",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-21"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-22",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-22"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-23",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-23"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-24",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-24"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-25",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-25"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-26",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-26"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-27",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-27"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-28",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-28"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-29",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-29"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-30",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-30"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-31",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-31"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-32",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-32"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-33",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-33"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-34",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-34"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-35",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-35"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-36",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-36"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-37",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-37"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-38",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-38"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-39",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-39"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-40",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-40"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-41",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-41"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-42",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-42"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-43",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-43"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-44",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-44"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-45",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-45"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-46",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-46"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "single-47",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-47"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-2-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-2-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-2-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-2-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-2-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-2-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-2-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-2-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-3-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-3-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-3-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-3-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-3-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-3-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-3-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-3-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-4-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-4-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-4-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-4-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-4-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-4-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-4-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-4-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-5-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-5-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-5-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-5-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-5-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-5-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-5-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-5-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-6-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-6-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-6-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-6-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-6-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-6-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-6-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-6-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-7-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-7-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-7-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-7-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-7-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-7-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-7-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-7-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-8-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-8-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-8-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-8-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-8-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-8-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-8-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-8-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-9-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-9-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-9-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-9-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-9-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-9-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-9-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-9-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-10-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-10-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-10-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-10-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-10-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-10-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-10-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-10-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-11-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-11-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-11-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-11-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-11-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-11-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-11-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-11-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-12-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-12-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-12-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-12-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-12-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-12-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-12-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-12-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-13-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-13-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-13-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-13-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-13-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-13-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-13-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-13-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-14-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-14-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-14-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-14-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-14-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-14-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-14-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-14-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-15-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-15-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-15-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-15-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-15-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-15-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-15-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-15-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-16-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-16-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-16-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-16-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-16-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-16-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-16-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-16-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-17-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-17-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-17-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-17-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-17-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-17-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-17-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-17-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-18-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-18-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-18-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-18-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-18-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-18-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-18-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-18-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-19-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-19-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-19-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-19-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-19-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-19-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-19-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-19-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-20-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-20-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-20-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-20-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-20-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-20-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-20-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-20-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-21-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-21-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-21-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-21-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-21-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-21-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-21-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-21-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-22-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-22-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-22-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-22-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-22-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-22-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-22-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-22-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-23-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-23-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-23-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-23-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-23-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-23-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-23-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-23-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-24-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-24-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-24-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-24-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-24-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-24-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-24-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-24-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-25-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-25-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-25-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-25-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-25-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-25-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-25-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-25-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-26-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-26-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-26-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-26-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-26-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-26-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-26-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-26-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-27-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-27-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-27-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-27-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-27-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-27-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-27-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-27-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-28-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-28-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-28-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-28-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-28-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-28-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-28-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-28-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-29-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-29-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-29-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-29-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-29-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-29-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-29-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-29-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-30-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-30-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-30-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-30-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-30-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-30-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-30-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-30-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-31-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-31-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-31-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-31-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-31-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-31-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-31-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-31-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-32-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-32-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-32-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-32-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-32-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-32-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-32-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-32-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-33-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-33-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-33-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-33-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-33-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-33-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-33-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-33-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-34-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-34-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-34-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-34-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-34-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-34-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-34-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-34-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-35-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-35-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-35-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-35-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-35-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-35-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-35-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-35-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-36-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-36-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-36-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-36-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-36-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-36-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-36-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-36-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-37-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-37-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-37-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-37-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-37-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-37-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-37-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-37-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-38-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-38-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-38-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-38-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-38-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-38-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-38-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-38-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-39-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-39-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-39-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-39-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-39-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-39-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-39-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-39-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-40-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-40-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-40-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-40-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-40-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-40-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-40-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-40-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-41-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-41-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-41-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-41-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-41-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-41-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-41-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-41-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-42-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-42-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-42-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-42-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-42-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-42-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-42-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-42-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-43-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-43-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-43-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-43-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-43-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-43-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-43-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-43-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-44-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-44-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-44-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-44-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-44-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-44-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-44-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-44-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-45-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-45-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-45-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-45-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-45-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-45-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-45-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-45-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-46-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-46-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-46-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-46-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-46-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-46-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-46-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-46-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-47-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-47-True-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-47-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-47-True-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-47-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-47-False-0-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "mixed-47-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-47-False-1-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "repeated-[False, False]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "repeated-[False, False]-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "repeated-[True, True]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[True, True]-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "repeated-[False, True]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[False, True]-projected"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "repeated-[True, False]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[True, False]-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "empty",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "empty"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "single-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-2",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-2"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-3",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-3"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-4",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-4"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-5",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-5"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-6",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-6"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-7",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-7"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-8",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-8"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-9",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-9"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-10",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-10"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-11",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-11"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-12",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-12"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-13",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-13"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-14",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-14"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-15",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-15"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-16",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-16"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-17",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-17"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-18",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-18"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-19",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-19"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-20",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-20"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-21",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-21"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-22",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-22"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-23",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-23"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-24",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-24"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-25",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-25"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-26",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-26"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-27",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-27"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-28",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-28"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-29",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-29"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-30",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-30"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-31",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-31"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-32",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-32"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-33",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-33"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-34",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-34"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-35",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-35"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-36",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-36"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-37",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-37"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-38",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-38"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-39",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-39"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-40",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-40"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-41",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-41"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-42",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-42"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-43",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-43"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-44",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-44"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-45",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-45"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-46",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-46"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "single-47",
+    "HasCanonicalXib": false,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "single-47"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-2-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-2-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-2-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-2-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-2-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-2-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-2-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-2-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-3-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-3-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-3-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-3-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-3-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-3-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-3-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-3-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-4-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-4-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-4-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-4-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-4-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-4-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-4-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-4-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-5-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-5-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-5-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-5-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-5-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-5-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-5-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-5-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-6-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-6-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-6-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-6-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-6-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-6-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-6-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-6-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-7-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-7-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-7-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-7-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-7-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-7-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-7-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-7-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-8-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-8-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-8-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-8-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-8-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-8-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-8-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-8-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-9-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-9-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-9-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-9-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-9-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-9-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-9-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-9-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-10-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-10-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-10-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-10-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-10-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-10-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-10-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-10-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-11-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-11-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-11-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-11-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-11-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-11-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-11-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-11-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-12-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-12-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-12-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-12-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-12-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-12-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-12-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-12-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-13-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-13-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-13-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-13-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-13-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-13-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-13-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-13-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-14-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-14-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-14-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-14-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-14-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-14-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-14-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-14-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-15-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-15-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-15-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-15-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-15-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-15-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-15-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-15-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-16-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-16-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-16-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-16-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-16-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-16-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-16-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-16-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-17-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-17-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-17-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-17-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-17-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-17-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-17-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-17-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-18-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-18-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-18-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-18-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-18-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-18-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-18-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-18-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-19-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-19-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-19-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-19-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-19-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-19-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-19-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-19-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-20-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-20-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-20-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-20-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-20-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-20-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-20-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-20-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-21-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-21-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-21-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-21-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-21-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-21-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-21-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-21-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-22-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-22-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-22-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-22-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-22-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-22-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-22-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-22-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-23-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-23-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-23-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-23-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-23-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-23-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-23-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-23-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-24-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-24-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-24-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-24-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-24-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-24-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-24-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-24-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-25-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-25-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-25-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-25-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-25-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-25-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-25-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-25-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-26-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-26-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-26-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-26-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-26-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-26-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-26-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-26-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-27-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-27-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-27-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-27-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-27-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-27-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-27-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-27-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-28-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-28-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-28-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-28-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-28-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-28-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-28-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-28-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-29-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-29-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-29-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-29-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-29-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-29-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-29-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-29-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-30-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-30-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-30-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-30-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-30-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-30-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-30-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-30-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-31-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-31-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-31-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-31-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-31-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-31-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-31-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-31-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-32-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-32-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-32-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-32-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-32-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-32-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-32-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-32-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-33-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-33-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-33-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-33-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-33-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-33-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-33-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-33-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-34-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-34-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-34-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-34-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-34-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-34-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-34-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-34-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-35-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-35-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-35-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-35-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-35-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-35-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-35-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-35-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-36-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-36-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-36-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-36-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-36-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-36-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-36-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-36-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-37-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-37-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-37-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-37-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-37-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-37-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-37-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-37-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-38-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-38-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-38-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-38-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-38-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-38-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-38-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-38-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-39-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-39-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-39-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-39-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-39-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-39-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-39-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-39-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-40-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-40-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-40-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-40-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-40-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-40-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-40-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-40-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-41-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-41-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-41-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-41-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-41-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-41-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-41-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-41-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-42-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-42-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-42-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-42-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-42-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-42-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-42-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-42-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-43-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-43-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-43-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-43-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-43-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-43-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-43-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-43-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-44-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-44-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-44-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-44-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-44-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-44-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-44-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-44-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-45-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-45-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-45-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-45-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-45-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-45-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-45-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-45-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-46-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-46-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-46-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-46-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-46-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-46-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-46-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-46-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-47-True-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-47-True-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-47-True-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "mixed-47-True-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-47-False-0",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-47-False-0-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "mixed-47-False-1",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "mixed-47-False-1-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "repeated-[False, False]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": false,
+    "ProjectionName": "repeated-[False, False]-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "repeated-[True, True]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[True, True]-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "repeated-[False, True]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[False, True]-projected"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "repeated-[True, False]",
+    "HasCanonicalXib": true,
+    "HasPositiveCanonicalXib": true,
+    "ProjectionName": "repeated-[True, False]-projected"
+  }
+]

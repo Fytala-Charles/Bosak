@@ -30,6 +30,11 @@
 //                      | Charles Korthout | 0.13  | 23-08-2026     | advanced-uca-fallback feature now supported                                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 23-08-2026     | schemaValidation feature now admitted                                                    |
+//                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
+//                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+//                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+//                      | Charles Korthout | 0.18  | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
+//                      | Charles Korthout | 0.19  | 28-10-2026     | Admit reviewed canonical xib fallback cases with correct dependency polarity. |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -46,6 +51,32 @@ internal sealed class DependencyFilter
         "xpath-1.0-compatibility",
         "olson-timezone",
         "arbitraryPrecisionDecimal",
+    };
+
+    // Explicit legacy catalog admission, not a certification of complete feature support.
+    // Keep schema/backend and harness-specific limits in the capability review ledger.
+    // Unrecognized names require review before either polarity can admit a test.
+    private static readonly HashSet<string> FrozenAdmittedFeatures = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "advanced-uca-fallback",
+        "collection-stability",
+        "directory-as-collection-uri",
+        "fn-format-integer-CLDR",
+        "fn-load-xquery-module",
+        "fn-transform-XSLT",
+        "fn-transform-XSLT30",
+        "higherOrderFunctions",
+        "infoset-dtd",
+        "moduleImport",
+        "namespace-axis",
+        "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation",
+        "remote_http",
+        "schemaImport",
+        "schemaValidation",
+        "serialization",
+        "simple-uca-fallback",
+        "typedData",
     };
 
     // Spec tokens that Bosak supports (XPath versions)
@@ -77,8 +108,50 @@ internal sealed class DependencyFilter
 
         foreach (var dep in dependencies)
         {
+            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
+            // Other language metadata retains the existing bounded admission policy.
+            if (dep.Type == "language" && dep.Value == "xib")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+            // Other calendar names retain their existing admission policy.
+            if (dep.Type == "calendar" && dep.Value == "CB")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+            // Keep other sequence names and dependency kinds under their existing policy.
+            if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            if (dep.Type == "feature"
+                && !FrozenAdmittedFeatures.Contains(dep.Value)
+                && !UnsupportedFeatures.Contains(dep.Value))
+                return false; // Unknown is not evidence of support or non-support.
+
             if (!dep.Satisfied)
             {
+                // Apply polarity to the same profile predicate used by positive dependencies.
+                // Other dependency kinds retain their existing capability policy.
+                if (dep.Type is "spec" or "default-language")
+                {
+                    var positive = new Dependency(dep.Type, dep.Value, satisfied: true);
+                    if (IsSupported(new[] { positive }, allowXQuerySpecs))
+                        return false;
+                    continue;
+                }
+
                 // Negative dependency: if we DO support this feature, skip the test
                 if (IsUnsupportedFeature(dep))
                     continue; // we don't support it, so negative dependency is satisfied
@@ -139,7 +212,8 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "xsd-version")
             {
-                // Bosak implements XSD 1.1 (required by XPath 3.1); skip XSD 1.0-only tests
+                // Frozen catalog admission profile; this is not an XSD 1.1 capability claim.
+                // Bosak.Schema owns staged XSD 1.1; the current core seam uses XmlSchemaSet.
                 if (dep.Value == "1.0")
                     return false;
                 if (dep.Value != "1.1")

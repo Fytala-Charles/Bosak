@@ -1,0 +1,14 @@
+{
+  "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#id-extension-expressions",
+  "revision": "REC-xquery-31-20170321",
+  "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+  "kind": "Paraphrased review, not implementation adoption",
+  "findings": [
+    "An extension has one or more pragmas and an optional associated expression, at ValueExpr precedence.",
+    "Pragma names are EQNames; prefixed names use static namespace resolution (XPST0081); unprefixed/no-namespace pragmas are ignored in 3.1.",
+    "Unrecognized namespaces are ignored. When all pragmas are ignored, evaluate the associated expression; if absent, XQST0079.",
+    "Pragma contents are raw characters ending at the first #); ordinary comment or string-literal processing is inappropriate inside contents. Required whitespace separates the name from nonempty contents.",
+    "Recognized namespaces and behavior are implementation-defined. Invalid recognized content raises XQST0013; static errors in associated expressions must still be reported. No recognized pragma namespace is proposed here.",
+    "An implementation slice needs explicit namespace policy, raw lexer support, fallback/static errors, and precedence before routing admission."
+  ]
+}

@@ -1,0 +1,392 @@
+[
+  {
+    "id": "verbatim-scan-running",
+    "expression": "fn:scan((1, 2, 3), 0, fn($acc, $it) { $acc + $it })\n  (: → [0], [1], [3], [6] — every running total, init first :)",
+    "entry": "experimental/fn-scan.md",
+    "expected": "0,1,3,6",
+    "error": null,
+    "projection": "string-join($value ! string(array:get(.,1)),',')",
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-scan-empty",
+    "expression": "fn:scan((), \"start\", fn($acc, $it) { $acc || $it })\n  (: → [\"start\"] — empty input yields just the init :)",
+    "entry": "experimental/fn-scan.md",
+    "expected": "start",
+    "error": null,
+    "projection": "string-join($value ! string(array:get(.,1)),',')",
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-computed-xquery",
+    "expression": "(name(element { \"dyn\" } { 1, 2, 3 }), string(element { \"dyn\" } { 1, 2, 3 }))",
+    "entry": "deferred/computed-node-constructors.md",
+    "expected": "dyn|1 2 3",
+    "error": null,
+    "projection": "string-join($value,'|')",
+    "profiles": [
+      "XQuery31"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "scan-sequence-states",
+    "expression": "string-join(scan((1,2),(),fn($a,$b){($a,$b)}) ! concat(array:size(.),':',count(.(1))),'|')",
+    "entry": "experimental/fn-scan.md",
+    "expected": "1:0|1:1|1:2",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "jnode-map-unwrap",
+    "expression": "string-join((jtree(map{'a':1})/\"a\") ! jvalue(.),',')",
+    "entry": "data-model/jnode-navigation.md",
+    "expected": "1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "jnode-parent-root",
+    "expression": "let $r:=jtree(map{'a':1}) return string-join((count($r/..),count($r/\"a\"/..)),'|')",
+    "entry": "data-model/jnode-navigation.md",
+    "expected": "0|1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "jnode-generic-current",
+    "expression": "jtree(map{'a':1}) instance of node()",
+    "entry": "data-model/jnode-template-boundary.md",
+    "expected": "false",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "jnode-generic-required",
+    "expression": "jtree(map{'a':1}) instance of node()",
+    "entry": "data-model/jnode-template-boundary.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C05-K01"
+  },
+  {
+    "id": "jnode-identity-current",
+    "expression": "let $r:=jtree(map{}) return $r is $r",
+    "entry": "data-model/jnode-template-boundary.md",
+    "expected": null,
+    "error": "XPTY0004",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "atomic-nan",
+    "expression": "atomic-equal(xs:double('NaN'),xs:float('NaN'))",
+    "entry": "functions/atomic-equal.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "atomic-incomparable",
+    "expression": "atomic-equal(1,'1')",
+    "entry": "functions/atomic-equal.md",
+    "expected": "false",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "extrema-required-mixed",
+    "expression": "compare(min((3.1,3.1e0)),3.1)",
+    "entry": "functions/batch-extrema.md",
+    "expected": "0",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F06"
+  },
+  {
+    "id": "extrema-identity-required",
+    "expression": "min((xs:integer(1),xs:decimal(2))) instance of xs:integer",
+    "entry": "functions/batch-extrema.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F06"
+  },
+  {
+    "id": "extrema-empty",
+    "expression": "empty(min(())) and empty(max(()))",
+    "entry": "functions/batch-extrema.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "extrema-family-refusal",
+    "expression": "min((1,'a'))",
+    "entry": "functions/batch-extrema.md",
+    "expected": null,
+    "error": "FORG0006",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "while-empty-no-action",
+    "expression": "while-do((1,2),fn($v,$p){()},fn($v,$p){error()})",
+    "entry": "functions/bounded-retries.md",
+    "expected": "1|2",
+    "error": null,
+    "projection": "string-join($value,'|')",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "until-action-first",
+    "expression": "do-until((),fn($v,$p){$p},fn($v,$p){true()})",
+    "entry": "functions/bounded-retries.md",
+    "expected": "1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "partial-nonpositive-frozen",
+    "expression": "partial-apply(concat#2,map{0:'ignored'})",
+    "entry": "functions/configured-label-callbacks.md",
+    "expected": null,
+    "error": "XPTY0004",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "partial-nonpositive-draft",
+    "expression": "function-arity(partial-apply(concat#2,map{0:'ignored'}))",
+    "entry": "functions/configured-label-callbacks.md",
+    "expected": "2",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F02"
+  },
+  {
+    "id": "partial-residual-order",
+    "expression": "partial-apply(concat#3,map{2:'-'})('A','B')",
+    "entry": "functions/configured-label-callbacks.md",
+    "expected": "A-B",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "identity-nodes",
+    "expression": "let $n:=parse-xml('<r/>') return identity($n) is $n",
+    "entry": "functions/configured-label-callbacks.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "partition-groups",
+    "expression": "let $a:=partition(('A','A','B','A'),fn($p,$n){$p[1] ne $n}) return string-join($a ! string-join(?*,''),'|')",
+    "entry": "functions/consecutive-partition.md",
+    "expected": "AA|B|A",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "partition-empty-no-callback",
+    "expression": "empty(partition((),fn($a,$b){error()}))",
+    "entry": "functions/consecutive-partition.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "csv-empty-bypass",
+    "expression": "empty(parse-csv((),map{'separator':'xx'}))",
+    "entry": "functions/csv-parsing.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "csv-invalid-separator",
+    "expression": "parse-csv('a,b',map{'separator':'xx'})",
+    "entry": "functions/csv-parsing.md",
+    "expected": null,
+    "error": "FOCV0002",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "equality-nan-distinct",
+    "expression": "count(distinct-values((xs:double('NaN'),xs:double('NaN'))))",
+    "entry": "functions/customer-reference-matching.md",
+    "expected": "1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "equality-order-sensitive",
+    "expression": "deep-equal((1,2),(2,1))",
+    "entry": "functions/customer-reference-matching.md",
+    "expected": "false",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "equality-options-refused",
+    "expression": "deep-equal(1,1,map{})",
+    "entry": "functions/customer-reference-matching.md",
+    "expected": null,
+    "error": "FOTY0013",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  }
+]

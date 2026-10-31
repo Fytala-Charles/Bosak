@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29",
+  "slice": "K04-C41",
+  "sourceBase": "f0cba4719537e78e4b548d133004338a0acd3eee",
+  "scope": [
+    "Read-only review of 37 XSD 1.0 profile exclusions and six separate schema preparation errors",
+    "Nine exact-query XSD 1.1 companion assertions and bounded XmlSchemaSet preparation contrast",
+    "Current Bosak.Schema documents, core seam surfaces and pending REQ-139 compatibility boundary"
+  ],
+  "limits": [
+    "No source, filters, baseline, fixtures/assertions, version, backend or licensing change",
+    "No ADR-006 acceptance or new public API; no sibling changes; no release/upstream/Braid action"
+  ]
+}

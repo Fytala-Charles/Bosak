@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-27",
+  "proposalCommit": "d0ca0741",
+  "decisionId": "K04-quote-routing-adoption-v1",
+  "ownerApproved": true,
+  "normalQt3": [
+    31161,
+    0,
+    660
+  ],
+  "exactRemoved": 16,
+  "retainedNamesAndReasons": 660,
+  "solutionPassed": 22007,
+  "solutionProjects": 10,
+  "qt4Gated": [
+    8437,
+    0,
+    1893
+  ],
+  "qt4ExperimentalPassed": 11,
+  "buildExitCode": 0,
+  "normalQt3ExitCode": 0,
+  "qt4ExitCode": 0,
+  "solutionExitCode": 0,
+  "sandboxTestExitCode": 1,
+  "sandboxFailure": "45 local HttpListener setup failures;unrestricted rerun all22007pass",
+  "candidateVersion": "1.26.11",
+  "publishedVersion": "1.26.3",
+  "releaseApproved": false
+}

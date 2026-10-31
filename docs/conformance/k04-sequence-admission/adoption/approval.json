@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-27",
+  "decisionId": "K04-sequence-adoption-v1",
+  "proposalCommit": "e924a708dadab92a29a1292d1ba546b1f4df71c3",
+  "answer": "Approve exact one-case adoption (Recommended)",
+  "scope": "Exact three-file patch;fresh complete normal gates;no engine/fixture/assertion/version/release change",
+  "releaseApproved": false
+}

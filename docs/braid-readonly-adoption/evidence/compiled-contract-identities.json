@@ -1,0 +1,7 @@
+{
+  "sourceSha256": "0aeabd474d149691ab6e6de1e647f0ce1e07f2b3da50e546f8a085cdcaad4a72",
+  "projectSha256": "6f98cb19c01c14ba974865688b469d03e49d9c5337fe2099ed1117a8cdbadb13",
+  "assemblySha256": "b9fa65c87a94c9918cefbbdc58a02139dc86be4e8e0f3336e2cf19ab53e87f69",
+  "xmlSha256": "6ec4ca4f0e35a8898a79573ca7a9db7d11b0b06970be24355e9e95dc29e11ec0",
+  "method": "Standalone API-shape compilation only; no factory/session implementation or consumer execution"
+}

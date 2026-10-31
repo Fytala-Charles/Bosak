@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C17",
+  "status": "Contract review complete; empty-value prerequisite and optional forms remain open",
+  "sourceBase": "e88e5ba5e792bbfcd219c8623ac967f5a1092c67",
+  "originals": 8,
+  "originalFailed": 8,
+  "controls": 96,
+  "controlPassed": 45,
+  "controlFailed": 51,
+  "emptyValueFailures": 30,
+  "missingCallSurfaceFailures": 21,
+  "normalExploratoryDate": [
+    208,
+    6,
+    18
+  ],
+  "normalExploratoryTime": [
+    92,
+    2,
+    4
+  ],
+  "boundedProcesses": 106,
+  "timeouts": 0,
+  "inheritedValidation": "docs/conformance/k04-calendar-admission/adoption/validation.json",
+  "inheritedSolutionPassed": 22579,
+  "qt3": [
+    31164,
+    0,
+    657
+  ],
+  "qt4Gate": [
+    8587,
+    0,
+    1892
+  ],
+  "candidateVersion": "1.28.1",
+  "publishedVersion": "1.26.3",
+  "engineChanged": false,
+  "baselineChanged": false,
+  "semanticAdoption": false
+}

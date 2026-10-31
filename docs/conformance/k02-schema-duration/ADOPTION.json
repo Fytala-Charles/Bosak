@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "c151c714",
+  "immutableSpecification": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+  "revision": "W3C Recommendation 21 March 2017",
+  "sections": ["4.11 Schema Import", "F Error Conditions: XQST0012 and XQST0059"],
+  "requiredBehavior": "Imported definitions rejected by schema compilation must carry XQST0012. Missing schema resolution remains XQST0059; resolver I/O and malformed XML are not blanket-recoded.",
+  "implementationScope": "Add the missing XQST0012 code to the existing aggregated schema-compilation diagnostic in XQueryExecutable.BuildSchemaSet. Preserve the collected diagnostic details and existing error phase.",
+  "intentionalBoundaries": [
+    "No emulated XSD 1.1 dayTimeDuration/yearMonthDuration types and no substitution with xs:duration.",
+    "No complete eager static validation or blanket conversion of all schema/XML/IO exceptions.",
+    "No test-specific success shortcut: the public query pipeline must produce the diagnostic independently of any test assertion.",
+    "The QT3 environment still compiles schemas before query execution; validateexpr-28 remains a harness skip. No gate admission or baseline change.",
+    "Six multi-affiliation substitutionGroup cases remain separate capability work."
+  ],
+  "qt3FixtureRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "case": "validateexpr-28",
+  "schema": "tests/qt3tests/prod/ValidateExpr/xq-e18.xsd"
+}

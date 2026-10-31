@@ -1,0 +1,49 @@
+from pathlib import Path
+import json,re,xml.etree.ElementTree as ET,hashlib,subprocess,shutil
+C=Path('docs/xpath40-catalog');E=C/'evidence/c09-semantic-batch1'
+def write(p,v):p.write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def shape(e):return(e.tag,sorted(e.attrib.items()),None if not (e.text or '').strip() else e.text,[(shape(c),None if not (c.tail or '').strip() else c.tail) for c in e])
+a=json.loads((E/'sample-audit.json').read_text(encoding='utf-8'));qs=json.loads((E/'probe-requests.json').read_text(encoding='utf-8'));cases=json.loads((C/'examples/cases.json').read_text(encoding='utf-8'));byid={q['id']:q for q in cases};source=json.loads((E/'entry-sources.json').read_text(encoding='utf-8'))
+# The sole explicit Sample Code walkthrough is also reviewed verbatim.
+w=C/'examples/equality-contracts/README.md';blocks=[]
+for i,m in enumerate(re.finditer(r'^(?P<f>`{3,}|~{3,})(?P<lang>[^\n]*)\n(?P<code>.*?)(?:\n)(?P=f)[ \t]*$',w.read_text(encoding='utf-8'),re.M|re.S)):
+ blocks.append(dict(index=i,language=m['lang'].strip(),code=m['code'].strip(),exactFiles=[],containedInFiles=[],expectedOutputCases=[]))
+walk=dict(source=w.as_posix(),gitBlob=subprocess.check_output(['git','hash-object',str(w)]).decode().strip(),text=w.read_text(encoding='utf-8'),entry='functions/customer-reference-matching.md',blocks=blocks)
+for n,row in [*a.items(),('functions/customer-reference-matching.md',{**a['functions/customer-reference-matching.md'],'blocks':blocks})]:
+ for block in row['blocks']:
+  code=block['code'];block['verbatimProbeIds']=[q['id'] for q in qs if q['expression'].strip()==code]
+  for f in row['fixtures']:
+   text=Path(f).read_text(encoding='utf-8-sig').strip()
+   if text==code and f not in block['exactFiles']:block['exactFiles'].append(f)
+   elif code in text and f not in block['containedInFiles']:block['containedInFiles'].append(f)
+  block['expectedOutputCases']=sorted(set(block['expectedOutputCases'])|{id for id in row['caseIds'] if str(byid[id].get('expected','')).strip()==code})
+  if block['language']=='xml' and not any(block[k] for k in ['exactFiles','containedInFiles','expectedOutputCases']):
+   expected=shape(ET.fromstring(code));matches=[]
+   for f in row['fixtures']:
+    if not f.endswith('.xpath'):continue
+    for literal in re.findall(r"parse-xml\(\s*'((?:[^']|'')*)'\s*\)",Path(f).read_text(encoding='utf-8-sig')):
+     try:
+      if shape(ET.fromstring(literal.replace("''","'")))==expected:matches.append(f)
+     except ET.ParseError:pass
+   block['equivalentEmbeddedXmlInputs']=sorted(set(matches))
+  assert any(block.get(k) for k in ['exactFiles','containedInFiles','expectedOutputCases','verbatimProbeIds','equivalentEmbeddedXmlInputs']),(n,block['index'],code[:90])
+write(E/'sample-audit.json',a);write(E/'sample-walkthrough.json',walk)
+trx=ET.parse(E/'catalog.trx').getroot();results=[v for v in trx.iter() if v.tag.endswith('UnitTestResult')];assert len(results)==len(cases)==3148 and all(v.get('outcome')=='Passed' for v in results)
+rows=[]
+for v in results:
+ display=re.search(r'id: "([^"]+)"',v.get('testName')).group(1);candidates=[display] if display in byid else [id for id in byid if id.startswith(display)];assert candidates
+ rows.append(dict(testId=v.get('testId'),display=v.get('testName'),caseCandidates=candidates,outcome=v.get('outcome')))
+base=Path('tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples/Catalog');assert (C/'examples/cases.json').read_bytes()==(base/'cases.json').read_bytes()
+selected={id for v in a.values() for id in v['caseIds']};receipts={};assets={}
+for id in sorted(selected):
+ q=byid[id];matching=[v for v in rows if id in v['caseCandidates']];assert matching
+ receipts[id]=dict(case=q,passedRows=matching,identityLimit='Some xUnit display arguments are truncated; complete manifest enumeration, equal count/all Passed, and exact compiled-asset identity establish coverage. Ambiguous display prefixes are retained without inventing a unique row identity.')
+ for field in ['file','input']:
+  if field in q:
+   p=C/'examples'/q[field];copy=base/q[field];assert p.read_bytes()==copy.read_bytes(),q[field];assets[p.as_posix()]=dict(sha256=sha(p),compiledAsset=copy.as_posix())
+write(E/'applicable-cases.json',receipts);write(E/'compiled-assets.json',dict(manifestSha256=sha(C/'examples/cases.json'),compiledManifest=(base/'cases.json').as_posix(),files=assets))
+write(E/'catalog-trx-summary.json',dict(total=3148,passed=3148,failed=0,scopedUniqueCases=len(selected),scopedCaseReferences=sum(len(v['caseIds']) for v in a.values()),truncatedRows=sum(any(id not in v['display'] for id in v['caseCandidates']) for v in rows)))
+gatefile=Path('tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs');text=gatefile.read_text(encoding='utf-8');gated=sorted(re.findall(r'"([^"\n]+)"',text.split('private static readonly HashSet<string> GatedSets',1)[1].split('};',1)[0]));assert len(gated)==224;write(E/'gated-sets.json',dict(source=gatefile.as_posix(),gitBlob=subprocess.check_output(['git','hash-object',str(gatefile)]).decode().strip(),sets=gated))
+for src,dst in [('.guard-tmp/c09-probe/Program.cs','probe-program.cs.txt'),('.guard-tmp/c09-probe/probe.csproj','probe-project.csproj.txt'),('.guard-tmp/audit-c09-samples.py','sample-audit-program.py.txt')]:shutil.copyfile(src,E/dst)
+print('Audited',sum(len(v['blocks']) for v in a.values()),'entry blocks +',len(blocks),'walkthrough blocks;',len(selected),'scoped cases;',len(assets),'exact compiled assets')

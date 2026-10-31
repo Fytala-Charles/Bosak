@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified reference contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Integral-decimal tolerance is not the declared integer-position contract; repeat counts must remain bounded. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Order-export sequence selection — Frozen 4.0.** Shipped in [Bosak PR #82](https://github.com/Fytala-Charles/Bosak/pull/82) at immutable revision [`40ebaa79`](https://github.com/Fytala-Charles/Bosak/commit/40ebaa79032b17fc45d6d3bb3e58cb00e2fda742).
@@ -60,6 +62,8 @@ The [routing chapter](../worked-examples/order-routing/README.md) preserves disp
 Out-of-range `items-at` positions are ignored; duplicate requested positions remain duplicated. Fractional positions fail XPTY0004. `foot(())` and `trunk` of an empty/singleton sequence are empty. `replicate` of empty input or with count zero is empty; negative count fails XPTY0004. A separator can contain several items, and no separator is inserted for empty or singleton input. Negative-step slices reverse traversal, while a mismatched explicit direction yields no items.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Whole-sequence repetition and separator insertion; One-based positions, duplicates, inclusive/negative/default slice bounds; Empty/singleton input, negative counts and invalid positions. **Boundaries:** Integral-decimal tolerance is not the declared integer-position contract; repeat counts must remain bounded. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.2. This reference work changes no engine code.
 

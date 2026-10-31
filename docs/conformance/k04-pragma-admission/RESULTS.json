@@ -1,0 +1,38 @@
+{
+  "slice": "K04-C38",
+  "base": "254d07d7",
+  "ownerApproval": "pending",
+  "catalogCases": 31821,
+  "catalogSets": 428,
+  "affectedPredicates": 57,
+  "directOriginals": 60,
+  "eligibleOriginalsPassed": 55,
+  "directPrototype": {
+    "passed": 59,
+    "failed": 1,
+    "excludedFailure": "K-ExtensionExpression-4"
+  },
+  "qt3Normal": [
+    31340,
+    0,
+    481
+  ],
+  "qt3Isolated": [
+    31395,
+    0,
+    426
+  ],
+  "qt4Normal": [
+    8939,
+    0,
+    1920
+  ],
+  "copyPassedEach": 49,
+  "contextPassedEach": 43,
+  "constructionPassedEach": 87,
+  "publicControlsPassed": 24,
+  "processes": 567,
+  "inheritedSolutionPasses": 24164,
+  "normalBaselineChanged": false,
+  "releaseApproved": false
+}

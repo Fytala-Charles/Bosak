@@ -1,0 +1,8 @@
+{
+  "reason": "The revised exact-scalar assertion used EvalStr on a lazy sequence, whose diagnostic ToString is (sequence).",
+  "correction": "Explicitly string-join the returned scalar values; preserve expected550 and the initial failed output.",
+  "scope": "Unit-test formatting only; production/backend/gate binaries unchanged.",
+  "initialStandardFailed": 1,
+  "initialStandardPassed": 13550,
+  "standardTotal": 13551
+}

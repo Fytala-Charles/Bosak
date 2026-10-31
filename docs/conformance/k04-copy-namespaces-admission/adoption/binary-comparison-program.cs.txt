@@ -1,0 +1,27 @@
+// Generated read-only PE metadata diagnostic; no assemblies are executed.
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+string root=Directory.GetCurrentDirectory();
+object Read(string path){
+ using var input=File.OpenRead(path);using var pe=new PEReader(input);var md=pe.GetMetadataReader();using var content=new MemoryStream();using var writer=new BinaryWriter(content,Encoding.UTF8,true);int bodies=0;
+ foreach(var h in md.TypeDefinitions){var t=md.GetTypeDefinition(h);writer.Write(md.GetString(t.Namespace));writer.Write(md.GetString(t.Name));writer.Write((int)t.Attributes);}
+ foreach(var h in md.FieldDefinitions){var f=md.GetFieldDefinition(h);writer.Write(md.GetString(f.Name));writer.Write((int)f.Attributes);writer.Write(md.GetBlobBytes(f.Signature));}
+ foreach(var h in md.MethodDefinitions){var m=md.GetMethodDefinition(h);writer.Write(md.GetString(m.Name));writer.Write((int)m.Attributes);writer.Write((int)m.ImplAttributes);writer.Write(md.GetBlobBytes(m.Signature));if(m.RelativeVirtualAddress!=0){var b=pe.GetMethodBody(m.RelativeVirtualAddress);writer.Write(b.MaxStack);writer.Write(b.LocalVariablesInitialized);writer.Write(b.GetILBytes()!);foreach(var region in b.ExceptionRegions){writer.Write((int)region.Kind);writer.Write(region.TryOffset);writer.Write(region.TryLength);writer.Write(region.HandlerOffset);writer.Write(region.HandlerLength);}bodies++;}}
+ writer.Flush();var assembly=md.GetAssemblyDefinition();string? informational=null;
+ foreach(var h in assembly.GetCustomAttributes()){
+  var attr=md.GetCustomAttribute(h);if(attr.Constructor.Kind!=HandleKind.MemberReference)continue;
+  var member=md.GetMemberReference((MemberReferenceHandle)attr.Constructor);if(member.Parent.Kind!=HandleKind.TypeReference)continue;
+  var type=md.GetTypeReference((TypeReferenceHandle)member.Parent);if(md.GetString(type.Name)!="AssemblyInformationalVersionAttribute")continue;
+  var blob=md.GetBlobReader(attr.Value);blob.ReadUInt16();informational=blob.ReadSerializedString();
+ }
+ return new{path=Path.GetRelativePath(root,path).Replace('\\','/'),sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant(),assemblyVersion=assembly.Version.ToString(),informationalVersion=informational,methodBodies=bodies,methodAndSignatureSha256=Convert.ToHexString(SHA256.HashData(content.ToArray())).ToLowerInvariant()};
+}
+var rows=new List<object>();
+foreach(var old in Directory.GetFiles(Path.Combine(root,".guard-tmp/k04-copy-admission-harness/bin/Release/net10.0"),"Bosak*.dll")){
+ if(Path.GetFileName(old)=="Bosak.XPath.Conformance.dll")continue;
+ rows.Add(new{name=Path.GetFileName(old),review=Read(old),adopted=Read(Path.Combine(root,"tests/Bosak.XPath.Conformance/bin/Release/net10.0",Path.GetFileName(old)))});
+}
+Console.WriteLine(JsonSerializer.Serialize(rows,new JsonSerializerOptions{WriteIndented=true}));

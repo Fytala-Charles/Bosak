@@ -1,0 +1,12 @@
+{
+  "name": "framework",
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-framework\\bin\\Release\\net10.0\\Probe.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 0.10298090003198013,
+  "log": "framework.log"
+}

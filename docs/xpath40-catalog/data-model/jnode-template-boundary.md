@@ -4,6 +4,8 @@
   <p>Deferred remainder; partial Frozen 4.0</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Known model blocker**. C05-K01: current generic-node membership remains unmet in both4 profiles; full model/template acceptance stays blocked. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **JNode model and template boundary — Deferred remainder; partial Frozen 4.0.** Shipped delivery remains [PR #116](https://github.com/Fytala-Charles/Bosak/pull/116), [revision 345ae58e](https://github.com/Fytala-Charles/Bosak/commit/345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0). Scope review: 2026-10-12, engine 1.1.2, [revision 3c0bd599](https://github.com/Fytala-Charles/Bosak/commit/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee). This reconciles the [original full-model exclusion](../../REQ-118-xpath-xslt-40.md) with partial delivered support.
@@ -71,6 +73,9 @@ The 4.0 expression parses the full JSON, wraps the batch, navigates invoices and
 The shipped feature is useful and should no longer be described as wholly absent. Confirmed broader gaps are node()/xnode() type alignment and JNode `is` identity. Default XSLT JNode rules, full generic-node ordering/union behavior and mixed-model operations are not certified here. No wrapper identity or stable map-key order is inferred from equal report strings.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers REQ123-jnode. Navigation, key/root/value type checks and array:members/array:of-members preserve member boundaries and empty/nested values. Generic node(), xnode() and is contracts remain unsupported model scope. Explicit jnode-pattern matching refuses XTSE0340 in both named hosts. The six generic-model unmet controls are retained known boundaries, not a new full-model adoption or template-rule certification. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 Reviewed source: [XdmJNode.cs](https://github.com/Fytala-Charles/Bosak/blob/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee/src/Bosak.XPath.Core/Xdm/XdmJNode.cs) stores Value/Key/Parent, while [VmEngine.cs](https://github.com/Fytala-Charles/Bosak/blob/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee/src/Bosak.XPath.Runtime/Vm/VmEngine.cs) has JNode navigation/type branches but `EvaluateNodeComparison` requires IsNode operands. This explains the tested identity refusal. [TransformEngine.cs](https://github.com/Fytala-Charles/Bosak/blob/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee/src/Bosak.Xslt/Runtime/TransformEngine.cs) and XML-oriented source APIs require separate review before claiming all draft JNode built-in template rules.
 
@@ -177,6 +182,8 @@ Both report paths materialize parsed JSON. Wrapper navigation retains parent con
 ## 15. Known Uses
 
 The partner invoice report is a realistic integration example, not evidence of a named deployment. The [order-routing chapter](../worked-examples/order-routing/README.md) already demonstrates ordinary map/array-to-stylesheet integration; that path is not proof of JNode built-in template handling.
+
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [19 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [InstanceOf_Bare_MatchesAnyJNode](../../../tests/Bosak.XPath.Standard.Tests/JNodeTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
 
 ## 16. Related Features
 

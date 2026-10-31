@@ -1,0 +1,21 @@
+{
+  "id": "K04-xib-adoption-v1",
+  "sourceBase": "08fe2e5aab1f4d5ee59e675dd78468c5788894b3",
+  "ownerApproval": "pending",
+  "paths": [
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs",
+    "AGENTS.md"
+  ],
+  "baseGitObjects": {
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "f13158aa59e4af03c106497c7630733a462aa1f4",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "d7fca12a5404f0f84c19eaf9dc145a88f2fa91ba",
+    "AGENTS.md": "0ce5c184fd9076c19e954137594d4997b4b6848c"
+  },
+  "sha256": {
+    "docs/conformance/k04-xib-admission/PROPOSED-ADOPTION.patch": "b3bd09a9acca7a07ecea57bdc3b4fb38cf55aa74c29fb75ff8e9216dcf81b4b1",
+    "docs/conformance/k04-xib-admission/evidence/proposed-DependencyFilter.cs.txt": "76a1fe0682ac4c2804ac02374296166564f02e1378447f1cbf0ee1350b79385b",
+    "docs/conformance/k04-xib-admission/evidence/proposed-DependencyFilter40.cs.txt": "42999540baf37bcdb47b2aef7c51bc5032edcbb720b4bc43d3a7e2b23aba909d",
+    "docs/conformance/k04-xib-admission/evidence/proposed-AGENTS.md.txt": "680183edb420cbb29501a90f62874bcb385fff5bde57eb2a50909e755eba630f"
+  }
+}

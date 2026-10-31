@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — changed existing-function contracts and observed limits</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Blocked for full current-draft extrema parity**. C02-F06/F08: current mixed-type selection/identity and plain-duration ordering are not fully implemented. Original observed fixtures remain observations. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 [fn:min](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-min)
@@ -116,6 +118,8 @@ Malformed values remain traceable; the decimal storage precision limit and
 unvalidated code/unit/range constraints remain outside the demonstrated contract.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Empty input, atomization, numeric/string and QName extrema; Omitted/empty collation and values keyword; NaN contamination and incomparable-family errors. **Boundaries:** Use homogeneous validated atomic inputs and explicit collation; remaining coercion/mixed-family combinations require targeted review. Follow-up groups: F06, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Use `CompileOptions.Compatibility40` for QName extrema and keyword calls.
 The numeric baseline runs with `Compatibility31` and its QName endpoints use

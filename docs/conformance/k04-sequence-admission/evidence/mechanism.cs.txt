@@ -1,0 +1,9 @@
+// Generated read-only reflection over the current formatter mechanism.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Numerics;
+using System.Text.Json;
+var directory=Path.GetFullPath("tests/Bosak.XPath.Conformance/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(ctx,name)=>{var p=Path.Combine(directory,name.Name+".dll");return File.Exists(p)?Assembly.LoadFrom(p):null;};
+var a=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Standard.dll"));var t=a.GetType("Bosak.XPath.Standard.Functions.FormatIntegerEngine",true)!;var m=t.GetMethod("TryFormatCustomSequence",BindingFlags.NonPublic|BindingFlags.Static)!;
+foreach(var cp in new[]{0xFBF4,0x2460}){object?[] input={BigInteger.One,char.ConvertFromUtf32(cp),null};bool supported=(bool)m.Invoke(null,input)!;Console.WriteLine(JsonSerializer.Serialize(new{codepoint=cp,value=1,supported,result=input[2]}));}

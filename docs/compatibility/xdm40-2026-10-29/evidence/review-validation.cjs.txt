@@ -1,0 +1,46 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),cp=require('child_process');
+const md=require('C:/Users/charl/AppData/Local/npm-cache/_npx/28f98e99224dac41/node_modules/markdown-it')({html:true});
+const root=process.cwd(),review='docs/compatibility/xdm40-2026-10-29',evidence=path.join(root,review,'evidence');
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const receipt=JSON.parse(fs.readFileSync(path.join(evidence,'repositories.json'),'utf8'));
+let checked=0;const finalRepositories=[],concurrentDocumentationChanges=[];
+for(const r of receipt.repositories){
+ const head=cp.execFileSync('git',['-c','safe.directory='+r.path,'-C',r.path,'rev-parse','HEAD'],{encoding:'utf8'}).trim();
+ if(head!==r.revision)throw Error('Revision changed: '+r.name);
+ const status=cp.execFileSync('git',['-c','safe.directory='+r.path,'-C',r.path,'status','--porcelain'],{encoding:'utf8'}).trim();
+ finalRepositories.push({name:r.name,revision:head,status});
+ if(r.name!=='Bosak' && status && status.split('\n').some(l=>!l.trim().match(/^(?:M|\?\?)\s+(?:README.md|ROADMAP.md|docs\/)/)))throw Error('Sibling non-documentation change: '+r.name);
+ for(const f of r.reviewedFiles||[]){const current=hash(fs.readFileSync(path.join(r.path,f.path)));if(current!==f.sha256){if(!f.path.startsWith('docs/'))throw Error('Source changed: '+r.name+'/'+f.path);concurrentDocumentationChanges.push({repository:r.name,path:f.path,initialSha256:f.sha256,finalSha256:current});}else checked++;}
+}
+const observations=JSON.parse(fs.readFileSync(path.join(evidence,'observations.json'),'utf8'));
+if(observations.Observations.length!==62)throw Error('Observation count');
+for(const a of observations.Assemblies)if(hash(fs.readFileSync(a.Path)).toUpperCase()!==a.Sha256)throw Error('Assembly changed '+a.Path);
+const spec=JSON.parse(fs.readFileSync(path.join(evidence,'spec-pin.json'),'utf8'));
+for(const f of spec.files){const local=f.path.endsWith('/xpath-datamodel.xml')?path.join(evidence,'xpath-datamodel.xml'):path.join(root,'.guard-tmp/xdm40-review-probe',path.basename(f.path));if(hash(fs.readFileSync(local))!==f.sha256)throw Error('Spec source changed');}
+const files=['README.md','docs/ARCHITECTURE.md','docs/FEATURE_REQUESTS.md','docs/INTEGRATION.md','docs/AGENT_HANDOVER.md','docs/DOCUMENTATION_RENDERER_TEST.md','docs/RESTART-2026-10-29.md','docs/XDM40-COMPATIBILITY-REVIEW-PLAN.md',...['README.md','SPEC-REVIEW.md','CONSUMER-MATRIX.md','NEXT-SLICE.md'].map(f=>review+'/'+f)];
+const out=path.join(root,'.guard-tmp/xdm40-compatibility-render');fs.mkdirSync(out,{recursive:true});
+fs.writeFileSync(path.join(evidence,'documentation-checks.json'),JSON.stringify({status:'Validation in progress'})+'\n');
+const css=path.join(root,'assets/css/fytala-markdown.css');const pages=[];let links=0;
+for(const f of files){
+ const source=fs.readFileSync(path.join(root,f),'utf8'),html=md.render(source);
+ if(!html.includes('<h'))throw Error('No heading '+f);
+ // All links in new review pages, and newly added review links in canonical pages.
+ const scope=f.startsWith(review)?source:source.split('\n').filter(l=>l.includes('compatibility/xdm40-2026-10-29')).join('\n');
+ for(const m of scope.matchAll(/\]\(([^)]+)\)/g)){
+  const link=m[1];if(/^(https?:|#)/.test(link))continue;
+  const target=decodeURIComponent(link.split('#')[0]);if(!fs.existsSync(path.resolve(path.dirname(path.join(root,f)),target)))throw Error('Missing link '+f+' -> '+target);links++;
+ }
+ const output=path.join(out,f.replaceAll('/','_')+'.html');
+ fs.writeFileSync(output,`<!doctype html><meta charset="utf-8"><base href="file:///${path.dirname(path.join(root,f)).replaceAll('\\','/')}/"><link rel="stylesheet" href="file:///${css.replaceAll('\\','/')}"><main>${html}</main>`);
+ pages.push({source:f,sourceSha256:hash(fs.readFileSync(path.join(root,f))),html:path.relative(root,output).replaceAll('\\','/'),htmlSha256:hash(fs.readFileSync(output))});
+}
+for(const f of files.filter(f=>f.startsWith(review)))if(fs.readFileSync(path.join(root,f),'utf8').split('\n').some(l=>/[\t ]+$/.test(l.replace(/\r$/,''))))throw Error('Authored Markdown whitespace '+f);
+cp.execFileSync('git',['diff','--check'],{encoding:'utf8'});
+for(const f of fs.readdirSync(evidence).filter(f=>f.endsWith('.json')))JSON.parse(fs.readFileSync(path.join(evidence,f),'utf8'));
+for(const [raw,normalized] of [['initial-raw.log','initial-observations.json'],['expanded-raw.log','expanded-observations.json'],['observations-raw.log','observations.json']]){
+ const bytes=fs.readFileSync(path.join(evidence,raw));const decoded=bytes.toString('utf16le').replace(/^\uFEFF/,'');
+ if(JSON.stringify(JSON.parse(decoded))!==JSON.stringify(JSON.parse(fs.readFileSync(path.join(evidence,normalized),'utf8'))))throw Error('Receipt normalization mismatch');
+}
+const result={kind:'HTML render only; no screenshot/PDF acceptance',date:'2026-10-29',unchangedSelectedFileHashesVerified:checked,concurrentDocumentationChanges,finalRepositories,repositoryRevisionsVerified:receipt.repositories.length,specSourceFilesVerified:spec.files.length,observations:62,assembliesUnchanged:observations.Assemblies.length,localLinksVerified:links,jsonAndAuthoredMarkdownWhitespaceChecked:true,threeRawReceiptValuesPreserved:true,cssSha256:hash(fs.readFileSync(css)),pages};
+fs.writeFileSync(path.join(evidence,'documentation-checks.json'),JSON.stringify(result,null,2)+'\n');
+console.log(`Verified ${checked} source hashes, ${spec.files.length} specification files, seven product binaries, ${links} local links; rendered ${pages.length} pages.`);

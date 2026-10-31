@@ -1,0 +1,443 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 29-10-2026     | Separate semantic inputs and add compatible-universe view prototype                       |
+// ===========================================================================================================================================================
+using System.Collections.Immutable;
+using System.Collections.Generic;
+using Bosak.XPath.Core.Xdm;
+namespace C44R2.Proposed;
+// C44-R2 revised isolated surface; prototype-only, not production.
+// Exact proposed surface only. Bodies that require product integration explicitly refuse.
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public enum SchemaVerdict
+{
+    /// <summary>The proposed contract category.</summary>
+    NotApplicable,
+    /// <summary>The proposed contract category.</summary>
+    Supported,
+    /// <summary>The proposed contract category.</summary>
+    Invalid,
+    /// <summary>The proposed contract category.</summary>
+    Unsupported,
+    /// <summary>The proposed contract category.</summary>
+    Cancelled
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public enum SchemaAssessmentMode
+{
+    /// <summary>The proposed contract category.</summary>
+    Strict,
+    /// <summary>The proposed contract category.</summary>
+    Lax,
+    /// <summary>The proposed contract category.</summary>
+    Type
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public enum SchemaTypeKind
+{
+    /// <summary>The proposed contract category.</summary>
+    Atomic,
+    /// <summary>The proposed contract category.</summary>
+    List,
+    /// <summary>The proposed contract category.</summary>
+    Union,
+    /// <summary>The proposed contract category.</summary>
+    ComplexSimple,
+    /// <summary>The proposed contract category.</summary>
+    ComplexMixed,
+    /// <summary>The proposed contract category.</summary>
+    ComplexElementOnly,
+    /// <summary>The proposed contract category.</summary>
+    ComplexEmpty
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+[Flags]
+public enum SchemaDerivation
+{
+    /// <summary>The proposed contract category.</summary>
+    None = 0,
+    /// <summary>The proposed contract category.</summary>
+    Restriction = 1,
+    /// <summary>The proposed contract category.</summary>
+    Extension = 2,
+    /// <summary>The proposed contract category.</summary>
+    Substitution = 4
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="NamespaceUri">The proposed contract input.</param>
+/// <param name="LocalName">The proposed contract input.</param>
+public readonly record struct SchemaName(string NamespaceUri, string LocalName);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Reason">The proposed contract input.</param>
+/// <param name="Message">The proposed contract input.</param>
+/// <param name="ResourceUri">The proposed contract input.</param>
+/// <param name="ComponentKey">The proposed contract input.</param>
+public sealed record SchemaFinding(string Reason, string Message, string? ResourceUri, string? ComponentKey);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Origin">The proposed contract input.</param>
+/// <param name="Content">The proposed contract input.</param>
+public sealed record SchemaResource(Uri Origin, ImmutableArray<byte> Content);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Prefix">The proposed contract input.</param>
+/// <param name="NamespaceUri">The proposed contract input.</param>
+public sealed record SchemaNamespaceBinding(string Prefix, string NamespaceUri);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Resources">The proposed contract input.</param>
+/// <param name="BaseUri">The proposed contract input.</param>
+/// <param name="QueryProfile">The captured host/query/XDM semantic profile.</param>
+/// <param name="SchemaLanguage">The separately selected XSD version.</param>
+/// <param name="ResourcePolicyFingerprint">The proposed contract input.</param>
+/// <param name="NamespaceBindings">The proposed contract input.</param>
+/// <param name="StaticContextFingerprint">The proposed contract input.</param>
+public sealed record SchemaCompilationRequest(ImmutableArray<SchemaResource> Resources, Uri BaseUri, QuerySemanticProfile QueryProfile, SchemaLanguageVersion SchemaLanguage, string ResourcePolicyFingerprint, ImmutableArray<SchemaNamespaceBinding> NamespaceBindings, string StaticContextFingerprint);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaOutcome<T>
+{
+    private readonly T _value;
+    private static ImmutableArray<SchemaFinding> CheckFindings(ImmutableArray<SchemaFinding> findings)
+    {
+        if(findings.IsDefaultOrEmpty || findings.Any(f=>f is null || string.IsNullOrWhiteSpace(f.Reason) || string.IsNullOrWhiteSpace(f.Message)))throw new ArgumentException("Findings required.");
+        return findings;
+    }
+    private SchemaOutcome(SchemaVerdict verdict,T value,ImmutableArray<SchemaFinding> findings) => (Verdict,_value,Findings)=(verdict,value,findings);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaVerdict Verdict { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public T Value => Verdict==SchemaVerdict.Supported?_value:throw new InvalidOperationException("No supported value.");
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public ImmutableArray<SchemaFinding> Findings { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="value">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaOutcome<T> Supported(T value) => value is null ? throw new ArgumentNullException(nameof(value)) : new(SchemaVerdict.Supported,value,[]);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaOutcome<T> NotApplicable() => new(SchemaVerdict.NotApplicable,default!,[]);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="findings">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaOutcome<T> Invalid(ImmutableArray<SchemaFinding> findings) => new(SchemaVerdict.Invalid,default!,CheckFindings(findings));
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="findings">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaOutcome<T> Unsupported(ImmutableArray<SchemaFinding> findings) => new(SchemaVerdict.Unsupported,default!,CheckFindings(findings));
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaOutcome<T> Cancelled() => new(SchemaVerdict.Cancelled,default!,[]);
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaSessionIdentity
+{
+    internal SchemaSessionIdentity(SchemaUniverseIdentity universe) => Universe=universe;
+    /// <summary>Gets the universe description; equality does not grant issuer authority.</summary>
+    public SchemaUniverseIdentity Universe { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public string Fingerprint => Universe.Fingerprint;
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaTypeIdentity
+{
+    internal SchemaTypeIdentity(SchemaSessionIdentity session,string key,SchemaName? displayName)=>(Session,Key,DisplayName)=(session,key,displayName);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaSessionIdentity Session { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public string Key { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaName? DisplayName { get; }
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaDeclarationIdentity
+{
+    internal SchemaDeclarationIdentity(SchemaSessionIdentity session,string key,SchemaName name,string scope)=>(Session,Key,Name,Scope)=(session,key,name,scope);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaSessionIdentity Session { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public string Key { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaName Name { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public string Scope { get; }
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaIdentityIssuer
+{
+    private readonly SchemaSessionIdentity _identity;
+    private readonly Dictionary<string,SchemaTypeIdentity> _types=new(StringComparer.Ordinal);
+    private readonly Dictionary<string,SchemaDeclarationIdentity> _declarations=new(StringComparer.Ordinal);
+    private bool _sealed;
+    private SchemaIdentityIssuer(SchemaUniverseIdentity universe)
+    {
+        ArgumentNullException.ThrowIfNull(universe);ArgumentException.ThrowIfNullOrWhiteSpace(universe.ProviderModelVersion);
+        if(!Enum.IsDefined(universe.SchemaLanguage) || universe.Fingerprint is not {Length:64} || universe.Fingerprint.Any(c=>!Uri.IsHexDigit(c)))throw new ArgumentException("Malformed universe identity.");
+        _identity=new(universe with {Fingerprint=universe.Fingerprint.ToUpperInvariant()});
+    }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="universe">The complete provider-described universe.</param>
+    /// <returns>The proposed contract result.</returns>
+    public static SchemaIdentityIssuer Create(SchemaUniverseIdentity universe) => new(universe);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaSessionIdentity Identity => _identity;
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="key">The proposed contract input.</param>
+    /// <param name="displayName">The proposed contract input.</param>
+    /// <returns>The immutable identity interned within this issuer.</returns>
+    public SchemaTypeIdentity InternType(string key,SchemaName? displayName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        if(_types.TryGetValue(key,out var id))return id.DisplayName==displayName?id:throw new ArgumentException("Identity redefinition.");
+        if(_sealed)throw new InvalidOperationException("Issuer sealed.");
+        id=new(_identity,key,displayName);_types.Add(key,id);return id;
+    }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="key">The proposed contract input.</param>
+    /// <param name="name">The proposed contract input.</param>
+    /// <param name="scope">The proposed contract input.</param>
+    /// <returns>The immutable scoped declaration identity.</returns>
+    public SchemaDeclarationIdentity InternDeclaration(string key,SchemaName name,string scope)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);ArgumentException.ThrowIfNullOrWhiteSpace(scope);
+        if(_declarations.TryGetValue(key,out var id))return id.Name==name&&id.Scope==scope?id:throw new ArgumentException("Identity redefinition.");
+        if(_sealed)throw new InvalidOperationException("Issuer sealed.");
+        id=new(_identity,key,name,scope);_declarations.Add(key,id);return id;
+    }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public void Seal() => _sealed=true;
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Identity">The proposed contract input.</param>
+/// <param name="Type">The proposed contract input.</param>
+/// <param name="Affiliations">The proposed contract input.</param>
+/// <param name="IsAbstract">The proposed contract input.</param>
+/// <param name="IsNillable">The proposed contract input.</param>
+/// <param name="BlockedDerivations">The proposed contract input.</param>
+public sealed record SchemaElementDescription(SchemaDeclarationIdentity Identity, SchemaTypeIdentity Type, ImmutableArray<SchemaDeclarationIdentity> Affiliations, bool IsAbstract, bool IsNillable, SchemaDerivation BlockedDerivations);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Identity">The proposed contract input.</param>
+/// <param name="Kind">The proposed contract input.</param>
+/// <param name="DirectBases">The proposed contract input.</param>
+/// <param name="Members">The proposed contract input.</param>
+/// <param name="ListItemType">The proposed contract input.</param>
+/// <param name="BuiltInBaseName">The proposed contract input.</param>
+public sealed record SchemaTypeDescription(SchemaTypeIdentity Identity, SchemaTypeKind Kind, ImmutableArray<SchemaTypeIdentity> DirectBases, ImmutableArray<SchemaTypeIdentity> Members, SchemaTypeIdentity? ListItemType, string? BuiltInBaseName);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Candidate">The proposed contract input.</param>
+/// <param name="Mode">The proposed contract input.</param>
+/// <param name="RequestedType">The proposed contract input.</param>
+/// <param name="GoverningDeclaration">The proposed contract input.</param>
+public sealed record SchemaAssessmentRequest(IXdmNode Candidate, SchemaAssessmentMode Mode, SchemaTypeIdentity? RequestedType, SchemaDeclarationIdentity? GoverningDeclaration);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="Root">The proposed contract input.</param>
+public sealed record SchemaAssessment(IXdmNode Root);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public sealed class SchemaValueAnnotation
+{
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="session">The proposed contract input.</param>
+    /// <param name="type">The proposed contract input.</param>
+    /// <param name="sourceIdentity">Optional host-owned source identity; never a schema authority.</param>
+    public SchemaValueAnnotation(ISchemaSession session,SchemaTypeIdentity type,SchemaSourceIdentity? sourceIdentity = null)
+    {
+        ArgumentNullException.ThrowIfNull(session);ArgumentNullException.ThrowIfNull(type);
+        if(!ReferenceEquals(session.Identity,type.Session))throw new ArgumentException("Foreign identity.");
+        (Session,Type,SourceIdentity)=(session,type,sourceIdentity);
+    }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public ISchemaSession Session { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaTypeIdentity Type { get; }
+    /// <summary>Gets the optional original host source binding.</summary>
+    public SchemaSourceIdentity? SourceIdentity { get; }
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+/// <param name="ValueAnnotation">The proposed contract input.</param>
+/// <param name="Declaration">The proposed contract input.</param>
+/// <param name="IsNilled">The proposed contract input.</param>
+/// <param name="IsComplexType">The proposed contract input.</param>
+/// <param name="HasNoTypedValue">The proposed contract input.</param>
+/// <param name="IsId">The proposed contract input.</param>
+/// <param name="IsIdrefs">The proposed contract input.</param>
+public sealed record SchemaNodeAnnotation(SchemaValueAnnotation ValueAnnotation, SchemaDeclarationIdentity? Declaration, bool IsNilled, bool IsComplexType, bool HasNoTypedValue, bool IsId, bool IsIdrefs);
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public interface ISchemaAnnotatedNode : IXdmNode
+{
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaNodeAnnotation? SchemaAnnotation { get; }
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public interface ISchemaProvider
+{
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="request">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<ISchemaSession> OpenSession(SchemaCompilationRequest request,CancellationToken cancellationToken);
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public interface ISchemaSession
+{
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    public SchemaSessionIdentity Identity { get; }
+    /// <summary>Gets the explicit captured query semantic profile.</summary>
+    public QuerySemanticProfile QueryProfile { get; }
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="name">The proposed contract input.</param>
+    /// <param name="scope">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaDeclarationIdentity> ResolveElement(SchemaName name,string scope,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="name">The proposed contract input.</param>
+    /// <param name="scope">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaDeclarationIdentity> ResolveAttribute(SchemaName name,string scope,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="name">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaTypeIdentity> ResolveType(SchemaName name,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="declaration">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaElementDescription> DescribeElement(SchemaDeclarationIdentity declaration,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="type">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaTypeDescription> DescribeType(SchemaTypeIdentity type,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="actual">The proposed contract input.</param>
+    /// <param name="expected">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<bool> IsDerivedFrom(SchemaTypeIdentity actual,SchemaTypeIdentity expected,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="head">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<ImmutableArray<SchemaDeclarationIdentity>> GetActualMembers(SchemaDeclarationIdentity head,CancellationToken cancellationToken);
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="request">The proposed contract input.</param>
+    /// <param name="cancellationToken">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    public SchemaOutcome<SchemaAssessment> Assess(SchemaAssessmentRequest request,CancellationToken cancellationToken);
+}
+/// <summary>Proposed isolated schema contract member; not a production API.</summary>
+public static class SchemaAtomicValues
+{
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="value">The proposed contract input.</param>
+    /// <param name="annotation">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    /// <exception cref="NotSupportedException">Only the API shape is supplied.</exception>
+    public static XdmValue Attach(XdmValue value,SchemaValueAnnotation annotation) => throw new NotSupportedException("API shape only; product carrier is unchanged.");
+    /// <summary>Proposed isolated schema contract member; not a production API.</summary>
+    /// <param name="value">The proposed contract input.</param>
+    /// <param name="annotation">The proposed contract input.</param>
+    /// <returns>The proposed contract result.</returns>
+    /// <exception cref="NotSupportedException">Only the API shape is supplied.</exception>
+    public static bool TryGetAnnotation(XdmValue value,out SchemaValueAnnotation? annotation) => throw new NotSupportedException("API shape only; product carrier is unchanged.");
+}
+
+/// <summary>Identifies the host language independently of XSD and XDM versions.</summary>
+public enum QueryHostLanguage
+{
+    /// <summary>XPath expressions.</summary>
+    XPath,
+    /// <summary>XQuery modules.</summary>
+    XQuery,
+    /// <summary>XSLT stylesheets.</summary>
+    Xslt
+}
+/// <summary>Identifies the schema language used for component interpretation.</summary>
+public enum SchemaLanguageVersion
+{
+    /// <summary>XML Schema 1.0.</summary>
+    Xsd10,
+    /// <summary>XML Schema 1.1.</summary>
+    Xsd11
+}
+/// <summary>Describes an explicitly selected query environment; validated at provider ingress.</summary>
+/// <param name="HostLanguage">Host language.</param>
+/// <param name="HostVersion">Exact host language version.</param>
+/// <param name="XdmRevision">Immutable XDM semantic source revision.</param>
+/// <param name="BehaviorProfile">Exact supported behavior/adoption profile.</param>
+/// <param name="QueryStaticContextFingerprint">Deterministic query static-context digest.</param>
+public sealed record QuerySemanticProfile(QueryHostLanguage HostLanguage,string HostVersion,string XdmRevision,string BehaviorProfile,string QueryStaticContextFingerprint);
+/// <summary>Describes the component universe; this data alone never grants authority.</summary>
+/// <param name="ProviderModelVersion">Exact component-provider/model version.</param>
+/// <param name="SchemaLanguage">Explicit XSD version.</param>
+/// <param name="Fingerprint">Complete interpreted closure fingerprint.</param>
+public sealed record SchemaUniverseIdentity(string ProviderModelVersion,SchemaLanguageVersion SchemaLanguage,string Fingerprint);
+/// <summary>Retains a fresh host-owned source token independently of component or XML node identity.</summary>
+public sealed class SchemaSourceIdentity
+{
+    private SchemaSourceIdentity(string provider,string snapshotKey,string contentFingerprint)=>(Provider,SnapshotKey,ContentFingerprint)=(provider,snapshotKey,contentFingerprint);
+    /// <summary>Creates a new source token; equal descriptive fields do not make tokens identical.</summary>
+    /// <param name="provider">Host/source provider description.</param>
+    /// <param name="snapshotKey">Host snapshot/generation key.</param>
+    /// <param name="contentFingerprint">Retained source digest.</param>
+    /// <returns>A fresh source identity, not an edit or storage capability.</returns>
+    public static SchemaSourceIdentity Create(string provider,string snapshotKey,string contentFingerprint)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(provider);ArgumentException.ThrowIfNullOrWhiteSpace(snapshotKey);
+        if(contentFingerprint is null || contentFingerprint.Length!=64 || contentFingerprint.Any(c=>!Uri.IsHexDigit(c)))throw new ArgumentException("SHA-256 required.");
+        return new(provider,snapshotKey,contentFingerprint.ToUpperInvariant());
+    }
+    /// <summary>Gets the descriptive provider name.</summary>
+    public string Provider { get; }
+    /// <summary>Gets the descriptive snapshot key; it does not authenticate a schema component.</summary>
+    public string SnapshotKey { get; }
+    /// <summary>Gets the original source-content fingerprint.</summary>
+    public string ContentFingerprint { get; }
+}
+/// <summary>Requests a directional, captured compatibility view; validated at authority ingress.</summary>
+/// <param name="Source">Original assessment session.</param>
+/// <param name="Target">Captured consuming session.</param>
+/// <param name="ExecutionProfile">Exact consuming query environment.</param>
+public sealed record SchemaCompatibilityRequest(ISchemaSession Source,ISchemaSession Target,QuerySemanticProfile ExecutionProfile);
+/// <summary>Attests compatibility of two owned component universes without revalidating instance data.</summary>
+public interface ISchemaCompatibilityAuthority
+{
+    /// <summary>Establishes an immutable endpoint-bound view or an explicit non-success outcome.</summary>
+    /// <param name="request">Source, target and execution environment.</param>
+    /// <param name="cancellationToken">Cancellation for the operation.</param>
+    /// <returns>A proven view; fingerprint/QName equality is insufficient.</returns>
+    SchemaOutcome<ISchemaCompatibilityView> Establish(SchemaCompatibilityRequest request,CancellationToken cancellationToken);
+}
+/// <summary>Checks original source annotations against compatible target components while preserving provenance.</summary>
+public interface ISchemaCompatibilityView
+{
+    /// <summary>Gets the exact original session; source annotations retain it.</summary>
+    ISchemaSession Source { get; }
+    /// <summary>Gets the exact captured consuming session.</summary>
+    ISchemaSession Target { get; }
+    /// <summary>Gets the immutable consuming query profile.</summary>
+    QuerySemanticProfile ExecutionProfile { get; }
+    /// <summary>Checks source actual-type derivation against a target expected type.</summary>
+    /// <param name="actual">Identity issued by Source.</param>
+    /// <param name="expected">Identity issued by Target.</param>
+    /// <param name="cancellationToken">Cancellation for the operation.</param>
+    /// <returns>The derivation result over the qualified compatible union.</returns>
+    SchemaOutcome<bool> IsDerivedFrom(SchemaTypeIdentity actual,SchemaTypeIdentity expected,CancellationToken cancellationToken);
+    /// <summary>Checks an original PSVI annotation against a target schema-element declaration.</summary>
+    /// <param name="actual">Source-owned original annotation.</param>
+    /// <param name="expected">Target-owned head declaration.</param>
+    /// <param name="cancellationToken">Cancellation for the operation.</param>
+    /// <returns>The actual-membership, type and nillability result without reassessment.</returns>
+    SchemaOutcome<bool> MatchesElement(SchemaNodeAnnotation actual,SchemaDeclarationIdentity expected,CancellationToken cancellationToken);
+}

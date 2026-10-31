@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-29",
+  "scope": "Bounded repeated decimal pre-implementation scope checkpoint",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 758,
+      "sha256": "4eecaf8d98d74eccebf2a4716592662fa4db230789a3e6a1437cb7ebe1b144a4"
+    },
+    {
+      "path": "evidence/baseline-source-identities.json",
+      "bytes": 1441,
+      "sha256": "4fccfdad2df2c6cab3279a9646cc869d3e8b1eb2abf26793f4df4fb5021b33f8"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 3960,
+      "sha256": "e221005e09793837bb8af28931ee644a314d2dec7a40d229eeffe73d6b05461d"
+    },
+    {
+      "path": "evidence/observations.json",
+      "bytes": 2762,
+      "sha256": "61c19429b8f1b10a08fb632efa3bd6480ce8880820baec938a5490896b38c870"
+    },
+    {
+      "path": "evidence/Probe.csproj.txt",
+      "bytes": 341,
+      "sha256": "20f0a111efb0588aa1a565528e5ee4142749bddb0f7970a7eb19cd144e492348"
+    },
+    {
+      "path": "evidence/probe.txt",
+      "bytes": 172,
+      "sha256": "447b885697a8ab13fdd69744a78f9c30001d83cad333abe6844976c69d1af2fe"
+    },
+    {
+      "path": "evidence/Program.cs.txt",
+      "bytes": 4631,
+      "sha256": "2d4d81203f26ad0ec2fc07f5a0733f14e876ce16e4ea6bbd0cfa97185cc9c35e"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/schema-remote-verification.json",
+      "bytes": 295,
+      "sha256": "3db1d28c46fe24eaca5d12bab049c460d6b3bd6752b2ca355af766e8a98f929b"
+    },
+    {
+      "path": "evidence/source-audit.json",
+      "bytes": 1886,
+      "sha256": "5d3dac1376711b3ee52b295ef8e33838be5c47c53d3f1419d1153df6ca4c321b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3123,
+      "sha256": "3a870584f0951d0086c9324fa0aadce91d8fcf86f2f1844cf7578cc3adfac0f8"
+    },
+    {
+      "path": "REPEATED-DECIMAL-ADOPTION-2026-10-29.md",
+      "bytes": 4313,
+      "sha256": "50b59478d9d5393336ceda3169c5d3fda24481bd8276cc7395f6c57cde065006"
+    },
+    {
+      "path": "REPEATED-DECIMAL-PLAN.md",
+      "bytes": 7475,
+      "sha256": "f34ebd0fb4e7b1bf5810dbe3bb7051e0e7820ab7bcd4a1c47688262b6cd9bd59"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 1212,
+      "sha256": "157e73ba879100b755da65a7a68d32aae9e5dde87efd7b1c35e533035a049bbc"
+    },
+    {
+      "path": "SOURCES.json",
+      "bytes": 882,
+      "sha256": "98dbeff312ec89a104fd6f551b990cbd6df819c37b2f5f531ca8eda494892946"
+    }
+  ]
+}

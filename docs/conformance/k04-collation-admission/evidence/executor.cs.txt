@@ -1,0 +1,58 @@
+// Generated read-only diagnostic over the released harness; never changes filters or gate membership.
+using System.Reflection;
+using Bosak.XQuery.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Standard.Functions;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Xml.Linq;
+var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+string root="D:/Development/Bosak/tests/";
+string Dir(string suite)=>root+(suite=="qt3"?"Bosak.XPath.Conformance":"Bosak.XPath.Conformance40")+"/bin/Release/net10.0/";
+AssemblyLoadContext.Default.Resolving+=(ctx,name)=>new[]{Dir("qt3"),Dir("qt4")}.Select(d=>Path.Combine(d,name.Name+".dll")).Where(File.Exists).Select(Assembly.LoadFrom).FirstOrDefault();
+Assembly Load(string suite)=>Assembly.LoadFrom(Dir(suite)+(suite=="qt3"?"Bosak.XPath.Conformance":"Bosak.XPath.Conformance40")+".dll");
+Type T(Assembly a,string name)=>a.GetType("Bosak.XPath.Conformance."+name,true)!;
+object Deps(Assembly a,IEnumerable<Dep> deps){var type=T(a,"Dependency");var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(type))!;foreach(var d in deps)list.GetType().GetMethod("Add")!.Invoke(list,new[]{Activator.CreateInstance(type,new object[]{d.Type,d.Value,d.Satisfied})});return list;}
+object? Invoke(Type type,string name,object? instance,params object?[] args)=>type.GetMethod(name,flags)!.Invoke(instance,args);
+if(args[0]=="filters"){
+ using var output=new StreamWriter(args[2]);
+ foreach(var row in JsonSerializer.Deserialize<Row[]>(File.ReadAllText(args[1]))!){
+  var a=Load(row.Suite);var ft=T(a,row.Suite=="qt3"?"DependencyFilter":"DependencyFilter40");var filter=Activator.CreateInstance(ft,true)!;
+  bool Supported(IEnumerable<Dep> deps,bool xq=false)=>(bool)(row.Suite=="qt3"?Invoke(ft,"IsSupported",filter,Deps(a,deps),xq):Invoke(ft,"IsSupported",filter,Deps(a,deps)))!;
+  var rejected=row.Dependencies.Where(d=>!Supported(new[]{d})).ToArray();
+  bool canRoute=row.Suite=="qt3"&&(bool)Invoke(T(a,"TestExecutor"),"CanHandleAsXQuery",null,row.Expression)!;
+  output.WriteLine(JsonSerializer.Serialize(new{row.Suite,row.Name,xpathSupported=Supported(row.Dependencies),xqueryDependenciesSupported=row.Suite=="qt3"&&Supported(row.Dependencies,true),canRouteXquery=canRoute,rejectedDependencies=rejected}));
+ }
+}else{
+ var row=JsonSerializer.Deserialize<ProbeRow>(File.ReadAllText(args[1]))!;var a=Load(row.Suite);var suite=Path.GetFullPath(row.SuiteRoot);var path=Path.GetFullPath(row.SetFile);var doc=XDocument.Load(path);var ns=doc.Root!.Name.Namespace;
+ if(row.Suite=="qt4"){
+  T(a,"TestCase").GetProperty("DecodeEntitiesInTestExpressions",flags)!.SetValue(null,true);
+  var property=T(a,"ResultComparer").GetProperty("AssertCompatibility",flags);if(property!=null)property.SetValue(null,Enum.Parse(property.PropertyType,"XPath40"));
+ }
+ var element=doc.Descendants(ns+"test-case").Single(x=>(string?)x.Attribute("name")==row.Name);
+ var inherited=doc.Root.Elements(ns+"dependency").Select(x=>new Dep((string?)x.Attribute("type")??"",(string?)x.Attribute("value")??"",x.Attribute("satisfied")==null||(string?)x.Attribute("satisfied")=="true"));
+ var test=Invoke(T(a,"TestCase"),"FromElement",null,element,ns,Deps(a,inherited),Path.GetDirectoryName(path));
+ object? env=null;var reference=element.Element(ns+"environment");var name=(string?)reference?.Attribute("ref");XElement? ee=null;
+ if(name!=null){ee=doc.Descendants(ns+"environment").FirstOrDefault(x=>(string?)x.Attribute("name")==name);if(ee==null){ee=XDocument.Load(Path.Combine(suite,"catalog.xml")).Descendants(ns+"environment").FirstOrDefault(x=>(string?)x.Attribute("name")==name);if(ee!=null)env=Invoke(T(a,"TestEnvironment"),"FromElement",null,ee,suite,"");}}
+ else if(reference!=null)ee=reference;
+ if(env==null&&ee!=null)env=Invoke(T(a,"TestEnvironment"),"FromElement",null,ee,suite,Path.GetDirectoryName(path));
+ env??=Activator.CreateInstance(T(a,"TestEnvironment"),true);
+ if(string.IsNullOrEmpty((string?)T(a,"TestEnvironment").GetProperty("BaseUri")!.GetValue(env)))T(a,"TestEnvironment").GetProperty("BaseUri")!.SetValue(env,new Uri(path).AbsoluteUri);
+ if(args[0]=="public-xquery"){
+  var context=new XQueryContext();context.EvaluationContext.IsSchemaAware=true;FunctionLibrary.Populate(context.EvaluationContext);
+  foreach(var field in new[]{"Schemas","Sources","Parameters","CollectionQueries"}){
+   var value=T(a,"TestEnvironment").GetProperty(field,flags)!.GetValue(env)!;
+   if((int)value.GetType().GetProperty("Count")!.GetValue(value)! != 0)throw new InvalidOperationException("This bounded public diagnostic excludes resource-bearing environments: "+field);
+  }
+  Invoke(T(a,"TestEnvironment"),"ApplyTo",env,context.EvaluationContext,false);
+  var compiler=new XQueryCompiler();foreach(var n in (System.Collections.IEnumerable)T(a,"TestEnvironment").GetProperty("Namespaces",flags)!.GetValue(env)!){var t=n.GetType();compiler.WithNamespace((string)t.GetProperty("Prefix")!.GetValue(n)!,(string)t.GetProperty("Uri")!.GetValue(n)!);}
+  XdmValue result=default;Exception? error=null;try{result=compiler.Compile(element.Element(ns+"test")!.Value).Evaluate(context);}catch(Exception e){error=e;}
+  var outcome=Invoke(T(a,"ResultComparer"),"Compare",null,element.Element(ns+"result"),result,error,Path.GetDirectoryName(path),null)!;
+  Console.WriteLine(JsonSerializer.Serialize(new{row.Suite,row.Name,mode="public-xquery",kind=outcome.GetType().GetProperty("Kind")!.GetValue(outcome)!.ToString(),message=outcome.GetType().GetProperty("Message")!.GetValue(outcome),expression=element.Element(ns+"test")!.Value,assertion=element.Element(ns+"result")!.ToString(),exceptionType=error?.GetType().Name,error=error?.Message}));return;
+ }
+ try{var et=T(a,row.Suite=="qt3"?"TestExecutor":"TestExecutor40");var result=Invoke(et,"Execute",Activator.CreateInstance(et,true),test,env)!;Console.WriteLine(JsonSerializer.Serialize(new{row.Suite,row.Name,kind=result.GetType().GetProperty("Kind")!.GetValue(result)!.ToString(),message=result.GetType().GetProperty("Message")!.GetValue(result)}));}
+ catch(Exception error){while(error is TargetInvocationException&&error.InnerException!=null)error=error.InnerException;Console.WriteLine(JsonSerializer.Serialize(new{row.Suite,row.Name,kind="HarnessException",exceptionType=error.GetType().FullName,message=error.Message}));}
+}
+record Dep(string Type,string Value,bool Satisfied);
+record Row(string Suite,string Name,string Expression,Dep[] Dependencies);
+record ProbeRow(string Suite,string SuiteRoot,string SetFile,string Name);

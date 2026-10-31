@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C12",
+  "status": "Exact baseline proposal ready;owner approval pending",
+  "sourceBase": "7d2e15b3ac5eec39a2de29eabdfa9bc3ef2be1b0",
+  "decisionId": "K04-sequence-adoption-v1",
+  "summary": {
+    "originalAssertionsPassed": 2,
+    "currentNormalOriginalSkipped": 2,
+    "expressionControlsPassed": 16,
+    "mechanismControls": 2,
+    "filterControls": 288,
+    "filterProfileOutcomesPerMode": 424,
+    "changedFilterOutcomes": 8,
+    "smallWatchdogProcesses": 25,
+    "completeRehearsals": 2,
+    "totalWatchdogProcesses": 27,
+    "timeouts": 0,
+    "currentQt3": [
+      31161,
+      0,
+      660
+    ],
+    "proposedQt3": [
+      31162,
+      0,
+      659
+    ],
+    "currentQt4": [
+      8586,
+      0,
+      1893
+    ],
+    "rehearsalQt4": [
+      8587,
+      0,
+      1892
+    ],
+    "removedSkipsEach": [
+      "format-integer-042"
+    ],
+    "retainedQt3NamesAndReasons": 659,
+    "retainedQt4NamesAndReasons": 1892,
+    "normalSourceChanged": false,
+    "ownerApproved": false,
+    "inheritedSolutionPassed": 22198,
+    "candidateVersion": "1.28.0",
+    "publishedVersion": "1.26.3"
+  },
+  "changedPredicates": [
+    {
+      "id": "qt3-sequence-\ufbf4-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-sequence-\ufbf4-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-sequence-\ufbf4-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-sequence-\ufbf4-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-original042",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-sequence-\ufbf4-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-sequence-\ufbf4-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-original042",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    }
+  ],
+  "limits": [
+    "Recognizes only the reviewed unsupported FBF4 sequence;other names/kinds retain existing policy",
+    "No engine semantics,fixture,assertion,version,schema or gate-membership change",
+    "Normal source and AGENTS remain unchanged pending explicit exact-baseline approval",
+    "Inherited unit evidence is source-identical;fresh complete normal gates required after adoption",
+    "REQ-126 remains Complete;Bosak.Schema owns staged XSD1.1",
+    "No release or upstream submission"
+  ]
+}

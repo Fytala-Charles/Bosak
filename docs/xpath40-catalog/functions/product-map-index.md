@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified reference contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Blocked strict filter-predicate contract**. map:filter currently accepts nonboolean truthy predicate results; do not use them. Map enumeration is not portable business order. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Product indexing with maps — Frozen 4.0.** Shipped in [Bosak PR #84](https://github.com/Fytala-Charles/Bosak/pull/84) at immutable revision [`f7f55b4e`](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19).
@@ -76,6 +78,8 @@ Version 1.1.2 is published with the corrected contracts. See the
 `use-any` leaves the choice implementation-defined; Bosak currently retains the first value. It is unsuitable when the business requires a specific correction to win.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Duplicate combine/use-first/use-last/reject and custom combining policies; Single-entry-map sequence and concatenated item result shapes; Entry-position callbacks, empty values, nesting and node identity. **Boundaries:** map:filter currently accepts nonboolean truthy predicate results; do not use them. Map enumeration is not portable business order. Follow-up groups: F01, F07, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. The original reference delivery changed no engine code. The later result-shape correction targets source 1.1.2; see the linked correction dossier for its regressions and gates.
 

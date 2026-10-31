@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/closure-triage-render/README.md.html",
+      "sha256": "e7aea21b4231a3f7ba427a8808eaf0505eeeead378d156a5217cd7938f6a844f"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/closure-triage-render/docs_ARCHITECTURE.md.html",
+      "sha256": "253876ff74277a72a8f6a3f7e88d292dbb1b54c5ea7ceebb2e4a31e5c9e9f587"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/closure-triage-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "0ac2e0d60e1ce19213f7c36d9548b56d88ef87d2b8754836f7b1916d0a872790"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/closure-triage-render/docs_INTEGRATION.md.html",
+      "sha256": "a04ceb16377dbbb24d61fe34bcc0d01612c54905d4bc4b68a4a53ceaa3bcbee0"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/closure-triage-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "62adf396c65c7cb734a5d210ff12b3804b1751cd068da070e642435b25039bc1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/closure-triage-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "8ab6394a527e6679ed0014d8a63d9957869ef73553d661a31b05c11b3bd0aa6e"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/closure-triage-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "2f54e172fbae8ffa2348db7b5ac1c4835310ef96f672db031f298222ef101475"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/closure-triage-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "2aae805dca821513823aef60f9ed70070df9931b62d48a75c26ad50e156c72fc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/closure-triage-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "e054665465dbf88285c111a3fc7ec6c9c855c4f9960c162b42ab3e1c12a5c466"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/closure-triage-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "464b00137bce90931dad964c83f6f3a271d1a1b431cd292b8e29f64eda1f5d02"
+    }
+  ]
+}

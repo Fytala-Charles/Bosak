@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited mapping; containing-focus blocker**. C04-G02: containing dot/position/size semantics remain unmet; unary examples cannot certify this boundary. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Mapping arrow** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -34,6 +36,8 @@ A batch of supplier product codes must be normalized individually. Apply the tar
 
 Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. The accepted spelling is =!>. Map each item, not the whole input sequence; =>> is rejected.
 
+Under the pinned semantics, additional arguments retain the containing focus. Released Bosak instead evaluates focus-sensitive extra arguments under mapped-item focus (C04 G02). Use an explicit `for $u in $seq return f($u, ...)` when those arguments depend on dot, position or size; the simple unary examples do not certify that boundary.
+
 ## 7. Applicability
 
 Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. The accepted spelling is =!>. Map each item, not the whole input sequence; =>> is rejected.
@@ -59,6 +63,9 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: Apply the target call to each item and return the mapped sequence. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. The accepted spelling is =!>. Map each item, not the whole input sequence; =>> is rejected.
 
 ## 12. Implementation
+
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S4-focus. Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus. Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

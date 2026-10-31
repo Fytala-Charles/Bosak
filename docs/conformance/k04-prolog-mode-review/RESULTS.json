@@ -1,0 +1,34 @@
+{
+  "slice": "K04-C30",
+  "status": "read-only review complete; admission unqualified",
+  "sourceBase": "fa199412",
+  "catalogCases": 31821,
+  "affectedCases": 136,
+  "constructionOnly": 75,
+  "copyOnly": 49,
+  "both": 12,
+  "normalQt3": [
+    31208,
+    0,
+    613
+  ],
+  "prototypeQt3": [
+    31214,
+    126,
+    481
+  ],
+  "prototypeExit": 2,
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "publicControls": {
+    "Passed": 6,
+    "Failed": 14
+  },
+  "diagnosticProcesses": 434,
+  "next": "C31 copy-namespaces semantic implementation; preserve normal guards",
+  "baselineChanged": false,
+  "release": false
+}

@@ -1,0 +1,4 @@
+# Keep generated review artifacts and audit tools deterministic.
+evidence/** -text whitespace=cr-at-eol
+tools/** -text whitespace=cr-at-eol
+*.json -text whitespace=cr-at-eol

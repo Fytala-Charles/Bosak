@@ -1,0 +1,38 @@
+[
+  {
+    "suite": "qt3",
+    "phase": "after",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-feature-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\qt3-after.jsonl",
+      "synthetic"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2622356999781914,
+    "output": "qt3-after.jsonl",
+    "log": "qt3-after.log"
+  },
+  {
+    "suite": "qt4",
+    "phase": "after",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-feature-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\qt4-after.jsonl",
+      "synthetic"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2627127999730874,
+    "output": "qt4-after.jsonl",
+    "log": "qt4-after.log"
+  }
+]

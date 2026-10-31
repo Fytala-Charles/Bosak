@@ -1,0 +1,200 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "C24-baseline-arithmetic",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "3 + 4",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "7",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-baseline-variable",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare variable $x := 3; $x+4",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "7",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-baseline-external-focus",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": ".",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "27",
+    "InitialContextExpression": "27"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-internal",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := 3; .+4",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "7",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-typed-internal",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item as xs:integer := 3; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "3",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-external-default",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item external := 5; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "5",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-external-supplied",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item as xs:integer external; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "27",
+    "InitialContextExpression": "27"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-external-overrides-default",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item external := 5; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "27",
+    "InitialContextExpression": "27"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-wrong-internal-type",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item as xs:integer := 'London'; .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XPTY0004",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-wrong-external-type",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item as xs:integer external; .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XPTY0004",
+    "InitialContextExpression": "'London'"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-empty-internal",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := (); .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XPTY0004",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-plural-internal",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := (1,2); .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XPTY0004",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-duplicate",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := 1; declare context item := 2; .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XQST0099",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-singleton-focus",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := 3; concat(position(), \":\",last())",
+    "Dependencies": [],
+    "ExpectedKind": "assert-string-value",
+    "Expected": "1:1",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-forward-variable",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare context item := $x; declare variable $x := 7; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "7",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-variable-uses-focus",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare variable $x := . + 5; declare context item := 17; $x",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "22",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-cycle",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare variable $x := .; declare context item := $x; .",
+    "Dependencies": [],
+    "ExpectedKind": "error",
+    "Expected": "XQDY0054",
+    "InitialContextExpression": null
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C24-comments",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml",
+    "Expression": "declare (:c:) context (:c:) item := 3; .",
+    "Dependencies": [],
+    "ExpectedKind": "assert-eq",
+    "Expected": "3",
+    "InitialContextExpression": null
+  }
+]

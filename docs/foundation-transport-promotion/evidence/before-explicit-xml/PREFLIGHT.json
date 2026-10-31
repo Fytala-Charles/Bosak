@@ -1,0 +1,7 @@
+{
+  "sourceArchiveSha256": "5282170b80e16e318b7ceb1f1522a080ad543ff127cdda744ef504bf8ae269d3",
+  "patchSha256": "c7b9517e08b504435dbfa8472fd95f93a14fd6ffa81f5e9c90a8a23cc3a9156d",
+  "appliedOnlyIn": "D:\\Development\\Bosak\\.guard-tmp\\transport-promotion-preflight",
+  "livePatchApplied": false,
+  "sourceVersion": "1.36.0"
+}

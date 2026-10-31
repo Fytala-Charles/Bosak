@@ -1,0 +1,86 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "C27-original-056-importer-u-bound",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Diagnostic importer binding only; unchanged original expression/assertion and original resources"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-original-057-importer-u-bound",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Diagnostic importer binding only; unchanged original expression/assertion and original resources"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-builtin-prefix-baseline",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-library-alias-only",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-matching-importer-alias",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-conflicting-importer-alias",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-library-alias-wrong-value",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-colliding-lexical-types",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-distinct-lexical-types",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-colliding-union-type-contexts",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Both modules constrain the same item: decimal/string accepts integer4, date/time rejects it; distinguish declaration contexts"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-distinct-union-type-contexts",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Both modules constrain the same item: decimal/string accepts integer4, date/time rejects it; distinguish declaration contexts"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-union-left-positive",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Positive witness that integer4 satisfies the first union constraint independently"
+  }
+]

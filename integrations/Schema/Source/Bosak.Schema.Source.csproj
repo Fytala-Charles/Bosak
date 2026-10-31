@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>Bosak.Schema</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <Import Project="Schema.Source.Files.props" />
+  <ItemGroup>
+    <Compile Include="@(SchemaSourceFile)" />
+    <ProjectReference Include="../../../src/Bosak.XPath.Api/Bosak.XPath.Api.csproj" />
+    <ProjectReference Include="../../../src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj" />
+    <ProjectReference Include="../../../src/Bosak.Xslt/Bosak.Xslt.csproj" />
+    <ProjectReference Include="../../../src/Bosak.XQuery/Bosak.XQuery.csproj" />
+  </ItemGroup>
+  <Target Name="RequirePublicSchema" BeforeTargets="PrepareForBuild">
+    <Error Condition="!Exists('$(SchemaSourceRoot)/src/Bosak.Schema/SchemaServices.cs')"
+           Text="Clone the public Fytala-Charles/Bosak.Schema repository and set SchemaSourceRoot. See integrations/Schema/README.md." />
+    <GetFileHash Files="@(SchemaSourceFile);@(SchemaTestFile);@(SchemaTestDataFile);@(SchemaLicenseFile)" Algorithm="SHA256">
+      <Output TaskParameter="Items" ItemName="_HashedSchemaFile" />
+    </GetFileHash>
+    <Error Condition="'%(_HashedSchemaFile.FileHash)' != '%(_HashedSchemaFile.ExpectedSha256)' and '%(_HashedSchemaFile.FileHash)' != '%(_HashedSchemaFile.AlternateSha256)'"
+           Text="Public Schema source/license pin mismatch: %(_HashedSchemaFile.Identity). Use the revision in docs/schema-integration/SOURCE-PIN.json." />
+  </Target>
+</Project>

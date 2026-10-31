@@ -1,0 +1,33 @@
+{
+  "files": {
+    "approval.json": "1e95bcaac78e6488cab9faa05ff1ef0032c1f2e341438d1b2397ce96a2660f19",
+    "BASELINE-ADOPTION.md": "120e9f04082c6aa2dbd1fc5e64f013f782e8842ac76f457a1d31630d4b0d0e88",
+    "build.log": "01d11a4b367091538e11a7902d57675e30365252ae5149059b13fe561332ded9",
+    "historical-identities.json": "c68193dac83e2d2e8976e9a0df3b4c1a57f12bce5108dcfffe1cfaf00c6b66ce",
+    "qt3-skips.txt": "e643b6fdb9c2b482adcdf6d8d9393ca7e7dd5abe72bd71304c2e0c9e7a04fb6e",
+    "qt3.log": "d5179a55b1a699d27860678d0393ebede71adb560d4fa18ac51ffbb31720ee3b",
+    "qt4.log": "cb81f221a58119607b92fcea38c7fd4b26595f7df9dfca6bc0cacc8fef2dad43",
+    "render-program.cjs.txt": "1164ca6e68704b52b8f6dca960e9a5ea26ebf3d2c865417de301dc2ab7d7a62d",
+    "render-receipts.json": "1ffd3a1113915512378299d170f067861b94c8b9c044cd4490ab80a888f19b4b",
+    "skip-verification.json": "3cde8c288bbff34bcda08a4760785dafcbae3ad07c7aef0cc262ad62cc708bc8",
+    "tests-sandbox.log": "4d59d707f8eb064b730478a019e2f57b606e3fdc522ac33044f7ba1ed181546b",
+    "tests-unrestricted.log": "43ef6c74eec690c7753a0a813d9c8b8f88d160a2b1caea818161a38e1816586c",
+    "validate-adoption.py": "8feb1589d8a626b1dd988a720d915a4abd309ca655ab1d7ba49670284f51d516",
+    "validation.json": "ce6ca9517b967aefb2d36bd78ba8febc7ef9ee4d9c3bdfa8bc52a6e358fcc112"
+  },
+  "documents": {
+    ".gitattributes": "3e2cd6154cc21451513bce74ce620e5d208e1ee7",
+    "AGENTS.md": "acc9b39f1b76502c4c1ffc1936c9fc839fe12a0d",
+    "README.md": "ef8d462df86cffea4b0b01649ba223b89a7a9940",
+    "docs/ARCHITECTURE.md": "2a3f6b562bf19c124d1cbb66064cce934dc8eccd",
+    "docs/FEATURE_REQUESTS.md": "94093951aeb4836dd0d2469771943c9f827218da",
+    "docs/INTEGRATION.md": "7a6dd99b40af56661280de76dc92ed263a851d32",
+    "docs/AGENT_HANDOVER.md": "c3f3f25ff226cd854b948d25bb45ca707fb62348",
+    "docs/DOCUMENTATION_RENDERER_TEST.md": "0ac531a6c17caf8da4040ebaea39c6501499134a",
+    "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md": "8cbee9b5db42b17c54cb97fc25043e9766bdb1d5",
+    "docs/conformance/k04-dependency-audit/README.md": "4d302ce4bc31c2f30998f2b3062b0a9011832d2c",
+    "docs/conformance/k04-quote-routing/README.md": "5b8512472fce0b398a6b90fb5336cf7f09ddb761",
+    "docs/conformance/k04-quote-routing/BASELINE-UPDATE-PROPOSAL.md": "fda302d3db0fc553b5fb7c90be5e0504f23176ec",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "ad1d9160b86fff29dc06715c061f64bc89c1cd94"
+  }
+}

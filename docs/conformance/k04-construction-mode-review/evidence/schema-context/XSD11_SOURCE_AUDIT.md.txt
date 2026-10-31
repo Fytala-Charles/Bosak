@@ -1,0 +1,133 @@
+# XSD 1.1 Source Audit (S0)
+
+> **REQ-009 · Phase S0 deliverable** — executed 2026-10-27 by Kimi; **§2 and §3.5 updated 2026-10-27 with the executed repoint to core 1.26.3**.  
+> Companion document: [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) · Request: [`FEATURE_REQUESTS.md`](./FEATURE_REQUESTS.md) REQ-009 · Design handover: [`Bosak_Schema_XSD11_Agent_Handover_v0.1.md`](./Bosak_Schema_XSD11_Agent_Handover_v0.1.md)
+
+---
+
+## 1. Baseline Run (2026-10-27)
+
+| Item | Value |
+|------|-------|
+| Repository commit | `6d3c328cb67e32d9fdbb3d27aaf8ef47cc996991` (2026-10-24, "docs(handover): record REQ-008 push") — working tree carried only the REQ-009 doc-registration changes on top |
+| .NET SDK | `10.0.301` (per `global.json` pin) |
+| Build | `dotnet build Bosak.Schema.slnx -c Release` → **0 warnings, 0 errors** |
+| `Bosak.Schema.Tests` | **60 passed / 0 failed / 0 skipped** |
+| `Bosak.Licensing.Pipeline.Tests` | **154 passed / 0 failed / 0 skipped** (requires Node.js/Azurite 3.37.0 per REQ-008) |
+| **Total** | **214 / 214 green** — matches the REQ-008 implementation note; no blockers |
+| CI gate | `tools/check-docs.ps1` run separately; see §7 of the REQ-009 decision log |
+
+Baseline command transcript: `dotnet build Bosak.Schema.slnx -c Release && dotnet test Bosak.Schema.slnx -c Release` (full log retained in the session task record).
+
+---
+
+## 2. Package and Version Inventory
+
+Referenced by `src/Bosak.Schema/Bosak.Schema.csproj` (and `tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj` adding `Bosak.XPath.Providers`):
+
+| Package | Referenced | Notes |
+|---------|-----------|-------|
+| `Bosak.XPath.Api` | **1.26.3** | `IXdmNode`, XDM value model, `Xsd.*` validation service types |
+| `Bosak.Xslt` | **1.26.3** | `XsltCompiler` / `XsltExecutable` / `IXsltUriResolver` |
+| `Bosak.XQuery` | **1.26.3** | `SchemaImport` (XQuery `import schema` support) |
+| `Bosak.XPath.Providers` | **1.26.3** | (tests only) `XDocumentNode`, `XdmSchemaAnnotator` |
+
+Transitive packages resolved during the audit dump: `Bosak.XPath.Core`, `Bosak.XPath.Compiler`, `Bosak.XPath.Parser`, `Bosak.XPath.Runtime`, `Bosak.XPath.Standard` — all pinned at 1.26.3.
+
+**Version findings (updated 2026-10-27 — repoint executed):**
+
+- nuget.org flat-container indexes verified 2026-10-27: all four packages share an identical version line (0.9.x → 0.12.3-beta → 0.13.0 → 1.0.0 → … → **1.26.3**). ROADMAP/AGENT_HANDOVER's "latest published = v0.12.3-beta (2026-10-03)" was stale: the core has shipped a full 1.x line since.
+- **Repoint executed 2026-10-27:** `src/Bosak.Schema` + `tests/Bosak.Schema.Tests` moved 0.12.1-beta → **1.26.3** (all four package IDs). Verification: Release build **0 warnings / 0 errors** (zero API breaks for the add-on's usage across 14 core minor versions) and the full suite re-run green — **214/214** (60 Schema incl. every seam-behavior test: XTSE1650 inert boundary, XPDY0050, XTTE1540/XTTE1510, FOTY0012; 154 Pipeline).
+- §3.2–3.4 reflection dumps were taken against the 0.12.1-beta assemblies; the seam surface was **re-verified present and unchanged in kind on 1.26.3** (same types/members; see §3.5 for additions).
+
+---
+
+## 3. Trace: Schema Compilation and Validation Today
+
+### 3.1 Entry point (this repo)
+
+`src/Bosak.Schema/SchemaAwareXslt.cs` is the **only** schema-aware surface the add-on exposes:
+
+- `CreateCompiler()` → `new XsltCompiler { SchemaAware = true }`
+- `CreateCompiler(string schemaDirectory)` → additionally sets a file-system `SchemaResolver` delegate (`Func<string baseUri, IReadOnlyList<string> hints, Stream?>`); unresolved hints fall back to core default URI resolution.
+- Both are gated by `EnsureActivated()` — check-at-gate re-evaluation of `License.Current.IsUsable` (REQ-002/004). An unactivated or expired-beyond-grace package throws `InvalidOperationException`, bit-identical to the free core.
+
+No other file in `src/Bosak.Schema/` touches schema machinery (`License*.cs`, `LicenseTier.cs`, `ActivatedLicense.cs`, `LicenseValidationException.cs` are licensing only).
+
+### 3.2 Compile-time seam (Bosak.Xslt 0.12.1-beta)
+
+`Bosak.Xslt.Api.XsltCompiler` public surface (reflection-verified against the published assembly):
+
+| Member | Signature (essentials) |
+|--------|------------------------|
+| `SchemaAware` | `bool` — opt-in gate; without it `xsl:import-schema` raises XTSE1650 |
+| `SchemaResolver` | `Func<string, IReadOnlyList<string>, Stream>` — serves `schema-location` hints |
+| `SchemaSet` | `System.Xml.Schema.XmlSchemaSet` — host-supplied merged schema set |
+| `Compile` | `(string, string baseUri)` / `(XDocument, string)` / `(IXdmNode, string)` → `XsltExecutable` |
+| also | `UriResolver`, `MessageListener`, `StaticParameters`, `TreatRecoverableAmbiguousMatchAsError`, `PackageVersionResolutionStrategy` |
+
+### 3.3 Runtime seam (Bosak.XPath.Runtime 0.12.1-beta)
+
+`Bosak.XPath.Runtime.Vm.EvaluationContext`:
+
+| Member | Signature (essentials) |
+|--------|------------------------|
+| `SchemaSet` | `System.Xml.Schema.XmlSchemaSet` get/set — flows the merged schema set into XPath compilation |
+| `SchemaResolver` | same delegate shape as the compiler's |
+| `GetSchemaElement` / `GetSchemaAttribute` / `GetSchemaType` | `(string ns, string local)` → `System.Xml.Schema.XmlSchemaElement` / `XmlSchemaAttribute` / `XmlSchemaType` |
+| `RegisterFunction` / `UnregisterFunction` | `FunctionSignature`-based host function registration (relevant for assertion-function restrictions) |
+| `DefaultCollation` / `CollationComparer` / `LazyVariableResolver` | static-context plumbing |
+
+### 3.4 Validation / PSVI seam (Bosak.XPath.Providers + Bosak.XPath.Api 0.12.1-beta)
+
+`Bosak.XPath.Providers.Xml.XdmSchemaAnnotator` (the H3/H4 service):
+
+- `Validate(XElement, XmlSchemaSet, XdmValidationOptions, ValidationEventHandler, bool)` and `ValidateAttribute(...)`
+- `ValidateSubtree(XElement, XmlSchemaSet, ValidationEventHandler, bool)` → `XdmSubtreeValidationResult` (`IsValid`, `Errors`, `FailureMessage`, `HasDocumentLevelConstraintFailure`)
+- `Annotate(XObject, IXmlSchemaInfo)`, `StripSchemaAnnotations`, `PreserveSchemaAnnotations`, `PreserveConstructedElementAnnotations`
+- `XdmValidationMode` = `Strict | Lax | Strip | Preserve`; `XdmValidationOptions` = `Mode` + `TypeName` (`XmlQualifiedName`) + `DocumentLevel` + `ExtraNamespaceBindings`
+
+`Bosak.XPath.Api.Xsd.IXsdValidator` / `XsdValidator` (document-level validation):
+
+- `Validate(string sourceUri, Stream | IEnumerable<Stream> schemas, XsdValidatorOptions)` → `XsdValidationResult` (`IsValid`, `Errors`, `WarningsOnly`); `ValidateSafe` variants (no-throw)
+- `XsdValidatorOptions`: `TreatWarningsAsErrors`, `MaxErrorCount`, `BaseUri`
+
+XDM tree: `Bosak.XPath.Core.Xdm.IXdmNode`, `Bosak.XPath.Providers.Xml.XDocumentNode` (LINQ-to-XML bridge used by every schema test). XQuery side: `Bosak.XQuery.Compiler.SchemaImport` exists for `import schema`.
+
+### 3.5 Test usage pattern (tests/Bosak.Schema.Tests)
+
+`ImportSchemaSliceTests` and `ComplexTypeValidationTests` exercise: `License.Activate(TestKeys...)` → `SchemaAwareXslt.CreateCompiler(schemaDir)` → stylesheet with `xsl:import-schema` + `schema-location` hint → `Compile` → source as `XDocumentNode` → `TransformToString`. Validation-on-construction via `xsl:copy-of validation='strict'` and literal result elements with `@type`; error surfaces verified: XTSE1650 (inert), XPDY0050, XTTE1540, XTTE1510, FOTY0012. `InertBeforeActivationTests` pins the unactivated boundary (`InvalidOperationException`, plain-compiler XTSE1650).
+
+### 3.5 New in the 1.26.3 line (repoint findings, 2026-10-27)
+
+Reflection dump of the 1.26.3 assemblies: the §3.2–3.4 schema surface is present unchanged in kind, plus two additions relevant to REQ-009:
+
+- **`Bosak.XPath.Runtime.Resources.ControlledSchemaResolver : XmlResolver`** — constructed from a **`ControlledResourcePolicy`** (authority via `IControlledResourceAuthority`, supported `ControlledResourceRoute`s, `Receipts` audit trail, `RefusedCode`/`UnsupportedCode`, credential redaction). This is a policy-based resource-resolution framework in the core — **S1's "secure schema resolution" requirement (default deny, allowlists, bounded behavior) should build on this rather than invent a parallel mechanism**, pending an S1 design check of its defaults.
+- **`Bosak.Xslt.Validation.XsltValidation` family** (`XsltValidation`, `XsltValidationOptions/Result/Outcome/Coverage/CoverageGap/Diagnostic`) — an *authoring-time* stylesheet validation API over `AuthoringSnapshot`/`AuthoringSource`, with an explicit `UnsupportedCoverage`/`Refused` outcome model and declared coverage slots (expression/pattern/AVT/static-variable/structural). Not XSD document validation, but its **explicit "refused / unsupported coverage" diagnostic posture is the pattern REQ-009 should mirror** for unsupported XSD 1.1 constructs.
+
+---
+
+## 4. Critical Finding — the Seam Is `XmlSchemaSet`-Typed
+
+**Every schema-bearing API in the seam — on 0.12.1-beta *and* re-verified on 1.26.3 — `XsltCompiler.SchemaSet`, `EvaluationContext.SchemaSet`/`GetSchema*`, `XdmSchemaAnnotator.*`, `IXsdValidator` inputs — is typed against `System.Xml.Schema.XmlSchemaSet` and its component model.** .NET's `System.Xml.Schema` implements **XSD 1.0 only**; it cannot represent XSD 1.1 constructs (`xs:assert`, `xs:alternative`, `xs:assertion`, open content, `xs:override`, …), and its validator cannot evaluate them.
+
+Consequences for REQ-009:
+
+1. **The handover's premise is confirmed** — XSD 1.1 needs a new immutable compiled schema model *inside* `Bosak.Schema` (S1); there is no 1.1-capable component model to reuse from the platform.
+2. **The current seam cannot carry XSD 1.1 components.** `xs:assert` etc. compiled in the add-on cannot flow into the engine through `XmlSchemaSet`-typed members. The engine's *validation behavior* for 1.1 documents must therefore be driven either by (a) pre-validating/annotating via a new add-side pipeline and mapping results onto existing PSVI annotation mechanisms, or (b) new core seam abstractions — a **public Bosak API change**, which per REQ-009's acceptance criteria and the handover's non-negotiable boundaries requires a separate compatibility ADR and explicit approval *before* S1/S2 design is frozen.
+3. **Assertion XPath evaluation** is feasible through the existing public `RegisterFunction` / compiled-expression surface, but the W3C-constrained static context (no free variables except `$value` context semantics, restricted function library, typed-value access) needs the compatibility layer the handover warns about — no engine change required for evaluation itself, only for *where* assertions hook into validation.
+4. **PSVI lifetime:** `XdmSchemaAnnotator.Annotate(XObject, IXmlSchemaInfo)` shows the engine's annotation side table is `IXmlSchemaInfo`-based (XSD 1.0 shapes). A 1.1 annotated view needs an explicit strategy (immutable annotated view vs snapshot-scoped side table) as flagged in the handover.
+
+---
+
+## 5. Inventory vs Handover Checklist
+
+| Handover audit target | Status |
+|-----------------------|--------|
+| `dotnet build` / `dotnet test` baseline, SDK/commit/counts | ✅ §1 |
+| Trace from `SchemaAwareXslt` through published APIs | ✅ §3 |
+| `IXdmNode`, `EvaluationContext`, `XdmSchemaAnnotator`, `XsdValidator`, `XsltCompiler`, XPath compiler | ✅ §3.2–3.4 (`Bosak.XPath.Compiler` exists in the closure; XPath compilation is engine-internal, reachable publicly via `XsltCompiler.Compile` and XQuery compile entry points) |
+| Exact methods, packages, versions | ✅ §2–3 (reflection-verified against the published 0.12.1-beta assemblies) |
+| Feature matrix / missing work | ✅ [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) |
+
+**Known audit limits:** the reflection dumps in §3.2–3.4 were taken against the 0.12.1-beta assemblies (the seam was re-verified on 1.26.3 in §3.5); the core repository itself was consulted read-only 2026-10-27 for the harness skip logic and the harness was run per affected test set — **30 XSD 1.1 skips confirmed and enumerated in the gap matrix §4** (superseding the earlier "exact IDs pending" item). Core-repo internals beyond the harness skip logic (e.g., how newer 1.x engine versions changed validation internals) are out of scope for this audit.

@@ -1,0 +1,7 @@
+{
+  "kind": "Local development package license check only; no publication",
+  "package": ".guard-tmp/k04-normalization-package/Bosak.XPath.Standard.1.29.1.nupkg",
+  "packageSha256": "525b6228e10be44a895045285749cd63199b9a58b5185a04f46c50912baf1395",
+  "licenseEntry": "licenses/Unicode17-LICENSE.txt",
+  "licenseSha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+}

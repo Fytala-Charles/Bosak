@@ -48,6 +48,7 @@
 //                      | Charles Korthout | 1.11  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.12  | 23-10-2026     | Reject leading/trailing separators in fractional and exponent digit groups.              |
+//                      | Charles Korthout | 1.13  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -69,7 +70,8 @@ internal ref struct XPathLexer
     /// </summary>
     /// <param name="source">The XPath or XQuery source text to tokenize.</param>
     /// <param name="allowConstructors">When true, XQuery direct element/comment/PI and string
-    /// constructors are scanned as single <see cref="TokenKind.Constructor"/> tokens.</param>
+    /// constructors are scanned as single <see cref="TokenKind.Constructor"/> tokens,
+    /// and raw extension pragmas as <see cref="TokenKind.Pragma"/> tokens.</param>
     /// <param name="xpath40">When true, XPath 4.0 lexical extensions are enabled: hexadecimal
     /// (<c>0x...</c>) and binary (<c>0b...</c>) integer literals and underscore digit separators.</param>
     public XPathLexer(ReadOnlySpan<char> source, bool allowConstructors = false, bool xpath40 = false)
@@ -120,6 +122,13 @@ internal ref struct XPathLexer
 
         int start = _position;
         char c = _source[_position];
+
+        if (_allowConstructors && c == '(' && _position + 1 < _source.Length && _source[_position + 1] == '#')
+        {
+            int length = ScanPragmaLength(_source[start..]);
+            _position += length;
+            return new Token(TokenKind.Pragma, start, length);
+        }
 
         // ---- XQuery direct element constructors -----------------------
         // '<' followed by a name-start char begins a constructor; the whole span
@@ -221,6 +230,18 @@ internal ref struct XPathLexer
     // ------------------------------------------------------------------
     // Whitespace & Comments
     // ------------------------------------------------------------------
+
+    /// <summary>Scans a raw pragma span without interpreting strings, comments or braces.</summary>
+    /// <param name="source">Source positioned at a possible pragma opener.</param>
+    /// <returns>The complete pragma length, or zero when no opener is present.</returns>
+    /// <exception cref="XPathParseException">The pragma has no closing delimiter.</exception>
+    public static int ScanPragmaLength(ReadOnlySpan<char> source)
+    {
+        if (!source.StartsWith("(#")) return 0;
+        int end = source[2..].IndexOf("#)".AsSpan(), StringComparison.Ordinal);
+        if (end < 0) throw new XPathParseException("XPST0003: Unterminated pragma.", 0);
+        return end + 4;
+    }
 
     private void SkipWhitespaceAndComments()
     {
@@ -1024,6 +1045,12 @@ internal ref struct XPathLexer
         while (pos < _source.Length)
         {
             char c = _source[pos];
+            if (_allowConstructors && c == '(' && pos + 1 < _source.Length && _source[pos + 1] == '#')
+            {
+                pos += ScanPragmaLength(_source[pos..]);
+                continue;
+            }
+
             if (c == '{')
             {
                 depth++;
@@ -1156,6 +1183,12 @@ internal ref struct XPathLexer
         while (pos < _source.Length)
         {
             char c = _source[pos];
+            if (_allowConstructors && c == '(' && pos + 1 < _source.Length && _source[pos + 1] == '#')
+            {
+                pos += ScanPragmaLength(_source[pos..]);
+                continue;
+            }
+
             if (c == '\'' || c == '"')
             {
                 char q = c;

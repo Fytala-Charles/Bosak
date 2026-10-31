@@ -1,0 +1,78 @@
+[
+  {
+    "suite": "qt3",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-current.jsonl",
+      "synthetic",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12347719998797402,
+    "output": "qt3-current.jsonl",
+    "log": "qt3-current.log"
+  },
+  {
+    "suite": "qt3",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-prototype.jsonl",
+      "synthetic",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2837989999970887,
+    "output": "qt3-prototype.jsonl",
+    "log": "qt3-prototype.log"
+  },
+  {
+    "suite": "qt4",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-current.jsonl",
+      "synthetic",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.07234919999609701,
+    "output": "qt4-current.jsonl",
+    "log": "qt4-current.log"
+  },
+  {
+    "suite": "qt4",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-prototype.jsonl",
+      "synthetic",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23548370000207797,
+    "output": "qt4-prototype.jsonl",
+    "log": "qt4-prototype.log"
+  }
+]

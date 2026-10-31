@@ -1,0 +1,272 @@
+{
+  "scope": {
+    "recordFormatVersion": 1,
+    "date": "2026-10-30",
+    "recordedBeforeExecution": true,
+    "sourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+    "callerRevision": "becfc051219baf99743b1f5dd9ddb1707e7fb390",
+    "version": "1.34.2",
+    "packages": [
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XPath.Api"
+    ],
+    "scope": "Seven-package Core/API closure, not all product packages or a release",
+    "recipe": "Compile committed source with exact SourceRevisionId/RepositoryCommit. Pack using recorded targets that also include the exact committed NOTICE asset. No edits to production source or stock pack metadata.",
+    "consumer": "Exact committed legacy caller source compiled with only a PackageReference to Bosak.XPath.Api [1.34.2], using private feed/cache and no fallback folders.",
+    "unchangedBinary": "Retained 1.34.1 caller DLL/deps/runtimeconfig with restored package DLLs",
+    "checks": [
+      "Exact package nuspec repository commit, version, dependency closure, license/NOTICE and Standard Unicode license",
+      "Package archive/cache/output/loaded assembly hashes and c88 informational revision",
+      "All 20 observations equal legacy baseline in both modes",
+      "Compiled public metadata unchanged for selected seven assemblies"
+    ],
+    "limits": [
+      "No package signing, NuGet push, release/tag, consumer adoption or API freeze",
+      "No actual external consumer qualification",
+      "No source semantics, interface, enum, layout or version change",
+      "Prior full engine/gate qualification inherited by source identity; fresh package-caller checks are separate"
+    ]
+  },
+  "commands": [
+    {
+      "name": "archive",
+      "argv": [
+        "git",
+        "archive",
+        "--format=tar",
+        "--output=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source.tar",
+        "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "src",
+        "README.md",
+        "license.md",
+        "NOTICE",
+        "assets"
+      ]
+    },
+    {
+      "name": "source-restore",
+      "argv": [
+        "dotnet",
+        "restore",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Api\\Bosak.XPath.Api.csproj",
+        "--configfile",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\NuGet.Config",
+        "--packages",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\cache",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "source-build",
+      "argv": [
+        "dotnet",
+        "build",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Api\\Bosak.XPath.Api.csproj",
+        "-c",
+        "Release",
+        "--no-restore",
+        "--nologo",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Core",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Core\\Bosak.XPath.Core.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Parser",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Parser\\Bosak.XPath.Parser.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Compiler",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Compiler\\Bosak.XPath.Compiler.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Providers",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Providers\\Bosak.XPath.Providers.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Runtime",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Runtime\\Bosak.XPath.Runtime.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Standard",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Standard\\Bosak.XPath.Standard.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "pack-Bosak.XPath.Api",
+      "argv": [
+        "dotnet",
+        "pack",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source\\src\\Bosak.XPath.Api\\Bosak.XPath.Api.csproj",
+        "-c",
+        "Release",
+        "--no-build",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\feed",
+        "-p:CustomBeforeMicrosoftCommonTargets=D:\\Development\\Bosak\\docs\\foundation-package-qualification\\tools\\CandidateAssets.targets",
+        "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\source",
+        "-p:SourceRevisionId=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:RepositoryCommit=c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "consumer-restore",
+      "argv": [
+        "dotnet",
+        "restore",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer\\PackageCaller.csproj",
+        "--configfile",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\NuGet.Config",
+        "--packages",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\cache",
+        "--force",
+        "--no-cache",
+        "-p:RetainedCallerSource=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer\\RetainedCaller.source.txt",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "consumer-build",
+      "argv": [
+        "dotnet",
+        "build",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer\\PackageCaller.csproj",
+        "-c",
+        "Release",
+        "--no-restore",
+        "--nologo",
+        "-o",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer-output",
+        "-p:RetainedCallerSource=D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer\\RetainedCaller.source.txt",
+        "-p:NuGetAudit=false"
+      ]
+    },
+    {
+      "name": "package-source-run",
+      "argv": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\consumer-output\\LegacyCaller.dll",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\package-source-run.json"
+      ]
+    },
+    {
+      "name": "unchanged-binary-run",
+      "argv": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\unchanged-caller\\LegacyCaller.dll",
+        "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-qualification-2026-10-30\\unchanged-binary-run.json"
+      ]
+    }
+  ],
+  "sourceArchiveSha256": "8f691a6e8c14316f519417828bfbf35d8fc34721c38736aa42a4f0db2b8f9d4a",
+  "callerSourceSha256": "9c71edf726d57d72ac88df53afc7cb61c12ae094253e4691332025919a2e1c82"
+}

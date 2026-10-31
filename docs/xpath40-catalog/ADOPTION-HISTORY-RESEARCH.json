@@ -1,0 +1,947 @@
+{
+  "reviewDate": "2026-10-26",
+  "workpackage": "C08",
+  "status": "Complete research and explicitly approved legacy disposition; historical facts remain missing",
+  "documentationBase": "c854e9bbfc0f12a57c976e07690930661276a3b7",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "summary": {
+    "originalMissingRecords": 28,
+    "recoveredAdoptionPins": 0,
+    "ownerDispositionsApplied": 28,
+    "unresolvedDispositionRecords": 0,
+    "legacyExceptions": 26,
+    "nonAdoptions": 2,
+    "originalPullRequests": 16,
+    "deliveryTrees": 16,
+    "retainedHeadTrees": 16,
+    "intermediateMatchingCommits": 58,
+    "sourceScopedMatchingCommits": 57,
+    "allTrackedTreeSearches": 32,
+    "prComments": 0,
+    "prReviews": 0
+  },
+  "entries": [
+    {
+      "entry": "operators-and-syntax/array-member-iteration.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/array-member-iteration.md",
+        "bosakPr": 87,
+        "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_ForMember_31Mode_ThrowsXpst0003",
+          "Evaluate_ForMember_IteratesMembers",
+          "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+        ]
+      },
+      "sourceEntryGitBlob": "07aae3c3d51b44c9a14081ae1dbf87ba7730c6e0",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-87.json",
+      "deliveryRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "headRevision": "44391d067b07788a91573d0cc6f2d6e5a9912b86",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/destructuring-let.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/destructuring-let.md",
+        "bosakPr": 129,
+        "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+          "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+          "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions"
+        ]
+      },
+      "sourceEntryGitBlob": "62f3a1ab6e1ac35fa6c4c349573569ee7189aba0",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-129.json",
+      "deliveryRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "headRevision": "37f3ac7bad503446fc8f4e157e1cd7bd8212ef71",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/focus-functions.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/focus-functions.md",
+        "bosakPr": 110,
+        "bosakRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+          "Evaluate_FocusConstructors_FrozenXPath40_Works"
+        ],
+        "namedPromotedSets": [
+          "xs-normalizedString",
+          "xs-numeric",
+          "xs-token"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types"
+        ]
+      },
+      "sourceEntryGitBlob": "2ffd9dff8cf273aa48099216a54b02b78c1ca6d8",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-110.json",
+      "deliveryRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+      "headRevision": "a83a97c93c7b6b64837b40cb909b628d11829c9d",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/keyword-arguments.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/keyword-arguments.md",
+        "bosakPr": 86,
+        "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+          "Evaluate_KeywordArgs_FullyKeyworded_Works",
+          "Evaluate_KeywordArgs_MixedWithPositionals_Works"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-static-functions"
+        ]
+      },
+      "sourceEntryGitBlob": "fd1b4aa33fd2a15058671e562a20ad51f377ca97",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-86.json",
+      "deliveryRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "headRevision": "dd872bb895900fc3cca9c76c2229d9f27f97de0c",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/map-entry-iteration.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/map-entry-iteration.md",
+        "bosakPr": 87,
+        "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+          "Evaluate_ForKeyValue_IteratesEntries",
+          "Evaluate_ForKeyValue_PositionalCountsAcrossMaps"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+        ]
+      },
+      "sourceEntryGitBlob": "3bfcdde74bcec1aa90af54b4a659d614fa2de658",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-87.json",
+      "deliveryRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "headRevision": "44391d067b07788a91573d0cc6f2d6e5a9912b86",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/mapping-arrow.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/mapping-arrow.md",
+        "bosakPr": 87,
+        "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+          "Evaluate_MappingArrow_AppliesFunctionPerItem",
+          "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+        ]
+      },
+      "sourceEntryGitBlob": "cfc3fd32ce8984a874dca25c469ebbd4977b411c",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-87.json",
+      "deliveryRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "headRevision": "44391d067b07788a91573d0cc6f2d6e5a9912b86",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/method-call-operator.md",
+        "bosakPr": 77,
+        "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+          "Evaluate_MappingArrow_AppliesFunctionPerItem",
+          "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods"
+        ]
+      },
+      "sourceEntryGitBlob": "eb4302c14c223e074c8cfff0a00afce99f22ae9d",
+      "finding": "No historical implementation adoption for this documented shape",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Non-adoption; implementation-adoption pin not applicable",
+      "prReceipt": "evidence/c08-adoption-research/pr-77.json",
+      "deliveryRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "headRevision": "740fde6492042084d8a1386ad90138e7f84563f1",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/otherwise-operator.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/otherwise-operator.md",
+        "bosakPr": 85,
+        "bosakRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+          "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+          "Evaluate_Otherwise_EmptyLeftYieldsRight"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise",
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions"
+        ]
+      },
+      "sourceEntryGitBlob": "ee93c4c1f841c87ce02a52cb3e2f3b584ac3d45c",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-85.json",
+      "deliveryRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+      "headRevision": "cff06616ceaf5fe659ec0d836994e4fd580b3b44",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/pipeline-operator.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/pipeline-operator.md",
+        "bosakPr": 87,
+        "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+          "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+          "Evaluate_Pipeline_SpecExample_SumOfPowers"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-pipeline-operator"
+        ]
+      },
+      "sourceEntryGitBlob": "3d3758470fae8e2cf690890d75659f1415f83fc9",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-87.json",
+      "deliveryRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "headRevision": "44391d067b07788a91573d0cc6f2d6e5a9912b86",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "operators-and-syntax/string-templates.md",
+      "originalRecord": {
+        "entry": "operators-and-syntax/string-templates.md",
+        "bosakPr": 86,
+        "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+          "Evaluate_StringTemplate_FixedOnly_Works",
+          "Evaluate_StringTemplate_Interpolation_Works"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-string-templates"
+        ]
+      },
+      "sourceEntryGitBlob": "169e287c3266681ac68080735c7270a3905013f0",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-86.json",
+      "deliveryRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "headRevision": "dd872bb895900fc3cca9c76c2229d9f27f97de0c",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "functions/atomic-equal.md",
+      "originalRecord": {
+        "entry": "functions/atomic-equal.md",
+        "bosakPr": 108,
+        "bosakRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+          "Evaluate_AtomicEqual_FrozenXPath40_Works"
+        ],
+        "namedPromotedSets": [
+          "fn-atomic-equal"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-equal"
+        ]
+      },
+      "sourceEntryGitBlob": "a7b477e156c31606b6eaf5410d4aaaf010f52df6",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-108.json",
+      "deliveryRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+      "headRevision": "cc6f7871d18c5ea99bdfa409f8997fd0393690a2",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "functions/csv-parsing.md",
+      "originalRecord": {
+        "entry": "functions/csv-parsing.md",
+        "bosakPr": 104,
+        "bosakRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+        "deliveryDate": "2026-10-09",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+          "Evaluate_ParseCsv_FrozenXPath40_Works"
+        ],
+        "namedPromotedSets": [
+          "fn-csv-doc",
+          "fn-csv-to-xml",
+          "fn-parse-csv"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-csv",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-doc",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-to-xml"
+        ]
+      },
+      "sourceEntryGitBlob": "8971533453d1796c87773c2ba9453b56f77a88fa",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-104.json",
+      "deliveryRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+      "headRevision": "2041d6550a1c74338398ea0af8196904aa7876fb",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "functions/element-to-map.md",
+      "originalRecord": {
+        "entry": "functions/element-to-map.md",
+        "bosakPr": 106,
+        "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+        "deliveryDate": "2026-10-09",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Evaluate_ElementToMap_FrozenXPath40_Works"
+        ],
+        "namedPromotedSets": [
+          "fn-element-to-map",
+          "fn-element-to-map-plan"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan"
+        ]
+      },
+      "sourceEntryGitBlob": "e8aad62d2598109efc9959f1ed0e878be7408edf",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-106.json",
+      "deliveryRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "headRevision": "45627161e291747e77dc60f779c020dcffc96938",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "functions/map-to-element.md",
+      "originalRecord": {
+        "entry": "functions/map-to-element.md",
+        "bosakPr": 106,
+        "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+        "deliveryDate": "2026-10-09",
+        "testFile": "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs",
+        "namedTests": [
+          "MapToElement_SingleEntryMap_BuildsElement",
+          "MapToElement_EmptySequence_ReturnsEmpty",
+          "MapToElement_NonMapInput_Xpty0004"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-to-element"
+        ]
+      },
+      "sourceEntryGitBlob": "211208a6d12454b1a136c0718a4af5689a56f5b8",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-106.json",
+      "deliveryRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "headRevision": "45627161e291747e77dc60f779c020dcffc96938",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "functions/sort-with.md",
+      "originalRecord": {
+        "entry": "functions/sort-with.md",
+        "bosakPr": 112,
+        "bosakRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+          "Compile_SortWithCluster_3Point1Functions_StillWork",
+          "Evaluate_SortWithCluster_FrozenXPath40_Works"
+        ],
+        "namedPromotedSets": [
+          "array-sort-with",
+          "fn-sort-with"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-with",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort-with"
+        ]
+      },
+      "sourceEntryGitBlob": "60b3b4ec883e0e92a1055de7ecc3cbc3995a5054",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-112.json",
+      "deliveryRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+      "headRevision": "031d72c9549af7094fcb6d103c48edbd0e77e809",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "type-system/choice-types.md",
+      "originalRecord": {
+        "entry": "type-system/choice-types.md",
+        "bosakPr": 89,
+        "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+          "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+          "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types"
+        ]
+      },
+      "sourceEntryGitBlob": "17b7530e4db49a292df4128ab78bcc6324105a6d",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-89.json",
+      "deliveryRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "headRevision": "1b9cb58279d71c041907387a41102375f2ac1bff",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "type-system/enum-types.md",
+      "originalRecord": {
+        "entry": "type-system/enum-types.md",
+        "bosakPr": 89,
+        "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_EnumType_31Mode_ThrowsXpst0003",
+          "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+          "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-enumeration-types"
+        ]
+      },
+      "sourceEntryGitBlob": "d42521483d8e842f67927dd6760c32e408a01c46",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-89.json",
+      "deliveryRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "headRevision": "1b9cb58279d71c041907387a41102375f2ac1bff",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "type-system/structural-records.md",
+      "originalRecord": {
+        "entry": "type-system/structural-records.md",
+        "bosakPr": 90,
+        "bosakRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+        "namedTests": [
+          "Coercion_BuildsAnnotatedRecord",
+          "Coercion_MissingFieldBecomesEmptyEntry",
+          "Coercion_SurplusKeys_XPTY0004"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types",
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules",
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression"
+        ]
+      },
+      "sourceEntryGitBlob": "9ab2d07e0bab3f0472561cc50632255f8af1f88d",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-90.json",
+      "deliveryRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+      "headRevision": "310ab3a50c8457cecf0a24fded8da3007ed4cac1",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "type-system/typed-let-coercion.md",
+      "originalRecord": {
+        "entry": "type-system/typed-let-coercion.md",
+        "bosakPr": 129,
+        "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Evaluate_TypedLet_FrozenXPath40_Coerces"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions",
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules"
+        ]
+      },
+      "sourceEntryGitBlob": "f73396acdd1558dadeb4e022c603b0cb6a64169d",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-129.json",
+      "deliveryRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "headRevision": "37f3ac7bad503446fc8f4e157e1cd7bd8212ef71",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "data-model/jnode-navigation.md",
+      "originalRecord": {
+        "entry": "data-model/jnode-navigation.md",
+        "bosakPr": 116,
+        "bosakRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+        "deliveryDate": "2026-10-10",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+          "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+        ],
+        "namedPromotedSets": [
+          "fn-jkey",
+          "fn-jtree",
+          "fn-jvalue"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey",
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue",
+          "https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html"
+        ]
+      },
+      "sourceEntryGitBlob": "db6cd0ed484c0b7df0fe2dd33979603ceffc1de2",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-116.json",
+      "deliveryRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+      "headRevision": "cd824d31b2fa6c410ef574d6cb0c67770019cc02",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/instruction-separators.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/instruction-separators.md",
+        "bosakPr": 91,
+        "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+        "namedTests": [
+          "ForEach_Separator_BetweenItems",
+          "ForEach_Separator_WithSort",
+          "ForEach_Separator_EmptyAndSingleItem_NoSeparator"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#for-each-separator",
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#apply-templates-separator"
+        ]
+      },
+      "sourceEntryGitBlob": "f0ad3b088afb0d2146083a7d3596abe6bd5a5973",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-91.json",
+      "deliveryRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "headRevision": "dbd17d337012438762922c11fbb8d88312ff59f8",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/xsl-array.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/xsl-array.md",
+        "bosakPr": 92,
+        "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+        "namedTests": [
+          "Array_Select_OneSingletonMemberPerItem",
+          "Array_Select_TokenizedString",
+          "Array_ForEachSelect_MemberIsWholeSequence"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction"
+        ]
+      },
+      "sourceEntryGitBlob": "8d2828ea99f747c682dcc0ff0ab4c8f02bd75990",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-92.json",
+      "deliveryRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "headRevision": "7327d310b2f5d1f3d22b406dbc0a84b2f826ceff",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/xsl-if.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/xsl-if.md",
+        "bosakPr": 91,
+        "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+        "namedTests": [
+          "If_ThenElse_TrueBranch",
+          "If_ThenElse_FalseBranch",
+          "If_ThenOnly_FalseIsEmpty"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-if"
+        ]
+      },
+      "sourceEntryGitBlob": "7ebd64505de05dea1089726f7f6edd4cd6289577",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-91.json",
+      "deliveryRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "headRevision": "dbd17d337012438762922c11fbb8d88312ff59f8",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/xsl-map.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/xsl-map.md",
+        "bosakPr": 91,
+        "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+        "namedTests": [
+          "Map_Select_MergesInputMaps",
+          "Map_Select_DuplicatesDefault_XTDE3365",
+          "Map_Select_DuplicatesUseFirst"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry"
+        ]
+      },
+      "sourceEntryGitBlob": "308b212ead6814203de964386944489cae50de63",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-91.json",
+      "deliveryRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "headRevision": "dbd17d337012438762922c11fbb8d88312ff59f8",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/xsl-note.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/xsl-note.md",
+        "bosakPr": 91,
+        "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+        "namedTests": [
+          "Note_InTemplate_IsDiscarded",
+          "Note_AtTopLevel_IsDiscarded",
+          "Note_ContentIsNotValidated"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-note-elements"
+        ]
+      },
+      "sourceEntryGitBlob": "40e7eb5711a78aa83e23952cf8ebd5bd474df03c",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-91.json",
+      "deliveryRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "headRevision": "dbd17d337012438762922c11fbb8d88312ff59f8",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "xslt-instructions/xsl-switch.md",
+      "originalRecord": {
+        "entry": "xslt-instructions/xsl-switch.md",
+        "bosakPr": 92,
+        "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+        "namedTests": [
+          "Switch_LookupTable_SelectBranches",
+          "Switch_TestSequences_DaysInMonth",
+          "Switch_GeneralComparison_NumericPromotion"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch"
+        ]
+      },
+      "sourceEntryGitBlob": "fc5cb82507cbb80f388384096c56305f11559d9e",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-92.json",
+      "deliveryRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "headRevision": "7327d310b2f5d1f3d22b406dbc0a84b2f826ceff",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "experimental/fn-scan.md",
+      "originalRecord": {
+        "entry": "experimental/fn-scan.md",
+        "bosakPr": 98,
+        "bosakRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+        "deliveryDate": "2026-10-09",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Evaluate_Scan_XPath40Experimental_Works"
+        ],
+        "namedPromotedSets": [
+          "fn-scan"
+        ],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan"
+        ]
+      },
+      "sourceEntryGitBlob": "68ed35a2893b2d862ada102a6629aa8adaf390ce",
+      "finding": "Historical adoption snapshot not recovered from researched records",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "prReceipt": "evidence/c08-adoption-research/pr-98.json",
+      "deliveryRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+      "headRevision": "942558cadda44b56a84e59e2c563667b32a5972b",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    },
+    {
+      "entry": "rejected/mapping-arrow-gtgt.md",
+      "originalRecord": {
+        "entry": "rejected/mapping-arrow-gtgt.md",
+        "bosakPr": 77,
+        "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+        "deliveryDate": "2026-10-08",
+        "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "namedTests": [
+          "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+          "Evaluate_MappingArrow_AppliesFunctionPerItem",
+          "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+        ],
+        "namedPromotedSets": [],
+        "adoptedSpecRevision": null,
+        "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+        "currentSpecificationSections": [
+          "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+        ]
+      },
+      "sourceEntryGitBlob": "0236b750c59e0e34de22d268d64dbb7c30c32c79",
+      "finding": "No historical implementation adoption for this documented shape",
+      "adoptedSpecRevision": null,
+      "ownerDisposition": "Approved 2026-10-26; historical null retained",
+      "disposition": "Non-adoption; implementation-adoption pin not applicable",
+      "prReceipt": "evidence/c08-adoption-research/pr-77.json",
+      "deliveryRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "headRevision": "740fde6492042084d8a1386ad90138e7f84563f1",
+      "evidenceLimit": "Current PR text, immutable Bosak source and fixture revisions do not establish an adopted specification revision."
+    }
+  ],
+  "approvedPolicy": "LEGACY-ADOPTION-POLICY-PROPOSAL.md",
+  "ownerDecision": {
+    "date": "2026-10-26",
+    "approvedBy": "User; explicit conversation approval",
+    "question": "Approve the scoped legacy-evidence policy in docs/xpath40-catalog/LEGACY-ADOPTION-POLICY-PROPOSAL.md? It keeps all 28 adoption pins null, records 26 legacy exceptions and two non-adoptions, and preserves semantic review and all defects. The closure plan explicitly requires owner disposition before C08 can close.",
+    "answer": "Approve the scoped legacy policy",
+    "decision": "Approved",
+    "policyAsPresented": "policy-as-presented.md",
+    "policyAsPresentedSha256": "15af9c586b9a6c8116b89f3cb56729cae65bd49f72fb599879e39f910bc0b98f",
+    "exactScope": [
+      "operators-and-syntax/array-member-iteration.md",
+      "operators-and-syntax/destructuring-let.md",
+      "operators-and-syntax/focus-functions.md",
+      "operators-and-syntax/keyword-arguments.md",
+      "operators-and-syntax/map-entry-iteration.md",
+      "operators-and-syntax/mapping-arrow.md",
+      "operators-and-syntax/method-call-operator.md",
+      "operators-and-syntax/otherwise-operator.md",
+      "operators-and-syntax/pipeline-operator.md",
+      "operators-and-syntax/string-templates.md",
+      "functions/atomic-equal.md",
+      "functions/csv-parsing.md",
+      "functions/element-to-map.md",
+      "functions/map-to-element.md",
+      "functions/sort-with.md",
+      "type-system/choice-types.md",
+      "type-system/enum-types.md",
+      "type-system/structural-records.md",
+      "type-system/typed-let-coercion.md",
+      "data-model/jnode-navigation.md",
+      "xslt-instructions/instruction-separators.md",
+      "xslt-instructions/xsl-array.md",
+      "xslt-instructions/xsl-if.md",
+      "xslt-instructions/xsl-map.md",
+      "xslt-instructions/xsl-note.md",
+      "xslt-instructions/xsl-switch.md",
+      "experimental/fn-scan.md",
+      "rejected/mapping-arrow-gtgt.md"
+    ],
+    "legacyExceptions": 26,
+    "nonAdoptions": 2,
+    "recoveredAdoptionPins": 0,
+    "conditions": [
+      "Keep all original adoptedSpecRevision fields null.",
+      "Do not substitute later review, fixture, publication or feature-origin pins.",
+      "Preserve semantic/applicable-evidence review and all engine defects.",
+      "Require immutable source pins for future implementations and semantic changes."
+    ]
+  },
+  "limits": [
+    "Negative searches are bounded to retained records, not proof that no original snapshot exists anywhere.",
+    "GitHub PR bodies/comments are retrieved current records, not immutable historical body versions.",
+    "Bosak delivery commits and source trees are immutable repository evidence, not specification source revisions.",
+    "Fixture gitlinks and later immutable review pins cannot establish historical specification adoption."
+  ],
+  "policy": "Preserve all28 original null adoption fields and original C00-C07 receipts. Explicit user approval grants only26 legacy provenance exceptions and2 non-adoption dispositions, not recovered facts or semantic acceptance. Five packages remain open; C09-C13 retain per-contract review, defects and final acceptance."
+}

@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed consumer qualification documentation checkpoint",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 366,
+      "sha256": "e2a06e0231be3d5b7b6f4bbb851af464261e9b209b6e7752d96494f3ba108d1f"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 5315,
+      "sha256": "d139be21ecf57f5e5bb71c047f14ef79560725ab602d85e760c824ff8d741b0b"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1285,
+      "sha256": "90f2ee836f4c62415b273bd489463ccd4e738ffb8f42475899f7bb292b120d43"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2404,
+      "sha256": "7b4ae1ed1990230616b958bfe372cf48753d30e237abda49b2fcd77a1f47c93e"
+    }
+  ]
+}

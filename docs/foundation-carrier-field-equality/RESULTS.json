@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-31",
+  "cohorts": {
+    "product": {
+      "runs": 2,
+      "controlsPerRun": 828,
+      "sizeX64": 48,
+      "plainEqualsBytesPerCall": 344.0,
+      "annotatedEqualsBytesPerCall": 344.0,
+      "hashBytesPerCall": 64.0,
+      "legacyCasesPassed": 20
+    },
+    "source": {
+      "runs": 2,
+      "controlsPerRun": 828,
+      "sizeX64": 48,
+      "plainEqualsBytesPerCall": 344.0,
+      "annotatedEqualsBytesPerCall": 344.0,
+      "hashBytesPerCall": 64.0,
+      "legacyCasesPassed": 20
+    },
+    "equal-selective": {
+      "runs": 2,
+      "controlsPerRun": 828,
+      "sizeX64": 48,
+      "plainEqualsBytesPerCall": 344.0,
+      "annotatedEqualsBytesPerCall": 408.0,
+      "hashBytesPerCall": 64.0,
+      "legacyCasesPassed": 20
+    },
+    "field-selective": {
+      "runs": 2,
+      "controlsPerRun": 828,
+      "sizeX64": 48,
+      "plainEqualsBytesPerCall": 344.0,
+      "annotatedEqualsBytesPerCall": 64.0,
+      "hashBytesPerCall": 64.0,
+      "legacyCasesPassed": 20
+    }
+  },
+  "frozenCallerMatchesParent": true,
+  "productionChanged": false,
+  "apiFreezeAccepted": false,
+  "remaining": [
+    "Reference-backed attachment still adds a holder",
+    "Inherited-method declaration/reflection review",
+    "Real production-kernel/provider transport and consumer qualification",
+    "Final workload/retained-memory budgets"
+  ]
+}

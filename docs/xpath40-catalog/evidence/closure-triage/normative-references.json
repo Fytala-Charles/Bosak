@@ -1,0 +1,14 @@
+{
+  "reviewDate": "2026-10-26",
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/xmlschema11-1/#element-element",
+      "claim": "XSD1.1 substitutionGroup accepts a list of QNames."
+    },
+    {
+      "url": "https://www.w3.org/TR/xml11/#NT-NameStartChar",
+      "claim": "XML1.1 NameStartChar includes the supplementary range containing U+1D11E."
+    }
+  ],
+  "policy": "Normative references classify observed schema/XML boundaries; no upstream contribution or historical-adoption substitution."
+}

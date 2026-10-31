@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-29",
+  "scope": "Uncommitted bounded Schema 0.9 presence implementation qualification",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 117,
+      "sha256": "f8d6dafc4d77f358a9d65ab3b6ec38444eeac500948768abafe30edbd7aa882c"
+    },
+    {
+      "path": "ADOPTION.md",
+      "bytes": 3882,
+      "sha256": "33325690d72eee9366fbc17b3c2692b0b4583ad4ef78adfcb72199841aa98916"
+    },
+    {
+      "path": "evidence/before.trx",
+      "bytes": 124562,
+      "sha256": "cc7a21df3e2ad78d09f405b7a7703d7774e98b681f04ec6825f565b999e064fd"
+    },
+    {
+      "path": "evidence/before.txt",
+      "bytes": 54624,
+      "sha256": "db61145b46fc5f974d5eef1293b47957a7ffe86536315d1fbb41f611d68f95ad"
+    },
+    {
+      "path": "evidence/build.txt",
+      "bytes": 3182,
+      "sha256": "9098f5272441d2737105d299e5169a03a38fdf91a86f7994254d7a12ad425c5e"
+    },
+    {
+      "path": "evidence/cohort-comparison.json",
+      "bytes": 660,
+      "sha256": "c617bda5c6a06417ad6f9d6cc778a3d7f4392f204ffe368fc43c308b8ae7377a"
+    },
+    {
+      "path": "evidence/core-inheritance-proof.json",
+      "bytes": 1042,
+      "sha256": "75bb169ccb5fa4bde22d7af7aa7cbee7d73e087c11106a27cd5d3d172c672914"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4435,
+      "sha256": "744ff81f7b4ba2cdca5146944e8403feba6b4b386883396d996a273ae9a27b96"
+    },
+    {
+      "path": "evidence/example.txt",
+      "bytes": 822,
+      "sha256": "aa28c3c0fc4e9bc2e808ab36c236e46e3eb1a8cc5ea80a9059a3729199bbb46b"
+    },
+    {
+      "path": "evidence/final.trx",
+      "bytes": 670441,
+      "sha256": "15ebaa3faf3508e9685cd569e314be852c6cbc264472cb6d171b3501376d03ff"
+    },
+    {
+      "path": "evidence/final.txt",
+      "bytes": 914,
+      "sha256": "3e9299589e564ea7c78ebfa728a4ff424ea4a5b5bb04598b5ed043ca2de41d4d"
+    },
+    {
+      "path": "evidence/initial.trx",
+      "bytes": 666572,
+      "sha256": "72c616001b4ab1e65c0ec2c30870d4cbe2a585cb2e7c086b5dfeb0bddb940706"
+    },
+    {
+      "path": "evidence/initial.txt",
+      "bytes": 7518,
+      "sha256": "ef0ca29043c7f7b3e8996deec66df50e51a170e80de1d714d72d2a7b83257625"
+    },
+    {
+      "path": "evidence/original-CountAssertionAssessmentTests.cs.txt",
+      "bytes": 19574,
+      "sha256": "726c9e399dfcf828e04b5bce9c6652da1081d8be0f9ae2018abba9fe43a4de47"
+    },
+    {
+      "path": "evidence/original-OptionalDecimalAssessmentTests.cs.txt",
+      "bytes": 18076,
+      "sha256": "dc2bc1ee47acc4d30aaf1340c2d503cdf5ed35a4c6458c598a4d2eead1d75bc6"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 555,
+      "sha256": "73d434734bba1ffbcb7ffe30f4796de3a012bc2b15b9d421e256fc906d1d2e50"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/source/examples/Bosak.Schema.Assessment.Example/Program.cs.txt",
+      "bytes": 6394,
+      "sha256": "a419310ecb8840c9016b937553989df657b0fe254fe8596493575ceaca143271"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs.txt",
+      "bytes": 15873,
+      "sha256": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs.txt",
+      "bytes": 12302,
+      "sha256": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Bosak.Schema.csproj.txt",
+      "bytes": 1212,
+      "sha256": "a1bade5fe569dfb0b2480edcac9102a043345a5bd02468e573b7adcd52ee724d"
+    },
+    {
+      "path": "evidence/source/tests/Bosak.Schema.Tests/Xsd11/CountAssertionAssessmentTests.cs.txt",
+      "bytes": 20100,
+      "sha256": "a3cd51fac36d2b012c92067358707edc7c0b7f3e922d4782b48b3ce7b554459d"
+    },
+    {
+      "path": "evidence/source/tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs.txt",
+      "bytes": 18339,
+      "sha256": "fc839d2fc38b720261811022aed812e0ebc6257f07ad603b7c3dc10a87fc91cf"
+    },
+    {
+      "path": "evidence/source/tests/Bosak.Schema.Tests/Xsd11/PresenceAssertionAssessmentTests.cs.txt",
+      "bytes": 16856,
+      "sha256": "4d0eb66d7fab6706c746990c62a401ed822cfcb310ff94958ace0ccbd2e841a9"
+    },
+    {
+      "path": "evidence/source-identities.json",
+      "bytes": 905,
+      "sha256": "dda78e39264b392231eead55f2026ebb56d1cfb4d473d33c3bd3a81525206468"
+    },
+    {
+      "path": "PRESENCE-SOURCES.json",
+      "bytes": 1566,
+      "sha256": "f00fb89d8dd248b24169776803ff31b6d894bd0366a49b1ed08a65c93f49ef36"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2993,
+      "sha256": "1d3b1dcf8162691b5122d69c7696e2b9ccd8f4af717935bfcf6403d93bb69422"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 407,
+      "sha256": "f84cc4013c34f8983160ff0fbdd4a551e087baf375a49ac6b626760ac8d76705"
+    }
+  ]
+}

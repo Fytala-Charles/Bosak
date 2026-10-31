@@ -1,0 +1,1 @@
+  Successfully created package 'D:\Development\Bosak\.guard-tmp\foundation-package-qualification-2026-10-30\feed\Bosak.XPath.Api.1.34.2.nupkg'.

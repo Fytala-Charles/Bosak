@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-26",
+  "repository": "Fytala-Charles/Bosak",
+  "operation": "Read-only gh pr view with bodies, comments, reviews, merge metadata and changed paths; no writes to GitHub.",
+  "pullRequests": [
+    77,
+    85,
+    86,
+    87,
+    89,
+    90,
+    91,
+    92,
+    98,
+    104,
+    106,
+    108,
+    110,
+    112,
+    116,
+    129
+  ]
+}

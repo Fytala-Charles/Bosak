@@ -1,0 +1,186 @@
+{
+  "repository": "https://github.com/Fytala-Charles/Bosak.Schema",
+  "revision": "044d2cb2e67decd46e03e0f5ee7cb03029f34bd9",
+  "files": [
+    {
+      "path": "src/Bosak.Schema/ActivatedLicense.cs",
+      "lfSha256": "09d5b1bb72afa35f2a29d39f61f8e5ebcd8b42a31d7f1df762612b6d08f00a6d",
+      "crlfSha256": "24f17e74adff9bdd682b841b92a684b746e0cfc68cbe1576ab674476079331d3"
+    },
+    {
+      "path": "src/Bosak.Schema/AssemblyInfo.cs",
+      "lfSha256": "871497abea86b9f17205198d8b41faab72178c9f738b5d40abcf71e732cce57e",
+      "crlfSha256": "865e48ecc9ea09f78cbc5208adc64b5fee7816909f81a15225f44f88e27e01e4"
+    },
+    {
+      "path": "src/Bosak.Schema/Compilation/SchemaCompileOptions.cs",
+      "lfSha256": "a56d952d0f07fb499dc94c4c5a1fd8f916b5888d659b577fb448bc11fc9f46e7",
+      "crlfSha256": "7a2445f11bab2446b16b22260ca1bbdefa9ff8c278bf56569dfb33567713111e"
+    },
+    {
+      "path": "src/Bosak.Schema/Compilation/SchemaCompiler.cs",
+      "lfSha256": "9675c332afaaf158deda246b38169cdcbcf31f0b34f50b88131167f5220814d7",
+      "crlfSha256": "c49da2651c7ed04a5a0d84e9f9c174cebc2395268f561818d028680c877b6c13"
+    },
+    {
+      "path": "src/Bosak.Schema/Compilation/SchemaResolution.cs",
+      "lfSha256": "390a0c139a24f98b1c8befddeb9d9238ed52332a54f798a7c625d5068cfff4c0",
+      "crlfSha256": "da8662cd0f10412578c48291cf3f862c3cdc526450ab5b649ae139e338dc0ddb"
+    },
+    {
+      "path": "src/Bosak.Schema/License.cs",
+      "lfSha256": "f82b3fde0d1776e42379a96b0290c76b414bad667e0148749626d01643e5e703",
+      "crlfSha256": "2fd3fac43ebf5b69cfe8b9850ea41c506579dfb4d5c95355e0143bac8259dc68"
+    },
+    {
+      "path": "src/Bosak.Schema/LicenseTier.cs",
+      "lfSha256": "d3c5608e181c87974a7eddcef85b96dc3f0a1ac22c8c6034fc4ced8b0af9e0b5",
+      "crlfSha256": "7eb0f6d75ceb02e9f3498493880b3b3effe3fc4a7fcb4e4f38ef744d929ea0ed"
+    },
+    {
+      "path": "src/Bosak.Schema/LicenseValidationException.cs",
+      "lfSha256": "2563c0beb9e8fd6894093626821fb8f8b7cfb8ae89e9ab2269f76c80f3681be5",
+      "crlfSha256": "6ac5bdaa049a94856c01dd6304867c304e0ff11285d5cc67a02a30a8e343825f"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/AssertionDefinition.cs",
+      "lfSha256": "75b7d77f174318dd884625bb39980f1950cd106e1cfaa10d4e383eae468f046e",
+      "crlfSha256": "07167ef0c02b6fa64816b567beab73a034e51b95e1914c024e6b639fe8dcdaf6"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/CompiledSchema.cs",
+      "lfSha256": "ccef226e935304bdf3860691c33ce821de12fdbf0aae19eba7b9d4be4f6c724d",
+      "crlfSha256": "076fb215bbe59fd5a943c68723a53b59b212986d81cf47eef1d1a4d313f73336"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/DefaultAttributesDefinition.cs",
+      "lfSha256": "4f040169309f78c1bfe73913db2d1a36b5893bdfb4e51b92ec26d64fb7af225a",
+      "crlfSha256": "3b9e8ebfa334a2263a3bf9b691afb3dcbefcb9c5e1cff5bcaf9ebbc21067a701"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/ElementDeclaration.cs",
+      "lfSha256": "c86ff8709d7af45536e5910b60af0802aedbc1788c5c03774d5f12aa1da9c8a1",
+      "crlfSha256": "80ba0b93731397f68614e3d47022fb3dc90e8306ce1d4d7759ffc356369f97c2"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/OpenContentDefinition.cs",
+      "lfSha256": "d69f61d8b44a2e29add5a4792d03c3a3b95a880604df4f707f8b0285729f84cb",
+      "crlfSha256": "9f6d3304b4c297c74b60933f8a1a2ab772f62c2d7a732af81f83b98a7bdcccdb"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/SchemaDiagnostic.cs",
+      "lfSha256": "fb9b107a84e542c37f1ddd114e151394bc4249205c752a08635e7865930b494a",
+      "crlfSha256": "175ff76d5626beeb699e00264ba0e2908ca6a41dcc9e43974dcb7868df4caa21"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/SimpleTypeDeclaration.cs",
+      "lfSha256": "b88bd001146b801d9afb9323dea035a69fc001e8858de885b3ade6ae8b1674fa",
+      "crlfSha256": "97081a6323259a0680c1e4eb947c4e7a9c13a5d55dfb5daed5e59af751208d34"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/XsdLanguageVersion.cs",
+      "lfSha256": "a4d56c055c2c76b5676f0f79dcd7ac0ef93cf1731014dde871b91584748d6ed0",
+      "crlfSha256": "46492c27207405cc2532daa10d040689596abcd8180dd82b9e6aa77cb240b2d7"
+    },
+    {
+      "path": "src/Bosak.Schema/SchemaAwareXslt.cs",
+      "lfSha256": "4c7d17763d41c3ad04c2ebf61158dff64e8eaf1a283d439cdd12c9984f2fea37",
+      "crlfSha256": "3a690217b31ab1222b40863cd8fa66368650ee6392abb6c3be5ad500e58fab9c"
+    },
+    {
+      "path": "src/Bosak.Schema/SchemaServices.cs",
+      "lfSha256": "176f2dd3944e4f3498ac5d0536dff3f1ad4fa3cfc81774752ee321b9dd0229ec",
+      "crlfSha256": "cfbc78010ce250e6040fc76548b88356c0c4347c0881337fb3cb928bff186414"
+    },
+    {
+      "path": "src/Bosak.Schema/Validation/SchemaValidationResult.cs",
+      "lfSha256": "c2bdebbb1b3e1c0208665a3ddfcdeac38fd2566e85cc72bdbc388ea499a280dc",
+      "crlfSha256": "7f97982eb642cb0c87b31f419974eb4edf71559f7bc24035e5a7b0ec9187ee39"
+    },
+    {
+      "path": "src/Bosak.Schema/Validation/XsdValidationService.cs",
+      "lfSha256": "e0c3f1a9b31404ef68c4c01fdf0352f61bc20ff2b10fc10fd2ca7e8d8edf9b09",
+      "crlfSha256": "c9f523db3f42b5f24c0dcd8b02a5685a311600bcb63c876a076a69a0a7fd3ae8"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/ApacheLicenseTests.cs",
+      "lfSha256": "232456b353f6829637594b9a9094ec4524d92e6f231e8249b7342b8ee72397eb",
+      "crlfSha256": "9c3e7ab3c8cdfa0a13a80d391e021ac9681cd1896e50311074729eef90049c49"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/ComplexTypeValidationTests.cs",
+      "lfSha256": "e1a39a19644bc7df78f8ada8df5477a82c6fb3a8bb5f86ef17c67f69ae0609c1",
+      "crlfSha256": "c4b27096228a585f05caa9e5bc59f84a77611cb0c0cf9ce08a2d4a2dc4979fb0"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/ImportSchemaSliceTests.cs",
+      "lfSha256": "3178c0ac6cb2294d80ee8a2e4c786ecc8234129ace1afe8eb523f31286622a77",
+      "crlfSha256": "e410977b8bbf07c2746c70a2467600d0ef7fa311429438c2a63696dcacc49beb"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeApplicabilityTests.cs",
+      "lfSha256": "5511dbeab9f95615295f8d84f6aa389f35261c37ec781bcee5602ea896b90488",
+      "crlfSha256": "9fa43333cf9872e9418863e71762a7e85693281b8cb55cd5f38cfaa25990cdcf"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeCompileTests.cs",
+      "lfSha256": "8311c1e79a280d6b9d93943e05a14c7febb2d2ec1642bda9fef203915435f325",
+      "crlfSha256": "a57ef8616b2c75508ee35dae7d174f0a6aedd7cff70e5361bb7f3f6c3df67898"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AssertionEvaluationTests.cs",
+      "lfSha256": "5650a13cc4cae1ad8ec7c55251df011bfb44e5abfb170e76edf6648686630c01",
+      "crlfSha256": "a28ab154db28ef2b7cbcb6d78d1666118999d690dc3ddcab61e38b5a801ab023"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AssertionFacetTests.cs",
+      "lfSha256": "d2726f1ab20fcf8d640ce7425d9b2af116c37de7ada48e1511377b57ef299769",
+      "crlfSha256": "8fca48010fe804b0d403a28363a9bc4079bbac58bb7081350873b05b1bbe786b"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/CompatibilityTests.cs",
+      "lfSha256": "9a9cc5f011d64dd86e6f6ce0b7404e9343de8da2264320f7b82689af44e39e7d",
+      "crlfSha256": "42c57746c6d0605d142b51fdeb28dc05b69855bab41f0d55238b2ede6fb3431e"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/DefaultAttributesTests.cs",
+      "lfSha256": "64536c6dae6d3ea6b6c89245a9cbac61e79e3efae2992090f6217eca8f50b8e2",
+      "crlfSha256": "b892176f768886f2d42e259af27b0ec5c05995ae02ef4221307db47d17b811eb"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/OpenContentTests.cs",
+      "lfSha256": "bdceaab15a680c536487def60606083a0c90e971281a752a5b850ad28ad74a81",
+      "crlfSha256": "9a4431883a8acf97be8801284737c9f208210ec739a953f50804ce8153032e08"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/SchemaComponentTests.cs",
+      "lfSha256": "234e11a1eb1f1eaafe845e94304660ff2c3cc5d8efb6cfa045ed27eff9e10f60",
+      "crlfSha256": "8f71206874d51d9d69e9b1080daf6af2b46e56d7736efc01304cf35e3c322ae0"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/SecurityTests.cs",
+      "lfSha256": "8db55b98c3c2b823efdd004f441cee01432ae359034bde7d8f610af0560904c5",
+      "crlfSha256": "4fbc1a424fbbe1e34ada44e50052cc032eda8875a7cb74637437034cb9f6fcae"
+    },
+    {
+      "path": "tests/TestData/Schemas/orders.xsd",
+      "lfSha256": "77ced737908c9d98552ba423eb092bb498a6f695db35b350ce6b53335ee61efb",
+      "crlfSha256": "fb4172a5ae8ed7866dc1c2b2d00c7d21e6884d99339c5df00518b323a049cef1"
+    },
+    {
+      "path": "tests/TestData/Schemas/sku.xsd",
+      "lfSha256": "e531b7e5d56c269dabe6434cc60ac523ce1e3bbe9b52758118651f0942e4c347",
+      "crlfSha256": "844890c5f1c695bdd70670df095ff6f81a7e08479bf76246aeaadaf6da87f95d"
+    },
+    {
+      "path": "LICENSE.md",
+      "lfSha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+      "crlfSha256": "6e4834381d74077c8a17155837a84a3b9cc6fd5e33baabdb2d02954c76084170"
+    },
+    {
+      "path": "NOTICE",
+      "lfSha256": "8670f7c16ff6525f65f6c29deef2b5804dcc9989d3233245006a72fc246e7b7a",
+      "crlfSha256": "a15d19e621bae9ffb6ae69d896bc3d70a92e86e84e3c829a95832500785b1f5c"
+    }
+  ]
+}

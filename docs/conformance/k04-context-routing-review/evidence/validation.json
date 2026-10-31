@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checksBeforeManifest": 70434,
+  "catalogCases": 31821,
+  "affectedPredicates": 43,
+  "retainedSkips": 613,
+  "processes": 134,
+  "sourceUnchanged": true,
+  "approvalPending": true
+}

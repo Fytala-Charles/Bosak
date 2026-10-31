@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C27",
+  "kind": "Read-only context resource/module qualification; isolated routing prototype only",
+  "sourceBase": "a061ea52562c1ef5430d5792ec5b2a2e7cb41ba4",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "scope": [
+    "13 remaining original QT3 ContextItemDecl resource/module cases",
+    "Complete44-case set qualification through unchanged normal machinery with one isolated routing edit",
+    "Independent controls if needed to distinguish schema, namespace and function-type boundaries"
+  ],
+  "limits": [
+    "Normal source, routing, fixtures/assertions, dependency guards, baselines, version and release unchanged",
+    "No qt4 XQuery applicability claim",
+    "Bosak.Schema retains XSD1.1 ownership; current XmlSchemaSet environment does not certify it"
+  ]
+}

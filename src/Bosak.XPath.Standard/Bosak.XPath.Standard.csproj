@@ -19,6 +19,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\schema-for-json.xsd" />
     <EmbeddedResource Include="Resources\analyze-string.xsd" />
+    <EmbeddedResource Include="Resources\UnicodeNormalization17.bin" LogicalName="Bosak.XPath.Standard.Resources.UnicodeNormalization17.bin" />
+    <EmbeddedResource Include="Resources\Unicode17-LICENSE.txt" LogicalName="Bosak.XPath.Standard.Resources.Unicode17-LICENSE.txt" />
+    <None Update="Resources\Unicode17-LICENSE.txt" Pack="true" PackagePath="licenses/Unicode17-LICENSE.txt" />
   </ItemGroup>
 
   <ItemGroup>

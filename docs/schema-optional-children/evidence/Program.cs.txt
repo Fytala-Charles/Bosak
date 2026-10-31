@@ -1,0 +1,56 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Records required-only baseline and empty-comparison behavior before optional-child adoption.
+// SPECIAL NOTES        : Bounded native XSD 1.1 assessment; decimal-sequence-assertions-v1 profile.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
+//                      | Charles Korthout | 0.2   | 29-10-2026     | Demonstrate original whole-document annotations through XPath and XSLT                    |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+const string schemaText = """
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="order"><xs:complexType><xs:sequence><xs:element name="amount" type="xs:decimal"/><xs:element name="shipped" type="xs:decimal"/></xs:sequence><xs:assert test="amount gt 0"/></xs:complexType></xs:element></xs:schema>
+""";
+var rows = new List<object>();
+var required = SchemaServices.CreateDocumentAssessor(XDocument.Parse(schemaText));
+var valid = required.Assess(XDocument.Parse("<order><amount>12.5</amount><shipped>2</shipped></order>"));
+rows.Add(new { id="required-baseline", supported=required.IsSupported, outcome=valid.Outcome.ToString(), states=valid.Document!.Elements.Count });
+if (!required.IsSupported || valid.Outcome != SchemaAssessmentOutcome.Valid) throw new Exception("Baseline failed");
+foreach(var lexical in new[]{"0","00"," 0 ","+0","-0"})
+{
+    var schema=XDocument.Parse(schemaText);
+    schema.Descendants(XName.Get("element","http://www.w3.org/2001/XMLSchema")).Single(x=>(string?)x.Attribute("name")=="shipped").SetAttributeValue("minOccurs",lexical);
+    var assessor=SchemaServices.CreateDocumentAssessor(schema);
+    var result=assessor.Assess(XDocument.Parse("<order><amount>12.5</amount></order>"));
+    rows.Add(new{id="optional-current-refusal",lexical,supported=assessor.IsSupported,outcome=result.Outcome.ToString(),hasDocument=result.Document is not null});
+    if(assessor.IsSupported || result.Outcome!=SchemaAssessmentOutcome.Unsupported || result.Document is not null)throw new Exception("Unexpected current optional admission");
+}
+var root=new XElement("order",valid.Document.CreateTypedElementCopy("amount"));
+var context=new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(root)),1,1);
+foreach(var item in new[]{("shipped le amount",false),("shipped ne amount",false),("shipped eq shipped",false),("shipped le amount or amount gt 0",true),("shipped le amount and amount gt 0",false),("amount gt 0",true)})
+{
+    var value=XPath31Expression.Compile(item.Item1,new CompileOptions{Compatibility=XPathCompatibility.XPath20}).Evaluate(context);
+    var ebv=value.GetEffectiveBooleanValue();
+    string payload;
+    try{payload=value.BooleanValue.ToString();}catch(Exception error){payload=error.GetType().Name;}
+    rows.Add(new{id="empty-comparison-control",expression=item.Item1,kind=value.Kind.ToString(),effectiveBoolean=ebv,booleanPayload=payload,expected=item.Item2});
+    if(ebv!=item.Item2)throw new Exception("Unexpected comparison EBV");
+}
+File.WriteAllText(args[0],JsonSerializer.Serialize(rows,new JsonSerializerOptions{WriteIndented=true})+"\n");
+Console.WriteLine($"{rows.Count} baseline/empty-comparison observations recorded; no optional implementation used.");

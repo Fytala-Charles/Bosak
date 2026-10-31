@@ -1,0 +1,1 @@
+<?before x?><invoice xmlns:p='urn:p'><!--root--><amount> 10.00 </amount><?inside x?><amount>5</amount></invoice>

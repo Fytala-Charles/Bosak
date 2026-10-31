@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "path": "src/Bosak.XPath.Api/CompileOptions.cs",
+      "revision": "20b2f426b94c75595687c8899d2c8e6f7c82ae8d",
+      "sha256": "801654588c1a65c29c28dddb02d5747d3e21f2ca5948fc269485d898b19a7851"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs",
+      "revision": "20b2f426b94c75595687c8899d2c8e6f7c82ae8d",
+      "sha256": "4789d5478afa2a056a0c19397e8343b08bc67e7ff765c8ce011f1b1c7344481b"
+    }
+  ]
+}

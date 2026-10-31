@@ -1,0 +1,151 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Declares a draft consumer-owned read-only session adoption API without implementation.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; read-only consumer adoption contract proposal                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using Bosak.Braid.Core;
+
+namespace Bosak.Braid.Application.EngineSessions;
+
+/// <summary>Proposed finite session states; Closed means release requested, not garbage collected.</summary>
+public enum ReadOnlySessionState
+{
+    /// <summary>Admission is possible when no operation is active.</summary>
+    Ready,
+    /// <summary>New work is refused while an active operation drains.</summary>
+    Quiescing,
+    /// <summary>No operation remains active and underlying release has been requested.</summary>
+    Closed
+}
+/// <summary>Proposed conceptual refusal categories; no published Braid code is assigned here.</summary>
+public enum ReadOnlySessionRefusalKind
+{
+    /// <summary>Another call owns the session lane.</summary>
+    Busy,
+    /// <summary>The session is closing or closed.</summary>
+    SessionUnavailable,
+    /// <summary>The approved artifact no longer matches.</summary>
+    ArtifactMismatch,
+    /// <summary>Runtime/shared-contract binding could not be established.</summary>
+    BindingMismatch,
+    /// <summary>The requested profile is unavailable.</summary>
+    UnsupportedProfile,
+    /// <summary>Caller options are outside the supported finite bounds.</summary>
+    InvalidConfiguration,
+    /// <summary>An underlying result violated the projected-data contract.</summary>
+    InvalidResponse,
+    /// <summary>Unexpected nonfatal engine execution failed without publishable data.</summary>
+    EngineFailure,
+    /// <summary>The active callback attempted to drain its own session.</summary>
+    SelfDrain,
+    /// <summary>Drain was requested before close began.</summary>
+    NotClosing
+}
+/// <summary>Immutable refusal evidence; messages do not contain raw engine state.</summary>
+/// <param name="Kind">Conceptual refusal category.</param>
+/// <param name="Message">Bounded consumer-safe explanation.</param>
+public sealed record ReadOnlySessionRefusal(ReadOnlySessionRefusalKind Kind,string Message);
+/// <summary>Separates original source pin, exact approved artifact and session instance identity.</summary>
+/// <param name="SessionId">Fresh process-local session identifier, never restored as authority.</param>
+/// <param name="ReviewedSourceRevision">The explicitly selected engine source revision.</param>
+/// <param name="ArtifactIdentity">Verified artifact-manifest identity.</param>
+/// <param name="ProfileId">Finite read-only profile identity.</param>
+public sealed record ReadOnlySessionIdentity(Guid SessionId,string ReviewedSourceRevision,string ArtifactIdentity,string ProfileId);
+/// <summary>First terminal lifecycle cause, distinct from per-call refusal categories.</summary>
+public enum ReadOnlySessionCloseReason
+{
+    /// <summary>The owner explicitly initiated close.</summary>
+    OwnerClose,
+    /// <summary>Approved artifact bytes no longer match.</summary>
+    ArtifactMismatch,
+    /// <summary>Runtime or shared-contract binding could not remain admitted.</summary>
+    BindingFailure,
+    /// <summary>A nonrecoverable session invariant failed.</summary>
+    FatalSessionFault
+}
+/// <summary>Informational lifecycle snapshot; callers still undergo admission checks.</summary>
+/// <param name="State">Current lifecycle state.</param>
+/// <param name="OperationActive">Whether a raw operation is still owned.</param>
+/// <param name="FirstTerminalReason">First close/revocation reason, when present.</param>
+public sealed record ReadOnlySessionStatus(ReadOnlySessionState State,bool OperationActive,ReadOnlySessionCloseReason? FirstTerminalReason);
+/// <summary>Caller limits only; these options never approve an engine artifact.</summary>
+/// <param name="ModuleByteLimit">Positive per-module byte bound, default eight MiB.</param>
+/// <param name="ModuleLimit">Positive module-count bound, default sixty-four.</param>
+/// <param name="TotalByteLimit">Positive aggregate byte bound, default thirty-two MiB.</param>
+public sealed record ReadOnlyInspectionOptions(int ModuleByteLimit=8*1024*1024,int ModuleLimit=64,long TotalByteLimit=32L*1024*1024);
+/// <summary>Inspection data only: no editor, opaque target, candidate, review or Apply authority.</summary>
+/// <param name="SourceWasInspectable">Structural inspection outcome, not validation/conformance.</param>
+/// <param name="Modules">Frozen projected module bytes and extents.</param>
+/// <param name="Issues">Frozen classified inspection/resource diagnostics.</param>
+public sealed record ReadOnlyInspectionData(bool SourceWasInspectable,IReadOnlyList<InspectionModule> Modules,IReadOnlyList<InspectionIssue> Issues);
+/// <summary>Completed data or refusal; exactly one field is populated by a conforming implementation.</summary>
+/// <param name="Data">Read-only data, including legitimate source diagnostics.</param>
+/// <param name="Refusal">Session/admission refusal, with no data authority.</param>
+public sealed record ReadOnlyInspectionReply(ReadOnlyInspectionData? Data,ReadOnlySessionRefusal? Refusal);
+/// <summary>Proposed bounded drain outcomes.</summary>
+public enum ReadOnlyDrainOutcome
+{
+    /// <summary>The operation ended and underlying release was requested.</summary>
+    Drained,
+    /// <summary>The bound expired; ownership and closed admission remain retained.</summary>
+    Incomplete,
+    /// <summary>The drain request was invalid or would wait on itself.</summary>
+    Refused
+}
+/// <summary>Drain evidence; no outcome certifies CLR unload or garbage collection.</summary>
+/// <param name="Outcome">Bounded drain result.</param>
+/// <param name="Status">Lifecycle state observed with the outcome.</param>
+/// <param name="Refusal">Refusal detail only when Outcome is Refused.</param>
+public sealed record ReadOnlyDrainReply(ReadOnlyDrainOutcome Outcome,ReadOnlySessionStatus Status,ReadOnlySessionRefusal? Refusal);
+/// <summary>Session or refusal; exactly one field is populated by a conforming factory.</summary>
+/// <param name="Session">Fresh admitted read-only session.</param>
+/// <param name="Refusal">No session was admitted.</param>
+public sealed record ReadOnlySessionOpenReply(IReadOnlyInspectionSession? Session,ReadOnlySessionRefusal? Refusal);
+/// <summary>Proposed consumer-owned session; Dispose stops admission without blocking a callback.</summary>
+/// <remarks>Call BeginClose then bounded DrainAsync when the owner needs shutdown evidence.</remarks>
+public interface IReadOnlyInspectionSession:IDisposable
+{
+    /// <summary>Gets immutable identity labels; they do not replace operation admission.</summary>
+    ReadOnlySessionIdentity Identity{get;}
+    /// <summary>Gets an informational lifecycle snapshot.</summary>
+    ReadOnlySessionStatus Status{get;}
+    /// <summary>Gets informational engine capabilities, distinct from the read-only admitted profile.</summary>
+    SourceAuthoringCapabilities EngineCapabilities{get;}
+    /// <summary>Inspects retained bytes through the single-lane read-only profile.</summary>
+    /// <param name="source">Immutable principal source bytes and URI.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; ownership persists until raw completion.</param>
+    /// <returns>Completed inspection data or an explicit admission refusal.</returns>
+    /// <exception cref="OperationCanceledException">Cancellation is observed before publication.</exception>
+    Task<ReadOnlyInspectionReply> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default);
+    /// <summary>Idempotently stops admission without waiting for active work.</summary>
+    void BeginClose();
+    /// <summary>Waits externally for drain up to a bound; does not force in-process termination.</summary>
+    /// <param name="timeout">Positive finite wait bound.</param>
+    /// <param name="cancellationToken">Cancels only this drain wait.</param>
+    /// <returns>Drained, incomplete or an explicit refusal such as self-drain.</returns>
+    /// <exception cref="OperationCanceledException">The caller cancels this wait.</exception>
+    Task<ReadOnlyDrainReply> DrainAsync(TimeSpan timeout,CancellationToken cancellationToken=default);
+}
+/// <summary>Factory composed with a private trusted deployment approval; callers cannot supply approvals.</summary>
+public interface IReadOnlyInspectionSessionFactory
+{
+    /// <summary>Opens a fresh session at the factory's explicitly reviewed deployment pin.</summary>
+    /// <param name="options">Supported finite caller limits.</param>
+    /// <param name="resources">Existing host resource-reader policy, or null for principal-only.</param>
+    /// <param name="cancellationToken">Cancellation before session publication.</param>
+    /// <returns>A fresh session or explicit admission/configuration refusal.</returns>
+    /// <exception cref="OperationCanceledException">Cancellation is observed before publication.</exception>
+    Task<ReadOnlySessionOpenReply> OpenAsync(ReadOnlyInspectionOptions options,IResourceReader? resources=null,CancellationToken cancellationToken=default);
+}

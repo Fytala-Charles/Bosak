@@ -1,0 +1,27 @@
+{
+  "repository": "D:\\Development\\Bosak.Schema",
+  "head": "228c9bea101760bce480b1f011998f887217097c",
+  "kind": "Read-only sibling working-tree documentation snapshots; repository HEAD is informational and document hashes pin the exact reviewed contents. No core seam adoption or release claim.",
+  "documents": [
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_SOURCE_AUDIT.md",
+      "snapshot": "docs/conformance/k04-construction-mode-review/evidence/schema-context/XSD11_SOURCE_AUDIT.md.txt",
+      "sha256": "c4ab0cdc90a084089f9d6d935da21c9231bf59c69285c37cf100dae774a319a6"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_GAP_MATRIX.md",
+      "snapshot": "docs/conformance/k04-construction-mode-review/evidence/schema-context/XSD11_GAP_MATRIX.md.txt",
+      "sha256": "af8087ef6a8f00e0be97833a096016912d3ea1892e5a8de78b3547f7039ecf16"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\ADR-006-xsd11-engine-seam-compatibility.md",
+      "snapshot": "docs/conformance/k04-construction-mode-review/evidence/schema-context/ADR-006-xsd11-engine-seam-compatibility.md.txt",
+      "sha256": "61b304da73ccaefaca8af8ce2b565cf954fe2e7ef51e57448bbeb730b00929a7"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_S4_DESIGN_PREP.md",
+      "snapshot": "docs/conformance/k04-construction-mode-review/evidence/schema-context/XSD11_S4_DESIGN_PREP.md.txt",
+      "sha256": "3d4cd7e32bb34090c65ee4a0862c95e6910d74ef17141684f877b08cb3736946"
+    }
+  ]
+}

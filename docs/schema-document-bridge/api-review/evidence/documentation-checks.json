@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "4da5d5b6cdbe631030881a819760a0af7d52fb3b5b68af16f10d365f9f93c045"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "9f815eac445e4da2243d83e29be4f99fd7c52a3220343635b08b0eb9b10f75f7"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "9378b95ed329edca410dbbcb0a041fd03580cda97b7c4399326b48d24acedc79"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "45c2bc1b4bcb1d99b3b17e12edad819426793dc6ff73cfe38c4ad5b50f2338fb"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "6c979abdbd3da74047406d25836837f078bb29a5b13fcfa01fb2a1f7886d6125"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "81021c15de86eca1f2f5d7c664604043cfaedfa1862aad486b699213b46b0c49"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "bdc1abf08cda1388d9ea6085457579ea10d7fbe08aaf19059128ba5d03fae16c"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "042fd1ea65f4bf0a017ac0ee126992a1f52aa14333d748b9f8918177b5f39f37"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-document-bridge/API-REVIEW.md",
+      "htmlSha256": "4c4d20090cff7b241be44b26b44246b67a580bae5ae1c18c2ca770d3957b6150"
+    },
+    {
+      "source": "docs/schema-document-bridge/api-review/README.md",
+      "htmlSha256": "6f62ea586a4b808d0612933fe376931608a726ed0f2cb8de32da52b8a6841ce9"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "0414de0a71e393af0317d31bae4f4db499b4785b63edd393882fc744db609202"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "02a4e259341c2672caec91baac6aa96ac69476f50005bb3f657b6e088635b5ee"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "7012d98ec7f5045f42aa6e253bde0689b4cf4153dec7d4f60cd8349fb6d144ab"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "e3887feebdec0aac3315d31e6854944ec3bf8d005cd6c5d2388056a77ba573a5"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "89d750ca3075ddadca057d59161c63411acca74df1f4df2ad0a18a5c6abcb093"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "aad3bc8f3d7ec097282ad1d10d6565bef96aa2a3e8cc897ce27856b74955e954"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "080a7d8c4923567dc32cbbb78888e2dd9f54d0b96cc9406e4899acf57bcb128a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "acee71f8d3f3773d7a84b8890773658630c6e8f25f92ee5b515ff151f442598e"
+    }
+  ],
+  "localLinks": 1892,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

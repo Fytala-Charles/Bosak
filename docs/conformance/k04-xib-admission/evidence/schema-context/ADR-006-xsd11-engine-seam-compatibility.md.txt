@@ -1,0 +1,62 @@
+# ADR-006: XSD 1.1 S4/S5 Engine Seam Compatibility
+
+> **Status:** `Proposed` — pending owner acceptance in the Bosak core repo before the S4 design freeze
+> **Date:** 2026-10-27
+> **Deciders:** Charles Korthout (owner), Kimi (drafting)
+
+---
+
+## Context
+
+[ADR-005](./ADR-005-xsd11-compiled-model-and-validation.md) (Accepted 2026-10-27) implemented REQ-009 phases S1–S3 entirely inside `Bosak.Schema` with zero public Bosak API changes, and its decision 4 explicitly deferred **in-transform typing of 1.1-validated nodes** to S4/S5 behind "a separate core-repo compatibility ADR with owner approval before the S4/S5 design freeze". This is that ADR.
+
+The forces, re-confirmed by the S0 source audit ([`XSD11_SOURCE_AUDIT.md`](./XSD11_SOURCE_AUDIT.md) §3–§4):
+
+- **Every schema-bearing API in the engine seam is typed against `System.Xml.Schema.XmlSchemaSet`** — `XsltCompiler.SchemaSet`, `EvaluationContext.SchemaSet`/`GetSchema*`, `XdmSchemaAnnotator.Validate*`/`ValidateSubtree`, `Bosak.XPath.Api.Xsd.IXsdValidator` — and .NET's `System.Xml.Schema` implements XSD 1.0 only. Re-verified unchanged in kind on core 1.26.3.
+- **S4's goal (`xs:alternative`) cannot be reached add-side alone.** `xs:alternative` types an element *conditionally*, during the engine's own attribute/element assessment; for `instance of element(*, T)` and pattern matching to see 1.1 types mid-transform, the engine's validation-relevant operations must consult 1.1 components at the point they type nodes — not after the fact.
+- **The 30 confirmed W3C conformance skips** ([`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) §4) close only via engine integration: they are harness tests that run *through the engine*, so no amount of add-side document validation removes them.
+- **The core/plugin boundary is non-negotiable:** Bosak core must never reference `Bosak.Schema`, and public Bosak API changes require explicit compatibility review (handover non-negotiables; ADR-005 decision boundary).
+
+## Decision
+
+We will extend the Bosak core with an **additive, opt-in schema-typing callback seam** for XSD 1.1, shaped as follows:
+
+1. **Callback seam, not a type change.** The core gains a host-settable hook (e.g. an interface such as `ISchemaTypingAdvisor` — exact name/signature in the core-repo design) through which the engine asks a host-supplied component to type nodes during validation-relevant operations: type lookup by expanded QName, conditional-type (`xs:alternative`) applicability assessment, and assertion consultation. All existing `XmlSchemaSet`-typed members keep their current signatures, semantics, and behavior **bit-identically** when no hook is registered; the hook is consulted only on an explicit opt-in.
+
+2. **The add-on supplies the implementation.** `Bosak.Schema` registers a 1.1 advisor built on its existing S1–S3 compiled model (`CompiledSchema`, `AssertionDefinition`, `TypeAlternativeDefinition`, the gated validation service). Without an activated `Bosak.Schema` license the advisor is absent, so unlicensed engines behave exactly as today — the REQ-001 inert-before-activation boundary is preserved.
+
+3. **Explicit posture for unsupported coverage.** Where the advisor cannot type a node (uncompiled constructs, unresolved alternatives), the engine receives an explicit "unsupported" answer and falls back to its current 1.0/`XmlSchemaSet` behavior plus a diagnostic in the established `Refused`/`UnsupportedCoverage` style — never silent acceptance, never a behavior change for documents the engine already handles.
+
+4. **Conformance closure via a test-only dependency.** The 30 confirmed skips close when the core conformance harness (`tests/Bosak.Xslt.Conformance`) runs with the `Bosak.Schema` advisor registered. To make that possible without violating the core/plugin boundary, the **core test project takes a test-only package reference on `Bosak.Schema`**; core product assemblies never reference the add-on. Skip removal is then gated on advisor-registered harness runs staying green.
+
+## Consequences
+
+### Positive
+
+- S4/S5 (`xs:alternative`, remaining 1.1 constructs) becomes implementable, and the 30 W3C skips have a concrete closure path.
+- The change is minimal and additive: one new seam interface + registration point in core; no existing signature, overload set, or 1.0 code path changes. `XmlSchemaSet` members stay concrete and untouched.
+- The conformance story is honest: skips are removed only when the advisor-registered harness reproduces the expected outcomes, keeping the baseline provably unregressed.
+- The add-on's existing S1–S3 model and validation service are reused; S4 is an advisor implementation over them, not a second pipeline.
+
+### Negative / Accepted Costs
+
+- This is a **public Bosak API change** (new interface + registration surface), so it needs owner acceptance in the core repo and a core release before S4 can land — REQ-009's pace couples to a core release cycle at exactly one point.
+- The callback seam is a new, permanent compatibility surface: once external hosts can register advisors, the core must maintain the contract (versioning, diagnostic conventions, fallback semantics).
+- Test-only dependency from core's conformance suite on a commercial add-on package introduces a release-ordering constraint (add-on must be on the public feed before the harness can consume it in CI).
+- Documents mixing 1.0 `XmlSchemaSet` schemas and 1.1 advisor schemas get two interacting typing authorities; the design must pin interaction rules (e.g. advisor-wins-on-1.1-marked, `XmlSchemaSet`-only otherwise) and test them.
+
+## Alternatives Considered
+
+| Option | Why Rejected |
+|--------|--------------|
+| Generalize the seam: replace/abstract `SchemaSet` (`XmlSchemaSet`) with a version-neutral schema-component abstraction in core | The full-power fix, but the blast radius spans every schema-bearing API listed in the audit; it is a breaking change to the public surface, forces every host to migrate, and contradicts ADR-005's "smallest slice first" gate. Rejected for S4/S5; may be revisited for a future major. |
+| Add-side only: pre-validate/annotate via the existing public `XdmSchemaAnnotator.Annotate(XObject, IXmlSchemaInfo)` and never touch core (audit §4 strategy (a)) | Proven viable for S2/S3 document validation and typed views, but it cannot type nodes *during* engine assessment, so `xs:alternative` and the in-transform typing skips stay unclosable. Document-validation-only coverage does not remove the 30 skips. |
+| Status quo: keep the skips open and ship S4 as add-side validation only | The 30 confirmed W3C skips remain indefinitely, and REQ-009's stated goal (close them) is unmet; marketing would be limited to "validation service" rather than conformance. |
+| Vendor a 1.1 component model into core (e.g. port Xerces-J XSD 1.1) | Same dependency/licensing/footprint objections as in ADR-005's vendor alternative, now inside the core product rather than the add-on. |
+
+## References
+
+- REQ-009: [`FEATURE_REQUESTS.md`](./FEATURE_REQUESTS.md) · prior decision: [ADR-005](./ADR-005-xsd11-compiled-model-and-validation.md) (decision 4 defers this ADR)
+- S0 seam inventory and strategy framing: [`XSD11_SOURCE_AUDIT.md`](./XSD11_SOURCE_AUDIT.md) §3.2–3.4, §4 · confirmed skip IDs: [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) §4
+- Design handover: [`Bosak_Schema_XSD11_Agent_Handover_v0.1.md`](./Bosak_Schema_XSD11_Agent_Handover_v0.1.md)
+- W3C XML Schema 1.1 Part 1 (Structures, conditional types / `xs:alternative`): https://www.w3.org/TR/xmlschema11-1/

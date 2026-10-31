@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C23",
+  "sourceBase": "25d6d8179c42efb483a247c64e2e0ce6cb506e1f",
+  "candidateVersion": "1.29.2",
+  "publishedVersion": "1.26.3",
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4": [
+    8895,
+    0,
+    1914
+  ],
+  "rehearsalQt3": [
+    31165,
+    0,
+    656
+  ],
+  "rehearsalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "normalizationQt3": [
+    43,
+    0,
+    5
+  ],
+  "normalizationQt4": [
+    44,
+    0,
+    6
+  ],
+  "proposedGatedSets": 230,
+  "normalGatedSets": 229,
+  "retainedQt3SkipReasons": 656,
+  "retainedQt4SkipReasons": 1914,
+  "addedQt4DependencySkips": 6,
+  "inheritedSolutionPassed": 23746,
+  "freshSolutionRun": false,
+  "boundedProcesses": 6,
+  "adopted": false,
+  "releaseApproved": false
+}

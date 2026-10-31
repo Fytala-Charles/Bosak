@@ -1,0 +1,26 @@
+  Bosak.Schema -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\src\Bosak.Schema\bin\Release\net10.0\Bosak.Schema.dll
+  Bosak.Schema.Tests -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+dotnet : [xUnit.net 00:00:00.33]
+Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies [FAIL]
+At line:2 char:1
++ dotnet test .guard-tmp/schema-assessment-worktree/Bosak.Schema.slnx - ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([xUnit.net 00:0...ipCopies [FAIL]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  Failed Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies [32 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "true"
+Actual:   "false"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Schema.Tests.DocumentAssessmentTests.TypedLeafProjection_RunsRealXPathAndXsltWithPreserveAndStripCopies() in D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\Xsd11\DocumentAssessmentTests.cs:line 266
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: D:\Development\Bosak\.guard-tmp\schema-assessment-tests-explicit-bindings\charl_CHARLES_2026-10-29_13_04_05_net10.0.trx
+
+Failed!  - Failed:     1, Passed:   171, Skipped:     0, Total:   172, Duration: 209 ms - Bosak.Schema.Tests.dll (net10.0)

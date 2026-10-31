@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C18",
+  "sourceBase": "15bb2312dd1b07a28179dd2700587debe9fa6b64",
+  "candidateVersion": "1.28.2",
+  "publishedVersion": "1.26.3",
+  "buildExitCode": 0,
+  "solutionExitCode": 0,
+  "solutionProjects": 10,
+  "solutionPassed": 22927,
+  "xsltPassed": 8196,
+  "newRegressionRows": 348,
+  "beforeNewRegressions": {
+    "failed": 240,
+    "passed": 108
+  },
+  "focusedAfterPassed": 729,
+  "existingCalendarChecks": 381,
+  "correctedCompatibilityRows": 9,
+  "correctedC17EmptyControls": 30,
+  "c17ControlsAfter": {
+    "passed": 75,
+    "failed": 21
+  },
+  "retainedOriginalMissingArityFailures": 8,
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4Gate": [
+    8587,
+    0,
+    1892
+  ],
+  "normalExploratoryDate": [
+    208,
+    6,
+    18
+  ],
+  "normalExploratoryTime": [
+    92,
+    2,
+    4
+  ],
+  "skipMapsUnchanged": true,
+  "gatedSets": 226,
+  "experimentalPasses": 11,
+  "boundedDiagnosticGateProcesses": 108,
+  "timeouts": 0,
+  "baselineChanged": false,
+  "admissionChanged": false,
+  "releaseApproved": false
+}

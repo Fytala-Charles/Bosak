@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,shutil,hashlib,xml.etree.ElementTree as ET,subprocess
+E=Path('docs/conformance/k01-schema-list/evidence');P=Path('.guard-tmp/k01-reflection');P.mkdir(exist_ok=True)
+s=Path('.guard-tmp/closure-reflection/Program.cs').read_text(encoding='utf-8');(E/'released-probe-program.cs.txt').write_text(s,encoding='utf-8');s=s.replace('D:/Development/Bosak/.guard-tmp/release1263-source/tests/','D:/Development/Bosak/tests/');(P/'Program.cs').write_text(s,encoding='utf-8');shutil.copyfile('.guard-tmp/closure-reflection/Probe.csproj',P/'Probe.csproj');shutil.copyfile(P/'Program.cs',E/'probe-program.cs.txt');shutil.copyfile(P/'Probe.csproj',E/'probe-project.csproj.txt')
+file=Path('tests/qt3tests/prod/CastExpr.schema.xml');root=ET.parse(file).getroot();ns=root.tag.split('}')[0]+'}';cases={}
+for name in ['CastAs-ListType-20','CastAs-ListType-28']:
+ element=next(v for v in root.iter(ns+'test-case') if v.get('name')==name);cases[name]=dict(xml=ET.tostring(element,encoding='unicode'),expression=element.findtext(ns+'test').strip(),result=ET.tostring(element.find(ns+'result'),encoding='unicode'))
+ request=dict(Suite='qt3',SuiteRoot=str(Path('tests/qt3tests').resolve()),SetFile=str(file.resolve()),Name=name);(E/(name+'-request.json')).write_text(json.dumps(request,indent=2)+'\n',encoding='utf-8')
+(E/'fixture.json').write_text(json.dumps(dict(file=file.as_posix(),sha256=hashlib.sha256(file.read_bytes()).hexdigest(),revision=subprocess.check_output(['git','-C','tests/qt3tests','rev-parse','HEAD']).decode().strip(),cases=cases),indent=2)+'\n',encoding='utf-8')

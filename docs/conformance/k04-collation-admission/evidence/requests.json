@@ -1,0 +1,265 @@
+[
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/compare.xml",
+    "Name": "compare-010",
+    "gated": true,
+    "expression": "compare(\"a\", \"A\", \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>0</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-56",
+    "gated": false,
+    "expression": "deep-equal((\"a\", \"A\"), (\"A\", \"a\"), \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-57",
+    "gated": false,
+    "expression": "deep-equal((\"a\", \"A\"), (\"A\", \"b\"), \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-58",
+    "gated": false,
+    "expression": "\n         deep-equal(<a><b x=\"abc\"/></a>, <a><b x=\"ABC\"/></a>,\n             \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-59",
+    "gated": false,
+    "expression": "\n         deep-equal(<a><b>abc</b></a>, <a><b>ABC</b></a>,\n             \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-60",
+    "gated": false,
+    "expression": "\n         deep-equal(<a><b>abc</b></a>, <a><B>abc</B></a>,\n             \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-61",
+    "gated": false,
+    "expression": "\n         deep-equal(<a><b x=\"abc\"/></a>, <a><b X=\"abc\"/></a>,\n             \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-62",
+    "gated": false,
+    "expression": "\n         let $deep := deep-equal(?, ?, \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n         return $deep(<a><b>abc</b></a>, <a><b>ABC</b></a>)\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-63",
+    "gated": false,
+    "expression": "\n         let $deep := deep-equal#3 \n         return $deep(<a><b>abc</b></a>, <a><b>ABC</b></a>, \n                      \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/deep-equal.xml",
+    "Name": "K-SeqDeepEqualFunc-70",
+    "gated": false,
+    "expression": "\n         let $deep := deep-equal(?, ?, \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")\n         return $deep(<a><b>abc</b></a>, <a><b>ABC</b></a>)\n      ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/substring-after.xml",
+    "Name": "fn-substring-after-24",
+    "gated": false,
+    "expression": "substring-after(\"banana\", \"A\", \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>\"nana\"</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/fn/substring-before.xml",
+    "Name": "fn-substring-before-24",
+    "gated": false,
+    "expression": "substring-before(\"banana\", \"A\",\n         \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>\"b\"</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests\\qt4tests",
+    "SetFile": "tests/qt4tests/prod/GroupByClause.xml",
+    "Name": "group-017",
+    "gated": false,
+    "expression": "\n      count(\n         for $y in (\"ax\", \"bx\", \"cx\", \"Ay\", \"By\", \"Cy\")\n         group by $k := substring($y, 1, 1) collation \"http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive\"\n         return <group>{$y}</group>\n       )\n       ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>3</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  }
+]

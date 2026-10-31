@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "ff1fd57478ce534303da5f08b5fd263f05ac25e0",
+  "fixtureRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "catalogSha256": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+  "totalCases": 31821,
+  "schemaCases": 1010,
+  "baselineCounts": {
+    "Passed": 895,
+    "Skipped": 115
+  },
+  "metadataCandidates": 902,
+  "excludedSkipped": 108,
+  "policy": "Inventory all cases/environments. Inspect actual guard only for baseline-passing schema cases plus seven known schema-preparation exceptions. Do not execute other skipped/inapplicable/heavy cases or infer XQuery4 routing. All diagnostic outcomes remain outside gate accounting."
+}

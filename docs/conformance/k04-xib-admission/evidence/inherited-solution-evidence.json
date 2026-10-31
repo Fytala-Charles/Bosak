@@ -1,0 +1,6 @@
+{
+  "source": "docs/conformance/k04-pragma-admission/adoption/solution-receipt.json",
+  "receiptSha256": "8634095315ad722dea52cf254fc82ffb1567a1b54e7e82c2ef44021f5ebd9b38",
+  "passed": 24164,
+  "disposition": "Inherited from adopted C38 through C39; no source/normal binary changes or new solution test run in qualification."
+}

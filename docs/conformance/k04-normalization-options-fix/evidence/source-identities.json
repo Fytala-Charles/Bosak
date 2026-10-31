@@ -1,0 +1,5 @@
+{
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "ee037a29aa573dd1d7e840298e43445e492d0d6e",
+  "src/Directory.Build.props": "669aa1e39cb8d096cd48bf4114316a3c3a7c77cd",
+  "tests/Bosak.XPath.Standard.Tests/NormalizationOptionsTests.cs": "be8be33096819561ac3caa98e3e53c861b4522f5"
+}

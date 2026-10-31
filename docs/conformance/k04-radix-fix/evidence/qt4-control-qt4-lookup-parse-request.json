@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-radix-fix/evidence/control-fixtures.xml", "Name": "control-qt4-lookup-parse", "case": "lookup-parse", "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2))", "boundary": "lookup", "expected": "true"}

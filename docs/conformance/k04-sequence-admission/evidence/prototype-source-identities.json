@@ -1,0 +1,24 @@
+{
+  "qt3": {
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "68d82fb6dadb6ff23e5e5937e6d323cebe4befbaa41b55377e03240a85230b16",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "e3227a83814dda831d6f81bb8beffb226fc4754b72794b897e4ad6f8bbf908df",
+    "tests/Bosak.XPath.Conformance/Program.cs": "33f12b0ff5a1809413c178fd7bd2f811955aba151b6656e1def921024d529125",
+    "tests/Bosak.XPath.Conformance/ResultComparer.cs": "240dea26db460c798ef8b163c19eb3de743309b1ed7772fdda64148d59058c9a",
+    "tests/Bosak.XPath.Conformance/TestCase.cs": "1c688f1aa6630e2b92a24675a51aa5cabf2852afdfb4cdd66382ebf3e949fa64",
+    "tests/Bosak.XPath.Conformance/TestEnvironment.cs": "55401394b943b74a45c99bd3408e8d0664199c9dde9c127860bd11823e41c8f3",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "5c0c9ce0eee084c348ea5649bc931a7e21955ccbc9d88e6f2737a9463d0305c2",
+    "tests/Bosak.XPath.Conformance/TestOutcome.cs": "9cfc3b3f688b0a652d2a2dd0a2c84e09ea4cdc2ed4bdd1557a369c0f632d7099",
+    "tests/Bosak.XPath.Conformance/TestReport.cs": "de5e0ab91c8a7ed9f35e8651b6b06bd433205c04f45bf0e0ff456aa38402162b"
+  },
+  "qt4": {
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cdf8ef841007278271ce814fc0fc8b442421f26162607a53a7ed5999ce17b665",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "79921f9f3ead2e96799a2009a1fb4963554b35232b897eea05c98a655a7ef6f7",
+    "tests/Bosak.XPath.Conformance40/Program.cs": "ade7553810bcaa8f9506da00bbb6b0edf22bafc6e17d4d700e78cff060ca0252",
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "b5d1a6935c560f2612898cc2d169ed0a6708f217011cc1c162ddb63a072dae9e",
+    "tests/Bosak.XPath.Conformance/TestCase.cs": "1c688f1aa6630e2b92a24675a51aa5cabf2852afdfb4cdd66382ebf3e949fa64",
+    "tests/Bosak.XPath.Conformance/TestEnvironment.cs": "55401394b943b74a45c99bd3408e8d0664199c9dde9c127860bd11823e41c8f3",
+    "tests/Bosak.XPath.Conformance/ResultComparer.cs": "240dea26db460c798ef8b163c19eb3de743309b1ed7772fdda64148d59058c9a",
+    "tests/Bosak.XPath.Conformance/TestReport.cs": "de5e0ab91c8a7ed9f35e8651b6b06bd433205c04f45bf0e0ff456aa38402162b",
+    "tests/Bosak.XPath.Conformance/TestOutcome.cs": "9cfc3b3f688b0a652d2a2dd0a2c84e09ea4cdc2ed4bdd1557a369c0f632d7099"
+  }
+}

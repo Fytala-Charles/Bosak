@@ -1,0 +1,706 @@
+[
+  {
+    "name": "base-URI-12",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\base-URI-12.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7894624000182375,
+    "log": "base-URI-12-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "base-URI-12",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "base-URI-12",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\base-URI-12.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 1.1956905999977607,
+    "log": "base-URI-12-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "base-URI-12",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Constr-attr-syntax-5",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Constr-attr-syntax-5.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7889308000158053,
+    "log": "Constr-attr-syntax-5-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-attr-syntax-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Constr-attr-syntax-5",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Constr-attr-syntax-5.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.41526760000851937,
+    "log": "Constr-attr-syntax-5-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-attr-syntax-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "DirectConElemAttr-1",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\DirectConElemAttr-1.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19236819999059662,
+    "log": "DirectConElemAttr-1-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemAttr-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "DirectConElemAttr-1",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\DirectConElemAttr-1.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2914220000093337,
+    "log": "DirectConElemAttr-1-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemAttr-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "DirectConElemNamespace-3",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\DirectConElemNamespace-3.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24216300001717173,
+    "log": "DirectConElemNamespace-3-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemNamespace-3",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 14: XPST0003: Unexpected token LessThan in primary expression; Expected error XQST0046, got: Parse error at position 14: XPST0003: Unexpected token LessThan in primary expression]"
+    }
+  },
+  {
+    "name": "DirectConElemNamespace-3",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\DirectConElemNamespace-3.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3228430000017397,
+    "log": "DirectConElemNamespace-3-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "DirectConElemNamespace-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElem-47",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElem-47.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24745520000578836,
+    "log": "K2-DirectConElem-47-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElem-47",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression; Expected error XQST0046, got: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression]"
+    }
+  },
+  {
+    "name": "K2-DirectConElem-47",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElem-47.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3206415000022389,
+    "log": "K2-DirectConElem-47-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElem-47",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-29",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-29.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2111416999832727,
+    "log": "K2-DirectConElemAttr-29-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-29",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-29",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-29.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2889924000191968,
+    "log": "K2-DirectConElemAttr-29-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-29",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-40",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-40.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1818007999972906,
+    "log": "K2-DirectConElemAttr-40-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-40",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-40",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-40.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25778949999948964,
+    "log": "K2-DirectConElemAttr-40-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-40",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-8",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-8.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19252479998976924,
+    "log": "K2-DirectConElemAttr-8-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemAttr-8",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemAttr-8.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18293589999666438,
+    "log": "K2-DirectConElemAttr-8-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemContent-28",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemContent-28.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21176940001896583,
+    "log": "K2-DirectConElemContent-28-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemContent-28",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+    }
+  },
+  {
+    "name": "K2-DirectConElemContent-28",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemContent-28.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2800127000082284,
+    "log": "K2-DirectConElemContent-28-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemContent-28",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConElemWhitespace-9",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemWhitespace-9.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2115598999953363,
+    "log": "K2-DirectConElemWhitespace-9-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemWhitespace-9",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+    }
+  },
+  {
+    "name": "K2-DirectConElemWhitespace-9",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConElemWhitespace-9.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2797955000132788,
+    "log": "K2-DirectConElemWhitespace-9-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemWhitespace-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-DirectConOther-1",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConOther-1.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20366280002053827,
+    "log": "K2-DirectConOther-1-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConOther-1",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+    }
+  },
+  {
+    "name": "K2-DirectConOther-1",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K2-DirectConOther-1.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26338530000066385,
+    "log": "K2-DirectConOther-1-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConOther-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Literals069",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Literals069.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19188719999510795,
+    "log": "Literals069-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Literals069",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Literals069.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2600033000053372,
+    "log": "Literals069-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Serialization-adaptive-32",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-adaptive-32.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18518470000708476,
+    "log": "Serialization-adaptive-32-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-32",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Serialization-adaptive-32",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-adaptive-32.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2916006000014022,
+    "log": "Serialization-adaptive-32-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-32",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Serialization-adaptive-33",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-adaptive-33.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18715460001840256,
+    "log": "Serialization-adaptive-33-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-33",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Serialization-adaptive-33",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-adaptive-33.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2862764000019524,
+    "log": "Serialization-adaptive-33-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-33",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Serialization-json-41",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-json-41.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19200290000298992,
+    "log": "Serialization-json-41-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-json-41",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Serialization-json-41",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Serialization-json-41.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2892262999957893,
+    "log": "Serialization-json-41-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Serialization-json-41",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "string-constructor-021",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\string-constructor-021.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21636570000555366,
+    "log": "string-constructor-021-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "string-constructor-021",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 14: XPST0003: Unexpected token Invalid in primary expression"
+    }
+  },
+  {
+    "name": "string-constructor-021",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\string-constructor-021.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2740633999928832,
+    "log": "string-constructor-021-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "string-constructor-021",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "originalCase": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"count(a) eq 2\")",
+  "newCase": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.CountAssertionCapability_IsSupported",
+  "reason": "Explicit capability adoption of the recorded count-refusal case as supported/v4",
+  "originalSourceSha256": "4ab05c059b756180c74ffe4465e14b7961d1a8efb8e44cff1d2acab637795f6b",
+  "currentSourceSha256": "2aaaf672884236b60755e837dee4b5a4b9f28a09a61b49162c6d57253ddd7b27",
+  "recordedBeforeProductionEdits": true
+}

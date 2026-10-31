@@ -1,0 +1,20 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const md=require('C:/Users/charl/AppData/Local/npm-cache/_npx/28f98e99224dac41/node_modules/markdown-it')({html:true});
+const root=process.cwd(),out=path.join(root,'.guard-tmp/k02-wide-render');fs.mkdirSync(out,{recursive:true});
+const files=["README.md", "docs/ARCHITECTURE.md", "docs/FEATURE_REQUESTS.md", "docs/INTEGRATION.md", "docs/AGENT_HANDOVER.md", "docs/DOCUMENTATION_RENDERER_TEST.md", "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md", "docs/conformance/k02-schema-inventory/README.md", "docs/conformance/k02-schema-loader/README.md"];
+const css=path.join(root,'assets/css/fytala-markdown.css');
+const receipts=[];
+for(const f of files){
+ const text=fs.readFileSync(path.join(root,f),'utf8'),html=md.render(text);
+ if(!html.includes('<h'))throw Error('No heading '+f);
+ const target=path.join(out,f.replaceAll('/','_')+'.html');
+ fs.writeFileSync(target,`<!doctype html><meta charset="utf-8"><base href="file:///${path.dirname(path.join(root,f)).replaceAll('\\','/')}/"><link rel="stylesheet" href="file:///${css.replaceAll('\\','/')}"><main>${html}</main>`);
+ receipts.push({source:f,html:path.relative(root,target).replaceAll('\\','/'),sha256:crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex')});
+}
+fs.writeFileSync(path.join(out,'receipts.json'),JSON.stringify({kind:'HTML only; no screenshot/PDF acceptance',cssSha256:crypto.createHash('sha256').update(fs.readFileSync(css)).digest('hex'),pages:receipts},null,2));
+console.log(`Rendered ${files.length} pages using unchanged Fytala CSS.`);
+
+
+
+
+

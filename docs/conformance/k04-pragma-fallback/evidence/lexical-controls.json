@@ -1,0 +1,98 @@
+[
+  {
+    "Name": "simple",
+    "Expression": "declare namespace p=\"urn:unknown\"; (#p:x#){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "comment",
+    "Expression": "(: (#p:x#){1} :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "string",
+    "Expression": "\"(#p:x#){1}\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "nested-comment",
+    "Expression": "(:a(: (#p:x#) :)b:) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "uri-name",
+    "Expression": "(#Q{urn:unknown}x#){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "unprefixed",
+    "Expression": "(#x#){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "empty-name",
+    "Expression": "(##){1}",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "missing-fallback",
+    "Expression": "(#p:x#){}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "multiple",
+    "Expression": "(#p:x#)(#p:y#){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "whitespace",
+    "Expression": "(# \np:x #){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "pragma-in-string",
+    "Expression": "'(# p:x #)'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "construction",
+    "Expression": "declare construction strip; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy",
+    "Expression": "declare copy-namespaces no-preserve,inherit;1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "context",
+    "Expression": "declare context item:=1;.",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "comment-gap",
+    "Expression": "(#(:x:)p:x#){1}",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "complex-content",
+    "Expression": "(#p:x (:unclosed \" #){1}",
+    "Before": false,
+    "After": true
+  }
+]

@@ -1,0 +1,1317 @@
+{
+  "date": "2026-10-31",
+  "status": "Partial E-01/E-02 actual-VM engineering return; no representation accepted",
+  "processRuns": 6,
+  "distinctExpressions": 27,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "identity",
+          "expression": "$v",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "identity",
+          "expression": "$v",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "identity",
+          "expression": "$v",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "identity-string",
+      "expression": "$s",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "identity-string",
+          "expression": "$s",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "identity-string",
+          "expression": "$s",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "identity-string",
+          "expression": "$s",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "let",
+          "expression": "let $x := $v return $x",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "let",
+          "expression": "let $x := $v return $x",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "let",
+          "expression": "let $x := $v return $x",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "filter",
+      "expression": "($v,$w)[1]",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "filter",
+          "expression": "($v,$w)[1]",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "filter",
+          "expression": "($v,$w)[1]",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "filter",
+          "expression": "($v,$w)[1]",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "simple-map",
+      "expression": "$v ! .",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "simple-map",
+          "expression": "$v ! .",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "simple-map",
+          "expression": "$v ! .",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "simple-map",
+          "expression": "$v ! .",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "array",
+          "expression": "[$v](1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "array",
+          "expression": "[$v](1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "array",
+          "expression": "[$v](1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "map-value",
+      "expression": "map{'a':$v}?a",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "map-value",
+          "expression": "map{'a':$v}?a",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "map-value",
+          "expression": "map{'a':$v}?a",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "map-value",
+          "expression": "map{'a':$v}?a",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "map-nested",
+      "expression": "map{'a':[$v]}?a(1)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "map-nested",
+          "expression": "map{'a':[$v]}?a(1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "map-nested",
+          "expression": "map{'a':[$v]}?a(1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "map-nested",
+          "expression": "map{'a':[$v]}?a(1)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "function",
+          "expression": "(function($x){$x})($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "function",
+          "expression": "(function($x){$x})($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "function",
+          "expression": "(function($x){$x})($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "data-atomic",
+      "expression": "data($v)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "data-atomic",
+          "expression": "data($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "data-atomic",
+          "expression": "data($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "data-atomic",
+          "expression": "data($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "data-node",
+      "expression": "data($n)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "data-node",
+          "expression": "data($n)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "data-node",
+          "expression": "data($n)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "data-node",
+          "expression": "data($n)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "data-untyped-node",
+      "expression": "data($untyped)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "data-untyped-node",
+          "expression": "data($untyped)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "data-untyped-node",
+          "expression": "data($untyped)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "data-untyped-node",
+          "expression": "data($untyped)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "data-sequence-node",
+      "expression": "data($list)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "data-sequence-node",
+          "expression": "data($list)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            },
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "data-sequence-node",
+          "expression": "data($list)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            },
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": "B"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "data-sequence-node",
+          "expression": "data($list)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            },
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": "B"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "cast-identity",
+      "expression": "xs:integer($v)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "cast-identity",
+          "expression": "xs:integer($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "cast-identity",
+          "expression": "xs:integer($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "cast-identity",
+          "expression": "xs:integer($v)",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "cast-decimal",
+      "expression": "xs:decimal($v)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "cast-decimal",
+          "expression": "xs:decimal($v)",
+          "items": [
+            {
+              "kind": "Decimal",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "cast-decimal",
+          "expression": "xs:decimal($v)",
+          "items": [
+            {
+              "kind": "Decimal",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "cast-decimal",
+          "expression": "xs:decimal($v)",
+          "items": [
+            {
+              "kind": "Decimal",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v + 1",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "arithmetic",
+          "expression": "$v + 1",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "43",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "arithmetic",
+          "expression": "$v + 1",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "43",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "arithmetic",
+          "expression": "$v + 1",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "43",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "comparison",
+      "expression": "$v = 42",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "comparison",
+          "expression": "$v = 42",
+          "items": [
+            {
+              "kind": "Boolean",
+              "value": "true",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "comparison",
+          "expression": "$v = 42",
+          "items": [
+            {
+              "kind": "Boolean",
+              "value": "true",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "comparison",
+          "expression": "$v = 42",
+          "items": [
+            {
+              "kind": "Boolean",
+              "value": "true",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "distinct",
+      "expression": "distinct-values(($v,$v))",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "distinct",
+          "expression": "distinct-values(($v,$v))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "distinct",
+          "expression": "distinct-values(($v,$v))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "distinct",
+          "expression": "distinct-values(($v,$v))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "sort",
+      "expression": "sort(($v,$w))",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "sort",
+          "expression": "sort(($v,$w))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": null
+            },
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "sort",
+          "expression": "sort(($v,$w))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": "B"
+            },
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "sort",
+          "expression": "sort(($v,$w))",
+          "items": [
+            {
+              "kind": "Integer",
+              "value": "7",
+              "origin": "B"
+            },
+            {
+              "kind": "Integer",
+              "value": "42",
+              "origin": "A"
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "string-conversion",
+      "expression": "string($s)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "string-conversion",
+          "expression": "string($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "string-conversion",
+          "expression": "string($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "string-conversion",
+          "expression": "string($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "upper-case",
+      "expression": "upper-case($s)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "upper-case",
+          "expression": "upper-case($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "ALPHA",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "upper-case",
+          "expression": "upper-case($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "ALPHA",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "upper-case",
+          "expression": "upper-case($s)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "ALPHA",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "string-join",
+      "expression": "string-join(($s,$s),'-')",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "string-join",
+          "expression": "string-join(($s,$s),'-')",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha-alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "string-join",
+          "expression": "string-join(($s,$s),'-')",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha-alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "string-join",
+          "expression": "string-join(($s,$s),'-')",
+          "items": [
+            {
+              "kind": "String",
+              "value": "alpha-alpha",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "map-key",
+      "expression": "map{$v:'hit'}? (42)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "map-key",
+          "expression": "map{$v:'hit'}? (42)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "hit",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "map-key",
+          "expression": "map{$v:'hit'}? (42)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "hit",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "map-key",
+          "expression": "map{$v:'hit'}? (42)",
+          "items": [
+            {
+              "kind": "String",
+              "value": "hit",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "serialization",
+      "expression": "serialize(map{'a':$v},map{'method':'json'})",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "serialization",
+          "expression": "serialize(map{'a':$v},map{'method':'json'})",
+          "items": [
+            {
+              "kind": "String",
+              "value": "{\"a\":42}",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "holder": {
+          "id": "serialization",
+          "expression": "serialize(map{'a':$v},map{'method':'json'})",
+          "items": [
+            {
+              "kind": "String",
+              "value": "{\"a\":42}",
+              "origin": null
+            }
+          ],
+          "error": null
+        },
+        "selective": {
+          "id": "serialization",
+          "expression": "serialize(map{'a':$v},map{'method':'json'})",
+          "items": [
+            {
+              "kind": "String",
+              "value": "{\"a\":42}",
+              "origin": null
+            }
+          ],
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "no-typed-value",
+      "expression": "data($empty)",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "no-typed-value",
+          "expression": "data($empty)",
+          "items": [],
+          "error": "FOTY0012",
+          "message": "FOTY0012: The argument node does not have a typed value."
+        },
+        "holder": {
+          "id": "no-typed-value",
+          "expression": "data($empty)",
+          "items": [],
+          "error": "FOTY0012",
+          "message": "FOTY0012: The argument node does not have a typed value."
+        },
+        "selective": {
+          "id": "no-typed-value",
+          "expression": "data($empty)",
+          "items": [],
+          "error": "FOTY0012",
+          "message": "FOTY0012: The argument node does not have a typed value."
+        }
+      }
+    },
+    {
+      "id": "invalid-cast",
+      "expression": "xs:integer('not-number')",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "invalid-cast",
+          "expression": "xs:integer('not-number')",
+          "items": [],
+          "error": "FORG0001",
+          "message": "FORG0001: Cannot cast 'not-number' to integer."
+        },
+        "holder": {
+          "id": "invalid-cast",
+          "expression": "xs:integer('not-number')",
+          "items": [],
+          "error": "FORG0001",
+          "message": "FORG0001: Cannot cast 'not-number' to integer."
+        },
+        "selective": {
+          "id": "invalid-cast",
+          "expression": "xs:integer('not-number')",
+          "items": [],
+          "error": "FORG0001",
+          "message": "FORG0001: Cannot cast 'not-number' to integer."
+        }
+      }
+    },
+    {
+      "id": "cardinality-error",
+      "expression": "exactly-one(($v,$w))",
+      "payloadAndErrorMatchBaseline": true,
+      "variants": {
+        "baseline": {
+          "id": "cardinality-error",
+          "expression": "exactly-one(($v,$w))",
+          "items": [],
+          "error": "FORG0005",
+          "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+        },
+        "holder": {
+          "id": "cardinality-error",
+          "expression": "exactly-one(($v,$w))",
+          "items": [],
+          "error": "FORG0005",
+          "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+        },
+        "selective": {
+          "id": "cardinality-error",
+          "expression": "exactly-one(($v,$w))",
+          "items": [],
+          "error": "FORG0005",
+          "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+        }
+      }
+    }
+  ],
+  "allocationSummary": [
+    {
+      "mode": "baseline",
+      "items": 1000,
+      "kind": "integer",
+      "allocatedBytes": [
+        48024
+      ],
+      "perProcessMedianNanoseconds": [
+        16800,
+        16300
+      ]
+    },
+    {
+      "mode": "baseline",
+      "items": 1000,
+      "kind": "string",
+      "allocatedBytes": [
+        48024
+      ],
+      "perProcessMedianNanoseconds": [
+        16100,
+        15800
+      ]
+    },
+    {
+      "mode": "baseline",
+      "items": 100000,
+      "kind": "integer",
+      "allocatedBytes": [
+        4800024
+      ],
+      "perProcessMedianNanoseconds": [
+        1322400,
+        2245500
+      ]
+    },
+    {
+      "mode": "baseline",
+      "items": 100000,
+      "kind": "string",
+      "allocatedBytes": [
+        4800024
+      ],
+      "perProcessMedianNanoseconds": [
+        1062200,
+        850300
+      ]
+    },
+    {
+      "mode": "holder",
+      "items": 1000,
+      "kind": "integer",
+      "allocatedBytes": [
+        80024
+      ],
+      "perProcessMedianNanoseconds": [
+        30300,
+        28100
+      ]
+    },
+    {
+      "mode": "holder",
+      "items": 1000,
+      "kind": "string",
+      "allocatedBytes": [
+        80024
+      ],
+      "perProcessMedianNanoseconds": [
+        28100,
+        35100
+      ]
+    },
+    {
+      "mode": "holder",
+      "items": 100000,
+      "kind": "integer",
+      "allocatedBytes": [
+        8000024,
+        8000048
+      ],
+      "perProcessMedianNanoseconds": [
+        6804000,
+        7199500
+      ]
+    },
+    {
+      "mode": "holder",
+      "items": 100000,
+      "kind": "string",
+      "allocatedBytes": [
+        8000024,
+        8000032,
+        8000040
+      ],
+      "perProcessMedianNanoseconds": [
+        1148600,
+        1742000
+      ]
+    },
+    {
+      "mode": "selective",
+      "items": 1000,
+      "kind": "integer",
+      "allocatedBytes": [
+        48024
+      ],
+      "perProcessMedianNanoseconds": [
+        13200,
+        13500
+      ]
+    },
+    {
+      "mode": "selective",
+      "items": 1000,
+      "kind": "string",
+      "allocatedBytes": [
+        80024
+      ],
+      "perProcessMedianNanoseconds": [
+        23900,
+        27700
+      ]
+    },
+    {
+      "mode": "selective",
+      "items": 100000,
+      "kind": "integer",
+      "allocatedBytes": [
+        4800024
+      ],
+      "perProcessMedianNanoseconds": [
+        1534000,
+        1252400
+      ]
+    },
+    {
+      "mode": "selective",
+      "items": 100000,
+      "kind": "string",
+      "allocatedBytes": [
+        8000024,
+        8000048
+      ],
+      "perProcessMedianNanoseconds": [
+        6205700,
+        7434100
+      ]
+    }
+  ],
+  "carrierSelected": null,
+  "performanceBudgetsAccepted": false,
+  "productionModified": false,
+  "apiFrozen": false,
+  "fullE02Completed": false,
+  "remaining": [
+    "Normative provenance laws for casts/computed values",
+    "CLR equality/consumer contract disposition",
+    "Real provider PSVI/list/union/compatible views",
+    "Reference-backed allocation/default-path costs",
+    "Session/lifetime and worker ownership E-04",
+    "Full engine/gate/consumer and performance qualification"
+  ]
+}

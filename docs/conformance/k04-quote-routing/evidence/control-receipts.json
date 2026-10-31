@@ -1,0 +1,140 @@
+[
+  {
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "can-handle",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-quote-routing\\evidence\\controls.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.09681299998192117,
+    "result": [
+      {
+        "id": "doubled-string",
+        "accepted": false
+      },
+      {
+        "id": "single-string",
+        "accepted": false
+      },
+      {
+        "id": "comment",
+        "accepted": false
+      },
+      {
+        "id": "nested-comment",
+        "accepted": false
+      },
+      {
+        "id": "direct-attribute",
+        "accepted": false
+      },
+      {
+        "id": "cdata",
+        "accepted": false
+      },
+      {
+        "id": "pi",
+        "accepted": false
+      },
+      {
+        "id": "malformed-attribute",
+        "accepted": false
+      },
+      {
+        "id": "context-prolog",
+        "accepted": false
+      },
+      {
+        "id": "construction-prolog",
+        "accepted": false
+      },
+      {
+        "id": "copy-prolog",
+        "accepted": false
+      },
+      {
+        "id": "pragma",
+        "accepted": false
+      },
+      {
+        "id": "commented-prolog",
+        "accepted": false
+      }
+    ],
+    "log": "controls-current.log"
+  },
+  {
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "can-handle",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-quote-routing\\evidence\\controls.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.09445679999771528,
+    "result": [
+      {
+        "id": "doubled-string",
+        "accepted": true
+      },
+      {
+        "id": "single-string",
+        "accepted": true
+      },
+      {
+        "id": "comment",
+        "accepted": true
+      },
+      {
+        "id": "nested-comment",
+        "accepted": true
+      },
+      {
+        "id": "direct-attribute",
+        "accepted": true
+      },
+      {
+        "id": "cdata",
+        "accepted": true
+      },
+      {
+        "id": "pi",
+        "accepted": true
+      },
+      {
+        "id": "malformed-attribute",
+        "accepted": true
+      },
+      {
+        "id": "context-prolog",
+        "accepted": false
+      },
+      {
+        "id": "construction-prolog",
+        "accepted": false
+      },
+      {
+        "id": "copy-prolog",
+        "accepted": false
+      },
+      {
+        "id": "pragma",
+        "accepted": false
+      },
+      {
+        "id": "commented-prolog",
+        "accepted": false
+      }
+    ],
+    "log": "controls-prototype.log"
+  }
+]

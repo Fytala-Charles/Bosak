@@ -4,6 +4,8 @@
   <p>Deferred — instruction and stylesheet-function alternatives</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified function refusal and instruction alternative**. No proposed fn:apply-templates adoption or complete template-environment certification. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **fn:apply-templates — Deferred.** The [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains in force. Bosak engine 1.1.2 reviewed against [revision 7758c568](https://github.com/Fytala-Charles/Bosak/commit/7758c568612a19781c36bb1ca30c01e973a6246a).
@@ -241,6 +243,8 @@ The examples use in-memory capture. Both alternatives visit each selected invoic
 ## 15. Known Uses
 
 The executable invoice export is a realistic ERP reporting pattern, not evidence of a named production deployment. Other uses include applying normalization rules before building JSON records; those constructions need their own fixtures.
+
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [28 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [Function_ApplyTemplates_Inside_Function_Matches_Name_Pattern](../../../tests/Bosak.Xslt.Tests/StylesheetTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
 
 ## 16. Related Features
 

@@ -1,0 +1,1 @@
+{"Name": "library-duplicate", "Source": "module namespace m = 'urn:c24'; declare context item external; declare context item external;", "ExpectedCode": "XQST0099"}

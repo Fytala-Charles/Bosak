@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "2d224d0a81b0ccdb57a5aaaee67d7890f4e7a1b3",
+  "specification": "https://www.w3.org/TR/2008/REC-xml-20081126/",
+  "sections": [
+    "2.3 Names",
+    "2.4 Character Data",
+    "2.5 Comments",
+    "2.6 Processing Instructions"
+  ],
+  "scope": "K03-C02 only: decode encoded element/attribute name tokens in serialized annotated XML; preserve existing XObject text, attribute values, namespace URIs, comments, CDATA, PI payload/targets and declarations. Keep loader/value-accessor and provider name-storage integration separate. No public API, fixture, harness or baseline change.",
+  "candidate": "1.26.10"
+}

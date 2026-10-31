@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C25",
+  "sourceBase": "98cce43eca941c702f1f488ae41efa3a6ce0fdb1",
+  "candidateVersion": "1.29.3",
+  "publishedVersion": "1.26.3",
+  "newRegressionRows": 24,
+  "baselineFailed": 8,
+  "baselinePassed": 16,
+  "solutionPassed": 23770,
+  "solutionProjects": 10,
+  "xqueryPassed": 371,
+  "xsltPassed": 8196,
+  "normalQt3": [
+    31165,
+    0,
+    656
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "contextDeclarationQt3": [
+    4,
+    0,
+    40
+  ],
+  "contextDeclarationQt4": [
+    0,
+    0,
+    53
+  ],
+  "gatedSets": 230,
+  "experimentalPasses": 11,
+  "unchangedC24ExecutionResults": 80,
+  "unchangedFilterAssessments": 97,
+  "libraryControlsPassed": 5,
+  "changedLibraryControls": [
+    "library-duplicate"
+  ],
+  "boundedProcesses": 90,
+  "mainModuleSupportChanged": false,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false
+}

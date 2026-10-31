@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-29",
+  "priorDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16,
+    "schema-repeated-implementation": 33,
+    "schema-repetition-review": 9,
+    "schema-count-assertions": 17,
+    "schema-count-implementation": 30,
+    "schema-count-review": 9,
+    "schema-presence-implementation": 28,
+    "schema-presence-review": 9,
+    "schema-consumer-priorities": 6,
+    "xmldb-compatibility": 28,
+    "braid-compatibility": 36,
+    "consumer-qualification-review": 6,
+    "binary-compatibility-scope": 9,
+    "binary-compatibility-execution": 560
+  },
+  "allOriginalBytesPreserved": true,
+  "rawCountsVerified": {
+    "xmldb.baseline": {
+      "pass": 27,
+      "fail": 0
+    },
+    "xmldb.replacement": {
+      "pass": 27,
+      "fail": 0
+    },
+    "braid.baseline": {
+      "pass": 1876,
+      "fail": 0
+    },
+    "braid.replacement": {
+      "pass": 1872,
+      "fail": 4
+    }
+  },
+  "testIdentityEquality": true,
+  "xmlDb44ObservationsEqual": true,
+  "engineOnlyLayoutDeltaVerified": true,
+  "runtimeIdentityFindingReproducedInRawReceipts": true,
+  "productionUnchanged": true,
+  "freshExecutionInReview": false
+}

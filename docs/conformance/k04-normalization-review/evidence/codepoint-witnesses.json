@@ -1,0 +1,920 @@
+[
+  {
+    "codepoint": 769,
+    "name": "COMBINING ACUTE ACCENT",
+    "category": "Mn",
+    "canonicalCombiningClass": 230,
+    "canonicalCompositionWitnesses": [
+      {
+        "composite": 193,
+        "mapping": [
+          65,
+          769
+        ]
+      },
+      {
+        "composite": 201,
+        "mapping": [
+          69,
+          769
+        ]
+      },
+      {
+        "composite": 205,
+        "mapping": [
+          73,
+          769
+        ]
+      },
+      {
+        "composite": 211,
+        "mapping": [
+          79,
+          769
+        ]
+      },
+      {
+        "composite": 218,
+        "mapping": [
+          85,
+          769
+        ]
+      },
+      {
+        "composite": 221,
+        "mapping": [
+          89,
+          769
+        ]
+      },
+      {
+        "composite": 225,
+        "mapping": [
+          97,
+          769
+        ]
+      },
+      {
+        "composite": 233,
+        "mapping": [
+          101,
+          769
+        ]
+      },
+      {
+        "composite": 237,
+        "mapping": [
+          105,
+          769
+        ]
+      },
+      {
+        "composite": 243,
+        "mapping": [
+          111,
+          769
+        ]
+      },
+      {
+        "composite": 250,
+        "mapping": [
+          117,
+          769
+        ]
+      },
+      {
+        "composite": 253,
+        "mapping": [
+          121,
+          769
+        ]
+      },
+      {
+        "composite": 262,
+        "mapping": [
+          67,
+          769
+        ]
+      },
+      {
+        "composite": 263,
+        "mapping": [
+          99,
+          769
+        ]
+      },
+      {
+        "composite": 313,
+        "mapping": [
+          76,
+          769
+        ]
+      },
+      {
+        "composite": 314,
+        "mapping": [
+          108,
+          769
+        ]
+      },
+      {
+        "composite": 323,
+        "mapping": [
+          78,
+          769
+        ]
+      },
+      {
+        "composite": 324,
+        "mapping": [
+          110,
+          769
+        ]
+      },
+      {
+        "composite": 340,
+        "mapping": [
+          82,
+          769
+        ]
+      },
+      {
+        "composite": 341,
+        "mapping": [
+          114,
+          769
+        ]
+      },
+      {
+        "composite": 346,
+        "mapping": [
+          83,
+          769
+        ]
+      },
+      {
+        "composite": 347,
+        "mapping": [
+          115,
+          769
+        ]
+      },
+      {
+        "composite": 377,
+        "mapping": [
+          90,
+          769
+        ]
+      },
+      {
+        "composite": 378,
+        "mapping": [
+          122,
+          769
+        ]
+      },
+      {
+        "composite": 471,
+        "mapping": [
+          220,
+          769
+        ]
+      },
+      {
+        "composite": 472,
+        "mapping": [
+          252,
+          769
+        ]
+      },
+      {
+        "composite": 500,
+        "mapping": [
+          71,
+          769
+        ]
+      },
+      {
+        "composite": 501,
+        "mapping": [
+          103,
+          769
+        ]
+      },
+      {
+        "composite": 506,
+        "mapping": [
+          197,
+          769
+        ]
+      },
+      {
+        "composite": 507,
+        "mapping": [
+          229,
+          769
+        ]
+      },
+      {
+        "composite": 508,
+        "mapping": [
+          198,
+          769
+        ]
+      },
+      {
+        "composite": 509,
+        "mapping": [
+          230,
+          769
+        ]
+      },
+      {
+        "composite": 510,
+        "mapping": [
+          216,
+          769
+        ]
+      },
+      {
+        "composite": 511,
+        "mapping": [
+          248,
+          769
+        ]
+      },
+      {
+        "composite": 901,
+        "mapping": [
+          168,
+          769
+        ]
+      },
+      {
+        "composite": 902,
+        "mapping": [
+          913,
+          769
+        ]
+      },
+      {
+        "composite": 904,
+        "mapping": [
+          917,
+          769
+        ]
+      },
+      {
+        "composite": 905,
+        "mapping": [
+          919,
+          769
+        ]
+      },
+      {
+        "composite": 906,
+        "mapping": [
+          921,
+          769
+        ]
+      },
+      {
+        "composite": 908,
+        "mapping": [
+          927,
+          769
+        ]
+      },
+      {
+        "composite": 910,
+        "mapping": [
+          933,
+          769
+        ]
+      },
+      {
+        "composite": 911,
+        "mapping": [
+          937,
+          769
+        ]
+      },
+      {
+        "composite": 912,
+        "mapping": [
+          970,
+          769
+        ]
+      },
+      {
+        "composite": 940,
+        "mapping": [
+          945,
+          769
+        ]
+      },
+      {
+        "composite": 941,
+        "mapping": [
+          949,
+          769
+        ]
+      },
+      {
+        "composite": 942,
+        "mapping": [
+          951,
+          769
+        ]
+      },
+      {
+        "composite": 943,
+        "mapping": [
+          953,
+          769
+        ]
+      },
+      {
+        "composite": 944,
+        "mapping": [
+          971,
+          769
+        ]
+      },
+      {
+        "composite": 972,
+        "mapping": [
+          959,
+          769
+        ]
+      },
+      {
+        "composite": 973,
+        "mapping": [
+          965,
+          769
+        ]
+      },
+      {
+        "composite": 974,
+        "mapping": [
+          969,
+          769
+        ]
+      },
+      {
+        "composite": 979,
+        "mapping": [
+          978,
+          769
+        ]
+      },
+      {
+        "composite": 1027,
+        "mapping": [
+          1043,
+          769
+        ]
+      },
+      {
+        "composite": 1036,
+        "mapping": [
+          1050,
+          769
+        ]
+      },
+      {
+        "composite": 1107,
+        "mapping": [
+          1075,
+          769
+        ]
+      },
+      {
+        "composite": 1116,
+        "mapping": [
+          1082,
+          769
+        ]
+      },
+      {
+        "composite": 7688,
+        "mapping": [
+          199,
+          769
+        ]
+      },
+      {
+        "composite": 7689,
+        "mapping": [
+          231,
+          769
+        ]
+      },
+      {
+        "composite": 7702,
+        "mapping": [
+          274,
+          769
+        ]
+      },
+      {
+        "composite": 7703,
+        "mapping": [
+          275,
+          769
+        ]
+      },
+      {
+        "composite": 7726,
+        "mapping": [
+          207,
+          769
+        ]
+      },
+      {
+        "composite": 7727,
+        "mapping": [
+          239,
+          769
+        ]
+      },
+      {
+        "composite": 7728,
+        "mapping": [
+          75,
+          769
+        ]
+      },
+      {
+        "composite": 7729,
+        "mapping": [
+          107,
+          769
+        ]
+      },
+      {
+        "composite": 7742,
+        "mapping": [
+          77,
+          769
+        ]
+      },
+      {
+        "composite": 7743,
+        "mapping": [
+          109,
+          769
+        ]
+      },
+      {
+        "composite": 7756,
+        "mapping": [
+          213,
+          769
+        ]
+      },
+      {
+        "composite": 7757,
+        "mapping": [
+          245,
+          769
+        ]
+      },
+      {
+        "composite": 7762,
+        "mapping": [
+          332,
+          769
+        ]
+      },
+      {
+        "composite": 7763,
+        "mapping": [
+          333,
+          769
+        ]
+      },
+      {
+        "composite": 7764,
+        "mapping": [
+          80,
+          769
+        ]
+      },
+      {
+        "composite": 7765,
+        "mapping": [
+          112,
+          769
+        ]
+      },
+      {
+        "composite": 7800,
+        "mapping": [
+          360,
+          769
+        ]
+      },
+      {
+        "composite": 7801,
+        "mapping": [
+          361,
+          769
+        ]
+      },
+      {
+        "composite": 7810,
+        "mapping": [
+          87,
+          769
+        ]
+      },
+      {
+        "composite": 7811,
+        "mapping": [
+          119,
+          769
+        ]
+      },
+      {
+        "composite": 7844,
+        "mapping": [
+          194,
+          769
+        ]
+      },
+      {
+        "composite": 7845,
+        "mapping": [
+          226,
+          769
+        ]
+      },
+      {
+        "composite": 7854,
+        "mapping": [
+          258,
+          769
+        ]
+      },
+      {
+        "composite": 7855,
+        "mapping": [
+          259,
+          769
+        ]
+      },
+      {
+        "composite": 7870,
+        "mapping": [
+          202,
+          769
+        ]
+      },
+      {
+        "composite": 7871,
+        "mapping": [
+          234,
+          769
+        ]
+      },
+      {
+        "composite": 7888,
+        "mapping": [
+          212,
+          769
+        ]
+      },
+      {
+        "composite": 7889,
+        "mapping": [
+          244,
+          769
+        ]
+      },
+      {
+        "composite": 7898,
+        "mapping": [
+          416,
+          769
+        ]
+      },
+      {
+        "composite": 7899,
+        "mapping": [
+          417,
+          769
+        ]
+      },
+      {
+        "composite": 7912,
+        "mapping": [
+          431,
+          769
+        ]
+      },
+      {
+        "composite": 7913,
+        "mapping": [
+          432,
+          769
+        ]
+      },
+      {
+        "composite": 7940,
+        "mapping": [
+          7936,
+          769
+        ]
+      },
+      {
+        "composite": 7941,
+        "mapping": [
+          7937,
+          769
+        ]
+      },
+      {
+        "composite": 7948,
+        "mapping": [
+          7944,
+          769
+        ]
+      },
+      {
+        "composite": 7949,
+        "mapping": [
+          7945,
+          769
+        ]
+      },
+      {
+        "composite": 7956,
+        "mapping": [
+          7952,
+          769
+        ]
+      },
+      {
+        "composite": 7957,
+        "mapping": [
+          7953,
+          769
+        ]
+      },
+      {
+        "composite": 7964,
+        "mapping": [
+          7960,
+          769
+        ]
+      },
+      {
+        "composite": 7965,
+        "mapping": [
+          7961,
+          769
+        ]
+      },
+      {
+        "composite": 7972,
+        "mapping": [
+          7968,
+          769
+        ]
+      },
+      {
+        "composite": 7973,
+        "mapping": [
+          7969,
+          769
+        ]
+      },
+      {
+        "composite": 7980,
+        "mapping": [
+          7976,
+          769
+        ]
+      },
+      {
+        "composite": 7981,
+        "mapping": [
+          7977,
+          769
+        ]
+      },
+      {
+        "composite": 7988,
+        "mapping": [
+          7984,
+          769
+        ]
+      },
+      {
+        "composite": 7989,
+        "mapping": [
+          7985,
+          769
+        ]
+      },
+      {
+        "composite": 7996,
+        "mapping": [
+          7992,
+          769
+        ]
+      },
+      {
+        "composite": 7997,
+        "mapping": [
+          7993,
+          769
+        ]
+      },
+      {
+        "composite": 8004,
+        "mapping": [
+          8000,
+          769
+        ]
+      },
+      {
+        "composite": 8005,
+        "mapping": [
+          8001,
+          769
+        ]
+      },
+      {
+        "composite": 8012,
+        "mapping": [
+          8008,
+          769
+        ]
+      },
+      {
+        "composite": 8013,
+        "mapping": [
+          8009,
+          769
+        ]
+      },
+      {
+        "composite": 8020,
+        "mapping": [
+          8016,
+          769
+        ]
+      },
+      {
+        "composite": 8021,
+        "mapping": [
+          8017,
+          769
+        ]
+      },
+      {
+        "composite": 8029,
+        "mapping": [
+          8025,
+          769
+        ]
+      },
+      {
+        "composite": 8036,
+        "mapping": [
+          8032,
+          769
+        ]
+      },
+      {
+        "composite": 8037,
+        "mapping": [
+          8033,
+          769
+        ]
+      },
+      {
+        "composite": 8044,
+        "mapping": [
+          8040,
+          769
+        ]
+      },
+      {
+        "composite": 8045,
+        "mapping": [
+          8041,
+          769
+        ]
+      },
+      {
+        "composite": 8142,
+        "mapping": [
+          8127,
+          769
+        ]
+      },
+      {
+        "composite": 8158,
+        "mapping": [
+          8190,
+          769
+        ]
+      }
+    ],
+    "algorithmicHangulSecond": false,
+    "composing": true
+  },
+  {
+    "codepoint": 847,
+    "name": "COMBINING GRAPHEME JOINER",
+    "category": "Mn",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": false
+  },
+  {
+    "codepoint": 2307,
+    "name": "DEVANAGARI SIGN VISARGA",
+    "category": "Mc",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": false
+  },
+  {
+    "codepoint": 2494,
+    "name": "BENGALI VOWEL SIGN AA",
+    "category": "Mc",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [
+      {
+        "composite": 2507,
+        "mapping": [
+          2503,
+          2494
+        ]
+      }
+    ],
+    "algorithmicHangulSecond": false,
+    "composing": true
+  },
+  {
+    "codepoint": 4449,
+    "name": "HANGUL JUNGSEONG A",
+    "category": "Lo",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": true,
+    "composing": true
+  },
+  {
+    "codepoint": 4520,
+    "name": "HANGUL JONGSEONG KIYEOK",
+    "category": "Lo",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": true,
+    "composing": true
+  },
+  {
+    "codepoint": 4352,
+    "name": "HANGUL CHOSEONG KIYEOK",
+    "category": "Lo",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": false
+  },
+  {
+    "codepoint": 8413,
+    "name": "COMBINING ENCLOSING CIRCLE",
+    "category": "Me",
+    "canonicalCombiningClass": 0,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": false
+  },
+  {
+    "codepoint": 119141,
+    "name": "MUSICAL SYMBOL COMBINING STEM",
+    "category": "Mc",
+    "canonicalCombiningClass": 216,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": true
+  },
+  {
+    "codepoint": 119143,
+    "name": "MUSICAL SYMBOL COMBINING TREMOLO-1",
+    "category": "Mn",
+    "canonicalCombiningClass": 1,
+    "canonicalCompositionWitnesses": [],
+    "algorithmicHangulSecond": false,
+    "composing": true
+  }
+]

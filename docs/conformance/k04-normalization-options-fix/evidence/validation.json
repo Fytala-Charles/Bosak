@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C22",
+  "sourceBase": "aa56978e7ae5d0cb3e90c1af6d351009b2449d44",
+  "candidateVersion": "1.29.2",
+  "publishedVersion": "1.26.3",
+  "newRegressionRows": 246,
+  "baselineFailed": 80,
+  "baselinePassed": 166,
+  "finalSolutionPassed": 23746,
+  "solutionProjects": 10,
+  "standardPassed": 13797,
+  "xsltPassed": 8196,
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4": [
+    8895,
+    0,
+    1914
+  ],
+  "normalizationQt3": [
+    42,
+    0,
+    6
+  ],
+  "normalizationQt4": [
+    44,
+    0,
+    6
+  ],
+  "reviewControlsPassed": 62,
+  "correctedReviewControls": 5,
+  "directOriginalsPassed": 4,
+  "conditionalNegativeOriginalsRetained": 4,
+  "gatedSets": 229,
+  "experimentalPasses": 11,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false
+}

@@ -24,6 +24,8 @@
 //                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.11  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 27-10-2026     | Correct cardinal variation parsing and bounded German named ordinal endings (1.26.12). |
+//                      | Charles Korthout | 0.13  | 27-10-2026     | Add bounded XPath4 radix pictures and original-value ordinals (candidate 1.27.0).       |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -43,7 +45,7 @@ internal static class FormatIntegerEngine
     /// </summary>
     /// <param name="ctx">The evaluation context.</param>
     /// <param name="value">The integer to format.</param>
-    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="picture">The format picture with optional cardinal or ordinal variation and numbering modifiers.</param>
     /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
     /// <returns>The formatted integer string.</returns>
     /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
@@ -55,7 +57,7 @@ internal static class FormatIntegerEngine
     /// </summary>
     /// <param name="ctx">The evaluation context.</param>
     /// <param name="value">The integer to format.</param>
-    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="picture">The format picture with optional cardinal or ordinal variation and numbering modifiers.</param>
     /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
     /// <returns>The formatted integer string.</returns>
     /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
@@ -71,10 +73,24 @@ internal static class FormatIntegerEngine
         // 2. Parse format modifier
         ParseModifier(modifier, out bool ordinal, out string? ordinalSuffix, out bool titleCase);
 
+        // A known German word-numbering scheme may select ordinal output even under c(...).
+        // Other schemes/languages retain the existing cardinal or ordinal fallback.
+        if (NormalizeLanguage(language) == "de"
+            && (primaryToken is "w" or "W" or "Ww")
+            && GermanOrdinalEnding(ordinalSuffix) is not null)
+            ordinal = true;
+
         // 3. Format based on primary token
         BigInteger absValue = BigInteger.Abs(value);
         string result;
-        if (TryFormatNamedToken(absValue, primaryToken, language, out result))
+        int radix = 0;
+        string radixPattern = string.Empty;
+        bool isRadix = ctx.IsXPath40 && TryParseRadix(primaryToken, out radix, out radixPattern);
+        if (isRadix)
+        {
+            result = FormatRadixPattern(absValue, radixPattern, radix);
+        }
+        else if (TryFormatNamedToken(absValue, primaryToken, language, out result))
         {
             // Named token handled
         }
@@ -101,11 +117,20 @@ internal static class FormatIntegerEngine
         // 4. Apply ordinal transformation
         if (ordinal)
         {
-            result = ToOrdinal(result, absValue, ordinalSuffix, language);
+            if (isRadix)
+            {
+                // Radix digits (including letters) are numeric; suffixes use the original value.
+                result += !string.IsNullOrEmpty(ordinalSuffix)
+                    && !ordinalSuffix.StartsWith('%') && !ordinalSuffix.StartsWith('-')
+                    ? ordinalSuffix
+                    : GetEnglishOrdinalSuffix((long)(absValue % 100));
+            }
+            else
+                result = ToOrdinal(result, absValue, ordinalSuffix, language);
         }
 
         // 5. Apply title case
-        if (titleCase)
+        if (titleCase && !isRadix)
         {
             result = ToTitleCase(result);
         }
@@ -117,6 +142,78 @@ internal static class FormatIntegerEngine
         }
 
         return result;
+    }
+
+    private static bool TryParseRadix(string token, out int radix, out string pattern)
+    {
+        radix = 0;
+        pattern = string.Empty;
+        int caret = token.IndexOf('^');
+        if (caret is < 1 or > 2 || token[0] == '0')
+            return false;
+        for (int i = 0; i < caret; i++)
+            if (token[i] is < '0' or > '9')
+                return false;
+        if (!int.TryParse(token.AsSpan(0, caret), NumberStyles.None, CultureInfo.InvariantCulture, out radix)
+            || radix is < 2 or > 36)
+            return false;
+        var tail = token.AsSpan(caret + 1);
+        if (tail.IndexOfAny('x', 'X') < 0)
+            return false; // Without x/X, caret retains its decimal-grouping interpretation.
+        pattern = token.Substring(caret + 1);
+        return true;
+    }
+
+    private static string FormatRadixPattern(BigInteger magnitude, string pattern, int radix)
+    {
+        var codepoints = GetCodepoints(pattern).ToList();
+        var separators = new List<(int Position, int Codepoint)>();
+        int totalDigits = 0;
+        int mandatoryDigits = 0;
+        bool sawOptional = false;
+        int mandatorySign = 0;
+        for (int i = codepoints.Count - 1; i >= 0; i--)
+        {
+            int cp = codepoints[i];
+            if (cp == '#')
+            {
+                sawOptional = true;
+                totalDigits++;
+            }
+            else if (cp is 'x' or 'X')
+            {
+                if (sawOptional || (mandatorySign != 0 && mandatorySign != cp))
+                    throw new InvalidOperationException("FODF1310");
+                mandatorySign = cp;
+                mandatoryDigits++;
+                totalDigits++;
+            }
+            else if (IsGroupingSeparator(cp))
+            {
+                if (i == 0 || i == codepoints.Count - 1
+                    || (codepoints[i - 1] != '#' && IsGroupingSeparator(codepoints[i - 1])))
+                    throw new InvalidOperationException("FODF1310");
+                separators.Add((totalDigits, cp));
+            }
+            else
+                throw new InvalidOperationException("FODF1310");
+        }
+        if (mandatoryDigits == 0)
+            throw new InvalidOperationException("FODF1310");
+
+        string alphabet = mandatorySign == 'X'
+            ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            : "0123456789abcdefghijklmnopqrstuvwxyz";
+        var reversed = new StringBuilder();
+        do
+        {
+            magnitude = BigInteger.DivRem(magnitude, radix, out var remainder);
+            reversed.Append(alphabet[(int)remainder]);
+        } while (magnitude > 0);
+        char[] digits = reversed.ToString().ToCharArray();
+        Array.Reverse(digits);
+        string padded = new string(digits).PadLeft(mandatoryDigits, '0');
+        return InsertGroupingSeparators(padded, BuildGroupingTemplate(separators, totalDigits));
     }
 
     private static bool HasMandatoryDigits(string token)
@@ -199,14 +296,16 @@ internal static class FormatIntegerEngine
             return;
         }
 
-        // Check for ordinal with suffix: o(-suffix)
-        if (remaining.StartsWith("o(") && remaining.EndsWith(")"))
+        // Both cardinal and ordinal modifiers may carry a nonempty variation name.
+        if (remaining.Length > 3
+            && (remaining[0] is 'c' or 'o')
+            && remaining[1] == '(' && remaining[^1] == ')')
         {
-            // Validate parentheses are balanced
+            // Preserve the existing balanced-parenthesis convention.
             if (remaining.Count(c => c == '(') != remaining.Count(c => c == ')'))
                 throw new InvalidOperationException("FODF1310");
 
-            ordinal = true;
+            ordinal = remaining[0] == 'o';
             ordinalSuffix = remaining.Substring(2, remaining.Length - 3);
             return;
         }
@@ -1069,9 +1168,20 @@ internal static class FormatIntegerEngine
         return n.ToString(CultureInfo.InvariantCulture);
     }
 
+    // Bounded aliases from the pinned German CLDR rules; feminine is the legacy e alias.
+    private static string? GermanOrdinalEnding(string? variation) => variation switch
+    {
+        "%spellout-ordinal" or "%spellout-ordinal-feminine" => "e",
+        "%spellout-ordinal-s" => "es",
+        "%spellout-ordinal-r" => "er",
+        "%spellout-ordinal-n" => "en",
+        _ => null,
+    };
+
     private static string GermanToOrdinalWords(string cardinalWord, string? suffix)
     {
-        string ending = string.IsNullOrEmpty(suffix) || suffix.StartsWith("%") ? "e" : suffix.TrimStart('-');
+        string ending = GermanOrdinalEnding(suffix)
+            ?? (string.IsNullOrEmpty(suffix) || suffix.StartsWith("%") ? "e" : suffix.TrimStart('-'));
         int lastSpace = cardinalWord.LastIndexOf(' ');
         if (lastSpace < 0)
             return MatchCase(cardinalWord, GermanMakeOrdinalLastWord(cardinalWord.ToLowerInvariant(), ending));

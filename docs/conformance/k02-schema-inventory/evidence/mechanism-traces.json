@@ -1,0 +1,53 @@
+[
+  {
+    "id": "Castable-UnionType-7",
+    "error1": "XPST0051: The type \u0027{http://www.w3.org/XQueryTest/unionListDefined}unrestrictedInteger\u0027 is not a known schema type.",
+    "result1": null,
+    "typeAfterFirst": true,
+    "functionAfterFirst": false,
+    "error2": null,
+    "result2": "true",
+    "functionAfterSecond": true
+  },
+  {
+    "id": "qischema030",
+    "error1": "XPST0051: The type \u0027{http://www.w3.org/XQueryTest/hats}hatsize\u0027 is not a known schema type.",
+    "result1": null,
+    "typeAfterFirst": true,
+    "functionAfterFirst": false,
+    "error2": null,
+    "result2": "5 8",
+    "functionAfterSecond": true
+  },
+  {
+    "schemaFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport\\qischema032.xsd",
+    "withBase": false,
+    "sourceUri": "",
+    "compiled": false,
+    "globalTypes": 0,
+    "events": [
+      {
+        "severity": "Warning",
+        "message": "Cannot resolve the \u0027schemaLocation\u0027 attribute."
+      },
+      {
+        "severity": "Error",
+        "message": "Undefined complexType \u0027http://schema.highwire.org/Publishing/Resource:resource\u0027 is used as a base for complex type restriction."
+      },
+      {
+        "severity": "Error",
+        "message": "Reference to undeclared substitution group affiliation."
+      }
+    ],
+    "error": null
+  },
+  {
+    "schemaFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport\\qischema032.xsd",
+    "withBase": true,
+    "sourceUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport/qischema032.xsd",
+    "compiled": true,
+    "globalTypes": 2,
+    "events": [],
+    "error": null
+  }
+]

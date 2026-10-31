@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "1d6d421e9cf7f970531dbaddac0c99996ea6197f",
+  "specifications": [
+    "https://www.w3.org/TR/2008/REC-xml-20081126/#NT-NameStartChar",
+    "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/#func-serialize"
+  ],
+  "scope": "Reversible map/provider name storage, literal-value preservation and copying. Reuse existing internal codec/annotation; keep XML-version feature validation separate. Remove redundant loader and attribute value decoding using existing CheckCharacters=false reader behavior. Do not change reader/resolver/network policy, public APIs, fixtures, harness filters or gated-set membership.",
+  "candidate": "1.26.11",
+  "qt3": [
+    31145,
+    0,
+    676
+  ],
+  "qt4Prior": [
+    8436,
+    0,
+    1894
+  ],
+  "expectedQt4Gain": "map-to-element-053; verify exact one-case skip delta through complete gated run"
+}

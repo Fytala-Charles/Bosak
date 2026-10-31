@@ -1,0 +1,63 @@
+{
+  "reason": "Normalize sequence output for readable observation; no expected outcome or engine result is changed.",
+  "requests": [
+    {
+      "id": "capture-constructor-reference",
+      "expression": "let $f := '12' ! xs:integer#0 return '99' ! string($f())",
+      "expected": null,
+      "error": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "group": "focus-context",
+      "classification": "investigation",
+      "backwardsCompatible": false,
+      "sourceCase": null
+    },
+    {
+      "id": "capture-constructor-lookup",
+      "expression": "let $f := '12' ! function-lookup(QName('http://www.w3.org/2001/XMLSchema','integer'),0) return '99' ! string($f())",
+      "expected": null,
+      "error": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "group": "focus-context",
+      "classification": "investigation",
+      "backwardsCompatible": false,
+      "sourceCase": null
+    }
+  ],
+  "observations": [
+    {
+      "id": "capture-constructor-reference",
+      "profile": "XPath40",
+      "result": "(sequence)",
+      "error": null,
+      "exceptionType": null
+    },
+    {
+      "id": "capture-constructor-reference",
+      "profile": "XPath40Experimental",
+      "result": "(sequence)",
+      "error": null,
+      "exceptionType": null
+    },
+    {
+      "id": "capture-constructor-lookup",
+      "profile": "XPath40",
+      "result": "(sequence)",
+      "error": null,
+      "exceptionType": null
+    },
+    {
+      "id": "capture-constructor-lookup",
+      "profile": "XPath40Experimental",
+      "result": "(sequence)",
+      "error": null,
+      "exceptionType": null
+    }
+  ]
+}

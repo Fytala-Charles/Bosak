@@ -1,0 +1,166 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 226 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 448 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 1 s - Bosak.XPath.Core.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   269, Skipped:     0, Total:   269, Duration: 1 s - Bosak.XPath.Runtime.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 1 s - Bosak.XPath.Api.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   347, Skipped:     0, Total:   347, Duration: 1 s - Bosak.XQuery.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed: 13416, Skipped:     0, Total: 13416, Duration: 2 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 5 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   201, Skipped:     0, Total:   201, Duration: 10 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+[xUnit.net 00:00:29.85]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-date-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-date-3") [44 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:34.16]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-dateTime-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-dateTime-4") [33 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:43.68]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-time-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-time-4") [47 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:10.45]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-time-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-time-4") [72 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:20.96]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-date-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-date-4") [96 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:31.78]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-date-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-date-4") [7 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:39.86]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-time-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-time-3") [99 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:51.14]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-dateTime-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-dateTime-3") [10 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:53.34]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-dateTime-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-dateTime-3") [8 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:02:23.64]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-time-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-inventory-fn-format-time-3") [3 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+           ↓ (pos 0)
+Expected: "0"
+Actual:   "1"
+           ↑ (pos 0)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 147
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:02:40.38]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-date-3") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-date-3") [158 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:02:49.70]     Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-dateTime-4") [FAIL]
+  Failed Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: "changed31-contract-reference-fn-format-dateTime-4") [2 ms]
+  Error Message:
+   Assert.ThrowsAny() Failure: No exception was thrown
+Expected: typeof(System.Exception)
+  Stack Trace:
+     at Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(String id) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\Documentation\CatalogExampleTests.cs:line 142
+   at InvokeStub_CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:    12, Passed:  8184, Skipped:     0, Total:  8196, Duration: 4 m 13 s - Bosak.Xslt.Tests.dll (net10.0)

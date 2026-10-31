@@ -1,0 +1,1 @@
+{"Suite": "qt3", "Name": "C24-empty-internal", "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests", "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml", "Expression": "declare context item := (); .", "Dependencies": [], "ExpectedKind": "error", "Expected": "XPTY0004", "InitialContextExpression": null}

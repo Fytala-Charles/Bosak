@@ -57,11 +57,15 @@ Target framework: `net10.0`. All tests must pass before considering a task compl
 > The script copies the build output to `%TEMP%` and runs `dotnet vstest` from there,
 > which bypasses the policy. Other test projects run normally with `dotnet test`.
 
+### Automation crash discipline
+
+Use `tools/run-retained-foundation-caller.py` for retained foundation binary callers. For an isolated qualified candidate, supply its exact seven-assembly hash manifest with `--candidate-evidence`; the default remains the production admission receipt. It checks arguments and qualified binary/configuration hashes before launch, captures output with a watchdog, and scopes Windows error-mode flags to the runner/child process. Do not intentionally launch unhandled .NET negative cases; exercise refusal with a mocked launcher or catch failures inside the diagnostic. Do not change machine-wide Windows Error Reporting settings.
+
 ## Conformance Harnesses
 
 Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
 
-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,142/0/679** (any engine-touching slice).
+- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,397/0/424** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions. The owner-approved K04 pragma update supersedes 31,340/0/481; its 55 eligible pragma admissions retain all 426 remaining skip names and reasons, including two independent exact-XQ10 pragma exclusions. The owner-approved K04 canonical xib update supersedes 31,395/0/426; only format-date-en151 and format-dateTime-en151 leave QT3 skips, retaining all 424 remaining names and reasons.
 - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
 
 ## Architecture Overview
@@ -107,6 +111,7 @@ UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsP
 Public-facing Markdown follows the Fytala branding contract in `docs/DOCUMENTATION_STYLE_GUIDE.md` (kit version recorded in `.fytala-docs.json`; canonical assets under `assets/`, renderer settings in `.vscode/settings.json` and `.crossnote/`). Verify rendered output with `docs/DOCUMENTATION_RENDERER_TEST.md`.
 
 **Rules:**
+- Keep `README.md` focused on the product, quick start, ecosystem/license boundaries and documentation links. Do not prepend implementation checkpoints, test-count logs, repository IDs or local workspace details. Put current engineering detail in `docs/IMPLEMENTATION_STATUS.md`, dated summaries in `docs/DEVELOPMENT_HISTORY.md`, and original receipts in their request-specific dossiers. Keep `ROADMAP.md` focused on current direction and upcoming work.
 - Canonical docs (`README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`) use the branded banner header with meaningful `alt` text; internal handover notes may use a compact heading.
 - Mermaid diagrams embed the Fytala `classDef` palette (`current` / `platform` / `external` / `planned`) and use anchors + `fytala-figure-caption` captions when referenceable.
 - Do not hand-edit kit-managed assets (`assets/css`, `assets/logos`, `assets/images/brand-swatches`, `.crossnote`); sync them from the Prime docs-kit and keep SHA-256 hashes matching its manifest.
@@ -182,6 +187,20 @@ After **every** successful implementation step, update the following canonical d
 - Use `ArrayPool<T>` or struct enumerators for hot paths; avoid `IEnumerable<T>` boxing on critical loops.
 - Keep the public API surface in `Bosak.XPath.Api` thin; delegate to the runtime layer.
 
+## Specification Adoption Evidence (Mandatory)
+
+Before a new implementation or semantic change, record the exact immutable specification source revision, affected sections, and intentional deviations. Keep historical adoption evidence separate from later review pins, test-fixture revisions, publication dates, and feature-origin PRs.
+
+The owner-approved [legacy adoption policy](docs/xpath40-catalog/LEGACY-ADOPTION-POLICY-PROPOSAL.md) applies only to its original 28 records: 26 provenance exceptions and two non-adoptions. Preserve their original null adoption fields and receipts. This exception does not extend to future work, semantic acceptance, or engine defects.
+
 ## Upstream Test Contribution Base (Mandatory)
 
 Prepare every upstream test correction or addition against the current upstream default branch. Fetch upstream before creating the contribution branch and again immediately before submission. Base the contribution on the refreshed default branch (rebase if it has advanced), record the exact base revision, and re-check the final diff against current upstream. Do not submit patches based only on an older contribution branch. This avoids the application/merge conflicts Michael Kay reported in qt4cg/xslt40-test issue #28. Preserve original submission and execution receipts; record corrections separately.
+
+## Schema Repository and Licensing Boundary (29 October 2026)
+
+The active Apache-2.0 schema engine is https://github.com/Fytala-Charles/Bosak.Schema at `D:/Development/Bosak.Schema.Public`. The original private repository/history is now Bosak.Licensing at `D:/Development/Bosak.Licensing`. The original locked `D:/Development/Bosak.Schema` directory remains a private licensing checkout, not the active public schema source. Never copy its credential, billing, deployment material or private history into the public repository. Licensing no longer requires a proprietary schema plug-in seam, but dependency direction, provenance/PSVI, compatibility and lifetime correctness still apply. C45/public core API acceptance remains pending. Bosak.Folio remains proprietary.
+
+The native assessment candidate is a separate persistent public-repository worktree at `D:/Development/Bosak/.worktrees/Bosak.Schema.Assessment`, branch `feature/bounded-document-assessment`; `.worktrees/` is ignored by this core repository. Its original public checkout/pins remain unchanged. Read that worktree's AGENTS.md and current assessment guide before edits; its rule forbids commit/push unless explicitly requested. Preserve earlier sealed integration evidence; current candidate state belongs in `docs/schema-assessment` and the handover.
+
+The reviewed whole-document checkpoint and delivery identities are in `docs/schema-document-bridge/api-review`; original sealed bridge and assessment dossiers remain historical evidence. Trusted-host attachment carries supplied state and does not perform schema validation.

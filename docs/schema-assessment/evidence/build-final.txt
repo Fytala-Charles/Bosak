@@ -1,0 +1,9 @@
+  Bosak.Schema -> D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\src\Bosak.Schema\bin\Release\net10.0\Bosak.Schema.dll
+  Bosak.Schema.Tests -> D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll
+  Bosak.Schema.Assessment.Example -> D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\examples\Bosak.Schema.Assessment.Example\bin\Release\net10.0\Bosak.Schema.Assessment.Example.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.38

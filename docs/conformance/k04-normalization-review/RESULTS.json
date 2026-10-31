@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C20",
+  "status": "Review complete; FULLY conversion correction precedes admission",
+  "sourceBase": "ab2a3d0d40ad131148b6ca17d8b6a46a9273e1aa",
+  "catalogCases": 78806,
+  "normalizationDeclarations": 14,
+  "originalProbes": 8,
+  "originalPassed": 2,
+  "originalFailed": 6,
+  "originalInapplicableNegativeExpectations": 4,
+  "positiveOriginalFailures": 2,
+  "controls": 62,
+  "controlsPassed": 33,
+  "controlsFailed": 29,
+  "fullyNormalizedConversionFailures": 24,
+  "formNameWhitespaceFailures": 2,
+  "defaultOnEmpty40Failures": 2,
+  "keyword40Failures": 1,
+  "normalQt3Set": [
+    42,
+    0,
+    6
+  ],
+  "normalQt4Set": [
+    41,
+    3,
+    6
+  ],
+  "boundedProcesses": 74,
+  "timeouts": 0,
+  "qt3FullGateInherited": [
+    31164,
+    0,
+    657
+  ],
+  "qt4FullGateInherited": [
+    8895,
+    0,
+    1914
+  ],
+  "inheritedSolutionPassed": 23365,
+  "candidateVersion": "1.29.0",
+  "publishedVersion": "1.26.3",
+  "engineChanged": false,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "semanticAdoption": false
+}

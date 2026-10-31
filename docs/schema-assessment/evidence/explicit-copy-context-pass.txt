@@ -1,0 +1,7 @@
+  Bosak.Schema -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\src\Bosak.Schema\bin\Release\net10.0\Bosak.Schema.dll
+  Bosak.Schema.Tests -> D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-assessment-worktree\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-assessment-tests-copy-context\charl_CHARLES_2026-10-29_13_04_58_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   172, Skipped:     0, Total:   172, Duration: 213 ms - Bosak.Schema.Tests.dll (net10.0)

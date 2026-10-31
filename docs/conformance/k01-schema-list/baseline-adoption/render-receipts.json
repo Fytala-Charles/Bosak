@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k01-adopted-render/README.md.html",
+      "sha256": "7a9536d63a0da007bf47249a50ff39eea1681a9dba030df39645dec50020dcd5"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_ARCHITECTURE.md.html",
+      "sha256": "7ee91aca73469fb4f237d9a9f61b2bd1efa9520c9cdddbc6cbaa227d63642b89"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "6d8c8c75b08f37b9e7223bd13dafd4f6473a5009a3b020193088003258ef72c2"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_INTEGRATION.md.html",
+      "sha256": "8b70c40d9b93ab270c203372132320e2521a129204331be7752261eb64e0df82"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "9eba45b0fae57482f0863db347f7098d65923b2e3a475fc5a5a319ef5c05bc5f"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "a81fe03bf9f4251f27b832b0e9ced2269915cb6f245ec80188924c11a48dad85"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "469a41384889c5c50420f968b621b7c7b45a815ea78e02e97f39ed2d38657c54"
+    },
+    {
+      "source": "docs/conformance/k01-schema-list/README.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_conformance_k01-schema-list_README.md.html",
+      "sha256": "c80084cc3372d5f9589554d8967546fb6a893ee3fbb5acac1bc4871536dbfd10"
+    },
+    {
+      "source": "docs/conformance/k01-schema-list/BASELINE-ADOPTION.md",
+      "html": ".guard-tmp/k01-adopted-render/docs_conformance_k01-schema-list_BASELINE-ADOPTION.md.html",
+      "sha256": "6d6958f2ce36623cac25981f0467924ed0c797d81ab10b8f8dbdb60f8702979a"
+    }
+  ]
+}

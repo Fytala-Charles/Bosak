@@ -1,0 +1,9 @@
+{
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "5aa023b8faedaa4cf982d81fee7053937fea024d",
+  "src/Bosak.XPath.Standard/Functions/FullNormalizationEngine.cs": "616d9d50942cc66f1b16fe12b2462aca2c4028d4",
+  "src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj": "157f5a1a784a782d4e38a8d87b8173303f42211e",
+  "src/Directory.Build.props": "1a15a21115904071516a04b13ba8ffc9cabdbcde",
+  "tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs": "5e361eb8d3d44e80a52d01ba11b07ae7a01ebbd3",
+  "tests/Bosak.XPath.Standard.Tests/FullNormalizationTests.cs": "d7f3f45a8e00087a501bf0afbd72505bc27fdf6a",
+  "NOTICE": "500a7877f384e0dd4585c8ad454603047f303a2a"
+}

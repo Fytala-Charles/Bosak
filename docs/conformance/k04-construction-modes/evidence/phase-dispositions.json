@@ -1,0 +1,7 @@
+{
+  "initial-originals": "Four failures exposed three anyType compatibility cases and validate ValueExpr precedence; original fixtures/assertions unchanged.",
+  "initial-full-gates": "One fn-id-25 assertion failed; retained as unsuccessful intermediate evidence. Final fresh gate passes.",
+  "intermediate-full-gates": "Empty xml:id escaped as ArgumentException, producing one new skip. Mapped to XQDY0091 and covered empty/whitespace regressions; final skip maps exact.",
+  "unit-transition": "One previous refusal expectation intentionally removed; all remaining 75 copy tests retained.",
+  "final": "73 regressions; 24082 solution passes; 87 originals; exact unchanged normal gates; isolated 83 skip removals."
+}

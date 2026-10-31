@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded conversion and annotation**. No full schema/type-context acceptance. C05-K03 still affects destructuring unknown annotated fields; ordinary-map empty lookup is separate. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **XSLT host/type review — 21 October 2026:** [Current mapping](../TYPE-PATTERN-GRAMMAR.md) distinguishes stylesheet aliases, conversion in bindings and noncoercing type/pattern tests. Named XSLT record identity is a separate bounded published contract; this does not add standalone XPath declarations.
 
 
@@ -77,6 +79,11 @@ The [record-contract delivery](../RECORD-CONTRACTS.md) and [complete stock task]
 These are tested structural cases, not exhaustive casts, nominal static/default fields or host declarations. Source1.23.6 also fixes an earlier-profile inline-signature leak; [the finding](../INLINE-RECORD-TYPE-GATE.md) preserves the original failing3.1 refusals instead of treating them as supported syntax.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-record-conversion, S6-update. C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records. Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported. Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence. Do not generalize structural updates to all nominal/static/package/recursive record combinations. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Cast constructs an annotated record and discards surplus fields; Coercion rejects surplus fields and recursively coerces declared fields; Required/optional emptiness, declaration order, record(*) and undeclared lookup/map:get distinctions. **Boundary:** A plain map is not an annotated record. Structural matches do not require annotation identity with the tested target, while named identity remains host-defined. Complete record/nominal/schema conversion combinations are not inferred. Ownership: T04, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

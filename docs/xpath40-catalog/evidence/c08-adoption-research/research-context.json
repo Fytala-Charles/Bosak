@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-26",
+  "documentationBase": "c854e9bbfc0f12a57c976e07690930661276a3b7",
+  "scope": "Exactly the28 originally missing adoption records; sixteen delivery trees, sixteen retained PR heads,57 historical matching commits, sixteen retrieved PR records.",
+  "originalLedgerGitBlob": "4bd0d40826092eeb834321016ea098ec6ced01db",
+  "originalLedgerSha256": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
+  "originalInventorySha256": "4d533a11069ddee9ce2ae3afde9792f07687226412d0598c50123bc08fae056c",
+  "ownerDisposition": "Pending; LEGACY-ADOPTION-POLICY-PROPOSAL.md is not applied",
+  "recoveredAdoptionPins": 0,
+  "proposedLegacyExceptions": 26,
+  "proposedNonAdoptions": 2,
+  "limits": [
+    "Negative searches are bounded to retained records, not proof that no original snapshot exists anywhere.",
+    "GitHub PR bodies/comments are retrieved current records, not immutable historical body versions.",
+    "Bosak delivery commits and source trees are immutable repository evidence, not specification source revisions.",
+    "Fixture gitlinks and later immutable review pins cannot establish historical specification adoption."
+  ]
+}

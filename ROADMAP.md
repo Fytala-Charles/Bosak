@@ -1,74 +1,56 @@
-# Bosak — Roadmap
+<div align="center">
+  <img src="assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak roadmap">
+  <br><br><h1>Bosak roadmap</h1>
+  <p>Current direction for the open XML engine and schema foundation</p>
+</div>
 
-**Status:** Beta — **1.0 close-out in progress (2026-10-07): release notes drafted (`docs/RELEASE-NOTES-1.0.md`), API-freeze/INTEGRATION/XML-doc items closed below; remaining before the paired tag: Bosak.Schema `v0.3.0` sign-off + §13.6 live-purchase/community/dead-letter smokes + first licensee + support-channel decision + the pin bump to `1.0.0`** · **Last updated:** 2026-10-07 · **Conformance baseline:** XSLT 3.0 schema-aware sweep **11,054 / 1 / 3,546** (conformance tail fully closed; the 1 is a documented platform limit) · XSLT 3.0 basic sweep **10,242 / 0 / 4,359 — 100.0% pass rate** (2026-10-06, harness 3.73 on main `929eea7`; the 26 former failures are triaged documented known limitations — upstream catalog dependency gap, `docs/BASIC_SWEEP_TRIAGE.md`, w3c/xslt30-test#90; earlier 3.72 record 10,250/0/4,351 on `b1a7479`) · QT3 (XPath 3.1 + XQuery 3.1) **31,142 / 0 / 679** (100% of runnable) · unit tests **2,729+ green** across 9 assemblies + LanguageServer 72/72
+Native kernel/carrier trial (31 October 2026): the isolated production private kernel/session plus unchanged native assessment sources passed 103 control and 109 carrier checks twice each, 14 VM expressions per process, and two retained legacy 20/0 replays. Production remains 1.35.0; public API acceptance and freeze remain pending. Next is direct private transport/read composition with explicit constructor admission. See [the sealed trial](docs/foundation-native-kernel-carrier/README.md).
 
----
+Direct private transport trial (31 October 2026): isolated Core kernel attachment/read and Runtime operation composition replace the host evidence frame. Candidate121/control103 checks pass twice each, 14 VM expressions per process and two legacy 20/0 replays; 48-byte values and no public diagnostic helpers. Production remains 1.35.0. Next: complete atomic fixture coverage and transport cost measurements before promotion; C45/API freeze pending. See [the sealed private transport trial](docs/foundation-private-transport/README.md).
 
-## What Bosak is
+Atomic transport/cost qualification (31 October 2026): the isolated candidate corrects twelve representation controls and retains a stack-owned read lease. 39 fixtures/11 public-factory atomic kinds pass 376 checks per process, twice for candidate/control; native 121/103 and legacy 20/0 remain green. Cached kernel reads fall 176 to 0 bytes/op; issued integer 0 and string/decimal 32, evidence lookup 0. Production remains 1.35.0; timing budgets, C45/API freeze pending. Next: full isolated solution/conformance qualification and equality-manifest review. See [the sealed atomic/cost trial](docs/foundation-transport-atomic-cost/README.md).
 
-A ground-up, pure-managed .NET implementation of **XPath 3.1** (with forward-compatibility for 4.0), **XSLT 3.0**, and **XQuery 3.1**, built on the W3C XQuery Data Model. No native dependencies, no Java bridge — the only third-party package in the tree is the MIT-licensed language-server library used by the VS Code extension.
+Full isolated transport qualification (31 October 2026): a complete rebuilt cohort passes all ten unit projects (24,245 tests; database listener sandbox failures retained, full rerun 47/0), QT3 31,397/0/424 and gated qt4 8,941/0/1,918 with 11 experimental passes. Skip maps and actual loaded hashes are verified; retained caller 20/0, native 121 and atomic 376 pass. Public metadata keeps 78 types but gains two declared equality overrides (1,199 to 1,201); inherited signatures/base slots stay unchanged. Production remains 1.35.0. Next: a production promotion patch with explicit override disposition; C45/API freeze pending. See [full qualification and API review](docs/foundation-transport-full-gates/README.md).
 
-## Where we are — Beta
+Private transport promotion patch prepared (31 October 2026): six-file proposal for 1.36.0 retains the qualified implementation bodies, records the paired equality-override disposition and adds 22 regressions. Isolated preflight passes Core 162/Runtime 281 (443 total), zero-warning builds, seven versioned 1.36.0.0 assemblies, matching public metadata and unchanged caller 20/0. Live source stays 1.35.0; full 1.36 solution/gates remain NotRun. Next: apply and qualify the final-version patch; C45/API freeze pending. See [promotion patch and disposition](docs/foundation-transport-promotion/README.md).
 
-Beta means: **feature-complete, conformance-verified (100% of runnable tests on both W3C suites), public API reviewed and frozen for the 1.0 line.**
+Private scalar transport is implemented and qualified in source 1.36.0. Next: reconcile the C45 public provider contract and owner handoff against this foundation, including the two equality declarations and required consumer/performance acceptance. Schema, XmlDb and Braid implementation remains delegated; publication and final API freeze remain pending. See [current foundation direction](docs/foundation-transport136/README.md).
 
-| Area | State |
-|------|-------|
-| XPath 3.1 | Complete; QT3 sweep 100% of runnable tests |
-| XQuery 3.1 | Phase 4 — full core FLWOR, direct/computed constructors, `switch`/`typeswitch`, library modules, `fn:load-xquery-module`, ordering features, schema-aware `fn:json-to-xml`; QT3 sweep 100% of runnable tests |
-| XSLT 3.0 | Packages (`xsl:package`/`xsl:use-package`/`xsl:override`/`xsl:original`), accumulators, keys, modes, `xsl:evaluate`, `fn:transform()`; strict error-code sweep 100% of runnable tests |
-| Tooling | VS Code language server (highlighting, diagnostics, completion, code lens, initial-template runner) |
-| CI | GitHub Actions build+test on every push/PR; weekly W3C conformance sweep |
+The [1.36 C45 owner-review handoff](docs/foundation-c45-handoff136/README.md) is prepared. Next Core work is the complete named API inventory and exact public provider signature delta; Schema/XmlDb/Braid requirements/design and ordinary compatibility can proceed in parallel. The public provider contract, selected consumer evidence, performance budgets and joint freeze remain pending.
 
-## Release stages
+## Immediate foundation work
 
-### Alpha → Beta
+Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.
 
-Everything below lands before the repo and packages are called Beta:
+1. Connect the [optimized selective carrier](docs/foundation-carrier-field-equality/README.md) to the actual private kernel/native assessment path in an isolated integration cohort. Its measured equality penalty is removed; inherited-method metadata, reference-backed costs and workload budgets still need qualification before production selection. Keep representation details out of the public contract.
+2. Connect the real native Schema provider through the full admitted semantic environment, including versioned host declarations and explicit unsupported capabilities.
+3. Qualify Schema, XmlDb and Braid against the same immutable source/package cohort, including lazy results, source/snapshot ownership, worker boundaries and unchanged consumer binaries.
+4. Resolve the named stable API manifest, C45 and [performance budgets](docs/foundation-performance/README.md), then obtain explicit Core/Schema/XmlDb/Braid dispositions before API freeze or publication.
 
-- [x] CI green on every push/PR
-- [x] Apache-2.0 license + commercial layer defined (`COMMERCIAL.md`)
-- [x] Repository hygiene (history scrubbed, customer references anonymized)
-- [x] NuGet **preview** packages policy decided: `0.9.0-preview` line published from CI (see Versioning policy); local packages re-versioned from 1.0.0
-- [x] Strict-sweep failures triaged: **QT3 31,142/0/679 and XSLT 7,722/3/6,875 — 100% of runnable on both suites**; the 3 XSLT residuals are individually documented as out-of-scope (see `docs/FEATURE_REQUESTS.md`, REQ-082 decision log)
-- [x] Public API review pass over `Bosak.XPath.Api` — thin surface confirmed; naming and options objects frozen as of the Beta line (`0.10.0-beta`); full XML-doc coverage pass over every published package (see `docs/INTEGRATION.md` recent changes)
-- [x] Issue templates, `CONTRIBUTING.md`, community scaffolding — issue forms + PR template in `.github/`, Discussions enabled
+The shared freeze remains the intended final breaking foundation API change. Internal implementation progress and passing core tests do not replace consumer qualification or owner acceptance. External owner work remains delegated.
 
-### Beta → 1.0 (GA)
+## Where we are
 
-- [x] `v0.12.1-beta` published to nuget.org 2026-10-02 (all 9 packages via Trusted Publishing OIDC; carries REQ-101…REQ-115 — schema-aware sweep 11,027/28/3,546, QT3 31,142/0/679). Package version is pinned in `src/Directory.Build.props` — bump the pin before tagging.
-- [x] `v0.12.2-beta` published to nuget.org 2026-10-03 (all 9 packages via Trusted Publishing OIDC; carries REQ-116 + REQ-117 + the REQ-117 tail PR #51 — schema-aware sweep 11,054/1/3,546 with the conformance tail fully closed, basic 10,250/26/4,325, QT3 31,142/0/679). Pin bumped before tagging per the pinned-version rule above.
-- [x] `v0.12.3-beta` published to nuget.org 2026-10-03 (10 packages — first publish of `Bosak.XPath.Providers.Database`; carries REQ-118/119/120)
-- [x] Basic-sweep residuals (26) triaged 2026-10-05 — all 26 documented as known limitations (upstream catalog dependency gap; harness 3.72 basic-only skips) in `docs/BASIC_SWEEP_TRIAGE.md`; **confirmation full sweep on `b1a7479`: 10,250/0/4,351 — 100.0% pass rate**; reported upstream as w3c/xslt30-test#90
-- [x] Full basic-sweep record refreshed on harness 3.73 (maintainer rule: any env with a `<schema>` element = implicit schema-awareness dependency) — **2026-10-06, main `929eea7`: 10,242/0/4,359, 100.0% pass rate, single chunk**; per-test delta vs the 3.72 record is exactly 8 pass→skip (merge-049/050/052/053/054, type-0303, xpath-default-namespace-0501/0502), zero pass→fail; `.guard-tmp/work/sweep373-basic-final.log`, baseline `.sweep-baselines/basic-after-373.txt`
-- [x] **Core 1.0 tagged as a pair with the commercial Bosak.Schema 1.0 (see the Bosak.Schema roadmap)** — ✅ **tagged `v1.0.0` 2026-10-09** (owner decision shortened the 0.13.0 soak): pin bump `0.13.0 → 1.0.0` + product-version fallback synced; carries the complete REQ-118 XPath/XSLT 4.0 wave behind the default-3.1 gate + the additive `XPathExpression` facade (dossier §5.4 naming resolution). The Bosak.Schema-side `v1.0.0` tag is owner-side in that repo's runbook.
-- [ ] **Bosak.Schema go-live ceremony — EXECUTED 2026-10-07 (owner-side, Bosak.Schema repo REQ-005 §13 runbook):** Steps 0–4 done (Stripe KYC + live products, production tenant `rg-fytala-licensing-prod`, ADR-003 signing-key ceremony, live secrets, Postmark/DKIM + `licensing@fytala.com`, bounce/complaint webhooks verified) and the **trial flow verified live** (real Turnstile → 30-day key, production-signature-verified). **Remaining: §13.6 live-purchase + community + dead-letter production smokes, `v0.3.0` tag (owner sign-off), first licensee — then the paired tags.** Zero core-repo work in this item; core 1.0 tags as the paired tag at Phase 4.
-- [x] Strict XSLT sweep at 100% of runnable tests that are not proven upstream artifacts
-- [x] API frozen; SemVer commitment begins — public API frozen since the Beta line (`0.10.0-beta`, see `docs/API_FREEZE.md`); the commitment formalizes at the `1.0.0` tag
-- [x] **0.13.0 stable soak release (owner decision 2026-10-07, pre-1.0)** — ✅ **tagged `v0.13.0` 2026-10-07** (PR #76, `822e712`): `-beta` stripped via pin bump `0.12.3-beta → 0.13.0` in `src/Directory.Build.props` + product-version fallback synced (FunctionLibrary 5.128); the 10 packages publish stable-labeled; soak window = issues/discussions before the 1.0 tag. Release notes state explicitly: 0.x breaking changes remain possible per SemVer, and the within-major API commitment **formally begins at 1.0.0**. Reuses the drafted 1.0 release-notes content (docs/RELEASE-NOTES-1.0.md) minus the GA framing.
-- [x] **Version promoted from `0.9.x-preview` to `1.0.0`; public release notes** — ✅ **2026-10-09** (owner decision shortened the soak): pin bump in `src/Directory.Build.props` (pinned-version rule) + `xsl:product-version` fallback synced; release notes finalized at `docs/RELEASE-NOTES-1.0.md`; the REQ-118 4.0 wave rides behind the default-3.1 gate; new additive `XPathExpression` facade resolves the §5.4 naming question non-breakingly.
-- [x] Integration guide (`docs/INTEGRATION.md`) and XML-doc coverage complete — XML-doc pass shipped at the Beta line (every published package); INTEGRATION.md current through 2026-10-07 (§0 covers every release and behavioral change since Beta)
-- [ ] Support channel defined per `COMMERCIAL.md`
+| Area | Current direction |
+| --- | --- |
+| XPath / XQuery / XSLT | Preserve qualified default-language behavior and frozen gates while developing newer profiles separately. |
+| Schema foundation | Internal admission is implemented; public contracts, complete type/provenance transport and full XSD 1.1 provider coverage remain staged. |
+| Persistent and authoring consumers | XmlDb and Braid are required pre-freeze consumers with explicit compatibility, ownership and performance requirements. |
 
-### Post-1.0 (not committed, in rough priority order)
+The [feature registry](docs/FEATURE_REQUESTS.md) owns individual request status and acceptance criteria. Earlier engineering checkpoints are preserved in the [development history](docs/DEVELOPMENT_HISTORY.md).
 
-- **XSLT streaming** — Phases A+B landed 2026-09-16: burst-mode streaming input via `XmlStreamingProvider` and `XsltExecutable.TransformStreaming` (record-at-a-time processing in bounded memory, verified at 500k records), plus push-style streaming accumulators (values computed per record as the stream arrives). Phase C landed 2026-09-17: `xsl:supports-streaming` reports `yes`, `xsl:source-document streamable="yes"` streams mid-transform documents, the `strm/` sets run through the harness, and a §19 static streamability analyzer raises XTSE3430 (106/110 unique expected-error corpus cases; `decl/accumulator` 102/0/5). Phase D landed 2026-09-17: analyzer-accepted streamable constructs execute — fused single-pass eager helpers, §11.7.3 content semantics, `fn:snapshot` grounding, opt-in record retention (tee/replay) for crawling union/except/intersect/fork shapes, streaming DTD support — full sweep **10,156/119/4,325** (post-release fork fix `9d81042`: si-fork-119/810/811/815). Remaining: the documented residual backlog (REQ-087)
-- **Full schema-awareness** — PSVI annotations exist for typed values and `fn:json-to-xml(validate:=true())`, but source-document validation (`is-schema-aware: no`) is not implemented; likely the core of a future commercial "Bosak Pro" add-on per `COMMERCIAL.md`
-- **XPath 4.0** — the parser is forward-compatible; 4.0 features (e.g. `->` operator, bare `||`, etc.) land as the recommendation stabilizes
-- **Performance work** — first wave landed 2026-09-09 (REQ-085): BenchmarkDotNet harness in `benchmarks/Bosak.Benchmarks` with a published baseline; document-evaluation benchmarks improved 33–48% on time and 45–51% on allocations (wrapper cache, lazy axes, copy-free materialization). Further: XSLT result-tree construction, per-transform thread reuse, predicate-path allocations
+## Continuing work
 
-## Known limitations (platform-bound, no fix planned)
+- Complete staged XSD 1.1 services with precise supported/refused profiles, without routing unsupported 1.1 structure through a 1.0 validator.
+- Reconcile 4.0 draft behavior against immutable adopted specification revisions and separate exploratory work from gated test sets.
+- Improve source-preserving authoring through the [bounded authoring contracts](docs/STRUCTURAL-AUTHORING-ROADMAP.md).
+- Extend streaming only with explicit streamability, lifetime and resource limits.
+- Measure runtime and transformation performance before selecting optimizations.
 
-These are consequences of .NET primitives, not bugs:
+## Open-source and commercial boundaries
 
-- **Date/time values with year < 1** — `DateTimeOffset` has no year 0 or negative years; affected tests are skipped in the QT3 sweep
-- **Decimal precision above 28–29 significant digits** — .NET `decimal` is fixed-precision; literals and arithmetic beyond this are rounded (an arbitrary-precision decimal is a possible future project)
-- **Remote-HTTP-dependent tests** — tests fetching external sites (e.g. `fn-unparsed-text-054a` → timeanddate.com) are blocked by Cloudflare from this environment; skipped, not failed
+Bosak and Bosak.Schema are Apache-2.0. Schema compilation and validation need no activation. The schema implementation remains a separate package with dependency direction and original component identity preserved. Bosak.Folio remains proprietary.
 
-## Versioning policy
+## Compatibility and evidence
 
-[Semantic Versioning](https://semver.org/). During Alpha/Beta the minor version moves freely and breaking API changes are called out in release notes. From 1.0.0 onward the public API of `Bosak.XPath.Api` is stable within a major version.
-
-## How the backlog is tracked
-
-Feature requests and engineering work items live in [`docs/FEATURE_REQUESTS.md`](docs/FEATURE_REQUESTS.md) — a living registry with per-item decision logs. Launch engineering is REQ-083; engine correctness history is REQ-078 through REQ-082.
+Retain original qualification cohorts, consumer acceptance and source/specification records. Broader Schema/XmlDb/Braid acceptance, package publication and final API freeze remain separate explicit gates. Start at the [integration guide](docs/INTEGRATION.md) and [implementation status](docs/IMPLEMENTATION_STATUS.md) for current detail.

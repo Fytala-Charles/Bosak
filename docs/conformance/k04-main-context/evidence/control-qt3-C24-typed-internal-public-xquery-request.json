@@ -1,0 +1,1 @@
+{"Suite": "qt3", "Name": "C24-typed-internal", "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests", "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml", "Expression": "declare context item as xs:integer := 3; .", "Dependencies": [], "ExpectedKind": "assert-eq", "Expected": "3", "InitialContextExpression": null}

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "nominal-own",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer'/></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"t:p(7) instance of t:p\"/></xsl:template></xsl:stylesheet>",
+    "expected": "true"
+  },
+  {
+    "id": "nominal-plain-map",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer'/></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"map{'x':7} instance of t:p\"/></xsl:template></xsl:stylesheet>",
+    "expected": "false"
+  },
+  {
+    "id": "nominal-coerced-map",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer'/></xsl:record-type><xsl:template match=\"/\"><xsl:variable name='p' as='t:p' select=\"map{'x':7}\"/><xsl:value-of select=\"$p instance of t:p\"/></xsl:template></xsl:stylesheet>",
+    "expected": "true"
+  },
+  {
+    "id": "nominal-default-constructor",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer' select='7'/></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"t:p()?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": "7"
+  },
+  {
+    "id": "nominal-default-coercion",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer' select='7'/></xsl:record-type><xsl:template match=\"/\"><xsl:variable name='p' as='t:p' select='map{}'/><xsl:value-of select=\"$p?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": "7"
+  },
+  {
+    "id": "nominal-trailing-default",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer'/><xsl:field name='y' as='xs:integer' select='2'/></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"t:p(1)?y\"/></xsl:template></xsl:stylesheet>",
+    "expected": "2"
+  },
+  {
+    "id": "nominal-body-default",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer'><xsl:sequence select='7'/></xsl:field></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"t:p()?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": "7"
+  },
+  {
+    "id": "nominal-static-constructor",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer' static='yes' select='7'/></xsl:record-type><xsl:template match=\"/\"><xsl:value-of select=\"t:p()?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": "7"
+  },
+  {
+    "id": "nominal-static-coercion",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer' static='yes' select='7'/></xsl:record-type><xsl:template match=\"/\"><xsl:variable name='p' as='t:p' select='map{}'/><xsl:value-of select=\"$p?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": "7"
+  },
+  {
+    "id": "nominal-static-external-override",
+    "stylesheet": "<xsl:stylesheet version=\"4.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:c03:types\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" exclude-result-prefixes=\"#all\"><xsl:output method=\"text\"/><xsl:record-type name='t:p' constructor='yes'><xsl:field name='x' as='xs:integer' static='yes' select='7'/></xsl:record-type><xsl:template match=\"/\"><xsl:variable name='p' as='t:p' select=\"map{'x':9}\"/><xsl:value-of select=\"$p?x\"/></xsl:template></xsl:stylesheet>",
+    "expected": null
+  }
+]

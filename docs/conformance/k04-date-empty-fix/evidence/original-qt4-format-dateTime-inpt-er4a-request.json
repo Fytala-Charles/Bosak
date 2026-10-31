@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "tests/qt4tests/fn/format-dateTime.xml", "Name": "format-dateTime-inpt-er4a", "expression": "format-dateTime(xs:dateTime('2001-12-31T00:00:00'), \"[D01]\", ())", "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-string-value>31</assert-string-value>\n      </result>\n   "}

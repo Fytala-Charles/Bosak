@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "authorization": "Continue repetition review/checkpoint recommendations then prepare separate count assertion scope",
+  "core": {
+    "base": "26ae9b06be97a8860d9f4b5089d41d70a5bd831f",
+    "target": "origin/checkpoint/restart-2026-10-29",
+    "deliveryResolver": "git log -1 --format=%H -- docs/schema-count-assertions/README.md"
+  },
+  "schema": {
+    "base": "a462022a852575f84f0cc504f86771deaa118e0e",
+    "target": "origin/feature/bounded-document-assessment",
+    "deliveryResolver": "git log -1 --format=%H -- docs/COUNT-ASSERTION-PLAN.md",
+    "commit": "2f4bf417131ba70e1653eda3d9148d83a6ef6d8a",
+    "remoteVerified": true,
+    "workingTreeClean": true
+  },
+  "merge": false,
+  "tag": false,
+  "publication": false
+}

@@ -15,6 +15,13 @@
 //                      |                  |       |                | no XQuery routing — XQ-only tests skip (XQuery 4.0 mode does not exist yet)              |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-123 sort-with slice: typedData declared unsupported (no PSVI-typed source nodes)     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
+//                      | Charles Korthout | 0.4   | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+//                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
+//                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+//                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+//                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
+//                      | Charles Korthout | 0.9  | 28-10-2026     | Admit reviewed canonical xib fallback cases with correct dependency polarity. |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -44,9 +51,33 @@ internal sealed class DependencyFilter40
         "fullText-units",
         "fullText-defaults",
         "binary",                            // EXPath-style binary data model not implemented
-        "fn-format-integer-CLDR",            // CLDR numbering systems not implemented
-        "non_unicode_codepoint_collation",   // non-Unicode codepoint collations not supported
         "typedData",                         // harness does not build schema-validated (PSVI-typed) source nodes
+    };
+
+    // Explicit legacy catalog admission, not a certification of complete feature support.
+    // Keep schema/backend and harness-specific limits in the capability review ledger.
+    // Unrecognized names require review before either polarity can admit a test.
+    private static readonly HashSet<string> FrozenAdmittedFeatures = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "advanced-uca-fallback",
+        "collection-stability",
+        "directory-as-collection-uri",
+        "expath-file",
+        "fn-format-integer-CLDR", // Reviewed bounded word schemes; not complete CLDR/RBNF.
+        "fn-load-xquery-module",
+        "fn-transform-XSLT",
+        "fn-transform-XSLT30",
+        "higherOrderFunctions",
+        "infoset-dtd",
+        "moduleImport",
+        "namespace-axis",
+        "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation", // Existing HTML ASCII/UCA routes; URI support is bounded.
+        "remote_http",
+        "schemaImport",
+        "schemaValidation",
+        "serialization",
+        "simple-uca-fallback",
     };
 
     // XPath spec tokens satisfiable at the 4.0 compatibility level (a superset of 3.1,
@@ -73,8 +104,50 @@ internal sealed class DependencyFilter40
     {
         foreach (var dep in dependencies)
         {
+            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
+            // Other language metadata retains the existing bounded admission policy.
+            if (dep.Type == "language" && dep.Value == "xib")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+            // Other calendar names retain their existing admission policy.
+            if (dep.Type == "calendar" && dep.Value == "CB")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+            // Keep other sequence names and dependency kinds under their existing policy.
+            if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
+            if (dep.Type == "feature"
+                && !FrozenAdmittedFeatures.Contains(dep.Value)
+                && !UnsupportedFeatures.Contains(dep.Value))
+                return false; // Unknown is not evidence of support or non-support.
+
             if (!dep.Satisfied)
             {
+                // Apply polarity to the same profile predicate used by positive dependencies.
+                // Other dependency kinds retain their existing capability policy.
+                if (dep.Type is "spec" or "default-language")
+                {
+                    var positive = new Dependency(dep.Type, dep.Value, satisfied: true);
+                    if (IsSupported(new[] { positive }))
+                        return false;
+                    continue;
+                }
+
                 // Negative dependency: if we DO NOT support this feature/spec, the
                 // negation holds and the test stays admissible.
                 if (IsUnsupportedFeature(dep))
@@ -108,7 +181,8 @@ internal sealed class DependencyFilter40
 
             if (dep.Type == "xsd-version")
             {
-                // Bosak implements XSD 1.1; skip XSD 1.0-only tests.
+                // Frozen catalog admission profile; this is not an XSD 1.1 capability claim.
+                // Bosak.Schema owns staged XSD 1.1; the current core seam uses XmlSchemaSet.
                 if (dep.Value != "1.1")
                     return false;
             }

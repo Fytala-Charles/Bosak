@@ -1,0 +1,22 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-deep-equal
+Test-name filter: K-SeqDeepEqualFunc-56
+
+Discovered 738 test sets.
+  Starting: fn-deep-equal ...
+  Done: fn-deep-equal (1 tests total) [P+=1 F+=0 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   1
+Passed:  1
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.00%
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.21s

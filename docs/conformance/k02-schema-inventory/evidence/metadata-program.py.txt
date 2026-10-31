@@ -1,0 +1,21 @@
+from pathlib import Path
+import json,subprocess,time,concurrent.futures
+E=Path('docs/conformance/k02-schema-inventory/evidence');P=Path('.guard-tmp/k02-wide/requests');P.mkdir(exist_ok=True)
+rows=[(i,q) for i,q in enumerate(json.loads((E/'schema-cases.json').read_text(encoding='utf-8'))) if q['inspectPolicy']]
+def run(item):
+ i,q=item;request=P/(str(i)+'.json');request.write_text(json.dumps([q],ensure_ascii=False)+'\n',encoding='utf-8');log=E/('metadata-'+str(i)+'.log');command=['dotnet','.guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll',str(request),q['id'],'metadata'];start=time.monotonic()
+ with log.open('wb') as output:
+  try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+  except subprocess.TimeoutExpired:code=None;timeout=True
+ result=None
+ if code==0:
+  try:result=json.loads(log.read_text(encoding='utf-8-sig').splitlines()[-1])
+  except(ValueError,IndexError):pass
+ return dict(index=i,id=q['id'],exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result)
+out=[];started=time.monotonic()
+with (E/'metadata-results.jsonl').open('w',encoding='utf-8') as checkpoint,concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+ for result in pool.map(run,rows):
+  out.append(result);checkpoint.write(json.dumps(result,ensure_ascii=False)+'\n');checkpoint.flush()
+  if len(out)%50==0 or result['timeout'] or result['exitCode']!=0:print(len(out),'of',len(rows),'elapsed',round(time.monotonic()-started,1),result['id'],result['result']['decision'] if result['result'] else result['exitCode'],flush=True)
+(E/'metadata-results.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+print('Finished',len(out),'metadata probes',flush=True)

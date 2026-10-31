@@ -1,0 +1,49 @@
+// Generated isolated K02 design experiment; never used by the normal runner.
+using System.Reflection;
+using System.Collections;
+using Bosak.XQuery.Api;
+
+namespace Bosak.XPath.Conformance;
+
+internal static class SchemaOwnership
+{
+    internal static (bool Defer, string Reason) Decide(string mode, bool xquery,
+        TestCase test, TestEnvironment environment, string expression, bool declaredSchemaVersion)
+    {
+        if (mode == "current") return (false, "CurrentMode");
+        if (!xquery) return (false, "XPathPath");
+        if (mode == "unsafe-control") return (true, "UnsafeUnconditionalControl");
+        if (declaredSchemaVersion || test.Dependencies.Any(d => d.Type == "xsd-version"))
+            return (false, "DeclaredXsdProfileNotReviewed");
+        if (environment.Sources.Any(s => !string.IsNullOrEmpty(s.Validation)))
+            return (false, "DeclaredSourceValidation");
+        if (environment.Parameters.Count != 0) return (false, "EnvironmentParameters");
+        if (!string.IsNullOrEmpty(environment.ContextItemSelect)) return (false, "InlineContext");
+        if (environment.CollectionQueries.Count != 0) return (false, "CollectionQueries");
+        if (test.Modules.Count != 0) return (false, "ModulesNotReviewed");
+        if (environment.Schemas.Count == 0) return (false, "NoEnvironmentSchemas");
+        if (environment.Schemas.Any(s => string.IsNullOrEmpty(s.Uri)))
+            return (false, "NoNamespaceAssociation");
+        if (environment.Schemas.Any(s => !File.Exists(s.FilePath)))
+            return (false, "MissingSchemaFile");
+        if (environment.Schemas.GroupBy(s => s.Uri).Any(g => g.Count() != 1))
+            return (false, "MultiplePhysicalComponents");
+        try
+        {
+            var compiler = new XQueryCompiler();
+            foreach (var ns in environment.Namespaces) compiler.WithNamespace(ns.Prefix, ns.Uri);
+            var executable = compiler.Compile(expression);
+            var context = typeof(XQueryExecutable).GetField("_staticContext", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(executable)!;
+            var imports = (IEnumerable)context.GetType().GetProperty("ImportedSchemas")!.GetValue(context)!;
+            var namespaces = imports.Cast<object>().Select(i => (string?)i.GetType().GetProperty("NamespaceUri")!.GetValue(i) ?? "").ToHashSet(StringComparer.Ordinal);
+            if (namespaces.Count == 0) return (false, "NoQueryImports");
+            if (environment.Schemas.Any(s => !namespaces.Contains(s.Uri!)))
+                return (false, "UnownedEnvironmentNamespace");
+            return (true, "QueryOwnedImportSubset");
+        }
+        catch (Exception error)
+        {
+            return (false, "CompileMetadataUnavailable:" + error.GetType().Name);
+        }
+    }
+}

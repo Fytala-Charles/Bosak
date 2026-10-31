@@ -1,0 +1,920 @@
+[
+  {
+    "id": "char-positive",
+    "expression": "string-to-codepoints(char(65))",
+    "expected": "65",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "char-zero",
+    "expression": "char(0)",
+    "expected": null,
+    "error": "FOCH0001",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "char-negative",
+    "expression": "char(-1)",
+    "expected": null,
+    "error": "FOCH0001",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "char-string-keyword",
+    "expression": "char(value := 65)",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F01",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "65"
+  },
+  {
+    "id": "partial-apply-normal",
+    "expression": "partial-apply(concat#2,map{1:'A'})('B')",
+    "expected": "AB",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "partial-apply-empty",
+    "expression": "partial-apply(concat#2,map{})('A','B')",
+    "expected": "AB",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "partial-apply-string-key",
+    "expression": "partial-apply(concat#2,map{'1':'A'})('B')",
+    "expected": null,
+    "error": "XPTY0004",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "partial-apply-zero-key",
+    "expression": "partial-apply(concat#2,map{0:'X'})('A','B')",
+    "expected": null,
+    "error": null,
+    "classification": "frozen-policy",
+    "ticket": "F02",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "AB"
+  },
+  {
+    "id": "partial-apply-negative-key",
+    "expression": "partial-apply(concat#2,map{-1:'X'})('A','B')",
+    "expected": null,
+    "error": null,
+    "classification": "frozen-policy",
+    "ticket": "F02",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "AB"
+  },
+  {
+    "id": "partial-apply-high-key",
+    "expression": "partial-apply(concat#2,map{3:'X'})('A','B')",
+    "expected": "AB",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "trim-explicit",
+    "expression": "trim-space('  A  ')",
+    "expected": "A",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "trim-empty",
+    "expression": "string-length(trim-space(()))",
+    "expected": "0",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "trim-context-default",
+    "expression": "'  A  ' ! trim-space()",
+    "expected": null,
+    "error": null,
+    "classification": "frozen-policy",
+    "ticket": "F02",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "A"
+  },
+  {
+    "id": "trim-unknown-option",
+    "expression": "trim-space(' A ',map{'sideways':true()})",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "Unknown non-namespaced option must be rejected under shared option conventions."
+  },
+  {
+    "id": "pad-unknown-option",
+    "expression": "pad-string('A',3,map{'sideways':true()})",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "pad-unused-invalid-side",
+    "expression": "pad-string('ABC',2,map{'side':'diagonal'})",
+    "expected": null,
+    "error": null,
+    "classification": "investigation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "pad-numeric-padding",
+    "expression": "pad-string('A',3,map{'padding':7})",
+    "expected": null,
+    "error": null,
+    "classification": "investigation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "unix-default",
+    "expression": "string(unix-dateTime())",
+    "expected": "1970-01-01T00:00:00Z",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "unix-empty",
+    "expression": "string(unix-dateTime(()))",
+    "expected": "1970-01-01T00:00:00Z",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "unix-negative-frozen",
+    "expression": "string(unix-dateTime(-1))",
+    "expected": null,
+    "error": "FOCA0002",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "unix-negative-experimental",
+    "expression": "string(unix-dateTime(-1))",
+    "expected": "1969-12-31T23:59:59.999Z",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "unix-wide-range",
+    "expression": "unix-dateTime(9223372036854775808)",
+    "expected": null,
+    "error": "FODT0001",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "uri-boolean-option",
+    "expression": "parse-uri('https://example.test:443/',map{'omit-default-ports':false()})?port",
+    "expected": "443",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "uri-string-option",
+    "expression": "exists(parse-uri('https://example.test:443/',map{'omit-default-ports':'false'})?port)",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F04",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "XPTY0004: declared option value is boolean, not string."
+  },
+  {
+    "id": "uri-empty-query-precedence",
+    "expression": "build-uri(map{'scheme':'https','host':'example.test','query':'old=1','query-parameters':map{}})",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F04",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "https://example.test"
+  },
+  {
+    "id": "uri-raw-authority",
+    "expression": "build-uri(map{'scheme':'https','authority':'user:pass@example.test:443'},map{'omit-default-ports':true()})",
+    "expected": "https://user:pass@example.test:443",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "sort-default-key",
+    "expression": "string-join(sort((3,1,2)),',')",
+    "expected": "1,2,3",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "sort-explicit-empty-key",
+    "expression": "string-join(sort((3,1,2),(),()),',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F05",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "1,2,3"
+  },
+  {
+    "id": "array-sort-explicit-empty-key",
+    "expression": "string-join(array:sort([3,1,2],(),())?*,',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F05",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "1,2,3"
+  },
+  {
+    "id": "sort-unknown-collation",
+    "expression": "string-join(sort(('B','A'),'urn:bosak:no-such-collation'),',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F05",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "FOCH0002"
+  },
+  {
+    "id": "sort-nan-left",
+    "expression": "string-join(sort((xs:double('NaN'),1)) ! string(.),',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F06",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "NaN,1"
+  },
+  {
+    "id": "sort-nan-right",
+    "expression": "string-join(sort((1,xs:double('NaN'))) ! string(.),',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F06",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "NaN,1"
+  },
+  {
+    "id": "sort-exact-numeric",
+    "expression": "string-join(sort((3.1e0,3.1)) ! (if (. instance of xs:decimal) then 'decimal' else 'double'),',')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F06",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "decimal,double"
+  },
+  {
+    "id": "sort-by-empty-defaults",
+    "expression": "string-join(sort-by((3,1,2),map{}),',')",
+    "expected": "1,2,3",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "sort-by-unknown-field",
+    "expression": "string-join(sort-by((3,1,2),map{'nonsense':true()}),',')",
+    "expected": null,
+    "error": null,
+    "classification": "investigation",
+    "ticket": "F05",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "sort-by-invalid-order",
+    "expression": "sort-by((3,1),map{'order':'sideways'})",
+    "expected": null,
+    "error": "FORG0001",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "highest-nan",
+    "expression": "string(highest((1,xs:double('NaN'),2)))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F06",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "2"
+  },
+  {
+    "id": "lowest-nan",
+    "expression": "string(lowest((1,xs:double('NaN'),2)))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F06",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "NaN"
+  },
+  {
+    "id": "merge-default",
+    "expression": "map:merge((map{'A':1},map{'A':2}))?A",
+    "expected": "1",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "merge-empty-options",
+    "expression": "map:merge((map{'A':1},map{'A':2}),())?A",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F07",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "1"
+  },
+  {
+    "id": "merge-malformed-input",
+    "expression": "map:size(map:merge((map{'A':1},42)))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F07",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "XPTY0004"
+  },
+  {
+    "id": "merge-duplicates-cardinality",
+    "expression": "map:merge((map{'A':1},map{'A':2}),map{'duplicates':('use-first','use-last')})?A",
+    "expected": null,
+    "error": null,
+    "classification": "investigation",
+    "ticket": "F07",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "map-filter-string-predicate",
+    "expression": "map:size(map:filter(map{'A':1},function($k,$v){'yes'}))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F08",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "XPTY0004"
+  },
+  {
+    "id": "all-equal-map",
+    "expression": "all-equal(map{'A':1})",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F08",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "FOTY0013 or XPTY0004: maps do not satisfy xs:anyAtomicType*."
+  },
+  {
+    "id": "duplicate-values-maps",
+    "expression": "count(duplicate-values((map{'A':1},map{'A':1})))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F08",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "deep-equal-options",
+    "expression": "deep-equal('A','a',map{'collation':'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'})",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F09",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "true"
+  },
+  {
+    "id": "index-of-empty-collation",
+    "expression": "string-join(index-of(('A','a'),'A',()),',')",
+    "expected": "1",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "compare-mixed-exact",
+    "expression": "compare(3.1e0,3.1)",
+    "expected": "1",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "compare-empty",
+    "expression": "count(compare((),1))",
+    "expected": "0",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "compare-current-keywords",
+    "expression": "compare(value1 := 1,value2 := 2)",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F01",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "-1"
+  },
+  {
+    "id": "date-fraction-precision",
+    "expression": "seconds-from-time(build-dateTime(map{'hour':12,'minute':34,'second':4.2678}))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F10",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "4.2678"
+  },
+  {
+    "id": "days-malformed-text",
+    "expression": "days-in-month('2024-02garbage')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F10",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "days-multiple-values",
+    "expression": "days-in-month((xs:date('2024-02-01'),xs:date('2024-03-01')))",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F10",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "XPTY0004"
+  },
+  {
+    "id": "hash-sha256",
+    "expression": "string(hash('abc','SHA-256'))",
+    "expected": "BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "hash-empty",
+    "expression": "count(hash(()))",
+    "expected": "0",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "hash-blake3",
+    "expression": "hash('abc','BLAKE3')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F11",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "hash-crc32",
+    "expression": "hash('abc','CRC-32')",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F11",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "352441C2"
+  },
+  {
+    "id": "csv-positive-selection",
+    "expression": "parse-csv('A,B',map{'select-columns':(2,1)})?rows?1?* ! string(.)",
+    "expected": "B A",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "csv-nonpositive-selection",
+    "expression": "parse-csv('A,B',map{'select-columns':(0,1)})?rows?1?* ! string(.)",
+    "expected": null,
+    "error": null,
+    "classification": "frozen-policy",
+    "ticket": "F12",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": " A"
+  },
+  {
+    "id": "csv-qname-extension",
+    "expression": "array:size(parse-csv('A',map{QName('urn:extension','opt'):true()})?rows)",
+    "expected": null,
+    "error": null,
+    "classification": "limitation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": "1"
+  },
+  {
+    "id": "json-default-duplicates",
+    "expression": "parse-json('{\"A\":1,\"A\":2}')?A",
+    "expected": "1",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "json-last-duplicates",
+    "expression": "parse-json('{\"A\":1,\"A\":2}',map{'duplicates':'use-last'})?A",
+    "expected": "2",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "json-reject-duplicates",
+    "expression": "parse-json('{\"A\":1,\"A\":2}',map{'duplicates':'reject'})",
+    "expected": null,
+    "error": "FOJS0003",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "json-boolean-type",
+    "expression": "parse-json('{}',map{'liberal':'false'})",
+    "expected": null,
+    "error": "XPTY0004",
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "json-unknown-option",
+    "expression": "map:size(parse-json('{}',map{'sideways':true()}))",
+    "expected": null,
+    "error": null,
+    "classification": "investigation",
+    "ticket": "F03",
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "json-qname-extension",
+    "expression": "map:size(parse-json('{}',map{QName('urn:extension','opt'):true()}))",
+    "expected": "0",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "abs-wide-integer-identity",
+    "expression": "abs(-9223372036854775807 - 1) instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "floor-wide-integer-identity",
+    "expression": "floor(9223372036854775808) instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "ceiling-wide-integer-identity",
+    "expression": "ceiling(-9223372036854775809) instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  },
+  {
+    "id": "round-extreme-precision",
+    "expression": "round(1e300,-29)",
+    "expected": "1E+300",
+    "error": null,
+    "classification": "control",
+    "ticket": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "currentDraftExpectation": null
+  }
+]

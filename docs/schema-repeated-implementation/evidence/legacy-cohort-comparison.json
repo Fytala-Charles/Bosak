@@ -1,0 +1,7 @@
+{
+  "previousCases": 260,
+  "unchangedExpectationsPassed": 259,
+  "adoptedCaseBefore": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"2\", supported: False)",
+  "adoptedCaseAfter": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"2\", supported: True)",
+  "adoptedCaseFinalPassed": true
+}

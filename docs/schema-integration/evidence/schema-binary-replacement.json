@@ -1,0 +1,17 @@
+{
+  "unchangedSchemaBinaries": {
+    "Bosak.Schema.dll": "63e1401b908c14b4762518b55b02ebff6e9c875f3415d6849ff42eb63ad5bff3",
+    "Bosak.Schema.Tests.dll": "48e81c7ca2e379993496c3c51a06107367778c7be832c71f6fdf0b73540ba07e"
+  },
+  "coreReplacements": [
+    "Bosak.XPath.Api.dll",
+    "Bosak.XPath.Compiler.dll",
+    "Bosak.XPath.Core.dll",
+    "Bosak.XPath.Parser.dll",
+    "Bosak.XPath.Providers.dll",
+    "Bosak.XPath.Runtime.dll",
+    "Bosak.XPath.Standard.dll",
+    "Bosak.XQuery.dll",
+    "Bosak.Xslt.dll"
+  ]
+}

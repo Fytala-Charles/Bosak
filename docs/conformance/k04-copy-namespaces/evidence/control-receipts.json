@@ -1,0 +1,502 @@
+[
+  {
+    "name": "C30-construction-preserve",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-preserve-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22184899996500462,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-preserve",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction preserve; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-preserve.log"
+  },
+  {
+    "name": "C30-construction-strip",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-strip-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22125230001984164,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-strip",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction strip; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-strip.log"
+  },
+  {
+    "name": "C30-copy-preserve-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-preserve-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3086926999967545,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-preserve-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-copy-preserve-inherit.log"
+  },
+  {
+    "name": "C30-copy-preserve-no-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-preserve-no-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30374070000834763,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-preserve-no-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, no-inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-copy-preserve-no-inherit.log"
+  },
+  {
+    "name": "C30-copy-no-preserve-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-no-preserve-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29384749999735504,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-no-preserve-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces no-preserve, inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-copy-no-preserve-inherit.log"
+  },
+  {
+    "name": "C30-copy-no-preserve-no-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-no-preserve-no-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2959819000097923,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-no-preserve-no-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces no-preserve, no-inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-copy-no-preserve-no-inherit.log"
+  },
+  {
+    "name": "C30-construction-duplicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-duplicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21786119998432696,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-duplicate",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XQST0067, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction preserve; declare construction strip; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0067\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-duplicate.log"
+  },
+  {
+    "name": "C30-copy-duplicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-duplicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20825460000196472,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-duplicate",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, inherit; declare copy-namespaces no-preserve, no-inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0055\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 66: XQST0055: More than one copy-namespaces declaration."
+    },
+    "log": "C30-copy-duplicate.log"
+  },
+  {
+    "name": "C30-construction-invalid",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22648660000413656,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-invalid",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare construction invalid; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-invalid.log"
+  },
+  {
+    "name": "C30-copy-invalid",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23795370000880212,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-invalid",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces invalid, inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 23: XPST0003: Expected preserve or no-preserve."
+    },
+    "log": "C30-copy-invalid.log"
+  },
+  {
+    "name": "C30-construction-missing",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-missing-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23842489998787642,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-missing",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare construction; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-missing.log"
+  },
+  {
+    "name": "C30-copy-missing-comma",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-missing-comma-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21760739997262135,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-missing-comma",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 33: XPST0003: Expected ','."
+    },
+    "log": "C30-copy-missing-comma.log"
+  },
+  {
+    "name": "C30-default-preserve",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-default-preserve-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3356511000311002,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-default-preserve",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "let $e := <a xmlns:p=\"urn:c30:p\"/> return string(namespace-uri-for-prefix(\"p\", <b>{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>urn:c30:p</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-default-preserve.log"
+  },
+  {
+    "name": "C30-explicit-preserve",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-explicit-preserve-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3424890000023879,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-explicit-preserve",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, inherit; let $e := <a xmlns:p=\"urn:c30:p\"/> return string(namespace-uri-for-prefix(\"p\", <b>{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>urn:c30:p</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-explicit-preserve.log"
+  },
+  {
+    "name": "C30-default-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-default-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3304140999680385,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-default-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "let $e := <a/> return string(namespace-uri-for-prefix(\"p\", <b xmlns:p=\"urn:c30:p\">{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>urn:c30:p</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-default-inherit.log"
+  },
+  {
+    "name": "C30-explicit-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-explicit-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34159589995397255,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-explicit-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, inherit; let $e := <a/> return string(namespace-uri-for-prefix(\"p\", <b xmlns:p=\"urn:c30:p\">{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>urn:c30:p</assert-string-value>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-explicit-inherit.log"
+  },
+  {
+    "name": "C30-explicit-no-preserve",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-explicit-no-preserve-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3319974000332877,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-explicit-no-preserve",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces no-preserve, inherit; let $e := <a xmlns:p=\"urn:c30:p\"/> return string(namespace-uri-for-prefix(\"p\", <b>{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value />\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-explicit-no-preserve.log"
+  },
+  {
+    "name": "C30-explicit-no-inherit",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-explicit-no-inherit-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35475130000850186,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-explicit-no-inherit",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare copy-namespaces preserve, no-inherit; let $e := <a/> return string(namespace-uri-for-prefix(\"p\", <b xmlns:p=\"urn:c30:p\">{$e}</b>/a))",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value />\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-explicit-no-inherit.log"
+  },
+  {
+    "name": "C30-construction-comment",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-construction-comment-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2238950000028126,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-construction-comment",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 27: XPST0003: Unexpected token Name",
+      "expression": "declare(:outer(:nested:) :)construction(:mode:)strip; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 27: XPST0003: Unexpected token Name"
+    },
+    "log": "C30-construction-comment.log"
+  },
+  {
+    "name": "C30-copy-comment",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\C30-copy-comment-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2950249999994412,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C30-copy-comment",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare(:a:)copy-namespaces(:b:)preserve,(:c:)inherit; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C30-copy-comment.log"
+  }
+]

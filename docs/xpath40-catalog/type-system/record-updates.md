@@ -4,6 +4,8 @@
  <p>Frozen XPath4.0 - structural record contract</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded annotated reconstruction**. No persistence, concurrency or nonnegative-stock business validation; nested/schema/nominal combinations remain bounded. C05-K03 annotated-record destructuring remains a distinct defect. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
 
 ## 1. Name and Classification
@@ -57,6 +59,11 @@ Cast constructs the import record, adding a present-but-empty optional note and 
 Unknown fields, a plain-map left operand, a non-map right operand and an empty required field raise XPTY0004 in the supplied probes. Integer-to-double promotion is checked; arbitrary string-to-integer update casting is not implied. Optional fields may be set to empty while retaining key presence. Nested structural conversion and declaration order are bounded tested cases, not proof of every composite/nominal type combination.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-update. Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence. Do not generalize structural updates to all nominal/static/package/recursive record combinations. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Annotation-preserving reconstruction retains the original value; Unknown fields, plain-map left operand and invalid replacement values refuse; Optional empty values retain key presence; nested promotion and field order are bounded. **Boundary:** Update uses coercion, not lexical import casting. Structural examples do not establish every nominal static/default-field update, method or package context. Ownership: T04, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Thirty-five XPath probes cover cast/coercion/update distinctions; three explicit 3.1 refusal cases and eight complete3.0/4.0 reports bring the slice to46 documentation checks. The first run exposed a record-signature gate leak in old profiles, separate from value semantics. [The parser finding](../INLINE-RECORD-TYPE-GATE.md) and 44 dedicated API regressions preserve the failures and bounded correction. The new examples do not invent or promote a qt4 gate.
 

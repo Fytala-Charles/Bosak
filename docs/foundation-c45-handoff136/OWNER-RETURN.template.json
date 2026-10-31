@@ -1,0 +1,22 @@
+{
+  "ownerRole": null,
+  "status": "NotReturned",
+  "candidateSourceRevision": "0126d492a8930001e0b947a0e27ae732af5a0653",
+  "candidateVersion": "1.36.0",
+  "selectedManifestIdentity": null,
+  "consumerRevision": null,
+  "actualPackageAndAssemblyHashes": null,
+  "supportedProfile": null,
+  "requirementsMapped": null,
+  "requiredGaps": null,
+  "baselineDifferences": null,
+  "newRegressions": null,
+  "evidenceCommandsAndReceipts": null,
+  "performanceBudgetsAndResults": null,
+  "disposition": null,
+  "dispositionDate": null,
+  "accountableOwner": null,
+  "productPinAdoptionAuthorized": false,
+  "publicationAuthorized": false,
+  "apiFreezeAccepted": false
+}

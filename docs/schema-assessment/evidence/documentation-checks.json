@@ -1,0 +1,45 @@
+{
+  "corePages": 16,
+  "schemaPages": 9,
+  "schemaRenderedPages": [
+    {
+      "path": "README.md",
+      "htmlSha256": "f20f89f4e28ea6934f5af1a90088925b0d7252e6ef76846a3937f3fc28a88d04"
+    },
+    {
+      "path": "ROADMAP.md",
+      "htmlSha256": "37423aa084dc9eb735bbb39346fa600c550ca842f0de121410488675a13f4fb6"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "htmlSha256": "77f17f740ee0f86f82a56981145b19b3a458807ffaf674b2c89fa893085b2ff7"
+    },
+    {
+      "path": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "65875f53cd0c931c685a5bd32bb77db4d27d50a83d61b4ffe8265e2a477e8da4"
+    },
+    {
+      "path": "docs/INTEGRATION.md",
+      "htmlSha256": "ad276c7c7b19236f7246ec2c524f1830eeaa4c90ac7cac88b0f1ff5c31d35cd9"
+    },
+    {
+      "path": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "08dda4d622d205ccb62cd6fd948ac39af53262b6fe9337a255e09010d87a7605"
+    },
+    {
+      "path": "docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "d39a62ec36420174518de516f2a54b84007f587c658f14c6b96661e4f2d14575"
+    },
+    {
+      "path": "docs/ASSESSMENT-ADOPTION-2026-10-29.md",
+      "htmlSha256": "617d94c236c8ac92868d2311be1118fadf3d7bf63e7f16d33c1ca008ac055f18"
+    },
+    {
+      "path": "docs/ADR-008-bounded-native-assessment.md",
+      "htmlSha256": "c5309431045ef220b860af8121c0c82bcad036f9f0b48d3cb4f39000aaf53a86"
+    }
+  ],
+  "previousSealedIntegrationFilesPreserved": 39,
+  "earlierReviewPrototypeFilesPreserved": 141,
+  "mode": "HTML/render and local-link checks; no screenshot claim"
+}

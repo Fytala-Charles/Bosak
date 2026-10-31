@@ -1,0 +1,7 @@
+    public void NormalizeUnicode_FullyNormalized()
+    {
+        Assert.Equal("blah", EvalStr("normalize-unicode('blah', 'FULLY-NORMALIZED')"));
+        Assert.Equal("32,2494", EvalStr("string-join(string-to-codepoints(normalize-unicode(codepoints-to-string(2494), 'FULLY-NORMALIZED')) ! string(.), ',')"));
+        Assert.Equal("550", EvalStr("string-to-codepoints(normalize-unicode(codepoints-to-string((65,775)), 'FULLY-NORMALIZED'))"));
+    }
+

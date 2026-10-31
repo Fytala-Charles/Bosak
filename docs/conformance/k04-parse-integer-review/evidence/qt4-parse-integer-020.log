@@ -1,0 +1,1 @@
+{"Suite":"qt4","Name":"parse-integer-020","kind":"Failed","message":"any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.]"}

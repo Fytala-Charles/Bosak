@@ -1,0 +1,72 @@
+[
+  {
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\adoption\\qt3-controls.jsonl",
+      "synthetic",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09722330002114177,
+    "log": "qt3-controls.log",
+    "suite": "qt3",
+    "kind": "filter",
+    "output": "qt3-controls.jsonl"
+  },
+  {
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-integer",
+      "format-integer-042"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29447439999785274,
+    "log": "qt3-original.log",
+    "suite": "qt3",
+    "kind": "normal-original"
+  },
+  {
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-sequence-filter-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\filter-controls.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\adoption\\qt4-controls.jsonl",
+      "synthetic",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0923694999946747,
+    "log": "qt4-controls.log",
+    "suite": "qt4",
+    "kind": "filter",
+    "output": "qt4-controls.jsonl"
+  },
+  {
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-integer",
+      "format-integer-042"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2599759000004269,
+    "log": "qt4-original.log",
+    "suite": "qt4",
+    "kind": "normal-original"
+  }
+]

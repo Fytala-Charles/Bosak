@@ -1,0 +1,35 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "status": "Proposed ownership disposition; no freeze acceptance",
+  "probeCommand": "dotnet run --project docs/foundation-result-ownership/tools/Ownership.csproj -c Release -- <separate-output-path>",
+  "boundedObservations": {
+    "passed": 10,
+    "failed": 0,
+    "repeat": "Byte-identical"
+  },
+  "productionSourceHashes": "Previous 245-file verifier passed; no engine source changes",
+  "memberManifestVerifier": "Passed; previous draft preserved",
+  "newFullEngineBuild": false,
+  "runtimeSuitesRun": false,
+  "frozenConformanceGatesRun": false,
+  "realConsumerQualificationRun": false,
+  "externalOwnerRepositoriesChanged": false,
+  "documentationChecks": {
+    "result": "Passed",
+    "renderedPages": 26,
+    "localLinksChecked": 2523,
+    "scope": "HTML render/local destinations; no screenshot or hosted CI claim"
+  },
+  "freezeAccepted": false,
+  "findingDisposition": {
+    "completionCallbackCleanup": "Reproduced; focused engine fix pending",
+    "earlyExitAndEscapedResults": "Provider/host ownership design and actual consumer qualification pending"
+  },
+  "artifactHashes": {
+    "tools/Program.cs": "04dede7bfe83803a32acf83e10305380e24cddb405af684f4627d679b4770c95",
+    "tools/Ownership.csproj": "3394b9c9ca4f7bedb4cd5b11138bc04ae0dad2adfc319f3ad09422df483b020d",
+    "evidence/observations.json": "e387615fa4728a9f8032184b72164d6489b6a72891cf56b17b43321b5d6af93c",
+    "evidence/source-pins.json": "fa9549c84718f537df66294fb2b1b28abe1e2d68702f6080e06e8fe69b18cfc7"
+  }
+}

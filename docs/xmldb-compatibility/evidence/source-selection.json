@@ -1,0 +1,25 @@
+{
+  "consumerHead": "3f722daf6ae38f0a5b67de1c678f3175768b28dd",
+  "coreHead": "2e33d3b7c02eb20a1bfe757a73bb78ebb034c980",
+  "sourceStatusExcluded": [
+    " M AGENTS.md",
+    " M M2_STATUS.md",
+    " M README.md",
+    " M ROADMAP.md",
+    " M docs/AGENT_HANDOVER.md",
+    " M docs/ARCHITECTURE.md",
+    " M docs/FEATURE_REQUESTS.md",
+    " M docs/INTEGRATION.md",
+    " M docs/implementation/M2_APPLICATION_AUTHORITY_FORMAT_V1.md",
+    " M src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Cutover.cs",
+    " M src/Bosak.XmlDb.Storage/MigrationCutoverSession.cs",
+    " M src/Bosak.XmlDb.Storage/MigrationCutoverValidation.cs",
+    "?? docs/ADR-032-owner-bound-first-enrollment-preparation.md",
+    "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_PREPARATION.md",
+    "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_VALIDATION.md",
+    "?? src/Bosak.XmlDb.Storage/ApplicationAuthorityEnrollment.cs",
+    "?? tests/Bosak.XmlDb.Storage.Tests/ApplicationAuthorityEnrollmentTests.cs"
+  ],
+  "archiveSha256": "9a896e08e9e20145c9f78d8edc387f1f490ddb8e7dbe648c7587b53e67c66c6a",
+  "scope": "Committed HEAD only; all consumer working-tree edits excluded"
+}

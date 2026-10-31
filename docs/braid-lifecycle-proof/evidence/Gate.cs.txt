@@ -1,0 +1,56 @@
+internal sealed class Admission(string code):InvalidOperationException(code){internal string Code{get;}=code;}
+internal sealed class Gate(Session session):IDisposable
+{
+    private static readonly AsyncLocal<Scope?> Current=new();
+    private readonly object sync=new();private string state="Ready";private string reason="";private long sequence;private long activeId;private long nextId;
+    private readonly TaskCompletionSource drained=new(TaskCreationOptions.RunContinuationsAsynchronously);
+    internal List<object> Events{get;}=[];internal int ForwardedCalls{get;private set;}internal int LeasesCreated{get;private set;}internal int LeasesReleased{get;private set;}internal int ReleaseRequests{get;private set;}
+    internal string State{get{lock(sync)return state;}}internal string Reason{get{lock(sync)return reason;}}internal bool Active{get{lock(sync)return activeId!=0;}}
+    internal object Profile{get{lock(sync)return new{profile="lifecycle-readonly-experiment-v1",state,reason,canDispatch=state=="Ready"&&activeId==0,operations=new[]{"Inspect","RenameTarget","SameNameNoChange"}};}}
+    private void Event(string name){Events.Add(new{sequence=++sequence,name,state,reason,activeId});}
+    private void Ready(){if(state!="Ready")throw new Admission(reason=="ArtifactRefused"?"ArtifactRefused":"SessionClosed");}
+    internal IDisposable Enter(CancellationToken token=default)
+    {
+        token.ThrowIfCancellationRequested();long id;
+        lock(sync){Ready();if(activeId!=0){Event("busy-refused");throw new Admission("Busy");}activeId=id=++nextId;LeasesCreated++;Event("lease-reserved");}
+        var lease=new Lease(this,id,Current.Value);Current.Value=new(this,id,token);
+        try{Validate();return lease;}catch{lease.Dispose();throw;}
+    }
+    private void Validate()
+    {
+        var scope=Current.Value;if(scope is null||!ReferenceEquals(scope.Owner,this))throw new Admission("InvalidLease");scope.Token.ThrowIfCancellationRequested();
+        lock(sync){Ready();if(activeId!=scope.Id)throw new Admission("InvalidLease");}
+        // Verification I/O and all adapter/callback work occur outside the lifecycle ordering lock.
+        try{session.Demand();}catch(InvalidOperationException){Close("ArtifactRefused");throw new Admission("ArtifactRefused");}
+        lock(sync){Ready();if(activeId!=scope.Id)throw new Admission("InvalidLease");}
+        scope.Token.ThrowIfCancellationRequested();
+    }
+    internal void Forward(){Validate();lock(sync){Ready();ForwardedCalls++;Event("raw-dispatch");}}
+    internal void Publish(){Validate();lock(sync){Ready();Event("publication-admitted");}}
+    internal T Read<T>(Func<T> read){lock(sync){Ready();return read();}}
+    internal void Close(string cause="UserClose")
+    {
+        var release=false;lock(sync){if(state=="Ready"){state="Quiescing";reason=cause;Event("quiesce");}else Event("repeat-close:"+cause);if(state=="Quiescing"&&activeId==0){state="Closed";ReleaseRequests++;Event("release-requested");release=true;}}
+        if(release)Release();
+    }
+    private void End(long id)
+    {
+        var release=false;lock(sync){if(activeId!=id)throw new InvalidOperationException("Lease accounting invariant");if(Current.Value?.Token.IsCancellationRequested==true)Event("cancelled-token-at-lease-end");activeId=0;LeasesReleased++;Event("lease-ended");if(state=="Quiescing"){state="Closed";ReleaseRequests++;Event("release-requested");release=true;}}
+        if(release)Release();
+    }
+    private void Release(){try{session.Dispose();drained.TrySetResult();}catch(Exception error){drained.TrySetException(error);}}
+    internal async Task<bool> DrainAsync(TimeSpan bound,CancellationToken token=default)
+    {
+        var scope=Current.Value;lock(sync){if(scope is not null&&ReferenceEquals(scope.Owner,this)&&scope.Id==activeId)throw new Admission("SelfDrain");if(state=="Ready")throw new Admission("NotClosing");}
+        try{await drained.Task.WaitAsync(bound,token);return true;}catch(TimeoutException){return false;}
+    }
+    /// <summary>Stops new admission without waiting for an active callback or engine call.</summary>
+    public void Dispose()=>Close();
+    private sealed record Scope(Gate Owner,long Id,CancellationToken Token);
+    private sealed class Lease(Gate owner,long id,Scope? prior):IDisposable
+    {
+        private int ended;
+        /// <inheritdoc />
+        public void Dispose(){if(Interlocked.Exchange(ref ended,1)==0){try{owner.End(id);}finally{Current.Value=prior;}}}
+    }
+}

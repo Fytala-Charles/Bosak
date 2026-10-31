@@ -1,0 +1,94 @@
+{"id":"local-3.0-none-Legacy","host":"Legacy","phase":"evaluate","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1"}
+{"id":"local-3.0-none-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"local-3.0-3.0-Legacy","host":"Legacy","phase":"evaluate","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1"}
+{"id":"local-3.0-3.0-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"local-3.0-4.0-Legacy","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"local-3.0-4.0-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"local-4.0-none-Legacy","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"local-4.0-none-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"local-4.0-3.0-Legacy","host":"Legacy","phase":"evaluate","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1"}
+{"id":"local-4.0-3.0-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"local-4.0-4.0-Legacy","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"local-4.0-4.0-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"serialization-version-Legacy","host":"Legacy","phase":"evaluate","result":null,"error":"Parse error at position 3: XPST0003: The \u0027??\u0027 (otherwise) operator requires XPath 4.0; it is not allowed in XPath 3.1"}
+{"id":"serialization-version-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"closed-variable-False","host":"Legacy","phase":"evaluate","result":null,"error":"XPST0008: Variable $missing is not defined."}
+{"id":"closed-variable-False","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XPST0008: Variable $missing is not defined."}
+{"id":"closed-variable-True","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"closed-variable-True","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"closed-function-False","host":"Legacy","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}no-such-function#0 not found."}
+{"id":"closed-function-False","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}no-such-function#0 not found."}
+{"id":"closed-function-True","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"closed-function-True","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"scan-refusal","host":"Legacy","phase":"success","result":"false","error":null}
+{"id":"scan-refusal","host":"Xslt40Draft","phase":"success","result":"false","error":null}
+{"id":"scan-direct-refusal","host":"Legacy","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath 40; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental."}
+{"id":"scan-direct-refusal","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan is a not-yet-stabilized XPath 4.0 addition and is not available when targeting XPath 40; set CompileOptions.Compatibility to XPathCompatibility.XPath40Experimental."}
+{"id":"future-fallback-3.0-Legacy","host":"Legacy","phase":"compile","result":null,"error":"XTSE0010: Unknown XSLT element xsl:future."}
+{"id":"future-fallback-3.0-Xslt40Draft","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE0010: Unknown XSLT element xsl:future."}
+{"id":"future-fallback-4.0-Legacy","host":"Legacy","phase":"success","result":"F","error":null}
+{"id":"future-fallback-4.0-Xslt40Draft","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE0010: Unknown XSLT element xsl:future."}
+{"id":"future-fallback-5.0-Legacy","host":"Legacy","phase":"success","result":"F","error":null}
+{"id":"future-fallback-5.0-Xslt40Draft","host":"Xslt40Draft","phase":"success","result":"F","error":null}
+{"id":"transform-visible","host":"Legacy","phase":"success","result":"true","error":null}
+{"id":"transform-visible","host":"Xslt40Draft","phase":"success","result":"true","error":null}
+{"id":"load-module-visible","host":"Legacy","phase":"success","result":"true","error":null}
+{"id":"load-module-visible","host":"Xslt40Draft","phase":"success","result":"true","error":null}
+{"id":"note-inert","host":"Legacy","phase":"success","result":"ok","error":null}
+{"id":"note-inert","host":"Xslt40Draft","phase":"success","result":"ok","error":null}
+{"id":"if-false-lazy","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"if-false-lazy","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"if-true-lazy","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"if-true-lazy","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"if-then-content","host":"Legacy","phase":"compile","result":null,"error":"XTSE0010: xsl:if with a then attribute must have no children."}
+{"id":"if-then-content","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE0010: xsl:if with a then attribute must have no children."}
+{"id":"if-empty","host":"Legacy","phase":"success","result":"","error":null}
+{"id":"if-empty","host":"Xslt40Draft","phase":"success","result":"","error":null}
+{"id":"if-bad-ebv","host":"Legacy","phase":"evaluate","result":null,"error":"FORG0006: Invalid argument type for fn:boolean() / effective boolean value"}
+{"id":"if-bad-ebv","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"FORG0006: Invalid argument type for fn:boolean() / effective boolean value"}
+{"id":"map-use-first","host":"Legacy","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-use-first","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-use-last","host":"Legacy","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-use-last","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-combine","host":"Legacy","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-combine","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-reject","host":"Legacy","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-reject","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-default-duplicate","host":"Legacy","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-default-duplicate","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTDE3365: Duplicate key in xsl:map"}
+{"id":"map-nonmap","host":"Legacy","phase":"evaluate","result":null,"error":"XTTE3375: xsl:map content must evaluate to a sequence of maps; a non-map item was produced"}
+{"id":"map-nonmap","host":"Xslt40Draft","phase":"evaluate","result":null,"error":"XTTE3375: xsl:map content must evaluate to a sequence of maps; a non-map item was produced"}
+{"id":"map-select-content","host":"Legacy","phase":"compile","result":null,"error":"XTSE3185: xsl:map must not have both a select attribute and sequence-constructor content."}
+{"id":"map-select-content","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE3185: xsl:map must not have both a select attribute and sequence-constructor content."}
+{"id":"separator-()","host":"Legacy","phase":"success","result":"","error":null}
+{"id":"separator-()","host":"Xslt40Draft","phase":"success","result":"","error":null}
+{"id":"separator-1","host":"Legacy","phase":"success","result":"1","error":null}
+{"id":"separator-1","host":"Xslt40Draft","phase":"success","result":"1","error":null}
+{"id":"separator-(1,2,3)","host":"Legacy","phase":"success","result":"1||3","error":null}
+{"id":"separator-(1,2,3)","host":"Xslt40Draft","phase":"success","result":"1||3","error":null}
+{"id":"separator-apply","host":"Legacy","phase":"success","result":"A|B","error":null}
+{"id":"separator-apply","host":"Xslt40Draft","phase":"success","result":"A|B","error":null}
+{"id":"array-empty","host":"Legacy","phase":"success","result":"0","error":null}
+{"id":"array-empty","host":"Xslt40Draft","phase":"success","result":"0","error":null}
+{"id":"array-sequence-members","host":"Legacy","phase":"success","result":"2|2","error":null}
+{"id":"array-sequence-members","host":"Xslt40Draft","phase":"success","result":"2|2","error":null}
+{"id":"array-empty-members","host":"Legacy","phase":"success","result":"2|0","error":null}
+{"id":"array-empty-members","host":"Xslt40Draft","phase":"success","result":"2|0","error":null}
+{"id":"array-select-content","host":"Legacy","phase":"compile","result":null,"error":"XTSE3185: xsl:array must not have both a select attribute and sequence-constructor content."}
+{"id":"array-select-content","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE3185: xsl:array must not have both a select attribute and sequence-constructor content."}
+{"id":"switch-empty-selected","host":"Legacy","phase":"success","result":"","error":null}
+{"id":"switch-empty-selected","host":"Xslt40Draft","phase":"success","result":"","error":null}
+{"id":"switch-general-comparison","host":"Legacy","phase":"success","result":"7","error":null}
+{"id":"switch-general-comparison","host":"Xslt40Draft","phase":"success","result":"7","error":null}
+{"id":"switch-not-boolean-guard","host":"Legacy","phase":"success","result":"","error":null}
+{"id":"switch-not-boolean-guard","host":"Xslt40Draft","phase":"success","result":"","error":null}
+{"id":"switch-missing-select","host":"Legacy","phase":"compile","result":null,"error":"XTSE0010: xsl:switch requires a select attribute."}
+{"id":"switch-missing-select","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE0010: xsl:switch requires a select attribute."}
+{"id":"select-cdata","host":"Legacy","phase":"success","result":"true","error":null}
+{"id":"select-cdata","host":"Xslt40Draft","phase":"success","result":"true","error":null}
+{"id":"select-as","host":"Legacy","phase":"success","result":"12","error":null}
+{"id":"select-as","host":"Xslt40Draft","phase":"success","result":"12","error":null}
+{"id":"select-child-invalid","host":"Legacy","phase":"compile","result":null,"error":"XTSE0010: xsl:select permits only fallback children before its expression text."}
+{"id":"select-child-invalid","host":"Xslt40Draft","phase":"compile","result":null,"error":"XTSE0010: xsl:select permits only fallback children before its expression text."}
+{"id":"select-node-identity","host":"Legacy","phase":"success","result":"true","error":null}
+{"id":"select-node-identity","host":"Xslt40Draft","phase":"success","result":"true","error":null}

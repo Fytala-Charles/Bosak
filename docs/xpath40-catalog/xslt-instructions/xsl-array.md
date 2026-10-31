@@ -4,6 +4,8 @@
   <p>Practical reference: Bosak XSLT 4.0 surface</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded sequence-valued members**. No full instruction-combination, streamability or host/package/type acceptance. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **Grammar/version review — 21 October 2026:** [Current pinned mapping](../SWITCH-ARRAY-SELECT-GRAMMAR.md) and [complete dispatch comparison](../examples/dispatch-grammar/README.md) distinguish known-instruction recognition, effective XPath version, raw result types and actual text delivery. Public1.23.2 is verified; historical provenance gaps remain.
 
 

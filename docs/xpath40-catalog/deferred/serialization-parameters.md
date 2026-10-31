@@ -4,6 +4,8 @@
   <p>Deferred additions — existing serialization and portable invoice export</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited serialization subset / deferred additions**. New serialization additions, CSV method and canonicalization remain unsupported; ignored keys are observations. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Serialization 4.0 parameter additions — Deferred, with a supported XSLT solidus control.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains; it must not imply that all serialization is missing. Bosak engine 1.1.2 reviewed against [revision 23218073](https://github.com/Fytala-Charles/Bosak/commit/232180733358fc4239229267763854fda0fa2791).
@@ -325,6 +327,8 @@ The portable expression materializes parsed input and one string per record befo
 ## 15. Known Uses
 
 The partner import is a realistic invoice interchange pattern, not a claim of a named deployment. Canonical XML or JSON intended for cryptographic use requires a verified canonicalization component; none is supplied by this worked example.
+
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [52 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [Capture_MethodFidelity_XmlHtmlTextJson](../../../tests/Bosak.Xslt.Tests/Capture/XsltCaptureTests.cs); [Output_Text_Method_Serializes_Only_Text](../../../tests/Bosak.Xslt.Tests/StylesheetTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
 
 ## 16. Related Features
 

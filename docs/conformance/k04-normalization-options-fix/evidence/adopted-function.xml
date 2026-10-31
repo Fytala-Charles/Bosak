@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:function xmlns:ns0="http://www.w3.org/xpath-functions/spec/namespace" name="normalize-unicode" prefix="fn">
+      <ns0:signatures>
+         <ns0:proto name="normalize-unicode" return-type="xs:string">
+            <ns0:arg name="value" type="xs:string?" />
+            <ns0:arg name="form" type="xs:string?" default="&quot;NFC&quot;" note="default-on-empty" />
+         </ns0:proto>
+      </ns0:signatures>
+      <ns0:summary>
+         <p>Returns <code>$value</code> after applying Unicode normalization.</p>
+      </ns0:summary>
+      <ns0:rules>
+         <p>If <code>$value</code> is the empty sequence, the function returns the
+            zero-length string.</p>
+         <p>Otherwise, the function returns <code>$value</code> normalized according to
+            the rules of the normalization form identified by the value of
+               <code>$form</code>.</p>
+         <p>The effective value of <code>$form</code> is the value of the expression
+               <code>fn:upper-case(fn:normalize-space($form))</code>.</p>
+
+         <ulist>
+            <item>
+               <p>If the effective value of <code>$form</code> is <quote>NFC</quote>,
+                  then the function returns <code>$value</code> converted to Unicode
+                  Normalization Form C (NFC).</p>
+            </item>
+            <item>
+               <p>If the effective value of <code>$form</code> is <quote>NFD</quote>,
+                  then the function returns <code>$value</code> converted to Unicode
+                  Normalization Form D (NFD).</p>
+            </item>
+            <item>
+               <p>If the effective value of <code>$form</code> is <quote>NFKC</quote>,
+                  then the function returns <code>$value</code> in Unicode Normalization
+                  Form KC (NFKC).</p>
+            </item>
+            <item>
+               <p>If the effective value of <code>$form</code> is <quote>NFKD</quote>,
+                  then the function returns <code>$value</code> converted to Unicode
+                  Normalization Form KD (NFKD).</p>
+            </item>
+            <item>
+               <p>If the effective value of <code>$form</code> is
+                     <quote>FULLY-NORMALIZED</quote>, then the function returns 
+                  <code>$value</code> converted to fully normalized form. </p>
+            </item>
+            <item>
+               <p>If the effective value of <code>$form</code> is the zero-length
+                  string, no normalization is performed and <code>$value</code> is returned.</p>
+            </item>
+         </ulist>
+         <p>Normalization forms NFC, NFD, NFKC, and NFKD, and the algorithms to be used for
+            converting a string to each of these forms, are defined in <bibref ref="UNICODE-TR15" />.</p>
+         <p>The motivation for normalization form FULLY-NORMALIZED is explained in <bibref ref="charmod-normalization" />. However, as that specification did not progress beyond
+            working draft status, the normative specification is as follows:</p>
+         <ulist>
+            <item>
+               <p>A string is <term>fully-normalized</term> if (a) it is in normalization form NFC
+                  as defined in <bibref ref="UNICODE-TR15" />, and (b) it does not start
+                  with a composing character.</p>
+            </item>
+            <item>
+               <p>A composing character is a character that is one or both of the following:</p>
+               <ulist>
+                  <item>
+                     <p>the second character in the canonical decomposition mapping of some
+                        character that is not listed in the Composition Exclusion Table defined in
+                        <bibref ref="UNICODE-TR15" />;</p>
+                  </item>
+                  <item>
+                     <p>of non-zero canonical combining class (as defined in <bibref ref="Unicode" />).</p>
+                  </item>
+
+               </ulist>
+            </item>
+            <item>
+               <p>A string is converted to FULLY-NORMALIZED form as follows:</p>
+               <ulist>
+                  <item>
+                     <p>if the first character in the string is a composing character, prepend a
+                        single space (x20);</p>
+                  </item>
+                  <item>
+                     <p>convert the resulting string to normalization form NFC.</p>
+                  </item>
+               </ulist>
+            </item>
+         </ulist>
+
+         <p>Conforming implementations <rfc2119>must</rfc2119> support normalization form <code>NFC</code> and
+               <rfc2119>may</rfc2119> support normalization forms <code>NFD</code>, <code>NFKC</code>, <code>NFKD</code>, and
+            <code>FULLY-NORMALIZED</code>. They <rfc2119>may</rfc2119> also support other normalization forms
+            with <termref def="implementation-defined">implementation-defined</termref> semantics. </p>
+         <p>It is <termref def="implementation-defined">implementation-defined</termref> which
+            version of Unicode (and therefore, of the normalization algorithms and their underlying
+            data) is supported by the implementation. See <bibref ref="UNICODE-TR15" /> for
+            details of the stability policy regarding changes to the normalization rules in future
+            versions of Unicode. If the input string contains codepoints that are unassigned in the
+            relevant version of Unicode, or for which no normalization rules are defined, the
+               <function>fn:normalize-unicode</function> function leaves such codepoints unchanged. If the
+            implementation supports the requested normalization form then it <rfc2119>must</rfc2119>
+            be able to handle every input string without raising an error.</p>
+      </ns0:rules>
+      <ns0:errors>
+         <p>A <phrase>dynamic</phrase> error is raised <errorref class="CH" code="0003" /> if the
+            effective value of the <code>$form</code> argument is not one of the values
+            supported by the implementation.</p>
+      </ns0:errors>
+   </ns0:function>
+   

@@ -1,0 +1,168 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 27 October 2026
+// PURPOSE              : Verifies bounded parse-integer values, errors and compatibility profiles.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 27-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Xunit;
+
+namespace Bosak.XPath.Standard.Tests;
+
+/// <summary>Verifies bounded parse-integer values, errors and compatibility profiles.</summary>
+public sealed class ParseIntegerTests
+{
+    /// <summary>Checks exact values, optional inputs and all call surfaces in both 4.0 profiles.</summary>
+    /// <param name="expression">The expression.</param>
+    /// <param name="expected">The exact result.</param>
+    [Theory]
+    [InlineData("parse-integer('123')", "123")]
+    [InlineData("parse-integer('ff',16)", "255")]
+    [InlineData("parse-integer('1_ 2 3')", "123")]
+    [InlineData("parse-integer(codepoints-to-string((9,49,10,50,13,51,32)))", "123")]
+    [InlineData("parse-integer('__ +__10')", "10")]
+    [InlineData("parse-integer('-0',2)", "0")]
+    [InlineData("parse-integer('111',())", "111")]
+    [InlineData("empty(parse-integer(()))", "true")]
+    [InlineData("empty(parse-integer((),1))", "true")]
+    [InlineData("parse-integer(parse-xml('<n>42</n>')/*)", "42")]
+    [InlineData("parse-integer('9007199254740993')", "9007199254740993")]
+    [InlineData("parse-integer('999999999999999999')", "999999999999999999")]
+    [InlineData("parse-integer('9223372036854775807')", "9223372036854775807")]
+    [InlineData("parse-integer('-9223372036854775808')", "-9223372036854775808")]
+    [InlineData("parse-integer('-8000000000000000',16)", "-9223372036854775808")]
+    [InlineData("(parse-integer#1)('123')", "123")]
+    [InlineData("(parse-integer#2)('101',2)", "5")]
+    [InlineData("function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2)('ff',16)", "255")]
+    [InlineData("parse-integer(radix := 16,value := 'ff')", "255")]
+    [InlineData("parse-integer(value := '123')", "123")]
+    [InlineData("parse-integer(value := 'ff',radix := 16)", "255")]
+    [InlineData("parse-integer('00000000000000000000000000000000000000000001')", "1")]
+    public void ParsesExactValue(string expression, string expected)
+    {
+        foreach (var level in new[] { XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+            Assert.Equal(expected, Evaluate(expression, level));
+    }
+
+    /// <summary>Distinguishes domain, lexical, size and type errors.</summary>
+    /// <param name="expression">The expression.</param>
+    /// <param name="code">The required error code.</param>
+    [Theory]
+    [InlineData("parse-integer('1',1)", "FORG0011")]
+    [InlineData("parse-integer('1',37)", "FORG0011")]
+    [InlineData("parse-integer('1',-1)", "FORG0011")]
+    [InlineData("parse-integer('1',9223372036854775808)", "FORG0011")]
+    [InlineData("parse-integer('',2)", "FORG0012")]
+    [InlineData("parse-integer('+',2)", "FORG0012")]
+    [InlineData("parse-integer('-',2)", "FORG0012")]
+    [InlineData("parse-integer('_ _',2)", "FORG0012")]
+    [InlineData("parse-integer('+-1',2)", "FORG0012")]
+    [InlineData("parse-integer('1-2',2)", "FORG0012")]
+    [InlineData("parse-integer('0x10',2)", "FORG0012")]
+    [InlineData("parse-integer('1.2',2)", "FORG0012")]
+    [InlineData("parse-integer('2',2)", "FORG0012")]
+    [InlineData("parse-integer('1'||codepoints-to-string(160)||'2')", "FORG0012")]
+    [InlineData("parse-integer(codepoints-to-string(1633))", "FORG0012")]
+    [InlineData("parse-integer('9223372036854775808')", "FOCA0003")]
+    [InlineData("parse-integer('-9223372036854775809')", "FOCA0003")]
+    [InlineData("parse-integer('8000000000000000',16)", "FOCA0003")]
+    [InlineData("parse-integer('999999999999999999999999x')", "FORG0012")]
+    [InlineData("parse-integer(123)", "XPTY0004")]
+    [InlineData("parse-integer('10',2.5)", "XPTY0004")]
+    [InlineData("parse-integer('10',2.0)", "XPTY0004")]
+    [InlineData("parse-integer(('1','2'))", "XPTY0004")]
+    [InlineData("parse-integer('1',(2,3))", "XPTY0004")]
+    public void ReportsRequiredError(string expression, string code)
+    {
+        foreach (var level in new[] { XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+        {
+            var error = Assert.ThrowsAny<Exception>(() => Evaluate(expression, level));
+            Assert.Contains(code, error.Message);
+        }
+    }
+
+    /// <summary>Checks every base and a formatting round trip within the declared range.</summary>
+    /// <param name="radix">The base.</param>
+    [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    [InlineData(6)]
+    [InlineData(7)]
+    [InlineData(8)]
+    [InlineData(9)]
+    [InlineData(10)]
+    [InlineData(11)]
+    [InlineData(12)]
+    [InlineData(13)]
+    [InlineData(14)]
+    [InlineData(15)]
+    [InlineData(16)]
+    [InlineData(17)]
+    [InlineData(18)]
+    [InlineData(19)]
+    [InlineData(20)]
+    [InlineData(21)]
+    [InlineData(22)]
+    [InlineData(23)]
+    [InlineData(24)]
+    [InlineData(25)]
+    [InlineData(26)]
+    [InlineData(27)]
+    [InlineData(28)]
+    [InlineData(29)]
+    [InlineData(30)]
+    [InlineData(31)]
+    [InlineData(32)]
+    [InlineData(33)]
+    [InlineData(34)]
+    [InlineData(35)]
+    [InlineData(36)]
+    public void ParsesEveryBase(int radix)
+    {
+        Assert.Equal("0", Evaluate($"parse-integer('-0',{radix})", XPathCompatibility.XPath40));
+        Assert.Equal(radix.ToString(), Evaluate($"parse-integer('10',{radix})", XPathCompatibility.XPath40));
+        const string alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Assert.Equal((radix - 1).ToString(), Evaluate($"parse-integer('{alphabet[radix - 1]}',{radix})", XPathCompatibility.XPath40));
+        Assert.Equal("105093381562", Evaluate($"parse-integer(format-integer(105093381562,'{radix}^X'),{radix})", XPathCompatibility.XPath40));
+    }
+
+    /// <summary>Retains unsupported arities and lower-profile boundaries.</summary>
+    /// <param name="expression">The unsupported expression.</param>
+    /// <param name="level">The language level.</param>
+    /// <param name="code">The expected code.</param>
+    [Theory]
+    [InlineData("parse-integer('1')", XPathCompatibility.XPath31, "XPST0017")]
+    [InlineData("parse-integer#2", XPathCompatibility.XPath31, "XPST0017")]
+    [InlineData("parse-integer(value := '1')", XPathCompatibility.XPath31, "XPST0003")]
+    [InlineData("parse-integer()", XPathCompatibility.XPath40, "XPST0017")]
+    [InlineData("parse-integer('1',2,3)", XPathCompatibility.XPath40, "XPST0017")]
+    public void PreservesProfile(string expression, XPathCompatibility level, string code)
+    {
+        var error = Assert.ThrowsAny<Exception>(() => Evaluate(expression, level));
+        Assert.Contains(code, error.Message);
+    }
+
+    /// <summary>Filters function lookup consistently by arity and profile.</summary>
+    [Fact]
+    public void FiltersLookup()
+    {
+        Assert.Equal("true", Evaluate("empty(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),1))", XPathCompatibility.XPath31));
+        Assert.Equal("true", Evaluate("empty(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),0))", XPathCompatibility.XPath40));
+    }
+
+    private static string Evaluate(string expression, XPathCompatibility level)
+        => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = level }).Evaluate((IXdmNode?)null).ToString();
+}

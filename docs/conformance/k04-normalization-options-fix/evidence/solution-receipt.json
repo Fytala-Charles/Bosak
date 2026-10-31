@@ -1,0 +1,55 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build"
+  ],
+  "exitCode": 0,
+  "basis": "Single complete solution run; all ten projects pass",
+  "projects": [
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "passed": 66
+    },
+    {
+      "name": "Bosak.XPath.Parser.Tests",
+      "passed": 202
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "passed": 269
+    },
+    {
+      "name": "Bosak.XPath.Api.Tests",
+      "passed": 489
+    },
+    {
+      "name": "Bosak.XPath.Core.Tests",
+      "passed": 132
+    },
+    {
+      "name": "Bosak.XQuery.Tests",
+      "passed": 347
+    },
+    {
+      "name": "Bosak.XPath.Standard.Tests",
+      "passed": 13797
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "passed": 47
+    },
+    {
+      "name": "Bosak.XPath.Providers.Tests",
+      "passed": 201
+    },
+    {
+      "name": "Bosak.Xslt.Tests",
+      "passed": 8196
+    }
+  ],
+  "totalPassed": 23746
+}

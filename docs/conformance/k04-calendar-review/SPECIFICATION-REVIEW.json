@@ -1,0 +1,17 @@
+{
+  "kind": "Review only; not semantic adoption",
+  "date": "2026-10-27",
+  "sourceBase": "5da130d09cf4fe2f8c88ddf7d3a9b620c2f7d60f",
+  "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+  "sections": [
+    "9.8.4.8",
+    "9.8.4.7"
+  ],
+  "retrievedSource": ".guard-tmp/k04-cldr-spec/fo31.txt",
+  "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+  "qt4ReviewScope": "Original fixture observations only; future implementation must pin affected 4.0 specification sections separately",
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  }
+}

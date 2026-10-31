@@ -1,0 +1,42 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-format-integer
+
+Discovered 738 test sets.
+  Starting: fn-format-integer ...
+  Done: fn-format-integer (102 tests total) [P+=82 F+=15 S+=5]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   102
+Passed:  82
+Failed:  15
+Skipped: 5
+
+Pass rate: 80.39%
+
+First 20 failures:
+  FAIL format-integer-40-001: Unexpected error: FODF1310
+  FAIL format-integer-40-002: Unexpected error: FODF1310
+  FAIL format-integer-40-003: Unexpected error: FODF1310
+  FAIL format-integer-40-004: Unexpected error: FODF1310
+  FAIL format-integer-40-005: Unexpected error: FODF1310
+  FAIL format-integer-40-006: Unexpected error: FODF1310
+  FAIL format-integer-40-007: Unexpected error: FODF1310
+  FAIL format-integer-40-008: Unexpected error: FODF1310
+  FAIL format-integer-40-009: Unexpected error: FODF1310
+  FAIL format-integer-40-010: Unexpected error: FODF1310
+  FAIL format-integer-40-011: Unexpected error: FODF1310
+  FAIL format-integer-40-012: Unexpected error: FODF1310
+  FAIL format-integer-40-013: Unexpected error: FODF1310
+  FAIL format-integer-40-016: Unexpected error: FODF1310
+  FAIL format-integer-40-017: Unexpected error: FODF1310
+
+Skip reasons (grouped):
+      5  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 15
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.28s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-cldr-admission\evidence\format-integer-before-skips.txt

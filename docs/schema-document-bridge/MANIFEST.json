@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-29",
+  "scope": "Uncommitted bounded whole-document bridge qualification",
+  "files": [
+    {
+      "path": "ADOPTION.md",
+      "bytes": 2784,
+      "sha256": "3aa32d41f986a3693c91ddf647232e74e713c8f47a31428962c372ee7b60a2db"
+    },
+    {
+      "path": "evidence/build.txt",
+      "bytes": 6002,
+      "sha256": "2080b93c7b9a0ad128036d30554e97140c337834b04edbf82de4ab0ab76c2cdf"
+    },
+    {
+      "path": "evidence/core.txt",
+      "bytes": 92430,
+      "sha256": "4813730faef913c8ad26d872aee7a8c67a8033a6517e08e54fb525a9a07fd495"
+    },
+    {
+      "path": "evidence/docs-final.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/docs.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0.trx",
+      "bytes": 87716,
+      "sha256": "0da78214a7328e19ed1a0cf27bd6555640cd08a8bd5a47af8142515edf8d30ee"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0[1].trx",
+      "bytes": 266973,
+      "sha256": "d1e88460a4d63f55f9c7da995261dbbf8567d2f9cd337dd867de7463b5ed4beb"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0[2].trx",
+      "bytes": 368233,
+      "sha256": "c46e64844e0d0e04f12f48dc031eb83a3e263c7d896fb86c09381f5fc51563b7"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0[3].trx",
+      "bytes": 157025,
+      "sha256": "0168434a822eef1073ae00047d815e356d90b17b3f404b9c177f913bfdb763f7"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0[4].trx",
+      "bytes": 170187,
+      "sha256": "2a8c7c8bcef5257cf8fb821717b9fabba72b249f431d9ad7c14b1bf91dc35caf"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_57_net10.0[5].trx",
+      "bytes": 291634,
+      "sha256": "64996553eae56068ef5299590fca115f8d06efb483d8b6a986c230a2cc12a748"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_58_net10.0.trx",
+      "bytes": 675490,
+      "sha256": "5fa4a183e82bacb262a88a4cc9787e5f0074e342ea9ccf442ac68a2dae21a8d2"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_58_net10.0[1].trx",
+      "bytes": 1107025,
+      "sha256": "589dfec27cdf15e5d0e55360c732531288a2a8778747f58ba8222063887bd518"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_59_net10.0.trx",
+      "bytes": 21518857,
+      "sha256": "9d8bd9bf01028288e838a8e3b26d92f6cf04f49ecb805d0f3e5c97e11036a0a7"
+    },
+    {
+      "path": "evidence/document-bridge-resume-core-charl_CHARLES_2026-10-29_14_24_59_net10.0[1].trx",
+      "bytes": 11509670,
+      "sha256": "d2b1acd2224784c8907105d28bcb9a98948336ccfe93f3d7989d36561e3b6743"
+    },
+    {
+      "path": "evidence/document-bridge-resume-database-charl_CHARLES_2026-10-29_14_25_49_net10.0.trx",
+      "bytes": 71532,
+      "sha256": "1db49875b171fdbfe0229a85666133df428f122ba27f61218dbed5e58ed9a4f4"
+    },
+    {
+      "path": "evidence/document-bridge-resume-schema-charl_CHARLES_2026-10-29_14_24_44_net10.0.trx",
+      "bytes": 300573,
+      "sha256": "ab2ec8bbe3168a729487eb709791d879a516c33890d5ba2b63ce85cbbebc54d2"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 3055,
+      "sha256": "d2485e72f472a1c4e645f302142f9b2dc7c61d220192f7e94d6bf66ecdf61588"
+    },
+    {
+      "path": "evidence/example.txt",
+      "bytes": 354,
+      "sha256": "896c1e052a4f2641d54198c93101c3d1b62fb6527454694387537596b543ba27"
+    },
+    {
+      "path": "evidence/qt3-exact.txt",
+      "bytes": 73044,
+      "sha256": "0b6f6481435d88a131614156988cefd1e3fca333d32021b05ce8ccf1a634c922"
+    },
+    {
+      "path": "evidence/qt3-skips.txt",
+      "bytes": 9815,
+      "sha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187"
+    },
+    {
+      "path": "evidence/qt4-exact.txt",
+      "bytes": 46430,
+      "sha256": "e4fa1ec244b31a016fa7cb0f4d42a244a969aacb47ef4e39f3018004c2f6d3ab"
+    },
+    {
+      "path": "evidence/qt4-skips.txt",
+      "bytes": 41479,
+      "sha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a"
+    },
+    {
+      "path": "evidence/README.md",
+      "bytes": 1404,
+      "sha256": "762e40f87f7dc6ec4f9e12f480462221b20154f9ed9ebf749c833c45b9ecd70f"
+    },
+    {
+      "path": "evidence/redundant-xslt-canceled.txt",
+      "bytes": 241,
+      "sha256": "e669df438a192109f4ec2b056141c45dc71bb8f25de81168a79647c942a8d984"
+    },
+    {
+      "path": "evidence/source-identities.json",
+      "bytes": 6721,
+      "sha256": "ab4fe6d0b1331d464b331335fb5ed5c408b57f41f70d5d33ee3ff85116562063"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3013,
+      "sha256": "cf832a53924513931f8f5dda14faeb97a7e875d008062f8d54fb145f3812659c"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 6263,
+      "sha256": "d6978da58b41aa3857c9de4bb06dc9dcf4cb72461046bc0656b87a398d6d824d"
+    }
+  ]
+}

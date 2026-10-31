@@ -1,0 +1,107 @@
+[
+  {
+    "name": "library-external",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "library-parse",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\library-external-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.09598020001430996,
+    "result": {
+      "Name": "library-external",
+      "kind": "Passed",
+      "expectedCode": "",
+      "errorType": null,
+      "error": null
+    },
+    "log": "library-external.log"
+  },
+  {
+    "name": "library-typed-external",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "library-parse",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\library-typed-external-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.08937599998898804,
+    "result": {
+      "Name": "library-typed-external",
+      "kind": "Passed",
+      "expectedCode": "",
+      "errorType": null,
+      "error": null
+    },
+    "log": "library-typed-external.log"
+  },
+  {
+    "name": "library-initializer",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "library-parse",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\library-initializer-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.10843009999371134,
+    "result": {
+      "Name": "library-initializer",
+      "kind": "Passed",
+      "expectedCode": "XQST0113",
+      "errorType": "XPathParseException",
+      "error": "Parse error at position 58: XQST0113: A context item declaration in a library module must not specify an initial or default value."
+    },
+    "log": "library-initializer.log"
+  },
+  {
+    "name": "library-default",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "library-parse",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\library-default-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.10543340002186596,
+    "result": {
+      "Name": "library-default",
+      "kind": "Passed",
+      "expectedCode": "XQST0113",
+      "errorType": "XPathParseException",
+      "error": "Parse error at position 67: XQST0113: A context item declaration in a library module must not specify an initial or default value."
+    },
+    "log": "library-default.log"
+  },
+  {
+    "name": "library-duplicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "library-parse",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\library-duplicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.10251100000459701,
+    "result": {
+      "Name": "library-duplicate",
+      "kind": "Passed",
+      "expectedCode": "XQST0099",
+      "errorType": "XPathParseException",
+      "error": "Parse error at position 93: XQST0099: More than one context item declaration in a module."
+    },
+    "log": "library-duplicate.log"
+  }
+]

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — real-world import text contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Do not rely on tolerated typed-numeric string arguments; no grapheme-position or path-authorization contract. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Import file names — Frozen 4.0.** [fn:substring-before-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [fn:substring-after-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), and [fn:index-of-substring](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring).
@@ -54,6 +56,8 @@ Extract the filename before searching its dots. Apply presence guards in a produ
 Earlier separators and dots remain in the preceding parts. Overlapping delimiters can select a later start than a non-overlapping tokenizer would. No delimiter is an empty-result contract, not an automatic whole-filename fallback. No path authorization or file operation occurs.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Last delimiter, overlap and one-based codepoint positions; Empty needle/source, default collation and malformed collation; Experimental absent-pattern correction with frozen refusal retained. **Boundaries:** Do not rely on tolerated typed-numeric string arguments; no grapheme-position or path-authorization contract. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Use CompileOptions.Compatibility40 for the new calls and Compatibility31 for the comparison. Default 3.1 rejects new names. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact report/error markers and default-profile refusal for successful 4.0 cases. All inputs are inline.
 

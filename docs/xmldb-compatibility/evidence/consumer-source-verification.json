@@ -1,0 +1,270 @@
+{
+  "archive": "9a896e08e9e20145c9f78d8edc387f1f490ddb8e7dbe648c7587b53e67c66c6a",
+  "allSelectedSourceFilesUnchanged": true,
+  "files": [
+    {
+      "path": "src/Bosak.XmlDb.Core/StorageNode.cs",
+      "sha256": "1f82b7a79e25c99bfd43b03b5df41f2a472370536c98a26b977f0e1365580bd6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityCodec.cs",
+      "sha256": "10dfc15893e16eb2259b9161c134601a92f153ce0de97109187db2405f02e8c6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityFileIdentity.cs",
+      "sha256": "e7f878f3091cefccedeef87560d7fa5354779808e92fdc8c823beb56187a0e55"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityHistoryCodec.cs",
+      "sha256": "806e7e5d92a01bf77641ada2de58140b993c4a1eb91e5fea3fc9c1c8fa3b8e3d"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityLifetime.cs",
+      "sha256": "a1b2c17aa65405312dcbe597d31f6aab1391eef855e3f9446315d5c0865c7733"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityPayloadCodec.cs",
+      "sha256": "fabb0aece3635efb4677bbebe0872e45abf4dd8e086dfbf361f880a6d805c8a0"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ApplicationAuthorityProvisioning.cs",
+      "sha256": "c026fd039b3c3f59e17802dc861cf902c6b43be80f0730653af8e1f4e3aad3e6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/BackupCodec.cs",
+      "sha256": "90225bf3e55328241eb5e64852444605943ad19f9d4d3be7d609c54df3c7bc92"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/BackupStorage.cs",
+      "sha256": "cb23419ffb2ce018730ed6c75de8777291a33f307c65a5a2ebdfc43e0c01c07b"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/BinaryEnvelope.cs",
+      "sha256": "1ccb74db107670c95334c75f62f39f4f3acbfb580e35c579988b48b02287db70"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/CheckpointCodec.cs",
+      "sha256": "33601b02ad8f1387b6c86eeb3284a129e2d4bd60e2797e9ec9e68b446e987a2b"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostApplicationInspection.cs",
+      "sha256": "5fee7f2eefef54bf1ac01514d65f2fbabec766e0bf076abd22e01d0fc96992d9"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostJournalAppend.cs",
+      "sha256": "2f972ac5dc47c97044b51f9b1f1433055bd65fea792b7230dc27343663753b3f"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostLifetime.cs",
+      "sha256": "9bb72bc7dd3e7f3899514a53bca89eefbb90f95ff1c4284abca6918eb4e228e6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostOrchestrator.cs",
+      "sha256": "decddc62301fe8139f04691a9c50f3bfda239e0b4bd3c8d31bc1d4e502262872"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostProvisioning.cs",
+      "sha256": "660a6b0f36a9eb50193bfa534ebae09d7b2545de072761482345b92e8a00d8cc"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostRestartReconciler.cs",
+      "sha256": "c9533e00be3add320701b3fd983257482cf487f9b9d80484e34b8d94814aec0d"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedHostStoppedReconciliation.cs",
+      "sha256": "9e4729f2007483451e94c5aa885083c910634c3221794909a14830973fc266c6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedPilotAuthorityClassifier.cs",
+      "sha256": "5181d04159b39aa0920c06b36a1580aa25c2658651bebd1dde9ef846961c0ce5"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Backup.cs",
+      "sha256": "87d5f6267933b19fbc5095686bf0609d01260f2fa6066d5b8cda1f141cdb3e54"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Cutover.cs",
+      "sha256": "252e413c6fd8d46ccd20a85381e83de8f9f52029f04349bfc15d39c90ef858b9"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs",
+      "sha256": "c44a2b560dbfac03c958252649795e0e8edde2ccbfce95783b12c14000e35f3b"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochAdministrativeAttemptExecution.cs",
+      "sha256": "983145df007b0ab157295beeee510b893fc3d8b467b96062b128bf3e00299d86"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochAdministrativeAttemptPlan.cs",
+      "sha256": "0afef610c6dd0275259b0242df298859e483c21cd1afc33550e33cc0cd55f87e"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochAdmission.cs",
+      "sha256": "9485ce8b5cd2ceb9ba33ccbf0cb85c17425ccd56146c506328efcd1f7b919a02"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochAuthorityCodec.cs",
+      "sha256": "b32648ab4a6849cc0c49e799c50d780c44904f5f67e4f79c4b742b843a9d0e11"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochBackupCodec.cs",
+      "sha256": "2cc7999d9550b57dee3cd2b5217085cfc6042ae4fb4f9fec007e422740b61ff6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochBackupRestore.cs",
+      "sha256": "02428fcb60fadf921a382419ccc4e17b367bbe5f7f7fa06c2ace8d7b24e8369f"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochBackupStorage.cs",
+      "sha256": "2a023864771b9c8c28492cdb0fd456b9310ecfd9b16f30dffca40b56eaae702c"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochCodec.cs",
+      "sha256": "fb59d2b478f8267c1e2caf0d0882d91380f9a709dd636bf3e33ced007e11d04b"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochEmptyCoordinator.cs",
+      "sha256": "e2f7a7cd6e42509b541bfeadf7d8453b7f93549a9b7c8f54ec5bced7ead997b3"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochEmptyRoot.cs",
+      "sha256": "da551690307278847741be196ec5c98033d81e8dde185e75a5a2f8a7c705c820"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochLegacyMigration.cs",
+      "sha256": "f7eb451a2a1324a6fe7afa40f028244448a9a71306a383bd458f2beb4d6b9f35"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochMigrationCodec.cs",
+      "sha256": "b737a1396c334d177afbeab14b66cec4e0e7dd3923d616463994468be6648224"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochPublicationInspector.cs",
+      "sha256": "c56451d93521fb13b3e24c39958c13838e6bb40fdde353ab0c38ca8e3ca2ed7d"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.Backup.cs",
+      "sha256": "815ed26439824877d9743774056f8f7dfb8d7831a91a87e7bca0f135d825843c"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.Cutover.cs",
+      "sha256": "7fec7af4ba701d840b66585414f38baab0417161dbe3ab27216e3fce35aa2609"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.cs",
+      "sha256": "dc4bc59b7963429cd87af78c217c8cc2db84a972bad7124c08a5514b0364bfb9"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochScalarHistory.cs",
+      "sha256": "db2b8fc07a75fb052c1414a165cf3f88989ffb896e5e80d313217c3c17ce0323"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochScalarRecovery.cs",
+      "sha256": "4e00417cafd0fc2ea1fb6e579891b1a8f3dd6305804da3568a44adf69252e3a3"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/EpochSnapshotCodec.cs",
+      "sha256": "fdbf41af2b402723cd0def49770d9d945e46da57e9895a9b811f1c8e6ad6700f"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/GenerationLease.cs",
+      "sha256": "acd377decd9d9bf0e6dad5983316e588128702f5b21daba2359207a8fcc602e2"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/HostAttemptLedgerClassifier.cs",
+      "sha256": "c485f66716c822609691aae0b1fe1a3e92c5eb59cad62e21467e3d3e206ef70c"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/HostAttemptLedgerHarness.cs",
+      "sha256": "05af0557e39770d04c6d0ade6681e95d3e46c5b3bbb201b024b4ea815e6b596e"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/HostJournalCodec.cs",
+      "sha256": "42306ada55c5ebde004ec147a6404dac46510d383e0677a9bb74fb0b324ba3c7"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/HostJournalHistoryCodec.cs",
+      "sha256": "ab6083455f8ce8a2891479972c1bd2b24fbf95a2f1aac43f66f8d22bdb1ae4eb"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/HostJournalPayloadCodec.cs",
+      "sha256": "7954951b66a3f060e74f9aff7263a194bba1474854c99d851c828d0afdc3fe82"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+      "sha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/LegacyMigrationVerifier.cs",
+      "sha256": "bef6b34800b638a4d331ede2a122d1e7b32d8c3290e2806aa0390f487b5159d6"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/MigrationCutoverSession.cs",
+      "sha256": "0ae3793e3dabf1625ae6fbd2ebbfe5d2afd11675acbd2ee197fc7139d212e4c9"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/MigrationCutoverValidation.cs",
+      "sha256": "6d1079c2148ade5eb8a5509c41f3f0e8357d24ffc26fdf8f1b712689afb83ea5"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/MigrationRestartClassifier.cs",
+      "sha256": "85fd0244ed0e656c2f5b22b71a6f20de7a392ce0f45f711b8c86c60e8027defc"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ReadOnlyEpochDatabase.cs",
+      "sha256": "4bf8998615d56011e727a551de2ee090569b4133819f61f6d91adb4871c93638"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/RetentionPlanner.cs",
+      "sha256": "1c43e5022d3c395e2b55a10b9943f7462d24f818bed8f3fe263c4685cf846aa4"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ScalarEpochAdministration.cs",
+      "sha256": "e1cc73e89cb42d9be3d96edd85f658d1454a1c7f88449cec9c5f42949cf42396"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ScalarEpochDatabase.cs",
+      "sha256": "0b8b7c228257605c14f22797e9663932d112631cdaa78f2c4d1fa9c60caf5234"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/ScalarGeneration.cs",
+      "sha256": "96cb64986660cdbea3bf05ba4b3c4385c8e0c19a1bd6ba4421e5427ced76f899"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/StoreCodec.cs",
+      "sha256": "a557d9b1a4fe6868253e56fba42f4320c9bd6214a247222e582ff4e2bfc7ef74"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/TransactionCodec.cs",
+      "sha256": "d684b5b2e48bc065b9d6d613824cc26258e49ce541112f1df1ea3c815cd4a95a"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/TransactionStorage.cs",
+      "sha256": "ebd409ecdf30fc889695b87780115933d8baa6bd0db30f32541f224a8e78becb"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/XmlFragmentImporter.cs",
+      "sha256": "1c1b2c382123bdb76b4a9c0d1fd2484c68d3d553346a1dc48f6515c2319725e1"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Storage/XmlWriteTransaction.cs",
+      "sha256": "5c6ad8876484a51556c11c23521daa309c3b4fcc66a768ec1aa157918879b64f"
+    },
+    {
+      "path": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+      "sha256": "d0718039606b9f5fe384ae4d88dc6b922b93de14a34d339535bbce24601f833d"
+    },
+    {
+      "path": "tests/Bosak.XmlDb.Xdm.Tests/DependencyBoundaryTests.cs",
+      "sha256": "6a45002bb4e4e92e776c3fac3b51288399b64db6c7fa1a86b0105a9f284c91d8"
+    },
+    {
+      "path": "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs",
+      "sha256": "f18dc41d9cf66649afd00c13eb1838b3d712705539daf8fe42bbec824a8c8e77"
+    },
+    {
+      "path": "tests/Bosak.XmlDb.Xdm.Tests/TransactionalQueryTests.cs",
+      "sha256": "6ae81b7a10ab324d652b7e13ace001886ebf621fafb6333b4d0b853e527fdabf"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "xmldb.baseline": {
+    "files": 613,
+    "allFrozenLayoutFilesUnchanged": true
+  },
+  "xmldb.replacement": {
+    "files": 613,
+    "allFrozenLayoutFilesUnchanged": true
+  },
+  "braid.baseline": {
+    "files": 1381,
+    "allFrozenLayoutFilesUnchanged": true
+  },
+  "braid.replacement": {
+    "files": 1381,
+    "allFrozenLayoutFilesUnchanged": true
+  }
+}

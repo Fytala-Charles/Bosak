@@ -1,0 +1,395 @@
+{
+  "scope": "Required owner review; no acceptance inferred.",
+  "rows": [
+    {
+      "id": "N1",
+      "owner": "Schema + Core",
+      "current136Status": "Private partial",
+      "currentEvidence": "Issuer-owned component references and exact environment admission; no public component/universe handles.",
+      "requestedReturn": "Select neutral handles and same-authority comparison; reject forged/independently compiled identity.",
+      "accepted": false
+    },
+    {
+      "id": "N2",
+      "owner": "Schema + Core",
+      "current136Status": "Proposed only",
+      "currentEvidence": "No production derivation, affiliation or complete closure authority operations.",
+      "requestedReturn": "Dispose the exact lookup/derivation/affiliation/closure capabilities, complete results versus Unsupported; map actual provider use cases.",
+      "accepted": false
+    },
+    {
+      "id": "N3",
+      "owner": "Schema + Core",
+      "current136Status": "Private atomic subset",
+      "currentEvidence": "39 atomic fixtures/11 public-factory kinds; native decimal profile. No list/union public transport.",
+      "requestedReturn": "Specify empty/singleton lists and per-atomic selected union member/provenance now; backend refusals do not waive required contract shape.",
+      "accepted": false
+    },
+    {
+      "id": "N4",
+      "owner": "Schema + Core",
+      "current136Status": "Private partial",
+      "currentEvidence": "Frozen private compile/evaluate environment; no selected C45 public assessment/advisor consultation seam.",
+      "requestedReturn": "Review assessment episode/assertion/CTA consultation and context capture; return unsupported/profile semantics explicitly.",
+      "accepted": false
+    },
+    {
+      "id": "N5",
+      "owner": "Schema + Core",
+      "current136Status": "Private partial",
+      "currentEvidence": "Native declaration/type/original-assessment copies and independent snapshot closure in the friend host.",
+      "requestedReturn": "Map public node facts, preserve/strip/copy, nil/no-typed-value and original PSVI; qualify the actual provider route.",
+      "accepted": false
+    },
+    {
+      "id": "N6",
+      "owner": "Schema + Core",
+      "current136Status": "Not implemented",
+      "currentEvidence": "Private admission rejects foreign environments/universes.",
+      "requestedReturn": "Select separate admitted compatible-view semantics that preserve original PSVI; no digest/QName identity shortcut.",
+      "accepted": false
+    },
+    {
+      "id": "N7",
+      "owner": "Schema + Core",
+      "current136Status": "Private partial",
+      "currentEvidence": "Raw-operation ownership, synchronous read lease, canceled-wait/cleanup checks.",
+      "requestedReturn": "Agree public borrowed/owned/deferred value scopes and actual provider snapshot/reader lifetime; define supported concurrency.",
+      "accepted": false
+    },
+    {
+      "id": "N8",
+      "owner": "Schema + Core",
+      "current136Status": "Private partial",
+      "currentEvidence": "Reference/seal checks and separate descriptive fingerprints in private tests.",
+      "requestedReturn": "Encode query/XDM/XSD/authority/source/snapshot separation in the selected public contract and negative acceptance cases.",
+      "accepted": false
+    },
+    {
+      "id": "FXR-01",
+      "owner": "XmlDb",
+      "title": "XML numeric kinds and persisted bytes",
+      "requiredContract": "Preserve the seven XML flag values 1/2/4/8/16/32/64, None=0 and All=127; preserve old compiled defaults and persisted bytes.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-02",
+      "owner": "XmlDb",
+      "title": "Axes, filters and optional defaults",
+      "requiredContract": "Keep all thirteen axes, lazy results, reverse-axis order, name filters and Children default All.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-03",
+      "owner": "XmlDb",
+      "title": "Names, URIs, ID and serialization",
+      "requiredContract": "Retain XML names/namespace/base/document URI, xml:id behavior and serialization; leave default encoded-name fallback optional.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-04",
+      "owner": "XmlDb",
+      "title": "Typed value and atomization policy",
+      "requiredContract": "Agree untyped XML typed-value/atomization and error behavior against a named profile; do not infer schema typing or full XDM conformance.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-01, FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-05",
+      "owner": "XmlDb",
+      "title": "Identity, equality and document order",
+      "requiredContract": "Preserve same-snapshot identity and order; state cross-snapshot/generation/document limits explicitly.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-06",
+      "owner": "XmlDb",
+      "title": "Custom sequences and cached Current",
+      "requiredContract": "Preserve implementer slots and lazy enumeration; distinguish provider fetch checks from access to cached values.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-02, FXG-03",
+      "accepted": false
+    },
+    {
+      "id": "FXR-07",
+      "owner": "XmlDb",
+      "title": "BindResult boundary and detached scalars",
+      "requiredContract": "Keep caller snapshot alive through supported lazy access; do not equate guarding an outer result with owning or deep-detaching the graph.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-02, FXG-03",
+      "accepted": false
+    },
+    {
+      "id": "FXR-08",
+      "owner": "XmlDb",
+      "title": "Early break, abandonment and cancellation",
+      "requiredContract": "State who releases the actual snapshot on completion, early exit, fault, cancellation and abandoned enumeration; never recursively dispose caller values.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-03, FXG-05",
+      "accepted": false
+    },
+    {
+      "id": "FXR-09",
+      "owner": "XmlDb",
+      "title": "Nested carriers, maps, arrays and escaped nodes",
+      "requiredContract": "Preserve carrier layouts and node references; define graph lifetime through nested/deferred/container/function access and copy/materialization.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-02, FXG-03, FXG-04",
+      "accepted": false
+    },
+    {
+      "id": "FXR-10",
+      "owner": "XmlDb",
+      "title": "Actual snapshot and generation ownership",
+      "requiredContract": "Retain the original usable snapshot admission/generation lease until explicit snapshot disposal; coordinator disposal must not release a live snapshot.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-03, FXG-05",
+      "accepted": false
+    },
+    {
+      "id": "FXR-11",
+      "owner": "XmlDb",
+      "title": "Optional default node properties and schema boundary",
+      "requiredContract": "Preserve all existing IXdmNode obligations and optional defaults; ordinary untyped XML must not require Schema/PSVI/JNode persistence.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04, FXG-06",
+      "accepted": false
+    },
+    {
+      "id": "FXR-12",
+      "owner": "XmlDb",
+      "title": "Query boundary and document loading",
+      "requiredContract": "Keep compilation/evaluation and exact same-snapshot document loading usable without provider-specific engine internals.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-03, FXG-04, FXG-05",
+      "accepted": false
+    },
+    {
+      "id": "FXR-13",
+      "owner": "XmlDb",
+      "title": "Package, implementation and ABI boundary",
+      "requiredContract": "Preserve source/unchanged-binary implementers, struct layouts/boxing, enum/default constants and optional slots across an explicitly supported candidate cohort.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-04, FXG-06",
+      "accepted": false
+    },
+    {
+      "id": "FXR-14",
+      "owner": "XmlDb",
+      "title": "Errors, threading and reentry",
+      "requiredContract": "Keep explicit failure boundaries, and do not promise concurrent snapshot disposal, cancellation isolation or reentry merely because metadata is immutable.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-05",
+      "accepted": false
+    },
+    {
+      "id": "FXR-15",
+      "owner": "XmlDb",
+      "title": "Existing experimental value kinds and optional persistence",
+      "requiredContract": "Do not renumber/remove existing public kinds; separate transient query carriers from persisting arbitrary XDM/schema/JSON graphs.",
+      "current136Status": "Owner refresh pending",
+      "currentEvidence": "Prior bounded ordinary-XML 1.34.2 evidence is retained; no 1.36 consumer execution.",
+      "requestedReturn": "Reconcile this existing row and its exact member/default obligations against 1.36, preserving prior case IDs and recording new differences; FXG-06",
+      "accepted": false
+    },
+    {
+      "id": "FXG-01",
+      "owner": "XmlDb + Core",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Agree typed-value/atomization expectations for the declared untyped XML/query profile; FromString alone is not a complete conformance argument. Pinned and candidate differential data()/type/numeric/error cases; normative adoption only before an actual semantic change.",
+      "accepted": false
+    },
+    {
+      "id": "FXG-02",
+      "owner": "XmlDb + Core",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Agree cached Current, nested/container escapes and BindResult outer-only guard behavior; do not promise every value access throws after disposal. Actual cached/nested/materialized/copied results before/after source snapshot disposal on exact candidate.",
+      "accepted": false
+    },
+    {
+      "id": "FXG-03",
+      "owner": "XmlDb + Core / FG-04",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Explicit caller snapshot ownership through early break, exhaustion, abandoned enumeration, faults and cancellation; no universal Dispose addition assumed. Actual reader/generation lease held and released once; owned vs foreign enumerator/callback cleanup; optional scope only if a concrete missing requirement remains.",
+      "accepted": false
+    },
+    {
+      "id": "FXG-04",
+      "owner": "XmlDb / FX009-02",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Real provider and tests against exact 1.34.2 cohort, constants/defaults/default dispatch, axes/namespaces/order/typing/errors, source/binary baseline differences and no format mutation. Isolated candidate source and supported unchanged-binary runs, precise loaded DLL/package hashes, existing-store reopen and historical snapshot fixtures.",
+      "accepted": false
+    },
+    {
+      "id": "FXG-05",
+      "owner": "XmlDb + Core / FG-06",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Record sequential scope and absent general cancellation/reentry/concurrent-disposal guarantee; verify any claimed deferred context behavior. Finite accepted scope, actual candidate cancellation/error/early-exit tests and ordered/repeated concurrent tests only for separately supported behaviors.",
+      "accepted": false
+    },
+    {
+      "id": "FXG-06",
+      "owner": "Core + Schema + XmlDb / FX009-03",
+      "current136Status": "Open for changed cohort/final contract",
+      "currentEvidence": "Prior return advances bounded 1.34.2 engineering evidence; it does not accept 1.36 or broader guarantees.",
+      "requestedReturn": "Select exact stable/legacy/experimental manifest scope; this consumer audit cannot freeze Core or complete full Schema foundation requirements. Dated owner dispositions against exact final manifest/feed; no product adoption or release inferred.",
+      "accepted": false
+    },
+    {
+      "id": "BF140-01",
+      "owner": "Braid",
+      "title": "Semantic environment and identity",
+      "current136Status": "Design/qualification pending",
+      "currentEvidence": "Old D01 acceptance and untyped 1.26.2 behavior remain historical.",
+      "requestedReturn": "Map actual validation/compile/preview/deferred settings to the selected public environment; retain engine-free Core/Application.",
+      "accepted": false
+    },
+    {
+      "id": "BF140-02",
+      "owner": "Braid",
+      "title": "Typed and persistent adapters",
+      "current136Status": "Design/qualification pending",
+      "currentEvidence": "Old D01 acceptance and untyped 1.26.2 behavior remain historical.",
+      "requestedReturn": "Design supported/refused real Schema/XmlDb input routes; preserve original PSVI/list/union and persistent snapshot identity.",
+      "accepted": false
+    },
+    {
+      "id": "BF140-03",
+      "owner": "Braid",
+      "title": "Worker ownership",
+      "current136Status": "Design/qualification pending",
+      "currentEvidence": "Old D01 acceptance and untyped 1.26.2 behavior remain historical.",
+      "requestedReturn": "Select and version worker-local reopen, approved broker or controlled in-process route; prove timeout/kill/callback/deferred cleanup.",
+      "accepted": false
+    },
+    {
+      "id": "BF140-04",
+      "owner": "Braid",
+      "title": "Currentness",
+      "current136Status": "Design/qualification pending",
+      "currentEvidence": "Old D01 acceptance and untyped 1.26.2 behavior remain historical.",
+      "requestedReturn": "Version schema/profile/snapshot descriptors and result reuse; preserve historical evidence without granting live authority.",
+      "accepted": false
+    },
+    {
+      "id": "BF140-05",
+      "owner": "Braid",
+      "title": "Representative integration",
+      "current136Status": "Design/qualification pending",
+      "currentEvidence": "Old D01 acceptance and untyped 1.26.2 behavior remain historical.",
+      "requestedReturn": "Execute actual typed preview and persistent ordinary-XML preview on the accepted route; return consumer regressions and explicit scoped disposition.",
+      "accepted": false
+    },
+    {
+      "id": "PF-01",
+      "owner": "Core",
+      "title": "Existing no-schema compile/evaluate and sequence enumeration",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-02",
+      "owner": "Core + Schema",
+      "title": "Compiled schema environment and authority lookup",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-03",
+      "owner": "Core + Schema",
+      "title": "Typed values and provenance transport",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-04",
+      "owner": "XmlDb + Core",
+      "title": "Persistent navigation and lazy results",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-05",
+      "owner": "XmlDb + Core",
+      "title": "Snapshot leases and partial consumption",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-06",
+      "owner": "Braid + Core + Schema + XmlDb",
+      "title": "End-to-end typed and persistent preview",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-07",
+      "owner": "Braid + Core",
+      "title": "Run identity and resource invalidation",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-08",
+      "owner": "All owners",
+      "title": "Scale, limits and failure responsiveness",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    },
+    {
+      "id": "PF-09",
+      "owner": "All owners",
+      "title": "API shape alternatives before final signatures",
+      "current136Status": "Owner workload/budget qualification pending",
+      "currentEvidence": "Local atomic warm-loop allocation samples are available; broader owner scenarios are not qualified.",
+      "requestedReturn": "Select representative fixtures and baselines; agree explicit budgets/tolerances and record allocations/latency/retained memory/I/O/IPC/lifetime as relevant.",
+      "accepted": false
+    }
+  ],
+  "allAccepted": false,
+  "real136ConsumerRuns": "NotRun"
+}

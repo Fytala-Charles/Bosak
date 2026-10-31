@@ -49,7 +49,14 @@
 //                      | Charles Korthout | 2.8   | 09-09-2026     | Register unsupplied external variable declarations (XPDY0002 on reference)               |
 //                      | Charles Korthout | 2.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 2.10  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
+//                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |
+//                      | Charles Korthout | 2.12  | 27-10-2026     | Expose main-module schema imports internally for guarded conformance diagnostics.         |
+//                      | Charles Korthout | 2.13  | 27-10-2026     | Register imported schema constructors on first evaluation (1.26.7).                    |
+//                      | Charles Korthout | 2.14  | 27-10-2026     | Preserve file-backed schema source URIs for relative imports (1.26.8).                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.15  | 28-10-2026     | Initialize main context with strict typing, lazy-global cycles and scoped focus (1.30.0). |
+//                      | Charles Korthout | 2.16  | 28-10-2026     | Match imported context types in declaration scope and restore caller namespaces (1.30.1). |
+//                      | Charles Korthout | 2.17  | 28-10-2026     | Isolate lazy initializer and declared-function constructor namespace frames (1.31.0). |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -102,11 +109,15 @@ internal sealed record CompiledUserVariable(
 public sealed class XQueryExecutable
 {
     private readonly IrModule _module;
+    private readonly IrModule? _contextInitializer;
     private readonly XQueryStaticContext _staticContext;
+
+    /// <summary>Gets declared main-module schema imports for conformance host initialization.</summary>
+    internal IReadOnlyList<SchemaImport> ConformanceSchemaImports => _staticContext.ImportedSchemas;
     private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
     private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
     private readonly IReadOnlyList<XQueryModuleSource> _moduleSources;
-    private readonly IReadOnlyList<string> _libraryModuleContextItemTypes;
+    private readonly IReadOnlyList<LibraryContextItemConstraint> _libraryModuleContextItemTypes;
     private readonly ModuleVisibilityValidator.UnresolvedNameReferences? _unresolvedNames;
 
     internal XQueryExecutable(
@@ -115,10 +126,12 @@ public sealed class XQueryExecutable
         IReadOnlyList<CompiledUserFunction>? userFunctions = null,
         IReadOnlyList<CompiledUserVariable>? userVariables = null,
         IReadOnlyList<XQueryModuleSource>? moduleSources = null,
-        IReadOnlyList<string>? libraryModuleContextItemTypes = null,
-        ModuleVisibilityValidator.UnresolvedNameReferences? unresolvedNames = null)
+        IReadOnlyList<LibraryContextItemConstraint>? libraryModuleContextItemTypes = null,
+        ModuleVisibilityValidator.UnresolvedNameReferences? unresolvedNames = null,
+        IrModule? contextInitializer = null)
     {
         _module = module;
+        _contextInitializer = contextInitializer;
         _staticContext = staticContext;
         _userFunctions = userFunctions ?? [];
         _userVariables = userVariables ?? [];
@@ -141,6 +154,45 @@ public sealed class XQueryExecutable
         var savedDefaultNs = evaluationContext.DefaultElementNamespace;
         var savedBaseUri = evaluationContext.BaseUri;
         var savedCollation = evaluationContext.DefaultCollation;
+        var savedItem = evaluationContext.ContextItem;
+        int savedPosition = evaluationContext.ContextPosition, savedSize = evaluationContext.ContextSize;
+        var savedFocusResolver = evaluationContext.InitialFocusResolver;
+        var declaration = _staticContext.ContextDeclaration;
+        bool initialized = false, initializing = false;
+        XdmValue initialItem = XdmValue.Undefined;
+
+        void ResolveInitialFocus()
+        {
+            if (initialized)
+            {
+                evaluationContext.WithFocus(initialItem, initialItem.IsUndefined ? 0 : 1, initialItem.IsUndefined ? 0 : 1);
+                return;
+            }
+            if (initializing)
+                throw new InvalidOperationException("XQDY0054: Circular dependency involving the initial context item.");
+            initializing = true;
+            try
+            {
+                bool useSupplied = declaration!.IsExternal && !savedItem.IsUndefined;
+                var value = useSupplied ? savedItem : _contextInitializer is null
+                    ? XdmValue.Undefined : VmEngine.Execute(_contextInitializer, evaluationContext);
+                bool absentExternal = !useSupplied && _contextInitializer is null && declaration.IsExternal;
+                initialItem = absentExternal ? XdmValue.Undefined : RequireContextSingleton(value);
+                if (!initialItem.IsUndefined && !XdmConversions.ValueMatchesType(initialItem, declaration.TypeName, evaluationContext))
+                    throw new InvalidOperationException($"XPTY0004: Initial context item does not match '{declaration.TypeName}'.");
+                initialized = true;
+                evaluationContext.WithFocus(initialItem, initialItem.IsUndefined ? 0 : 1, initialItem.IsUndefined ? 0 : 1);
+            }
+            finally { initializing = false; }
+        }
+
+        if (declaration is not null)
+        {
+            foreach (var variable in _userVariables)
+                evaluationContext.InvalidateLazyGlobal(variable.LocalName, variable.NamespaceUri);
+            evaluationContext.WithFocus(XdmValue.Undefined, 0, 0);
+            evaluationContext.InitialFocusResolver = ResolveInitialFocus;
+        }
 
         // XQuery element constructors need a node-building provider; default to XDocument.
         evaluationContext.ElementConstructorHook ??= XDocumentProvider.ConstructElement;
@@ -150,7 +202,16 @@ public sealed class XQueryExecutable
 
         try
         {
-            ApplyStaticContext(evaluationContext);
+            ApplyStaticContext(evaluationContext, declaration is null ? null : () =>
+                initialized ? (initialItem, initialItem.IsUndefined ? 0 : 1, initialItem.IsUndefined ? 0 : 1)
+                            : (XdmValue.Undefined, 0, 0));
+            ValidateUnresolvedNames(evaluationContext);
+            if (declaration is not null)
+            {
+                ResolveInitialFocus();
+                evaluationContext.InitialFocusResolver = savedFocusResolver;
+                ValidateExternalVariables(evaluationContext);
+            }
 
             // XQuery 3.1 §4.14: the initial context item must satisfy the context item
             // type declared by every imported library module (contextDecl-054).
@@ -158,15 +219,14 @@ public sealed class XQueryExecutable
             {
                 foreach (var contextItemType in _libraryModuleContextItemTypes)
                 {
-                    if (!XdmConversions.ValueMatchesType(evaluationContext.ContextItem, contextItemType, evaluationContext))
+                    if (!contextItemType.Matches(evaluationContext.ContextItem, evaluationContext))
                         throw new InvalidOperationException(
-                            $"XPTY0004: The initial context item does not match the context item type '{contextItemType}' declared in an imported library module.");
+                            $"XPTY0004: The initial context item does not match the context item type '{contextItemType.TypeName}' declared in an imported library module.");
                 }
             }
 
-            ValidateUnresolvedNames(evaluationContext);
-
-            return VmEngine.Execute(_module, evaluationContext);
+            var result = VmEngine.Execute(_module, evaluationContext);
+            return declaration is null ? result : StabilizeSequence(result);
         }
         // Unwrap global-variable error markers so callers see the original error.
         catch (GlobalVariableEvaluationException gve) when (gve.InnerException is not null)
@@ -175,11 +235,41 @@ public sealed class XQueryExecutable
         }
         finally
         {
+            if (declaration is not null)
+            {
+                evaluationContext.InitialFocusResolver = savedFocusResolver;
+                evaluationContext.WithFocus(savedItem, savedPosition, savedSize);
+            }
             evaluationContext.RestoreNamespaces(snapshot);
             evaluationContext.DefaultElementNamespace = savedDefaultNs;
             evaluationContext.BaseUri = savedBaseUri;
             evaluationContext.DefaultCollation = savedCollation;
         }
+    }
+
+    private static XdmValue RequireContextSingleton(XdmValue value)
+    {
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            XdmValue first = XdmValue.Undefined;
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+            {
+                if (++count > 1) throw new InvalidOperationException("XPTY0004: The initial context must be a single item.");
+                first = item;
+            }
+            value = first;
+        }
+        if (value.IsUndefined) throw new InvalidOperationException("XPTY0004: The initial context must be a single item.");
+        return value;
+    }
+
+    private static XdmValue StabilizeSequence(XdmValue value)
+    {
+        if (!value.IsSequence || value.SequenceValue is null) return value;
+        var items = new List<XdmValue>();
+        foreach (var item in XdmSequence.FromSource(value.SequenceValue)) items.Add(item);
+        return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
     // Names that the compiler could not resolve statically (undeclared variables, undeclared
@@ -288,7 +378,15 @@ public sealed class XQueryExecutable
 
             using (stream)
             {
-                using var reader = System.Xml.XmlReader.Create(stream);
+                // A file-backed resolver result identifies the schema document, independently
+                // of query base URI or location hints the resolver did not select. Other
+                // stream implementations retain the existing identity-free behavior.
+                if (stream is FileStream fileStream && Path.IsPathFullyQualified(fileStream.Name))
+                    resolvedLocation = fileStream.Name;
+                string schemaBaseUri = resolvedLocation is null
+                    ? string.Empty
+                    : new Uri(Path.GetFullPath(resolvedLocation)).AbsoluteUri;
+                using var reader = System.Xml.XmlReader.Create(stream, null, schemaBaseUri);
                 var schema = XmlSchema.Read(reader, null);
                 if (schema is null)
                     throw new InvalidOperationException($"XQST0059: Unable to read schema for namespace '{targetNs}'.");
@@ -299,12 +397,12 @@ public sealed class XQueryExecutable
         schemaSet.Compile();
         if (errors.Count > 0)
         {
-            throw new InvalidOperationException($"Schema compilation failed:\n{string.Join("\n", errors)}");
+            throw new InvalidOperationException($"XQST0012: Schema compilation failed:\n{string.Join("\n", errors)}");
         }
         return schemaSet;
     }
 
-    private void ApplyStaticContext(EvaluationContext ctx)
+    private void ApplyStaticContext(EvaluationContext ctx, Func<(XdmValue Item, int Position, int Size)>? initialFocus = null)
     {
         // Populate the standard function library once per execution context.
         if (!ctx.SkipStandardFunctionPopulation)
@@ -381,6 +479,8 @@ public sealed class XQueryExecutable
         if (ctx.SchemaSet is null && _staticContext.ImportedSchemas.Count > 0)
         {
             ctx.SchemaSet = BuildSchemaSet(_staticContext.ImportedSchemas, ctx);
+            if (!ctx.SkipStandardFunctionPopulation)
+                FunctionLibrary.RegisterSchemaConstructors(ctx);
         }
 
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)
@@ -416,7 +516,7 @@ public sealed class XQueryExecutable
                 ReturnType = XdmValueKind.External,
                 ParameterTypeNames = captured.ParameterTypes,
                 ReturnTypeName = captured.ReturnType,
-                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args, mainModuleDefaultElementNamespace)
+                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args, mainModuleDefaultElementNamespace, _staticContext.Namespaces)
             });
         }
 
@@ -435,6 +535,8 @@ public sealed class XQueryExecutable
             {
                 foreach (var v in _userVariables)
                 {
+                    if (v.LocalName == local && v.NamespaceUri == ns && v.Body is null && initialFocus is not null)
+                        return null;
                     if (v.LocalName == local && v.NamespaceUri == ns && v.Body is not null)
                     {
                         // XQDY0054: circular variable dependency. Per XQuery 3.1 §4.15 the
@@ -447,8 +549,10 @@ public sealed class XQueryExecutable
                         var savedSize = ctx.ContextSize;
                         try
                         {
-                            ctx.WithFocus(initialItem, initialPosition, initialSize);
-                            return EvaluateWithModuleContext(v, ctx);
+                            var focus = initialFocus?.Invoke() ?? (initialItem, initialPosition, initialSize);
+                            ctx.WithFocus(focus.Item1, focus.Item2, focus.Item3);
+                            var value = EvaluateWithModuleContext(v, ctx, _staticContext);
+                            return initialFocus is null ? value : StabilizeSequence(value);
                         }
                         // Errors raised while evaluating a global variable initializer are
                         // not caught by try/catch expressions (XQuery try-006/007); mark
@@ -476,19 +580,7 @@ public sealed class XQueryExecutable
                 ctx.UnsuppliedExternalVariables.Add((v.LocalName, v.NamespaceUri));
         }
 
-        // External variables with a declared type: the supplied value is checked strictly
-        // (atomization plus instance-of, no casts or promotions) — XPTY0004 on mismatch
-        // (extvardeclwithtype-19). Unbound externals resolve to XPST0008 on reference.
-        foreach (var v in _userVariables)
-        {
-            if (!v.IsExternal || v.TypeName is null)
-                continue;
-            if (!ctx.TryGetVariable(v.LocalName, out var externalValue, v.NamespaceUri))
-                continue;
-            var valueToCheck = IsNodeKindTestText(v.TypeName) ? externalValue : AtomizeItemsForTypeCheck(externalValue);
-            if (!XdmConversions.ValueMatchesType(valueToCheck, v.TypeName, ctx))
-                throw new InvalidOperationException($"XPTY0004: The value of the external variable '${v.LocalName}' does not match the declared type '{v.TypeName}'.");
-        }
+        if (initialFocus is null) ValidateExternalVariables(ctx);
 
         // Decimal-format declarations (declare (default )?decimal-format) feed
         // fn:format-number's named and default formats.
@@ -515,10 +607,24 @@ public sealed class XQueryExecutable
         }
     }
 
+    private void ValidateExternalVariables(EvaluationContext ctx)
+    {
+        foreach (var v in _userVariables)
+        {
+            if (!v.IsExternal || v.TypeName is null)
+                continue;
+            if (!ctx.TryGetVariable(v.LocalName, out var externalValue, v.NamespaceUri))
+                continue;
+            var valueToCheck = IsNodeKindTestText(v.TypeName) ? externalValue : AtomizeItemsForTypeCheck(externalValue);
+            if (!XdmConversions.ValueMatchesType(valueToCheck, v.TypeName, ctx))
+                throw new InvalidOperationException($"XPTY0004: The value of the external variable '${v.LocalName}' does not match the declared type '{v.TypeName}'.");
+        }
+    }
+
     // Invokes a user function body, applying the declaring library module's runtime static
     // context (namespaces, base URI, default element namespace, default collation) when the
     // function was declared in a library module (cbcl-module-002: module-local base URIs).
-    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args, string? mainModuleDefaultElementNamespace)
+    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args, string? mainModuleDefaultElementNamespace, IReadOnlyDictionary<string, string> mainNamespaces)
     {
         if (function.ModuleNamespaces is null)
         {
@@ -527,9 +633,13 @@ public sealed class XQueryExecutable
             // namespace does not leak into the function body's type tests and name
             // resolution (extvardeclwithtype-23).
             var savedMainDefaultNs = callCtx.DefaultElementNamespace;
+            var savedMainNamespaces = callCtx.SnapshotNamespaces();
+            var savedMainLocals = callCtx.ConstructorLocalNamespaces.ToArray();
             try
             {
                 callCtx.DefaultElementNamespace = mainModuleDefaultElementNamespace;
+                callCtx.RestoreNamespaces(new Dictionary<string, string>(mainNamespaces));
+                callCtx.TruncateConstructorLocalNamespaces(0);
                 return XdmConversions.InvokeFunctionItem(
                     new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
                     callCtx, args);
@@ -537,8 +647,12 @@ public sealed class XQueryExecutable
             finally
             {
                 callCtx.DefaultElementNamespace = savedMainDefaultNs;
+                callCtx.RestoreNamespaces(savedMainNamespaces);
+                RestoreConstructorNamespaces(callCtx, savedMainLocals);
             }
         }
+        var savedLocals = callCtx.ConstructorLocalNamespaces.ToArray();
+        callCtx.TruncateConstructorLocalNamespaces(0);
         var snapshot = callCtx.SnapshotNamespaces();
         var savedDefaultNs = callCtx.DefaultElementNamespace;
         var savedBaseUri = callCtx.BaseUri;
@@ -556,6 +670,7 @@ public sealed class XQueryExecutable
         }
         finally
         {
+            RestoreConstructorNamespaces(callCtx, savedLocals);
             callCtx.RestoreNamespaces(snapshot);
             callCtx.DefaultElementNamespace = savedDefaultNs;
             callCtx.BaseUri = savedBaseUri;
@@ -566,10 +681,29 @@ public sealed class XQueryExecutable
     }
 
     // Evaluates a global variable initializer with the declaring module's runtime context.
-    private static XdmValue EvaluateWithModuleContext(CompiledUserVariable variable, EvaluationContext ctx)
+    private static XdmValue EvaluateWithModuleContext(CompiledUserVariable variable, EvaluationContext ctx, XQueryStaticContext mainContext)
     {
         if (variable.ModuleNamespaces is null)
-            return VmEngine.Execute(variable.Body!, ctx);
+        {
+            var savedNamespaces = ctx.SnapshotNamespaces();
+            var savedDefault = ctx.DefaultElementNamespace;
+            var savedLocals = ctx.ConstructorLocalNamespaces.ToArray();
+            try
+            {
+                ctx.RestoreNamespaces(new Dictionary<string, string>(mainContext.Namespaces));
+                ctx.DefaultElementNamespace = mainContext.DefaultElementNamespace;
+                ctx.TruncateConstructorLocalNamespaces(0);
+                return VmEngine.Execute(variable.Body!, ctx);
+            }
+            finally
+            {
+                ctx.RestoreNamespaces(savedNamespaces);
+                ctx.DefaultElementNamespace = savedDefault;
+                RestoreConstructorNamespaces(ctx, savedLocals);
+            }
+        }
+        var moduleLocals = ctx.ConstructorLocalNamespaces.ToArray();
+        ctx.TruncateConstructorLocalNamespaces(0);
         var snapshot = ctx.SnapshotNamespaces();
         var savedDefaultNs = ctx.DefaultElementNamespace;
         var savedBaseUri = ctx.BaseUri;
@@ -585,6 +719,7 @@ public sealed class XQueryExecutable
         }
         finally
         {
+            RestoreConstructorNamespaces(ctx, moduleLocals);
             ctx.RestoreNamespaces(snapshot);
             ctx.DefaultElementNamespace = savedDefaultNs;
             ctx.BaseUri = savedBaseUri;
@@ -592,6 +727,12 @@ public sealed class XQueryExecutable
             ctx.DefaultDecimalFormat = savedDefaultFormat;
             ctx.RestoreDecimalFormats(savedFormats);
         }
+    }
+
+    private static void RestoreConstructorNamespaces(EvaluationContext ctx, (string Prefix, string Uri)[] saved)
+    {
+        ctx.TruncateConstructorLocalNamespaces(0);
+        foreach (var (prefix, uri) in saved) ctx.AddConstructorLocalNamespace(prefix, uri);
     }
 
     private static void ApplyModuleContext(
@@ -603,11 +744,8 @@ public sealed class XQueryExecutable
         IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
         DecimalFormat? defaultDecimalFormat = null)
     {
-        foreach (var (prefix, nsUri) in namespaces)
-        {
-            if (!string.IsNullOrEmpty(prefix))
-                ctx.WithNamespace(prefix, nsUri);
-        }
+        ctx.RestoreNamespaces(new Dictionary<string, string>(namespaces));
+        ctx.DefaultElementNamespace = defaultElementNamespace;
         if (!string.IsNullOrEmpty(baseUri))
             ctx.BaseUri = baseUri;
         if (!string.IsNullOrEmpty(defaultElementNamespace))

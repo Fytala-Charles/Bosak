@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0e35973a16930a665e36f4a6d118a6a93c2cfabeae4e9d7cfbfcc2c3052298a5"
+    },
+    {
+      "path": "REQUIREMENTS.json",
+      "sha256": "48deaf5eb19ccf8cf75bea5070dd1b524683f444ecc402c31afc76bfd8097db3"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "68950f3d2a32fa6e01ae9b59807bddc034f9e17b353bacf3ae8d1ec7a57f23ce"
+    }
+  ]
+}

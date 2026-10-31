@@ -1,0 +1,3691 @@
+{
+  "mode": "holder",
+  "scope": "Frozen pre-override caller against product/source/diagnostic Core variants; no schema authority or production carrier acceptance",
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "processorCount": 24,
+  "xdmValueSize": 48,
+  "clrEqualsToPlainInteger": false,
+  "xpathEqualsToPlainInteger": true,
+  "xpathHashToPlainInteger": true,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "identity-string",
+      "expression": "$s",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "filter",
+      "expression": "($v,$w)[1]",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "simple-map",
+      "expression": "$v ! .",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-value",
+      "expression": "map{\u0027a\u0027:$v}?a",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-nested",
+      "expression": "map{\u0027a\u0027:[$v]}?a(1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-atomic",
+      "expression": "data($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-node",
+      "expression": "data($n)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-untyped-node",
+      "expression": "data($untyped)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-sequence-node",
+      "expression": "data($list)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        },
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-identity",
+      "expression": "xs:integer($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-decimal",
+      "expression": "xs:decimal($v)",
+      "items": [
+        {
+          "kind": "Decimal",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v \u002B 1",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "43",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "comparison",
+      "expression": "$v = 42",
+      "items": [
+        {
+          "kind": "Boolean",
+          "value": "true",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "distinct",
+      "expression": "distinct-values(($v,$v))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sort",
+      "expression": "sort(($v,$w))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        },
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-conversion",
+      "expression": "string($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "upper-case",
+      "expression": "upper-case($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "ALPHA",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-join",
+      "expression": "string-join(($s,$s),\u0027-\u0027)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha-alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-key",
+      "expression": "map{$v:\u0027hit\u0027}? (42)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "hit",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "serialization",
+      "expression": "serialize(map{\u0027a\u0027:$v},map{\u0027method\u0027:\u0027json\u0027})",
+      "items": [
+        {
+          "kind": "String",
+          "value": "{\u0022a\u0022:42}",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "no-typed-value",
+      "expression": "data($empty)",
+      "items": [],
+      "error": "FOTY0012",
+      "message": "FOTY0012: The argument node does not have a typed value."
+    },
+    {
+      "id": "invalid-cast",
+      "expression": "xs:integer(\u0027not-number\u0027)",
+      "items": [],
+      "error": "FORG0001",
+      "message": "FORG0001: Cannot cast \u0027not-number\u0027 to integer."
+    },
+    {
+      "id": "cardinality-error",
+      "expression": "exactly-one(($v,$w))",
+      "items": [],
+      "error": "FORG0005",
+      "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+    }
+  ],
+  "allocations": [
+    {
+      "items": 1000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 39900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 32000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 26200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 29100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 41600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 34700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 26300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 33400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 27200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 37300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 41100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 34900,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 26700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 25400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "kind": "decimal",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 34800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 37400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 40800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 78500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 38400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 30700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 26200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000048,
+          "nanoseconds": 21061700,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000048,
+          "nanoseconds": 13808200,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 3378800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000032,
+          "nanoseconds": 12348000,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2331200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 3190600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2254000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1509400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000040,
+          "nanoseconds": 12609400,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1267200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 14646900,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1834700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 13943100,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1310700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "decimal",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1585200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 14626300,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1584800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000032,
+          "nanoseconds": 13786500,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 7854400,
+          "gen0": 2,
+          "gen1": 2,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000032,
+          "nanoseconds": 7891500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1883300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    }
+  ],
+  "equality": {
+    "controls": 253,
+    "checks": [
+      {
+        "id": "C0-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C0-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C0-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C1-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C1-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C2-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C2-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C3-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C3-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C4-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C4-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C5-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C5-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C6-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C6-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C7-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C7-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C8-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C8-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C9-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C9-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C10-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C10-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C11-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C11-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C12-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C12-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C13-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C13-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C14-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C14-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C15-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C15-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C16-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C16-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C17-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C17-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C18-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C18-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C19-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C19-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C20-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C20-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C21-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C21-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-payload",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-accessor",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-tag",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-plain-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-tagged-left",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-object-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-generic-equals",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-different-origin",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-retag-value",
+        "observed": true,
+        "expected": true,
+        "passed": true
+      },
+      {
+        "id": "C22-hashset",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      },
+      {
+        "id": "C22-dictionary",
+        "observed": false,
+        "expected": false,
+        "passed": true
+      }
+    ],
+    "atomicFixtures": 23,
+    "plainPairs": [
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "decoratedPairs": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "equalsDeclaredOn": "System.ValueType",
+    "hashDeclaredOn": "System.ValueType"
+  },
+  "equalityCosts": [
+    {
+      "count": 1000,
+      "annotated": false,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 118200
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 119600
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 119600
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 194400
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 220100
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 214000
+        },
+        {
+          "checksum": 1000,
+          "allocatedBytes": 344000,
+          "nanoseconds": 213100
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": false,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 90000
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 70500
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 46800
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 43600
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39900
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 40400
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39800
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": true,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 211600
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 242800
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 255000
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 225900
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 265400
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 327500
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 344000,
+          "nanoseconds": 281600
+        }
+      ]
+    },
+    {
+      "count": 1000,
+      "annotated": true,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 54500
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 37800
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39200
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 44000
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 46700
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 39000
+        },
+        {
+          "checksum": 1517712250000,
+          "allocatedBytes": 64000,
+          "nanoseconds": 45000
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": false,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13434200
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12108100
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13307200
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13999600
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13764300
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13711800
+        },
+        {
+          "checksum": 100000,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 11941200
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": false,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2401200
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3187000
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2223100
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2354900
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2278600
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2254200
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2139700
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": true,
+      "operation": "equals",
+      "samples": [
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13527900
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 11538500
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 11207300
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 11862900
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 14632700
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 12078800
+        },
+        {
+          "checksum": 0,
+          "allocatedBytes": 34400000,
+          "nanoseconds": 13784000
+        }
+      ]
+    },
+    {
+      "count": 100000,
+      "annotated": true,
+      "operation": "hash",
+      "samples": [
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2240900
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2379300
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 3382700
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2364800
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2316700
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2608900
+        },
+        {
+          "checksum": 151771225000000,
+          "allocatedBytes": 6400000,
+          "nanoseconds": 2390600
+        }
+      ]
+    }
+  ],
+  "callerSha256": "91cefc347741a47901cdf34cbbbd6031cf1da5e4293c10af0e8534ecdad93207",
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "5453b856a8fb510f32457136ee18d72dd6b32b0e3a0c557efbe334f123e1c2e1"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.35.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\carrier-equality\\holder\\lib\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+    }
+  ]
+}

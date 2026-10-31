@@ -1,0 +1,30 @@
+{"Name":"simple","Expression":"declare context item := 1; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"comments","Expression":"declare(:outer(:nested:) :)context(:gap:)item := 1; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"newlines","Expression":"declare\ncontext\titem external; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"uppercase","Expression":"DECLARE CONTEXT ITEM := 1; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"external","Expression":"declare context item as xs:integer external; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"copy-namespaces preserve, inherit5","Expression":"declare copy-namespaces preserve, inherit; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"copy-namespaces preserve, inherit6","Expression":"declare copy-namespaces preserve, inherit; declare context item := 1; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"copy-namespaces preserve, inherit7","Expression":"declare(:gap:)copy-namespaces preserve, inherit; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"copy-namespaces preserve, inherit8","Expression":"declare(:gap:)copy-namespaces preserve, inherit; declare context item := 1; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"construction preserve9","Expression":"declare construction preserve; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"construction preserve10","Expression":"declare construction preserve; declare context item := 1; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"construction preserve11","Expression":"declare(:gap:)construction preserve; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"construction preserve12","Expression":"declare(:gap:)construction preserve; declare context item := 1; .","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"literal\u0022","Expression":"\u0022declare context item\u0022","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"doubled\u0022","Expression":"\u0022a\u0022\u0022declare context item\u0022","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"literal\u0027","Expression":"\u0027declare context item\u0027","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"doubled\u0027","Expression":"\u0027a\u0027\u0027declare context item\u0027","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"comment","Expression":"(: declare context item :) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"nested-comment","Expression":"(: a (: declare context item :) b :) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"qname-prefix","Expression":"declare contextual item := 1; .","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"identifier","Expression":"declarecontext item := 1; .","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"variable","Expression":"$declare-context","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"pragma","Expression":"(# p:x #) {1}","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"context-pragma","Expression":"declare context item := 1; (# p:x #) { . }","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"hyphen-boundary-conservative","Expression":"declare context-item := 1; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"context-plus-quoted-construction","Expression":"declare context item := \u0022declare construction preserve\u0022; .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"context-plus-commented-copy","Expression":"declare context item := 1; (: declare copy-namespaces preserve, inherit :) .","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"split-keyword","Expression":"de(:gap:)clare context item := 1; .","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"quoted-context-real-construction","Expression":"declare construction preserve; \u0022declare context item\u0022","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"context-nested-comment-pragma","Expression":"declare(:a(:b:)a:)context item := 1; (# p:x #) { . }","before":false,"after":false,"actual":false,"passed":true}

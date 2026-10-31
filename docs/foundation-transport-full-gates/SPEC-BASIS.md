@@ -1,0 +1,9 @@
+# Composed candidate qualification — pre-execution basis
+
+31 October 2026. Source checkpoint: 83341091; product source semantics remain based on 8080b18ba69959f4fc33feebb6810914da3f817d. Apply only the three sealed candidate source files from docs/foundation-transport-atomic-cost/candidate in an isolated materialization. No production source, public contract acceptance or version change is authorized by this qualification.
+
+Historical immutable normative pins remain XPath 3.1 REC-xpath-31-20170321 sections 2.1.1, 2.4.2, 3.14.2; XDM 3.1 REC-xpath-datamodel-31-20170321 sections 3.3.1.1–3 and 5.14; F&O 3.1 REC-xpath-functions-31-20170321 sections 18.1, 19, 19.1. No new semantic implementation is planned. This is execution and compatibility evidence for the existing isolated candidate, not a new specification adoption.
+
+Build the entire solution, run all ten solution unit-test projects, frozen QT3 and gated qt4 against the newly composed cohort. Record corpus revisions and skip maps separately from normative pins. Read original corpus inputs through isolated-directory junctions; do not change corpus files. XSLT tests may run from a unique temporary copy to avoid the documented Application Control issue; serialize database test collections to avoid known listener-port collisions. Use bounded processes and scoped Windows error mode, never intentional unhandled crash probes. A read-only startup observer records actual loaded Bosak assembly paths/hashes/load contexts; it changes no evaluation behavior. New measurements here are correctness runs, not performance comparisons.
+
+Compare the seven-assembly exported/declared and inherited public reflection surfaces with the sealed product cohort. Review Equals(object)/GetHashCode override signatures and base slots explicitly; public manifest/C45 acceptance remains pending even if existing callers and tests pass. Owner checkout builds/changes and API freeze are outside this step.

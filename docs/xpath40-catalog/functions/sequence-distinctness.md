@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Maps do not satisfy the declared atomic input contract despite current tolerance; no implicit case folding or normalization. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
 
 
@@ -60,6 +62,8 @@ The routing planner passes an XDM map to portable XSLT through a required parame
 all-different reports whether atomic values are pairwise distinct. duplicate-values reports each duplicated value once, in second-appearance order. Equality follows the function collation and atomic comparison rules; this chapter restricts identity to strings and the default codepoint collation. Both empty and singleton inputs are all-different. Blankness is a separate business rule. Duplicate detection is not document identity, structural map equality or automatic Unicode normalization. Do not trim or case-fold identifiers implicitly; choose that policy before checking uniqueness.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Atomic duplicate classes, second-occurrence representatives and order; Empty/singleton input, NaN grouping and explicit collations; Typed/atomized source and unknown-collation boundaries. **Boundaries:** Maps do not satisfy the declared atomic input contract despite current tolerance; no implicit case folding or normalization. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 

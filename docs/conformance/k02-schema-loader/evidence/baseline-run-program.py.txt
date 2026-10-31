@@ -1,0 +1,13 @@
+from pathlib import Path
+import json,subprocess,time
+E=Path('docs/conformance/k02-schema-loader/evidence');rows=json.loads((E/'requests.json').read_text(encoding='utf-8'));out=[]
+for q in rows:
+ if q['kind']!='original':continue
+ request=E/(q['id']+'-actual-request.json');request.write_text(json.dumps(dict(Suite='qt3',SuiteRoot=str(Path('tests/qt3tests').resolve()),SetFile=q['setFile'],Name=q['name']),indent=2)+'\n',encoding='utf-8');log=E/(q['id']+'-actual.log');start=time.monotonic()
+ command=['dotnet','.guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll','probe',str(request)]
+ with log.open('wb') as output:
+  try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+  except subprocess.TimeoutExpired:code=None;timeout=True
+ text=log.read_text(encoding='utf-8-sig').splitlines();result=json.loads(text[-1]) if code==0 else None
+ out.append(dict(id=q['id'],exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result));print(q['id'],result)
+(E/'actual-results.json').write_text(json.dumps(out,indent=2)+'\n',encoding='utf-8')

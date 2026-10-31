@@ -1,0 +1,629 @@
+{
+  "mode": "control",
+  "scope": "Isolated friend host: unchanged production kernel/native source; internal Runtime validation seams; no public provider API or automatic constructor hook",
+  "checkCount": 103,
+  "checks": [
+    {
+      "id": "N01-native-supported",
+      "passed": true
+    },
+    {
+      "id": "N02-native-valid",
+      "passed": true
+    },
+    {
+      "id": "N03-original-local-declaration",
+      "passed": true
+    },
+    {
+      "id": "N04-shared-decimal-type",
+      "passed": true
+    },
+    {
+      "id": "N05-distinct-occurrences",
+      "passed": true
+    },
+    {
+      "id": "N06-anonymous-root",
+      "passed": true
+    },
+    {
+      "id": "N07-copy-identities",
+      "passed": true
+    },
+    {
+      "id": "N08-owned-snapshot",
+      "passed": true
+    },
+    {
+      "id": "N09-invalid-no-document",
+      "passed": true
+    },
+    {
+      "id": "N10-unsupported-no-document",
+      "passed": true
+    },
+    {
+      "id": "N11-foreign-native-universe",
+      "passed": true
+    },
+    {
+      "id": "VM-value-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-type-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-identity",
+      "passed": true
+    },
+    {
+      "id": "VM-value-let",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-let",
+      "passed": true
+    },
+    {
+      "id": "VM-type-let",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-let",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-let",
+      "passed": true
+    },
+    {
+      "id": "VM-value-array",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-array",
+      "passed": true
+    },
+    {
+      "id": "VM-type-array",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-array",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-array",
+      "passed": true
+    },
+    {
+      "id": "VM-value-map",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-map",
+      "passed": true
+    },
+    {
+      "id": "VM-type-map",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-map",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-map",
+      "passed": true
+    },
+    {
+      "id": "VM-value-function",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-function",
+      "passed": true
+    },
+    {
+      "id": "VM-type-function",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-function",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-function",
+      "passed": true
+    },
+    {
+      "id": "VM-value-child",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-child",
+      "passed": true
+    },
+    {
+      "id": "VM-type-child",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-child",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-child",
+      "passed": true
+    },
+    {
+      "id": "VM-value-descendant",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-descendant",
+      "passed": true
+    },
+    {
+      "id": "VM-type-descendant",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-descendant",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-descendant",
+      "passed": true
+    },
+    {
+      "id": "VM-value-sibling",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-sibling",
+      "passed": true
+    },
+    {
+      "id": "VM-type-sibling",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-sibling",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-sibling",
+      "passed": true
+    },
+    {
+      "id": "VM-value-parent",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-parent",
+      "passed": true
+    },
+    {
+      "id": "VM-type-parent",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-parent",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-parent",
+      "passed": true
+    },
+    {
+      "id": "VM-value-reverse",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-reverse",
+      "passed": true
+    },
+    {
+      "id": "VM-type-reverse",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-reverse",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-reverse",
+      "passed": true
+    },
+    {
+      "id": "VM-value-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-type-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-sum",
+      "passed": true
+    },
+    {
+      "id": "VM-value-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-type-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-arithmetic",
+      "passed": true
+    },
+    {
+      "id": "VM-value-integer-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-integer-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-type-integer-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-integer-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-integer-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-value-decimal-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-origin-decimal-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-type-decimal-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-clr-decimal-raw",
+      "passed": true
+    },
+    {
+      "id": "VM-facts-decimal-raw",
+      "passed": true
+    },
+    {
+      "id": "N12-real-root-FOTY0012",
+      "passed": true
+    },
+    {
+      "id": "Ctor-value-Decimal",
+      "passed": true
+    },
+    {
+      "id": "Ctor-origin-Decimal",
+      "passed": true
+    },
+    {
+      "id": "Ctor-type-Decimal",
+      "passed": true
+    },
+    {
+      "id": "Ctor-noop-scope-closes",
+      "passed": true
+    },
+    {
+      "id": "Ctor-value-Integer",
+      "passed": true
+    },
+    {
+      "id": "Ctor-origin-Integer",
+      "passed": true
+    },
+    {
+      "id": "Ctor-type-Integer",
+      "passed": true
+    },
+    {
+      "id": "Ctor-detached-after-close",
+      "passed": true
+    },
+    {
+      "id": "K01-real-copy-original-type",
+      "passed": true
+    },
+    {
+      "id": "K02-copy-scope-is-independent",
+      "passed": true
+    },
+    {
+      "id": "K03-production-container-admission",
+      "passed": true
+    },
+    {
+      "id": "K04-no-untrusted-getters",
+      "passed": true
+    },
+    {
+      "id": "K05-equal-descriptor",
+      "passed": true
+    },
+    {
+      "id": "K06-real-environment-instance",
+      "passed": true
+    },
+    {
+      "id": "K07-node-operation-escape",
+      "passed": true
+    },
+    {
+      "id": "L01-initial-lazy-node",
+      "passed": true
+    },
+    {
+      "id": "L02-canceled-wait",
+      "passed": true
+    },
+    {
+      "id": "L03-actual-raw-operation-retains",
+      "passed": true
+    },
+    {
+      "id": "L04-closed-cached-node-content",
+      "passed": true
+    },
+    {
+      "id": "L06-raw-drained-result",
+      "passed": true
+    },
+    {
+      "id": "L07-release-once",
+      "passed": true
+    }
+  ],
+  "observations": [
+    {
+      "id": "identity",
+      "expr": "$v",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "let",
+      "expr": "let $x := $v return $x",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "array",
+      "expr": "[$v](1)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "map",
+      "expr": "map{\u0027a\u0027:$v}?a",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "function",
+      "expr": "(function($x){$x})($v)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "child",
+      "expr": "data($d/invoice/amount)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        },
+        {
+          "value": "5",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "descendant",
+      "expr": "data($d//amount)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        },
+        {
+          "value": "5",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "sibling",
+      "expr": "data($a/following-sibling::amount[1])",
+      "entries": [
+        {
+          "value": "5",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "parent",
+      "expr": "data($a/parent::invoice/amount[2])",
+      "entries": [
+        {
+          "value": "5",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "reverse",
+      "expr": "data($b/preceding-sibling::amount[1])",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "sum",
+      "expr": "sum($d/invoice/amount)",
+      "entries": [
+        {
+          "value": "15",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "arithmetic",
+      "expr": "$v\u002B1",
+      "entries": [
+        {
+          "value": "11",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "integer-raw",
+      "expr": "xs:integer($v)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Integer",
+          "origin": false
+        }
+      ]
+    },
+    {
+      "id": "decimal-raw",
+      "expr": "xs:decimal($v)",
+      "entries": [
+        {
+          "value": "10",
+          "kind": "Decimal",
+          "origin": false
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "cd2d323cec043c97c32f72fcaae820496f477326d82f468cd58b6b95cd8c6ac1",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "2fd135b98ecc6c853fa37cae63c6da0321372679d6ebce91ba7bf17c3933ef2e",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588",
+      "context": "Default",
+      "collectible": false
+    }
+  ]
+}

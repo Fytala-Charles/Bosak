@@ -1,0 +1,36 @@
+    private static XdmValue NormalizeUnicode_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => NormalizeUnicode(RequireString(args[0]), "NFC");
+
+    private static XdmValue NormalizeUnicode_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => NormalizeUnicode(RequireString(args[0]), RequireStringRequired(args[1]));
+
+    private static XdmValue NormalizeUnicode(string input, string form)
+    {
+        // The form name is matched case-insensitively after stripping whitespace; the
+        // zero-length form performs no normalization (fn-normalize-unicode-1/2args-2/4).
+        switch (form.Trim().ToUpperInvariant())
+        {
+            case "":
+                return XdmValue.FromString(input);
+            case "NFC":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormC));
+            case "NFD":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormD));
+            case "NFKC":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKC));
+            case "NFKD":
+                return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKD));
+            case "FULLY-NORMALIZED":
+                // XML 1.1 full normalization: NFC and not starting with a non-starter
+                // (combining mark; spacing marks such as U+09BE are starters).
+                if (!input.IsNormalized(System.Text.NormalizationForm.FormC) ||
+                    (input.Length > 0 && char.GetUnicodeCategory(input, 0) is
+                        System.Globalization.UnicodeCategory.NonSpacingMark or
+                        System.Globalization.UnicodeCategory.EnclosingMark))
+                    throw new InvalidOperationException("FOCH0003");
+                return XdmValue.FromString(input);
+            default:
+                throw new InvalidOperationException("FOCH0003");
+        }
+    }
+

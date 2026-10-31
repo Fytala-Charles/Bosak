@@ -171,6 +171,9 @@
 //                      | Charles Korthout | 1.76  | 13-10-2026     | Validate targeted processing-instruction sequence types with shared target parsing
 //                      | Charles Korthout | 1.77 | 13-10-2026     | Parse XPath 4.0 fn function types and documentary parameters
 //                      | Charles Korthout | 1.78 | 22-10-2026     | Gate record types while retaining inline-function signature text in older profiles.
+//                      | Charles Korthout | 1.79  | 28-10-2026     | Distinguish literal child elements from enclosed-expression node copies (1.31.0). |
+//                      | Charles Korthout | 1.80  | 28-10-2026     | Parse ValidateExpr at ValueExpr precedence; require parentheses for path/postfix use (1.32.0). |
+//                      | Charles Korthout | 1.81  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -1799,11 +1802,57 @@ internal sealed class XPathParser
             else if (Match(TokenKind.Minus)) ops.Add(UnaryOperator.Minus);
             else break;
         }
-        var expr = ParseSimpleMapExpr();
+        var expr = _allowFullFlwor && Current.Kind == TokenKind.Pragma ? ParseExtensionExpression()
+            : IsValidateExpressionStart() ? ParseValidateExpression(Current.Start) : ParseSimpleMapExpr();
         for (int i = ops.Count - 1; i >= 0; i--)
             expr = WithSpan(new UnaryExpressionNode(ops[i], expr), start, End);
         return expr;
     }
+
+    private XPathAstNode ParseExtensionExpression()
+    {
+        int start = Current.Start;
+        var names = new List<QNameLiteralNode>();
+        do
+        {
+            string text = GetString(Current)[2..^2];
+            int offset = 0;
+            while (offset < text.Length && IsPragmaWhitespace(text[offset])) offset++;
+            if (offset == text.Length || text[offset] == '(')
+                throw new XPathParseException("XPST0003: A pragma requires an EQName.", Current.Start);
+            var lexer = new XPathLexer(text.AsSpan(offset));
+            var token = lexer.NextToken();
+            if (token.Start != 0)
+                throw new XPathParseException("XPST0003: Only XML whitespace may precede a pragma name.", Current.Start);
+            string name = token.Text(text.AsSpan(offset)).ToString();
+            var (prefix, local, uri) = SplitQName(name);
+            try
+            {
+                System.Xml.XmlConvert.VerifyNCName(local);
+                if (prefix is not null) System.Xml.XmlConvert.VerifyNCName(prefix);
+                System.Xml.XmlConvert.VerifyXmlChars(text);
+            }
+            catch (Exception ex) when (ex is System.Xml.XmlException or ArgumentException)
+            { throw new XPathParseException("XPST0003: Invalid pragma EQName or content.", Current.Start); }
+            int remainder = offset + token.Length;
+            if (remainder < text.Length && !IsPragmaWhitespace(text[remainder]))
+                throw new XPathParseException("XPST0003: Whitespace must separate a pragma name from its content.", Current.Start);
+            names.Add(new QNameLiteralNode(local, prefix, uri));
+            Advance();
+        } while (Current.Kind == TokenKind.Pragma);
+        Expect(TokenKind.LBrace);
+        if (Current.Kind == TokenKind.RBrace)
+            throw new XPathParseException("XQST0079: An ignored pragma requires an associated expression.", start);
+        var expression = ParseExpr();
+        Expect(TokenKind.RBrace);
+        return WithSpan(new ExtensionExpressionNode(names, expression), start, End);
+    }
+
+    private static bool IsPragmaWhitespace(char c) => c is ' ' or '\t' or '\r' or '\n';
+
+    private bool IsValidateExpressionStart() => _allowFullFlwor && Current.Kind == TokenKind.Name
+        && GetString(Current) == "validate"
+        && (Peek(1).Kind == TokenKind.LBrace || Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) is "strict" or "lax" or "type");
 
     // SimpleMapExpr ::= PathExpr ("!" PathExpr)*
     private XPathAstNode ParseSimpleMapExpr()
@@ -1934,15 +1983,6 @@ internal sealed class XPathParser
         if (_allowFullFlwor && Current.Kind == TokenKind.Name
             && GetString(Current) is "ordered" or "unordered"
             && Peek(1).Kind == TokenKind.LBrace)
-        {
-            return ParsePostfixExpr();
-        }
-
-        // ValidateExpr (XQuery only) is a primary expression, not a name-test step.
-        if (_allowFullFlwor && Current.Kind == TokenKind.Name
-            && GetString(Current) == "validate"
-            && (Peek(1).Kind == TokenKind.LBrace
-                || (Peek(1).Kind == TokenKind.Name && GetString(Peek(1)) is "strict" or "lax" or "type")))
         {
             return ParsePostfixExpr();
         }
@@ -2638,11 +2678,6 @@ internal sealed class XPathParser
 
             case TokenKind.Name:
                 var name = GetString(Current);
-                // 'validate' introduces a validate expression only when followed by '{'
-                // (or by 'strict'/'lax'/'type' and then '{'). When followed by '(' or '#'
-                // it is an ordinary function name (xquery30keywords5).
-                if (_allowFullFlwor && name == "validate" && Peek(1).Kind != TokenKind.LParen && Peek(1).Kind != TokenKind.Hash)
-                    return ParseValidateExpression(start);
                 if (_allowFullFlwor && IsComputedConstructorForm(name))
                     return ParseComputedConstructor(start);
                 // OrderedExpr / UnorderedExpr (XQuery only): identity in this engine —
@@ -3390,6 +3425,12 @@ internal sealed class XPathParser
         while (pos < _source.Length)
         {
             char c = _source[pos];
+            if (_allowFullFlwor && c == '(' && pos + 1 < _source.Length && _source[pos + 1] == '#')
+            {
+                pos += XPathLexer.ScanPragmaLength(_source.AsSpan(pos));
+                continue;
+            }
+
             if (c == '\'' || c == '"')
             {
                 char q = c;
@@ -3761,7 +3802,7 @@ internal sealed class XPathParser
                 if (char.IsLetter(next) || next == '_')
                 {
                     FlushText();
-                    content.Add(ScanElementConstructor(ref pos, ctorStart));
+                    content.Add(((DirectElementConstructorNode)ScanElementConstructor(ref pos, ctorStart)) with { IsLiteralChild = true });
                     continue;
                 }
                 throw ConstructorError("unexpected '<' in element content", pos);
@@ -3906,6 +3947,12 @@ internal sealed class XPathParser
         while (pos < _source.Length)
         {
             char c = _source[pos];
+            if (_allowFullFlwor && c == '(' && pos + 1 < _source.Length && _source[pos + 1] == '#')
+            {
+                pos += XPathLexer.ScanPragmaLength(_source.AsSpan(pos));
+                continue;
+            }
+
             if (c == '{')
             {
                 depth++;

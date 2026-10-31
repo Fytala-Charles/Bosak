@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Read-only consumer priority assessment and next isolated qualification plan",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 117,
+      "sha256": "f8d6dafc4d77f358a9d65ab3b6ec38444eeac500948768abafe30edbd7aa882c"
+    },
+    {
+      "path": "evidence/consumer-source-identities.json",
+      "bytes": 3419,
+      "sha256": "2cca8d71120ca758f9c38152589e947d85807f6a7df37bde65deda4e2f3a7f94"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4259,
+      "sha256": "461a051da244e2dfb13c533786b5288f4ee8642f14eb2e7dc093503cf87d9882"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 778,
+      "sha256": "312497bc7dc259f423f93f834717a031ec9c37cef316a8c8eccfca026427103b"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5704,
+      "sha256": "b32e5b2622c1dbb966a06fca565d16b69213542e5f16afbd448c13abc919005c"
+    }
+  ]
+}

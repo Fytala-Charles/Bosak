@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C39",
+  "sourceBase": "2806ddace7184783082577ec69e12470055b7d2d",
+  "scope": [
+    "Read-only review of every one of 370 independent QT3 dependency exclusions; preserve the other 56 skips separately",
+    "Actual full QT3/qt4 catalog dependency inventory; bounded direct originals and language controls",
+    "Current Bosak.Schema documentation snapshots and core ownership/pending boundary",
+    "No normal source/filter, fixtures, assertions, baseline, version, release or schema seam change"
+  ],
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/#formatting-dates-and-times",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sections": [
+      "9.8.4 date/time formatting",
+      "9.8.4.8 language/calendar/place"
+    ],
+    "kind": "Read-only semantic review, not implementation adoption",
+    "paraphrase": "The supported language set is implementation-defined. Formatting with an unsupported requested language uses fallback and identifies the actual language. This does not prove support for every unknown language or justify reversing negative dependencies on implemented features."
+  }
+}

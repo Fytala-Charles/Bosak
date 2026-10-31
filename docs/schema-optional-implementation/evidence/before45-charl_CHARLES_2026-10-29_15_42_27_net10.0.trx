@@ -1,0 +1,1028 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="159d4430-8c8d-4a4d-868c-ef633a4ef3f7" name="charl@CHARLES 2026-10-29 15:42:27" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-29T15:42:27.0273765+01:00" queuing="2026-10-29T15:42:27.0273767+01:00" start="2026-10-29T15:42:26.0636953+01:00" finish="2026-10-29T15:42:27.4893706+01:00" />
+  <TestSettings name="default" id="7099315a-0a30-4732-b311-a39e08962605">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-29_15_42_27" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2a9725c7-eec4-4423-8227-a60a1fb81f02" testId="2af96820-ecfe-446a-fcdf-0af3efaaf53c" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: True)" computerName="CHARLES" duration="00:00:00.0003761" startTime="2026-10-29T15:42:27.4428008+01:00" endTime="2026-10-29T15:42:27.4428298+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a9725c7-eec4-4423-8227-a60a1fb81f02">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 216&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e7b8d561-3812-4bb1-8933-b8892e74a0ef" testId="6a4be00f-81e1-07ad-6e40-1e648ab4a5ad" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue" computerName="CHARLES" duration="00:00:00.0003231" startTime="2026-10-29T15:42:27.4436751+01:00" endTime="2026-10-29T15:42:27.4437158+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7b8d561-3812-4bb1-8933-b8892e74a0ef">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 161&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="91bb930d-f91b-40e2-8c8b-14ea5a812655" testId="fded6719-1e3d-da03-3dfb-5b5af642dd38" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000570" startTime="2026-10-29T15:42:27.0034393+01:00" endTime="2026-10-29T15:42:27.0034629+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="91bb930d-f91b-40e2-8c8b-14ea5a812655">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ce49bf55-9e94-4f60-bd44-2489229772af" testId="c3b55139-fc41-2de4-6a6a-0397c2c2f009" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0004062" startTime="2026-10-29T15:42:26.9818312+01:00" endTime="2026-10-29T15:42:26.9818508+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce49bf55-9e94-4f60-bd44-2489229772af">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e923109d-2a0f-4a71-bb80-f98eeccde210" testId="b178e0f0-620a-417b-dc80-d6e4bfe61522" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 6)" computerName="CHARLES" duration="00:00:00.0000301" startTime="2026-10-29T15:42:26.9812519+01:00" endTime="2026-10-29T15:42:26.9812677+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e923109d-2a0f-4a71-bb80-f98eeccde210">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2d24aa28-6e71-4167-aad6-988682867a99" testId="b3ebc45d-0123-d68a-5e9b-925f71a7def0" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b ne a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0002239" startTime="2026-10-29T15:42:27.1740557+01:00" endTime="2026-10-29T15:42:27.1740708+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2d24aa28-6e71-4167-aad6-988682867a99">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ff37b6cd-4f9b-458a-9ca5-d04d8d30746c" testId="07372488-abcc-037b-91ce-673e5f069a86" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 4)" computerName="CHARLES" duration="00:00:00.0000285" startTime="2026-10-29T15:42:26.9811015+01:00" endTime="2026-10-29T15:42:26.9811177+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff37b6cd-4f9b-458a-9ca5-d04d8d30746c">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a3186306-217a-4aac-a40d-5d9018d6fe21" testId="9d1f66a0-9023-d41b-3ed3-6c598258fcf6" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a or a gt 0&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000255" startTime="2026-10-29T15:42:27.1754713+01:00" endTime="2026-10-29T15:42:27.1754872+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3186306-217a-4aac-a40d-5d9018d6fe21">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7bb6db67-4183-47c7-b598-907d103114e3" testId="b40400a7-a188-c142-4fbe-55ab45011b2c" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b eq a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000255" startTime="2026-10-29T15:42:27.1751630+01:00" endTime="2026-10-29T15:42:27.1751796+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7bb6db67-4183-47c7-b598-907d103114e3">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4d2489da-8eff-47f5-afa6-954024881240" testId="b3b9f65e-5abd-46d9-cf1c-7c8ce7c690dc" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot; 0 &quot;, maximum: &quot; 1 &quot;, supported: True)" computerName="CHARLES" duration="00:00:00.0030400" startTime="2026-10-29T15:42:27.0061986+01:00" endTime="2026-10-29T15:42:27.0062310+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4d2489da-8eff-47f5-afa6-954024881240">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 71&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ce32a7e4-d9aa-4060-9e3e-cbf25d98e8e4" testId="fffca8c7-ebd1-f81e-341c-64ce7877fd5f" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;unbounded&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000157" startTime="2026-10-29T15:42:27.1731301+01:00" endTime="2026-10-29T15:42:27.1731462+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce32a7e4-d9aa-4060-9e3e-cbf25d98e8e4" />
+    <UnitTestResult executionId="c5f59efc-55f5-49e3-ae31-6c772b9a1dfe" testId="b14ba071-b58e-5a93-2332-bf0a8dc0ec13" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 5)" computerName="CHARLES" duration="00:00:00.0000338" startTime="2026-10-29T15:42:26.9807958+01:00" endTime="2026-10-29T15:42:26.9808131+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5f59efc-55f5-49e3-ae31-6c772b9a1dfe">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="423e169d-3080-40e2-9be6-b6f4d1e79c3d" testId="7442c281-7864-8a4f-f4b9-8cefc595875e" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 0)" computerName="CHARLES" duration="00:00:00.3050852" startTime="2026-10-29T15:42:26.6554833+01:00" endTime="2026-10-29T15:42:26.9708352+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="423e169d-3080-40e2-9be6-b6f4d1e79c3d">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="78d17707-da62-4f15-a5ba-2748827b4559" testId="d78eacc6-2297-060c-cd49-1ba05b2c71b8" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;0&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0615566" startTime="2026-10-29T15:42:27.0064777+01:00" endTime="2026-10-29T15:42:27.0378565+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78d17707-da62-4f15-a5ba-2748827b4559" />
+    <UnitTestResult executionId="a11dcac3-55d9-43e6-b229-04068525cb7e" testId="30ceb8e7-bb82-a702-dd1c-72d89b0ff841" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 2)" computerName="CHARLES" duration="00:00:00.0004746" startTime="2026-10-29T15:42:26.9798048+01:00" endTime="2026-10-29T15:42:26.9798510+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a11dcac3-55d9-43e6-b229-04068525cb7e">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8a10a021-ff7a-4ffb-8e14-6f6348c5854f" testId="0388d271-838a-cd66-6221-af3574819227" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;2&quot;, maximum: &quot;1&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000150" startTime="2026-10-29T15:42:27.1731713+01:00" endTime="2026-10-29T15:42:27.1731861+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8a10a021-ff7a-4ffb-8e14-6f6348c5854f" />
+    <UnitTestResult executionId="28666af5-19e2-4827-ac24-696222b73788" testId="ad845833-c325-39f3-12b3-09a3c437e1a6" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 1)" computerName="CHARLES" duration="00:00:00.0000297" startTime="2026-10-29T15:42:26.9809522+01:00" endTime="2026-10-29T15:42:26.9809698+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28666af5-19e2-4827-ac24-696222b73788">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d5678c75-6cb7-4f2e-9844-617025e6a259" testId="31324465-3732-600b-a8c7-0d8e8840ee18" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError" computerName="CHARLES" duration="00:00:00.0003969" startTime="2026-10-29T15:42:27.4430505+01:00" endTime="2026-10-29T15:42:27.4433303+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5678c75-6cb7-4f2e-9844-617025e6a259">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 172&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2a926e5d-88a2-4203-9fa5-f4392babd48e" testId="2d331896-7928-30e9-820e-d57f6277f397" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;unknown&gt;0&lt;/unknown&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000281" startTime="2026-10-29T15:42:27.0047831+01:00" endTime="2026-10-29T15:42:27.0047999+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a926e5d-88a2-4203-9fa5-f4392babd48e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="de6cc8d4-6fba-4f54-b61c-8ada15ad7164" testId="39279063-26a5-cec5-258f-e5dbb3d3db4f" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;-0&quot;, maximum: &quot;1&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000208" startTime="2026-10-29T15:42:27.1730414+01:00" endTime="2026-10-29T15:42:27.1730576+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de6cc8d4-6fba-4f54-b61c-8ada15ad7164" />
+    <UnitTestResult executionId="0376a7ab-7681-4e0d-aec0-c49d36f69b19" testId="e4164f71-a99d-7a18-1b7c-c1a541ff333d" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;c&gt;3&lt;/c&gt;&lt;a&gt;1&lt;/a&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000352" startTime="2026-10-29T15:42:27.0036752+01:00" endTime="2026-10-29T15:42:27.0037038+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0376a7ab-7681-4e0d-aec0-c49d36f69b19">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e92e96f4-df97-472d-9372-b7d47d98f7b9" testId="8e068ee4-94b1-09d6-b976-0f00f1dd4365" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: False)" computerName="CHARLES" duration="00:00:00.2157827" startTime="2026-10-29T15:42:27.1756365+01:00" endTime="2026-10-29T15:42:27.3898909+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e92e96f4-df97-472d-9372-b7d47d98f7b9">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Boolean empty) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 189&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b3f0bd66-f966-4968-ba21-ae00ee553802" testId="6be32777-ee8c-000d-ebe0-9485bd3171c8" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: False)" computerName="CHARLES" duration="00:00:00.0519536" startTime="2026-10-29T15:42:27.3906468+01:00" endTime="2026-10-29T15:42:27.4423250+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3f0bd66-f966-4968-ba21-ae00ee553802">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 216&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f563dd31-0069-41a2-8704-f88e8b293551" testId="0a8d70e3-1599-75db-b1b2-84359e16a677" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0002022" startTime="2026-10-29T15:42:27.1738896+01:00" endTime="2026-10-29T15:42:27.1739091+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f563dd31-0069-41a2-8704-f88e8b293551">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ed736ad7-105d-4e9f-9620-8e5903353780" testId="d3892db6-ba4a-18ed-4c94-1fa306ae8569" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000283" startTime="2026-10-29T15:42:27.0046004+01:00" endTime="2026-10-29T15:42:27.0046178+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ed736ad7-105d-4e9f-9620-8e5903353780">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="497ea09c-8d69-4a36-abcf-65ecf240b74e" testId="54e94551-e373-2809-95af-1b0f285c968f" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b lt a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000305" startTime="2026-10-29T15:42:27.1743783+01:00" endTime="2026-10-29T15:42:27.1744098+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="497ea09c-8d69-4a36-abcf-65ecf240b74e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="05d71a53-5474-4dff-a12e-d42b2904720b" testId="df80ed7d-9533-7e8c-0e3f-3c9ff27a885c" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;+0&quot;, maximum: &quot;1&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000509" startTime="2026-10-29T15:42:27.1729898+01:00" endTime="2026-10-29T15:42:27.1730090+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="05d71a53-5474-4dff-a12e-d42b2904720b" />
+    <UnitTestResult executionId="86c06f6e-4b54-4439-979d-9b6f13b2e96a" testId="336a5479-acd4-7781-1955-0af186a28602" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;unknown&gt;0&lt;/unknown&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0002023" startTime="2026-10-29T15:42:27.0029944+01:00" endTime="2026-10-29T15:42:27.0030388+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86c06f6e-4b54-4439-979d-9b6f13b2e96a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9c6cb7d5-8af8-4cf2-b090-36dc35bf8dee" testId="5dba5a83-6b80-aaf6-c6a8-e0ae78bca0c6" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;1&quot;, supported: True)" computerName="CHARLES" duration="00:00:00.0000323" startTime="2026-10-29T15:42:27.1736950+01:00" endTime="2026-10-29T15:42:27.1737109+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c6cb7d5-8af8-4cf2-b090-36dc35bf8dee">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 71&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="72ee9690-325d-4890-8de5-d3abff9ec8de" testId="4b1fa91e-59e0-505a-71bb-29310d7d559b" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000317" startTime="2026-10-29T15:42:27.0038844+01:00" endTime="2026-10-29T15:42:27.0039032+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72ee9690-325d-4890-8de5-d3abff9ec8de">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a8052dee-479b-4ae5-a1bd-327e41040277" testId="fc5988c4-609e-e110-17f0-ec7267ec124d" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;b&gt;2&lt;/b&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000304" startTime="2026-10-29T15:42:27.0040721+01:00" endTime="2026-10-29T15:42:27.0040911+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a8052dee-479b-4ae5-a1bd-327e41040277">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="30611d2b-0058-446d-add3-ffdb6cd20472" testId="17e80e9a-7131-9068-d36a-51f7c9046613" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b ge a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000473" startTime="2026-10-29T15:42:27.1742208+01:00" endTime="2026-10-29T15:42:27.1742364+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30611d2b-0058-446d-add3-ffdb6cd20472">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4c215666-3bd6-4009-b5f1-9a9c1bc04ac4" testId="66e6b8a3-7c21-20fb-8043-2c6c0b5e0659" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;00&quot;, maximum: &quot;01&quot;, supported: True)" computerName="CHARLES" duration="00:00:00.0001653" startTime="2026-10-29T15:42:27.1725780+01:00" endTime="2026-10-29T15:42:27.1726582+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c215666-3bd6-4009-b5f1-9a9c1bc04ac4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 71&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="04aa1338-b44d-48a6-9d9b-cd774263b822" testId="770f1d53-063d-98bb-b641-0d78b9a42394" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 3)" computerName="CHARLES" duration="00:00:00.0000407" startTime="2026-10-29T15:42:26.9806390+01:00" endTime="2026-10-29T15:42:26.9806574+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04aa1338-b44d-48a6-9d9b-cd774263b822">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="965a23c9-0e7a-4efa-a2a0-467f7b682225" testId="4c236926-7512-9c01-94b0-c8e5422d4c89" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;&quot;, maximum: &quot;1&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000172" startTime="2026-10-29T15:42:27.1736522+01:00" endTime="2026-10-29T15:42:27.1736685+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="965a23c9-0e7a-4efa-a2a0-467f7b682225" />
+    <UnitTestResult executionId="cadcafbe-36f6-49e4-8cb2-66b70b03e3a8" testId="a2424169-f7bd-42b3-2b34-9042d27f0c04" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;01&quot;, maximum: &quot;001&quot;, supported: True)" computerName="CHARLES" duration="00:00:00.1348580" startTime="2026-10-29T15:42:27.0387115+01:00" endTime="2026-10-29T15:42:27.1724575+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cadcafbe-36f6-49e4-8cb2-66b70b03e3a8" />
+    <UnitTestResult executionId="3d2fa1ab-97b7-44aa-bb52-8542a9b57081" testId="794aa729-e9d4-1270-831a-f02d99ff0112" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;2&quot;, supported: False)" computerName="CHARLES" duration="00:00:00.0000171" startTime="2026-10-29T15:42:27.1730851+01:00" endTime="2026-10-29T15:42:27.1731037+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d2fa1ab-97b7-44aa-bb52-8542a9b57081" />
+    <UnitTestResult executionId="8306032f-3314-4fe0-8c2c-480edd409f67" testId="bf66bee9-fe53-0bc4-ae2c-c78106ff27f0" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000313" startTime="2026-10-29T15:42:27.0044288+01:00" endTime="2026-10-29T15:42:27.0044462+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8306032f-3314-4fe0-8c2c-480edd409f67">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="00c3954b-339d-4449-9fe5-4d1152530a82" testId="81f1f2ed-9b59-bfdd-c398-c08198eff2f1" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b gt a&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000272" startTime="2026-10-29T15:42:27.1745532+01:00" endTime="2026-10-29T15:42:27.1745691+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="00c3954b-339d-4449-9fe5-4d1152530a82">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="068e5544-3e49-46b0-ad22-79347ab79360" testId="8d918ff8-07f7-103a-5bc5-645c848855a8" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b eq b&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000248" startTime="2026-10-29T15:42:27.1753226+01:00" endTime="2026-10-29T15:42:27.1753383+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="068e5544-3e49-46b0-ad22-79347ab79360">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="84e7b621-27aa-4466-bc3a-e851f14bc88d" testId="9fce5c3b-8dd5-6dcc-5702-5203904e14d6" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a and a gt 0&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000271" startTime="2026-10-29T15:42:27.1747083+01:00" endTime="2026-10-29T15:42:27.1747236+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84e7b621-27aa-4466-bc3a-e851f14bc88d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 147&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="900c8a76-6789-4e5a-887a-b5dfcd8c9689" testId="819939b4-e658-4cc4-a0e3-10d80e08cbb6" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 7)" computerName="CHARLES" duration="00:00:00.0000770" startTime="2026-10-29T15:42:26.9804161+01:00" endTime="2026-10-29T15:42:26.9804372+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="900c8a76-6789-4e5a-887a-b5dfcd8c9689">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 91&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9d435a6b-7d20-42e1-aa6f-c36d9c578ea8" testId="c01e9c15-b14d-03e7-1b42-2267e44fb0c9" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: True)" computerName="CHARLES" duration="00:00:00.0002775" startTime="2026-10-29T15:42:27.3903792+01:00" endTime="2026-10-29T15:42:27.3904103+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d435a6b-7d20-42e1-aa6f-c36d9c578ea8">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 45&#xD;
+   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Boolean empty) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 189&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="21ad112d-07df-4846-ae47-2a67e359c981" testId="b2bfebcd-8680-aecd-bd63-aa377f27e819" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;1&quot;, maximum: &quot;1&quot;, supported: True)" computerName="CHARLES" duration="00:00:00.0000540" startTime="2026-10-29T15:42:27.1735929+01:00" endTime="2026-10-29T15:42:27.1736207+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21ad112d-07df-4846-ae47-2a67e359c981" />
+    <UnitTestResult executionId="f58e1621-c41b-4544-a6d4-3670133fe0b7" testId="710938d1-3a15-d257-de5a-9cd2467f0b9d" testName="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000298" startTime="2026-10-29T15:42:27.0042540+01:00" endTime="2026-10-29T15:42:27.0042719+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f58e1621-c41b-4544-a6d4-3670133fe0b7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs:line 127&#xD;
+   at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;2&quot;, maximum: &quot;1&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="0388d271-838a-cd66-6221-af3574819227">
+      <Execution id="8a10a021-ff7a-4ffb-8e14-6f6348c5854f" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;b&gt;2&lt;/b&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fc5988c4-609e-e110-17f0-ec7267ec124d">
+      <Execution id="a8052dee-479b-4ae5-a1bd-327e41040277" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 1)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="ad845833-c325-39f3-12b3-09a3c437e1a6">
+      <Execution id="28666af5-19e2-4827-ac24-696222b73788" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;unknown&gt;0&lt;/unknown&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="2d331896-7928-30e9-820e-d57f6277f397">
+      <Execution id="2a926e5d-88a2-4203-9fa5-f4392babd48e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot; 0 &quot;, maximum: &quot; 1 &quot;, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b3b9f65e-5abd-46d9-cf1c-7c8ce7c690dc">
+      <Execution id="4d2489da-8eff-47f5-afa6-954024881240" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 0)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="7442c281-7864-8a4f-f4b9-8cefc595875e">
+      <Execution id="423e169d-3080-40e2-9be6-b6f4d1e79c3d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8e068ee4-94b1-09d6-b976-0f00f1dd4365">
+      <Execution id="e92e96f4-df97-472d-9372-b7d47d98f7b9" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="XsltCopies_HandleGapsAndEmptyRoots" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fded6719-1e3d-da03-3dfb-5b5af642dd38">
+      <Execution id="91bb930d-f91b-40e2-8c8b-14ea5a812655" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;2&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="794aa729-e9d4-1270-831a-f02d99ff0112">
+      <Execution id="3d2fa1ab-97b7-44aa-bb52-8542a9b57081" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;00&quot;, maximum: &quot;01&quot;, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="66e6b8a3-7c21-20fb-8043-2c6c0b5e0659">
+      <Execution id="4c215666-3bd6-4009-b5f1-9a9c1bc04ac4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b eq b&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8d918ff8-07f7-103a-5bc5-645c848855a8">
+      <Execution id="068e5544-3e49-46b0-ad22-79347ab79360" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;&quot;, maximum: &quot;1&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="4c236926-7512-9c01-94b0-c8e5422d4c89">
+      <Execution id="965a23c9-0e7a-4efa-a2a0-467f7b682225" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c01e9c15-b14d-03e7-1b42-2267e44fb0c9">
+      <Execution id="9d435a6b-7d20-42e1-aa6f-c36d9c578ea8" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="XsltCopies_HandleGapsAndEmptyRoots" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;c&gt;3&lt;/c&gt;&lt;a&gt;1&lt;/a&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="e4164f71-a99d-7a18-1b7c-c1a541ff333d">
+      <Execution id="0376a7ab-7681-4e0d-aec0-c49d36f69b19" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;unknown&gt;0&lt;/unknown&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="336a5479-acd4-7781-1955-0af186a28602">
+      <Execution id="86c06f6e-4b54-4439-979d-9b6f13b2e96a" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 2)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="30ceb8e7-bb82-a702-dd1c-72d89b0ff841">
+      <Execution id="a11dcac3-55d9-43e6-b229-04068525cb7e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="bf66bee9-fe53-0bc4-ae2c-c78106ff27f0">
+      <Execution id="8306032f-3314-4fe0-8c2c-480edd409f67" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 3)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="770f1d53-063d-98bb-b641-0d78b9a42394">
+      <Execution id="04aa1338-b44d-48a6-9d9b-cd774263b822" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="4b1fa91e-59e0-505a-71bb-29310d7d559b">
+      <Execution id="72ee9690-325d-4890-8de5-d3abff9ec8de" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b ge a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="17e80e9a-7131-9068-d36a-51f7c9046613">
+      <Execution id="30611d2b-0058-446d-add3-ffdb6cd20472" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="2af96820-ecfe-446a-fcdf-0af3efaaf53c">
+      <Execution id="2a9725c7-eec4-4423-8227-a60a1fb81f02" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="XQueryCopies_RetainPresentStateOnly" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="6a4be00f-81e1-07ad-6e40-1e648ab4a5ad">
+      <Execution id="e7b8d561-3812-4bb1-8933-b8892e74a0ef" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="MissingProjection_RefusesWithoutShiftingLaterValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="d3892db6-ba4a-18ed-4c94-1fa306ae8569">
+      <Execution id="ed736ad7-105d-4e9f-9620-8e5903353780" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="0a8d70e3-1599-75db-b1b2-84359e16a677">
+      <Execution id="f563dd31-0069-41a2-8704-f88e8b293551" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 6)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b178e0f0-620a-417b-dc80-d6e4bfe61522">
+      <Execution id="e923109d-2a0f-4a71-bb80-f98eeccde210" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a or a gt 0&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="9d1f66a0-9023-d41b-3ed3-6c598258fcf6">
+      <Execution id="a3186306-217a-4aac-a40d-5d9018d6fe21" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;01&quot;, maximum: &quot;001&quot;, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="a2424169-f7bd-42b3-2b34-9042d27f0c04">
+      <Execution id="cadcafbe-36f6-49e4-8cb2-66b70b03e3a8" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b eq a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b40400a7-a188-c142-4fbe-55ab45011b2c">
+      <Execution id="7bb6db67-4183-47c7-b598-907d103114e3" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 7)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="819939b4-e658-4cc4-a0e3-10d80e08cbb6">
+      <Execution id="900c8a76-6789-4e5a-887a-b5dfcd8c9689" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b le a and a gt 0&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="9fce5c3b-8dd5-6dcc-5702-5203904e14d6">
+      <Execution id="84e7b621-27aa-4466-bc3a-e851f14bc88d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b lt a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="54e94551-e373-2809-95af-1b0f285c968f">
+      <Execution id="497ea09c-8d69-4a36-abcf-65ecf240b74e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="710938d1-3a15-d257-de5a-9cd2467f0b9d">
+      <Execution id="f58e1621-c41b-4544-a6d4-3670133fe0b7" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;-0&quot;, maximum: &quot;1&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="39279063-26a5-cec5-258f-e5dbb3d3db4f">
+      <Execution id="de6cc8d4-6fba-4f54-b61c-8ada15ad7164" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="6be32777-ee8c-000d-ebe0-9485bd3171c8">
+      <Execution id="b3f0bd66-f966-4968-ba21-ae00ee553802" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="XQueryCopies_RetainPresentStateOnly" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;+0&quot;, maximum: &quot;1&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="df80ed7d-9533-7e8c-0e3f-3c9ff27a885c">
+      <Execution id="05d71a53-5474-4dff-a12e-d42b2904720b" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 5)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b14ba071-b58e-5a93-2332-bf0a8dc0ec13">
+      <Execution id="c5f59efc-55f5-49e3-ae31-6c772b9a1dfe" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 4)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="07372488-abcc-037b-91ce-673e5f069a86">
+      <Execution id="ff37b6cd-4f9b-458a-9ca5-d04d8d30746c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EveryOptionalPresenceCombination_RetainsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: &quot;&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c3b55139-fc41-2de4-6a6a-0397c2c2f009">
+      <Execution id="ce49bf55-9e94-4f60-bd44-2489229772af" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OrderedMatching_DoesNotSeekAhead" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b ne a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b3ebc45d-0123-d68a-5e9b-925f71a7def0">
+      <Execution id="2d24aa28-6e71-4167-aad6-988682867a99" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;unbounded&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fffca8c7-ebd1-f81e-341c-64ce7877fd5f">
+      <Execution id="ce32a7e4-d9aa-4060-9e3e-cbf25d98e8e4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="31324465-3732-600b-a8c7-0d8e8840ee18">
+      <Execution id="d5678c75-6cb7-4f2e-9844-617025e6a259" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;1&quot;, maximum: &quot;1&quot;, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b2bfebcd-8680-aecd-bd63-aa377f27e819">
+      <Execution id="21ad112d-07df-4846-ae47-2a67e359c981" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;1&quot;, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5dba5a83-6b80-aaf6-c6a8-e0ae78bca0c6">
+      <Execution id="9c6cb7d5-8af8-4cf2-b090-36dc35bf8dee" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: &quot;b gt a&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="81f1f2ed-9b59-bfdd-c398-c08198eff2f1">
+      <Execution id="00c3954b-339d-4449-9fe5-4d1152530a82" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="AbsentComparison_UsesEffectiveBooleanValue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: &quot;0&quot;, maximum: &quot;0&quot;, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="d78eacc6-2297-060c-cd49-1ba05b2c71b8">
+      <Execution id="78d17707-da62-4f15-a5ba-2748827b4559" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.OptionalDecimalAssessmentTests" name="OccurrenceCoverage_IsFinite" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="2af96820-ecfe-446a-fcdf-0af3efaaf53c" executionId="2a9725c7-eec4-4423-8227-a60a1fb81f02" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a4be00f-81e1-07ad-6e40-1e648ab4a5ad" executionId="e7b8d561-3812-4bb1-8933-b8892e74a0ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fded6719-1e3d-da03-3dfb-5b5af642dd38" executionId="91bb930d-f91b-40e2-8c8b-14ea5a812655" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c3b55139-fc41-2de4-6a6a-0397c2c2f009" executionId="ce49bf55-9e94-4f60-bd44-2489229772af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b178e0f0-620a-417b-dc80-d6e4bfe61522" executionId="e923109d-2a0f-4a71-bb80-f98eeccde210" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3ebc45d-0123-d68a-5e9b-925f71a7def0" executionId="2d24aa28-6e71-4167-aad6-988682867a99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="07372488-abcc-037b-91ce-673e5f069a86" executionId="ff37b6cd-4f9b-458a-9ca5-d04d8d30746c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d1f66a0-9023-d41b-3ed3-6c598258fcf6" executionId="a3186306-217a-4aac-a40d-5d9018d6fe21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b40400a7-a188-c142-4fbe-55ab45011b2c" executionId="7bb6db67-4183-47c7-b598-907d103114e3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3b9f65e-5abd-46d9-cf1c-7c8ce7c690dc" executionId="4d2489da-8eff-47f5-afa6-954024881240" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fffca8c7-ebd1-f81e-341c-64ce7877fd5f" executionId="ce32a7e4-d9aa-4060-9e3e-cbf25d98e8e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b14ba071-b58e-5a93-2332-bf0a8dc0ec13" executionId="c5f59efc-55f5-49e3-ae31-6c772b9a1dfe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7442c281-7864-8a4f-f4b9-8cefc595875e" executionId="423e169d-3080-40e2-9be6-b6f4d1e79c3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d78eacc6-2297-060c-cd49-1ba05b2c71b8" executionId="78d17707-da62-4f15-a5ba-2748827b4559" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30ceb8e7-bb82-a702-dd1c-72d89b0ff841" executionId="a11dcac3-55d9-43e6-b229-04068525cb7e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0388d271-838a-cd66-6221-af3574819227" executionId="8a10a021-ff7a-4ffb-8e14-6f6348c5854f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ad845833-c325-39f3-12b3-09a3c437e1a6" executionId="28666af5-19e2-4827-ac24-696222b73788" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="31324465-3732-600b-a8c7-0d8e8840ee18" executionId="d5678c75-6cb7-4f2e-9844-617025e6a259" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2d331896-7928-30e9-820e-d57f6277f397" executionId="2a926e5d-88a2-4203-9fa5-f4392babd48e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39279063-26a5-cec5-258f-e5dbb3d3db4f" executionId="de6cc8d4-6fba-4f54-b61c-8ada15ad7164" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e4164f71-a99d-7a18-1b7c-c1a541ff333d" executionId="0376a7ab-7681-4e0d-aec0-c49d36f69b19" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e068ee4-94b1-09d6-b976-0f00f1dd4365" executionId="e92e96f4-df97-472d-9372-b7d47d98f7b9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6be32777-ee8c-000d-ebe0-9485bd3171c8" executionId="b3f0bd66-f966-4968-ba21-ae00ee553802" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0a8d70e3-1599-75db-b1b2-84359e16a677" executionId="f563dd31-0069-41a2-8704-f88e8b293551" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d3892db6-ba4a-18ed-4c94-1fa306ae8569" executionId="ed736ad7-105d-4e9f-9620-8e5903353780" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54e94551-e373-2809-95af-1b0f285c968f" executionId="497ea09c-8d69-4a36-abcf-65ecf240b74e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="df80ed7d-9533-7e8c-0e3f-3c9ff27a885c" executionId="05d71a53-5474-4dff-a12e-d42b2904720b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="336a5479-acd4-7781-1955-0af186a28602" executionId="86c06f6e-4b54-4439-979d-9b6f13b2e96a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5dba5a83-6b80-aaf6-c6a8-e0ae78bca0c6" executionId="9c6cb7d5-8af8-4cf2-b090-36dc35bf8dee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b1fa91e-59e0-505a-71bb-29310d7d559b" executionId="72ee9690-325d-4890-8de5-d3abff9ec8de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc5988c4-609e-e110-17f0-ec7267ec124d" executionId="a8052dee-479b-4ae5-a1bd-327e41040277" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17e80e9a-7131-9068-d36a-51f7c9046613" executionId="30611d2b-0058-446d-add3-ffdb6cd20472" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="66e6b8a3-7c21-20fb-8043-2c6c0b5e0659" executionId="4c215666-3bd6-4009-b5f1-9a9c1bc04ac4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="770f1d53-063d-98bb-b641-0d78b9a42394" executionId="04aa1338-b44d-48a6-9d9b-cd774263b822" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4c236926-7512-9c01-94b0-c8e5422d4c89" executionId="965a23c9-0e7a-4efa-a2a0-467f7b682225" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2424169-f7bd-42b3-2b34-9042d27f0c04" executionId="cadcafbe-36f6-49e4-8cb2-66b70b03e3a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="794aa729-e9d4-1270-831a-f02d99ff0112" executionId="3d2fa1ab-97b7-44aa-bb52-8542a9b57081" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bf66bee9-fe53-0bc4-ae2c-c78106ff27f0" executionId="8306032f-3314-4fe0-8c2c-480edd409f67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="81f1f2ed-9b59-bfdd-c398-c08198eff2f1" executionId="00c3954b-339d-4449-9fe5-4d1152530a82" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d918ff8-07f7-103a-5bc5-645c848855a8" executionId="068e5544-3e49-46b0-ad22-79347ab79360" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9fce5c3b-8dd5-6dcc-5702-5203904e14d6" executionId="84e7b621-27aa-4466-bc3a-e851f14bc88d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="819939b4-e658-4cc4-a0e3-10d80e08cbb6" executionId="900c8a76-6789-4e5a-887a-b5dfcd8c9689" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c01e9c15-b14d-03e7-1b42-2267e44fb0c9" executionId="9d435a6b-7d20-42e1-aa6f-c36d9c578ea8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2bfebcd-8680-aecd-bd63-aa377f27e819" executionId="21ad112d-07df-4846-ae47-2a67e359c981" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="710938d1-3a15-d257-de5a-9cd2467f0b9d" executionId="f58e1621-c41b-4544-a6d4-3670133fe0b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="45" executed="45" passed="9" failed="36" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.14]   Discovering: Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.19]   Discovered:  Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.21]   Starting:    Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.54]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.54]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.54]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.54]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.54]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.54]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(91,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Int32 mask)&#xD;
+[xUnit.net 00:00:00.55]            at InvokeStub_OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.55]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.55]       Expected: True&#xD;
+[xUnit.net 00:00:00.55]       Actual:   False&#xD;
+[xUnit.net 00:00:00.55]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.55]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.55]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.57]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.57]       Expected: True&#xD;
+[xUnit.net 00:00:00.57]       Actual:   False&#xD;
+[xUnit.net 00:00:00.57]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.57]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(127,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(String children, Boolean valid)&#xD;
+[xUnit.net 00:00:00.57]            at InvokeStub_OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.57]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.58]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.58]       Expected: True&#xD;
+[xUnit.net 00:00:00.58]       Actual:   False&#xD;
+[xUnit.net 00:00:00.58]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.58]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(71,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported)&#xD;
+[xUnit.net 00:00:00.58]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.58]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.74]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(71,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(71,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(String minimum, String maximum, Boolean supported)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.74]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.75]       Actual:   False&#xD;
+[xUnit.net 00:00:00.75]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.75]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.75]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.75]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.75]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.75]       Expected: True&#xD;
+[xUnit.net 00:00:00.75]       Actual:   False&#xD;
+[xUnit.net 00:00:00.75]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.75]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.75]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.75]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.75]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.75]       Expected: True&#xD;
+[xUnit.net 00:00:00.75]       Actual:   False&#xD;
+[xUnit.net 00:00:00.75]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.75]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(147,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(String assertion, Boolean valid)&#xD;
+[xUnit.net 00:00:00.75]            at InvokeStub_OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.75]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.96]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.96]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.96]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.96]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(189,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Boolean empty)&#xD;
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.96]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:00.96]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.96]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.96]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(189,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Boolean empty)&#xD;
+[xUnit.net 00:00:00.96]            at InvokeStub_OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.96]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.01]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:01.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(216,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Boolean preserve)&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.01]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:01.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(216,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Boolean preserve)&#xD;
+[xUnit.net 00:00:01.01]            at InvokeStub_OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.01]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:01.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(172,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError()&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.01]       BSK-XSD-016: Every local declaration must be a unique, single-occurrence xs:decimal element without additional content.&#xD;
+[xUnit.net 00:00:01.01]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(45,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.01]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\OptionalDecimalAssessmentTests.cs(161,0): at Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue()&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.01]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.02]   Finished:    Bosak.Schema.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9733215+01:00">
+        <Text>[xUnit.net 00:00:00.54]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 0) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9801924+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9805961+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 7) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9807027+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 3) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9808575+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 5) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9810776+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 1) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9812122+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 4) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9813432+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 6) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:26.9819772+01:00">
+        <Text>[xUnit.net 00:00:00.55]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0320448+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;unknown&gt;0&lt;/unknown&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0320659+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0320818+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;c&gt;3&lt;/c&gt;&lt;a&gt;1&lt;/a&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0320991+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0321197+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;b&gt;2&lt;/b&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0321348+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0321506+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;b&gt;2&lt;/b&gt;&lt;c&gt;3&lt;/c&gt;", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0321698+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0322085+01:00">
+        <Text>[xUnit.net 00:00:00.57]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: "&lt;a&gt;1&lt;/a&gt;&lt;c&gt;3&lt;/c&gt;&lt;unknown&gt;0&lt;/unknown&gt;", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.0328161+01:00">
+        <Text>[xUnit.net 00:00:00.58]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: " 0 ", maximum: " 1 ", supported: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1730347+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: "00", maximum: "01", supported: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1754048+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: "0", maximum: "1", supported: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1754624+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b le a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1754961+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b ne a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1755234+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b ge a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1755485+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b lt a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1755741+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b gt a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1756060+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b le a and a gt 0", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1773790+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b eq a", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1774009+01:00">
+        <Text>[xUnit.net 00:00:00.75]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b eq b", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.1774171+01:00">
+        <Text>[xUnit.net 00:00:00.75]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: "b le a or a gt 0", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.3902917+01:00">
+        <Text>[xUnit.net 00:00:00.96]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.3905131+01:00">
+        <Text>[xUnit.net 00:00:00.96]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.4427166+01:00">
+        <Text>[xUnit.net 00:00:01.01]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.4428915+01:00">
+        <Text>[xUnit.net 00:00:01.01]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.4434708+01:00">
+        <Text>[xUnit.net 00:00:01.01]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T15:42:27.4438919+01:00">
+        <Text>[xUnit.net 00:00:01.01]     Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

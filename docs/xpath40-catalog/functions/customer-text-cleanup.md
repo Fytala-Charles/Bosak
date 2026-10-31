@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — real-world import text contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited text contract; incomplete grapheme segmentation**. Grapheme segmentation is approximate; missing keywords, implicit trim focus and unknown-option validation are not supported contracts. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Customer text cleanup — Frozen 4.0.** [fn:trim-space](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trim-space), [fn:pad-string](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-pad-string), [fn:characters](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-characters), [fn:graphemes](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-graphemes) and [fn:char](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-char).
@@ -56,6 +58,8 @@ Trim before padding. Keep the original combining sequence when preservation is r
 The fixture retains two interior spaces and a decomposed accent. Its eight codepoints form seven supported grapheme clusters; two dots reach ten codepoints. Oversized values remain unchanged. Invalid side/padding options and unsupported char values raise the demonstrated errors. Known grapheme limitations remain documented rather than being certified by these samples.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles XML boundary whitespace, interior preservation, nontruncating codepoint padding; Character/entity conversion and supported grapheme clusters; Defaults, empty values, side options and invalid input. **Boundaries:** Grapheme segmentation is approximate; missing keywords, implicit trim focus and unknown-option validation are not supported contracts. Follow-up groups: F01, F02, F03, F13. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile new calls with CompileOptions.Compatibility40; the default 3.1 profile rejects them. The comparison uses Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. Unicode inputs are inline XML character references so their intended values are explicit.
 

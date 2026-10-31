@@ -1,0 +1,19 @@
+{
+  "qt3": {
+    "cases": 44,
+    "xpathAdmitted": 0,
+    "xqueryDependenciesPass": 44,
+    "xquerySyntaxEligible": 4
+  },
+  "qt4": {
+    "cases": 53,
+    "xpathAdmitted": 0,
+    "xqueryDependenciesPass": 0,
+    "xquerySyntaxEligible": 0
+  },
+  "selected": {
+    "cases": 31,
+    "allXQueryDependenciesPass": true,
+    "allRouterRefused": true
+  }
+}

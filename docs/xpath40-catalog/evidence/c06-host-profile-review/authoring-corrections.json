@@ -1,0 +1,7 @@
+{
+  "map": "Initial diagnostic incorrectly used on-duplicates instead of documented duplicates; corrected input only, original receipts retained.",
+  "static": "Pinned errors section explicitly permits a lazy mode. Guarded binding outcomes are context observations, not proof of a conformance defect. Mandatory complete static-detection mode remains an explicit H01 evidence gap.",
+  "switch": "Retained original required XPTY0004 for numeric/boolean comparison. Added direct XPath comparison control; no expectation relaxed.",
+  "registration": "Initial lookup expectation incorrectly treated the standard load-xquery-module dispatch stub as absent. Source confirms resolvable stub; corrected lookup expectations and added invocation controls to distinguish registration from loader availability. Original receipts retained.",
+  "moduleSetup": "Populate installs the loader delegate, but does not copy the static source registry into a standalone EvaluationContext. Stylesheet compilation performs that copy. Incomplete standalone setup receipts retained; final FOQM0002 control distinguishes loader installation from module availability. Added fully configured stylesheet controls. Source precisely limits static registry propagation to CreateUseWhenContext; final configured stylesheet controls use use-when. Prior runtime setup failure retained, not classified as a defect."
+}

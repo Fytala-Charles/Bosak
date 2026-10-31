@@ -1,0 +1,24 @@
+cbf7f88ce8364334040a819f96967622992f24a2
+2026-10-10T04:13:43+02:00
+2026-10-10T04:13:43+02:00
+REQ-123 fn:atomic-equal slice: F&O 4.0 §2.2.1 map-key equality exposed (frozen level) + 4.0 parser companions — gate gains two sets → 212 (#108)
+
+* docs(handover): REQ-123 element-to-map squash hash tail — PR #106 merged as 1bb7314
+
+* feat(req123): fn:atomic-equal — F&O 4.0 §2.2.1 map-key equality exposed (frozen level) + 4.0 parser companions
+
+- fn:atomic-equal(, ) delegates to the existing map-key comparer
+  (XdmValueEqualityComparer): codepoint string-family (no collation), exact-magnitude
+  numerics (NaN=NaN, +0=-0, 1.1 != 1.1e0), timezone-presence date/times, QName by
+  {URI,local}, normalized durations; PR2168 adds hexBinary/base64Binary mutual
+  octet comparison
+- parser (4.0): quantifier keywords legal as arrow targets ($s => every());
+  if accepts braced EnclosedExpr branches with omittable else (else-omission
+  only for a braced then)
+- qt4tests: fn-atomic-equal 29/0/1 + fn-while-do 30/0/0 promoted → gate at 212 sets
+  (gate-only 7,562/0/1,833 exit 0)
+- verification: dotnet test 3,501/0; QT3 31,142/0/679; XSLT smoke 162/0/26
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

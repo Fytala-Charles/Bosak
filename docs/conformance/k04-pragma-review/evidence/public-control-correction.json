@@ -1,0 +1,7 @@
+{
+  "case": "C36-control-literal",
+  "initialExpected": 8,
+  "correctedExpected": 7,
+  "reason": "Seven characters in literal (#p:x#); test expectation error, not an engine defect. Initial receipt and all control inputs/results preserved.",
+  "productionChanged": false
+}

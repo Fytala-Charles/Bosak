@@ -1,0 +1,1 @@
+{"Name":"C33-version-early-error","kind":"Passed","expectedCode":"XQST0038","errorType":"XPathParseException","error":"Parse error at position 119: XQST0038: Collation \u0027xspanish\u0027 is not supported."}

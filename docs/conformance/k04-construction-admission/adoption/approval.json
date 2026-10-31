@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-28",
+  "proposalCommit": "7c0fc78c",
+  "proposalId": "K04-construction-adoption-v1",
+  "questionItemId": "[\"request_user_input_async\",\"call_bc65d205f3394229b2d11e9db0918614\",0]",
+  "answer": "Approve exact 83-case construction adoption (Recommended)",
+  "scope": "Exact two-file proposal, fresh full solution tests and normal gates; no release."
+}

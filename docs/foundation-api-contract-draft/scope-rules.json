@@ -1,0 +1,49 @@
+{
+  "formatVersion": 1,
+  "status": "Proposed only; existing obligations preserved",
+  "draftTypes": [
+    "Bosak.XPath.Core.Xdm.XdmJNode",
+    "Bosak.XPath.Core.Xdm.XdmRecordType",
+    "Bosak.XPath.Core.Xdm.XdmRecordField"
+  ],
+  "draftMemberTokens": [
+    "FromJNode",
+    "JNodeValue",
+    "IsJNode",
+    "WithRecordType",
+    "RecordType"
+  ],
+  "queryEntryTypes": [
+    "Bosak.XPath.Api.CompileOptions",
+    "Bosak.XPath.Api.XPath31Expression",
+    "Bosak.XPath.Api.XPathCompatibility",
+    "Bosak.XPath.Api.XPathExpression"
+  ],
+  "schemaTokens": [
+    "Schema",
+    "Assessment",
+    "IsNilled",
+    "IsId",
+    "HasNoTypedValue",
+    "IsComplexType"
+  ],
+  "nodeTokens": [
+    "Node",
+    "Axis",
+    "Parent",
+    "Document",
+    "Children",
+    "Attributes",
+    "BaseUri"
+  ],
+  "sequenceTokens": [
+    "Sequence",
+    "Enumerator",
+    "SinglePass"
+  ],
+  "notes": [
+    "Tokens route review work; they do not infer semantic conformance or accept a signature.",
+    "Full public-type closure uses every observed declaration, including provisional/excluded members, to expose mixed-surface dependencies.",
+    "Metadata rows A/L remain evidence and do not create callable members."
+  ]
+}

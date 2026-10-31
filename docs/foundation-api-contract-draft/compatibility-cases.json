@@ -1,0 +1,269 @@
+{
+  "formatVersion": 1,
+  "status": "Planned; no behavioral case executed in this documentation step",
+  "cases": [
+    {
+      "id": "FC-01",
+      "title": "Existing provider source compatibility",
+      "owner": "Core + XmlDb/Schema",
+      "procedure": "Compile actual implementers with existing required members, defaults and caller code against the exact candidate; compare overload resolution and nullable/compiler diagnostics.",
+      "requiredEvidence": "Default members stay optional; no new required implementation or accidental overload ambiguity.",
+      "gapIds": [
+        "FG-01",
+        "FG-07",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-02",
+      "title": "Unchanged consumer binaries",
+      "owner": "Core + both owners",
+      "procedure": "Use retained old consumer binaries and exact candidate dependency replacements; exercise methods, interface dispatch, boxing, collections and generic/container values on supported runtimes.",
+      "requiredEvidence": "No unsupported slot, missing member, load or value corruption; original builds and package identities retained.",
+      "gapIds": [
+        "FG-07",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-03",
+      "title": "Enum and optional argument constants",
+      "owner": "Core + XmlDb",
+      "procedure": "Compare every captured enum constant/default, especially XML 0/1/2/4/8/16/32/64/127; run old compiled call sites whose defaults were embedded.",
+      "requiredEvidence": "No numeric remapping or silent default-behavior change; XML storage mappings preserved.",
+      "gapIds": [
+        "FG-01",
+        "FG-05",
+        "FG-07"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-04",
+      "title": "Managed value layout and carriers",
+      "owner": "Core + both owners",
+      "procedure": "Compare type/field shape and supported-runtime managed size/layout; pass old/new XdmValue and XdmSequence through boxing, arrays, callbacks and unchanged binaries.",
+      "requiredEvidence": "Metadata alone is insufficient; typed/reference slots and observable accessor behavior remain valid.",
+      "gapIds": [
+        "FG-03",
+        "FG-07"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-05",
+      "title": "Node identity and order",
+      "owner": "XmlDb + Core",
+      "procedure": "Use repeated axes, aliases, wrappers in both directions, roots/snapshots/generations and mixed providers; evaluate identity/hash/order/deduplication.",
+      "requiredEvidence": "Preserve snapshot-relative identity, symmetric wrapper behavior and declared ordering without conflating schema component identity.",
+      "gapIds": [
+        "FG-05",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-06",
+      "title": "Typed values and atomization",
+      "owner": "Schema + Core; XmlDb untyped baseline",
+      "procedure": "Exercise atomic/list/union/empty/no-typed-value cases, argument/results, casts and numeric conversions with original type identities.",
+      "requiredEvidence": "Retain original authority and list/union values; FOTY0012 where specified; plain XML behavior stays qualified separately.",
+      "gapIds": [
+        "FG-02",
+        "FG-03",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-07",
+      "title": "Lazy ownership and early termination",
+      "owner": "Core + both owners",
+      "procedure": "Enumerate zero/one/all items, abandon results, throw/cancel between fetches, dispose input before/during enumeration and reopen an independently owned fixture.",
+      "requiredEvidence": "Explicit owner releases leases at agreed boundaries; no accidental caller disposal, revived snapshots or unproved automatic cleanup.",
+      "gapIds": [
+        "FG-04",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-08",
+      "title": "Nested and escaped values",
+      "owner": "Core + both owners",
+      "procedure": "Retain nodes in maps/arrays/functions/external values and deferred sequences; copy/box/pass results beyond evaluation scope and dispose the caller owner.",
+      "requiredEvidence": "References retain agreed metadata authority without extending disposed input validity; nested ownership is explicit.",
+      "gapIds": [
+        "FG-03",
+        "FG-04"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-09",
+      "title": "Single-pass sequencing",
+      "owner": "Core + XmlDb where implemented",
+      "procedure": "Use an actual marked producer, attempted second enumeration, early exit, throwing fetch and document-order/duplicate assertions.",
+      "requiredEvidence": "Marker guarantees are preserved; no hidden materialization or invented repeatability/disposal guarantee.",
+      "gapIds": [
+        "FG-04",
+        "FG-05"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-10",
+      "title": "Compile/evaluate environment and caches",
+      "owner": "Core + both owners",
+      "procedure": "Vary language/profile, schema closure, effective URIs, namespace/options and authority individually; test concurrent independent contexts and post-compile mutable inputs.",
+      "requiredEvidence": "Accepted semantic capture/cache identity prevents stale reuse; legacy setters do not imply thread safety.",
+      "gapIds": [
+        "FG-02",
+        "FG-06"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-11",
+      "title": "Resource authority and cancellation",
+      "owner": "Core + both owners",
+      "procedure": "Exercise denied/imported/missing resources, resolver/provider faults, cancellation and reentry on owned fixtures with exact resource receipts.",
+      "requiredEvidence": "Preserve resource policy and original failure/cancellation; no hidden fallback or authority escalation.",
+      "gapIds": [
+        "FG-04",
+        "FG-06"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-12",
+      "title": "Assessment preserve/strip/copy",
+      "owner": "Schema + Core",
+      "procedure": "Exercise existing bounded bridge plus agreed general provider on copies, descendants/attributes, edited content and escaped trees.",
+      "requiredEvidence": "Original provenance/PSVI retained on preserve, removed on strip; stale assessment refused; bounded success does not certify full support.",
+      "gapIds": [
+        "FG-02",
+        "FG-03"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-13",
+      "title": "Component universe and compatible views",
+      "owner": "Schema + Core",
+      "procedure": "Use same QName/different closures, imports/redefine/override/chameleon cases, anonymous types and distinct compatible sessions after contract acceptance.",
+      "requiredEvidence": "No QName/root-digest authority shortcut; compatibility proof and original PSVI are explicit.",
+      "gapIds": [
+        "FG-02",
+        "FG-03"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-14",
+      "title": "Ordinary untyped persistent XML",
+      "owner": "XmlDb",
+      "procedure": "Execute complete provider/differential tests and reopen existing supported stores using freshly owned fixtures; compare query behavior and format bytes.",
+      "requiredEvidence": "No required schema/JSON storage or migration; XML enums, histories and CanReclaim=false unchanged.",
+      "gapIds": [
+        "FG-05",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-15",
+      "title": "Errors and refusals",
+      "owner": "Core + both owners",
+      "procedure": "Record baseline and candidate error identities for invalid, unsupported, absent-provider and provider-fault cases; distinguish legacy/BCL paths.",
+      "requiredEvidence": "No invented W3C errors or downgrade; preserve documented no-provider behavior and supported-profile refusal.",
+      "gapIds": [
+        "FG-02",
+        "FG-03"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-16",
+      "title": "Concurrency and disposal isolation",
+      "owner": "Both owners + Core",
+      "procedure": "Run supported independent sessions/snapshots, cancellation isolation and ownership schedules; enumerate excluded concurrent-disposal/reentry scenarios.",
+      "requiredEvidence": "Shared immutable metadata does not certify mutable snapshot/context concurrency; no stronger claim than executed evidence.",
+      "gapIds": [
+        "FG-04",
+        "FG-06",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-17",
+      "title": "Package and assembly identity",
+      "owner": "Core/release + both owners",
+      "procedure": "Build package-only consumers from exact artifacts; record source/package/archive/assembly identity, signing/provenance and transitive dependencies.",
+      "requiredEvidence": "Same qualified candidate for both consumers; no source-override-only or synthetic-only release claim.",
+      "gapIds": [
+        "FG-07",
+        "FG-09"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-18",
+      "title": "Full tests and frozen engine gates",
+      "owner": "Core",
+      "procedure": "Run full solution tests plus QT3 and gated qt4, capturing exact retained skip names/reasons and comparing adopted baselines.",
+      "requiredEvidence": "QT3 31,397/0/424 and qt4 8,941/0/1,918 over 230 gated sets unchanged unless separately adopted.",
+      "gapIds": [
+        "FG-09"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-19",
+      "title": "API manifest and scope drift",
+      "owner": "Core",
+      "procedure": "Verify baseline hashes, one-to-one row coverage, exact overload IDs, classifications, closure and linked cases; review every proposed signature/default/enum/layout change.",
+      "requiredEvidence": "No omitted or duplicate metadata row, automatic freeze or silent excluded dependency.",
+      "gapIds": [
+        "FG-01",
+        "FG-07"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    },
+    {
+      "id": "FC-20",
+      "title": "Mixed draft and established members",
+      "owner": "Core + both owners",
+      "procedure": "Separate current-draft JNode/record/profile members from the proposed stable selection, inspect public signature reachability and execute any retained-profile compatibility cases.",
+      "requiredEvidence": "Exclusion is a proposed scope decision, not removal or waiver of existing compatibility; no forced JSON persistence.",
+      "gapIds": [
+        "FG-01",
+        "FG-08"
+      ],
+      "status": "NotRun",
+      "resultReceipt": null
+    }
+  ]
+}

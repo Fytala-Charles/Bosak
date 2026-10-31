@@ -1,0 +1,84 @@
+// Generated isolated VM/carrier diagnostic; no production semantics or API adoption.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+try {
+var mode=args[0];object originA=new object(),originB=new object();
+XdmValue Attach(XdmValue v,object origin) {
+#if PATCHED
+ return XdmValue.PrototypeAttach(v,origin);
+#else
+ return v;
+#endif
+}
+string? Origin(XdmValue v) {
+#if PATCHED
+ var m=XdmValue.PrototypeMarker(v);return ReferenceEquals(m,originA)?"A":ReferenceEquals(m,originB)?"B":m is null?null:"Foreign";
+#else
+ return null;
+#endif
+}
+IEnumerable<XdmValue> Items(XdmValue v,int depth=0) {
+ if(depth>32)throw new InvalidOperationException("Diagnostic recursion bound");
+ if(v.IsSequence) { if(v.SequenceValue is not null)foreach(var item in XdmSequence.FromSource(v.SequenceValue))foreach(var leaf in Items(item,depth+1))yield return leaf; }
+ else if(!v.IsUndefined)yield return v;
+}
+var v=Attach(XdmValue.FromInteger(42),originA);var w=Attach(XdmValue.FromInteger(7),originB);var s=Attach(XdmValue.FromString("alpha"),originA);
+var node=new TypedNode(new XDocumentNode(XElement.Parse("<n>42</n>")),v,false);
+var empty=new TypedNode(new XDocumentNode(XElement.Parse("<n/>")),XdmValue.Undefined,true);
+var untyped=new TypedNode(new XDocumentNode(XElement.Parse("<n>42</n>")),v,false,false);
+var listSource=XdmSequence.FromSource(new Values(new[]{v,w}));
+var listNode=new TypedNode(new XDocumentNode(XElement.Parse("<n>42 7</n>")),XdmValue.FromSequence(listSource),false);
+var cases=new (string id,string expr)[]{
+ ("identity","$v"),("identity-string","$s"),("let","let $x := $v return $x"),("filter","($v,$w)[1]"),("simple-map","$v ! ."),
+ ("array","[$v](1)"),("map-value","map{'a':$v}?a"),("map-nested","map{'a':[$v]}?a(1)"),("function","(function($x){$x})($v)"),
+ ("data-atomic","data($v)"),("data-node","data($n)"),("data-untyped-node","data($untyped)"),("data-sequence-node","data($list)"),("cast-identity","xs:integer($v)"),("cast-decimal","xs:decimal($v)"),
+ ("arithmetic","$v + 1"),("comparison","$v = 42"),("distinct","distinct-values(($v,$v))"),("sort","sort(($v,$w))"),
+ ("string-conversion","string($s)"),("upper-case","upper-case($s)"),("string-join","string-join(($s,$s),'-')"),
+ ("map-key","map{$v:'hit'}? (42)"),("serialization","serialize(map{'a':$v},map{'method':'json'})"),
+ ("no-typed-value","data($empty)"),("invalid-cast","xs:integer('not-number')"),("cardinality-error","exactly-one(($v,$w))")};
+var observations=new List<object>();
+foreach(var test in cases) {
+ try {
+  var context=new EvaluationContext().WithVariable("v",v).WithVariable("w",w).WithVariable("s",s).WithVariable("n",XdmValue.FromNode(node)).WithVariable("untyped",XdmValue.FromNode(untyped)).WithVariable("list",XdmValue.FromNode(listNode)).WithVariable("empty",XdmValue.FromNode(empty));
+  var result=XPath31Expression.Compile(test.expr).Evaluate(context);
+  var items=Items(result).Select(x=>new {kind=x.Kind.ToString(),value=x.ToString(),origin=Origin(x)}).ToArray();
+  observations.Add(new {id=test.id,expression=test.expr,items,error=(string?)null});
+ } catch(Exception error) {
+  var code=System.Text.RegularExpressions.Regex.Match(error.Message,@"\b[A-Z]{4}[0-9]{4}\b").Value;
+  observations.Add(new {id=test.id,expression=test.expr,items=Array.Empty<object>(),error=code.Length>0?code:error.GetType().Name,message=error.Message});
+ }
+}
+var allocations=new List<object>();
+foreach(var n in new[]{1000,100000})foreach(var kind in new[]{"integer","string"}) {
+ var plain=kind=="integer"?XdmValue.FromInteger(42):XdmValue.FromString("alpha");
+ long Run(){var a=new XdmValue[n];for(int i=0;i<n;i++)a[i]=Attach(plain,originA);GC.KeepAlive(a);return a.Length;}
+ for(int i=0;i<3;i++)_=Run();var samples=new List<object>();
+ for(int i=0;i<7;i++){int g0=GC.CollectionCount(0),g1=GC.CollectionCount(1),g2=GC.CollectionCount(2);long before=GC.GetAllocatedBytesForCurrentThread(),start=Stopwatch.GetTimestamp();long count=Run();long ticks=Stopwatch.GetTimestamp()-start,bytes=GC.GetAllocatedBytesForCurrentThread()-before;samples.Add(new {count,allocatedBytes=bytes,nanoseconds=ticks*1_000_000_000.0/Stopwatch.Frequency,gen0=GC.CollectionCount(0)-g0,gen1=GC.CollectionCount(1)-g1,gen2=GC.CollectionCount(2)-g2});}
+ allocations.Add(new {items=n,kind,samples});
+}
+var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.XPath.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new {name=a.GetName().Name,identity=a.FullName,path=a.Location,context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new {mode,scope="Actual package API/VM with synthetic typed nodes/markers; modified Core variants are unqualified hybrid cohorts",runtime=Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,processorCount=Environment.ProcessorCount,xdmValueSize=Unsafe.SizeOf<XdmValue>(),clrEqualsToPlainInteger=v.Equals(XdmValue.FromInteger(42)),xpathEqualsToPlainInteger=XdmValueEqualityComparer.Instance.Equals(v,XdmValue.FromInteger(42)),xpathHashToPlainInteger=XdmValueEqualityComparer.Instance.GetHashCode(v)==XdmValueEqualityComparer.Instance.GetHashCode(XdmValue.FromInteger(42)),observations,allocations,bindings},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error) {Console.Error.WriteLine(error);Environment.ExitCode=1;}
+// Synthetic typed-node adapter: does not assess XML or establish PSVI authority.
+sealed class TypedNode(IXdmNode inner,XdmValue typed,bool noTyped,bool annotated=true):IXdmNode {
+ public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;
+ public string StringValue=>inner.StringValue;public XdmValue TypedValue=>typed;public bool HasNoTypedValue=>noTyped;public bool IsComplexType=>noTyped;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>annotated?("urn:diagnostic","test-type"):null;
+ public IXdmNode? Parent=>inner.Parent;public IXdmNode? Document=>inner.Document;public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;
+ public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>inner.Children(kind);public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>inner.Attributes(localName,namespaceUri);
+ public XdmSequence Axis(XdmAxis axis)=>inner.Axis(axis);public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>inner.ToXmlString();
+}
+sealed class Values(XdmValue[] values):IXdmSequence {
+ public bool TryGetLength(out int length){length=values.Length;return true;}
+ public IXdmSequenceEnumerator GetEnumerator()=>new Cursor(values);
+ sealed class Cursor(XdmValue[] items):IXdmSequenceEnumerator {int index=-1;public XdmValue Current=>items[index];public bool MoveNext()=>++index<items.Length;}
+}

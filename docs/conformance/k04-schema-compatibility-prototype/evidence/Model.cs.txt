@@ -1,0 +1,416 @@
+// Generated isolated C44-R2 fake graph experiment; not a production API or XSD validator.
+// AUTHOR: Charles Korthout; CREATE DATE: 29 October 2026; PURPOSE: Qualify compatible-universe handoff.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0); SPDX-License-Identifier: Apache-2.0
+using System.Collections.Frozen;
+using System.Collections.Immutable;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using System.Xml;
+using System.Diagnostics.CodeAnalysis;
+using Bosak.XPath.Core.Xdm;
+using C44R2.Proposed;
+
+namespace C44R2;
+
+internal sealed class Failure(string reason, Exception? inner = null) : Exception(reason, inner);
+internal static class Experiment
+{
+    internal static string Mutation = "none";
+    internal const string Revision="3e9f3bddd38f39f8953750306f0c574a2fbd0387";
+    internal static string Hash(string value) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
+    internal static void Require([DoesNotReturnIf(false)] bool value,string reason) { if(!value)throw new Failure(reason); }
+    internal static SchemaOutcome<T> Refuse<T>(string reason,bool invalid=false) => invalid
+        ? SchemaOutcome<T>.Invalid([new(reason,reason,null,null)]) : SchemaOutcome<T>.Unsupported([new(reason,reason,null,null)]);
+    internal static T Owned<T>(Func<SchemaOutcome<T>> provider,CancellationToken cancellation=default)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        SchemaOutcome<T> outcome;
+        try { outcome=provider() ?? throw new Failure("NullOutcome"); }
+        catch(OperationCanceledException) { throw; }
+        catch(Exception e) { throw new Failure("ProviderFault",e); }
+        if(outcome.Verdict==SchemaVerdict.Cancelled)throw new OperationCanceledException();
+        if(outcome.Verdict==SchemaVerdict.Supported)return outcome.Value;
+        if(Mutation=="fallback")return default!;
+        throw new Failure(outcome.Verdict==SchemaVerdict.NotApplicable?"OwnershipLost":outcome.Findings[0].Reason);
+    }
+    internal static void ValidateProfile(QuerySemanticProfile profile)
+    {
+        Require(profile is not null,"ProfileRequired");
+        Require(Enum.IsDefined(profile.HostLanguage),"HostLanguage");
+        Require(profile.HostLanguage==QueryHostLanguage.Xslt?profile.HostVersion is "3.0" or "4.0":profile.HostVersion is "3.1" or "4.0","HostVersion");
+        Require(profile.XdmRevision==Revision&&profile.BehaviorProfile=="c44r2-fake","UnsupportedProfile");
+        Require(profile.QueryStaticContextFingerprint is {Length:64} && profile.QueryStaticContextFingerprint.All(Uri.IsHexDigit),"QueryContextDigest");
+    }
+    internal static QuerySemanticProfile CanonicalProfile(QuerySemanticProfile profile)
+    {
+        ValidateProfile(profile);return profile with {QueryStaticContextFingerprint=profile.QueryStaticContextFingerprint.ToUpperInvariant()};
+    }
+}
+
+internal sealed record TypeDef(string Key,string? Name,string? Base=null,SchemaDerivation Method=SchemaDerivation.None,SchemaDerivation Block=SchemaDerivation.None,string? AnonymousOrigin=null,string? ExclusiveSlot=null);
+internal sealed record ElementDef(string Key,string Name,string Type,ImmutableArray<string> Heads,bool Abstract=false,bool Nillable=false,SchemaDerivation Block=SchemaDerivation.None,string Scope="global");
+internal sealed record FakeDocument(ImmutableArray<string> Imports,ImmutableArray<TypeDef> Types,ImmutableArray<ElementDef> Elements,bool Complete=true);
+internal sealed record NormalType(string Address,string? Base,SchemaDerivation Method,SchemaDerivation Block,string? ExclusiveSlot);
+internal sealed record NormalElement(string Address,string Name,string Type,ImmutableArray<string> Heads,bool Abstract,bool Nillable,SchemaDerivation Block,string Scope);
+
+internal sealed class Graph
+{
+    internal FrozenDictionary<string,NormalType> Types { get; }
+    internal FrozenDictionary<string,NormalElement> Elements { get; }
+    internal FrozenDictionary<string,string> TypeAddresses { get; }
+    internal FrozenDictionary<string,string> ElementAddresses { get; }
+    private static string TypeAddress(TypeDef t) => t.Name is {} n ? "type:"+n : "anonymous:"+(t.AnonymousOrigin ?? throw new Failure("AnonymousOriginRequired"));
+    internal Graph(IEnumerable<TypeDef> types,IEnumerable<ElementDef> elements)
+    {
+        var t=types.ToFrozenDictionary(x=>x.Key,StringComparer.Ordinal);
+        var e=elements.ToFrozenDictionary(x=>x.Key,StringComparer.Ordinal);
+        foreach(var item in t.Values)
+        {
+            Experiment.Require(!string.IsNullOrWhiteSpace(item.Key),"TypeKey");
+            if(item.Name is not null)XmlConvert.VerifyNCName(item.Name);
+            Experiment.Require((item.Method&~(SchemaDerivation.Restriction|SchemaDerivation.Extension))==0&&(item.Block&~(SchemaDerivation.Restriction|SchemaDerivation.Extension))==0,"DerivationFlags");
+        }
+        foreach(var item in e.Values)
+        {
+            Experiment.Require(!string.IsNullOrWhiteSpace(item.Key)&&!string.IsNullOrWhiteSpace(item.Scope)&&!item.Heads.IsDefault,"DeclarationShape");XmlConvert.VerifyNCName(item.Name);
+            Experiment.Require((item.Block&~(SchemaDerivation.Restriction|SchemaDerivation.Extension|SchemaDerivation.Substitution))==0,"DerivationFlags");
+        }
+        TypeAddresses=t.ToFrozenDictionary(x=>x.Key,x=>TypeAddress(x.Value),StringComparer.Ordinal);
+        ElementAddresses=e.ToFrozenDictionary(x=>x.Key,x=>"element:"+x.Value.Name+"|"+x.Value.Scope,StringComparer.Ordinal);
+        string T(string key)=>TypeAddresses.TryGetValue(key,out var a)?a:throw new Failure("MissingType");
+        string E(string key)=>ElementAddresses.TryGetValue(key,out var a)?a:throw new Failure("MissingHead");
+        Types=t.Values.Select(x=>new NormalType(T(x.Key),x.Base is null?null:T(x.Base),x.Method,x.Block,x.ExclusiveSlot)).ToFrozenDictionary(x=>x.Address,StringComparer.Ordinal);
+        Elements=e.Values.Select(x=>new NormalElement(E(x.Key),x.Name,T(x.Type),x.Heads.Select(E).Order(StringComparer.Ordinal).ToImmutableArray(),x.Abstract,x.Nillable,x.Block,x.Scope)).ToFrozenDictionary(x=>x.Address,StringComparer.Ordinal);
+        Validate(false);
+    }
+    private Graph(Dictionary<string,NormalType> types,Dictionary<string,NormalElement> elements)
+    {
+        Types=types.ToFrozenDictionary(StringComparer.Ordinal);Elements=elements.ToFrozenDictionary(StringComparer.Ordinal);
+        TypeAddresses=FrozenDictionary<string,string>.Empty;ElementAddresses=FrozenDictionary<string,string>.Empty;
+        Validate(true);
+    }
+    private void Validate(bool union)
+    {
+        foreach(var t in Types.Values)
+        {
+            var seen=new HashSet<string>(StringComparer.Ordinal);var current=t;
+            while(true)
+            {
+                Experiment.Require(seen.Add(current.Address),"TypeCycle");
+                if(current.Base is null)break;
+                Experiment.Require(Types.ContainsKey(current.Base),"MissingType");current=Types[current.Base];
+            }
+        }
+        foreach(var e in Elements.Values)
+        {
+            Experiment.Require(Types.ContainsKey(e.Type),"MissingType");
+            void Walk(string address,HashSet<string> path)
+            {
+                Experiment.Require(path.Add(address),"AffiliationCycle");
+                foreach(var h in Elements[address].Heads)
+                {
+                    Experiment.Require(Elements.ContainsKey(h)&&Elements[h].Scope=="global","MissingHead");
+                    Walk(h,new(path,StringComparer.Ordinal));
+                }
+            }
+            Walk(e.Address,new(StringComparer.Ordinal));
+        }
+        // Synthetic union-only coherence oracle. This is not an XSD UPA implementation.
+        if(!(union&&Experiment.Mutation=="union"))
+            Experiment.Require(!Types.Values.Where(t=>t.ExclusiveSlot is not null).GroupBy(t=>t.ExclusiveSlot,StringComparer.Ordinal).Any(g=>g.Count()>1),"UnionConstraint");
+    }
+    internal static Graph Union(Graph source,Graph target)
+    {
+        var types=source.Types.ToDictionary(StringComparer.Ordinal);var elements=source.Elements.ToDictionary(StringComparer.Ordinal);
+        foreach(var p in target.Types)
+        {
+            if(types.TryGetValue(p.Key,out var t))Experiment.Require(Experiment.Mutation=="qname" || t==p.Value,"TypeConflict");
+            else types.Add(p.Key,p.Value);
+        }
+        foreach(var p in target.Elements)
+        {
+            if(elements.TryGetValue(p.Key,out var e))Experiment.Require(Experiment.Mutation=="qname" || JsonSerializer.Serialize(e)==JsonSerializer.Serialize(p.Value),"DeclarationConflict");
+            else elements.Add(p.Key,p.Value);
+        }
+        return new(types,elements);
+    }
+    internal bool Derived(string actual,string expected)
+    {
+        for(string? current=actual;current is not null;current=Types[current].Base)if(current==expected)return true;
+        return false;
+    }
+    internal bool Member(string actual,string expected)
+    {
+        var a=Elements[actual];var h=Elements[expected];
+        if(a.Scope!="global"||h.Scope!="global"||a.Abstract)return false;
+        if(actual==expected)return true;
+        if(h.Block.HasFlag(SchemaDerivation.Substitution))return false;
+        var pending=new Stack<string>(a.Heads);var seen=new HashSet<string>(StringComparer.Ordinal);bool found=false;
+        while(pending.TryPop(out var c)){if(!seen.Add(c))continue;if(c==expected){found=true;break;}foreach(var b in Elements[c].Heads)pending.Push(b);}
+        if(!found||!Derived(a.Type,h.Type))return false;
+        var methods=SchemaDerivation.None;var blocked=h.Block|Types[h.Type].Block;
+        for(var t=Types[a.Type];t.Address!=h.Type;t=Types[t.Base!]){methods|=t.Method;blocked|=Types[t.Base!].Block;}
+        return (methods&blocked)==0;
+    }
+}
+
+internal static class Keys
+{
+    internal static string CanonicalUri(Uri uri)
+    {
+        Experiment.Require(uri is not null&&uri.IsAbsoluteUri&&uri.Fragment.Length==0&&uri.UserInfo.Length==0,"ResourceUri");
+        return uri.AbsoluteUri;
+    }
+    private static string Digest(Action<BinaryWriter> write)
+    {
+        using var buffer=new MemoryStream();using(var w=new BinaryWriter(buffer,new UTF8Encoding(false,true),true))write(w);
+        return Convert.ToHexString(SHA256.HashData(buffer.ToArray()));
+    }
+    internal static string Universe(SchemaCompilationRequest r)
+    {
+        return Digest(w=>{
+            w.Write("c44r2-universe-v1");w.Write(Provider.ModelVersion);
+            if(Experiment.Mutation!="schema-version")w.Write((int)r.SchemaLanguage);
+            w.Write(CanonicalUri(r.BaseUri));w.Write(r.ResourcePolicyFingerprint.ToUpperInvariant());w.Write(r.StaticContextFingerprint.ToUpperInvariant());
+            var resources=(Experiment.Mutation=="root-only"?r.Resources.Take(1):r.Resources).OrderBy(x=>CanonicalUri(x.Origin),StringComparer.Ordinal).ToArray();w.Write(resources.Length);
+            foreach(var p in resources){w.Write(CanonicalUri(p.Origin));w.Write(Convert.ToHexString(SHA256.HashData(p.Content.AsSpan())));}
+            var bindings=r.NamespaceBindings.OrderBy(x=>x.Prefix,StringComparer.Ordinal).ToArray();w.Write(bindings.Length);
+            foreach(var b in bindings){w.Write(b.Prefix);w.Write(b.NamespaceUri);}
+        });
+    }
+    internal static string Execution(Session s) => Digest(w=>{
+        w.Write("c44r2-executable-v1");w.Write(s.Identity.Fingerprint);
+        if(Experiment.Mutation!="profile"){var p=s.QueryProfile;w.Write((int)p.HostLanguage);w.Write(p.HostVersion);w.Write(p.XdmRevision);w.Write(p.BehaviorProfile);w.Write(p.QueryStaticContextFingerprint.ToUpperInvariant());}
+    });
+}
+
+internal sealed class Provider : ISchemaProvider,ISchemaCompatibilityAuthority
+{
+    internal const string ModelVersion="finite-fake-components/2";
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<SchemaSessionIdentity,Session> _owned=new();
+    internal int AssessmentCalls;
+    internal bool Owns(Session s)=>_owned.TryGetValue(s.Identity,out var own)&&ReferenceEquals(own,s);
+    public SchemaOutcome<ISchemaSession> OpenSession(SchemaCompilationRequest request,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            ArgumentNullException.ThrowIfNull(request);Experiment.ValidateProfile(request.QueryProfile);
+            Experiment.Require(Enum.IsDefined(request.SchemaLanguage),"SchemaVersion");
+            Experiment.Require(!request.Resources.IsDefaultOrEmpty&&!request.NamespaceBindings.IsDefault,"ClosedResourcesRequired");
+            Experiment.Require(request.ResourcePolicyFingerprint is {Length:64}&&request.ResourcePolicyFingerprint.All(Uri.IsHexDigit)&&request.StaticContextFingerprint is {Length:64}&&request.StaticContextFingerprint.All(Uri.IsHexDigit),"SchemaContextRequired");
+            Experiment.Require(request.NamespaceBindings.All(b=>b is not null&&b.Prefix is not null&&b.NamespaceUri is not null)&&request.NamespaceBindings.Select(b=>b.Prefix).Distinct(StringComparer.Ordinal).Count()==request.NamespaceBindings.Length,"DuplicateBinding");
+            var resources=new Dictionary<string,SchemaResource>(StringComparer.Ordinal);
+            foreach(var resource in request.Resources)
+            {
+                Experiment.Require(resource is not null&&!resource.Content.IsDefault,"ResourceBytes");
+                Experiment.Require(resources.TryAdd(Keys.CanonicalUri(resource.Origin),resource),"DuplicateResource");
+            }
+            var root=Keys.CanonicalUri(request.BaseUri);Experiment.Require(resources.ContainsKey(root),"RootResource");
+            var documents=new Dictionary<string,FakeDocument>(StringComparer.Ordinal);var stack=new HashSet<string>(StringComparer.Ordinal);
+            void Visit(string uri)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                Experiment.Require(!stack.Contains(uri),"ImportCycle");if(documents.ContainsKey(uri))return;
+                Experiment.Require(resources.ContainsKey(uri),"UndeclaredImport");stack.Add(uri);
+                var doc=JsonSerializer.Deserialize<FakeDocument>(resources[uri].Content.AsSpan()) ?? throw new Failure("MalformedDescriptor");
+                Experiment.Require(!doc.Imports.IsDefault&&!doc.Types.IsDefault&&!doc.Elements.IsDefault,"MalformedDescriptor");
+                Experiment.Require(doc.Complete,"IncompleteCoverage");documents.Add(uri,doc);
+                foreach(var import in doc.Imports)Visit(Keys.CanonicalUri(new Uri(resources[uri].Origin,import)));
+                stack.Remove(uri);
+            }
+            Visit(root);Experiment.Require(documents.Count==resources.Count,"UnconsumedResource");
+            var graph=new Graph(documents.Values.SelectMany(d=>d.Types),documents.Values.SelectMany(d=>d.Elements));
+            var session=new Session(this,Experiment.CanonicalProfile(request.QueryProfile),new(ModelVersion,request.SchemaLanguage,Keys.Universe(request)),graph,documents.Values.SelectMany(d=>d.Types),documents.Values.SelectMany(d=>d.Elements));
+            _owned.TryAdd(session.Identity,session);return SchemaOutcome<ISchemaSession>.Supported(session);
+        }
+        catch(OperationCanceledException){throw;}
+        catch(Failure e){return Experiment.Refuse<ISchemaSession>(e.Message,e.Message is not ("IncompleteCoverage" or "UnsupportedProfile"));}
+        catch(Exception e) when(e is ArgumentException or JsonException or InvalidOperationException or XmlException){return Experiment.Refuse<ISchemaSession>("MalformedRequest",true);}
+    }
+    public SchemaOutcome<ISchemaCompatibilityView> Establish(SchemaCompatibilityRequest request,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            Experiment.Require(request?.Source is Session&&request.Target is Session,"ForeignProvider");
+            var source=(Session)request.Source;var target=(Session)request.Target;
+            var digestShortcut=Experiment.Mutation=="fingerprint"&&source.Identity.Fingerprint==target.Identity.Fingerprint;
+            Experiment.Require(digestShortcut || Owns(source)&&Owns(target),"ForeignProvider");
+            var consumingProfile=Experiment.CanonicalProfile(request.ExecutionProfile);
+            Experiment.Require(Experiment.Mutation=="profile"||consumingProfile==target.QueryProfile,"ExecutionProfileMismatch");
+            Experiment.Require(Experiment.Mutation=="schema-version"||source.Identity.Universe.SchemaLanguage==target.Identity.Universe.SchemaLanguage,"SchemaVersionCoverage");
+            Experiment.Require(Experiment.Mutation!="token-only"||ReferenceEquals(source,target),"TokenOnlyRestriction");
+            var graph=Graph.Union(source.Graph,target.Graph);
+            return SchemaOutcome<ISchemaCompatibilityView>.Supported(new View(source,target,consumingProfile,graph));
+        }
+        catch(Failure e){return Experiment.Refuse<ISchemaCompatibilityView>(e.Message,e.Message is "TypeConflict" or "DeclarationConflict" or "UnionConstraint");}
+    }
+}
+
+internal sealed class Session : ISchemaSession
+{
+    internal Provider Owner { get; }
+    internal Graph Graph { get; }
+    private readonly FrozenDictionary<string,SchemaTypeIdentity> _types;
+    private readonly FrozenDictionary<string,SchemaDeclarationIdentity> _elements;
+    internal Session(Provider owner,QuerySemanticProfile profile,SchemaUniverseIdentity universe,Graph graph,IEnumerable<TypeDef> types,IEnumerable<ElementDef> elements)
+    {
+        Owner=owner;Graph=graph;QueryProfile=profile;var issuer=SchemaIdentityIssuer.Create(universe);Identity=issuer.Identity;
+        _types=types.ToFrozenDictionary(t=>t.Key,t=>issuer.InternType(t.Key,t.Name is null?null:Name(t.Name)),StringComparer.Ordinal);
+        _elements=elements.ToFrozenDictionary(e=>e.Key,e=>issuer.InternDeclaration(e.Key,Name(e.Name),e.Scope),StringComparer.Ordinal);issuer.Seal();
+    }
+    internal static SchemaName Name(string text)=>new("urn:c44r2",text);
+    public SchemaSessionIdentity Identity { get; }
+    public QuerySemanticProfile QueryProfile { get; }
+    internal SchemaTypeIdentity Type(string key)=>_types[key];
+    internal SchemaDeclarationIdentity Element(string key)=>_elements[key];
+    internal void Require(SchemaTypeIdentity id)=>Experiment.Require(id is not null&&ReferenceEquals(id.Session,Identity)&&_types.TryGetValue(id.Key,out var own)&&ReferenceEquals(own,id),"ForeignTypeIdentity");
+    internal void Require(SchemaDeclarationIdentity id)=>Experiment.Require(id is not null&&ReferenceEquals(id.Session,Identity)&&_elements.TryGetValue(id.Key,out var own)&&ReferenceEquals(own,id),"ForeignDeclarationIdentity");
+    public SchemaOutcome<SchemaTypeIdentity> ResolveType(SchemaName name,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();var result=_types.Values.FirstOrDefault(t=>t.DisplayName==name);
+        return result is null?Experiment.Refuse<SchemaTypeIdentity>("TypeMissing",true):SchemaOutcome<SchemaTypeIdentity>.Supported(result);
+    }
+    public SchemaOutcome<SchemaDeclarationIdentity> ResolveElement(SchemaName name,string scope,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();var result=_elements.Values.FirstOrDefault(e=>e.Name==name&&e.Scope==scope);
+        return result is null?Experiment.Refuse<SchemaDeclarationIdentity>("DeclarationMissing",true):SchemaOutcome<SchemaDeclarationIdentity>.Supported(result);
+    }
+    public SchemaOutcome<SchemaDeclarationIdentity> ResolveAttribute(SchemaName name,string scope,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();return Experiment.Refuse<SchemaDeclarationIdentity>("AttributeAssessmentNotModeled");
+    }
+    public SchemaOutcome<SchemaElementDescription> DescribeElement(SchemaDeclarationIdentity declaration,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();Require(declaration);var e=Graph.Elements[Graph.ElementAddresses[declaration.Key]];
+        return SchemaOutcome<SchemaElementDescription>.Supported(new(declaration,_types.Values.Single(t=>Graph.TypeAddresses[t.Key]==e.Type),e.Heads.Select(h=>_elements.Values.Single(d=>Graph.ElementAddresses[d.Key]==h)).ToImmutableArray(),e.Abstract,e.Nillable,e.Block));
+    }
+    public SchemaOutcome<SchemaTypeDescription> DescribeType(SchemaTypeIdentity type,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();Require(type);var t=Graph.Types[Graph.TypeAddresses[type.Key]];
+        return SchemaOutcome<SchemaTypeDescription>.Supported(new(type,SchemaTypeKind.Atomic,t.Base is null?[]:[_types.Values.Single(d=>Graph.TypeAddresses[d.Key]==t.Base)],[],null,"integer"));
+    }
+    public SchemaOutcome<bool> IsDerivedFrom(SchemaTypeIdentity actual,SchemaTypeIdentity expected,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();Require(actual);Require(expected);return SchemaOutcome<bool>.Supported(Graph.Derived(Graph.TypeAddresses[actual.Key],Graph.TypeAddresses[expected.Key]));
+    }
+    public SchemaOutcome<ImmutableArray<SchemaDeclarationIdentity>> GetActualMembers(SchemaDeclarationIdentity head,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();Require(head);
+        return SchemaOutcome<ImmutableArray<SchemaDeclarationIdentity>>.Supported(_elements.Values.Where(e=>Graph.Member(Graph.ElementAddresses[e.Key],Graph.ElementAddresses[head.Key])).OrderBy(e=>e.Key,StringComparer.Ordinal).ToImmutableArray());
+    }
+    public SchemaOutcome<SchemaAssessment> Assess(SchemaAssessmentRequest request,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();Interlocked.Increment(ref Owner.AssessmentCalls);
+        if(request.Mode!=SchemaAssessmentMode.Strict||request.RequestedType is not null||request.GoverningDeclaration is not null)return Experiment.Refuse<SchemaAssessment>("AssessmentModeNotModeled");
+        // Finite fake assessment: an original hinted type must exist in this universe.
+        if(request.Candidate is not FakeNode node)return Experiment.Refuse<SchemaAssessment>("FakeNodeRequired");
+        node.Lease.Use();
+        if(!_types.ContainsKey(node.HintedType))return Experiment.Refuse<SchemaAssessment>("TypeMissing",true);
+        if(!_elements.TryGetValue(node.DeclarationKey,out var declaration))return Experiment.Refuse<SchemaAssessment>("DeclarationMissing",true);
+        var annotation=new SchemaNodeAnnotation(new(this,Type(node.HintedType),node.SourceIdentity),declaration,false,false,false,false,false);
+        return SchemaOutcome<SchemaAssessment>.Supported(new(node.With(annotation)));
+    }
+}
+
+internal sealed class View(Session source,Session target,QuerySemanticProfile profile,Graph graph) : ISchemaCompatibilityView
+{
+    public ISchemaSession Source=>source;
+    public ISchemaSession Target=>target;
+    public QuerySemanticProfile ExecutionProfile=>profile;
+    public SchemaOutcome<bool> IsDerivedFrom(SchemaTypeIdentity actual,SchemaTypeIdentity expected,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();source.Require(actual);target.Require(expected);
+        return SchemaOutcome<bool>.Supported(graph.Derived(source.Graph.TypeAddresses[actual.Key],target.Graph.TypeAddresses[expected.Key]));
+    }
+    public SchemaOutcome<bool> MatchesElement(SchemaNodeAnnotation actual,SchemaDeclarationIdentity expected,CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();target.Require(expected);
+        if(!(Experiment.Mutation=="storage-id"&&actual.ValueAnnotation.SourceIdentity is not null))
+        {
+            Experiment.Require(ReferenceEquals(actual.ValueAnnotation.Session,source),"ForeignAnnotationSession");
+            source.Require(actual.ValueAnnotation.Type);if(actual.Declaration is not null)source.Require(actual.Declaration);
+        }
+        if(actual.Declaration is null)return SchemaOutcome<bool>.Supported(false);
+        var a=source.Graph.Elements[source.Graph.ElementAddresses[actual.Declaration.Key]];
+        if(Experiment.Mutation=="revalidate")
+        {
+            var repeat=target.Assess(new(new FakeNode("M",actual.ValueAnnotation.Type.Key,actual.Declaration.Key,actual.ValueAnnotation.SourceIdentity),SchemaAssessmentMode.Strict,null,null),cancellationToken);
+            if(repeat.Verdict!=SchemaVerdict.Supported)return SchemaOutcome<bool>.Supported(false);
+        }
+        return SchemaOutcome<bool>.Supported(graph.Member(a.Address,target.Graph.ElementAddresses[expected.Key])&&(!actual.IsNilled||a.Nillable)&&graph.Derived(source.Graph.TypeAddresses[actual.ValueAnnotation.Type.Key],a.Type));
+    }
+}
+
+internal sealed class SourceLease : IDisposable
+{
+    private bool _disposed;
+    internal void Use()=>ObjectDisposedException.ThrowIf(_disposed,this);
+    public void Dispose()=>_disposed=true;
+}
+internal sealed class FakeNode : ISchemaAnnotatedNode
+{
+    internal string HintedType { get; }
+    internal string DeclarationKey { get; }
+    internal SchemaSourceIdentity? SourceIdentity { get; }
+    internal SourceLease Lease { get; }
+    private readonly object _identity;
+    private readonly string _name;
+    internal FakeNode(string name,string hintedType,string declarationKey,SchemaSourceIdentity? source,SourceLease? lease=null,object? identity=null,SchemaNodeAnnotation? annotation=null)
+        =>(_name,HintedType,DeclarationKey,SourceIdentity,Lease,_identity,SchemaAnnotation)=(name,hintedType,declarationKey,source,lease??new(),identity??new(),annotation);
+    internal FakeNode With(SchemaNodeAnnotation? annotation)=>new(_name,HintedType,DeclarationKey,SourceIdentity,Lease,_identity,annotation);
+    public SchemaNodeAnnotation? SchemaAnnotation { get; }
+    public XdmNodeKind NodeKind { get {Lease.Use();return XdmNodeKind.Element;} }
+    public string LocalName { get {Lease.Use();return _name;} }
+    public string NamespaceUri=>"urn:c44r2";
+    public string Prefix=>"";
+    public string StringValue { get {Lease.Use();return "12";} }
+    public XdmValue TypedValue { get {Lease.Use();return XdmValue.FromInteger(12);} }
+    public bool HasNoTypedValue=>SchemaAnnotation?.HasNoTypedValue??false;
+    public bool IsNilled=>SchemaAnnotation?.IsNilled??false;
+    public IXdmNode? Parent=>null;
+    public IXdmNode? Document=>null;
+    public long DocumentOrder=>1;
+    public string BaseUri=>"urn:c44r2:source";
+    public string DocumentUri=>"";
+    public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>XdmSequence.Empty;
+    public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>XdmSequence.Empty;
+    public XdmSequence Axis(XdmAxis axis)=>XdmSequence.Empty;
+    public bool IsSameNode(IXdmNode other)=>other is FakeNode node&&ReferenceEquals(_identity,node._identity);
+    public string ToXmlString()=>"<"+LocalName+">"+StringValue+"</"+LocalName+">";
+}
+internal readonly record struct AtomicValue(XdmValue Value,SchemaValueAnnotation? Annotation)
+{
+    internal AtomicValue Bind(ISchemaCompatibilityView view,SchemaTypeIdentity expected,QuerySemanticProfile executionProfile)
+    {
+        Experiment.Require(Annotation is not null,"MissingIdentity");
+        Experiment.Require(Experiment.Mutation=="profile"||Experiment.CanonicalProfile(executionProfile)==view.ExecutionProfile,"ExecutionProfileMismatch");
+        Experiment.Require(ReferenceEquals(Annotation.Session,view.Source),"ForeignAnnotationSession");
+        var original=Annotation;
+        Experiment.Require(Experiment.Owned(()=>view.IsDerivedFrom(original.Type,expected,default)),"XPTY0004");
+        return Experiment.Mutation=="rewrite"?new(Value,new(view.Target,expected,Annotation.SourceIdentity)):this;
+    }
+    internal AtomicValue ToBuiltIn()=>new(XdmValue.FromInteger(Value.IntegerValue),null);
+}
+internal sealed class TreeSnapshot
+{
+    private readonly XElement _xml;
+    internal FrozenDictionary<string,SchemaNodeAnnotation> Annotations { get; }
+    internal string Xml=>_xml.ToString(SaveOptions.DisableFormatting);
+    internal TreeSnapshot(XElement source,IEnumerable<KeyValuePair<string,SchemaNodeAnnotation>> annotations)
+    {
+        _xml=new(source);Annotations=annotations.ToFrozenDictionary(x=>x.Key,x=>x.Value,StringComparer.Ordinal);
+        Experiment.Require(Annotations.Values.Select(a=>a.ValueAnnotation.Session).Distinct().Count()<=1,"MixedTreeAuthority");
+    }
+    internal TreeSnapshot Copy(bool preserve)=>new(_xml,preserve?Annotations:Experiment.Mutation=="strip"?Annotations.Where(x=>x.Key!="/"):[]);
+    internal AtomicValue Atomize(string path,XdmValue value)=>new(value,Annotations.TryGetValue(path,out var a)?a.HasNoTypedValue?throw new Failure("FOTY0012"):a.ValueAnnotation:null);
+}
+internal sealed class Registration(ISchemaSession session) : IDisposable
+{
+    private ISchemaSession? _session=session;
+    internal ISchemaSession Capture()=>_session??throw new ObjectDisposedException(nameof(Registration));
+    public void Dispose()=>_session=null;
+}

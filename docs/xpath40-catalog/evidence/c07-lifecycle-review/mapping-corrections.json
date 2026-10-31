@@ -1,0 +1,15 @@
+{
+  "entry": "rejected/mapping-arrow-gtgt.md",
+  "field": "manifestIds",
+  "before": [
+    "mapping-arrow-edge",
+    "mapping-arrow-main",
+    "rejected-mapping-arrow-edge",
+    "rejected-mapping-arrow-main"
+  ],
+  "after": [
+    "rejected-mapping-arrow-edge",
+    "rejected-mapping-arrow-main"
+  ],
+  "reason": "Use complete identifier tokens or exact linked fixture paths; do not count mapping-arrow-main/edge solely as substrings inside rejected-mapping-arrow-main/edge. Source text and Git blob remain unchanged; both accepted cases remain mapped by their own entry."
+}

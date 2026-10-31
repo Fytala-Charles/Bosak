@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-29",
+  "scope": "Isolated identity policy model, mutations, real file observations and recorded runtime-evidence boundary",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/build.txt",
+      "bytes": 544,
+      "sha256": "dff842563f36d584ee1522f1b07504012b7712528c0d89353bac5a0ca4a0e92e"
+    },
+    {
+      "path": "evidence/compiled-source-identities.json",
+      "bytes": 454,
+      "sha256": "e4bee205d2241e55870ab1c0edbe312a92fd03b46a608930e67ce2f8b23c4bb0"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4620,
+      "sha256": "99b442d6a9983a0a0ec197035a2af027bab3b099560a36ed444d04ae005af3a9"
+    },
+    {
+      "path": "evidence/final-results.json",
+      "bytes": 5233,
+      "sha256": "b107ed7c3ae68df14173b5b09de5fe77689fe19ea78f970efb6a28764cb4d046"
+    },
+    {
+      "path": "evidence/final-run.txt",
+      "bytes": 91,
+      "sha256": "bd89e844542526fce6fd1561d27c882a6d477aa085acb2f7a665299079ab4e2d"
+    },
+    {
+      "path": "evidence/initial-Program.cs.txt",
+      "bytes": 12617,
+      "sha256": "6cebb053eb07b44140715206e02a0a4e76b7aee359b7c3fef8fc8d181184f4e4"
+    },
+    {
+      "path": "evidence/initial-results.json",
+      "bytes": 4742,
+      "sha256": "ef1f3b7f74012137866384be046a74fcd4951eca801cc480ed555f1588b8f578"
+    },
+    {
+      "path": "evidence/initial-run.txt",
+      "bytes": 184,
+      "sha256": "ca8df640ea8af1fd05095226f54bd9ca0a8abd14a4fe492d1c89fa02e56dea0e"
+    },
+    {
+      "path": "evidence/inputs.json",
+      "bytes": 7437,
+      "sha256": "f2be354f764f9d1f13aee2c03d141d476744d7912e29cc7c3af206eb2ef045de"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1042,
+      "sha256": "6ae40e3ff19ae4af9b9c5b2c5bff4c2a9348a8ddce3ff3d5816f35f95a5253ab"
+    },
+    {
+      "path": "evidence/process.json",
+      "bytes": 104,
+      "sha256": "f8a48ff044387c21479aad27fa6f56d5cd6dbca0df4aa8df75ff06befdcddf65"
+    },
+    {
+      "path": "evidence/Program.cs.txt",
+      "bytes": 14156,
+      "sha256": "e7fd6b02cb81f6e3f37ccd0b662f9ffccd959a8fc02f65925ffb4de07b83718c"
+    },
+    {
+      "path": "evidence/Prototype.csproj.txt",
+      "bytes": 261,
+      "sha256": "86c7af2e18087ed1579d55514fe3b7b4c449e174da19a5f6e73fde53b1bcefba"
+    },
+    {
+      "path": "evidence/recorded-load-names.json",
+      "bytes": 200,
+      "sha256": "7bff6963e4f9c07096ae3bc0a4e4042df7d1b3921a445fc0f37fc731f31d2a6c"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "POLICY-SCOPE-SNAPSHOT.md",
+      "bytes": 8617,
+      "sha256": "158b053303f02775ca5f9e02504e7ebaf4b5ade7faa0048edfd957567ed0e448"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5400,
+      "sha256": "bb8046002e1d941cfcd3d4814d53a30318b5832dbf47c5848e7b02bfaee893b0"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 472,
+      "sha256": "e9d7710f1a61e76671071637545e03bb01089403ffddcb12e20875503e637b16"
+    }
+  ]
+}

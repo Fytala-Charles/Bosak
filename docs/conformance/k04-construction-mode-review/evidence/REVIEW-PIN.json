@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C33",
+  "kind": "Read-only construction/type-annotation boundary review",
+  "sourceBase": "71233bfc00930f18d6845d77a1e95930aa49b87a",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.6 Construction Declaration",
+      "3.9.1 Direct Element Constructors: copied-node type/name/nilled/typed-value properties",
+      "Construction-preserve namespace-sensitive values: XQTY0086"
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "scope": [
+    "Complete QT3 catalog inventory; isolate only construction prolog refusal",
+    "Run unchanged 87 originals; preserve independent dependencies and failed assertion receipts",
+    "Audit current type/nilled/schema annotations and Bosak.Schema ownership without changing backend",
+    "No source, fixtures, baseline, version or release change"
+  ],
+  "limits": [
+    "Normal source, routing, fixtures/assertions, dependency guards, baselines, version and release unchanged",
+    "No qt4 XQuery applicability claim",
+    "Bosak.Schema retains XSD1.1 ownership; current XmlSchemaSet environment does not certify it"
+  ]
+}

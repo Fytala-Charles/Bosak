@@ -1,0 +1,8 @@
+{
+  "remainingQt3Skips": 424,
+  "independentDependencyCases": 368,
+  "otherSkips": 56,
+  "xsdVersionProfileCases": 37,
+  "separateSchemaHarnessErrors": 6,
+  "disposition": "All remaining dependency cases retain independent profile rejection; no automatic engine-defect or schema-backend capability claim."
+}

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — parse components, build routes and decode values</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Use validated typed Boolean options and remove raw query when deliberately supplying an empty query map. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Invoice API URIs — Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri), [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri), and [fn:decode-from-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-decode-from-uri).
@@ -115,6 +117,8 @@ do not imply such an ordering contract. Semantic value preservation differs
 from byte-for-byte roundtripping.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Raw and decoded URI fields, repeated query keys and plus/percent behavior; Structured segment/query precedence and non-byte-preserving roundtrip; One-pass UTF-8 decoding, absence and malformed syntax. **Boundaries:** Use validated typed Boolean options and remove raw query when deliberately supplying an empty query map. Follow-up groups: F01, F04. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Use `CompileOptions.Compatibility40` for the new functions. The default XPath
 3.1 profile rejects them. The fixed route comparison uses `Compatibility31`.

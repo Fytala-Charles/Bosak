@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-28",
+  "kind": "Pre-implementation adoption for prerequisite lexical constructor context isolation",
+  "sourceBase": "3a5017df",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.9 Copy-Namespaces Declaration",
+      "3.9.1 Direct Element Constructors: copied-element in-scope namespaces",
+      "3.9.3 Computed Constructors: corresponding element/document content rules",
+      "4.1 Prolog: declaration ordering"
+    ]
+  },
+  "additionalSections": [
+    "2.1 Static context and module lexical scope",
+    "3.9.1 Direct Element Constructors: lexical namespace declarations versus enclosed-expression copies",
+    "4.16 Variable Declaration: initializer static context"
+  ],
+  "finding": "Seven original cases expose caller constructor namespace leakage into lazy globals, and erased literal-child versus enclosed-expression provenance.",
+  "contract": [
+    "Lazy global initializers and named module functions use declaring-module namespace/default namespace and constructor-local scope, restoring caller state afterward",
+    "Literal nested elements retain lexical namespace declarations; copy modes apply to existing nodes from enclosed expressions, not lexical child construction",
+    "No source node mutation; preserve construction and admission guards"
+  ]
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "id": "none-transform-1",
+    "registration": "none",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-transform-1",
+    "registration": "none",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-transform-1",
+    "registration": "none",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-transform-0",
+    "registration": "none",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-transform-0",
+    "registration": "none",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-transform-0",
+    "registration": "none",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-load-xquery-module-2",
+    "registration": "none",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-load-xquery-module-2",
+    "registration": "none",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-load-xquery-module-2",
+    "registration": "none",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-scan-3",
+    "registration": "none",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-scan-3",
+    "registration": "none",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "none-scan-3",
+    "registration": "none",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "transform-transform-1",
+    "registration": "transform",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "transform-transform-1",
+    "registration": "transform",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "transform-transform-1",
+    "registration": "transform",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "transform-transform-0",
+    "registration": "transform",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-transform-0",
+    "registration": "transform",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-transform-0",
+    "registration": "transform",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-load-xquery-module-2",
+    "registration": "transform",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-load-xquery-module-2",
+    "registration": "transform",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-load-xquery-module-2",
+    "registration": "transform",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-scan-3",
+    "registration": "transform",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-scan-3",
+    "registration": "transform",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "transform-scan-3",
+    "registration": "transform",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-transform-1",
+    "registration": "all",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-transform-1",
+    "registration": "all",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-transform-1",
+    "registration": "all",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),1))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-transform-0",
+    "registration": "all",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "all-transform-0",
+    "registration": "all",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "all-transform-0",
+    "registration": "all",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','transform'),0))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "all-load-xquery-module-2",
+    "registration": "all",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-load-xquery-module-2",
+    "registration": "all",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-load-xquery-module-2",
+    "registration": "all",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','load-xquery-module'),2))",
+    "expected": "true",
+    "error": null
+  },
+  {
+    "id": "all-scan-3",
+    "registration": "all",
+    "profile": "XPath31",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "all-scan-3",
+    "registration": "all",
+    "profile": "XPath40",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "false",
+    "error": null
+  },
+  {
+    "id": "all-scan-3",
+    "registration": "all",
+    "profile": "XPath40Experimental",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','scan'),3))",
+    "expected": "true",
+    "error": null
+  }
+]

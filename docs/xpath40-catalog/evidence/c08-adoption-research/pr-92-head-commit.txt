@@ -1,0 +1,5 @@
+7327d310b2f5d1f3d22b406dbc0a84b2f826ceff
+2026-10-08T21:50:50+02:00
+2026-10-08T21:50:50+02:00
+docs: record 4.0-S8 commit hashes in handover
+

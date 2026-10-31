@@ -1,0 +1,29 @@
+// Generated read-only assembly binding observer for isolated qualification.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Concurrent;
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text.Json;
+internal static class StartupHook
+{
+ private static readonly ConcurrentDictionary<string,object> Seen=new();
+ private static readonly ConcurrentQueue<string> Errors=new();
+ public static void Initialize()
+ {
+  AppDomain.CurrentDomain.AssemblyLoad+=(_,e)=>Observe(e.LoadedAssembly);
+  foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())Observe(assembly);
+  AppDomain.CurrentDomain.ProcessExit+=(_,_)=>{
+   try{var folder=Environment.GetEnvironmentVariable("BOSAK_BINDING_DIRECTORY")!;Directory.CreateDirectory(folder);File.WriteAllText(Path.Combine(folder,Environment.ProcessId+".json"),JsonSerializer.Serialize(new{processId=Environment.ProcessId,assemblies=Seen.OrderBy(p=>p.Key).Select(p=>p.Value).ToArray(),errors=Errors.ToArray()},new JsonSerializerOptions{WriteIndented=true}));}catch{ }
+  };
+ }
+ private static void Observe(Assembly assembly)
+ {
+  try{
+   var name=assembly.GetName().Name;if(name?.StartsWith("Bosak.",StringComparison.Ordinal)!=true||assembly.IsDynamic)return;
+   var path=assembly.Location;if(string.IsNullOrEmpty(path))return;var context=AssemblyLoadContext.GetLoadContext(assembly);
+   Seen.TryAdd(name+"|"+path+"|"+context?.Name,new{name,path,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant(),context=context?.Name,collectible=assembly.IsCollectible});
+  }catch(Exception e){Errors.Enqueue(e.GetType().Name+": "+e.Message);}
+ }
+}

@@ -1,0 +1,923 @@
+[
+  {
+    "Name": "si-apply-templates-007",
+    "Set": "si-apply-templates",
+    "Original": {
+      "Name": "si-apply-templates-007",
+      "Set": "si-apply-templates",
+      "file": "tests/xslt30-test/tests/strm/si-apply-templates/_si-apply-templates-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"si-apply-templates-007\">\n      <ns0:description>Test streaming apply-templates with a schema-aware match pattern (Saxon bug 3563).</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2017-12-08\" />\n      <ns0:environment>\n         <ns0:schema file=\"../docs/books.xsd\" />\n         <ns0:source role=\".\" streaming=\"true\" file=\"../docs/books.xml\" validation=\"strict\" />\n      </ns0:environment>\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"si-apply-templates-007.xsl\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:all-of>\n            <ns0:assert>empty(//AUTHOR)</ns0:assert>\n            <ns0:assert>exists(//TITLE)</ns0:assert>\n         </ns0:all-of>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\">\n         <ns0:schema file=\"../docs/books.xsd\" />\n         <ns0:source role=\".\" streaming=\"true\" file=\"../docs/books.xml\" validation=\"strict\" />\n      </ns0:environment>\n      ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/strm/docs/books.xml",
+        "tests/xslt30-test/tests/strm/docs/books.xsd",
+        "tests/xslt30-test/tests/strm/si-apply-templates/si-apply-templates-007.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "si-apply-templates-007",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "si-apply-templates-012",
+    "Set": "si-apply-templates",
+    "Original": {
+      "Name": "si-apply-templates-012",
+      "Set": "si-apply-templates",
+      "file": "tests/xslt30-test/tests/strm/si-apply-templates/_si-apply-templates-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"si-apply-templates-012\">\n      <ns0:description>Schema-aware built-in shallow-copy drops type annotation.</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2017-12-08\" />\n      <ns0:environment>\n         <ns0:schema file=\"../docs/books.xsd\" />\n         <ns0:source role=\".\" streaming=\"true\" file=\"../docs/books.xml\" validation=\"strict\" />\n      </ns0:environment>\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"si-apply-templates-012.xsl\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out='false'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\">\n         <ns0:schema file=\"../docs/books.xsd\" />\n         <ns0:source role=\".\" streaming=\"true\" file=\"../docs/books.xml\" validation=\"strict\" />\n      </ns0:environment>\n      ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/strm/docs/books.xml",
+        "tests/xslt30-test/tests/strm/docs/books.xsd",
+        "tests/xslt30-test/tests/strm/si-apply-templates/si-apply-templates-012.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "si-apply-templates-012",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "catalog-005",
+    "Set": "catalog",
+    "Original": {
+      "Name": "catalog-005",
+      "Set": "catalog",
+      "file": "tests/xslt30-test/tests/misc/catalog/_catalog-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog-005\">\n      <ns0:description>Test that all non-error stylesheets are valid against the schema for\n         stylesheets</ns0:description>\n      <ns0:keywords>catalog-self-test tests-stylesheet-schema-validity xsl:import-schema</ns0:keywords>\n      <ns0:created by=\"Michael Kay\" on=\"2013-11-28\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2019-03-10\" change=\"Bug #30414: removed global schema-aware flag, local flag stays, this test requires schema-aware\" />\n      <ns0:modified by=\"Michael Kay\" on=\"2021-06-14\" change=\"Add XML 1.1 dependency\" />\n      <ns0:environment ref=\"catalog005\" />\n      <ns0:dependencies>\n         <ns0:spec value=\"XSLT30+\" />\n         <ns0:feature value=\"schema_aware\" />\n         <ns0:feature value=\"XML_1.1\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"catalog-005.xsl\" />\n         <ns0:param name=\"supports_xml1.1\" static=\"yes\" select=\"true()\" />\n      </ns0:test>\n      <ns0:result>\n         \n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog005\">\n      <ns0:source role=\".\" file=\"../../../catalog.xml\" validation=\"strict\" />\n      \n      <ns0:schema role=\"source-reference\" file=\"../../../admin/catalog-schema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"../../../admin/xml.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"XMLSchema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"source-reference\" file=\"schema-for-xslt30.xsd\" xsd-version=\"1.1\" />\n   </ns0:environment>\n\n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/admin/catalog-schema.xsd",
+        "tests/xslt30-test/admin/xml.xsd",
+        "tests/xslt30-test/catalog.xml",
+        "tests/xslt30-test/tests/misc/catalog/XMLSchema.xsd",
+        "tests/xslt30-test/tests/misc/catalog/catalog-005.xsl",
+        "tests/xslt30-test/tests/misc/catalog/schema-for-xslt30.xsd"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "catalog-005",
+      "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "catalog-005b",
+    "Set": "catalog",
+    "Original": {
+      "Name": "catalog-005b",
+      "Set": "catalog",
+      "file": "tests/xslt30-test/tests/misc/catalog/_catalog-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog-005b\">\n      <ns0:description>Variant of catalog-005 for processors that don't support XML 1.1</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2021-06-14\" />\n      <ns0:environment ref=\"catalog005\" />\n      <ns0:dependencies>\n         <ns0:spec value=\"XSLT30+\" />\n         <ns0:feature value=\"schema_aware\" />\n         <ns0:feature value=\"XML_1.1\" satisfied=\"false\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"catalog-005.xsl\" />\n         <ns0:param name=\"supports_xml1.1\" static=\"yes\" select=\"false()\" />\n      </ns0:test>\n      <ns0:result>\n         \n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   </ns0:test-case>\n\n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog005\">\n      <ns0:source role=\".\" file=\"../../../catalog.xml\" validation=\"strict\" />\n      \n      <ns0:schema role=\"source-reference\" file=\"../../../admin/catalog-schema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"../../../admin/xml.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"XMLSchema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"source-reference\" file=\"schema-for-xslt30.xsd\" xsd-version=\"1.1\" />\n   </ns0:environment>\n\n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/admin/catalog-schema.xsd",
+        "tests/xslt30-test/admin/xml.xsd",
+        "tests/xslt30-test/catalog.xml",
+        "tests/xslt30-test/tests/misc/catalog/XMLSchema.xsd",
+        "tests/xslt30-test/tests/misc/catalog/catalog-005.xsl",
+        "tests/xslt30-test/tests/misc/catalog/schema-for-xslt30.xsd"
+      ],
+      "cohort": "separate-harness-boundary-control"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "catalog-005b",
+      "detail": "Selected=1 / Selected skipped=1; no emitted per-case reason. Source review: independent negative XML_1.1 applicability."
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-independent-applicability-skip"
+  },
+  {
+    "Name": "catalog-009",
+    "Set": "catalog",
+    "Original": {
+      "Name": "catalog-009",
+      "Set": "catalog",
+      "file": "tests/xslt30-test/tests/misc/catalog/_catalog-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog-009\">\n      <ns0:description>Validate all examples in the spec</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2015-09-07\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2019-03-10\" change=\"Bug #30414: remove global schema-aware flag, leave local flag, test requires schema-aware feature\" />\n      \n      <ns0:environment ref=\"catalog005\" />\n      <ns0:dependencies>\n         <ns0:spec value=\"XSLT30+\" />\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"catalog-009.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>empty(/out/error)</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n\n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"catalog005\">\n      <ns0:source role=\".\" file=\"../../../catalog.xml\" validation=\"strict\" />\n      \n      <ns0:schema role=\"source-reference\" file=\"../../../admin/catalog-schema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"../../../admin/xml.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"secondary\" file=\"XMLSchema.xsd\" xsd-version=\"1.1\" />\n      <ns0:schema role=\"source-reference\" file=\"schema-for-xslt30.xsd\" xsd-version=\"1.1\" />\n   </ns0:environment>\n\n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/admin/catalog-schema.xsd",
+        "tests/xslt30-test/admin/xml.xsd",
+        "tests/xslt30-test/catalog.xml",
+        "tests/xslt30-test/tests/misc/catalog/XMLSchema.xsd",
+        "tests/xslt30-test/tests/misc/catalog/catalog-009.xsl",
+        "tests/xslt30-test/tests/misc/catalog/schema-for-xslt30.xsd"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "catalog-009",
+      "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-049",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-049",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-049\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation=strict\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Michael Kay\" on=\"2015-07-08\" change=\"Bug 28762 means merging on position() no longer makes sense\" />\n      <ns0:modified by=\"Michael Kay\" on=\"2017-03-03\" change=\"Label as schema-aware\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2018-12-23\" change=\"Making the test valid for non-schema-aware processors: XTSE1650\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-049.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:any-of>\n            <ns0:all-of>\n              <ns0:assert>count(/books/ok) = 3</ns0:assert>\n              <ns0:assert>count(/books/bad) = 0</ns0:assert>\n            </ns0:all-of>  \n            <ns0:error code=\"XTSE1650\" />\n         </ns0:any-of>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-049.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-049",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-050",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-050",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-050\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation failure\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2018-12-23\" change=\"Making the test valid for non-schema-aware processors: XTSE1650\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-050.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:any-of>\n            <ns0:error code=\"XTTE1510\" />\n            <ns0:error code=\"XTSE1650\" />\n         </ns0:any-of>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-050.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-050",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-051",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-051",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-051\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation by type\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Michael Kay\" on=\"2017-03-03\" change=\"Label as schema-aware\" />\n      <ns0:modified by=\"Michael Kay\" on=\"2017-06-22\" change=\"Fix bug 30131\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-051.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:all-of>\n           <ns0:assert>count(/books/ok) = 4</ns0:assert>\n           <ns0:assert>count(/books/bad) = 0</ns0:assert>\n         </ns0:all-of>  \n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-051.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-051",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-052",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-052",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-052\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation by type, failure\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2018-12-23\" change=\"Making the test valid for non-schema-aware processors: XTSE1650\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-052.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:any-of>\n            <ns0:error code=\"XTTE1540\" />\n            <ns0:error code=\"XTSE1650\" />\n         </ns0:any-of>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-052.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-052",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-053",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-053",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-053\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation; both validation and type specified, error.\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2018-12-23\" change=\"Making the test valid for non-schema-aware processors: XTSE1650 can also be raised before XTSE1505 is encountered\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-053.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:any-of>\n            <ns0:error code=\"XTSE1505\" />\n            <ns0:error code=\"XTSE1650\" />\n         </ns0:any-of>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-053.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-053",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "merge-054",
+    "Set": "merge",
+    "Original": {
+      "Name": "merge-054",
+      "Set": "merge",
+      "file": "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge-054\">\n      <ns0:description>\n         xsl:merge: merge two documents with validation; validation specified without for-each-source, error.\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2014-04-10\" />\n      <ns0:modified by=\"Abel Braaksma\" on=\"2018-12-23\" change=\"Making the test valid for non-schema-aware processors: XTSE1650\" />\n      <ns0:environment ref=\"merge049\" />\n      <ns0:test>\n         <ns0:stylesheet file=\"merge-054.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:any-of>\n            <ns0:error code=\"XTSE0020\" />\n            <ns0:error code=\"XTSE1650\" />\n         </ns0:any-of>\n      </ns0:result>\n   </ns0:test-case>   \n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"merge049\">\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" />\n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/merge/books.xsd",
+        "tests/xslt30-test/tests/insn/merge/merge-054.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "merge-054",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-101",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-101",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-101\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, validation=\"strict\"</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-101\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = \"true\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-101",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-102",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-102",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-102\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, validation=\"strict\" failure</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-102\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1510\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-102",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-103",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-103",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-103\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, validation by type</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-103\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = \"true\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-103",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-104",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-104",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-104\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, validation by type, invalid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-104\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1540\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-104",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-105",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-105",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-105\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, partial validation, valid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-105\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out/ITEM/TITLE = \"Pride and Prejudice\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-105",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-106",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-106",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-106\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  instruction, partial validation, invalid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2013-12-03\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:dependencies>\n        <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-106\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1510\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-106",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-107",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-107",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-107\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  called within a function</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2015-07-09\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-107\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = '9.06'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-107",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-108",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-108",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-108\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  called with early termination</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2015-07-09\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-108\" />\n      </ns0:test>\n      <ns0:result early-exit-possible=\"true\">\n         <ns0:assert>/out = 'true'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-108",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "stream-109",
+    "Set": "source-document",
+    "Original": {
+      "Name": "stream-109",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-109\">\n      <ns0:description>Test xsl:source-document (streamable=\"yes\")  called within a function calling a constructor function</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2015-07-09\" />\n      <ns0:environment ref=\"stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-109\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = '9.06'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"stream-B\">\n     <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"true()\" />\n     <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "stream-109",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "streaming assessment/lifetime"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-101",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-101",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-101\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, validation=\"strict\"</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-101\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = \"true\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-101",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-102",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-102",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-102\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, validation=\"strict\" failure</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-102\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1510\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-102",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-103",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-103",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-103\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, validation by type</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-103\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = \"true\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-103",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-104",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-104",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-104\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, validation by type, invalid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-104\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1540\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-104",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-105",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-105",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-105\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, partial validation, valid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-105\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out/ITEM/TITLE = \"Pride and Prejudice\"</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-105",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-106",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-106",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-106\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") instruction, partial validation, invalid</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:initial-template name=\"s-106\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:error code=\"XTTE1510\" />\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-106",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-107",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-107",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-107\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") called within a function</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-107\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = '9.06'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-107",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-108",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-108",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-108\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") called with early termination</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-108\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = 'true'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-108",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "non-stream-109",
+    "Set": "source-document",
+    "Original": {
+      "Name": "non-stream-109",
+      "Set": "source-document",
+      "file": "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-109\">\n      <ns0:description>Test xsl:source-document (streamable=\"no\") called within a function calling a constructor function</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2016-08-28\" />\n      <ns0:environment ref=\"non-stream-B\" />\n      <ns0:test>\n         <ns0:initial-template name=\"s-109\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/out = '9.06'</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"non-stream-B\">\n      <ns0:stylesheet file=\"stream-B.xsl\" />\n      <ns0:param name=\"STREAMABLE\" static=\"yes\" select=\"false()\" />\n      <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" /> \n   </ns0:environment>\n   \n   ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/insn/source-document/books.xsd",
+        "tests/xslt30-test/tests/insn/source-document/stream-B.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "non-stream-109",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "accumulator-073",
+    "Set": "accumulator",
+    "Original": {
+      "Name": "accumulator-073",
+      "Set": "accumulator",
+      "file": "tests/xslt30-test/tests/decl/accumulator/_accumulator-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"accumulator-073\">\n      <ns0:description>xsl:copy-of combining copy-accumulators=yes with validation=lax</ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2017-07-19\" />\n      <ns0:environment>\n         <ns0:source role=\".\" file=\"books.xml\" validation=\"strict\" />\n         <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" xsd-version=\"1.0\" />\n      </ns0:environment>\n      <ns0:dependencies>\n         <ns0:feature value=\"schema_aware\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"accumulator-073.xsl\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert-xml>&lt;out&gt;&lt;book title=\"Jude the Obscure\" typed=\"true\"&gt;16.48&lt;/book\n            &gt;&lt;book title=\"The Big Over Easy\" typed=\"true\"&gt;21.43&lt;/book\n            &gt;&lt;book title=\"The Eyre Affair\" typed=\"true\"&gt;37.9&lt;/book\n            &gt;&lt;/out&gt;</ns0:assert-xml>          \n      </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\">\n         <ns0:source role=\".\" file=\"books.xml\" validation=\"strict\" />\n         <ns0:schema role=\"stylesheet-import\" file=\"books.xsd\" xsd-version=\"1.0\" />\n      </ns0:environment>\n      ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/decl/accumulator/accumulator-073.xsl",
+        "tests/xslt30-test/tests/decl/accumulator/books.xml",
+        "tests/xslt30-test/tests/decl/accumulator/books.xsd"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "accumulator-073",
+      "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "strip-space-009",
+    "Set": "strip-space",
+    "Original": {
+      "Name": "strip-space-009",
+      "Set": "strip-space",
+      "file": "tests/xslt30-test/tests/decl/strip-space/_strip-space-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"strip-space-009\">\n      <ns0:description>\n         Was: whitespace-0603\n         Test that whitespace text nodes are not stripped from elements having an\n         ancestor whose governing type contains an XSD 1.1 assertion. </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2012-12-07\" />\n      <ns0:environment>\n         <ns0:source role=\".\" file=\"strip-space-009.xml\" uri=\"strip-space-009.xml\" validation=\"strict\" />\n         <ns0:schema file=\"strip-space-009.xsd\" uri=\"strip-space-009.xsd\" role=\"source-reference\" xsd-version=\"1.1\" />\n      </ns0:environment>\n      <ns0:dependencies>\n         <ns0:spec value=\"XSLT10+\" />\n         <ns0:feature value=\"schema_aware\" />\n         <ns0:feature value=\"XSD_1.1\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"strip-space-009.xsl\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert>/ok</ns0:assert>\n      </ns0:result>\n   </ns0:test-case>\n\n   ",
+      "EnvironmentXml": "<ns0:environment xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\">\n         <ns0:source role=\".\" file=\"strip-space-009.xml\" uri=\"strip-space-009.xml\" validation=\"strict\" />\n         <ns0:schema file=\"strip-space-009.xsd\" uri=\"strip-space-009.xsd\" role=\"source-reference\" xsd-version=\"1.1\" />\n      </ns0:environment>\n      ",
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xml",
+        "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xsd",
+        "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xsl"
+      ],
+      "cohort": "documented-30"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "strip-space-009",
+      "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  },
+  {
+    "Name": "validation-1301",
+    "Set": "validation",
+    "Original": {
+      "Name": "validation-1301",
+      "Set": "validation",
+      "file": "tests/xslt30-test/tests/attr/validation/_validation-test-set.xml",
+      "CaseXml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2012/10/xslt-test-catalog\" name=\"validation-1301\">\n      <ns0:description>\n        Test validation=\"strict\" on an LRE using XSD 1.1 conditional type assignment.\n        Saxon bug 2316.\n      </ns0:description>\n      <ns0:created by=\"Michael Kay\" on=\"2015-02-18\" />\n      <ns0:dependencies>\n         <ns0:spec value=\"XSLT20+\" />\n         <ns0:feature value=\"schema_aware\" />\n         <ns0:feature value=\"XSD_1.1\" />\n      </ns0:dependencies>\n      <ns0:test>\n         <ns0:stylesheet file=\"validation-1301.xsl\" />\n         <ns0:initial-template name=\"main\" />\n      </ns0:test>\n      <ns0:result>\n         <ns0:assert-xml>&lt;list&gt;&lt;element type=\"type2\"&gt;&lt;child1/&gt;&lt;child2/&gt;&lt;/element&gt;&lt;/list&gt;</ns0:assert-xml>\n      </ns0:result>\n   </ns0:test-case>\n\n   ",
+      "EnvironmentXml": null,
+      "ResourceFiles": [
+        "tests/xslt30-test/tests/attr/validation/validation-1301.xsl"
+      ],
+      "cohort": "separate-harness-boundary-control"
+    },
+    "Observed": {
+      "outcome": "SKIP",
+      "name": "validation-1301",
+      "detail": "stylesheet declares xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+    },
+    "requiredCapabilities": [
+      "compile/import closure",
+      "assessment/assertion coverage",
+      "stable type identity",
+      "host error/result fidelity",
+      "conditional type assignment and xsi:type derivation"
+    ],
+    "disposition": "retained-original-skip-no-provider-qualification"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "sourceBase": "cbd0d6986df06721b0b7ee681c3ef977d8714c2c",
+  "baseNormalized": {
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "3b545e420b047fb783768e30ce31aa8ddc937f4a",
+    "AGENTS.md": "b3cda59b8711b87807122bfd1c5e8119e238b94d"
+  },
+  "proposedRaw": {
+    "proposed-TestExecutor.cs.txt": "6fc2a6ab88d7d3297d053ab0ab9f68e8da4dfadbe30fff6b036da4e894c113de",
+    "proposed-AGENTS.md.txt": "283f0ea344897a9f1c969db6afc6ac94dcca66eaa92eb86e1f2e665a22b244fd"
+  },
+  "patchSha256": "1b50c28756137cb5691cc8c3860803d658d383b83044270e2a8151eb16f4b146",
+  "files": 2
+}

@@ -150,3 +150,257 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/release-evidence/1.26.3/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 
 /docs/release-evidence/1.26.3-publication/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+/docs/xpath40-catalog/evidence/closure-triage/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+/docs/xpath40-catalog/evidence/c01-inventory/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c02-function-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c03-type-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c04-expression-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c05-collection-pattern-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c06-host-profile-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c07-lifecycle-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c08-adoption-research/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c09-semantic-batch1/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c10-semantic-batch2/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c11-semantic-batch3/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c12-semantic-batch4/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c13-final-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c13-owner-acceptance/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k01-schema-list/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k01-schema-list/baseline-adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-schema-duration/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-schema-loader/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-schema-inventory/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-constructor-registration/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-relative-schema-uri/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-admission-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+/docs/conformance/k02-admission-review/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-admission-review/baseline-adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k03-unicode-names/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k03-name-validation/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k03-serialization/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k03-name-storage/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k04-dependency-audit/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k04-quote-routing/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+/docs/conformance/k04-quote-routing/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Owner-approved K04 normal-run adoption receipts (raw bytes).
+docs/conformance/k04-quote-routing/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded profile-review evidence retains exact receipt bytes.
+docs/conformance/k04-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 explicit feature-admission review receipts retain original bytes.
+docs/conformance/k04-feature-inventory/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded collation-admission evidence retains original receipt bytes.
+docs/conformance/k04-collation-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 read-only CLDR diagnostics preserve original and calibration receipt bytes.
+docs/conformance/k04-cldr-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded formatter correction preserves exact validation/adoption receipts.
+docs/conformance/k04-cldr-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded CLDR admission retains exact before/after validation receipts.
+docs/conformance/k04-cldr-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 read-only radix review retains exact original and boundary-control receipts.
+docs/conformance/k04-radix-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 radix formatter adoption and validation preserve original receipt bytes.
+docs/conformance/k04-radix-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 parse-integer contract review preserves all original and boundary receipts.
+docs/conformance/k04-parse-integer-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded parse-integer adoption and gate promotion retain exact receipt bytes.
+docs/conformance/k04-parse-integer-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 unsupported-sequence proposal retains exact evidence and an LF dry patch.
+docs/conformance/k04-sequence-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-sequence-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Owner-approved unsupported-sequence adoption receipts retain exact bytes.
+docs/conformance/k04-sequence-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C13 immutable diagnostic receipts.
+docs/conformance/k04-negative-capability-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C14 immutable calendar diagnostic receipts.
+docs/conformance/k04-calendar-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C15 calendar correction raw validation receipts.
+docs/conformance/k04-calendar-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C16 exact CB admission proposal and raw receipts.
+docs/conformance/k04-calendar-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-calendar-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-calendar-admission/RESULTS.json -text whitespace=cr-at-eol
+
+# Owner-approved K04-C16 CB admission receipts retain exact bytes.
+docs/conformance/k04-calendar-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C17 date-arity review preserves raw diagnostics and source snapshots.
+docs/conformance/k04-date-arity-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-date-arity-review/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C18 date-formatting empty-result correction retains raw validation evidence.
+docs/conformance/k04-date-empty-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-date-empty-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C19 optional date calls retain raw regressions, qualification and validation receipts.
+docs/conformance/k04-date-optional-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-date-optional-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C20 normalization contract review preserves original diagnostic bytes.
+docs/conformance/k04-normalization-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-review/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C21 preserves raw Unicode data and validation receipts.
+docs/conformance/k04-normalization-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-fix/RESULTS.json -text whitespace=cr-at-eol
+src/Bosak.XPath.Standard/Resources/UnicodeNormalization17.bin -text
+src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt -text
+
+# K04-C22 preserves normalization option diagnostics and validation receipts.
+docs/conformance/k04-normalization-options-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-options-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C23 preserves exact unadopted patch and isolated admission receipts.
+docs/conformance/k04-normalization-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-normalization-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# K04-C23 owner adoption preserves raw approval, proposal snapshots and normal receipts.
+docs/conformance/k04-normalization-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-admission/adoption/BASELINE-ADOPTION.md text
+
+# K04-C24 retains raw context-declaration diagnostics and setup-failure disposition.
+docs/conformance/k04-context-declaration-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-declaration-review/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C25 preserves duplicate-context regression, replay and gate evidence.
+docs/conformance/k04-context-duplicate-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-duplicate-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C26 retains phased main-context regressions, diagnostic probes and final gates.
+docs/conformance/k04-main-context/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-main-context/RESULTS.json -text whitespace=cr-at-eol
+
+# C27 preserves original resource/module diagnostics and unqualified prototype results.
+docs/conformance/k04-context-resource-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-resource-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-context-resource-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C28 preserves qualified library context evidence.
+docs/conformance/k04-library-context-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-library-context-fix/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-library-context-fix/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C29 preserves complete catalog routing evidence and exact adoption proposal.
+docs/conformance/k04-context-routing-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-routing-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-context-routing-review/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C29 owner-approved adoption preserves fresh normal gate evidence.
+docs/conformance/k04-context-routing-review/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C30 preserves failed prolog-mode diagnostics and immutable review receipts.
+docs/conformance/k04-prolog-mode-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-prolog-mode-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-prolog-mode-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C31 preserves phased implementation evidence, failures and final qualification.
+docs/conformance/k04-copy-namespaces/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-copy-namespaces/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-copy-namespaces/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C32 preserves exact copy-only routing qualification and pending adoption patch.
+docs/conformance/k04-copy-namespaces-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-copy-namespaces-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-copy-namespaces-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C32 owner-approved admission preserves complete normal adoption evidence.
+docs/conformance/k04-copy-namespaces-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C33 preserves failed construction qualification, typed-copy observations and schema context.
+docs/conformance/k04-construction-mode-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-construction-mode-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-construction-mode-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C34 preserves construction implementation and intermediate/final evidence.
+docs/conformance/k04-construction-modes/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-construction-modes/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-construction-modes/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C35 preserves exact construction admission qualification and pending proposal.
+docs/conformance/k04-construction-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-construction-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-construction-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C35 owner-approved adoption preserves fresh normal evidence.
+docs/conformance/k04-construction-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C36 preserves remaining-skip classification and failed pragma qualification.
+docs/conformance/k04-pragma-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-review/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C37 preserves pragma semantic adoption, implementation and final/intermediate evidence.
+docs/conformance/k04-pragma-fallback/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-fallback/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-fallback/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C38 preserves exact pragma admission qualification and pending adoption proposal.
+docs/conformance/k04-pragma-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C38 owner-approved adoption preserves fresh normal execution evidence.
+docs/conformance/k04-pragma-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C39 preserves independent-profile dispositions, original diagnostics and schema context.
+docs/conformance/k04-independent-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-independent-profile-review/RESULTS.json -text whitespace=cr-at-eol
+
+# C40 preserves exact xib filter qualification and pending baseline proposal.
+docs/conformance/k04-xib-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-xib-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-xib-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C40 owner-approved adoption preserves fresh normal gates and matrix replay.
+docs/conformance/k04-xib-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C41 preserves schema-profile originals, independent contract witnesses and readiness snapshots.
+docs/conformance/k04-schema-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-schema-profile-review/RESULTS.json -text whitespace=cr-at-eol

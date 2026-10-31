@@ -1,0 +1,836 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "a707c90af82bfdf52f4cec57afe246e59d40df92",
+  "status": "K04 initial applicability audit complete; five bounded follow-ups remain open",
+  "summary": {
+    "qt3DependencySkips": 619,
+    "qt4GatedDependencySkips": 1893,
+    "totalCatalogAssessments": 2512,
+    "syntheticAssessments": 62,
+    "filterProcesses": 4,
+    "routingOnlyQt3Cases": 246,
+    "tripleQuoteRoutingCandidates": 16,
+    "executionCases": 16,
+    "executionProcesses": 32,
+    "publicXqueryPassed": 6,
+    "publicXqueryFailed": 10,
+    "quoteCasesPublicPassed": 5,
+    "timeouts": 0,
+    "engineChanged": false,
+    "filterPolicyChanged": false,
+    "baselineChanged": false,
+    "inheritedSolutionPasses": 22007,
+    "inheritedQt3": [
+      31145,
+      0,
+      676
+    ],
+    "inheritedQt4": [
+      8437,
+      0,
+      1893
+    ],
+    "candidate": "1.26.11",
+    "published": "1.26.3"
+  },
+  "qt3RoutingAxes": [
+    {
+      "xqueryDependencies": true,
+      "syntaxEligible": false,
+      "cases": 246
+    },
+    {
+      "xqueryDependencies": false,
+      "syntaxEligible": true,
+      "cases": 367
+    },
+    {
+      "xqueryDependencies": false,
+      "syntaxEligible": false,
+      "cases": 6
+    }
+  ],
+  "effectiveRejectedMentions": {
+    "qt3": {
+      "spec:XQ10": 117,
+      "feature:staticTyping": 75,
+      "xsd-version:1.0": 37,
+      "xml-version:1.0": 37,
+      "feature:fn-load-xquery-module [negative]": 16,
+      "spec:XP20 XQ10": 15,
+      "spec:XQ10 XQ30": 11,
+      "feature:olson-timezone": 8,
+      "spec:XP20 XP30 XQ10 XQ30": 7,
+      "spec:XQ10 XP20": 7,
+      "feature:xpath-1.0-compatibility": 5,
+      "feature:fn-transform-XSLT [negative]": 3,
+      "feature:schema-location-hint": 3,
+      "unicode-normalization-form:FULLY-NORMALIZED [negative]": 2,
+      "feature:collection-stability [negative]": 2,
+      "unicode-version:7.0": 2,
+      "feature:fn-transform-XSLT30 [negative]": 2,
+      "language:xib [negative]": 2,
+      "calendar:CB [negative]": 2,
+      "spec:XP30 XQ30": 2,
+      "spec:XQ10 XP20 XQ30 XP30": 2,
+      "feature:typedData [negative]": 2,
+      "feature:arbitraryPrecisionDecimal": 2,
+      "feature:serialization [negative]": 2,
+      "xml-version:1.0:4-": 2,
+      "default-language:fr-CA": 1,
+      "unicode-version:5.2": 1,
+      "unicode-version:6.0": 1,
+      "unicode-version:6.2": 1,
+      "spec:XP20 XQ10 XP30 XQ30": 1,
+      "format-integer-sequence:ﯴ [negative]": 1,
+      "spec:XP20": 1,
+      "spec:XQ30": 1,
+      "spec:XQ30 XP30": 1
+    },
+    "qt4": {
+      "spec:XQ10+": 1608,
+      "spec:XQ40+": 106,
+      "spec:XQ31+": 97,
+      "spec:XQ10 XQ30 XQ31": 31,
+      "spec:XQ30+": 29,
+      "xml-version:1.0": 4,
+      "feature:typedData": 3,
+      "feature:staticTyping": 3,
+      "feature:collection-stability [negative]": 2,
+      "unicode-version:7.0": 2,
+      "spec:XQ10 XQ30 XQ31 XP20 XP30 XP31": 2,
+      "spec:XP20 XQ10": 2,
+      "spec:XP20 XP30 XP31": 2,
+      "spec:XQ10 XP20": 2,
+      "xml-version:1.0:4-": 2,
+      "feature:non_unicode_codepoint_collation": 1,
+      "spec:XP20 XP30 XP31 XQ10 XQ30 XQ31": 1,
+      "default-language:fr-CA": 1,
+      "spec:XP20 XP30 XQ10 XQ30": 1,
+      "spec:XQ10 XQ30": 1,
+      "spec:XQ10": 1,
+      "spec:XP30 XP31": 1,
+      "spec:XP30 XP31 XQ30 XQ31": 1
+    }
+  },
+  "countPolicy": "Dependency mentions overlap. QT3 counts use actual admitted-XQuery single-predicate results; routing axes are separate. CanHandleAsXQuery is syntax eligibility, not proof of semantic support.",
+  "findings": [
+    {
+      "id": "K04-F01",
+      "status": "Open",
+      "scope": "Quote-aware routing",
+      "evidence": "Sixteen dependency-admissible QT3 cases are refused by a raw triple-double-quote test. Five original quote cases pass through public XQuery, including four positive assertions and one malformed-constructor error assertion.",
+      "next": "K04-C01: isolate quote-aware routing, verify all16 candidates and negative controls, then rehearse the full runner before any exact QT3 baseline proposal."
+    },
+    {
+      "id": "K04-F02",
+      "status": "Open",
+      "scope": "Unsupported prolog/pragma boundaries",
+      "evidence": "All seven sampled context declarations, construction strip, valid copy-namespaces and pragma controls fail original assertions through public XQuery. Invalid copy-namespaces syntax also passes an expected parse error, which is not implementation support.",
+      "next": "Keep broader guards until each construct has independently verified engine semantics."
+    },
+    {
+      "id": "K04-F03",
+      "status": "Open",
+      "scope": "Polarity and explicit profiles",
+      "evidence": "Synthetic negative mixed XP/XQ spec dependencies are admitted despite matching XPath tokens; contradictory positive/negative XQ31 predicates pass the admitted-XQuery filter. Negative fr-CA is rejected despite positive fr-CA rejection. Unknown positive features default to supported.",
+      "next": "Define/profile-test polarity, known/unknown capabilities and language routing before policy changes; synthetic observations are not legal unskip evidence."
+    },
+    {
+      "id": "K04-F04",
+      "status": "Open",
+      "scope": "Schema ownership mismatch",
+      "evidence": "Both filters admit xsd-version1.1 and contain comments asserting XSD1.1 implementation. The current core representation is XmlSchemaSet; Bosak.Schema owns staged XSD1.1.",
+      "next": "Correct capability wording and coordinate explicit schema profiles with Bosak.Schema; do not convert the existing predicate into a schema compliance claim."
+    },
+    {
+      "id": "K04-F05",
+      "status": "Open",
+      "scope": "qt4 XQuery/profile exclusions",
+      "evidence": "Most gatedqt4 dependency skips mention XQuery-only versions;1608 mention XQ10+ among their rejected predicates. The qt4 harness is XPath-only. Feature and version rejection counts overlap.",
+      "next": "Keep XQuery4/version/profile exclusions separate from core implementation bugs; no blanket admission or broader full-catalog execution."
+    }
+  ],
+  "executionPairs": {
+    "K2-DirectConElemAttr-8": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-8",
+        "kind": "Passed",
+        "message": null
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-8",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "<foo attr=\"\"\"/>",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 0: XPST0003: Unexpected token LessThan in primary expression"
+      }
+    },
+    "Constr-attr-syntax-5": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "Constr-attr-syntax-5",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "Constr-attr-syntax-5",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "<elem attr=\"\"\"\"/>",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<elem attr=\"&quot;\"/>]]></assert-xml>\r\n</result>",
+        "exceptionType": null,
+        "error": null
+      }
+    },
+    "DirectConElemAttr-1": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "DirectConElemAttr-1",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "DirectConElemAttr-1",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "<shoe name=\" \"\"\"\" \"/>",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<shoe name=\" &#34;&#34; \"/>]]></assert-xml>\r\n</result>",
+        "exceptionType": null,
+        "error": null
+      }
+    },
+    "K2-DirectConElemAttr-29": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-29",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-29",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "string(<foo attr=\"\"\"\"/>/@attr)",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>\"</assert-string-value>\r\n</result>",
+        "exceptionType": null,
+        "error": null
+      }
+    },
+    "Literals069": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "Literals069",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "Literals069",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "text{ \"He said, \"\"I don't like it.\"\"\" }",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>He said, \"I don't like it.\"</assert-string-value>\r\n</result>",
+        "exceptionType": null,
+        "error": null
+      }
+    },
+    "contextDecl-028": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-028",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-028",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": " declare context item := 3; . + 4 ",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-018": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-018",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-018",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+        "expression": " declare context item := last() + 1; .",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-032": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-032",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-032",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": "declare context item := (1 to 17)[20]; .",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-019": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-019",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-019",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+        "expression": " declare context item := position() + 1; .",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-022": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-022",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-022",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+        "expression": " declare context item as xs:string := 2; . ",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPTY0004\" />\r\n  </any-of>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-020": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-020",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-020",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": " declare context item as xs:integer external; . ",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "contextDecl-021": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "contextDecl-021",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "contextDecl-021",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": " declare context item as xs:integer := 'London'; . ",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "Axes102": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "Axes102",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "Axes102",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": "\n        declare namespace ns1 = \"http://www.example.org/ns1\"; \n        declare namespace ns2 = \"http://www.example.org/ns2\"; \n        declare construction strip; \n        let $element as element(*, xs:untyped) := <e>test</e> \n        let $element as element(*, xs:untyped) := $element/self::* \n        return count($element)",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "K-CopyNamespacesProlog-3": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-3",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-3",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+        "expression": "declare copy-namespaces preserve, inherit; 1 eq 1",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "K-CopyNamespacesProlog-5": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-5",
+        "kind": "Passed",
+        "message": null
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-5",
+        "mode": "public-xquery",
+        "kind": "Passed",
+        "message": null,
+        "expression": "declare copy-namespaces inherit, preserve; 1 eq 1",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+      }
+    },
+    "K-ExtensionExpression-4a": {
+      "actual": {
+        "Suite": "qt3",
+        "Name": "K-ExtensionExpression-4a",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+      },
+      "public-xquery": {
+        "Suite": "qt3",
+        "Name": "K-ExtensionExpression-4a",
+        "mode": "public-xquery",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0.",
+        "expression": "(#name content #) {1}",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+        "exceptionType": "XPathParseException",
+        "error": "Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+      }
+    }
+  },
+  "synthetic": [
+    {
+      "id": "qt3-spec-XP31+-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-spec-XP31+-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-spec-XQ31+-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-spec-XQ31+-False",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-spec-XP31+ XQ31+-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-spec-XP31+ XQ31+-False",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-spec-XQ40+-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-spec-XQ40+-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-spec-XX99+-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-spec-XX99+-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-feature-static-typing-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-feature-static-typing-False",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-feature-schemaImport-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-feature-schemaImport-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-feature-fn-load-xquery-module-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-feature-fn-load-xquery-module-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-feature-urn:k04-unknown-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-feature-urn:k04-unknown-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xml-version-1.0-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xml-version-1.0-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xml-version-1.1-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-xml-version-1.1-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xsd-version-1.0-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xsd-version-1.0-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-xsd-version-1.1-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-xsd-version-1.1-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-default-language-en-True",
+      "suite": "qt3",
+      "xpathSupported": true,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt3-default-language-en-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-default-language-fr-CA-True",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-default-language-fr-CA-False",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": false
+    },
+    {
+      "id": "qt3-contradictory-spec",
+      "suite": "qt3",
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    {
+      "id": "qt4-spec-XP31+-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XP31+-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XQ31+-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XQ31+-False",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XP31+ XQ31+-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XP31+ XQ31+-False",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XQ40+-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XQ40+-False",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XX99+-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-spec-XX99+-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-static-typing-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-static-typing-False",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-schemaImport-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-schemaImport-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-fn-load-xquery-module-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-fn-load-xquery-module-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-urn:k04-unknown-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-feature-urn:k04-unknown-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xml-version-1.0-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xml-version-1.0-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xml-version-1.1-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xml-version-1.1-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xsd-version-1.0-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xsd-version-1.0-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xsd-version-1.1-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-xsd-version-1.1-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-default-language-en-True",
+      "suite": "qt4",
+      "xpathSupported": true,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-default-language-en-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-default-language-fr-CA-True",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-default-language-fr-CA-False",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    },
+    {
+      "id": "qt4-contradictory-spec",
+      "suite": "qt4",
+      "xpathSupported": false,
+      "xquerySupported": null
+    }
+  ],
+  "next": "K04-C01 quote-aware routing correction and complete candidate/rehearsal evidence before any baseline-policy proposal.",
+  "policy": "Read-only audit. Direct executor/public API probes bypass admission diagnostically but retain original assertions and constrained resource-free environments. Public XQuery comparison uses no output-option overrides for this selected sample. No engine, harness, fixture, assertion, filter, baseline, package, release or REQ-126 acceptance change. All10 unmet public observations remain failures."
+}

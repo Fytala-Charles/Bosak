@@ -1,0 +1,330 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build",
+    "--logger",
+    "trx",
+    "--results-directory",
+    ".guard-tmp/k04-schema-element-solution-final"
+  ],
+  "exitCode": 0,
+  "passed": 24203,
+  "failed": 0,
+  "projects": 10,
+  "log": "solution-tests.log",
+  "projectReceipts": [
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0.trx",
+      "sha256": "7819730a2c0b5cac6fdb2b732db9329a5db6ff7971133d28809c7d256cc7fdc4",
+      "counters": {
+        "total": "66",
+        "executed": "66",
+        "passed": "66",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.0862842+01:00",
+        "queuing": "2026-10-29T05:55:06.0862846+01:00",
+        "start": "2026-10-29T05:55:05.6069955+01:00",
+        "finish": "2026-10-29T05:55:06.1255653+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[1].trx",
+      "sha256": "aea27406db71995b6c91b044fd488690e18b9f016eb0e21c33eeebf89b4589e1",
+      "counters": {
+        "total": "202",
+        "executed": "202",
+        "passed": "202",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.1089688+01:00",
+        "queuing": "2026-10-29T05:55:06.1089691+01:00",
+        "start": "2026-10-29T05:55:05.6084420+01:00",
+        "finish": "2026-10-29T05:55:06.1618855+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[2].trx",
+      "sha256": "3e51b4d9ed06b7aa2cc0719f2fbc48f353ecc981daf7be6d31a3cbe13d686a66",
+      "counters": {
+        "total": "269",
+        "executed": "269",
+        "passed": "269",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.1472432+01:00",
+        "queuing": "2026-10-29T05:55:06.1472435+01:00",
+        "start": "2026-10-29T05:55:05.6116672+01:00",
+        "finish": "2026-10-29T05:55:06.3246652+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[3].trx",
+      "sha256": "bbb18f8382d8f23a1541c162952db858a5f298b11cebcfcab839f4c2f098756a",
+      "counters": {
+        "total": "132",
+        "executed": "132",
+        "passed": "132",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.0866721+01:00",
+        "queuing": "2026-10-29T05:55:06.0866727+01:00",
+        "start": "2026-10-29T05:55:05.6084276+01:00",
+        "finish": "2026-10-29T05:55:06.4367067+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[4].trx",
+      "sha256": "cc54f7cb990a78ec8d12143ac2f299c4f8e4af31cddbb32cc7246d3e6dc4cadb",
+      "counters": {
+        "total": "489",
+        "executed": "489",
+        "passed": "489",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.1312653+01:00",
+        "queuing": "2026-10-29T05:55:06.1312655+01:00",
+        "start": "2026-10-29T05:55:05.6083752+01:00",
+        "finish": "2026-10-29T05:55:06.4375936+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[5].trx",
+      "sha256": "4d3620671709dbd4b7bf5915f27b81de150d23b840a23a61a7a88c2e8e25cf8a",
+      "counters": {
+        "total": "804",
+        "executed": "804",
+        "passed": "804",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.3731758+01:00",
+        "queuing": "2026-10-29T05:55:06.3731761+01:00",
+        "start": "2026-10-29T05:55:05.6114842+01:00",
+        "finish": "2026-10-29T05:55:06.6598660+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[6].trx",
+      "sha256": "56c24b6d41e572ab0c33f86a9f52905b339af353cd4c2eae6d2b9d3fa02d3bf8",
+      "counters": {
+        "total": "47",
+        "executed": "47",
+        "passed": "47",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.0842193+01:00",
+        "queuing": "2026-10-29T05:55:06.0842199+01:00",
+        "start": "2026-10-29T05:55:05.6066330+01:00",
+        "finish": "2026-10-29T05:55:10.6256066+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_06_net10.0[7].trx",
+      "sha256": "38e632bac5d462c9b81f114fc733007d3a6858c3d615e2ca5f070cc20128edbd",
+      "counters": {
+        "total": "201",
+        "executed": "201",
+        "passed": "201",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:06.1341815+01:00",
+        "queuing": "2026-10-29T05:55:06.1341818+01:00",
+        "start": "2026-10-29T05:55:05.6039831+01:00",
+        "finish": "2026-10-29T05:55:13.0701867+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_07_net10.0.trx",
+      "sha256": "99529fabf3fe29ee745bd6c038edb9a37b21b464cdbfdbfc4f76df76726a2bcf",
+      "counters": {
+        "total": "13797",
+        "executed": "13797",
+        "passed": "13797",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:07.0574897+01:00",
+        "queuing": "2026-10-29T05:55:07.0574898+01:00",
+        "start": "2026-10-29T05:55:05.6155919+01:00",
+        "finish": "2026-10-29T05:55:08.5036225+01:00"
+      }
+    },
+    {
+      "file": ".guard-tmp/k04-schema-element-solution-final/charl_CHARLES_2026-10-29_05_55_07_net10.0[1].trx",
+      "sha256": "5e085dd5d011489edb7419a66199a429b14120a44e79a73ad57da83b45625757",
+      "counters": {
+        "total": "8196",
+        "executed": "8196",
+        "passed": "8196",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "times": {
+        "creation": "2026-10-29T05:55:07.9151391+01:00",
+        "queuing": "2026-10-29T05:55:07.9151392+01:00",
+        "start": "2026-10-29T05:55:05.7093503+01:00",
+        "finish": "2026-10-29T05:58:28.0581455+01:00"
+      }
+    }
+  ],
+  "postFormattingXQuery": {
+    "file": "docs/conformance/k04-schema-element-fix/evidence/xquery-results/xquery-final.trx",
+    "sha256": "2822daac2b95989f4cb432558a5cf66235bd8f06b4485e9764df7d69a09a95d8",
+    "counters": {
+      "total": "804",
+      "executed": "804",
+      "passed": "804",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "times": {
+      "creation": "2026-10-29T05:57:42.6427779+01:00",
+      "queuing": "2026-10-29T05:57:42.6427782+01:00",
+      "start": "2026-10-29T05:57:41.9989572+01:00",
+      "finish": "2026-10-29T05:57:42.9265279+01:00"
+    }
+  },
+  "note": "Full solution checks the final 39-case cohort. Subsequent cleanup only removes insignificant embedded-XSD trailing whitespace in the test source; the final full XQuery project independently passes all 804 tests, including all 39 regressions. Baseline-clean rerun retains 22 pass/17 fail. Raw complete-solution TRX files remain in ignored temporary directories; canonical raw logs, counters and hashes are retained here."
+}

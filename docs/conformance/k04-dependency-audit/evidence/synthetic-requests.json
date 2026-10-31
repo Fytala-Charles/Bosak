@@ -1,0 +1,694 @@
+[
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XX99+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XX99+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XX99+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XX99+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-schemaImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-schemaImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-fn-load-xquery-module-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-fn-load-xquery-module-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-urn:k04-unknown-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "urn:k04-unknown",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-urn:k04-unknown-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "urn:k04-unknown",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-en-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-en-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-fr-CA-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-fr-CA-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-contradictory-spec",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XX99+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XX99+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XX99+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XX99+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-schemaImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-schemaImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-fn-load-xquery-module-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-fn-load-xquery-module-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-urn:k04-unknown-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "urn:k04-unknown",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-urn:k04-unknown-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "urn:k04-unknown",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-en-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-en-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-fr-CA-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-fr-CA-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-contradictory-spec",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  }
+]

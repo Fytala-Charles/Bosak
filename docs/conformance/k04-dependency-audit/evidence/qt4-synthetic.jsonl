@@ -1,0 +1,31 @@
+{"id":"qt4-spec-XP31\u002B-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-spec-XP31\u002B-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-spec-XQ31\u002B-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-spec-XQ31\u002B-False","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-spec-XP31\u002B XQ31\u002B-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-spec-XP31\u002B XQ31\u002B-False","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-spec-XQ40\u002B-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-spec-XQ40\u002B-False","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-spec-XX99\u002B-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-spec-XX99\u002B-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-feature-static-typing-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-feature-static-typing-False","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-feature-schemaImport-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-feature-schemaImport-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-feature-fn-load-xquery-module-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-feature-fn-load-xquery-module-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-feature-urn:k04-unknown-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-feature-urn:k04-unknown-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xml-version-1.0-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xml-version-1.0-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xml-version-1.1-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-xml-version-1.1-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xsd-version-1.0-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xsd-version-1.0-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-xsd-version-1.1-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-xsd-version-1.1-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-default-language-en-True","suite":"qt4","xpathSupported":true,"xquerySupported":null}
+{"id":"qt4-default-language-en-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-default-language-fr-CA-True","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-default-language-fr-CA-False","suite":"qt4","xpathSupported":false,"xquerySupported":null}
+{"id":"qt4-contradictory-spec","suite":"qt4","xpathSupported":false,"xquerySupported":null}

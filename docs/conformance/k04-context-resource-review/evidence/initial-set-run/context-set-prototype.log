@@ -1,0 +1,23 @@
+Bosak XPath 3.1 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt3tests\catalog.xml
+Test-set filter:  prod-ContextItemDecl
+
+Discovered 428 test sets.
+  Starting: prod-ContextItemDecl ...
+  Done: prod-ContextItemDecl (44 tests total)
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   44
+Passed:  42
+Failed:  2
+Skipped: 0
+
+Pass rate: 95.45%
+
+First 20 failures:
+  FAIL contextDecl-056: Unexpected error: XPST0081: Prefix 'u' is not declared.
+  FAIL contextDecl-057: Expected error XPTY0004, got: XPST0081: Prefix 'u' is not declared.
+
+Elapsed: 0.95s

@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-quote-render/README.md.html",
+      "sha256": "d784ed09368d818176b4446eebaba4816f17d4862044604a1c805e954e25e4e3"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-quote-render/docs_ARCHITECTURE.md.html",
+      "sha256": "7c14a9ed1a62ba41a8ec2c42a142f8fbf869e00990c447912181d050926335a2"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-quote-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "4c31978b31a5849ded1e1b8ca815a9b45d8c3135b433f4ef89469d26639d4521"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-quote-render/docs_INTEGRATION.md.html",
+      "sha256": "b48ee02e9e52f3b71c39fd699d2396f621a0970952c6a4a1a9b02f1a68abc2f7"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-quote-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "07f374a6a96cc808ab3175949808aff6b968698b724b91c4b10e199a6c082aa3"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-quote-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "c41daeeb757bfc90b9f112c4fea3d98f7ff6e76ff750d94a3d8fc59e2fd171fa"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-quote-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "039d1bd9a927fd8142275d6dd36a9e862e2ae428b63a8e267a55cf08c35fba5a"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-quote-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "f79fcdf7cec244988b91840091a22706ce5b95d4ea01a0ac5f00621613bf501d"
+    },
+    {
+      "source": "docs/conformance/k04-quote-routing/README.md",
+      "html": ".guard-tmp/k04-quote-render/docs_conformance_k04-quote-routing_README.md.html",
+      "sha256": "f63c8bf4efdfd67a45c92bbf5933ab23ade38450b3df8384c9195b3ed19fc14f"
+    },
+    {
+      "source": "docs/conformance/k04-quote-routing/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-quote-render/docs_conformance_k04-quote-routing_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "6364020c50675770f92e766deeac9ad97044510ec2eb04271a7600381d04fdf4"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "counts": {
+    "qt3": {
+      "allCases": 31821,
+      "normalGateCases": 31821,
+      "selectedCases": 0,
+      "gatedSelectedCases": 0
+    },
+    "qt4": {
+      "allCases": 46985,
+      "normalGateCases": 10330,
+      "selectedCases": 0,
+      "gatedSelectedCases": 0
+    }
+  },
+  "negativeTypes": {
+    "feature": 58,
+    "language": 4,
+    "calendar": 4,
+    "format-integer-sequence": 2,
+    "unicode-normalization-form": 4,
+    "revalidation": 3
+  },
+  "gatedSetCount": 224
+}

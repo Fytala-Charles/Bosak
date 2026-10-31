@@ -1,0 +1,202 @@
+{
+  "date": "2026-10-29",
+  "schemaBase": "044d2cb2e67decd46e03e0f5ee7cb03029f34bd9",
+  "branch": "feature/bounded-document-assessment",
+  "worktree": "D:/Development/Bosak/.worktrees/Bosak.Schema.Assessment",
+  "implementationState": "Uncommitted candidate; no publication/API freeze",
+  "developmentLine": "0.5",
+  "coreBase": "a2ade8fd1b3b45b302e2601021af8cac976cd801",
+  "coreProductionSourceChanged": false,
+  "profile": "decimal-sequence-assertions-v1",
+  "publishedCoreVersion": "1.26.3",
+  "currentCoreVersion": "1.33.1",
+  "publishedCoreSuite": {
+    "passed": 191,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": ".guard-tmp\\schema-assessment-published-final-results\\charl_CHARLES_2026-10-29_13_35_27_net10.0.trx",
+    "sha256": "172cef4cde3b6abcf58e9ac00810649124093bf0dc1426d69fcb6f1314e63647"
+  },
+  "currentCoreSuite": {
+    "passed": 191,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": ".guard-tmp\\schema-assessment-current-qualified-results\\charl_CHARLES_2026-10-29_13_40_05_net10.0.trx",
+    "sha256": "ec5dd509200caa1e844e596ae34179a9ef568ce7eac5036a1414b446263ff9d5"
+  },
+  "legacyBinarySuite": {
+    "passed": 114,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": ".guard-tmp\\schema-assessment-binary114-qualified-results\\charl_CHARLES_2026-10-29_13_40_02_net10.0.trx",
+    "sha256": "21809dafa8935d8ab87f17f2ff5576787b6389263f97d6485d68ad7355c861c7"
+  },
+  "overlappingScopesNotAdditive": true,
+  "candidateCSharpFiles": 38,
+  "newAssessmentCases": 77,
+  "currentCoreDependencyWitness": {
+    "Bosak.XPath.Api/1.33.1": "project",
+    "Bosak.XPath.Compiler/1.33.1": "project",
+    "Bosak.XPath.Core/1.33.1": "project",
+    "Bosak.XPath.Parser/1.33.1": "project",
+    "Bosak.XPath.Providers/1.33.1": "project",
+    "Bosak.XPath.Runtime/1.33.1": "project",
+    "Bosak.XPath.Standard/1.33.1": "project",
+    "Bosak.XQuery/1.33.1": "project",
+    "Bosak.Xslt/1.33.1": "project"
+  },
+  "changedFileHeaderChecksPassed": true,
+  "inheritedLongPurposeHeaders": [
+    {
+      "path": "src/Bosak.Schema/Validation/XsdValidationService.cs",
+      "purposeCharacters": 100,
+      "unchanged": true
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeApplicabilityTests.cs",
+      "purposeCharacters": 100,
+      "unchanged": true
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AlternativeCompileTests.cs",
+      "purposeCharacters": 124,
+      "unchanged": true
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/AssertionEvaluationTests.cs",
+      "purposeCharacters": 100,
+      "unchanged": true
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/DefaultAttributesTests.cs",
+      "purposeCharacters": 113,
+      "unchanged": true
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/OpenContentTests.cs",
+      "purposeCharacters": 114,
+      "unchanged": true
+    }
+  ],
+  "snapshots": [
+    {
+      "source": "docs/DOCUMENT-ASSESSMENT.md",
+      "sourceSha256": "2224db450c8ac612530e24b41f544b42bf154a120537a65f1c9707dbea6930f7",
+      "snapshot": "API-GUIDE.md",
+      "snapshotSha256": "6ed601af4c4460f4c5875fddf53777a2934a65dd85f5f87a7a6ae545215f2d59",
+      "adaptation": "Relative documentation links rebased only"
+    },
+    {
+      "source": "docs/ASSESSMENT-ADOPTION-2026-10-29.md",
+      "sourceSha256": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2",
+      "snapshot": "ADOPTION.md",
+      "snapshotSha256": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2",
+      "adaptation": "Relative documentation links rebased only"
+    },
+    {
+      "source": "docs/ADR-008-bounded-native-assessment.md",
+      "sourceSha256": "7de353eca27d9458ae8ff3ac50d3403d9b458b6021044fc9167ff9b8141da439",
+      "snapshot": "ADR.md",
+      "snapshotSha256": "f472445a64684601feb00710381f3b2818631f063bb4fa0e983ca1ece4dfa988",
+      "adaptation": "Relative documentation links rebased only"
+    }
+  ],
+  "logs": [
+    {
+      "path": "docs/schema-assessment/evidence/build-final.txt",
+      "sha256": "41c154b5766236fe375ee1039fa2af8c0970607b2f6bd0a2c55408bc7a2d48ff",
+      "rawSha256": "d0c515bca0bafe9aaabfde395a9789269c72acbb2f792474a4646607b2171c52",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/published-final.txt",
+      "sha256": "a7f00ba61f6a09f9f12e17e69d31472688ed0d957f35161ddc146a1e66294eb2",
+      "rawSha256": "c39b071b1c70d32209b0a495102c8e793b7b1032ab21c0fb0b874179cf64de54",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/current-core-final.txt",
+      "sha256": "08bb1df9ca82ea3d73d772ad547f9722903c39b671cb3878e6c0f75c059e701c",
+      "rawSha256": "d81e950a9b3539a4ba505a1fd45971cd8e5c16f1db95aacc3ddac579dc85b6a3",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/legacy-binary-final.txt",
+      "sha256": "fdfcbe6ecbe8eb8ddff87775deca788f029fe0d68ca2453d085f8ab1fbc6b237",
+      "rawSha256": "9f6f687af5543f9236a8f9a8192ff62e74fd26e5560f32648268f01e9216fec1",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/example-final.txt",
+      "sha256": "d0b133f2bbd0cc8f0108a72c177a9eaf51bbf2bd34b6d9e29a7afccacdae76a9",
+      "rawSha256": "c246478bba19920f6a740ad52801121c3afcdb01573b2c6ea97f252f1d9cd5f4",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/schema-docs-strict.txt",
+      "sha256": "606e17f56bd6d5839b637111c1fa280bba0673bda5563f77ed1aed0f19d9983a",
+      "rawSha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/initial-detached-context.txt",
+      "sha256": "fa949258a79fc94b4e016abe473cfdde58e29fe04555370a618d73ccb155deab",
+      "rawSha256": "d3a422c1118d86118dfbb4bb04f1a9ccf0f7714f6883e95646ee2cc3e5284325",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/initial-document-context.txt",
+      "sha256": "0e0311482b38b491d79e6d2351538ab54a37d6ede0aa835a99ddb23a4f634edc",
+      "rawSha256": "8272ca9b2dc0bd07e9aa6f08ca647e47947e6d0c678972a1a12da8097d5838cf",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/initial-explicit-bindings.txt",
+      "sha256": "556191ad956a4b8b08440e01dd80ef299b92ad7922ec8d3e36cfab4b3aa8fcd3",
+      "rawSha256": "704bb42a19a6b7cbe264a60687bad72d875c9f120c501f6462e5d6512c51acc1",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/explicit-copy-context-pass.txt",
+      "sha256": "ce7be914f0efa9a38f8a0c96c90f14ab381da99f12913d0556d515ad4adbea85",
+      "rawSha256": "223bd16d4307f3e417b05fd049c57afaec25b6f99709e884679cea87b1bef002",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    },
+    {
+      "path": "docs/schema-assessment/evidence/initial-current-wrapper-path.txt",
+      "sha256": "8248bdcecc6f1db7e9261e7682cd8833081126c1b1c9b11c6d964c6fd88f1a01",
+      "rawSha256": "6081f0ddee77a3909db40818efa925ccfa5dceba9a0a639a2e7fa22828019d58",
+      "normalization": "UTF-8 LF, trailing whitespace removed"
+    }
+  ],
+  "patchSha256": "c04833a7f53adfe4f087d13f7a50ee2b4bd7bdd6e4924d464a9c6f5ec8e9a722",
+  "inheritedCoreQualification": {
+    "solutionPassed": 24203,
+    "qt3": [
+      31397,
+      0,
+      424
+    ],
+    "qt4": [
+      8941,
+      0,
+      1918
+    ],
+    "freshThisStep": false
+  },
+  "limits": {
+    "fullTypedAnonymousRootExport": false,
+    "fullXsd11": false,
+    "compatibleSchemaHandoff": false,
+    "generalCoreSessionApiAccepted": false,
+    "hostedCiRun": false,
+    "packagePublished": false,
+    "consumerPinsChanged": false
+  },
+  "history": [
+    "Initial detached-element XSLT fixture had no global document context.",
+    "Document-context copy fixture additionally needed the explicit legacy annotation context (empty XmlSchemaSet); no XSD 1.1 schema passed through it.",
+    "Initial current-source wrapper project references pointed one directory too high; corrected and verified all nine actual project dependencies.",
+    "Worktree moved from scratch to persistent .worktrees before final qualification; all source snapshots/hashes use its final location."
+  ]
+}

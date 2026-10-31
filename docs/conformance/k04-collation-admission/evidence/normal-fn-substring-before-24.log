@@ -1,0 +1,24 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-substring-before
+Test-name filter: fn-substring-before-24
+
+Discovered 738 test sets.
+  Starting: fn-substring-before ...
+  Done: fn-substring-before (1 tests total) [P+=1 F+=0 S+=0]
+  Starting: fn-substring-before-last ...
+  Done: fn-substring-before-last (1 tests total) [P+=0 F+=0 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   1
+Passed:  1
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.00%
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.17s

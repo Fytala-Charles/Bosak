@@ -1,0 +1,134 @@
+{
+  "scannedCases": {
+    "qt3": 31821,
+    "qt4": 46985
+  },
+  "declarations": [
+    {
+      "suite": "qt3",
+      "name": "format-integer-014",
+      "value": "\u0661",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-015",
+      "value": "\u0661",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-042",
+      "value": "\ufbf4",
+      "satisfied": false,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-046",
+      "value": "\u2460",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-047",
+      "value": "\u2474",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-048",
+      "value": "\u2488",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-049",
+      "value": "\u0391",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-050",
+      "value": "\u03b1",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt3",
+      "name": "format-integer-052",
+      "value": "\u4e00",
+      "satisfied": true,
+      "setFile": "tests/qt3tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-014",
+      "value": "\u0661",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-015",
+      "value": "\u0661",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-042",
+      "value": "\ufbf4",
+      "satisfied": false,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-046",
+      "value": "\u2460",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-047",
+      "value": "\u2474",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-048",
+      "value": "\u2488",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-049",
+      "value": "\u0391",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-050",
+      "value": "\u03b1",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    },
+    {
+      "suite": "qt4",
+      "name": "format-integer-052",
+      "value": "\u4e00",
+      "satisfied": true,
+      "setFile": "tests/qt4tests/fn/format-integer.xml"
+    }
+  ]
+}

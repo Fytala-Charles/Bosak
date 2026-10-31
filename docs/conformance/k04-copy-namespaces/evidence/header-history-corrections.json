@@ -1,0 +1,32 @@
+{
+  "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs": {
+    "before": "1.20",
+    "after": "1.57",
+    "implementationBodySha256": "2ea4fd29886ae36c0afc3e3c47aabfb0abeb82f130aea59ce08a8e432193f573",
+    "sourceBehaviorChanged": false
+  },
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": {
+    "before": "2.15",
+    "after": "2.209",
+    "implementationBodySha256": "54844d7b8f481c23d0bfbb458f8f47ca46bb10285bd0d4582bfdb9f5c90f2c73",
+    "sourceBehaviorChanged": false
+  },
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": {
+    "before": "3.3",
+    "after": "3.7",
+    "implementationBodySha256": "e94dc3783059020a61f05a7e6f2a8c3f4c20e729e38dcc4afb7ec662d50fcd30",
+    "sourceBehaviorChanged": false
+  },
+  "src/Bosak.XQuery/Compiler/XQueryStaticContext.cs": {
+    "before": "0.7",
+    "after": "0.12",
+    "implementationBodySha256": "e4f23e86be322251b60ee6d33b54728f04cf7ae69398faabf4b0e518436e85a3",
+    "sourceBehaviorChanged": false
+  },
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": {
+    "before": "1.1",
+    "after": "1.19",
+    "implementationBodySha256": "d28b853fe63a5af140bb3e05529e5bf64101fb8732cd3f3229c30356179342e1",
+    "sourceBehaviorChanged": false
+  }
+}

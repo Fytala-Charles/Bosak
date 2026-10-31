@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-27",
+  "decisionId": "K02-guarded-runner-adoption-v1",
+  "status": "Complete",
+  "ownerApproved": true,
+  "sourceBase": "628f169e8399f65d8be4ff88679ff98fd746e4b9",
+  "approvedProposalCommit": "628f169e",
+  "summary": {
+    "qt3": [
+      31145,
+      0,
+      676
+    ],
+    "totalCases": 31821,
+    "removedSkip": "validateexpr-28",
+    "retainedSkipNamesReasons": 676,
+    "addedSkips": 0,
+    "normalRunnerGuarded": true,
+    "testExecutorDefaultGuarded": false,
+    "inheritedSolutionPasses": 21842,
+    "inheritedQt4": [
+      8436,
+      0,
+      1894
+    ],
+    "candidate": "1.26.8",
+    "published": "1.26.3",
+    "releaseApproved": false
+  },
+  "freshGate": {
+    "command": [
+      "dotnet",
+      "run",
+      "--project",
+      "tests/Bosak.XPath.Conformance",
+      "-c",
+      "Release",
+      "--no-build"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 64.13640600000508,
+    "log": "qt3-normal-gate.log",
+    "skipDump": "qt3-skips.txt",
+    "mode": "Actual normal Program entry point; no reflection or diagnostic flag injection"
+  },
+  "policy": "Approved exact normal-runner initializer and AGENTS baseline update only; TestExecutor default and all guards unchanged. validateexpr-28 passes via its unchanged XQST0012 alternative. No fixture, assertion, dependency, retry/timeout, engine, version, release or REQ-126 acceptance change. Bosak.Schema owns XSD1.1.",
+  "validation": "Fresh harness build and complete actual normal QT3 gate with exact skip delta. Unit21842 and qt4 gate8436/0/1894 inherited from unchanged engine; no fresh full-suite/qt4 claim."
+}

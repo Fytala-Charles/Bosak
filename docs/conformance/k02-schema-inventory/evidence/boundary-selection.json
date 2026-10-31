@@ -1,0 +1,591 @@
+[
+  {
+    "index": 2,
+    "id": "K2-DataFunc-6",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.5097030000179075,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\2.json",
+      "K2-DataFunc-6",
+      "metadata"
+    ],
+    "log": "metadata-2.log",
+    "result": {
+      "id": "K2-DataFunc-6",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "XPathPath",
+      "routeXquery": false,
+      "expression": "\n      \t/*/data()\n      \t\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n        <error code=\"FOTY0012\" />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.example.com/QNameXSD",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/QName-schema.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/QName-source.xml",
+          "Uri": null,
+          "Validation": "strict"
+        }
+      ]
+    }
+  },
+  {
+    "index": 318,
+    "id": "fn-union-node-args-022",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.14626980002503842,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\318.json",
+      "fn-union-node-args-022",
+      "metadata"
+    ],
+    "log": "metadata-318.log",
+    "result": {
+      "id": "fn-union-node-args-022",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "XPathPath",
+      "routeXquery": false,
+      "expression": "(/atomic:root/atomic:idrefs/text()) | (/atomic:root/atomic:idrefs/text())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-string-value>id1 id2</assert-string-value>\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/atomic.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/atomic.xml",
+          "Uri": "http://www.w3.org/fots/docs/atomic.xml",
+          "Validation": "strict"
+        }
+      ]
+    }
+  },
+  {
+    "index": 3,
+    "id": "fn-datacomplextype-1",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.509901900019031,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\3.json",
+      "fn-datacomplextype-1",
+      "metadata"
+    ],
+    "log": "metadata-3.log",
+    "result": {
+      "id": "fn-datacomplextype-1",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace mc =\"http://www.w3.org/XQueryTest/mixedcontent\"; \n        fn:data( validate { <mc:weather> <mc:temperature>30</mc:temperature> <mc:precipitation>10</mc:precipitation> </mc:weather> } )\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"FOTY0012\" />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/mixedcontent",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\data/mixedcontent.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\data/mixed.xml",
+          "Uri": null,
+          "Validation": "strict"
+        }
+      ]
+    }
+  },
+  {
+    "index": 980,
+    "id": "combined-errors-3",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.13423799999873154,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\980.json",
+      "combined-errors-3",
+      "metadata"
+    ],
+    "log": "metadata-980.log",
+    "result": {
+      "id": "combined-errors-3",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "routeXquery": true,
+      "expression": "declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        validate strict {<Strings><orderData>one string</orderData></Strings>}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <any-of>\r\n            <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n            <error code=\"XQST0075\" />\r\n            <error code=\"XQST0009\" />\r\n         </any-of>\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTestOrderBy",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\../prod/OrderByClause/orderData.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\../prod/OrderByClause/orderData.xml",
+          "Uri": null,
+          "Validation": "strict"
+        }
+      ]
+    }
+  },
+  {
+    "index": 63,
+    "id": "json-to-xml-001",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18775409998488612,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\63.json",
+      "json-to-xml-001",
+      "metadata"
+    ],
+    "log": "metadata-63.log",
+    "result": {
+      "id": "json-to-xml-001",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "NoQueryImports",
+      "routeXquery": true,
+      "expression": "fn:json-to-xml('{}')",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <all-of>\r\n                <assert-count>1</assert-count>\r\n                <assert-type>document-node()</assert-type>\r\n                <assert-xml ignore-prefixes=\"true\"><![CDATA[<map xmlns=\"http://www.w3.org/2005/xpath-functions\"/>]]></assert-xml>\r\n            </all-of>\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/2005/xpath-functions",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\json-to-xml\\schema-for-json.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 639,
+    "id": "instanceof134",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1961491000256501,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\639.json",
+      "instanceof134",
+      "metadata"
+    ],
+    "log": "metadata-639.log",
+    "result": {
+      "id": "instanceof134",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "NoQueryImports",
+      "routeXquery": true,
+      "expression": "\n         filter#2 instance of function(function(*), item()*) as item()*\n       ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n       </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/unionListDefined",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 115,
+    "id": "fn-load-xquery-module-050",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.15686079999431968,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\115.json",
+      "fn-load-xquery-module-050",
+      "metadata"
+    ],
+    "log": "metadata-115.log",
+    "result": {
+      "id": "fn-load-xquery-module-050",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "ModulesNotReviewed",
+      "routeXquery": true,
+      "expression": "\n      let $module-ns := \"http://www.w3.org/fots/fn/load-xquery-module/import-schema/module\",\n       $module := fn:load-xquery-module($module-ns)\n      return\n      $module(\"functions\")(QName($module-ns, \"hatsize\"))(1)(8)\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert-xml><![CDATA[<a>8</a>]]></assert-xml>\r\n    </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/hats",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\../prod/SchemaImport/hats.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 817,
+    "id": "qischema90431-no-err",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.13522689999081194,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\817.json",
+      "qischema90431-no-err",
+      "metadata"
+    ],
+    "log": "metadata-817.log",
+    "result": {
+      "id": "qischema90431-no-err",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "ModulesNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        declare namespace hat = \"http://www.fpml.org/2005/FpML-4-2\"; \n        import module \"http://www.fpml.org/2005/FpML-4-2\"; \n        if (exists($hat:docvar)) then <a/> else <b/>\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert>$result/self::b</assert>\r\n    </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.fpml.org/2005/FpML-4-2",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/mini-fpml.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 433,
+    "id": "notation-cast-2",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16047750000143424,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\433.json",
+      "notation-cast-2",
+      "metadata"
+    ],
+    "log": "metadata-433.log",
+    "result": {
+      "id": "notation-cast-2",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:InvalidOperationException",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace myType = \"http://www.w3.org/XQueryTest/userDefinedTypes\"; \n        myType:NOTATIONBased(\"myType:value1\") cast as xs:NOTATION",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <error code=\"XPST0080\" />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/userDefinedTypes",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\../docs/userdefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 838,
+    "id": "substitution-020",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1374163000145927,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\838.json",
+      "substitution-020",
+      "metadata"
+    ],
+    "log": "metadata-838.log",
+    "result": {
+      "id": "substitution-020",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 839,
+    "id": "substitution-021",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.12972739999531768,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\839.json",
+      "substitution-021",
+      "metadata"
+    ],
+    "log": "metadata-839.log",
+    "result": {
+      "id": "substitution-021",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 840,
+    "id": "substitution-022",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1294653999793809,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\840.json",
+      "substitution-022",
+      "metadata"
+    ],
+    "log": "metadata-840.log",
+    "result": {
+      "id": "substitution-022",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 841,
+    "id": "substitution-023",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1349478000192903,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\841.json",
+      "substitution-023",
+      "metadata"
+    ],
+    "log": "metadata-841.log",
+    "result": {
+      "id": "substitution-023",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 842,
+    "id": "substitution-024",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.13980650002486072,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\842.json",
+      "substitution-024",
+      "metadata"
+    ],
+    "log": "metadata-842.log",
+    "result": {
+      "id": "substitution-024",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 843,
+    "id": "substitution-025",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.14725710000493564,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\843.json",
+      "substitution-025",
+      "metadata"
+    ],
+    "log": "metadata-843.log",
+    "result": {
+      "id": "substitution-025",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 930,
+    "id": "validate-as-91012",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1568159000016749,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\930.json",
+      "validate-as-91012",
+      "metadata"
+    ],
+    "log": "metadata-930.log",
+    "result": {
+      "id": "validate-as-91012",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:XPathParseException",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate type hat:hatsize hat:brimsize { <hat>8</hat> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/hats",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/hats.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  },
+  {
+    "index": 935,
+    "id": "validate-as-91017",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.15121080001699738,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\935.json",
+      "validate-as-91017",
+      "metadata"
+    ],
+    "log": "metadata-935.log",
+    "result": {
+      "id": "validate-as-91017",
+      "mode": "metadata",
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:XPathParseException",
+      "routeXquery": true,
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate as hat:hatsize { <hut>8</hut> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/hats",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/hats.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "sources": []
+    }
+  }
+]

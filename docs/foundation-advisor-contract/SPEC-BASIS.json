@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-31",
+  "status": "Proposed design basis only; no production semantic adoption",
+  "parentBasis": "docs/foundation-provenance-lifetime/SPEC-BASIS.json",
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "immutableRevision": "REC-xmlschema11-1-20120405",
+      "sections": [
+        "3.12 Type Alternatives",
+        "3.13 Assertions",
+        "3.13.4.2 XPath Evaluation"
+      ]
+    }
+  ],
+  "implementationScope": "Synthetic protocol/endpoint guards only; no validator, assertion evaluator or language semantics implemented",
+  "intentionalDeviations": [],
+  "notAdopted": [
+    "Full XSD conformance or strict/lax/type host-language mappings",
+    "A compatibility algorithm for arbitrary providers",
+    "Engine profile producer implementation",
+    "Production public signatures"
+  ]
+}

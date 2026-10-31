@@ -1,0 +1,29 @@
+[
+  {
+    "url": "https://www.w3.org/TR/2010/REC-xpath-functions-20101214/",
+    "normativeEdition": "REC-xpath-functions-20101214; second edition revised 13 April 2015",
+    "section": "15.4.1",
+    "exactRetrievedRepresentationSha256": "6d85cf91b013989979335bb6c2d21f48ab193f8debe5ad67647bcbc6651d721f",
+    "bytes": 927318,
+    "retrievedDate": "2026-10-29",
+    "note": "Edition/revision is normative selection; this hash locks the exact retrieved representation separately from publication/review dates."
+  },
+  {
+    "url": "https://www.w3.org/TR/2010/REC-xpath20-20101214/",
+    "normativeEdition": "REC-xpath20-20101214; second edition link corrections 3 January 2011",
+    "section": null,
+    "exactRetrievedRepresentationSha256": "8f570fb5f09ee66b5a645a7d7e3f185d6314379eb2c4d80ac944dc66d2fe8e0a",
+    "bytes": 490562,
+    "retrievedDate": "2026-10-29",
+    "note": "Edition/revision is normative selection; this hash locks the exact retrieved representation separately from publication/review dates."
+  },
+  {
+    "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+    "normativeEdition": "REC-xmlschema11-1-20120405",
+    "section": null,
+    "exactRetrievedRepresentationSha256": "5ffb773f81fb81cfc9ac54dfb871c333cefb12fbdffe4caeb28170054b21fc6a",
+    "bytes": 2021328,
+    "retrievedDate": "2026-10-29",
+    "note": "Edition/revision is normative selection; this hash locks the exact retrieved representation separately from publication/review dates."
+  }
+]
