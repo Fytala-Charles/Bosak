@@ -11,6 +11,11 @@ For today's introduction and installation, start with the [README](../README.md)
 Future implementation logs belong in operation-specific documents, release records and handover notes. Append a dated entry here only when a historical summary is useful; keep the README focused on the product and getting started.
 
 
+## 31 October 2026 — Private scalar transport 1.36.0
+
+Private scalar transport promoted — 31 October 2026: source **1.36.0** applies the prepared six-file patch and 22 regressions. Fresh full build passes with five unchanged warnings; all ten unit projects pass **24,267/0/0**, QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** plus 11 experimental passes. Skip maps, actual loaded hashes, unchanged caller 20/0 and native 121/atomic 376 are verified. Two equality overrides are explicitly implemented/disclosed (78 types; declared members 1,199 to 1,201; inherited signatures/base slots unchanged). No package publication, C45, consumer/budget or freeze acceptance. Next: updated C45 owner-review handoff for Schema, XmlDb and Braid. See [1.36 qualification and disposition](foundation-transport136/README.md). Delivery resolves via `git log -1 --format=%H -- src/Directory.Build.props`.
+
+
 ## Private production admission and roadmap archive ? 31 October 2026
 
 Core 1.35.0 introduces internal scalar evidence admission, frozen opt-in XPath context and raw-operation ownership. All 24,245 unit tests and exact QT3/qt4 gates pass; retained caller20/0 and exported metadata/layout remain unchanged. Public schema API/carrier/provider acceptance and publication remain pending. See the [implementation dossier](foundation-production-admission/README.md). The prior roadmap is preserved below as historical design sequence, not current direction.

@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 31-10-2026     | Creation: private foundation admission (1.35.0)                                          |
+//                      | Charles Korthout | 0.2   | 31-10-2026     | Bind private scalar transport and retain stack-owned cached-read leases (1.36.0)         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
@@ -109,6 +110,27 @@ internal sealed class SchemaEvidenceKernel
     internal Evidence Read(Snapshot snapshot, ISchemaIssuedScalar value, CancellationToken cancellationToken)
     {
         CheckSnapshot(snapshot);
+        var lease = snapshot.EnterRead();
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!_issuer.OwnsValue(value)) throw new ArgumentException("Unissued scalar container.", nameof(value));
+            cancellationToken.ThrowIfCancellationRequested();
+            var cached = snapshot.ReadCached(value);
+            return cached ?? ReadUncached(snapshot, value, cancellationToken);
+        }
+        catch (Exception primary)
+        {
+            try { lease.Dispose(); }
+            catch (Exception cleanup) { throw new AggregateException("Operation and owned cleanup both failed.", primary, cleanup); }
+            throw;
+        }
+        finally { lease.Dispose(); }
+    }
+
+    private Evidence ReadUncached(Snapshot snapshot, ISchemaIssuedScalar value, CancellationToken cancellationToken)
+    {
+        CheckSnapshot(snapshot);
         var operation = snapshot.Enter();
         try
         {
@@ -145,7 +167,7 @@ internal sealed class SchemaEvidenceKernel
                 && source.Value.Kind == target.Value.Kind
                 && source.Value.SchemaTypeName == target.Value.SchemaTypeName
                 && source.Value.UserSchemaTypeName == target.Value.UserSchemaTypeName
-                && XdmValueEqualityComparer.Instance.Equals(source.Value, target.Value);
+                && source.Value.SchemaTransportMatches(target.Value);
             source.Snapshot?.Check();
             return same ? source : new Evidence(_seal, target.Value, target.Declared, target.Actual, null, null);
         }
@@ -168,9 +190,34 @@ internal sealed class SchemaEvidenceKernel
         var origin = scalar.OriginalAssessment;
         if (origin is not null && !_issuer.OwnsAssessment(origin)) throw new ArgumentException("Unissued assessment evidence.", nameof(scalar));
         var value = scalar.Value;
+        if (XdmValue.SchemaTransportMarker(value) is not null)
+            throw new ArgumentException("Issuer values must be plain.", nameof(scalar));
         if (value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)
             throw new ArgumentException("A scalar atomic value is required.", nameof(scalar));
         return (value, declared, actual, origin);
+    }
+
+    // Private scalar transport; no public attachment factory.
+    internal XdmValue AttachValue(Evidence evidence)
+    {
+        CheckEvidence(evidence);
+        return XdmValue.SchemaTransportAttach(evidence.Value, evidence);
+    }
+
+    internal Evidence? ReadValue(XdmValue value)
+    {
+        AdmitEnvironment(_environment);
+        var marker = XdmValue.SchemaTransportMarker(value);
+        if (marker is null) return null;
+        if (marker is not Evidence evidence) throw new ArgumentException("Unrecognized evidence marker.", nameof(value));
+        CheckEvidence(evidence);
+        var plain = XdmValue.WithoutSchemaEvidence(value);
+        var expected = evidence.Value;
+        if (plain.Kind != expected.Kind || plain.SchemaTypeName != expected.SchemaTypeName
+            || plain.UserSchemaTypeName != expected.UserSchemaTypeName
+            || !plain.SchemaTransportMatches(expected))
+            throw new ArgumentException("Rebound evidence payload.", nameof(value));
+        return evidence;
     }
 
     internal void CheckEvidence(Evidence evidence)
@@ -204,7 +251,7 @@ internal sealed class SchemaEvidenceKernel
         if (failures is not null) throw new AggregateException("Snapshot cleanup failed.", failures);
     }
 
-    /// <summary>Immutable admitted boundary evidence; no attachment to XdmValue.</summary>
+    /// <summary>Immutable admitted evidence bound to private scalar transport.</summary>
     internal sealed class Evidence
     {
         private readonly object _seal;
@@ -237,6 +284,25 @@ internal sealed class SchemaEvidenceKernel
         internal IDisposable Enter()
         {
             lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new Lease(this); }
+        }
+        internal ReadLease EnterRead()
+        {
+            lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new ReadLease(this); }
+        }
+        // Synchronous stack-owned local only; no interface boxing or async escape.
+        internal ref struct ReadLease
+        {
+            private Snapshot? _snapshot;
+            internal ReadLease(Snapshot snapshot) => _snapshot = snapshot;
+            internal void Dispose() { var snapshot = _snapshot; _snapshot = null; snapshot?.Leave(); }
+        }
+        internal Evidence? ReadCached(ISchemaIssuedScalar value)
+        {
+            lock (_gate)
+            {
+                ObjectDisposedException.ThrowIf(_closing, this);
+                return _values.TryGetValue(value, out var existing) ? existing : null;
+            }
         }
         internal Evidence GetOrCreate(ISchemaIssuedScalar value, Func<Evidence> create)
         {

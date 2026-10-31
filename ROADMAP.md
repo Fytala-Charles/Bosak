@@ -14,6 +14,8 @@ Full isolated transport qualification (31 October 2026): a complete rebuilt coho
 
 Private transport promotion patch prepared (31 October 2026): six-file proposal for 1.36.0 retains the qualified implementation bodies, records the paired equality-override disposition and adds 22 regressions. Isolated preflight passes Core 162/Runtime 281 (443 total), zero-warning builds, seven versioned 1.36.0.0 assemblies, matching public metadata and unchanged caller 20/0. Live source stays 1.35.0; full 1.36 solution/gates remain NotRun. Next: apply and qualify the final-version patch; C45/API freeze pending. See [promotion patch and disposition](docs/foundation-transport-promotion/README.md).
 
+Private scalar transport is implemented and qualified in source 1.36.0. Next: reconcile the C45 public provider contract and owner handoff against this foundation, including the two equality declarations and required consumer/performance acceptance. Schema, XmlDb and Braid implementation remains delegated; publication and final API freeze remain pending. See [current foundation direction](docs/foundation-transport136/README.md).
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.

@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 31-10-2026     | Creation: private foundation admission (1.35.0)                                          |
+//                      | Charles Korthout | 0.2   | 31-10-2026     | Compose issued-value reads and explicit conversion transport (1.36.0)                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
@@ -51,6 +52,7 @@ internal sealed class SchemaQuerySession : IDisposable
     }
 
     internal SchemaQueryEnvironment Environment { get; }
+    internal SchemaEvidenceKernel.Evidence? ReadEvidence(XdmValue value) => _kernel.ReadValue(value);
     internal SchemaEvidenceKernel.Snapshot OpenSnapshot(SchemaQueryEnvironment environment, object identity,
         object assessment, Action release, CancellationToken cancellationToken = default)
         => _kernel.Open(environment, identity, assessment, release, cancellationToken);
@@ -99,6 +101,18 @@ internal sealed class SchemaQuerySession : IDisposable
             ObjectDisposedException.ThrowIf(Volatile.Read(ref _lease) is null, this);
             _cancellationToken.ThrowIfCancellationRequested();
             _owner._kernel.CheckSnapshot(_snapshot);
+        }
+        internal void ValidateAccess() => Check();
+        internal XdmValue ReadValue(ISchemaIssuedScalar value)
+        { Check(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
+        internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)
+        {
+            Check();
+            var evidence = _owner._kernel.ReadValue(source)
+                ?? throw new ArgumentException("An admitted source value is required.", nameof(source));
+            if (evidence.Snapshot is not null && !ReferenceEquals(evidence.Snapshot, _snapshot))
+                throw new ArgumentException("Source belongs to another operation snapshot.", nameof(source));
+            return _owner._kernel.AttachValue(_owner._kernel.AdmitConversion(evidence, constructed, _cancellationToken));
         }
         internal XdmValue Evaluate(EvaluationContext context)
         {

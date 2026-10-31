@@ -1,0 +1,221 @@
+{
+  "date": "2026-10-31",
+  "version": "1.36.0",
+  "productionApplied": true,
+  "sourceBaseRevision": "a87ec4ac3a034da81a8efb7326c5115e91bc1b18",
+  "sourceArchiveSha256": "d05ed0af570c0ac8e33a5e78fda15175fd9dd486f80a2775a15472f098cda047",
+  "newRegressionCases": 22,
+  "unitTests": {
+    "passed": 24267,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests.dll": 162,
+      "Bosak.XPath.Parser.Tests.dll": 202,
+      "Bosak.XPath.Runtime.Tests.dll": 281,
+      "Bosak.XPath.Api.Tests.dll": 489,
+      "Bosak.XPath.Standard.Tests.dll": 13797,
+      "Bosak.XPath.Compiler.Tests.dll": 66,
+      "Bosak.Xslt.Tests.dll": 8196,
+      "Bosak.XQuery.Tests.dll": 804,
+      "Bosak.XPath.Providers.Tests.dll": 223,
+      "Bosak.XPath.Providers.Database.Tests.dll": 47
+    },
+    "initialRunAllGreen": true,
+    "databaseListenerAccessEnabled": true,
+    "databaseCollectionsSerialized": true,
+    "xsltUniqueTempCopy": true
+  },
+  "build": {
+    "errors": 0,
+    "warningsInUnchangedFiles": 5
+  },
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchangedIgnoringLineEndings": true,
+  "publicMetadata": {
+    "exportedTypes": 78,
+    "priorDeclaredMembers": 1199,
+    "declaredMembers": 1201,
+    "inheritedSignaturesUnchanged": true,
+    "baseVirtualSlotsUnchanged": true,
+    "xdmValueSizeX64": 48,
+    "declaringTypeChanged": true
+  },
+  "pairedOverridesImplemented": true,
+  "retainedCaller": {
+    "passed": 20,
+    "failed": 0,
+    "unchangedBytes": true
+  },
+  "nativeProbeChecks": 121,
+  "atomicProbeChecks": 376,
+  "atomicFixtures": 39,
+  "atomicFactoryKinds": 11,
+  "freshCohortCosts": {
+    "integer|payload-access|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 18.4
+    },
+    "integer|cached-kernel-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 414.1
+    },
+    "integer|issued-value-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 208.3
+    },
+    "integer|evidence-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 128.2
+    },
+    "integer|exact-noop|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 382.7
+    },
+    "integer|payload-access|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 4.625
+    },
+    "integer|cached-kernel-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 130.735
+    },
+    "integer|issued-value-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 160.27
+    },
+    "integer|evidence-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 116.09
+    },
+    "integer|exact-noop|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 336.145
+    },
+    "string|payload-access|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 23.8
+    },
+    "string|cached-kernel-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 179.7
+    },
+    "string|issued-value-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 260.9
+    },
+    "string|evidence-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 149.8
+    },
+    "string|exact-noop|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 64.0,
+      "medianNsPerOp": 421.0
+    },
+    "string|payload-access|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 12.19
+    },
+    "string|cached-kernel-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 147.3
+    },
+    "string|issued-value-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 194.585
+    },
+    "string|evidence-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 124.68
+    },
+    "string|exact-noop|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 64.0,
+      "medianNsPerOp": 315.235
+    },
+    "decimal|payload-access|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 15.1
+    },
+    "decimal|cached-kernel-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 152.4
+    },
+    "decimal|issued-value-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 202.8
+    },
+    "decimal|evidence-read|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 108.4
+    },
+    "decimal|exact-noop|1000": {
+      "samples": 7,
+      "medianBytesPerOp": 64.0,
+      "medianNsPerOp": 371.5
+    },
+    "decimal|payload-access|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 6.895
+    },
+    "decimal|cached-kernel-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 139.505
+    },
+    "decimal|issued-value-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 32.0,
+      "medianNsPerOp": 175.055
+    },
+    "decimal|evidence-read|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 0.0,
+      "medianNsPerOp": 87.695
+    },
+    "decimal|exact-noop|20000": {
+      "samples": 7,
+      "medianBytesPerOp": 64.0,
+      "medianNsPerOp": 310.79
+    }
+  },
+  "c45Accepted": false,
+  "apiFreezeAccepted": false,
+  "consumerQualificationComplete": false,
+  "budgetAccepted": false,
+  "published": false
+}

@@ -1,0 +1,64 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 120 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XQuery\Bosak.XQuery.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj (in 143 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 143 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Conformance\Bosak.XPath.Conformance.csproj (in 144 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Providers.Database\Bosak.XPath.Providers.Database.csproj (in 143 ms).
+  Restored D:\Development\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj (in 143 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Conformance40\Bosak.XPath.Conformance40.csproj (in 144 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\Bosak.XPath.Parser.Tests.csproj (in 175 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj (in 176 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\Bosak.XPath.Providers.Tests.csproj (in 176 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\Bosak.XPath.Compiler.Tests.csproj (in 175 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XQuery.Tests\Bosak.XQuery.Tests.csproj (in 175 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\Bosak.XPath.Providers.Database.Tests.csproj (in 176 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj (in 176 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\Bosak.XPath.Api.Tests.csproj (in 177 ms).
+  Restored D:\Development\Bosak\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj (in 175 ms).
+  Restored D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\Bosak.XPath.Core.Tests.csproj (in 175 ms).
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XPath.Core.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll
+  Bosak.XPath.Parser.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll
+  Bosak.XPath.Runtime.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll
+  Bosak.XPath.Api.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(64,54): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(83,79): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerRadixTests.cs(152,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\ParseIntegerTests.cs(167,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+  Bosak.XPath.Standard.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll
+  Bosak.XPath.Compiler.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll
+  Bosak.XQuery -> D:\Development\Bosak\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.XPath.Conformance -> D:\Development\Bosak\tests\Bosak.XPath.Conformance\bin\Release\net10.0\Bosak.XPath.Conformance.dll
+  Bosak.Xslt.Tests -> D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll
+D:\Development\Bosak\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+  Bosak.Xslt.Conformance -> D:\Development\Bosak\tests\Bosak.Xslt.Conformance\bin\Release\net10.0\Bosak.Xslt.Conformance.dll
+  Bosak.XQuery.Tests -> D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll
+  Bosak.XPath.Providers.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll
+  Bosak.XPath.Providers.Database -> D:\Development\Bosak\src\Bosak.XPath.Providers.Database\bin\Release\net10.0\Bosak.XPath.Providers.Database.dll
+  Bosak.XPath.Providers.Database.Tests -> D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll
+  Bosak.XPath.Conformance40 -> D:\Development\Bosak\tests\Bosak.XPath.Conformance40\bin\Release\net10.0\Bosak.XPath.Conformance40.dll
+
+Build succeeded.
+
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(64,54): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(83,79): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\FormatIntegerRadixTests.cs(152,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\ParseIntegerTests.cs(167,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+    5 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:20.73
