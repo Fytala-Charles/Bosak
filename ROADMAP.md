@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+Both owners have returned requirements, and bounded XmlDb candidate characterization is delivered. The [31 October reconciliation](docs/foundation-owner-reconciliation/README.md) proposes answers to Schema’s four questions and XmlDb’s six return items. Next select exact authority/annotation/session/value-transport signatures and immutable semantic adoption; do not repeat the missing-requirements inventory.
+
 The [proposed implementation ordering](docs/foundation-implementation-scope/README.md) separates existing XmlDb XML qualification from optional Schema authority/session design. Twelve traced needs identify the concrete owner facts needed for exact signatures; further inventory alone will not close the decision.
 
 The [finite C139-01/C45 decision matrix](docs/foundation-contract-decision/README.md) now records six review groups and pinned owner observations. Next, reconcile concrete owner requirements into the smallest named implementation scope; signatures, adoption and acceptance remain pending.
