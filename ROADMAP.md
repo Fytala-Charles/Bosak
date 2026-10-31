@@ -10,6 +10,8 @@ Direct private transport trial (31 October 2026): isolated Core kernel attachmen
 
 Atomic transport/cost qualification (31 October 2026): the isolated candidate corrects twelve representation controls and retains a stack-owned read lease. 39 fixtures/11 public-factory atomic kinds pass 376 checks per process, twice for candidate/control; native 121/103 and legacy 20/0 remain green. Cached kernel reads fall 176 to 0 bytes/op; issued integer 0 and string/decimal 32, evidence lookup 0. Production remains 1.35.0; timing budgets, C45/API freeze pending. Next: full isolated solution/conformance qualification and equality-manifest review. See [the sealed atomic/cost trial](docs/foundation-transport-atomic-cost/README.md).
 
+Full isolated transport qualification (31 October 2026): a complete rebuilt cohort passes all ten unit projects (24,245 tests; database listener sandbox failures retained, full rerun 47/0), QT3 31,397/0/424 and gated qt4 8,941/0/1,918 with 11 experimental passes. Skip maps and actual loaded hashes are verified; retained caller 20/0, native 121 and atomic 376 pass. Public metadata keeps 78 types but gains two declared equality overrides (1,199 to 1,201); inherited signatures/base slots stay unchanged. Production remains 1.35.0. Next: a production promotion patch with explicit override disposition; C45/API freeze pending. See [full qualification and API review](docs/foundation-transport-full-gates/README.md).
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.

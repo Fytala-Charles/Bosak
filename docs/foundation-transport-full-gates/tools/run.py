@@ -1,0 +1,120 @@
+"""Build and qualify a complete isolated source cohort. No production source edits."""
+from pathlib import Path
+import os,sys,json,hashlib,subprocess,zipfile,re,tempfile,shutil
+ROOT=Path(__file__).resolve().parents[3];P=Path(__file__).resolve().parents[1];E=P/'evidence';E.mkdir(exist_ok=True)
+W=ROOT/'.guard-tmp/transport-full-gates';sha=lambda b:hashlib.sha256(b).hexdigest()
+sys.path.insert(0,str(ROOT/'docs/foundation-runner-safety/tools'))
+from run_caller import process_error_mode
+def run(command,log,cwd=None,env=None,timeout=600,check=True):
+ with process_error_mode(),(E/log).open('w',encoding='utf-8') as f:
+  r=subprocess.run([str(c) for c in command],cwd=cwd or W,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=timeout)
+ if check and r.returncode:raise RuntimeError(log+' failed: '+str(r.returncode))
+ return r.returncode
+def write(name,value):(E/name).write_text(json.dumps(value,indent=2)+'\n',encoding='utf-8')
+def observed(label):
+ folder=E/(label+'-bindings');folder.mkdir(exist_ok=True);env=os.environ.copy();env['DOTNET_STARTUP_HOOKS']=str(W/'Observer/bin/Release/net10.0/Observer.dll');env['BOSAK_BINDING_DIRECTORY']=str(folder);return env
+def project(folder,name,source,refs=(),assembly=None):
+ folder.mkdir(exist_ok=True);(folder/'Program.cs').write_bytes(source)
+ references=''.join('<Reference Include="'+Path(n).stem+'"><HintPath>'+str(W/'lib'/n)+'</HintPath></Reference>' for n in refs)
+ props='<OutputType>Exe</OutputType>' if name!='Observer' else ''
+ if assembly:props+='<AssemblyName>'+assembly+'</AssemblyName>'
+ (folder/(name+'.csproj')).write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors>'+props+'</PropertyGroup><ItemGroup>'+references+'</ItemGroup></Project>',encoding='utf-8')
+ return folder/(name+'.csproj')
+def build(proj,log):run(['dotnet','build',proj,'-c','Release','--configfile',W/'NuGet.Config','-p:NuGetAudit=false','-m:1'],log)
+def prepare():
+ if W.exists():raise ValueError('Use a fresh qualification directory.')
+ W.mkdir(parents=True)
+ revision=subprocess.check_output(['git','rev-parse','83341091'],cwd=ROOT,text=True).strip()
+ paths=['src','tests','Bosak.sln','README.md','license.md','NOTICE','assets','docs/xpath40-catalog/worked-examples','docs/xpath40-catalog/examples']
+ archive=E/'source-baseline.zip';subprocess.run(['git','archive','--format=zip','-o',str(archive),revision,*paths],cwd=ROOT,check=True)
+ with zipfile.ZipFile(archive) as z:
+  for n in z.namelist():
+   target=(W/n).resolve();assert target.is_relative_to(W.resolve())
+   if n.endswith('/'):target.mkdir(parents=True,exist_ok=True)
+   else:target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read(n))
+ overlays={}
+ for name,projectName in [('XdmValue.cs.txt','Bosak.XPath.Core'),('SchemaEvidenceKernel.cs.txt','Bosak.XPath.Core'),('SchemaQuerySession.cs.txt','Bosak.XPath.Runtime')]:
+  target=W/'src'/projectName/('Vm' if projectName.endswith('Runtime') else 'Xdm')/name.removesuffix('.txt')
+  source=ROOT/'docs/foundation-transport-atomic-cost/candidate'/name;target.write_bytes(source.read_bytes());overlays[target.relative_to(W).as_posix()]=sha(source.read_bytes())
+ corpora={}
+ for name in ['qt3tests','qt4tests']:
+  source=ROOT/'tests'/name;target=W/'tests'/name
+  if target.exists():target.rmdir() # git archive emits only the empty gitlink directory.
+  command="New-Item -ItemType Junction -Path '"+str(target).replace("'","''")+"' -Value '"+str(source).replace("'","''")+"' | Out-Null"
+  subprocess.run(['powershell','-NoProfile','-Command',command],check=True)
+  corpora[name]={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=source,text=True).strip(),'statusBefore':subprocess.check_output(['git','status','--porcelain'],cwd=source,text=True)}
+ (W/'NuGet.Config').write_text('<configuration><packageSources><clear /></packageSources></configuration>')
+ write('SOURCE.json',{'revision':revision,'archiveSha256':sha(archive.read_bytes()),'archivePaths':paths,'overlays':overlays,'corpora':corpora,'productionModified':False})
+ run(['dotnet','--info'],'dotnet-info.txt')
+ build(W/'Bosak.sln','solution-build.txt')
+ sourceProjects=re.findall(r'^Project\([^\n]+? = "([^"]+)", "(src\\[^\"]+\.csproj)"',(W/'Bosak.sln').read_text(encoding='utf-8-sig'),re.M)
+ engines={}
+ for name,path in sourceProjects:
+  output=W/Path(path.replace('\\','/')).parent/'bin/Release/net10.0'/(name+'.dll');engines[name+'.dll']={'path':str(output),'sha256':sha(output.read_bytes())}
+ lib=W/'lib';lib.mkdir()
+ with zipfile.ZipFile(ROOT/'docs/foundation-carrier-equality/evidence/product-dlls.zip') as z:names=[n for n in z.namelist() if n.endswith('.dll')]
+ for name in names:shutil.copyfile(engines[name]['path'],lib/name)
+ write('LAYOUT.json',{'engines':engines,'seven':{n:engines[n]['sha256'] for n in names}})
+ build(project(W/'Observer','Observer',(P/'tools/StartupHook.cs.txt').read_bytes()),'observer-build.txt')
+ build(project(W/'Metadata','Metadata',(P/'tools/MetadataProbe.cs.txt').read_bytes()),'metadata-build.txt')
+def units():
+ solution=(W/'Bosak.sln').read_text(encoding='utf-8-sig');projects=re.findall(r'^Project\([^\n]+? = "([^"]+\.Tests)", "(tests\\[^\"]+\.csproj)"',solution,re.M);assert len(projects)==10
+ results=W/'trx';results.mkdir(exist_ok=True);records=[]
+ for name,path in projects:
+  output=W/Path(path.replace('\\','/')).parent/'bin/Release/net10.0'
+  if name=='Bosak.Xslt.Tests':
+   target=Path(tempfile.mkdtemp(prefix='BosakTransportXslt-'));shutil.copytree(output,target,dirs_exist_ok=True);output=target
+  if name=='Bosak.XPath.Providers.Database.Tests':(output/'xunit.runner.json').write_text('{"parallelizeTestCollections":false}')
+  layout={f.name:sha(f.read_bytes()) for f in output.glob('Bosak.*.dll')}
+  code=run(['dotnet','vstest',output/(name+'.dll'),'/Logger:trx;LogFileName='+name+'.trx','/ResultsDirectory:'+str(results)],name+'.txt',cwd=output,env=observed(name),check=False)
+  assert layout=={f.name:sha(f.read_bytes()) for f in output.glob('Bosak.*.dll')}
+  records.append({'name':name,'exitCode':code,'directory':str(output),'assemblies':layout})
+ write('UNIT-RUNS.json',records)
+ with zipfile.ZipFile(E/'unit-trx.zip','w',compression=zipfile.ZIP_DEFLATED) as z:
+  for f in sorted(results.rglob('*.trx')):z.write(f,f.relative_to(results))
+ if any(r['exitCode'] for r in records):raise RuntimeError('Unit failures retained; inspect UNIT-RUNS.json.')
+def database_retry():
+ records=json.loads((E/'UNIT-RUNS.json').read_text());v=next(v for v in records if v['name']=='Bosak.XPath.Providers.Database.Tests');output=Path(v['directory']);results=W/'database-retry-trx';results.mkdir(exist_ok=True)
+ assert v['assemblies']=={f.name:sha(f.read_bytes()) for f in output.glob('Bosak.*.dll')}
+ code=run(['dotnet','vstest',output/(v['name']+'.dll'),'/Logger:trx;LogFileName='+v['name']+'.trx','/ResultsDirectory:'+str(results)],'database-rerun.txt',cwd=output,env=observed('database-rerun'),check=False)
+ retry={**v,'exitCode':code};write('DATABASE-RERUN.json',retry)
+ with zipfile.ZipFile(E/'database-rerun-trx.zip','w',compression=zipfile.ZIP_DEFLATED) as z:
+  for f in results.glob('*.trx'):z.write(f,f.name)
+ write('UNIT-FINAL.json',[retry if row['name']==v['name'] else row for row in records])
+ if code:raise RuntimeError('Database retry failed; receipts retained.')
+def gates():
+ records={}
+ for label,projectName,corpus in [('qt3','Bosak.XPath.Conformance','qt3tests'),('qt4','Bosak.XPath.Conformance40','qt4tests')]:
+  output=W/'tests'/projectName/'bin/Release/net10.0';env=observed(label);env['BOSAK_'+label.upper()+'_DUMP_SKIPS']=str(E/(label+'-skips.txt'))
+  if label=='qt4':env['BOSAK_QT4_GATE_ONLY']='1'
+  records[label]=run(['dotnet',output/(projectName+'.dll'),ROOT/'tests'/corpus],label+'.txt',cwd=W,env=env,check=False)
+ write('GATE-RUNS.json',records)
+ source=json.loads((E/'SOURCE.json').read_text())
+ write('CORPUS-AFTER.json',{name:{'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT/'tests'/name,text=True).strip(),'status':subprocess.check_output(['git','status','--porcelain'],cwd=ROOT/'tests'/name,text=True)} for name in source['corpora']})
+ if any(records.values()):raise RuntimeError('Gate failure retained.')
+def review():
+ baseline=W/'baseline';baseline.mkdir(exist_ok=True)
+ with zipfile.ZipFile(ROOT/'docs/foundation-carrier-equality/evidence/product-dlls.zip') as z:
+  for n in z.namelist():
+   if n.endswith('.dll'):(baseline/n).write_bytes(z.read(n))
+ for name,folder in [('baseline',baseline),('candidate',W/'lib')]:run(['dotnet',W/'Metadata/bin/Release/net10.0/Metadata.dll',folder],name+'-metadata.json')
+ layout=json.loads((E/'LAYOUT.json').read_text());write('legacy-qualification.json',{'assemblies':[{'name':Path(n).stem,'sha256':h} for n,h in layout['seven'].items()]})
+ legacy=W/'Legacy';legacy.mkdir(exist_ok=True)
+ with zipfile.ZipFile(ROOT/'docs/foundation-legacy-compatibility/evidence/unchanged-binary-runtime.zip') as z:
+  for n in z.namelist():
+   target=(legacy/n).resolve();assert target.is_relative_to(legacy.resolve())
+   if not n.endswith('/'):target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read(n))
+ for n in layout['seven']:shutil.copyfile(W/'lib'/n,legacy/n)
+ run([sys.executable,'-B',ROOT/'tools/run-retained-foundation-caller.py','--layout',legacy,'--candidate-evidence',E/'legacy-qualification.json','--output',E/'legacy-caller.json'],'legacy-log.txt')
+ for label,source in [('Native',ROOT/'docs/foundation-private-transport/tools/Probe.cs.txt'),('Atomic',ROOT/'docs/foundation-transport-atomic-cost/tools/AtomicProbe.cs.txt')]:
+  folder=W/label;proj=project(folder,label,source.read_bytes(),layout['seven'],assembly='Bosak.XPath.Runtime.Tests')
+  if label=='Native':
+   with zipfile.ZipFile(ROOT/'docs/foundation-native-adapter/evidence/native-source.zip') as z:
+    for n in z.namelist():
+     if n.endswith('.cs'):(folder/Path(n).name).write_bytes(z.read(n))
+  text=proj.read_text();proj.write_text(text.replace('<TargetFramework>','<DefineConstants>CARRIER</DefineConstants><TargetFramework>',1))
+  build(proj,label.lower()+'-build.txt')
+  run(['dotnet',folder/'bin/Release/net10.0/Bosak.XPath.Runtime.Tests.dll','carrier'],label.lower()+'-candidate.json')
+action=sys.argv[1] if len(sys.argv)>1 else 'prepare'
+{'prepare':prepare,'units':units,'database-retry':database_retry,'gates':gates,'review':review}[action]()
+print(action+' completed; receipts retained in '+str(E))
