@@ -1,0 +1,32 @@
+{
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "5a2f470b990272afa2e8b0082cc3d3b708e86f0e273b8ecde8ba67d54163c658"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+    }
+  ]
+}

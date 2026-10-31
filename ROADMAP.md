@@ -8,7 +8,7 @@
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.
 
-1. Select a private atomic carrier using actual compatibility, equality, allocation and workload evidence. Keep representation details out of the public contract.
+1. Remove the measured 64-byte annotated-equality penalty in the [selective 48-byte carrier candidate](docs/foundation-carrier-equality/README.md), preserving the frozen-caller oracle. Review inherited-method reflection changes and complete workload/budget qualification before selection. Keep representation details out of the public contract.
 2. Connect the real native Schema provider through the full admitted semantic environment, including versioned host declarations and explicit unsupported capabilities.
 3. Qualify Schema, XmlDb and Braid against the same immutable source/package cohort, including lazy results, source/snapshot ownership, worker boundaries and unchanged consumer binaries.
 4. Resolve the named stable API manifest, C45 and [performance budgets](docs/foundation-performance/README.md), then obtain explicit Core/Schema/XmlDb/Braid dispositions before API freeze or publication.

@@ -59,7 +59,7 @@ Target framework: `net10.0`. All tests must pass before considering a task compl
 
 ### Automation crash discipline
 
-Use `docs/foundation-runner-safety/tools/run_caller.py` for retained foundation binary callers. It checks arguments and qualified binary/configuration hashes before launch, captures output with a watchdog, and scopes Windows error-mode flags to the runner/child process. Do not intentionally launch unhandled .NET negative cases; exercise refusal with a mocked launcher or catch failures inside the diagnostic. Do not change machine-wide Windows Error Reporting settings.
+Use `tools/run-retained-foundation-caller.py` for retained foundation binary callers. For an isolated qualified candidate, supply its exact seven-assembly hash manifest with `--candidate-evidence`; the default remains the production admission receipt. It checks arguments and qualified binary/configuration hashes before launch, captures output with a watchdog, and scopes Windows error-mode flags to the runner/child process. Do not intentionally launch unhandled .NET negative cases; exercise refusal with a mocked launcher or catch failures inside the diagnostic. Do not change machine-wide Windows Error Reporting settings.
 
 ## Conformance Harnesses
 
