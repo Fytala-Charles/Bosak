@@ -8,7 +8,9 @@ The [actual-source audit](docs/foundation-callsite-disposition/README.md) identi
 
 V5 boundary diagnostics now pass 75 controls. The subsequent native adapter trial exercises direct-node/value transport; whole-tree routing, full capture, consumer qualification and freeze remain pending.
 
-The [native decimal adapter trial](docs/foundation-native-adapter/README.md) passes 61 controls in four real API/VM runs. Next: resolve the same-type constructor provenance distinction and qualify whole-snapshot navigation before production carrier integration.
+The [native decimal adapter trial](docs/foundation-native-adapter/README.md) passes 61 controls in four real API/VM runs. The subsequent whole-snapshot trial supplies a candidate no-op disposition and navigation evidence; production integration remains pending.
+
+The [whole-snapshot trial](docs/foundation-snapshot-navigation/README.md) passes 162 controls in four runs without changing V5 signatures. Next: private trusted-issuer/evidence-read kernel, authoritative constructor guard and explicit snapshot/cache ownership before full binding and product qualification.
 
 ## Immediate foundation work
 

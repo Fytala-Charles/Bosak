@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-31",
+  "status": "Candidate design disposition; not production semantic adoption or owner acceptance",
+  "rule": "An exact authoritative declared-type and actual-type match with unchanged atomic value may reuse existing evidence; it grants no new node/document assessment or issuer authority.",
+  "typeChangingConversion": "Fresh target evidence, without inherited OriginalAssessment; computed audit lineage is a separate concern.",
+  "insufficientChecks": [
+    "QName alone",
+    "schema digest equality",
+    "primitive XdmValueKind equality",
+    "numeric value equality across kinds",
+    "union member matching without governing-type matching"
+  ],
+  "guardQualification": "Six isolated guard controls only; current VM constructors are not wired to this guard. Real user-defined facet/union providers are not exercised.",
+  "publicApiDeltaFromV5": false,
+  "productionChanged": false,
+  "apiFreezeAccepted": false,
+  "historicalProposalPreserved": "docs/foundation-provenance-lifetime",
+  "futureImplementation": [
+    "private trusted-issuer and evidence-read kernel",
+    "authoritative constructor fast-path guard",
+    "operation/snapshot lifetime and bounded cache ownership",
+    "full product gates and actual consumer qualification"
+  ]
+}
