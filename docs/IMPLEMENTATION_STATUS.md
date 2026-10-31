@@ -24,6 +24,8 @@ C139-01 actual VM carrier probe — 31 October 2026: [27-case return](foundation
 
 C139-01 provenance/lifetime review — 31 October 2026: [PL-01–10 and V2 declaration amendment](foundation-provenance-lifetime/README.md) separate current atomic type evidence, optional original assessment and non-authorizing audit lineage; original node origin remains required. Exact 2017 Recommendation revisions/sections are recorded as proposed basis, not production adoption. Standalone admission model passes three repeats of 12 scenarios/46 checks with actual private file handles. Canceling an active wait/drain retains raw ownership; an intentionally waiter-owned lease demonstrates premature closure. Core operation API placement, real providers/workers/races and full E-04 remain pending. No product change or freeze. Delivery: `git log -1 --format=%H -- docs/foundation-provenance-lifetime/README.md`.
 
+C139-01 advisor/compatible-view proposal — 31 October 2026: [V3 declarations and 54 controls](foundation-advisor-contract/README.md) add captured query/static context, provider-prepared assessor/advisor, assessment episode/input/evidence, bounded/location-aware diagnostics, fresh simple construction and directional source/target/profile-bound compatibility. Three synthetic protocol runs and XML-doc/warnings-as-errors compilation pass. The 35-type surface is a review inventory, not blanket Core API acceptance; actual compiler capture, provider assessment/compatibility, carrier/performance and host mapping remain open. Full N1–N8/XmlDb/Braid trace retained. No production source/pin/gate or freeze change. Delivery: `git log -1 --format=%H -- docs/foundation-advisor-contract/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

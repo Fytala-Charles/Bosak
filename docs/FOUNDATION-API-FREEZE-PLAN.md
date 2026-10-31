@@ -111,3 +111,7 @@ The [C139-01 first signature slice](foundation-contract-design/README.md) replac
 ## Provenance and operation-ownership proposal — 31 October 2026
 
 [PL-01–10/V2 and partial E-04](foundation-provenance-lifetime/README.md) propose current type evidence independently of original assessment, with casts/computation not automatically inheriting authority. A private admission model demonstrates correct raw-owned lifetime and unsafe waiter-owned release using fresh file handles. This does not adopt production semantics or force a public Core owner/drain API; exact placement and actual provider/worker qualification remain pending.
+
+## Assessment/advisor and compatible-view signature proposal — 31 October 2026
+
+[V3 declarations](foundation-advisor-contract/README.md) add the previously missing proposed signature families with explicit query/schema context separation, input/source/snapshot guards, validity/evidence/diagnostic bounds and endpoint-bound compatibility. Three repeats of 54 synthetic controls and zero-warning XML-doc builds pass. Actual provider algorithms, compiler capture, performance/descriptor selection and real consumer/gate qualification remain required; the 35 review types are not an accepted freeze manifest.

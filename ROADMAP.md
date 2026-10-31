@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+The [V3 assessment/advisor and compatible-view proposal](docs/foundation-advisor-contract/README.md) now compiles with 54 passing synthetic boundary controls. Reconcile its 35-type inventory against actual provider/consumer needs and run the bulk/cursor/per-call-cost experiment before selecting the stable public surface; test-double success is not production acceptance.
+
 [Provenance and operation ownership](docs/foundation-provenance-lifetime/README.md) now has ten proposed transition rules, a compiled V2 atomic-evidence amendment and controlled file-lifetime evidence. Keep raw-operation ownership out of canceled waiting scopes. Next reconcile these rules with real providers and finish advisor/compatible-view signatures before final scope.
 
 [Actual VM carrier traces](docs/foundation-vm-carrier-probe/README.md) show which structural/atomization paths retain markers and which constructors/computations drop them. Selective inline storage removes the sampled integer holder allocation, while reference-backed costs and CLR equality remain unresolved. Next settle explicit provenance transition laws and session ownership before choosing final contracts.
