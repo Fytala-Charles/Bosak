@@ -4,6 +4,8 @@
   <p>Current direction for the open XML engine and schema foundation</p>
 </div>
 
+Native kernel/carrier trial (31 October 2026): the isolated production private kernel/session plus unchanged native assessment sources passed 103 control and 109 carrier checks twice each, 14 VM expressions per process, and two retained legacy 20/0 replays. Production remains 1.35.0; public API acceptance and freeze remain pending. Next is direct private transport/read composition with explicit constructor admission. See [the sealed trial](docs/foundation-native-kernel-carrier/README.md).
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.
