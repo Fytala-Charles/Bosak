@@ -57,6 +57,10 @@ Target framework: `net10.0`. All tests must pass before considering a task compl
 > The script copies the build output to `%TEMP%` and runs `dotnet vstest` from there,
 > which bypasses the policy. Other test projects run normally with `dotnet test`.
 
+### Automation crash discipline
+
+Use `docs/foundation-runner-safety/tools/run_caller.py` for retained foundation binary callers. It checks arguments and qualified binary/configuration hashes before launch, captures output with a watchdog, and scopes Windows error-mode flags to the runner/child process. Do not intentionally launch unhandled .NET negative cases; exercise refusal with a mocked launcher or catch failures inside the diagnostic. Do not change machine-wide Windows Error Reporting settings.
+
 ## Conformance Harnesses
 
 Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
