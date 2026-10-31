@@ -167,6 +167,9 @@ C139-01 granularity and Core-scope reduction — 31 October 2026: [E-03/V4 retur
 Foundation call-site disposition (31 October 2026): [actual-source audit and finite next slice](foundation-callsite-disposition/README.md) identify V4's missing plain-value/evidence producer boundary and incomplete public compiler-context mirror. Proposed V5 uses issued immutable atomic cells, scalar access and private effective-context capture with descriptive versioned fingerprints; no implementation or acceptance is claimed. Native Schema remains bounded, XmlDb source f9f74fa is distinct from historical owner receipts, and Braid remains an untyped byte-input route. Next: isolated boundary diagnostics, then the real bounded Schema adapter. Core 1.34.2, C45 and four-owner freeze gates remain unchanged.
 
 
+V5 boundary experiment (31 October 2026): [draft and retained diagnostics](foundation-boundary-experiment/README.md) compile 34 proposed types against the retained Core DLL and pass 54 prior protocol plus 21 new producer controls. Plain-value/evidence cells, scalar access, issued-container checks and narrowed namespace context close the draft producer gap; descriptive context fields are not authority. Actual compiler capture, VM carrier, real Schema adapter and full consumer/performance qualification remain unimplemented or pending. Product Core 1.34.2 and C45/four-owner freeze status are unchanged. Next: real bounded decimal assessment adapter and actual API/VM transport qualification.
+
+
 ## REQ-126 C05 type/collection/pattern reconciliation — 26 October 2026
 
 Source/proposal base: `d0ca0741`; delivery commit: `git log -1 --format=%H -- docs/conformance/k04-quote-routing/adoption/BASELINE-ADOPTION.md`. What was built: exact approved TestExecutor routing patch/history 0.28 and AGENTS baseline update; fresh normal gate and exact skip-delta verification. No engine or public API change.

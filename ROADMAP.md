@@ -4,11 +4,13 @@
   <p>Current direction for the open XML engine and schema foundation</p>
 </div>
 
-Next foundation slice: [repair the typed-value producer boundary and capture effective context privately](docs/foundation-callsite-disposition/README.md), then qualify the bounded real adapter before freeze.
+The [actual-source audit](docs/foundation-callsite-disposition/README.md) identified the producer boundary and context-capture requirements now addressed in the V5 draft; production integration remains pending.
+
+V5 boundary diagnostics now pass 75 controls. Next: [real bounded adapter and API/VM transport](docs/foundation-boundary-experiment/README.md); full capture, consumer qualification and freeze remain pending.
 
 ## Immediate foundation work
 
-The [V4 Core candidate](docs/foundation-granularity-experiment/README.md) now has 33 review types, excluding two unused host-operation interfaces. Synthetic E-03 results favor retaining complete bulk closure with bounded internal reuse; no new public batch/cursor/scalar-dependency API is selected. Next map retained members to actual owner call sites/workloads and finalize the finite implementation disposition.
+The [V4 Core candidate](docs/foundation-granularity-experiment/README.md) now has 33 review types, excluding two unused host-operation interfaces. Synthetic E-03 results favor retaining complete bulk closure with bounded internal reuse; no new public batch/cursor/scalar-dependency API is selected. The subsequent source audit and V5 boundary experiment narrow the next implementation to the native decimal adapter and real transport; full workload and owner qualification remain pending.
 
 The [V3 assessment/advisor and compatible-view proposal](docs/foundation-advisor-contract/README.md) now compiles with 54 passing synthetic boundary controls. Reconcile its 35-type inventory against actual provider/consumer needs and run the bulk/cursor/per-call-cost experiment before selecting the stable public surface; test-double success is not production acceptance.
 
