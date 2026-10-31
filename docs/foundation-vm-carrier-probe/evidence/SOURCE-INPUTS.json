@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "revision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "d213cdd9be7434a8e86d70504a59b5673d520c70d4cab0a1c88418373e65fd22"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "revision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+      "revision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "1b4ad6c27e10cb15db2939cb9693e8b86b1f43d07cfc3aa3f82e1a5b5ac5ffcd"
+    }
+  ]
+}

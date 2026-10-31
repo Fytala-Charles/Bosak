@@ -103,3 +103,7 @@ The [C139-01 first signature slice](foundation-contract-design/README.md) replac
 ## Partial carrier experiment return — 31 October 2026
 
 [E-01/E-02 cloned-Core observations](foundation-carrier-experiments/README.md) reject unsafe payload replacement and quantify the prototype overlay holder allocation versus wrapper size/transport loss. No representation or production performance budget is accepted. Existing plans remain historical; current evidence is partial and does not close full VM, real-provider, lifetime or final signature gates.
+
+## Actual VM carrier return — 31 October 2026
+
+[Partial actual-VM evidence](foundation-vm-carrier-probe/README.md) extends the carrier experiments: 27 repeated cases retain baseline payload/error behavior and document structural versus cast/construction markers with synthetic typed nodes. A selective integer marker avoids a holder allocation; strings and CLR equality remain unresolved. This is an unqualified diagnostic hybrid, not a selected representation or full provider/semantic/performance gate.

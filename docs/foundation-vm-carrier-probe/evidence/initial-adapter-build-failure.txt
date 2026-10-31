@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\vm-carrier-probe\baseline\Runner\Probe.csproj (in 56 ms).
+D:\Development\Bosak\.guard-tmp\vm-carrier-probe\baseline\Runner\Program.cs(72,68): error CS0535: 'TypedNode' does not implement interface member 'IXdmNode.DocumentUri' [D:\Development\Bosak\.guard-tmp\vm-carrier-probe\baseline\Runner\Probe.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\vm-carrier-probe\baseline\Runner\Program.cs(72,68): error CS0535: 'TypedNode' does not implement interface member 'IXdmNode.DocumentUri' [D:\Development\Bosak\.guard-tmp\vm-carrier-probe\baseline\Runner\Probe.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.51

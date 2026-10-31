@@ -1,0 +1,640 @@
+{
+  "mode": "holder",
+  "scope": "Actual package API/VM with synthetic typed nodes/markers; modified Core variants are unqualified hybrid cohorts",
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "processorCount": 24,
+  "xdmValueSize": 48,
+  "clrEqualsToPlainInteger": false,
+  "xpathEqualsToPlainInteger": true,
+  "xpathHashToPlainInteger": true,
+  "observations": [
+    {
+      "id": "identity",
+      "expression": "$v",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "identity-string",
+      "expression": "$s",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "let",
+      "expression": "let $x := $v return $x",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "filter",
+      "expression": "($v,$w)[1]",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "simple-map",
+      "expression": "$v ! .",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "array",
+      "expression": "[$v](1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-value",
+      "expression": "map{\u0027a\u0027:$v}?a",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-nested",
+      "expression": "map{\u0027a\u0027:[$v]}?a(1)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "function",
+      "expression": "(function($x){$x})($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-atomic",
+      "expression": "data($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-node",
+      "expression": "data($n)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-untyped-node",
+      "expression": "data($untyped)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "data-sequence-node",
+      "expression": "data($list)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        },
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-identity",
+      "expression": "xs:integer($v)",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "cast-decimal",
+      "expression": "xs:decimal($v)",
+      "items": [
+        {
+          "kind": "Decimal",
+          "value": "42",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "arithmetic",
+      "expression": "$v \u002B 1",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "43",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "comparison",
+      "expression": "$v = 42",
+      "items": [
+        {
+          "kind": "Boolean",
+          "value": "true",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "distinct",
+      "expression": "distinct-values(($v,$v))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "sort",
+      "expression": "sort(($v,$w))",
+      "items": [
+        {
+          "kind": "Integer",
+          "value": "7",
+          "origin": "B"
+        },
+        {
+          "kind": "Integer",
+          "value": "42",
+          "origin": "A"
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-conversion",
+      "expression": "string($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "upper-case",
+      "expression": "upper-case($s)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "ALPHA",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "string-join",
+      "expression": "string-join(($s,$s),\u0027-\u0027)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "alpha-alpha",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "map-key",
+      "expression": "map{$v:\u0027hit\u0027}? (42)",
+      "items": [
+        {
+          "kind": "String",
+          "value": "hit",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "serialization",
+      "expression": "serialize(map{\u0027a\u0027:$v},map{\u0027method\u0027:\u0027json\u0027})",
+      "items": [
+        {
+          "kind": "String",
+          "value": "{\u0022a\u0022:42}",
+          "origin": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "id": "no-typed-value",
+      "expression": "data($empty)",
+      "items": [],
+      "error": "FOTY0012",
+      "message": "FOTY0012: The argument node does not have a typed value."
+    },
+    {
+      "id": "invalid-cast",
+      "expression": "xs:integer(\u0027not-number\u0027)",
+      "items": [],
+      "error": "FORG0001",
+      "message": "FORG0001: Cannot cast \u0027not-number\u0027 to integer."
+    },
+    {
+      "id": "cardinality-error",
+      "expression": "exactly-one(($v,$w))",
+      "items": [],
+      "error": "FORG0005",
+      "message": "FORG0005: fn:exactly-one called with a sequence containing more than one item."
+    }
+  ],
+  "allocations": [
+    {
+      "items": 1000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 23700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 22000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 37200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 35600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 28100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 22300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 32800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 21500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 150800,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 37000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 31500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 24200,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 35100,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 1000,
+          "allocatedBytes": 80024,
+          "nanoseconds": 40300,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "integer",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 14944900,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 8330500,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 7199500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2883500,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2501700,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 2526400,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000048,
+          "nanoseconds": 7320800,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        }
+      ]
+    },
+    {
+      "items": 100000,
+      "kind": "string",
+      "samples": [
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1742000,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 13369500,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 967600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000032,
+          "nanoseconds": 16012500,
+          "gen0": 2,
+          "gen1": 2,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1239600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 11707000,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "count": 100000,
+          "allocatedBytes": 8000024,
+          "nanoseconds": 1013600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "debd9d66cb80827a3ca2794ccb92abf867937207e51558ce12f3bccfc99d5806"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\vm-carrier-probe\\holder\\Runner\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": false,
+      "sha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+    }
+  ]
+}

@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+[Actual VM carrier traces](docs/foundation-vm-carrier-probe/README.md) show which structural/atomization paths retain markers and which constructors/computations drop them. Selective inline storage removes the sampled integer holder allocation, while reference-backed costs and CLR equality remain unresolved. Next settle explicit provenance transition laws and session ownership before choosing final contracts.
+
 [Isolated E-01/E-02 experiments](docs/foundation-carrier-experiments/README.md) now expose concrete allocation, payload-access, default-equality and wrapper transport trade-offs. Neither carrier is selected. Next audit actual VM boundaries and test lower-allocation alternatives against the required provenance laws and owner budgets.
 
 The [first concrete C139-01 declarations](docs/foundation-contract-design/README.md) now compile against the candidate Core DLL. Next run isolated carrier/provenance and ownership experiments before choosing final representation; complete semantic-profile, advisor and compatible-view signatures afterward. This is a partial design, not a production API acceptance.
