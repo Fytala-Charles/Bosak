@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-31",
+  "sourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "coreSourceArchiveSha256": "b38c9a60758278fbd403c949520c4a98e884e44d7e9bc21769daec3a1f853015",
+  "sourceFiles": 24,
+  "variants": [
+    {
+      "mode": "baseline",
+      "coreProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework><AssemblyName>Bosak.XPath.Core</AssemblyName><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AllowUnsafeBlocks>true</AllowUnsafeBlocks><LangVersion>preview</LangVersion></PropertyGroup></Project>",
+      "runnerProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup><ProjectReference Include=\"../Core/Core.csproj\"/></ItemGroup></Project>",
+      "xdmValueSourceSha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c"
+    },
+    {
+      "mode": "naive",
+      "coreProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework><AssemblyName>Bosak.XPath.Core</AssemblyName><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AllowUnsafeBlocks>true</AllowUnsafeBlocks><LangVersion>preview</LangVersion></PropertyGroup></Project>",
+      "runnerProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><DefineConstants>PATCHED</DefineConstants></PropertyGroup><ItemGroup><ProjectReference Include=\"../Core/Core.csproj\"/></ItemGroup></Project>",
+      "xdmValueSourceSha256": "6dcbf7d456926bcfbd485df3e49f2447148589b005f7f1c53262c6ac74afad6d"
+    },
+    {
+      "mode": "overlay",
+      "coreProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework><AssemblyName>Bosak.XPath.Core</AssemblyName><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AllowUnsafeBlocks>true</AllowUnsafeBlocks><LangVersion>preview</LangVersion></PropertyGroup></Project>",
+      "runnerProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><DefineConstants>PATCHED</DefineConstants></PropertyGroup><ItemGroup><ProjectReference Include=\"../Core/Core.csproj\"/></ItemGroup></Project>",
+      "xdmValueSourceSha256": "c5c642de6af8d31f7de536740826e35c5e3441c598277ec42614c60274aeb98f"
+    },
+    {
+      "mode": "wrapper",
+      "coreProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework><AssemblyName>Bosak.XPath.Core</AssemblyName><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AllowUnsafeBlocks>true</AllowUnsafeBlocks><LangVersion>preview</LangVersion></PropertyGroup></Project>",
+      "runnerProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup><ProjectReference Include=\"../Core/Core.csproj\"/></ItemGroup></Project>",
+      "xdmValueSourceSha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c"
+    }
+  ],
+  "environmentOverrides": {
+    "DOTNET_TieredCompilation": "0",
+    "DOTNET_ReadyToRun": "0"
+  },
+  "productionModified": false,
+  "scope": "Rebuilt cloned Core source only; no VM, real provider, performance budget or API acceptance"
+}

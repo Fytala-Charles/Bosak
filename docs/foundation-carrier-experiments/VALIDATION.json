@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-31",
+  "privateBuilds": "Four final cohorts succeed, zero warnings/errors",
+  "dataVerifier": "Passed: 14 process/size receipts; 49 reused IDs; four intentional bad-access failures; allocation/layout and summary agreement",
+  "earlierSealedDesignAndPerformancePlans": "Verified unchanged; their NotRun entries remain historical plans",
+  "documentation": {
+    "date": "2026-10-31",
+    "pages": [
+      {
+        "source": "README.md",
+        "htmlSha256": "304ed0b3ca19174a7b5a40a1129222d9122625a345a43d45462aaf80a82935b4"
+      },
+      {
+        "source": "ROADMAP.md",
+        "htmlSha256": "07e203f40e7c9e037fa146b2c23baacaac0e7eb6182b1475d799e33ae7a1072f"
+      },
+      {
+        "source": "docs/ARCHITECTURE.md",
+        "htmlSha256": "f9066c51b93a259d604530853b103e83abf0fd004297b663afc938c62eba6c3a"
+      },
+      {
+        "source": "docs/FEATURE_REQUESTS.md",
+        "htmlSha256": "3cb8bb09d084364cc5325abea8c1b7fea3547d3b31cf329b8c3497d3da046063"
+      },
+      {
+        "source": "docs/INTEGRATION.md",
+        "htmlSha256": "9e2d8159f52b6567d3c2052f9bba9e6f6985202daf9d094f47d373374ed28272"
+      },
+      {
+        "source": "docs/AGENT_HANDOVER.md",
+        "htmlSha256": "9bdf76905aaf70601e44b036a9c6f556c7914eac48f66a92c9aae39d9436187a"
+      },
+      {
+        "source": "docs/IMPLEMENTATION_STATUS.md",
+        "htmlSha256": "fcd01aecaeb3870d1f5f956c299c4d8a8398c2afe52e3556990c8bcbc7800ad0"
+      },
+      {
+        "source": "docs/RESTART-2026-10-29.md",
+        "htmlSha256": "ea79d634bd71f8f74acc27c48b6e0fc3dc205029f5ea23515095db0676c8ea47"
+      },
+      {
+        "source": "docs/schema-document-bridge/README.md",
+        "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+      },
+      {
+        "source": "docs/schema-document-bridge/ADOPTION.md",
+        "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+      },
+      {
+        "source": "docs/FOUNDATION-API-FREEZE-PLAN.md",
+        "htmlSha256": "297451dd5565246adedccb396f6153ffdf0bd03eee33db5d2db22a3a5fce6031"
+      },
+      {
+        "source": "docs/foundation-api-baseline/README.md",
+        "htmlSha256": "200daab3625b8b485e510ff1172a5ef370ffad3511efd575b6f4468028f9bfaa"
+      },
+      {
+        "source": "docs/foundation-api-baseline/CONTRACTS.md",
+        "htmlSha256": "314ecc5998193e49d4f699b7c7f24124b3ff36140d721e7f3900dba8add0580c"
+      },
+      {
+        "source": "docs/foundation-api-baseline/GAPS.md",
+        "htmlSha256": "c7b570dbea9dd86f67da91ca6b25b36ff000072d9dce8f2db4e02b4b51df9529"
+      },
+      {
+        "source": "docs/foundation-api-contract-draft/README.md",
+        "htmlSha256": "422e202251fa38b4d2e8274c81f29c00158c7141dad744c16e8e8b73fd05fdcf"
+      },
+      {
+        "source": "docs/foundation-api-contract-draft/COMPATIBILITY-MATRIX.md",
+        "htmlSha256": "66ca1ca465bc5862ae598c2565bd9aba670c7b8dec90ac447de451d327f2e866"
+      },
+      {
+        "source": "docs/foundation-result-ownership/README.md",
+        "htmlSha256": "d0e9157a55520e9ec98ac35c72bed665e24eb9fa56a7a237b621c544d614bd73"
+      },
+      {
+        "source": "docs/foundation-result-ownership/DECISION.md",
+        "htmlSha256": "a7c0513a41f7af1e9bff456244a1f01dd6c62d142a885bf531d5e4a28937e2bd"
+      },
+      {
+        "source": "docs/streaming-completion-cleanup/README.md",
+        "htmlSha256": "8c2baa92830ecd69e80a45391d8a838216981b42c1e6d069dd0a8e76069fb918"
+      },
+      {
+        "source": "docs/streaming-completion-cleanup/ADOPTION.md",
+        "htmlSha256": "c96c6cb7da4fcac032c6b5f220b009bbb10ed876d0ca5584aaaff7409aee4b08"
+      },
+      {
+        "source": "docs/DEVELOPMENT_HISTORY.md",
+        "htmlSha256": "6483a016dda1559190f5f1fb743254e8119b4dba2b190711179e476b98c69a7a"
+      },
+      {
+        "source": "docs/foundation-external-dependencies/README.md",
+        "htmlSha256": "47c98d92475f364f8c8ebf2da2a0c18cf3ea6032ca6e351cb92dcd7809ed9dfe"
+      },
+      {
+        "source": "docs/foundation-external-dependencies/BOUNDARY.md",
+        "htmlSha256": "dd74761231bdbd577b34a59f8cfb0594dfb0ea761130b9f110d403864e98c08b"
+      },
+      {
+        "source": "docs/foundation-legacy-compatibility/README.md",
+        "htmlSha256": "de8d6e9442aa59043fd104fa16b810510e58acf776022bafdee25b52e36c6fdb"
+      },
+      {
+        "source": "docs/foundation-legacy-compatibility/CASES.md",
+        "htmlSha256": "840405519b658dcb4fa516142d5411233dbe531c6f1f03491e6d06ae86cfd1ed"
+      },
+      {
+        "source": "docs/foundation-package-qualification/README.md",
+        "htmlSha256": "365bfc1e5a5108cf781c491c6ced6c773f236647886944e9071547e013c93754"
+      },
+      {
+        "source": "docs/foundation-package-gates/README.md",
+        "htmlSha256": "d65f4b190dce5e0a419e397b64eb3659d7579674b38e640d199088ea62add7a2"
+      },
+      {
+        "source": "docs/foundation-readiness/README.md",
+        "htmlSha256": "408c7d116e7925969d570743a4c84e2f11fa7fa701d923292f941c685ac55ac4"
+      },
+      {
+        "source": "docs/foundation-readiness/OWNER-ACCEPTANCE.md",
+        "htmlSha256": "119a19d1fcae4ff726cab7dc62111fa049db0682e1296873835b49560934277c"
+      },
+      {
+        "source": "docs/foundation-contract-decision/README.md",
+        "htmlSha256": "43035f960741610ffd69b6583130c0d171a1978b7bc52eb9ab25c0210e8a63f3"
+      },
+      {
+        "source": "docs/foundation-implementation-scope/README.md",
+        "htmlSha256": "815746ef01f37db602eca2e5bf26319584c8d6e6a8a7f8fdd0d720f698851437"
+      },
+      {
+        "source": "docs/foundation-owner-reconciliation/README.md",
+        "htmlSha256": "d2d5f642278edfc999e6eb79ae8acdbe385ff4a2f900f0ca990b9703cc620d54"
+      },
+      {
+        "source": "docs/braid-foundation-requirements/README.md",
+        "htmlSha256": "1646d28947eae506c0ab72a7d52968dfe5da84ae12afaff9e854ae6b7145c6cb"
+      },
+      {
+        "source": "docs/foundation-performance/README.md",
+        "htmlSha256": "e05ddb165db0703945670773a04a49619d1583a6aa36ec73c844ad2e5cc0f4c5"
+      },
+      {
+        "source": "docs/foundation-contract-design/README.md",
+        "htmlSha256": "b1a07a0aff24840a9238edc0d2f8a5b161af5a93fb445d7aea59a6a6bc8afc5b"
+      },
+      {
+        "source": "docs/foundation-carrier-experiments/README.md",
+        "htmlSha256": "63a62839e0c50a5ef0db8badc13fad4ac21363a66b9e4ff40c209a3db633aab3"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+        "htmlSha256": "c77d15aee82e141a2c97732eb86f6ab3a926ba799285ccf55f28cdfe6b0a48fb"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+        "htmlSha256": "83829d78d25c1dae137f8482623b02dea39a19ae115e006269b20185d2b1f94d"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+        "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+        "htmlSha256": "8fb72fd5ef18b278fa875a04b4adfc5288f617f97cb4bc39cbc35127638a00fa"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+        "htmlSha256": "c3a36ecb8fa9d8a9510fde84ddda08ac0d4657ad579d70ac54207ff95340f142"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+        "htmlSha256": "46d6ecb969fe59d0d2b3d1bdcf80bd861ef196aad7a1dd636bd8301d582045d1"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+        "htmlSha256": "2c9e95b21e2a03683764d9fb3a5bafd5fd807881f66eb12324a2a81040f8d4d9"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+        "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
+      }
+    ],
+    "localLinks": 3101,
+    "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+    "scope": "Intended canonical docs; concurrent owner additions and root README attribution excluded"
+  },
+  "productionTests": "Not rerun: product source, packages and semantics unchanged; cloned Core is not a production engine qualification",
+  "acceptance": "No carrier, final API, performance budget, actual provider or release acceptance"
+}

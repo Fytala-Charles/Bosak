@@ -18,6 +18,8 @@ Performance and final-breaking-change intent — 31 October 2026: [PF-01–09](f
 
 C139-01 concrete transport/ownership draft — 31 October 2026: [13-type isolated signature slice](foundation-contract-design/README.md) proposes authority identity/derivation/affiliation/closure, original node/atomic/list provenance and optional operation admission without required legacy node/sequence/layout changes. Exact package-backed declaration build passes zero warnings/errors; metadata observes current 48-byte XdmValue on this x64 runtime only. Four discriminating experiments remain NotRun; carrier choice, full semantic profile/advisor/compatible views and final signatures remain Pending. No production/API adoption, performance qualification, gate rerun or freeze. Delivery: `git log -1 --format=%H -- docs/foundation-contract-design/README.md`.
 
+C139-01 carrier experiments — 31 October 2026: [partial E-01/E-02 results](foundation-carrier-experiments/README.md) execute four isolated cloned-Core variants over 14 process/size runs. Unsafe slot replacement fails four reference-backed accesses as intended. Accessor-aware overlay preserves sampled markers/comparer/container behavior and 48-byte outer size but allocates ~32 bytes/item; wrapper is 56 bytes and loses markers when unwrapped into existing APIs. CLR default equality differs on annotated values. Neither carrier selected; full VM/provenance, real providers, budgets and lifetime remain unqualified. Four final builds/data verifier pass; no product source/gate/pin change. Delivery: `git log -1 --format=%H -- docs/foundation-carrier-experiments/README.md`.
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |

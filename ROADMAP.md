@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+[Isolated E-01/E-02 experiments](docs/foundation-carrier-experiments/README.md) now expose concrete allocation, payload-access, default-equality and wrapper transport trade-offs. Neither carrier is selected. Next audit actual VM boundaries and test lower-allocation alternatives against the required provenance laws and owner budgets.
+
 The [first concrete C139-01 declarations](docs/foundation-contract-design/README.md) now compile against the candidate Core DLL. Next run isolated carrier/provenance and ownership experiments before choosing final representation; complete semantic-profile, advisor and compatible-view signatures afterward. This is a partial design, not a production API acceptance.
 
 Treat the shared freeze as the intended final breaking foundation API change. [PF-01–09](docs/foundation-performance/README.md) requires upfront performance design, representative budgets and final-candidate measurement for Core, Schema, XmlDb and Braid; unresolved performance-driven contract gaps block freeze.

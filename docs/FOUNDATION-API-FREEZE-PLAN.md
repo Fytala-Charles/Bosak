@@ -99,3 +99,7 @@ Use [the readiness packet](foundation-readiness/README.md) as the entry point: e
 ## Concrete transport/ownership draft — 31 October 2026
 
 The [C139-01 first signature slice](foundation-contract-design/README.md) replaces a generic prototype inventory with 13 concrete draft types, explicit ownership/error rules and four distinguishing experiment plans. Declaration compilation against the exact 1.34.2 Core DLL passes without warnings; no production implementation or performance behavior is proved. Final carrier representation and the remaining profile/advisor/compatible-view API need real experiments and owner disposition. Full known requirements remain freeze blockers.
+
+## Partial carrier experiment return — 31 October 2026
+
+[E-01/E-02 cloned-Core observations](foundation-carrier-experiments/README.md) reject unsafe payload replacement and quantify the prototype overlay holder allocation versus wrapper size/transport loss. No representation or production performance budget is accepted. Existing plans remain historical; current evidence is partial and does not close full VM, real-provider, lifetime or final signature gates.

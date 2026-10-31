@@ -1,0 +1,87 @@
+// Generated isolated E-01/E-02 engineering probe; no production adoption or XSD semantics.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Bosak.XPath.Core.Xdm;
+
+var mode = args[0]; int n = int.Parse(args[1]);
+object marker = new object(), foreign = new object();
+var values = new[] { XdmValue.FromBoolean(true), XdmValue.FromInteger(42), XdmValue.FromDouble(3.5), XdmValue.FromString("alpha"), XdmValue.FromDecimal(12.5m), XdmValue.FromQName(new XsQName("item","urn:test","p")), XdmValue.FromDateTime(new DateTimeOffset(2026,10,31,0,0,0,TimeSpan.Zero)) };
+XdmValue Attach(XdmValue v) {
+#if PATCHED
+ return XdmValue.PrototypeAttach(v, marker);
+#else
+ return v;
+#endif
+}
+bool Marked(XdmValue v, object expected) {
+#if PATCHED
+ return ReferenceEquals(XdmValue.PrototypeMarker(v),expected);
+#else
+ return false;
+#endif
+}
+string Describe(XdmValue v) => v.Kind switch {
+ XdmValueKind.Boolean => v.BooleanValue.ToString(), XdmValueKind.Integer => v.IntegerValue.ToString(), XdmValueKind.Double => v.DoubleValue.ToString(System.Globalization.CultureInfo.InvariantCulture), XdmValueKind.String => v.StringValue, XdmValueKind.Decimal => v.DecimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture), XdmValueKind.QName => v.QNameValue.ToString(), XdmValueKind.DateTime => v.DateTimeValue.ToString("O"), _ => throw new Exception("Unexpected kind") };
+var checks=new List<object>(); int mismatches=0;
+void Check(string id,bool observed,bool expected) {checks.Add(new {id,observed,expected});if(observed!=expected)throw new Exception("Control mismatch: "+id);}
+for(int i=0;i<values.Length;i++) {
+ var plain=values[i];var v=Attach(plain);bool okay;
+ try { okay=Describe(v)==Describe(plain) && v.ToString()==plain.ToString(); }
+ catch(InvalidCastException) {okay=false;}
+ bool expected=mode!="naive" || i<3;
+ Check("access-"+plain.Kind,okay,expected);if(!okay)mismatches++;
+ Check("marker-"+plain.Kind,Marked(v,marker),mode is "overlay" or "naive");
+ Check("foreign-"+plain.Kind,Marked(v,foreign),false);
+}
+if(mode!="naive") {
+ var v=Attach(values[1]); var arr=new XdmArray();arr.Add(v);Check("array-value",Marked(arr.Get(0),marker),mode=="overlay");
+ var map=new XdmMap();map.Add(XdmValue.FromString("value"),v);Check("map-value",map.TryGetValue(XdmValue.FromString("value"),out var mv)&&Marked(mv,marker),mode=="overlay");
+ var seq=XdmSequence.Singleton(v).GetEnumerator();Check("sequence-value",seq.MoveNext()&&Marked(seq.Current,marker),mode=="overlay");
+ Func<XdmValue> identity=()=>v;Check("function-carrier",Marked(((Func<XdmValue>)XdmValue.FromFunction(identity).FunctionValue)(),marker),mode=="overlay");
+ foreach(var index in new[]{1,3,4,5,6}) {
+  var a=Attach(values[index]);var original=values[index];var comparer=XdmValueEqualityComparer.Instance;
+  Check("xpath-equality-"+a.Kind,comparer.Equals(a,original),true);
+  Check("xpath-hash-"+a.Kind,comparer.GetHashCode(a)==comparer.GetHashCode(original),true);
+  var keys=new XdmMap();keys.Add(a,XdmValue.FromInteger(9));Check("map-key-"+a.Kind,keys.TryGetValue(original,out var found)&&found.IntegerValue==9,true);
+ }
+ var pair=new Pair(values[1],marker);Check("wrapper-local",ReferenceEquals(pair.Marker,marker),true);
+ var dropped=new XdmArray();dropped.Add(pair.Value);Check("wrapper-unwrapped-array-loss",Marked(dropped.Get(0),marker),false);
+ var pairMap=new XdmMap();pairMap.Add(XdmValue.FromString("value"),pair.Value);pairMap.TryGetValue(XdmValue.FromString("value"),out var droppedValue);Check("wrapper-unwrapped-map-loss",Marked(droppedValue,marker),false);
+ var computed=XdmValue.FromInteger(v.IntegerValue+1);Check("new-computed-no-automatic-authority",Marked(computed,marker),false);
+ // Diagnostic list metadata: not a real Schema list/union assessment.
+ var emptyList=new ListView(true,Array.Empty<Pair>());var singletonList=new ListView(true,new[]{pair});var atomicView=new ListView(false,new[]{pair});
+ Check("empty-list-distinct",emptyList.IsList&&emptyList.Items.Length==0,true);
+ Check("singleton-list-distinct",singletonList.IsList&&!atomicView.IsList&&singletonList.Items.Length==1,true);
+ var carried=singletonList.Items[0];Check("list-member-marker",ReferenceEquals(carried.Marker,marker),true);
+ Check("list-boundary-lost-on-atomics-only",singletonList.Items.Length==atomicView.Items.Length,true);
+ // ValueType default equality includes the added reference: do not treat it as XPath equality.
+ Check("clr-default-equality",v.Equals(values[1]),mode!="overlay");
+}
+var measurements=new List<object>();
+void Measure(string id,Func<long> action) {
+ for(int i=0;i<3;i++) _=action();
+ var samples=new List<object>();long checksum=0;
+ for(int i=0;i<7;i++) {long before=GC.GetAllocatedBytesForCurrentThread();long start=Stopwatch.GetTimestamp();checksum=action();long elapsed=Stopwatch.GetTimestamp()-start;long bytes=GC.GetAllocatedBytesForCurrentThread()-before;samples.Add(new {elapsedNanoseconds=elapsed*(1_000_000_000.0/Stopwatch.Frequency),allocatedBytes=bytes});}
+ measurements.Add(new {id,items=n,samples,checksum});
+}
+if(mode!="naive") {
+ Measure("copy-create",()=> {
+  if(mode=="wrapper") {var a=new Pair[n];for(int i=0;i<n;i++)a[i]=new Pair(values[1],marker);GC.KeepAlive(a);return a[^1].Value.IntegerValue;}
+  else {var a=new XdmValue[n];for(int i=0;i<n;i++)a[i]=mode=="overlay"?Attach(values[1]):values[1];GC.KeepAlive(a);return a[^1].IntegerValue;}
+ });
+ var annotated=mode=="overlay"?Attach(values[3]):values[3];
+ Measure("string-access",()=> {long sum=0;for(int i=0;i<n*10;i++)sum+=annotated.StringValue.Length;return sum;});
+ var unannotated=values[3];
+ Measure("plain-string-access",()=> {long sum=0;for(int i=0;i<n*10;i++)sum+=unannotated.StringValue.Length;return sum;});
+ var numbers=mode=="overlay"?Attach(values[1]):values[1];
+ Measure("integer-access",()=> {long sum=0;for(int i=0;i<n*10;i++)sum+=numbers.IntegerValue;return sum;});
+}
+var assembly=typeof(XdmValue).Assembly;
+Console.WriteLine(JsonSerializer.Serialize(new {mode,items=n,scope="Isolated cloned-Core accessor/container probe; no VM or real Schema/XmlDb/Braid qualification",runtime=Environment.Version.ToString(),framework=System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,architecture=System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString(),pointerSize=IntPtr.Size,xdmValueSize=Unsafe.SizeOf<XdmValue>(),pairSize=Unsafe.SizeOf<Pair>(),coreSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(assembly.Location))).ToLowerInvariant(),controlCount=checks.Count,intentionalNaiveAccessorFailures=mismatches,checks,measurements},new JsonSerializerOptions {WriteIndented=true}));
+readonly record struct Pair(XdmValue Value,object Marker);
+readonly record struct ListView(bool IsList,Pair[] Items);
