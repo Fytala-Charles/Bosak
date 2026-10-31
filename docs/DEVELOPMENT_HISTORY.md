@@ -11,6 +11,11 @@ For today's introduction and installation, start with the [README](../README.md)
 Future implementation logs belong in operation-specific documents, release records and handover notes. Append a dated entry here only when a historical summary is useful; keep the README focused on the product and getting started.
 
 
+## 31 October 2026 — C45 owner-review handoff
+
+C45 owner-review handoff prepared — 31 October 2026: [the source-pinned 1.36.0 packet](foundation-c45-handoff136/README.md) reconciles fresh issue #468 and seven local owner documents, with 43 explicit N/FXR/FXG/BF/PF review rows and a public bounded integration fixture. XmlDb requirements are now committed at checkout 280f706; their older 1.34.2 qualification remains separate. No owner messages/checkouts/pins or product source changed. The public provider SDK and complete named stable manifest remain pending; the seven-assembly reflection receipt is not that manifest. Next Core task: refresh the full 1.36 named API inventory and exact proposed C45 public delta; owners can review/design and refresh ordinary compatibility in parallel. All acceptance/budget/freeze flags remain pending.
+
+
 ## 31 October 2026 — Private scalar transport 1.36.0
 
 Private scalar transport promoted — 31 October 2026: source **1.36.0** applies the prepared six-file patch and 22 regressions. Fresh full build passes with five unchanged warnings; all ten unit projects pass **24,267/0/0**, QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** plus 11 experimental passes. Skip maps, actual loaded hashes, unchanged caller 20/0 and native 121/atomic 376 are verified. Two equality overrides are explicitly implemented/disclosed (78 types; declared members 1,199 to 1,201; inherited signatures/base slots unchanged). No package publication, C45, consumer/budget or freeze acceptance. Next: updated C45 owner-review handoff for Schema, XmlDb and Braid. See [1.36 qualification and disposition](foundation-transport136/README.md). Delivery resolves via `git log -1 --format=%H -- src/Directory.Build.props`.

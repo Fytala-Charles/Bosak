@@ -1,0 +1,43 @@
+{
+  "sourceProbe": "docs/foundation-private-transport/tools/Probe.cs.txt",
+  "sourceProbeSha256": "36275d1aabd3355ffe76f49e70f9ccc83417329ac9f963f249f9b0a517fe2944",
+  "profile": "decimal-sequence-assertions-v5",
+  "purpose": "Existing public Core integration use case supplied for S009-02; not a new backend grammar-slice selection.",
+  "schemaSha256": "43c29551b2b619b1b598281495267067bee97712cc940ea3a77d5aa219930465",
+  "instanceSha256": "d7d2190d26b907b3da5a47beac06946826a006c259dbbf5a9ed1f0416c945a3d",
+  "operations": [
+    {
+      "query": "data($d/invoice/amount)",
+      "values": [
+        "10",
+        "5"
+      ],
+      "actualType": "Native compiled decimal component",
+      "origin": "Original assessment retained under admitted lifetime."
+    },
+    {
+      "query": "data($d/invoice)",
+      "error": "FOTY0012"
+    },
+    {
+      "query": "sum($d/invoice/amount)",
+      "values": [
+        "15"
+      ],
+      "origin": "Computed output has no original assessment."
+    }
+  ],
+  "copy": "Original declaration/type/assessment facts retained; copied snapshot identity/lifetime independent.",
+  "close": "Evidence and operation-bound nodes refuse after relevant closure; ordinary detached payload access is distinct.",
+  "explicitConstruction": "Same-representation decimal no-op retains evidence; explicit changed integer result detaches assessment. The integer token is host-owned, not a native compiled Schema integer component.",
+  "newExecutionInHandoff": false,
+  "publicProviderBinding": "Pending C45; existing execution used the private friend host.",
+  "notCovered": [
+    "list/union",
+    "derivation/affiliation/closure",
+    "compatible universes",
+    "full XSD 1.1",
+    "Braid worker",
+    "XmlDb store"
+  ]
+}

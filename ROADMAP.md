@@ -16,6 +16,8 @@ Private transport promotion patch prepared (31 October 2026): six-file proposal 
 
 Private scalar transport is implemented and qualified in source 1.36.0. Next: reconcile the C45 public provider contract and owner handoff against this foundation, including the two equality declarations and required consumer/performance acceptance. Schema, XmlDb and Braid implementation remains delegated; publication and final API freeze remain pending. See [current foundation direction](docs/foundation-transport136/README.md).
 
+The [1.36 C45 owner-review handoff](docs/foundation-c45-handoff136/README.md) is prepared. Next Core work is the complete named API inventory and exact public provider signature delta; Schema/XmlDb/Braid requirements/design and ordinary compatibility can proceed in parallel. The public provider contract, selected consumer evidence, performance budgets and joint freeze remain pending.
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.

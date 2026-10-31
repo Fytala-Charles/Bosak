@@ -1,0 +1,80 @@
+{
+  "capturedUtc": "2026-10-31T18:59:56.461074+00:00",
+  "localDocuments": [
+    {
+      "snapshot": "inputs/schema-needs.md",
+      "source": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\docs\\S009-04-FOUNDATION-REQUIREMENTS.md",
+      "repositoryRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "branch": "feature/bounded-document-assessment",
+      "sha256": "03f81b3714394c81ed953935d82f80443eee16a40e05b2d2ebdb9ca0bf360dc8",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/schema-facts.md",
+      "source": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\docs\\S009-02-PROVIDER-FACT-MAPPING.md",
+      "repositoryRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "branch": "feature/bounded-document-assessment",
+      "sha256": "7f183f9a3704eea8cf0ad8a0c7590b379f8f02f97cb3023da2f121867b5d67bb",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/schema-fixtures.json",
+      "source": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\docs\\S009-02-FIXTURE-IDENTITIES.json",
+      "repositoryRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "branch": "feature/bounded-document-assessment",
+      "sha256": "b4d1fd95402ff9e311ac2b2ea8d28a676d0179df8b52707bb4d60304e3e2137e",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/xmldb-needs.md",
+      "source": "D:\\Development\\Bosal.XmlDb\\docs\\foundation-requirements\\README.md",
+      "repositoryRevision": "280f7064b5ef413096b202fc4cf2f8a56e760534",
+      "branch": "main",
+      "sha256": "7b11b30387aade3bc031d3cd39140c7682ee8bfad2520d78fbeeabbf92d51ce4",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/xmldb-matrix.json",
+      "source": "D:\\Development\\Bosal.XmlDb\\docs\\foundation-requirements\\fx009-01-matrix.json",
+      "repositoryRevision": "280f7064b5ef413096b202fc4cf2f8a56e760534",
+      "branch": "main",
+      "sha256": "2c9fd631d9ee7fb5d39d42cb5e0da14fbac63649dc087fbc5c3725b1adf09186",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/braid-work.md",
+      "source": "D:\\Development\\Bosak\\.worktrees\\Bosak.Braid.ReadOnly\\docs\\SHARED-FOUNDATION-WORK-PACKAGES.md",
+      "repositoryRevision": "d81f195f63a534099391220536f9885c44fddb30",
+      "branch": "feature/readonly-inspection-session",
+      "sha256": "9c1efbf1708bfb056e43341e6c4704e27e0d5a96eaac4da6b97ee6c04d1ac28d",
+      "committedDocumentAvailable": true,
+      "documentMatchesCommitIgnoringLineEndings": true
+    },
+    {
+      "snapshot": "inputs/xmldb-prior-return.json",
+      "source": "D:\\Development\\Bosak\\docs\\foundation-owner-status\\xmldb-fx009-02-characterization-2026-10-30\\OWNER-RETURN.json",
+      "repositoryRevision": "0126d492a8930001e0b947a0e27ae732af5a0653",
+      "branch": "main",
+      "sha256": "f24663408b18b7b6a8afa03b6eda071de32d03c2fdf3fbd00f6706455394f990",
+      "committedDocumentAvailable": false,
+      "documentMatchesCommitIgnoringLineEndings": false
+    }
+  ],
+  "onlineIssue": [
+    {
+      "snapshot": "inputs/issue-468.json",
+      "sha256": "234615fb34a545b063082f33e9dafc7888ea761a472339cdf0d442f0dc8fec8a"
+    },
+    {
+      "snapshot": "inputs/issue-468-comments.json",
+      "sha256": "a69931cac45c65a4dfa0b7ba00bd15f0c9d5f35f214b59033552a41921af0c4b"
+    }
+  ],
+  "externalCheckoutsModified": false,
+  "messagesSent": false
+}

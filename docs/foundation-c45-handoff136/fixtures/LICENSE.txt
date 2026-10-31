@@ -1,0 +1,2 @@
+Copyright 2026 Fytala. SPDX-License-Identifier: Apache-2.0
+Derived from the existing public Core qualification probe; see ../../../license.md.
