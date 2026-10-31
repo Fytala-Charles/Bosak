@@ -1,0 +1,136 @@
+// Generated isolated VM/carrier diagnostic; no production semantics or API adoption.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+try {
+if(args.Length!=1)throw new ArgumentException("Expected one known cohort name");
+var mode=args[0];
+var attachMethod=typeof(XdmValue).GetMethod("PrototypeAttach",BindingFlags.Public|BindingFlags.Static);
+var markerMethod=typeof(XdmValue).GetMethod("PrototypeMarker",BindingFlags.Public|BindingFlags.Static);
+var attach=attachMethod?.CreateDelegate<Func<XdmValue,object,XdmValue>>();
+var marker=markerMethod?.CreateDelegate<Func<XdmValue,object?>>();
+object originA=new object(),originB=new object();
+XdmValue Attach(XdmValue value,object origin)=>attach is null?value:attach(value,origin);
+string? Origin(XdmValue value){var m=marker?.Invoke(value);return ReferenceEquals(m,originA)?"A":ReferenceEquals(m,originB)?"B":m is null?null:"Foreign";}
+IEnumerable<XdmValue> Items(XdmValue v,int depth=0) {
+ if(depth>32)throw new InvalidOperationException("Diagnostic recursion bound");
+ if(v.IsSequence) { if(v.SequenceValue is not null)foreach(var item in XdmSequence.FromSource(v.SequenceValue))foreach(var leaf in Items(item,depth+1))yield return leaf; }
+ else if(!v.IsUndefined)yield return v;
+}
+var v=Attach(XdmValue.FromInteger(42),originA);var w=Attach(XdmValue.FromInteger(7),originB);var s=Attach(XdmValue.FromString("alpha"),originA);
+var node=new TypedNode(new XDocumentNode(XElement.Parse("<n>42</n>")),v,false);
+var empty=new TypedNode(new XDocumentNode(XElement.Parse("<n/>")),XdmValue.Undefined,true);
+var untyped=new TypedNode(new XDocumentNode(XElement.Parse("<n>42</n>")),v,false,false);
+var listSource=XdmSequence.FromSource(new Values(new[]{v,w}));
+var listNode=new TypedNode(new XDocumentNode(XElement.Parse("<n>42 7</n>")),XdmValue.FromSequence(listSource),false);
+var cases=new (string id,string expr)[]{
+ ("identity","$v"),("identity-string","$s"),("let","let $x := $v return $x"),("filter","($v,$w)[1]"),("simple-map","$v ! ."),
+ ("array","[$v](1)"),("map-value","map{'a':$v}?a"),("map-nested","map{'a':[$v]}?a(1)"),("function","(function($x){$x})($v)"),
+ ("data-atomic","data($v)"),("data-node","data($n)"),("data-untyped-node","data($untyped)"),("data-sequence-node","data($list)"),("cast-identity","xs:integer($v)"),("cast-decimal","xs:decimal($v)"),
+ ("arithmetic","$v + 1"),("comparison","$v = 42"),("distinct","distinct-values(($v,$v))"),("sort","sort(($v,$w))"),
+ ("string-conversion","string($s)"),("upper-case","upper-case($s)"),("string-join","string-join(($s,$s),'-')"),
+ ("map-key","map{$v:'hit'}? (42)"),("serialization","serialize(map{'a':$v},map{'method':'json'})"),
+ ("no-typed-value","data($empty)"),("invalid-cast","xs:integer('not-number')"),("cardinality-error","exactly-one(($v,$w))")};
+var observations=new List<object>();
+foreach(var test in cases) {
+ try {
+  var context=new EvaluationContext().WithVariable("v",v).WithVariable("w",w).WithVariable("s",s).WithVariable("n",XdmValue.FromNode(node)).WithVariable("untyped",XdmValue.FromNode(untyped)).WithVariable("list",XdmValue.FromNode(listNode)).WithVariable("empty",XdmValue.FromNode(empty));
+  var result=XPath31Expression.Compile(test.expr).Evaluate(context);
+  var items=Items(result).Select(x=>new {kind=x.Kind.ToString(),value=x.ToString(),origin=Origin(x)}).ToArray();
+  observations.Add(new {id=test.id,expression=test.expr,items,error=(string?)null});
+ } catch(Exception error) {
+  var code=System.Text.RegularExpressions.Regex.Match(error.Message,@"\b[A-Z]{4}[0-9]{4}\b").Value;
+  observations.Add(new {id=test.id,expression=test.expr,items=Array.Empty<object>(),error=code.Length>0?code:error.GetType().Name,message=error.Message});
+ }
+}
+var allocations=new List<object>();
+foreach(var n in new[]{1000,100000})foreach(var kind in new[]{"integer","string","decimal"}) {
+ var plain=kind=="integer"?XdmValue.FromInteger(42):kind=="decimal"?XdmValue.FromDecimal(42m):XdmValue.FromString("alpha");
+ long Run(){var a=new XdmValue[n];for(int i=0;i<n;i++)a[i]=Attach(plain,originA);GC.KeepAlive(a);return a.Length;}
+ for(int i=0;i<3;i++)_=Run();var samples=new List<object>();
+ for(int i=0;i<7;i++){int g0=GC.CollectionCount(0),g1=GC.CollectionCount(1),g2=GC.CollectionCount(2);long before=GC.GetAllocatedBytesForCurrentThread(),start=Stopwatch.GetTimestamp();long count=Run();long ticks=Stopwatch.GetTimestamp()-start,bytes=GC.GetAllocatedBytesForCurrentThread()-before;samples.Add(new {count,allocatedBytes=bytes,nanoseconds=ticks*1_000_000_000.0/Stopwatch.Frequency,gen0=GC.CollectionCount(0)-g0,gen1=GC.CollectionCount(1)-g1,gen2=GC.CollectionCount(2)-g2});}
+ allocations.Add(new {items=n,kind,samples});
+}
+var equalityCosts=EqualityControls.Measure(Attach,originA);
+var equality=EqualityControls.Run(Attach,marker,mode,originA,originB);
+var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.XPath.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new {name=a.GetName().Name,identity=a.FullName,path=a.Location,context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new {mode,scope="Frozen pre-override caller against product/source/diagnostic Core variants; no schema authority or production carrier acceptance",runtime=Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,processorCount=Environment.ProcessorCount,xdmValueSize=Unsafe.SizeOf<XdmValue>(),clrEqualsToPlainInteger=v.Equals(XdmValue.FromInteger(42)),xpathEqualsToPlainInteger=XdmValueEqualityComparer.Instance.Equals(v,XdmValue.FromInteger(42)),xpathHashToPlainInteger=XdmValueEqualityComparer.Instance.GetHashCode(v)==XdmValueEqualityComparer.Instance.GetHashCode(XdmValue.FromInteger(42)),observations,allocations,equality,equalityCosts,callerSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location))).ToLowerInvariant(),bindings},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error) {Console.Error.WriteLine(error);Environment.ExitCode=1;}
+// Synthetic typed-node adapter: does not assess XML or establish PSVI authority.
+sealed class TypedNode(IXdmNode inner,XdmValue typed,bool noTyped,bool annotated=true):IXdmNode {
+ public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;
+ public string StringValue=>inner.StringValue;public XdmValue TypedValue=>typed;public bool HasNoTypedValue=>noTyped;public bool IsComplexType=>noTyped;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>annotated?("urn:diagnostic","test-type"):null;
+ public IXdmNode? Parent=>inner.Parent;public IXdmNode? Document=>inner.Document;public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;
+ public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>inner.Children(kind);public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>inner.Attributes(localName,namespaceUri);
+ public XdmSequence Axis(XdmAxis axis)=>inner.Axis(axis);public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>inner.ToXmlString();
+}
+sealed class Values(XdmValue[] values):IXdmSequence {
+ public bool TryGetLength(out int length){length=values.Length;return true;}
+ public IXdmSequenceEnumerator GetEnumerator()=>new Cursor(values);
+ sealed class Cursor(XdmValue[] items):IXdmSequenceEnumerator {int index=-1;public XdmValue Current=>items[index];public bool MoveNext()=>++index<items.Length;}
+}
+
+static class EqualityControls {
+ public static object[] Measure(Func<XdmValue,object,XdmValue> attach,object marker){
+  var results=new List<object>();var plain=XdmValue.FromInteger(42);
+  foreach(var count in new[]{1000,100000})foreach(var annotated in new[]{false,true})foreach(var operation in new[]{"equals","hash"}){
+   var value=annotated?attach(plain,marker):plain;
+   long Run(){long checksum=0;for(int i=0;i<count;i++)checksum=unchecked(checksum+(operation=="equals"?(value.Equals(plain)?1:0):value.GetHashCode()));return checksum;}
+   for(int i=0;i<3;i++)_=Run();var samples=new List<object>();
+   for(int i=0;i<7;i++){long before=GC.GetAllocatedBytesForCurrentThread(),start=Stopwatch.GetTimestamp();long checksum=Run();long elapsed=Stopwatch.GetTimestamp()-start,allocated=GC.GetAllocatedBytesForCurrentThread()-before;samples.Add(new{checksum,allocatedBytes=allocated,nanoseconds=elapsed*1_000_000_000.0/Stopwatch.Frequency});}
+   results.Add(new{count,annotated,operation,samples});
+  }
+  return results.ToArray();
+ }
+
+ public static object Run(Func<XdmValue,object,XdmValue> attach,Func<XdmValue,object?>? marker,string mode,object a,object b){
+  bool tagged=marker is not null;bool knownBad=mode=="holder";
+  var checks=new List<object>();void Check(string id,bool observed,bool expected=true){checks.Add(new{id,observed,expected,passed=observed==expected});if(observed!=expected)throw new Exception("Equality control: "+id);}
+  var date=new DateTimeOffset(2026,10,31,1,2,3,TimeSpan.FromHours(1));
+  var values=new[]{XdmValue.FromBoolean(true),XdmValue.FromBoolean(false),XdmValue.FromInteger(42),XdmValue.FromInteger(42,"int"),XdmValue.FromInteger(42,"int","Q{urn:t}a"),XdmValue.FromDecimal(12.5m),XdmValue.FromDecimal(12.50m),XdmValue.FromDouble(double.NaN),XdmValue.FromDouble(double.PositiveInfinity),XdmValue.FromDouble(0d),XdmValue.FromDouble(-0d),XdmValue.FromFloat(2.5f),XdmValue.FromString("alpha"),XdmValue.FromString(new string(new[]{'a','l','p','h','a'})),XdmValue.FromString("alpha","token"),XdmValue.FromString("4142","hexBinary"),XdmValue.FromString("QUI=","base64Binary"),XdmValue.FromString("urn:value","anyURI"),XdmValue.FromDuration("P1D"),XdmValue.FromQName(new XsQName("name","urn:t","p")),XdmValue.FromDateTime(date),XdmValue.FromDate(date),XdmValue.FromTime(date)};
+  string Payload(XdmValue value)=>value.Kind switch {
+   XdmValueKind.String=>value.StringValue,
+   XdmValueKind.Integer=>value.IntegerValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Decimal=>value.DecimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Double or XdmValueKind.Float=>value.DoubleValue.ToString("R",System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Boolean=>value.BooleanValue.ToString(),
+   XdmValueKind.QName=>value.QNameValue.ToString(),
+   XdmValueKind.DateTime=>value.DateTimeValue.ToString("O",System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Date=>value.DateValue.ToString("O",System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Time=>value.TimeValue.ToString("O",System.Globalization.CultureInfo.InvariantCulture),
+   XdmValueKind.Duration=>value.DurationValue,
+   _=>value.ToString()};
+  var plainPairs=new List<bool>();var decoratedPairs=new List<bool>();
+  for(int i=0;i<values.Length;i++){
+   var plain=values[i];var left=attach(plain,a);var right=attach(plain,b);
+   Check("C"+i+"-payload",plain.ToString()==left.ToString());
+   Check("C"+i+"-accessor",Payload(plain)==Payload(left));
+   Check("C"+i+"-tag",!tagged||ReferenceEquals(marker!(left),a));
+   Check("C"+i+"-plain-left",plain.Equals(left),!knownBad);
+   Check("C"+i+"-tagged-left",left.Equals(plain),!knownBad);
+   Check("C"+i+"-object-equals",object.Equals(plain,left),!knownBad);
+   Check("C"+i+"-generic-equals",EqualityComparer<XdmValue>.Default.Equals(left,plain),!knownBad);
+   Check("C"+i+"-different-origin",left.Equals(right),!knownBad);
+   Check("C"+i+"-retag-value",attach(left,b).ToString()==plain.ToString());
+   if(!knownBad)Check("C"+i+"-hash",left.GetHashCode()==plain.GetHashCode());
+   if(!knownBad)Check("C"+i+"-generic-hash",EqualityComparer<XdmValue>.Default.GetHashCode(left)==EqualityComparer<XdmValue>.Default.GetHashCode(plain));
+   Check("C"+i+"-hashset",new HashSet<XdmValue>{left}.Contains(plain),!knownBad);
+   Check("C"+i+"-dictionary",new Dictionary<XdmValue,string>{{plain,"hit"}}.ContainsKey(left),!knownBad);
+   for(int j=0;j<values.Length;j++){
+    bool expected=plain.Equals(values[j]);plainPairs.Add(expected);
+    var target=attach(values[j],b);bool same=left.Equals(target);decoratedPairs.Add(same);
+    if(!knownBad)Check("P"+i+"-"+j,same,expected);
+   }
+  }
+  return new{controls=checks.Count,checks,atomicFixtures=values.Length,plainPairs,decoratedPairs,equalsDeclaredOn=typeof(XdmValue).GetMethod("Equals",new[]{typeof(object)})!.DeclaringType!.FullName,hashDeclaredOn=typeof(XdmValue).GetMethod("GetHashCode",Type.EmptyTypes)!.DeclaringType!.FullName};
+ }
+}
