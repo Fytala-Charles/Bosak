@@ -4,6 +4,8 @@
   <p>Current direction for the open XML engine and schema foundation</p>
 </div>
 
+Next foundation slice: [repair the typed-value producer boundary and capture effective context privately](docs/foundation-callsite-disposition/README.md), then qualify the bounded real adapter before freeze.
+
 ## Immediate foundation work
 
 The [V4 Core candidate](docs/foundation-granularity-experiment/README.md) now has 33 review types, excluding two unused host-operation interfaces. Synthetic E-03 results favor retaining complete bulk closure with bounded internal reuse; no new public batch/cursor/scalar-dependency API is selected. Next map retained members to actual owner call sites/workloads and finalize the finite implementation disposition.

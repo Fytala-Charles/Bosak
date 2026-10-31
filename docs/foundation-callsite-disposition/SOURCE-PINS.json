@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-31",
+  "scope": "Selected committed source inspection only; no external edits/builds or owner acceptance.",
+  "sources": [
+    {
+      "project": "core",
+      "revision": "544479e0630d14ae193f7f31ac861a1ec35aaa43",
+      "files": [
+        {
+          "path": "src/Bosak.XPath.Api/CompileOptions.cs",
+          "sha256": "801654588c1a65c29c28dddb02d5747d3e21f2ca5948fc269485d898b19a7851",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.XPath.Api/XPath31Expression.cs",
+          "sha256": "d0e45e5d98a62de7bec8795bb07442f920c62f168140b7b19b28a5592e2b89f0",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs",
+          "sha256": "4789d5478afa2a056a0c19397e8343b08bc67e7ff765c8ce011f1b1c7344481b",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        }
+      ]
+    },
+    {
+      "project": "schema-assessment",
+      "revision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "files": [
+        {
+          "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+          "sha256": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+          "workingFileMatchesCommitted": true,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+          "sha256": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+          "workingFileMatchesCommitted": true,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+          "sha256": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d",
+          "workingFileMatchesCommitted": true,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+          "sha256": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+          "workingFileMatchesCommitted": true,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        }
+      ]
+    },
+    {
+      "project": "schema-public",
+      "revision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "files": [
+        {
+          "path": "src/Bosak.Schema/SchemaServices.cs",
+          "sha256": "176f2dd3944e4f3498ac5d0536dff3f1ad4fa3cfc81774752ee321b9dd0229ec",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        }
+      ]
+    },
+    {
+      "project": "xmldb",
+      "revision": "f9f74fadf72e702ec8cf4b93693b4bdc276639b9",
+      "files": [
+        {
+          "path": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+          "sha256": "fba3bfcba4303505784cd433d527001c173f2350013beeb2be8e5f2871ba60de",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj",
+          "sha256": "6911a4d22202b319e01103b91214222fc3ac268a8c6b56d4a5ae4c28b46a663f",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        }
+      ]
+    },
+    {
+      "project": "braid",
+      "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "files": [
+        {
+          "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+          "sha256": "cb41797ab7996bbdb4dccf8eadc52eed2c1bd86593c6acc34501d23330b9eb78",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs",
+          "sha256": "1ed971e9333efaa0e530476fd15195313c4958ba889176a2d6312ffb5281439f",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        },
+        {
+          "path": "src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs",
+          "sha256": "48d7b8c78cd967adc0da44d430583d956d1097dc5ac6a7553b17054a295dd239",
+          "workingFileMatchesCommitted": false,
+          "workingTextMatchesCommittedIgnoringLineEndings": true
+        }
+      ]
+    }
+  ]
+}

@@ -28,6 +28,9 @@ C139-01 advisor/compatible-view proposal — 31 October 2026: [V3 declarations a
 
 C139-01 granularity and Core-scope reduction — 31 October 2026: [E-03/V4 return](foundation-granularity-experiment/README.md) compares scalar/bulk/cache/certified-cursor and lookup strategies on 64/4096/65536 synthetic components. Three runs pass 38 controls and 99 size/mode groups; replayed prior54 protocol controls pass. Keep bulk closure as candidate, avoid new public scalar-dependency/batch/cursor APIs without actual demand, and prefer bounded internal metadata reuse. V4 excludes two unused host-operation interfaces: 35 to33 review types, all retained members unchanged. No real-provider performance, signature acceptance, production/pin or freeze change. Delivery: `git log -1 --format=%H -- docs/foundation-granularity-experiment/README.md`.
 
+Foundation call-site disposition (31 October 2026): [actual-source audit and finite next slice](foundation-callsite-disposition/README.md) identify V4's missing plain-value/evidence producer boundary and incomplete public compiler-context mirror. Proposed V5 uses issued immutable atomic cells, scalar access and private effective-context capture with descriptive versioned fingerprints; no implementation or acceptance is claimed. Native Schema remains bounded, XmlDb source f9f74fa is distinct from historical owner receipts, and Braid remains an untyped byte-input route. Next: isolated boundary diagnostics, then the real bounded Schema adapter. Core 1.34.2, C45 and four-owner freeze gates remain unchanged.
+
+
 ## Releases and source state
 
 | Scope | Recorded state | Evidence |
