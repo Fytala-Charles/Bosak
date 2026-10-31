@@ -429,6 +429,8 @@ Proposed C139-01 implementation ordering — 30 October 2026: [requirements-to-s
 
 C139-01 owner reconciliation — 31 October 2026: [concrete owner-return resolutions](foundation-owner-reconciliation/README.md) acknowledge Schema D1–D7/N1–N8 and XmlDb FXR-01–15 delivery, answer four Schema questions and propose dispositions for FXG-01–06. Newer bounded Windows/Linux FX009-02 evidence also passes its packet verifier: same 27 cases/37 observations across four modes per platform; exact package/binary bindings and owned-store invariants checked. Historical missing-return status is superseded. Final signatures, semantic adoption, C45 implementation disposition and joint freeze remain pending. No product change or fresh runtime run. Delivery: `git log -1 --format=%H -- docs/foundation-owner-reconciliation/README.md`.
 
+Braid pre-freeze integration registered — 31 October 2026: [BF140-01–05 requirements](braid-foundation-requirements/README.md) replace regression-only treatment with required Schema/XmlDb semantic-environment, typed/persistent input, worker ownership, fingerprint/currentness and representative integration review. Braid adapters/protocols may change; supported behavior stays required. Shared freeze now needs Core plus Schema, XmlDb and Braid dispositions. No implementation, pin change, D01 extension or native/trust rollout acceptance. Delivery: `git log -1 --format=%H -- docs/braid-foundation-requirements/README.md`.
+
 ## Bosak 1.17.0 published - 17 October 2026
 
 Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.
@@ -6482,3 +6484,7 @@ The [seven-package mixed-cohort qualification](foundation-package-gates/README.m
 ## REQ-140 consolidated core handoff — 30 October 2026
 
 [Core readiness and owner acceptance packet](foundation-readiness/README.md) now binds thirteen immutable inputs, the exact seven-package feed and current mixed-cohort qualification to an eight-item pending requirements ledger. The blank Schema/XmlDb return template supplies no sign-off or product adoption. Existing candidate artifacts are qualified for the recorded legacy scope; shared REQ-140 remains In Progress, REQ-139/C45 and actual consumer/freeze/release decisions stay pending. No source/version/package or external owner change. Next is reconciliation of actual owner requirements into the finite neutral contract/member-scope decision.
+
+## REQ-140 Braid pre-freeze scope — 31 October 2026
+
+REQ-140 remains In Progress. Braid REQ-122 / BF140-01–05 is registered as a required foundation design/integration workstream alongside Schema and XmlDb. Known required Braid contract gaps block freeze. Scope/implementation/qualification and owner disposition remain pending; unrelated D02–D07 rollout is separate.

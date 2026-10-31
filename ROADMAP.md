@@ -6,6 +6,8 @@
 
 ## Immediate foundation work
 
+Braid is now a required pre-freeze integration consumer: [BF140-01–05](docs/braid-foundation-requirements/README.md) covers semantic environment, typed/persistent inputs, worker ownership, versioned run identity and real-provider qualification. Core, Schema, XmlDb and Braid must dispose the exact shared scope; unrelated Braid native/trust rollout stays separate.
+
 Both owners have returned requirements, and bounded XmlDb candidate characterization is delivered. The [31 October reconciliation](docs/foundation-owner-reconciliation/README.md) proposes answers to Schema’s four questions and XmlDb’s six return items. Next select exact authority/annotation/session/value-transport signatures and immutable semantic adoption; do not repeat the missing-requirements inventory.
 
 The [proposed implementation ordering](docs/foundation-implementation-scope/README.md) separates existing XmlDb XML qualification from optional Schema authority/session design. Twelve traced needs identify the concrete owner facts needed for exact signatures; further inventory alone will not close the decision.

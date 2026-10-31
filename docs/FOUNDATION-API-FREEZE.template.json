@@ -20,5 +20,7 @@
   "freezeDisposition": null,
   "experimentalSurfacesExcluded": null,
   "productAdoptionImplied": false,
-  "fullXsd11ConformanceClaimed": false
+  "fullXsd11ConformanceClaimed": false,
+  "braidFoundationEvidence": null,
+  "braidOwnerSignoff": null
 }
