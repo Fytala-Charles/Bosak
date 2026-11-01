@@ -55,14 +55,16 @@
     {
       "id": "P03",
       "owner": "Core",
-      "status": "Next",
+      "status": "InProgress",
       "dependsOn": [
         "P02"
       ],
       "canPrepareBeforeR2Closure": true,
       "title": "Qualify the named capture feasibility gap",
       "work": "Execute targeted isolated capture controls on the exact candidate; test outputs/messages/failures/receipts and leases, not another generic lifetime model.",
-      "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit."
+      "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit.",
+      "evidence": "docs/foundation-bcap-runtime/evidence/STATUS.json",
+      "progress": "26 real-engine controls twice plus 631 selected existing regressions; incomplete C06/C08/C09/C10 and no native/full qualification"
     },
     {
       "id": "P04",

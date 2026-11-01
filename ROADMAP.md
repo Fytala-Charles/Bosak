@@ -11,6 +11,9 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 
 Current execution update (1 November): [P02 isolated capture declaration candidate](docs/foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
 
+
+P03 progress (1 November): [real capture feasibility](docs/foundation-bcap-runtime/README.md) passes 26 bounded controls twice and 631 selected existing regressions on isolated binaries. P03 remains InProgress for controls/fault/native qualification; production and owner acceptance remain unchanged.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

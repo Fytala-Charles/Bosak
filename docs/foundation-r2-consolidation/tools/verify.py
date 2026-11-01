@@ -34,4 +34,4 @@ for value in engines.values():assert sha(Path(value['path']))==value['sha256']
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha(P/name)==digest,name
-print('Verified five returns (three scoped accepts/two revisions), two missing Schema returns, pinned XmlDb evidence, ten tasks and 18 NotRun follow-up controls; production unchanged.')
+print('Verified five returns (three scoped accepts/two revisions), two missing Schema returns, pinned XmlDb evidence and ten tasks; original 18-case planning matrix retained, later capture execution is recorded separately; production unchanged.')

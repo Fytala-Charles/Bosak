@@ -18,6 +18,9 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 
 Current execution update (1 November): [P02 isolated capture declaration candidate](../foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
 
+
+P03 progress (1 November): [real capture feasibility](../foundation-bcap-runtime/README.md) passes 26 bounded controls twice and 631 selected existing regressions on isolated binaries. P03 remains InProgress for controls/fault/native qualification; production and owner acceptance remain unchanged.
+
 ## What is already demonstrated
 
 The latest full production qualification passed **24,390 unit tests**, QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** and 11 experimental passes. Public metadata remains **270 types / 5,770 declarations**. The private factories, same-session snapshot leases, typed input stamps, separate XSLT source roles and deferred cleanup are implemented. A further [57 host acquisition/rollback controls](../foundation-host-acquisition-rollback/README.md) passed twice without production changes. These receipts do not export or accept the proposed public SDK.
