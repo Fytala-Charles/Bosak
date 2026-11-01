@@ -1,0 +1,9 @@
+# Real private session integration basis
+
+1 November 2026, before fixture execution. Use the exact qualified production 1.37.0 binaries from [production promotion](../foundation-xslt-context-promotion/README.md). Existing immutable language adoption remains in [the production basis](../foundation-xslt-context-promotion/SPEC-BASIS.md); no new production semantics or public API is adopted here.
+
+Exercise actual SchemaQuerySession and SchemaEvidenceKernel with all three actual hosts. Use a single fixture-owned composite snapshot and a test issuer; this is not independent multi-snapshot acquisition or native authenticated assessment. XPath uses the existing private compilation factory. XQuery/XSLT integration producers and their descriptors belong to the fixture, not production compilation APIs. Reflect only the pinned four-argument internal XSLT bridge; introduce no friend grants.
+
+Select a bounded dynamic-data profile: focus/position/size, direct scalar or fixture-owned node variables, namespaces, base URI, default element namespaces and collation. Copy admitted inputs into fresh contexts. Reject other nondefault context state rather than silently dropping it. The fixture uses reflection for exhaustive private-field auditing/default comparison, not as proposed production context-cloning code. Shared node graphs remain borrowed; copying bindings does not freeze their content or grant authority.
+
+Guard flat atomic result consumption through the actual borrowed operation. Reject structured results in this profile; no recursive graph detachment or general escaping-node guarantee follows. Preserve real close semantics: new access rejects immediately after close, while raw callbacks retain their lease until completion. Catch all negative cases under scoped process error mode and bounded waits. Preserve canonical source and qualified binary hashes.

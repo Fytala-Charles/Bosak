@@ -20,7 +20,7 @@ The [1.36 C45 owner-review handoff](docs/foundation-c45-handoff136/README.md) is
 
 The [full 1.36 inventory and exact C45 proposal](docs/foundation-c45-delta136/README.md) are ready for review. Resolve numeric representation/precision and XQuery/XSLT host signatures, then closure/lifetime performance choices with Schema/XmlDb/Braid before accepting the public SDK. The observed inventory is refreshed; stable scope, real consumer qualification, budgets and API freeze remain pending.
 
-Next C45 step: connect and qualify private all-host session execution using the [production 1.37.0 context bridge](docs/foundation-xslt-context-promotion/README.md), including caller-context restoration and borrowed-operation lifetime checks. Exact numeric execution and public contract acceptance remain open; API freeze remains pending.
+Next C45 step: implement a typed internal input/result boundary and direct host bridges from the [real private-session fixture](docs/foundation-real-host-session/README.md), preserving explicit refusals, caller isolation and raw callback lifetime while removing reflective admission and duplicate XQuery context creation. Effective static capture, exact numeric execution and public contract acceptance remain open; API freeze remains pending.
 
 ## Immediate foundation work
 
