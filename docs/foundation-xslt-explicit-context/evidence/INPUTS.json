@@ -1,0 +1,150 @@
+{
+  "qualifiedEngines": {
+    "Bosak.XPath.Core.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Core\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "1e24fea9f386f83dfb956e80cd07c520a498eefb5041a3012ec59568ccf60f4a"
+    },
+    "Bosak.XPath.Parser.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Parser\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "cf6a4a1449cb861573a4c1b9839e5a0e9a3c26b04607b9c18843255f1637873e"
+    },
+    "Bosak.XPath.Compiler.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Compiler\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "4f36d9d8d56610ab44c573beb67fb0f90d65e394d72f05af3f17ae67b7d887d0"
+    },
+    "Bosak.XPath.Runtime.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "fa68438baa5790a9ed52f85d543fc14eec2a95fc35e54d7d1c257677eda7ab66"
+    },
+    "Bosak.XPath.Api.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "0d6888ded2bfb7b20b72bcd7ddcfe1a71668745893b782af075f827d1d463d00"
+    },
+    "Bosak.XPath.Standard.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "959ecb4175111a12e6df4630b37ddb91920c7eddffd9b22ff262f9e1d16f377c"
+    },
+    "Bosak.XPath.Providers.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Providers\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "f9512bf786de7bd8365679f73efaced8cf633f39de3ef658c7c975f3c2accdaf"
+    },
+    "Bosak.Xslt.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.Xslt\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "f67dadd64b1aa8c42ff6f1752c0e374d72c14f983afa2b28cb3b60ff36a7c0eb"
+    },
+    "Bosak.XQuery.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XQuery\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "599697530ad98f089116813f1dde39780c46e1a962dc870db6ae79ab3e117798"
+    },
+    "Bosak.XPath.Providers.Database.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Providers.Database\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "57d79e54feaaeabea51f6bfa5fcf7142938e952e65ae5d97473868d8f2e99710"
+    }
+  },
+  "sourceFiles": {
+    "Bosak.Xslt.csproj": "0edf9681db165377565932d23e992dd52e6cb1740f3e8d4a7de5c61f6755dd98",
+    "Api/FileSystemUriResolver.cs": "6d6a6e3ba76166b2da07c9823c5aa46b9fd11c161e1eee681e42096db5d9883a",
+    "Api/IXsltMessageListener.cs": "a7f5ccb491026dec772ca2f76f790adeba82ab536e2e7de379d2e5831b58f077",
+    "Api/IXsltUriResolver.cs": "f05d2930f60feb17803b235b6d9e0eb96ea29581547ac5452612404e8a335dc3",
+    "Api/StreamingTransformOptions.cs": "56bd4ce6fa9d7b83251dc4343640956799a464cec6676e26ae4fc770d421310a",
+    "Api/XsltCompiler.cs": "5da9f528ce80fed32dae2cd432e387e7a53975ebd3b0442a1f566bfd1084f0bb",
+    "Api/XsltExecutable.cs": "dd4a7188b7531563fefcf071d808a9ead4cc079c6cf5272097376aa6f20ad29f",
+    "Api/XsltFunctionLibrary.cs": "b5a4f83be404c1cd6e62902437729a8b32b5b1dfa939c0978149dbb35d94622b",
+    "Api/XsltProcessorProfile.cs": "f862a45af2e74bc02ba17efcb74c34bd37a83531b070a3c4f8fc0df8bdfa4057",
+    "Authoring/AttributeSlotClassifier.cs": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66",
+    "Authoring/AuthoringAttributeDescriptor.cs": "39189eea04136effb6fdacb8b9433acd03804d907b3b3a15e38206910d0317f8",
+    "Authoring/AuthoringCapabilities.cs": "b8bd97004f4c0cf60a239d289a7b24991c36adfee5320cab4f9baa5561728f53",
+    "Authoring/AuthoringConditionalWrapper.cs": "e0d246b3daa461214735de7fe8de24df6b63e6a5bf3c3e92b4dde37793f2d1d3",
+    "Authoring/AuthoringEdit.cs": "9a05e6551495cd83662f7cf9cfd7980ce3d783731f08b324f5f5cc488bff01a1",
+    "Authoring/AuthoringFailure.cs": "ac484de436b62026860293c495230ece205c8677da50d44ea6b349d54074a2ba",
+    "Authoring/AuthoringFunctionSignatures.cs": "3fd53d8174da7a77fb16a82de5202a33b22b48a6a9a90bfbf5b3d18706da2e90",
+    "Authoring/AuthoringInspector.cs": "1e792d4e90fb27052685f4937d7e72b4406e13f29e148c0cb8b2919e26a49146",
+    "Authoring/AuthoringLiteralAttributeLifecycle.cs": "ab734db21f453e6ce614bab4aff3b35bbaa5cd0177c85aec032cef1bb5ae5789",
+    "Authoring/AuthoringLiteralElementInsertion.cs": "75d688e056ac8ef4059926eddb1a21cf8f9b4573e9f10e62e00058c60990416d",
+    "Authoring/AuthoringLiteralElementLifecycle.cs": "98d76eb00f2feb6f2f81cea55f427ef632fbb73b42b649ffc3ddd1289c7d637f",
+    "Authoring/AuthoringLiteralElementReordering.cs": "8ca3c8a49f4e16552089edb8a0a0679455d81e7c4f34c4dccdd89953c825b929",
+    "Authoring/AuthoringModuleDescriptor.cs": "4a97b3d55dbfa62f315c5ff9d0ee405673d07d7a1bb9737c35f92858b3e4664a",
+    "Authoring/AuthoringModuleUriResolverBridge.cs": "20c37a7e265af4247cdd1e01e1f67e92e530ade42e707015c64fd4f90bf313b8",
+    "Authoring/AuthoringNamedTypes.cs": "af6a965a7702058f910fe1e540c911a5d1aa1dc77860161e3b7f2748483e5481",
+    "Authoring/AuthoringNodeDescriptor.cs": "fb7bf92887f744cb7ad16b07f9393c69c1018ffc799eecb9b7f28fe457ea8acd",
+    "Authoring/AuthoringSnapshot.cs": "d4cd377f3f041cc7666780ae5f46e56d03efbd966c3e767f2dcbb0ed48d0bbdb",
+    "Authoring/AuthoringSource.cs": "fb2515302c222b9c0d621658a673719ecede0cd62016464eefdb372bcc175b27",
+    "Authoring/AuthoringTextBodyReplacement.cs": "bc018c42520668211ae9e8c6893d373cf39871b7fe0c39cf7b2b971333e16182",
+    "Authoring/AuthoringTextDeletion.cs": "54343d65710c29ef445d5fbd91eaa71926782e410edeacc0f5d464a13d6e8462",
+    "Authoring/AuthoringTextInsertion.cs": "bd9d0aa288c04a57e99eab2930bba90abc8b09c923a503ce35d288c7454b0921",
+    "Authoring/AuthoringValueOfDeletion.cs": "9b471b2fb4a5c0cf30cb48061a6bf1fa27192e20af147d13455edecdaacf4361",
+    "Authoring/AuthoringValueOfInsertion.cs": "950733cc6e333add81faaa1bf3cb633154f9ea086949bc0660acc6e624c450de",
+    "Authoring/BoundedExpressionEditPipeline.cs": "d5a22727bc5018c67d5015e4bfc019aaf631bcd2129f12c9228c14db56f17475",
+    "Authoring/ConditionalProof.cs": "bcb8ddba2ea9d02c8818b596d2358156f3ae8d4b948a44ceaafdcf75832bd316",
+    "Authoring/ConditionalWrapperPipeline.cs": "4cc57f788badf0dc9c0113261bb8eb3aaaece479e39d834a1e5ef307ad293f5b",
+    "Authoring/ExpressionEditPipeline.cs": "400855a70b84803790bb3f34154b402681d848a8fdbd216bb5a254ef8748c57c",
+    "Authoring/ExpressionSlotContext.cs": "d8e39dddff9764a05d70835163356d5615ec80ddbc760f9874ba5f4624e8b22b",
+    "Authoring/IAuthoringModuleResolver.cs": "b94807cc19f4e0d10104edc3e8bc86d6f668d988d51f11b727eb0d6907ef2c52",
+    "Authoring/InsertionExpressionCoverage.cs": "0b4e4b116a25d99a49d724cb652d9fefef0129dceaa939afeb13b88e60bfeaf2",
+    "Authoring/LiteralAttributeLifecyclePipeline.cs": "8a0b8eca10d2efd33e380ef6d18db5fff86027a426ba70d5fe128fcf345f655c",
+    "Authoring/LiteralElementInsertionPipeline.cs": "f7cc3d97dacb7cd7b3a05f313432a352835caf731f8b0cedc2162778c3b95a70",
+    "Authoring/LiteralElementLifecyclePipeline.cs": "c762f2859e2abdaad2230d4ce31d649225cb041dcd6abc7e292c1ef6c00a205b",
+    "Authoring/LiteralElementReorderPipeline.cs": "df652f6efb359b8e106396a39600ec9ec9f8ba36324f2a7942989ff510f9cb42",
+    "Authoring/SourceRange.cs": "58fecd8a92a311c90f2c1e9578e44364bcf05cbbc2fab6de85b5cfecf3861f29",
+    "Authoring/SourceTagScanner.cs": "20c4f021c8573518d2632ccf63fa2a5aad531af52cd0e5ca8d6ab06c009900bd",
+    "Authoring/TextBodyReplacementPipeline.cs": "40747eb7708e750cc7f6084bae198db767797cfcc12dc6b3939ee4e6346b6241",
+    "Authoring/TextDeletionPipeline.cs": "5f6340b5795431deb5815870fcd50789a8eed67c380df78e23e92e5ec9eed911",
+    "Authoring/TextInsertionPipeline.cs": "4d20949dc25941051a9b34a96ec4d7568dffcd808a5fad076c5da66a4a74f73e",
+    "Authoring/ValueOfDeletionPipeline.cs": "f3d25c986382a894c36724874ddce66bb1bcb7f4a03843237aa6f6f90b7d2370",
+    "Authoring/ValueOfInsertionLayout.cs": "fde2d325c300bccf0743ecd36d59319d5d7d8b23fb81de1c70de447831d0f07f",
+    "Authoring/ValueOfInsertionPipeline.cs": "efd52ccef858ddb53a72b30e2fd033996e970115fcb7d2191a9280b71b42886f",
+    "Authoring/XsltAuthoring.cs": "29cd5284b03dc9b315c3f03437ad4a393f525c09c2728058e694bedcc460ea49",
+    "Capture/XsltCapturedOutput.cs": "ef4d4b181e2ed9ee6b7af230993d238e879cea7e61fd98d87895c53fff2d48fc",
+    "Capture/XsltCaptureFailure.cs": "3bfcc22fa1c7e0e5d13d790dd8d13ec0e1cf22fa391f070ff6132e56b466dd87",
+    "Capture/XsltCaptureFailureKind.cs": "f139d5c1c42deaadf2ea25eccbde12017248bed05f1afa459a2b604bb9d5cf8f",
+    "Capture/XsltCaptureLimitException.cs": "2ba70b62630de01f9129c3d58386401d9170b9fa01b574b534d475195b60add2",
+    "Capture/XsltCaptureOptions.cs": "7c7662562434085e826040198e06c55a272c939479b0e31d94ee0995fb216595",
+    "Capture/XsltCaptureOutcome.cs": "57e0cd61a4d3d7988ee36e78750c93eecb9461173e34c4e672d947fc5c1923f0",
+    "Capture/XsltCaptureResult.cs": "1aa67b3cb60ed54ca821c728241029af38d0628942e0317c0dd83645b1e114ab",
+    "Capture/XsltCaptureSession.cs": "89fb54e650f2e7ae7f5c88ff49b3f1f6f4d9a7fdfd82d56e2a8e5cd00fd5e9f4",
+    "Patterns/ArrayPattern.cs": "1948ba7c2eb40a608a93a29bdb897bcdcf16543456d31c3e27a01195b3154fc0",
+    "Patterns/AtomicPattern.cs": "76773ce6a0a2ce6f2975a7ed172c88e59cb8b4334e479d02a05acbb72dfad4e3",
+    "Patterns/PatternCompiler.cs": "c4c966e9ca283aa0d7c9b8a475022a2bd6c926f6e796bd6cc98fd05b12ee918f",
+    "Patterns/RecordPattern.cs": "c120d6847ca4ac216da8ca9b51fc798bc4071e294a24123eb6da85e813446890",
+    "Patterns/StringKeyMapPattern.cs": "84eaa7ccb6e93cfb680cfe0c456f807b3995837e1caa9976623d7ac711b32e7a",
+    "Runtime/BoundedSerializationWriter.cs": "be430e01d71478edb8c433204992d9aa4a9eae6b3eb8aab35b5c051b9d47b97e",
+    "Runtime/CaptureMarkupWriter.cs": "7b778b7628f7622256ac1e12a7c84ec27a7f7483805b5f7c354a485fb8f2a4b5",
+    "Runtime/ElementPrefixHint.cs": "64b0da04754d185cf688c528f69f0d581505f5ca9d6ad98f6e852304b6926929",
+    "Runtime/KeyIndex.cs": "649ad8f909dfe9f205986a9c307b2caa9535be21ecce54e788752531f5183490",
+    "Runtime/ResultTreeSerializer.Capture.cs": "c61ada4210c1eb272f3f40eb8ec163e003df9cf44263bce66e67d02fc58d9876",
+    "Runtime/ResultTreeSerializer.cs": "f512c822dfdd069a2608fe5a256be03208fd78a1c49e09d252b7cf75e82a89bd",
+    "Runtime/TransformEngine.cs": "53281357228372a45b0c7734559879df62642dbe95ff0beb5dea2519d33bd1ab",
+    "Runtime/XRawText.cs": "68637cb6cc88085a3a44004cfc9b2f348f252a4200187d9ac9ada0cce7ff9325",
+    "Stylesheet/AbstractOriginalReferenceValidator.cs": "bf5a2612266817118695cc1054a594c863d17dbe3df274068dabe8b9780ec0d3",
+    "Stylesheet/AccumulatorDefinition.cs": "8cdfe0ecdec5f5cca647e76b742a6229b81e53fe5e5b781f1ec67ed166ee145b",
+    "Stylesheet/AttributeSetDefinition.cs": "64fe71e7ffdfb36cdcd3b9cf27ae2c58fd15353a1477d3cc2b588a04c3ee43ae",
+    "Stylesheet/CharacterMapDefinition.cs": "6d3cb15c42d1b888231afd51f12ad72d40fd29afc3f979af32dd5b49cb004b98",
+    "Stylesheet/ContextItemDeclaration.cs": "931308f1ab78107b532c4215d1ae0547a9398ec8f2893b992c7fadc5871f646f",
+    "Stylesheet/KeyDefinition.cs": "4027b9292f8b80e2fae8f5f712aaff33f4c8c8438eb3351efbd0d6de147bc58a",
+    "Stylesheet/ModeDefinition.cs": "4a2f384adde3ff49feb71ef9bcd8785130fd926f83aa25cebffe227566eb8111",
+    "Stylesheet/NamespaceAliasDefinition.cs": "f0bbd3f654f22ff75261fbb9b941d0fe5a183128269de22806bc2f694424de24",
+    "Stylesheet/OutputProperties.cs": "a08b131724eba16926d8919a42b7fa4738d69a08abd74c0ecb6aa85223075c6d",
+    "Stylesheet/SchemaImportState.cs": "3eecfef117b988bfee821a8db154172de61445b4d0ce938a73902c34b3c935ae",
+    "Stylesheet/SchemaSetBuilder.cs": "a8cb35c1d24e974645f3a05bc8fbf6dcc9980cd34df5b1093380f6812ca245f9",
+    "Stylesheet/StreamabilityAnalyzer.cs": "21ccdf18a889adc3a389b9bcfde14aba975ee1590bcaf1327ed75038bba3ed79",
+    "Stylesheet/Stylesheet.cs": "42a4f4d1f6b0d642609a94207731b159979ffd81b9495cfdb01e4862ea7ef277",
+    "Stylesheet/TemplateRule.cs": "d1fd33b2a56f5e10d2b1ca50b386677346af3a2756832d1301a33722857b6ff7",
+    "Stylesheet/XsltFunctionDefinition.cs": "03f81945918cbbb4846199d11b19c5e4fa9a1722501ffb11e406ab226416dd7b",
+    "Validation/FreeVariableCollector.cs": "774166b664af77e4b962626c7d95d2dc26ea83bbff1e22c9d4d2cd646016080b",
+    "Validation/XsltValidation.cs": "515f46a10d711d35f4dbf8111f05fbb304066394fed77f856a3b6b1dcb4a4da7",
+    "Validation/XsltValidationCoverageGap.cs": "2f681797426e312c99f166063cf22a197d3ec5080ec3e0522a651513adfb4a58",
+    "Validation/XsltValidationDiagnostic.cs": "b9270a1a1a8c478c4c2d62d7b16de8488e1012bd0867bebb0e81986f13b1334e",
+    "Validation/XsltValidationEngine.cs": "233d005430f3600da48ee0e25eb6145b1313e7a028d3f1fbf93f38bc50c00149",
+    "Validation/XsltValidationOptions.cs": "f61245640ddefcb554df9488610d362b8c8db2de56df13a36b6938828da0e389",
+    "Validation/XsltValidationOutcome.cs": "cc1496a9d5da8a22144e1608e5f21ae4cf740ff17a04baa8236481d8152c0390",
+    "Validation/XsltValidationResult.cs": "f1149053b1ba0ac9e16d437c3e3d7abcf5b57d82fbd511a7750c440d97482b2b"
+  },
+  "candidatePath": "D:\\Development\\Bosak\\.guard-tmp\\xslt-explicit-context\\src\\Bosak.Xslt\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+  "candidateSha256": "dfb2efc9e406b239bd05cfe14d0606a27b35a1d734a7f25d25e974ea703931fa",
+  "patchedFiles": {
+    "Runtime/TransformEngine.cs": "6ecc91eb812be0f0ac379fdbe5a16c4cd4e85734b2ff46d9898cda0c5f7016c2",
+    "Api/XsltExecutable.cs": "75f01abd210e9b9c8da6f923c80076b5eca528b3ab9736eebfc2040703ebda59"
+  },
+  "canonicalChanges": false,
+  "productionAccepted": false
+}
