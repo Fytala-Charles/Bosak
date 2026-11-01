@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 31-10-2026     | Creation: private foundation admission (1.35.0)                                          |
 //                      | Charles Korthout | 0.2   | 31-10-2026     | Compose issued-value reads and explicit conversion transport (1.36.0)                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3  | 01-11-2026     | Add typed isolated input and guarded atomic result operations. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Security.Cryptography;
@@ -113,6 +115,23 @@ internal sealed class SchemaQuerySession : IDisposable
             if (evidence.Snapshot is not null && !ReferenceEquals(evidence.Snapshot, _snapshot))
                 throw new ArgumentException("Source belongs to another operation snapshot.", nameof(source));
             return _owner._kernel.AttachValue(_owner._kernel.AdmitConversion(evidence, constructed, _cancellationToken));
+        }
+        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces)
+        {
+            Check();
+            ArgumentNullException.ThrowIfNull(caller);
+            var inputs = caller.CaptureSchemaInputs(ownsNode, maxBindings, maxNamespaces, _snapshot);
+            Check();
+            return inputs;
+        }
+        internal SchemaAtomicResult EvaluateAtomic(SchemaOperationInputs inputs, int maxAtoms)
+        {
+            Check();
+            ArgumentNullException.ThrowIfNull(inputs);
+            if (maxAtoms <= 0) throw new ArgumentOutOfRangeException(nameof(maxAtoms));
+            if (!ReferenceEquals(inputs.Snapshot, _snapshot))
+                throw new ArgumentException("Captured inputs belong to another operation snapshot.", nameof(inputs));
+            return new SchemaAtomicResult(this, _owner._evaluate(inputs.CreateContext()), maxAtoms);
         }
         internal XdmValue Evaluate(EvaluationContext context)
         {

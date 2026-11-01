@@ -57,6 +57,8 @@
 //                      | Charles Korthout | 2.15  | 28-10-2026     | Initialize main context with strict typing, lazy-global cycles and scoped focus (1.30.0). |
 //                      | Charles Korthout | 2.16  | 28-10-2026     | Match imported context types in declaration scope and restore caller namespaces (1.30.1). |
 //                      | Charles Korthout | 2.17  | 28-10-2026     | Isolate lazy initializer and declared-function constructor namespace frames (1.31.0). |
+//                      | Charles Korthout | 2.18  | 01-11-2026     | Factor direct internal evaluation while retaining the public wrapper. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -149,7 +151,13 @@ public sealed class XQueryExecutable
     {
         ArgumentNullException.ThrowIfNull(context);
 
-        var evaluationContext = context.EvaluationContext;
+        return EvaluateIsolatedContext(context.EvaluationContext);
+    }
+
+    /// <summary>Evaluates on an operation-owned context without allocating an XQueryContext wrapper.</summary>
+    internal XdmValue EvaluateIsolatedContext(EvaluationContext evaluationContext)
+    {
+        ArgumentNullException.ThrowIfNull(evaluationContext);
         var snapshot = evaluationContext.SnapshotNamespaces();
         var savedDefaultNs = evaluationContext.DefaultElementNamespace;
         var savedBaseUri = evaluationContext.BaseUri;

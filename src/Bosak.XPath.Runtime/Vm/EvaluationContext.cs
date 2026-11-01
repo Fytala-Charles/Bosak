@@ -127,6 +127,8 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 2.49  | 28-10-2026     | Add internal semantic-focus resolution and per-variable lazy-cache invalidation for XQuery. |
+//                      | Charles Korthout | 2.50  | 01-11-2026     | Add nonreflective bounded private input capture. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -341,6 +343,58 @@ public sealed class EvaluationContext
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
         _documentCache = new Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), DocumentCacheEntry>();
         _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
+    }
+
+    /// <summary>Captures the bounded data-only profile; services and populated execution state refuse.</summary>
+    internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null)
+    {
+        ArgumentNullException.ThrowIfNull(ownsNode);
+        if (maxBindings <= 0) throw new ArgumentOutOfRangeException(nameof(maxBindings));
+        if (maxNamespaces <= 0) throw new ArgumentOutOfRangeException(nameof(maxNamespaces));
+        if (LazyVariableResolver is not null || SuppressLazyGlobalCaching || SkipLazyGlobalCacheOnce
+            || SuppressLazySequenceConstructorGlobals || SkipStandardFunctionPopulation || UnsuppliedExternalVariables.Count != 0
+            || CollationComparer is not null || ElementConstructorHook is not null || ContentNodeConstructorHook is not null
+            || AttributeConstructorHook is not null || DocumentConstructorHook is not null || StaticOutputParameters is not null
+            || _evaluatedLazyGlobals.Count != 0 || _functions.Count != 0 || _variadicMinArity.Count != 0 || _documentCache.Count != 0
+            || _schemaSet is not null || SchemaResolver is not null || _currentDateTimeSnapshot is not null
+            || _implicitTimezoneOffsetSet || _implicitTimezoneOffsetMinutes != 0 || _namedDecimalFormats.Count != 0
+            || CurrentOutputUri is not null || IsStaticEvaluation || IsXPath40 || IsXPath40Experimental || IsXsltMode
+            || NamedRecordCoercion is not null || !EmptyOrdinal(NamedRecordTypes) || !EmptyOrdinal(BindingItemTypes)
+            || InStreamingMapContext || InStreamedPipeline || Xml11Mode || RegexGroups is not null || ResourcePolicy is not null
+            || ExecutionGate is not null || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
+            || CollectionLoader is not null || Collections.Count != 0 || CollectionValues.Count != 0 || XQueryModuleSources.Count != 0
+            || XQueryModuleLoader is not null || DocumentPostProcessor is not null || ConstructedElementProcessor is not null
+            || ConstructedDocumentProcessor is not null || DocumentLoadPolicy is not null || BackwardsCompatible || XsltVersion is not null
+            || InitialTemplateCallParameters is not null || InitialTemplateTunnelParameters is not null || DocumentLoaded is not null
+            || AccumulatorValueCopier is not null || InitialFocusResolver is not null || !_currentItem.IsUndefined
+            || _constructorLocalNamespaces.Count != 0 || FunctionLookupInterceptor is not null || !DefaultFormat(_defaultDecimalFormat))
+            throw new NotSupportedException("Context services or nondefault execution state require a separate capture profile.");
+        if (_variables.Count > maxBindings || _namespaces.Count > maxNamespaces)
+            throw new NotSupportedException("Input binding or namespace limit reached.");
+        if (_contextItem.IsUndefined ? _contextPosition != 0 || _contextSize != 0
+            : !_contextItem.IsNode || _contextPosition < 1 || _contextSize < _contextPosition)
+            throw new NotSupportedException("Invalid bounded node focus.");
+        if (_contextItem.IsNode && !ownsNode(_contextItem.NodeValue!))
+            throw new NotSupportedException("Unadmitted focus node.");
+        foreach (var value in _variables.Values)
+        {
+            if (value.IsNode)
+            {
+                if (!ownsNode(value.NodeValue!)) throw new NotSupportedException("Unadmitted variable node.");
+            }
+            else if (value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))
+                throw new NotSupportedException("Only direct scalar or admitted node bindings are supported.");
+        }
+        return new SchemaOperationInputs(_contextItem, _contextPosition, _contextSize, _variables.ToArray(), _namespaces.ToArray(),
+            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot);
+
+        static bool EmptyOrdinal<T>(IReadOnlyDictionary<string, T> values)
+            => values is Dictionary<string, T> dictionary && values.GetType() == typeof(Dictionary<string, T>) && dictionary.Count == 0
+                && (ReferenceEquals(dictionary.Comparer, StringComparer.Ordinal) || ReferenceEquals(dictionary.Comparer, EqualityComparer<string>.Default));
+        static bool DefaultFormat(DecimalFormat? value) => value is not null && value.DecimalSeparator == "." && value.GroupingSeparator == ","
+            && value.Digit == "#" && value.ZeroDigit == "0" && value.PatternSeparator == ";" && value.MinusSign == "-"
+            && value.Percent == "%" && value.PerMille == "\u2030" && value.Infinity == "Infinity" && value.NaN == "NaN" && value.ExponentSeparator == "e";
     }
 
     /// <summary>

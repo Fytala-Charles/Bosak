@@ -1,0 +1,8 @@
+System.ArgumentException: Captured inputs belong to another operation snapshot. (Parameter 'inputs')
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.EvaluateAtomic(SchemaOperationInputs inputs, Int32 maxAtoms) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 133
+   at Fixture.<>c__DisplayClass13_1.<Run>b__19(Operation op) in D:\Development\Bosak\.guard-tmp\typed-host-inputs\Probe\Program.cs:line 110
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, Snapshot snapshot, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 70
+   at Fixture.<>c__DisplayClass13_2.<Run>b__18() in D:\Development\Bosak\.guard-tmp\typed-host-inputs\Probe\Program.cs:line 110
+   at Fixture.Refuse[T](String id, Func`1 action) in D:\Development\Bosak\.guard-tmp\typed-host-inputs\Probe\Program.cs:line 94
+   at Fixture.Run() in D:\Development\Bosak\.guard-tmp\typed-host-inputs\Probe\Program.cs:line 110
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\typed-host-inputs\Probe\Program.cs:line 18
