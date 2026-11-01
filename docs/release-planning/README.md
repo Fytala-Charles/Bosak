@@ -2,7 +2,7 @@
 
 Updated 1 November 2026. Current source version: **1.42.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
 
-The internal foundation is qualified within its bounded private profile. The remaining critical path is **public contract disposition → public implementation → actual consumer/performance qualification → four-owner acceptance → release candidate → publication**. [Owner capability mapping](OWNER-CAPABILITIES.md) identifies concrete gaps from pinned source, rather than treating synthetic tests as consumer acceptance. [GATES.json](GATES.json) is the machine-readable gate registry.
+The [consolidated answers and execution plan](../foundation-r2-consolidation/README.md) is the current owner-disposition index: five submitted returns, three scoped design accepts, two revisions and two missing Schema returns. The internal foundation is qualified within its bounded private profile. The remaining critical path is **public contract disposition → public implementation → actual consumer/performance qualification → four-owner acceptance → release candidate → publication**. [Owner capability mapping](OWNER-CAPABILITIES.md) identifies concrete gaps from pinned source, rather than treating synthetic tests as consumer acceptance. [GATES.json](GATES.json) is the machine-readable gate registry.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
@@ -21,18 +21,16 @@ The latest full production qualification passed **24,390 unit tests**, QT3 **31,
 
 The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. Notable decisions still needed are ordinary XmlDb admission without schema authority, neutral authority/assessment handles, exact numeric and list/union representation, advisor/compatible-view semantics, real resource failure preservation and finite concurrency profiles.
 
-## Immediate next task: close R2 owner dispositions
+## Immediate next work
 
-- [x] [Core ledger](../foundation-r2-ledger/README.md) maps all 45 proposed types, 615 baseline metadata/evidence rows, six numeric member intents and 43 requirement rows.
-- [x] Four boundary method changes compile in four isolated assemblies; 45 revised proposed types remain, with 619 metadata/evidence rows. Production is unchanged.
-- [x] Prepare [O1–O4 owner packets](../foundation-r2-owner-review/README.md), seven unanswered role-specific return forms and draft-bound completeness checks. Delivery and acceptance are not claimed.
-- [x] Record [O2-Core and O4-Core scoped design returns](../foundation-r2-core-returns/README.md), authored by Codex on the Core engineering task; no external/runtime/C45 acceptance is inferred.
-- [x] Review [Braid O3 and issue #468](../foundation-r2-response-review/README.md): Braid submitted Revise with BCAP-01; Schema is informed but no O1/O2 response is present in the inspected issue.
-- [ ] **Next Core action: resolve BCAP-01**, the operation-bound bounded capture route, by supported existing-route proof or a smallest revised declaration draft; obtain Braid disposition of the result.
-- [ ] Obtain four missing role returns: O1-Schema, O1-XmlDb, O2-Schema and O4-XmlDb. XmlDb remains pending; do not count Braid Revise as acceptance.
-- [ ] Record accepted implementation scope and any newly affected immutable specification revisions/sections/deviations before semantic implementation. The Core ledger is not owner acceptance.
-- [x] Prepare [W1-A–E implementation slices](../foundation-w1-readiness/README.md) and 20 NotRun acceptance cases for neutral ordinary-source admission. This does not open R3.
-- [x] Publish a finite W1–W7 implementation/qualification queue, gated by the corresponding accepted R2 scope. Prepare fixtures in parallel; do not substitute more synthetic lifecycle experiments for these decisions.
+- [x] Core ledger covers all proposed type/member/requirement rows; the isolated review draft compiles. Core O2/O4 and XmlDb O1 have scoped design accepts, not runtime acceptance.
+- [x] [Consolidate five submitted returns and Schema checklist guidance](../foundation-r2-consolidation/README.md); independently verify XmlDb's newer b09c7341 source/evidence pins.
+- [ ] **Core P02/P03:** prepare and qualify the minimal operation-bound bounded capture route/declaration candidate for BCAP-01; obtain Braid's P04 disposition. This is the next concrete Core deliverable.
+- [ ] **XmlDb P06/P07, parallel:** resolve actual cleanup/failure/profile revision XDB-LIFE-01 and implement/qualify provider-local membership. No additional required Core disposal signature has been demonstrated.
+- [ ] **Schema P05, parallel:** submit actual O1/O2 dispositions using the eight checklist work items, with actual methods/profile/gaps/evidence. The issue comment is guidance, not those responses.
+- [ ] **P08:** reconcile changed draft hashes and all owner dispositions, then close accepted R2 scope. R3 production implementation remains gated; W1–W7 and targeted follow-up controls are prepared, not completed.
+
+See the [dependency queue](../foundation-r2-consolidation/PLAN.json), [Core capture plan](../foundation-r2-consolidation/CORE-CAPTURE-PLAN.md) and [parallel owner actions](../foundation-r2-consolidation/OWNER-ACTIONS.md). Do not replace these named deliverables with another generic lifecycle model or planning-only checkpoint.
 
 ## Work that can continue in parallel
 

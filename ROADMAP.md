@@ -14,7 +14,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 |---|---|---|
 | R0 Internal engine foundation | Qualified within bounded private profile | Preserve the existing implementation and regression/conformance baseline. |
 | R1 Owner capability mapping | Audited, not owner accepted | Exact source pins and explicit Schema/XmlDb/Braid contract gaps. |
-| R2 Final public contract disposition | In review | Core design returns recorded; Braid Revise/BCAP-01 open; four role returns pending. |
+| R2 Final public contract disposition | In review | Five returns: three scoped accepts/two revisions; Schema O1/O2 missing. |
 | R3 Public implementation | Pending R2 | Implement and document accepted contracts with API/ABI and semantic/lifetime tests. |
 | R4 Actual consumer/performance qualification | Pending candidate; preparation parallel | Same immutable candidate for Schema, XmlDb and Braid; source/unchanged binaries, owner resources and agreed workload budgets. |
 | R5 C45 acceptance/API freeze | Pending R4 | Explicit Core/Schema/XmlDb/Braid acceptance of the exact manifest/profile. |
@@ -23,7 +23,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 
 ## Immediate Core task
 
-The [R2 Core ledger](docs/foundation-r2-ledger/README.md) and [owner packets](docs/foundation-r2-owner-review/README.md) are ready. The [latest response review](docs/foundation-r2-response-review/README.md) records Braid O3 as **Revise**, with BCAP-01: demonstrate bounded XSLT capture through the exact operation/environment, including secondary outputs, messages, failures, limits and resource receipts. Resolve this Core route/signature gap next; a raw Transform result is not sufficient proof. Schema is informed through issue #468 but has not supplied O1/O2 answers there; XmlDb remains pending. Four role returns are missing, and R3 remains pending accepted corresponding scope/provider facts. The W1 plan remains prepared and unexecuted. Keep backend coverage separate from required signature completeness.
+Use the [consolidated answers and execution plan](docs/foundation-r2-consolidation/README.md). **Core next: P02/P03, the operation-bound bounded XSLT capture candidate and targeted evidence for BCAP-01**, followed by Braid review. In parallel, XmlDb resolves XDB-LIFE-01 (actual cleanup/failure profile) and prepares provider-local membership; Schema submits formal O1/O2 answers using its checklist. Five role returns are submitted: Core O2/O4 and XmlDb O1 accept scoped design, while Braid O3 and XmlDb O4 request revision. Only Schema's two formal returns are missing. Resolve all known gaps and explicitly rebind any revised draft before R2 closes and accepted R3 work starts. Full XSD 1.1 backend completion remains separate from required foundation signature completeness.
 
 The [capability audit](docs/release-planning/OWNER-CAPABILITIES.md) identifies actual source paths and remaining owner evidence, including XmlDb acquisition cleanup/failure preservation. Core owns contract selection and implementation; external implementation remains delegated. Do not add more synthetic lifecycle experiments unless they resolve a named decision.
 

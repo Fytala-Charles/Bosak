@@ -39,24 +39,30 @@
       "ownerReviewPacketPrepared": true,
       "ownerDeliveryConfirmed": false,
       "requiredRoleReturns": 7,
-      "recordedAcceptedReturns": 2,
+      "recordedAcceptedReturns": 3,
       "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
-      "recordedReturnScope": "Two scoped Core design dispositions only; not runtime or C45 acceptance",
-      "externalRoleReturnsPending": 4,
-      "recordedSubmittedRoleReturns": 3,
+      "recordedReturnScope": "Three scoped agent-authored design accepts, two Revise returns; no runtime/C45 acceptance",
+      "externalRoleReturnsPending": 2,
+      "recordedSubmittedRoleReturns": 5,
       "externalRoleReturnsPendingIds": [
         "O1-Schema",
-        "O1-XmlDb",
-        "O2-Schema",
-        "O4-XmlDb"
+        "O2-Schema"
       ],
       "braidDecision": "Revise",
       "openRevisionRequests": [
-        "BCAP-01"
+        "BCAP-01",
+        "XDB-LIFE-01"
       ],
       "schemaRegistrationConfirmed": true,
       "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
-      "latestResponseReview": "docs/foundation-r2-response-review/STATUS.json"
+      "latestResponseReview": "docs/foundation-r2-consolidation/STATUS.json",
+      "externalRoleReturnsPendingScope": "Missing submissions only; received Revise returns are separate open work",
+      "xmlDbO1Decision": "AcceptWithScope",
+      "xmlDbO4Decision": "Revise",
+      "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
+      "schemaAlignmentIsFormalReturn": false,
+      "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
+      "nextCoreTask": "P02: operation-bound bounded capture route/declaration candidate"
     },
     {
       "id": "R3",

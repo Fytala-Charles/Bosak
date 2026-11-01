@@ -1,0 +1,63 @@
+{
+  "productionVersion": "1.42.0",
+  "productionChanged": false,
+  "requiredRoleReturns": 7,
+  "submittedRoleReturns": 5,
+  "scopedDesignAccepts": 3,
+  "revisionReturns": 2,
+  "missingRoleReturns": [
+    "O1-Schema",
+    "O2-Schema"
+  ],
+  "rows": [
+    {
+      "id": "O1-Schema",
+      "owner": "Schema",
+      "decision": "Missing",
+      "scope": "Checklist guidance only; no source-specific formal return"
+    },
+    {
+      "id": "O1-XmlDb",
+      "owner": "XmlDb",
+      "decision": "AcceptWithScope",
+      "scope": "Ordinary source design; provider-local membership bridge not yet implemented"
+    },
+    {
+      "id": "O2-Schema",
+      "owner": "Schema",
+      "decision": "Missing",
+      "scope": "Checklist guidance only; no formal N1\u2013N8/numeric/compatibility disposition"
+    },
+    {
+      "id": "O2-Core",
+      "owner": "Core",
+      "decision": "AcceptWithScope",
+      "scope": "Core design only; exact numeric execution and provider feasibility unqualified"
+    },
+    {
+      "id": "O3-Braid",
+      "owner": "Braid",
+      "decision": "Revise",
+      "scope": "BCAP-01: operation-bound complete bounded capture route"
+    },
+    {
+      "id": "O4-XmlDb",
+      "owner": "XmlDb",
+      "decision": "Revise",
+      "scope": "XDB-LIFE-01: actual provider failure preservation and finite lifetime/concurrency profile"
+    },
+    {
+      "id": "O4-Core",
+      "owner": "Core",
+      "decision": "AcceptWithScope",
+      "scope": "Core design only; no additional required disposal signature demonstrated"
+    }
+  ],
+  "schemaGuidanceComment": 6563123351,
+  "schemaGuidanceIsFormalReturn": false,
+  "r2Complete": false,
+  "r3Started": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

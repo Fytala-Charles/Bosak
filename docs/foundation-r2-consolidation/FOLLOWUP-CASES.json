@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "allStatuses": "NotRun",
+  "note": "18 targeted follow-up controls; overlap existing W1/owner cases and are not additional passed tests or a complete consumer suite",
+  "cases": [
+    {
+      "id": "C01",
+      "group": "BCAP-01",
+      "trigger": "Same compiled environment and live operation",
+      "expected": "Capture is bound to the exact executable/environment; foreign/closed operations refuse before source getters.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C02",
+      "group": "BCAP-01",
+      "trigger": "Distinct/shared/source-free inputs",
+      "expected": "Separate match/global roles, unique admission leasing and source-free named templates retain correct context during capture.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C03",
+      "group": "BCAP-01",
+      "trigger": "Principal and secondary output",
+      "expected": "Detached managed serialized bytes, URIs/properties and production order match the supported capture contract; no filesystem output.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C04",
+      "group": "BCAP-01",
+      "trigger": "Messages and production bounds",
+      "expected": "Message count, secondary count, per-output and total-byte bounds apply at production with expected classified outcomes; no total-memory claim.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C05",
+      "group": "BCAP-01",
+      "trigger": "Partial and failing output",
+      "expected": "Completed outputs survive subsequent transform/serialization failure with correct failure classification; principal-only serialization is insufficient.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C06",
+      "group": "BCAP-01",
+      "trigger": "Cancellation and execution gates",
+      "expected": "Raw cancellation/operation/time controls compose explicitly and preserve Cancelled/Partial/Failed semantics; compilation and between-checkpoint limits remain documented.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C07",
+      "group": "BCAP-01",
+      "trigger": "Resource receipts",
+      "expected": "Actual per-run denial/unsupported-route receipts remain attributable and isolated across runs; state/test redaction before publication/IPC.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C08",
+      "group": "BCAP-01",
+      "trigger": "Raw ownership through serialization",
+      "expected": "Actual admitted resources stay held until all captured output/result consumption completes; canceling a wait does not release early.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C09",
+      "group": "BCAP-01",
+      "trigger": "Options/context conflicts",
+      "expected": "Mutable options are copied/refused under selected profile; invocation/context precedence, raw-result exclusions and unsupported fields never silently fall back.",
+      "status": "NotRun"
+    },
+    {
+      "id": "C10",
+      "group": "BCAP-01",
+      "trigger": "Failure aggregation and cost",
+      "expected": "Capture/serialization plus multiple cleanup failures preserve all objects/order; measure warm/cold allocations/latency under identified fixtures without claiming owner budgets.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X01",
+      "group": "XDB-LIFE-01",
+      "trigger": "Generation acquisition failure plus release failure",
+      "expected": "Original failure and cleanup failure survive; owner fault state is established even if release throws.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X02",
+      "group": "XDB-LIFE-01",
+      "trigger": "Epoch acquisition plus two cleanup failures",
+      "expected": "Original then generation/admission cleanup failures are preserved in reverse-acquisition attempt order.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X03",
+      "group": "XDB-LIFE-01",
+      "trigger": "Release before/after uncertainty",
+      "expected": "Distinguish fail-before-release and fail-after-release; no blind retry, duplicate release or unproven reclamation guarantee.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X04",
+      "group": "XDB-LIFE-01",
+      "trigger": "Actual reader/generation retention",
+      "expected": "Hold actual BeginRead/native generation ownership through raw work, partial consumption and canceled waits; normal and fault paths are separated.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X05",
+      "group": "XDB-LIFE-01",
+      "trigger": "Sequential/reentry/concurrent-close scope",
+      "expected": "Refuse unsupported same-owner overlap/reentry before getters; admission close defers actual disposal until raw completion.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X06",
+      "group": "XDB-LIFE-01",
+      "trigger": "XSLT worker thread handoff",
+      "expected": "Clarify and qualify sequential handoff between operation-entry thread and dedicated transform worker; do not accidentally require an incompatible thread-affinity rule.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X07",
+      "group": "XDB-LIFE-01",
+      "trigger": "Native source membership",
+      "expected": "Provider-local actual snapshot checks reject throwing foreign nodes and same labels in another snapshot without traversal/copy or schema authority.",
+      "status": "NotRun"
+    },
+    {
+      "id": "X08",
+      "group": "XDB-LIFE-01",
+      "trigger": "Compatibility and evidence",
+      "expected": "Unchanged source/binary, identity/order/namespaces/defaults/typed-value policy and store-format invariants are checked against one candidate; no history deletion or implicit pin change.",
+      "status": "NotRun"
+    }
+  ]
+}

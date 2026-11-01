@@ -1,0 +1,20 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "CORE-CAPTURE-PLAN.md": "8d805f8741cf12fe9d07b83fe8ab00c83e1f9469ba8d1580eb6bc3d7e85d52bd",
+  "evidence/DOCUMENTATION-CHECKS.json": "aab8512166fbf992e8c1c874c182947d41ae46a755ac5d37df4714ca460566ab",
+  "FOLLOWUP-CASES.json": "554d16934f03f3f375fe73c3de1ce9b0324ab49067eb435c4a06bde5bfa237dd",
+  "inputs/issue-468-comments.json": "6019d2b8084c28797ce89b6b10b9938a2e5e456f5916e6a197a63fee5beff29f",
+  "inputs/O1-XmlDb.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+  "inputs/O2-Core.json": "460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f",
+  "inputs/O3-Braid.json": "b9de8b1f79f399cd9e618ca724dfe08d785279653ae7f6ab20f2243ec30bae78",
+  "inputs/O4-Core.json": "48ec1cb1f07470c8bf7f7a7366e7350b52fd80954cf88eb9b27f246c757bac26",
+  "inputs/O4-XmlDb.json": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+  "inputs/Schema-alignment-comment.json": "4b975ae23668877380f716fdfb86a3b98acbe59fc8f68da86baca356a38e456d",
+  "inputs/XmlDb-owner-INPUTS.json": "c338f649967399c1af83e14ca6a5d5b1fcded1bbeeb464552a33d727a411c179",
+  "INPUTS.json": "99a0bc03ade96cd734ba46ffa4fba472d482ccee7f904ceb4c978bdda6fa796e",
+  "OWNER-ACTIONS.md": "0e025e310c8dbbf6a49f262f863e3710fc8693d6b19af4d793228f37c2b5ed5b",
+  "PLAN.json": "a57e4ce9f2c040c72b7c72150f4569ff9eedf47e13f02b3b584cef34d9d5c784",
+  "README.md": "3aedcde8ed81511c5d0b588fa549064395767fd59df592586f9632b6b60acb4a",
+  "STATUS.json": "d2c2f265685d9afb19dc10c4a4a0f4452111632b04d6f87f6a449cd05fd914b5",
+  "tools/verify.py": "63c21fdc016bcf3e6dce8175d72f15647e669bca0da902b1d1dc06f1e44ee282"
+}
