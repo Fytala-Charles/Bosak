@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextCoreTask": "P02",
+  "nextCoreTask": "P03",
   "parallelOwnerTasks": [
     "P05",
     "P06",
@@ -42,19 +42,20 @@
     {
       "id": "P02",
       "owner": "Core",
-      "status": "Next",
+      "status": "CompleteIsolatedDeclaration",
       "dependsOn": [
         "P01"
       ],
       "canPrepareBeforeR2Closure": true,
       "title": "Prepare minimal capture route/declaration candidate",
       "work": "Demonstrate a supported same-executable composition or compile the smallest operation-bound capture entry and receipt handoff. Reuse existing capture machinery/options/results where valid.",
-      "exitEvidence": "Exact route/signature delta, invocation/context precedence, bounds, raw ownership and receipt contract; no production promotion."
+      "exitEvidence": "Exact route/signature delta, invocation/context precedence, bounds, raw ownership and receipt contract; no production promotion.",
+      "evidence": "docs/foundation-bcap-candidate/README.md"
     },
     {
       "id": "P03",
       "owner": "Core",
-      "status": "Pending",
+      "status": "Next",
       "dependsOn": [
         "P02"
       ],
@@ -145,5 +146,6 @@
       "work": "Qualify actual source/unchanged binaries and PF-01\u201309 budgets on one immutable candidate, obtain four-owner freeze, then build/review/publish release packages.",
       "exitEvidence": "R4\u2013R7 gates individually evidenced; no automatic product pin upgrade, release version or date commitment."
     }
-  ]
+  ],
+  "ownerRequestsRegistered": "docs/foundation-bcap-candidate/evidence/owner-registration.json"
 }

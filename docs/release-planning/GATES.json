@@ -62,7 +62,8 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P02: operation-bound bounded capture route/declaration candidate"
+      "nextCoreTask": "P03: real operation-bound capture producer and C01-C10 feasibility",
+      "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md"
     },
     {
       "id": "R3",

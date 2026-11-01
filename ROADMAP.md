@@ -8,6 +8,9 @@ Updated 1 November 2026. Source is **1.42.0**; the next publication version/date
 
 The [release plan and checklist](docs/release-planning/README.md) is the single planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance.
 
+
+Current execution update (1 November): [P02 isolated capture declaration candidate](docs/foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

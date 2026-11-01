@@ -4,6 +4,9 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 
 **Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
 
+
+Current execution update (1 November): [P02 isolated capture declaration candidate](../foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

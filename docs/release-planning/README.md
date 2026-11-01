@@ -15,6 +15,9 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R6 Release candidate packages/docs | Pending freeze; preparation parallel | Core | Selected SemVer, package provenance, migration/release notes, complete docs and fresh-cache package-only consumer tests. |
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
+
+Current execution update (1 November): [P02 isolated capture declaration candidate](../foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
+
 ## What is already demonstrated
 
 The latest full production qualification passed **24,390 unit tests**, QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** and 11 experimental passes. Public metadata remains **270 types / 5,770 declarations**. The private factories, same-session snapshot leases, typed input stamps, separate XSLT source roles and deferred cleanup are implemented. A further [57 host acquisition/rollback controls](../foundation-host-acquisition-rollback/README.md) passed twice without production changes. These receipts do not export or accept the proposed public SDK.

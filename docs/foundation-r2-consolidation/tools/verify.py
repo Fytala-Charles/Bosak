@@ -18,7 +18,8 @@ assert sha(P/'inputs/Schema-alignment-comment.json')==i['schemaCommentSha256'] a
 comment=json.loads((P/'inputs/Schema-alignment-comment.json').read_text());assert comment['id']==6563123351 and 'proposed work/acceptance checklist' in comment['body'] and 'not a claim' in comment['body']
 seen=set()
 for task in plan['tasks']:assert set(task['dependsOn'])<=seen and task['exitEvidence'];seen.add(task['id'])
-assert len(seen)==10 and plan['nextCoreTask']=='P02' and {x['id'] for x in plan['openItems']}=={'BCAP-01','XDB-LIFE-01'}
+assert len(seen)==10 and plan['nextCoreTask']=='P03' and {x['id'] for x in plan['openItems']}=={'BCAP-01','XDB-LIFE-01'}
+assert next(t for t in plan['tasks'] if t['id']=='P02')['status']=='CompleteIsolatedDeclaration'
 assert len(cases['cases'])==18 and len({x['id'] for x in cases['cases']})==18 and all(x['status']=='NotRun' for x in cases['cases'])
 for name,digest in i['reviewInputs'].items():assert sha(R/name)==digest,name
 audit=i['xmlDbSourceAudit'];assert sha(P/'inputs/XmlDb-owner-INPUTS.json')==audit['ownerReceiptSha256']

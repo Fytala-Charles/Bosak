@@ -1,0 +1,96 @@
+{
+  "qualifiedEngines": {
+    "Bosak.XPath.Core.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Core\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "37273d0c0405cafe4a5001fdd30849e4da1f1195bbca231bb4ed24b28e1e3827"
+    },
+    "Bosak.XPath.Parser.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Parser\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "acbf883a105eef90d36aa3578eb1010439490a728bf0c9866b7248b2ee3ed95e"
+    },
+    "Bosak.XPath.Compiler.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Compiler\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "df8db3a69581228ed6b9c74f38e56703066d5c9fe42f4165d873238c532a5816"
+    },
+    "Bosak.XPath.Runtime.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "2855b35cf2237c626600b13e079d6b1e46b4b148102fc48a566fda57e980d0a3"
+    },
+    "Bosak.XPath.Api.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "e7701df8b8de5bdfbdb7057481c929a555da66920dfd46ac77863bd101f176de"
+    },
+    "Bosak.XPath.Standard.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "b15025afa3ea0ca690728bde48ae27343ef766f4bb5dfacefbba54ecacfd5ae9"
+    },
+    "Bosak.XPath.Providers.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Providers\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "906cf8585df31e352b4c8cbd1eeb85e988fb334fb78a7268f220c8a042a6dc68"
+    },
+    "Bosak.Xslt.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.Xslt\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "8957ef1b1eb452efedb922297323e9a3b3a3d01e80a5b931a7ff2d79f07f5343"
+    },
+    "Bosak.XQuery.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XQuery\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "fca6cd57d7ae13e893f5763158d41fe226100b7e71833b0d3ebd7fa534552170"
+    },
+    "Bosak.XPath.Providers.Database.dll": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Providers.Database\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "bc50066bfe75b45c1b8245cfaf927cc4707ee1cd138cd4ba903ac2a99bc38649"
+    }
+  },
+  "declarationSources": {
+    "ExactNumeric.cs.txt": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364",
+    "OperationLifetime.cs.txt": "4666976ab15ddd2792ad00f7f2995e9f5623baa1bfb85ca5caac6d0731234b1e",
+    "Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+    "QueryFacade.cs.txt": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37",
+    "XQuery.cs.txt": "9c22a8d957f51f49d4214eaee760c498e95bb5cce00a0b3d7ad12ab26d5c00aa",
+    "Xslt.cs.txt": "41d0998f2aa50f0131965173606f30cd36a42e2fec98667c5d60881d8815bbc7"
+  },
+  "dependencyGraph": {
+    "Bosak.XPath.Core.C45Proposal": {
+      "proposalReferences": [],
+      "engineReferences": [
+        "Bosak.XPath.Core"
+      ]
+    },
+    "Bosak.XPath.Api.C45Proposal": {
+      "proposalReferences": [
+        "Bosak.XPath.Core.C45Proposal"
+      ],
+      "engineReferences": [
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Api",
+        "Bosak.XPath.Runtime"
+      ]
+    },
+    "Bosak.XQuery.C45Proposal": {
+      "proposalReferences": [
+        "Bosak.XPath.Core.C45Proposal",
+        "Bosak.XPath.Api.C45Proposal"
+      ],
+      "engineReferences": [
+        "Bosak.XPath.Core",
+        "Bosak.XQuery"
+      ]
+    },
+    "Bosak.Xslt.C45Proposal": {
+      "proposalReferences": [
+        "Bosak.XPath.Core.C45Proposal",
+        "Bosak.XPath.Api.C45Proposal"
+      ],
+      "engineReferences": [
+        "Bosak.XPath.Core",
+        "Bosak.XPath.Runtime",
+        "Bosak.Xslt"
+      ]
+    }
+  },
+  "publicTypes": 46,
+  "proposalBodiesExecuted": false,
+  "productionExportsAdded": 0,
+  "inventoryBaseSourceSha256": "cfdf1fa72ff31750873ce2cb085845f8345dc1924d9aa9ea97a7c3218bfe36ae",
+  "inventorySourceSha256": "a00a9a156678696a7b0c3276146278f7a644b400f92b92b57d85e93ba0fbd4c9"
+}
