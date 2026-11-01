@@ -44,7 +44,7 @@ public sealed class SchemaCompositeHostTests
     }
     /// <summary>Executes real compiled hosts over two independent source admissions.</summary>
     /// <param name="query">Whether to compile XQuery instead of XPath.</param>
-    
+
     public void TwoSourceCompiledEvaluation(bool query)
     {
         var p=new Provider();SchemaQuerySession? session;string? reason;

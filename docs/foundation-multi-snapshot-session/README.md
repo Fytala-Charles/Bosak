@@ -42,3 +42,5 @@ The input record gains an operation-identity reference; older single-input alloc
 Next admit separate XSLT match and global-context roles through the exact operation membership before enabling composite transforms. Then qualify native owner adapters, broader typed results, acquisition rollback and compatibility routes. Exact numeric execution, Schema/XmlDb/Braid acceptance and API freeze remain pending.
 
 Read-only verification: `python -B docs/foundation-multi-snapshot-session/tools/verify.py`. Negative fixtures use scoped child error handling and bounded waits; no deliberate unhandled crash test or machine-wide error configuration change is used.
+
+A formatting follow-up normalizes trailing whitespace in the standalone host fixture and repeats its three controls twice. Production source and qualification bytes are unchanged; the original fixture receipts remain in commit `8d3170e5`.
