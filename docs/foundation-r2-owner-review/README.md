@@ -19,6 +19,8 @@ Braid's active checkout is `0f1d949e758645f7944f617f2b4613e49161a195` (1.26.2 up
 
 ## Completing and reviewing a return
 
+Incoming files under `returns/` are unsealed submissions, excluded from the prepared-packet manifest. They require separate format and substantive review; merely adding a file changes no acceptance field. Original packets/templates remain unchanged. Current return dispositions are tracked in the [response review](../foundation-r2-response-review/README.md).
+
 Copy the role's JSON template to a new response file. Set responseStatus to Submitted; provide Accept, AcceptWithScope, Revise or Reject, exact source revision, named signer/date, explicit profile, an answer to every question, an explicit required-signature-gap list and evidence references. A justified not-applicable answer is allowed; a null answer or null gap assessment is not acceptance. Accept/AcceptWithScope cannot leave a required signature gap unresolved.
 
 Check completeness with `python -B docs/foundation-r2-owner-review/tools/returns.py --response <response.json>`. This validates format and draft binding only. It does not authenticate the signer, evaluate evidence quality, accept a contract or update any release gate. Actual runtime qualification stays distinct from a design disposition; R2 acceptance does not imply R4 consumer acceptance, C45, API freeze, publication or a product pin upgrade.

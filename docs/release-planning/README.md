@@ -27,7 +27,9 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 - [x] Four boundary method changes compile in four isolated assemblies; 45 revised proposed types remain, with 619 metadata/evidence rows. Production is unchanged.
 - [x] Prepare [O1–O4 owner packets](../foundation-r2-owner-review/README.md), seven unanswered role-specific return forms and draft-bound completeness checks. Delivery and acceptance are not claimed.
 - [x] Record [O2-Core and O4-Core scoped design returns](../foundation-r2-core-returns/README.md), authored by Codex on the Core engineering task; no external/runtime/C45 acceptance is inferred.
-- [ ] Obtain five external role returns: O1-Schema, O1-XmlDb, O2-Schema, O3-Braid and O4-XmlDb. Resolve all demonstrated required gaps before R2 closes.
+- [x] Review [Braid O3 and issue #468](../foundation-r2-response-review/README.md): Braid submitted Revise with BCAP-01; Schema is informed but no O1/O2 response is present in the inspected issue.
+- [ ] **Next Core action: resolve BCAP-01**, the operation-bound bounded capture route, by supported existing-route proof or a smallest revised declaration draft; obtain Braid disposition of the result.
+- [ ] Obtain four missing role returns: O1-Schema, O1-XmlDb, O2-Schema and O4-XmlDb. XmlDb remains pending; do not count Braid Revise as acceptance.
 - [ ] Record accepted implementation scope and any newly affected immutable specification revisions/sections/deviations before semantic implementation. The Core ledger is not owner acceptance.
 - [x] Prepare [W1-A–E implementation slices](../foundation-w1-readiness/README.md) and 20 NotRun acceptance cases for neutral ordinary-source admission. This does not open R3.
 - [x] Publish a finite W1–W7 implementation/qualification queue, gated by the corresponding accepted R2 scope. Prepare fixtures in parallel; do not substitute more synthetic lifecycle experiments for these decisions.

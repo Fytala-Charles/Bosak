@@ -32,7 +32,7 @@ for repo in observations['repositories']:
 source=json.loads((R/'docs/foundation-xslt-source-membership/evidence/SOURCE.json').read_text())
 for name,digest in source['files'].items():assert sha(R/name)==digest,name
 if (P/'MANIFEST.json').exists():
- m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
+ m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json' and p.relative_to(P).parts[0]!='returns'}
  for name,digest in m.items():assert sha(P/name)==digest,name
 if '--record-format-checks' in __import__('sys').argv:
  (P/'evidence/FORMAT-CHECKS.json').write_text(json.dumps({'scope':'Synthetic response-format controls only; no actual owner return, authentication, runtime or gate acceptance','checks':checks},indent=2)+'\n',encoding='utf-8')

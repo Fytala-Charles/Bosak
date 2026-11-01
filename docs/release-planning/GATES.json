@@ -42,7 +42,21 @@
       "recordedAcceptedReturns": 2,
       "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
       "recordedReturnScope": "Two scoped Core design dispositions only; not runtime or C45 acceptance",
-      "externalRoleReturnsPending": 5
+      "externalRoleReturnsPending": 4,
+      "recordedSubmittedRoleReturns": 3,
+      "externalRoleReturnsPendingIds": [
+        "O1-Schema",
+        "O1-XmlDb",
+        "O2-Schema",
+        "O4-XmlDb"
+      ],
+      "braidDecision": "Revise",
+      "openRevisionRequests": [
+        "BCAP-01"
+      ],
+      "schemaRegistrationConfirmed": true,
+      "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
+      "latestResponseReview": "docs/foundation-r2-response-review/STATUS.json"
     },
     {
       "id": "R3",
