@@ -22,6 +22,10 @@ The [full 1.36 inventory and exact C45 proposal](docs/foundation-c45-delta136/RE
 
 Next C45 step: implement complete private compilation/binding factories above the [1.38.0 typed host boundary](docs/foundation-typed-host-inputs/README.md), capturing effective static context and actual provider/owner contracts. Independent multi-source ownership and exact numeric execution remain open before public acceptance; API freeze remains pending.
 
+## Composite operation design — 1 November 2026
+
+[Selected internal ownership contract](docs/foundation-composite-ownership/README.md): hosts acquire source resources; the session retains an immutable same-session operation lease set, rolls back partial lease acquisition and preserves all completion failures. No new public group or provider disposal requirement is selected. Mixed authorities and native ownership routing remain unsupported pending design. All 24 acceptance cases are NotRun; production remains unchanged 1.39.0. Next implement and qualify the private lease-set primitive before extending typed capture and XSLT role admission. Consumer/C45 acceptance and API freeze remain pending. Delivery: `git log -1 --format=%H -- docs/foundation-composite-ownership/README.md`.
+
 ## Independent owner qualification — 1 November 2026
 
 The unchanged 1.39.0 production factories pass [151 integration checks twice](docs/foundation-independent-owners/README.md), including 48 new controls using independent providers, sessions, assessments, nodes and snapshots across XPath/XQuery/XSLT. Foreign inputs refuse; revocation and cleanup failures remain isolated, with exactly-once deferred release. Failed admission retains caller cleanup ownership. This qualifies side-by-side sources, not a joint multi-source operation or native assessment. The preceding 24,341 unit passes and frozen gates remain inherited receipts; source/engine hashes are unchanged. Next specify composite owner membership, admission rollback and failure preservation before implementation. Public API, C45/consumer acceptance and freeze remain pending. Delivery: `git log -1 --format=%H -- docs/foundation-independent-owners/README.md`.
