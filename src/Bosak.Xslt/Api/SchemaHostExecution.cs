@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2 | 01-11-2026     | Validate distinct XSLT roles against exact composite operation membership. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -28,6 +30,13 @@ internal static class SchemaHostExecution
         ArgumentNullException.ThrowIfNull(executable);
         return executable.EvaluateIsolatedContext;
     }
+
+    internal static Action<SchemaQuerySession.Operation, SchemaOperationInputs> BindXsltAdmission(IXdmNode? matchInput, IXdmNode? globalInput)
+        => (operation, inputs) =>
+        {
+            operation.RequireNodeInput(inputs, matchInput);
+            operation.RequireNodeInput(inputs, globalInput);
+        };
 
     internal static Func<EvaluationContext, XdmValue> BindXslt(XsltExecutable executable,
         IXdmNode? matchInput, IXdmNode? globalInput, string? initialTemplate, Func<IXdmNode, bool> ownsNode)

@@ -20,6 +20,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5 | 01-11-2026     | Integrate same-session composite leases and operation-stamped typed inputs. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6 | 01-11-2026     | Admit composite host node roles before child context and evaluation. |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7 | 01-11-2026     | Reuse the captured composite ownership delegate for role validation. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Security.Cryptography;
@@ -49,6 +53,7 @@ internal sealed class SchemaQuerySession : IDisposable
     private readonly Action? _ensureAvailable;
     private readonly bool _typedInputsOnly;
     private readonly bool _compositeEvaluation;
+    private readonly Action<Operation, SchemaOperationInputs>? _compositeAdmission;
     private readonly int _snapshotLimit;
 
     internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
@@ -56,7 +61,8 @@ internal sealed class SchemaQuerySession : IDisposable
         : this(environment, evaluate, issuer, snapshotLimit, valueLimit, null, false) { }
 
     internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
-        ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit, Action? ensureAvailable, bool typedInputsOnly, bool compositeEvaluation = true)
+        ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit, Action? ensureAvailable, bool typedInputsOnly, bool compositeEvaluation = true,
+        Action<Operation, SchemaOperationInputs>? compositeAdmission = null)
     {
         ArgumentNullException.ThrowIfNull(environment);
         ArgumentNullException.ThrowIfNull(evaluate);
@@ -65,6 +71,7 @@ internal sealed class SchemaQuerySession : IDisposable
         _ensureAvailable = ensureAvailable;
         _typedInputsOnly = typedInputsOnly;
         _compositeEvaluation = compositeEvaluation;
+        _compositeAdmission = compositeAdmission;
         _snapshotLimit = snapshotLimit;
         _kernel = new SchemaEvidenceKernel(environment, issuer, snapshotLimit, valueLimit);
     }
@@ -190,8 +197,19 @@ internal sealed class SchemaQuerySession : IDisposable
                 foreach (var snapshot in _snapshots) { if (ownsNode(snapshot, node)) owners++; Check(); }
                 return owners == 1;
             }
-            var inputs = caller.CaptureSchemaInputs(Owns, maxBindings, maxNamespaces).ForOperation(this);
+            Func<IXdmNode, bool> owns = Owns;
+            var inputs = caller.CaptureSchemaInputs(owns, maxBindings, maxNamespaces).ForOperation(this, owns);
             Check(); return inputs;
+        }
+        internal void RequireNodeInput(SchemaOperationInputs inputs, IXdmNode? node)
+        {
+            Check();
+            ArgumentNullException.ThrowIfNull(inputs);
+            if (_leaseSet is null || !ReferenceEquals(inputs.OperationIdentity, this))
+                throw new ArgumentException("Host roles require this composite operation's inputs.", nameof(inputs));
+            if (node is not null && !inputs.OwnsNode(this, node))
+                throw new ArgumentException("Host input must belong to exactly one operation source.", nameof(node));
+            Check();
         }
         private void Check()
         {
@@ -228,10 +246,12 @@ internal sealed class SchemaQuerySession : IDisposable
             Check();
             ArgumentNullException.ThrowIfNull(inputs);
             if (maxAtoms <= 0) throw new ArgumentOutOfRangeException(nameof(maxAtoms));
-            if (_leaseSet is not null && !_owner._compositeEvaluation)
+            if (_leaseSet is not null && !_owner._compositeEvaluation && _owner._compositeAdmission is null)
                 throw new NotSupportedException("This host has no composite source-role admission.");
             if (_leaseSet is not null ? !ReferenceEquals(inputs.OperationIdentity, this) : !ReferenceEquals(inputs.Snapshot, _snapshot))
                 throw new ArgumentException("Captured inputs belong to another operation snapshot.", nameof(inputs));
+            if (_leaseSet is not null) _owner._compositeAdmission?.Invoke(this, inputs);
+            Check();
             return new SchemaAtomicResult(this, _owner._evaluate(inputs.CreateContext()), maxAtoms);
         }
         internal XdmValue Evaluate(EvaluationContext context)

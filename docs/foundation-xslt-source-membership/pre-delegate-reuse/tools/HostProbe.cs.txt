@@ -1,0 +1,151 @@
+// Generated standalone host qualification under an existing test identity.
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 01 November 2026
+// PURPOSE              : Checks compiled host factories against composite input membership.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Collections.Immutable;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+using System.Text.Json;
+using System.Security.Cryptography;
+var fixture=new SchemaCompositeHostTests();fixture.TwoSourceCompiledEvaluation(false);Cases.Check("XPath-two-source",true);fixture.TwoSourceCompiledEvaluation(true);Cases.Check("XQuery-two-source",true);await fixture.XsltMembershipQualification();
+var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+var allocations=fixture.MeasureAllocations();
+Console.WriteLine(JsonSerializer.Serialize(new{checks=Cases.Rows.Count,assertions=Assert.Count,rows=Cases.Rows,passed=true,bindings,allocations,allocationIterations=1000,allocationScope="Warmed real composite transform including capture, context, closed-resource policy, role checks and flat result drain; precompiled stylesheets/preopened sources. Excludes compilation, provider acquisition and worker/concurrency throughput."},new JsonSerializerOptions{WriteIndented=true}));
+/// <summary>Checks actual compiled XPath/XQuery and explicit XSLT composite refusal.</summary>
+public sealed class SchemaCompositeHostTests
+{
+    private sealed class Provider : ISchemaSessionProvider, ISchemaEvidenceIssuer
+    {
+        internal readonly object A=new(),B=new();internal bool Available=true;
+        private sealed class Binding(Provider owner,SchemaQueryEnvironment environment):ISchemaSessionBinding
+        {SchemaQueryEnvironment ISchemaSessionBinding.Environment=>environment;ISchemaEvidenceIssuer ISchemaSessionBinding.Issuer=>owner;void ISchemaSessionBinding.ThrowIfUnavailable(){if(!owner.Available)throw new ObjectDisposedException("provider");} }
+        ISchemaSessionBinding ISchemaSessionProvider.Bind(SchemaQueryEnvironment e)=>new Binding(this,e);
+        bool ISchemaEvidenceIssuer.OwnsAssessment(object a)=>ReferenceEquals(a,A)||ReferenceEquals(a,B);
+        bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar v)=>false;
+        bool ISchemaEvidenceIssuer.OwnsType(object t)=>false;
+        bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+    }
+    /// <summary>Executes real compiled hosts over two independent source admissions.</summary>
+    /// <param name="query">Whether to compile XQuery instead of XPath.</param>
+
+    public void TwoSourceCompiledEvaluation(bool query)
+    {
+        var p=new Provider();SchemaQuerySession? session;string? reason;
+        bool ok=query?HostFactories.Query("declare variable $a external;declare variable $b external;number($a)+number($b)",new XQueryCompiler(),false,p,4,16,out session,out reason):HostFactories.XPath("number($a)+number($b)",new CompileOptions(),p,4,16,out session,out reason);
+        Assert.True(ok,reason);using var owned=session!;int releases=0;
+        using var a=owned.OpenSnapshot(owned.Environment,new object(),p.A,()=>releases++);using var b=owned.OpenSnapshot(owned.Environment,new object(),p.B,()=>releases++);
+        var na=new XDocumentNode(XElement.Parse("<n>2</n>"));var nb=new XDocumentNode(XElement.Parse("<n>3</n>"));
+        var caller=new EvaluationContext().WithVariable("a",XdmValue.FromNode(na)).WithVariable("b",XdmValue.FromNode(nb));
+        owned.Run(owned.Environment,[a,b],op=>{var input=op.CaptureInputs(caller,(snapshot,node)=>ReferenceEquals(snapshot,a)?ReferenceEquals(node,na):ReferenceEquals(node,nb),16,16);double result=0;op.EvaluateAtomic(input,16).ForEachAtomic(v=>result=v.DoubleValue);Assert.Equal(5,result);Assert.Equal(0,releases);return 0;});
+        Assert.Throws<NotSupportedException>(()=>owned.Run(owned.Environment,[a],op=>op.CaptureInputs(caller,(_,node)=>ReferenceEquals(node,na),16,16)));
+    }
+    const string Sheet="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:variable name='g' select='string(/*)'/><xsl:template match='/' name='main'><xsl:sequence select=\"concat(string(/*),'|',$g)\"/></xsl:template></xsl:stylesheet>";
+    static SchemaQuerySession Compile(Provider p,IXdmNode? match,IXdmNode? global,string? template=null,string? source=null)
+    {
+        Assert.True(HostFactories.Xslt(source??Sheet,new XsltCompiler(),null,match,global,template,_=>true,p,4,16,out var session,out var reason),reason);return session!;
+    }
+    static string Drain(SchemaQuerySession.Operation op,SchemaOperationInputs input){var values=new List<string>();op.EvaluateAtomic(input,16).ForEachAtomic(v=>values.Add(v.ToString()));return string.Join("|",values);}
+    public object[] MeasureAllocations()
+    {
+        var rows=new List<object>();
+        foreach(int count in new[]{0,1,2}){
+            var p=new Provider();var match=count==0?null:new XDocumentNode(XDocument.Parse("<n>A</n>"));IXdmNode? global=count==2?new XDocumentNode(XDocument.Parse("<n>B</n>")):match;
+            const string empty="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='main'><xsl:sequence select='42'/></xsl:template></xsl:stylesheet>";
+            using var session=Compile(p,match,global,count==0?"main":null,count==0?empty:null);
+            using var a=count==0?null:session.OpenSnapshot(session.Environment,new object(),p.A,()=>{});using var b=count==2?session.OpenSnapshot(session.Environment,new object(),p.B,()=>{}):null;
+            ImmutableArray<SchemaEvidenceKernel.Snapshot> members=count==0?[]:count==1?[a!]:[a!,b!];var caller=new EvaluationContext();
+            Func<SchemaEvidenceKernel.Snapshot,IXdmNode,bool> owns=(snapshot,node)=>ReferenceEquals(snapshot,a)?ReferenceEquals(node,match):ReferenceEquals(snapshot,b)&&ReferenceEquals(node,global);
+            Func<SchemaQuerySession.Operation,string> work=op=>Drain(op,op.CaptureInputs(caller,owns,16,16));
+            void Run()=>session.Run(session.Environment,members,work);
+            for(int n=0;n<100;n++)Run();long before=GC.GetAllocatedBytesForCurrentThread();for(int n=0;n<1000;n++)Run();
+            rows.Add(new{members=count,bytesPerOperation=(GC.GetAllocatedBytesForCurrentThread()-before)/1000});
+        }
+        return rows.ToArray();
+    }
+    public async Task XsltMembershipQualification()
+    {
+        foreach(bool shared in new[]{false,true})foreach(bool named in new[]{false,true}){
+            var p=new Provider();var match=new XDocumentNode(XDocument.Parse("<n>A</n>"));IXdmNode global=shared?match:new XDocumentNode(XDocument.Parse("<n>B</n>"));
+            using var session=Compile(p,match,global,named?"main":null);int ar=0,br=0;using var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>ar++);using var b=shared?null:session.OpenSnapshot(session.Environment,new object(),p.B,()=>br++);
+            ImmutableArray<SchemaEvidenceKernel.Snapshot> members=shared?[a]:[a,b!];
+            session.Run(session.Environment,members,op=>{var input=op.CaptureInputs(new EvaluationContext(),(snapshot,node)=>ReferenceEquals(snapshot,a)?ReferenceEquals(node,match):ReferenceEquals(snapshot,b)&&ReferenceEquals(node,global),16,16);var expected=shared?"A|A":named?"B|B":"A|B";Assert.Equal(expected,Drain(op,input));a.Dispose();if(b is not null)b.Dispose();Assert.Equal(0,ar+br);return 0;});
+            Cases.Check("XSLT:"+(shared?"shared":"distinct")+":"+(named?"named":"matched"),ar==1&&br==(shared?0:1));
+        }
+        foreach(bool globalRole in new[]{false,true}){
+            var p=new Provider();var poison=new PoisonNode();using var session=Compile(p,globalRole?null:poison,globalRole?poison:null,"main");using var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>{});
+            Assert.Throws<ArgumentException>(()=>session.Run(session.Environment,[a],op=>Drain(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16))));Cases.Check("XSLT:unadmitted-"+(globalRole?"global":"match")+"-before-getter",poison.Reads==0);
+        }
+        {
+            var p=new Provider();var node=new XDocumentNode(XDocument.Parse("<n>A</n>"));using var session=Compile(p,node,node);using var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>{});using var b=session.OpenSnapshot(session.Environment,new object(),p.B,()=>{});
+            Assert.Throws<ArgumentException>(()=>session.Run(session.Environment,[a,b],op=>Drain(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>true,16,16))));Cases.Check("XSLT:ambiguous-source",true);
+            session.Run(session.Environment,[a],op=>{bool owns=true;var input=op.CaptureInputs(new EvaluationContext(),(_,_)=>owns,16,16);owns=false;Assert.Throws<ArgumentException>(()=>Drain(op,input));return 0;});Cases.Check("XSLT:ownership-rechecked-before-transform",true);
+        }
+        {
+            var p=new Provider();const string source="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='main'><xsl:sequence select='42'/></xsl:template></xsl:stylesheet>";using var session=Compile(p,null,null,"main",source);
+            session.Run(session.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{Assert.Equal("42",Drain(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>throw new Exception("No node ownership callback expected"),16,16)));return 0;});Cases.Check("XSLT:source-free-named-template",true);
+            using var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>{});session.Run(session.Environment,a,op=>{Assert.Equal("42",Drain(op,op.CaptureInputs(new EvaluationContext(),_=>false,16,16)));return 0;});Cases.Check("XSLT:single-snapshot-path-retained",true);
+        }
+        {
+            var p=new Provider();var match=new XDocumentNode(XDocument.Parse("<n>A</n>"));var global=new XDocumentNode(XDocument.Parse("<n>B</n>"));using var session=Compile(p,match,global);int releases=0;
+            using var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>releases++);using var b=session.OpenSnapshot(session.Environment,new object(),p.B,()=>releases++);
+            Func<SchemaEvidenceKernel.Snapshot,IXdmNode,bool> owns=(snapshot,node)=>ReferenceEquals(snapshot,a)?ReferenceEquals(node,match):ReferenceEquals(snapshot,b)&&ReferenceEquals(node,global);
+            var captured=session.Run(session.Environment,[a,b],op=>op.CaptureInputs(new EvaluationContext(),owns,16,16));Assert.Throws<ArgumentException>(()=>session.Run(session.Environment,[a,b],op=>Drain(op,captured)));Cases.Check("XSLT:foreign-operation-token",true);
+            var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+            var raw=session.RunAsync(session.Environment,[a,b],async op=>{var input=op.CaptureInputs(new EvaluationContext(),owns,16,16);var result=op.EvaluateAtomic(input,16);entered.SetResult();await resume.Task;Assert.Throws<ObjectDisposedException>(()=>result.ForEachAtomic(_=>{}));return 0;});
+            await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));using var cancel=new CancellationTokenSource();cancel.Cancel();bool canceled=false;try{await raw.WaitAsync(cancel.Token);}catch(OperationCanceledException){canceled=true;}Cases.Check("XSLT:canceled-wait-retains-both",canceled&&releases==0&&!raw.IsCompleted);
+            p.Available=false;session.Dispose();Cases.Check("XSLT:revoked-provider-defers-cleanup",releases==0);resume.SetResult();await raw.WaitAsync(TimeSpan.FromSeconds(10));Cases.Check("XSLT:raw-completion-releases-both",releases==2);
+        }
+        {
+            var p=new Provider();var node=new XDocumentNode(XDocument.Parse("<n>A</n>"));const string source="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='main'><xsl:sequence select='error()'/></xsl:template></xsl:stylesheet>";using var session=Compile(p,node,node,"main",source);
+            var ea=new ApplicationException("cleanup-A");var eb=new ApplicationException("cleanup-B");int releases=0;var a=session.OpenSnapshot(session.Environment,new object(),p.A,()=>{releases++;throw ea;});var b=session.OpenSnapshot(session.Environment,new object(),p.B,()=>{releases++;throw eb;});Exception? primary=null;AggregateException? observed=null;
+            try{session.Run(session.Environment,[a,b],op=>{var input=op.CaptureInputs(new EvaluationContext(),(snapshot,n)=>ReferenceEquals(snapshot,a)&&ReferenceEquals(n,node),16,16);try{return Drain(op,input);}catch(Exception error){primary=error;a.Dispose();b.Dispose();throw;}});}catch(AggregateException error){observed=error;}
+            Cases.Check("XSLT:host-and-cleanup-failures-retained",primary is not null&&observed is not null&&observed.InnerExceptions.Count==3&&ReferenceEquals(primary,observed.InnerExceptions[0])&&ReferenceEquals(eb,observed.InnerExceptions[1])&&ReferenceEquals(ea,observed.InnerExceptions[2]));a.Dispose();b.Dispose();Cases.Check("XSLT:failing-cleanup-released-once",releases==2);
+        }
+    }
+
+}
+
+static class Assert {
+ internal static int Count;
+ internal static void True(bool value,string? reason=null){Count++;if(!value)throw new Exception(reason);}
+ internal static void Equal<T>(T expected,T actual){Count++;if(!EqualityComparer<T>.Default.Equals(expected,actual))throw new Exception($"Expected {expected}; got {actual}");}
+ internal static void Throws<T>(Action action)where T:Exception{Count++;try{action();}catch(T){return;}throw new Exception("Expected "+typeof(T).Name);}
+}
+static class HostFactories {
+ internal delegate bool XPathFactory(string source,CompileOptions options,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ internal delegate bool XQueryFactory(string source,XQueryCompiler compiler,bool xml11,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ internal delegate bool XsltFactory(string source,XsltCompiler compiler,string? baseUri,IXdmNode? match,IXdmNode? global,string? template,Func<IXdmNode,bool> owns,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ static readonly Type Host=typeof(XsltExecutable).Assembly.GetType("Bosak.Xslt.Api.SchemaHostSessionCompilation")!;
+ const System.Reflection.BindingFlags Flags=System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic;
+ internal static readonly XPathFactory XPath=Host.GetMethod("TryCompileXPath",Flags)!.CreateDelegate<XPathFactory>();
+ internal static readonly XQueryFactory Query=Host.GetMethod("TryCompileXQuery",Flags)!.CreateDelegate<XQueryFactory>();
+ internal static readonly XsltFactory Xslt=Host.GetMethod("TryCompileXslt",Flags)!.CreateDelegate<XsltFactory>();
+}
+
+static class Cases {
+ internal static readonly List<object> Rows=new();
+ internal static void Check(string id,bool passed){if(!passed)throw new Exception(id);Rows.Add(new{id,passed});}
+}
+sealed class PoisonNode : IXdmNode {
+ internal int Reads;Exception Read(){Reads++;return new InvalidOperationException("Unexpected node access");}
+ XdmNodeKind IXdmNode.NodeKind=>throw Read();string IXdmNode.LocalName=>throw Read();string IXdmNode.NamespaceUri=>throw Read();string IXdmNode.Prefix=>throw Read();string IXdmNode.StringValue=>throw Read();XdmValue IXdmNode.TypedValue=>throw Read();bool IXdmNode.HasNoTypedValue=>throw Read();bool IXdmNode.IsComplexType=>throw Read();(string NamespaceUri,string LocalName)? IXdmNode.SchemaTypeAnnotation=>throw Read();
+ IXdmNode? IXdmNode.Parent=>throw Read();IXdmNode? IXdmNode.Document=>throw Read();long IXdmNode.DocumentOrder=>throw Read();string IXdmNode.BaseUri=>throw Read();string IXdmNode.DocumentUri=>throw Read();XdmSequence IXdmNode.Children(XdmNodeKind kind)=>throw Read();XdmSequence IXdmNode.Attributes(string? localName,string? namespaceUri)=>throw Read();XdmSequence IXdmNode.Axis(XdmAxis axis)=>throw Read();bool IXdmNode.IsSameNode(IXdmNode other)=>throw Read();string IXdmNode.ToXmlString()=>throw Read();
+}

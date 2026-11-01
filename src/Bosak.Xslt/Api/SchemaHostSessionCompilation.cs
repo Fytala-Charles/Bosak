@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2 | 01-11-2026     | Refuse composite XSLT until source-role membership is implemented. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3 | 01-11-2026     | Enable composite transforms only through exact match/global source admission. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Globalization;
@@ -102,7 +104,7 @@ internal static class SchemaHostSessionCompilation
             supplied = Describe(copied), effective = Describe(statics)
         }));
         session = SchemaProviderSessionBinding.Create(environment, SchemaHostExecution.BindXslt(executable, match, global, initialTemplate, ownsNode),
-            provider, snapshots, values, cancellationToken, compositeEvaluation: false); return true;
+            provider, snapshots, values, cancellationToken, compositeEvaluation: false, compositeAdmission: SchemaHostExecution.BindXsltAdmission(match, global)); return true;
     }
 
     private static bool PlainStatic(XdmValue value) => XdmValue.SchemaTransportMarker(value) is null
