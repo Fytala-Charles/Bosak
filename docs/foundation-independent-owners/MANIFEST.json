@@ -1,0 +1,13 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/build.txt": "676bfc56fae78fa89d01379c0b4a348ac296044ffd3ef18b86e338767c4a8ff7",
+  "evidence/DOCUMENTATION-CHECKS.json": "169ec83c21d4feba04f1de6e9edc1ad5463ccf4bc11fcb654b3335389ac021f9",
+  "evidence/INPUTS.json": "fab627dd478b3f820ada46a13b1383509f9c77c659ee7df5849c4e03a0e30bfc",
+  "evidence/probe-0.json": "eca2ae9002c13e3fb41dd4d304bd6fc825db9d0868ea9ca513a2b6bcaa39b966",
+  "evidence/probe-1.json": "eca2ae9002c13e3fb41dd4d304bd6fc825db9d0868ea9ca513a2b6bcaa39b966",
+  "README.md": "728bb96ae872ca67a2566961862a0979791c3490eec6408db11565b2c7a0a3c7",
+  "SPEC-BASIS.md": "7fcc0785d0a6332156928c09dc27fdadf9713ca8b5a895008a8c192cf29d7aaf",
+  "tools/Probe.cs.txt": "bcc661226a00ba2783c5a41244e5fc54c33bbe3315ef9b08ec9308071886ffba",
+  "tools/run.py": "8802e0a7802612b9b39979924859141e57afdbe707818187ef0e68fb04b368d9",
+  "tools/verify.py": "6a5f64877e80ff1cf92735e127c98113e46325a28e90247e672ec563ebdf0423"
+}

@@ -1,0 +1,3 @@
+# Qualification basis
+
+1 November 2026. This step qualifies unchanged production 1.39.0 at f72db224; it introduces no language semantics or public API. The immutable specification sources and affected sections remain those recorded in [the factory adoption basis](../foundation-private-host-factories/SPEC-BASIS.md). Lifetime, owner identity and admission failure checks exercise the existing private host contract rather than a W3C multi-document transaction guarantee. Independent sources use distinct provider, session, assessment, node bundle and snapshot objects. No joint operation, native schema authority or detached evidence is claimed.
