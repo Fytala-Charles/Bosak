@@ -1,0 +1,25 @@
+"""Verify the finite release plan and immutable read-only review inputs."""
+from pathlib import Path
+import hashlib,json,subprocess
+P=Path(__file__).resolve().parents[1];R=P.parents[1];sha=lambda b:hashlib.sha256(b).hexdigest()
+i=json.loads((P/'INPUTS.json').read_text());g=json.loads((P/'GATES.json').read_text())
+assert not i['ownerAcceptance'] and i['productionVersion']==g['sourceVersion']=='1.42.0'
+assert g['targetReleaseVersion'] is None and g['releaseDate'] is None and not g['apiFrozen'] and not g['publicationAuthorized']
+assert [x['id'] for x in g['gates']]==['R'+str(n) for n in range(8)]
+assert [x['status'] for x in g['gates']]==['Qualified','Audited','Next','Pending','Pending','Pending','Pending','Pending']
+seen=set()
+for row in g['gates']:
+ assert set(row['dependsOn'])<=seen and row['owner'] and row['exitEvidence'];seen.add(row['id'])
+for repo in i['repositories']:
+ assert repo['observedStatus']=='clean'
+ for name,digest in repo['files'].items():assert sha(subprocess.check_output(['git','show',repo['revision']+':'+name],cwd=repo['root']))==digest,(repo['name'],name)
+for name,digest in i['coreFiles'].items():assert sha((R/name).read_bytes())==digest,name
+old=subprocess.check_output(['git','show',i['originalRoadmapRevision']+':ROADMAP.md'],cwd=R)
+assert sha(old)==i['originalRoadmapSha256']==sha((P/'inputs/ROADMAP-before-consolidation.txt').read_bytes())
+source=json.loads((R/'docs/foundation-xslt-source-membership/evidence/SOURCE.json').read_text())
+for name,digest in source['files'].items():assert sha((R/name).read_bytes())==digest,name
+roadmap=(R/'ROADMAP.md').read_text(encoding='utf-8');assert len(roadmap.splitlines())<90 and 'Immediate foundation work' not in roadmap and 'release-planning/README.md' in roadmap
+if (P/'MANIFEST.json').exists():
+ m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
+ for name,digest in m.items():assert sha((P/name).read_bytes())==digest,name
+print('Verified R0–R7 gate dependencies/statuses, four clean observed owner pins, archived roadmap and unchanged production source. No runtime/owner acceptance claimed.')

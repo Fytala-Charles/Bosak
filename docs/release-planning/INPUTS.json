@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-01",
+  "coreReviewRevision": "0d1f7b0e66ae90f9d12f8c4f6bbce870a9bcafaa",
+  "productionVersion": "1.42.0",
+  "ownerAcceptance": false,
+  "repositories": [
+    {
+      "name": "schema-assessment",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+      "revision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "observedStatus": "clean",
+      "files": {
+        "docs/S009-02-PROVIDER-FACT-MAPPING.md": "7f183f9a3704eea8cf0ad8a0c7590b379f8f02f97cb3023da2f121867b5d67bb",
+        "docs/S009-04-FOUNDATION-REQUIREMENTS.md": "03f81b3714394c81ed953935d82f80443eee16a40e05b2d2ebdb9ca0bf360dc8",
+        "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+        "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+        "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610"
+      }
+    },
+    {
+      "name": "schema-public",
+      "root": "D:\\Development\\Bosak.Schema.Public",
+      "revision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "observedStatus": "clean",
+      "files": {
+        "ROADMAP.md": "2143158f5f50d55d08ce5d5192e070b6b542ebd585d70bc9773f5825ceb628fa"
+      }
+    },
+    {
+      "name": "xmldb",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.XmlDb.Foundation",
+      "revision": "080859542786d514150d74f7ac9dd1ef56c6399a",
+      "observedStatus": "clean",
+      "files": {
+        "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": "a4bbc9cbf6af7061e442a06b6f39a47446de99912af65f36f32278f2ffee4357",
+        "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": "cef1dd1a0bcbdfcdcb3c3841337a8a310d327851ef9cbfca86a803bd6e4a83fa",
+        "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": "fba3bfcba4303505784cd433d527001c173f2350013beeb2be8e5f2871ba60de"
+      }
+    },
+    {
+      "name": "braid",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Braid.ReadOnly",
+      "revision": "d81f195f63a534099391220536f9885c44fddb30",
+      "observedStatus": "clean",
+      "files": {
+        "docs/FEATURE_REQUESTS.md": "c98a697c3b1d72299aa103b41398d821e91f2c17ed65d75503d3f095252a541e"
+      }
+    }
+  ],
+  "coreFiles": {
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+    "docs/foundation-c45-revised-shape/README.md": "445129bb147d54c8edcef4e19ef2adbbedb0c2b027bfa7cea86ccbccb0019385",
+    "docs/foundation-c45-revised-shape/NUMERIC-MEMBERS.json": "21ccf7600c99438061f2728f55ba22efba9a68b6d03c4c51653461e3115461b0",
+    "docs/REQ-139-OWNER-WORK-PACKAGES.md": "1e095d8a12ad09a7d903e8c092e9672b32a957b22ac0b56399ff4b501830b676",
+    "docs/foundation-c45-handoff136/inputs/xmldb-needs.md": "7b11b30387aade3bc031d3cd39140c7682ee8bfad2520d78fbeeabbf92d51ce4",
+    "docs/foundation-c45-handoff136/inputs/schema-needs.md": "03f81b3714394c81ed953935d82f80443eee16a40e05b2d2ebdb9ca0bf360dc8",
+    "docs/braid-foundation-requirements/README.md": "daed48a980e8682d5615bf6268f1e0d53501ef3dfc4458e13150ce392db1500e",
+    "docs/foundation-performance/README.md": "d1670a107582d98d40214c52ace3568db2f8d24bc73f0b53052755a52d4af299",
+    "docs/foundation-xslt-source-membership/evidence/RESULTS.json": "cf00ff09ef8beb9333e92e684b380138f11b305c6f2f9cb8c4f3fbe2f8d71152",
+    "docs/foundation-host-acquisition-rollback/evidence/INPUTS.json": "f96b2196fb573054146c447f334a893ca38ccce000d263370ec86da570207cb0"
+  },
+  "originalRoadmapSha256": "18c56cf90761b92742c59f8ebeceee41cddec004b171a0fa3d30e22ddffc5aa4",
+  "originalRoadmapRevision": "0d1f7b0e66ae90f9d12f8c4f6bbce870a9bcafaa"
+}

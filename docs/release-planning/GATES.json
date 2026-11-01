@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "sourceVersion": "1.42.0",
+  "targetReleaseVersion": null,
+  "releaseDate": null,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "gates": [
+    {
+      "id": "R0",
+      "title": "Private engine foundation",
+      "status": "Qualified",
+      "owner": "Core",
+      "dependsOn": [],
+      "exitEvidence": "Retain 1.42.0 source qualification and bounded profile; not public SDK acceptance."
+    },
+    {
+      "id": "R1",
+      "title": "Owner capability mapping",
+      "status": "Audited",
+      "owner": "Core",
+      "dependsOn": [
+        "R0"
+      ],
+      "exitEvidence": "Read-only pinned source/requirements mapping; runtime owner qualification remains in R4."
+    },
+    {
+      "id": "R2",
+      "title": "Final public contract disposition",
+      "status": "Next",
+      "owner": "Core with Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R1"
+      ],
+      "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions."
+    },
+    {
+      "id": "R3",
+      "title": "Accepted public contract implementation",
+      "status": "Pending",
+      "owner": "Core",
+      "dependsOn": [
+        "R2"
+      ],
+      "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory."
+    },
+    {
+      "id": "R4",
+      "title": "Real consumer and performance qualification",
+      "status": "Pending",
+      "owner": "Core/Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R3"
+      ],
+      "exitEvidence": "Same immutable candidate; source and unchanged-binary consumers; representative PF-01\u201309 budgets and complete regression gates."
+    },
+    {
+      "id": "R5",
+      "title": "Four-owner C45 acceptance and API freeze",
+      "status": "Pending",
+      "owner": "Core/Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R4"
+      ],
+      "exitEvidence": "Dated explicit dispositions over exact manifest/profile/candidate; no unresolved required signature gap."
+    },
+    {
+      "id": "R6",
+      "title": "Release candidate packages and documentation",
+      "status": "Pending",
+      "owner": "Core",
+      "dependsOn": [
+        "R5"
+      ],
+      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel."
+    },
+    {
+      "id": "R7",
+      "title": "Publish and verify availability",
+      "status": "Pending",
+      "owner": "Core with release authorization",
+      "dependsOn": [
+        "R6"
+      ],
+      "exitEvidence": "Concrete reviewed artifacts, release approval, publication receipts and public-package verification; consumer pin upgrades remain separate."
+    }
+  ]
+}
