@@ -52,7 +52,11 @@
       "dependsOn": [
         "R2"
       ],
-      "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory."
+      "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
+      "w1ReadinessPlan": "docs/foundation-w1-readiness/README.md",
+      "w1PlanPrepared": true,
+      "w1ImplementationStarted": false,
+      "w1AcceptanceCasesNotRun": 20
     },
     {
       "id": "R4",

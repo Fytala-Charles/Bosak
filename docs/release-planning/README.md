@@ -29,6 +29,7 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 - [x] Record [O2-Core and O4-Core scoped design returns](../foundation-r2-core-returns/README.md), authored by Codex on the Core engineering task; no external/runtime/C45 acceptance is inferred.
 - [ ] Obtain five external role returns: O1-Schema, O1-XmlDb, O2-Schema, O3-Braid and O4-XmlDb. Resolve all demonstrated required gaps before R2 closes.
 - [ ] Record accepted implementation scope and any newly affected immutable specification revisions/sections/deviations before semantic implementation. The Core ledger is not owner acceptance.
+- [x] Prepare [W1-A–E implementation slices](../foundation-w1-readiness/README.md) and 20 NotRun acceptance cases for neutral ordinary-source admission. This does not open R3.
 - [x] Publish a finite W1–W7 implementation/qualification queue, gated by the corresponding accepted R2 scope. Prepare fixtures in parallel; do not substitute more synthetic lifecycle experiments for these decisions.
 
 ## Work that can continue in parallel

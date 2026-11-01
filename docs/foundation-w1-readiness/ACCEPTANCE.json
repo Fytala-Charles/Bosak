@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "productionVersion": "1.42.0",
+  "implementationStarted": false,
+  "r2Closed": false,
+  "cases": [
+    {
+      "id": "W1-01",
+      "name": "ordinary-no-schema",
+      "trigger": "Compile/admit/evaluate with no assessor/origin",
+      "expected": "Success for the accepted ordinary profile; zero schema binding/issuance calls and no fabricated assessment.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-02",
+      "name": "foreign-environment",
+      "trigger": "Use an equal-looking foreign environment",
+      "expected": "Reject before root/content getters or work; equality never admits authority.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-03",
+      "name": "invalid-origin-without-advisor",
+      "trigger": "Supply original assessment without an available selected advisor",
+      "expected": "Reject under the accepted argument/profile policy; never ignore, downgrade or synthesize origin.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-04",
+      "name": "owner-entry-failure",
+      "trigger": "Owner lifetime Enter throws",
+      "expected": "No root access/work; cleanup only acquired obligations; host retains untransferred resources.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-05",
+      "name": "root-getter-order",
+      "trigger": "Owner availability fails before root access",
+      "expected": "Root/content getter spies remain untouched; release acquired admission obligation once.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-06",
+      "name": "foreign-node",
+      "trigger": "Input predicate rejects a purported node",
+      "expected": "Reject before node contents/facts getters; do not infer membership from labels.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-07",
+      "name": "ambiguous-node",
+      "trigger": "Two sources claim the same supplied node",
+      "expected": "Refuse before dispatch; no implicit owner choice or graph copy.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-08",
+      "name": "no-authority-from-annotations",
+      "trigger": "Ordinary input exposes descriptive type annotations or purported foreign facts",
+      "expected": "Do not authenticate or attach schema provenance without selected advisor issuance/association.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-09",
+      "name": "source-free",
+      "trigger": "Explicit empty operation membership",
+      "expected": "Source-free supported XPath/XQuery/named XSLT work succeeds; any node role still requires admission.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-10",
+      "name": "separate-xslt-roles",
+      "trigger": "Distinct match/global admissions and shared admission variant",
+      "expected": "Both roles validated against exact operation; shared source leased once; global and match focus remain distinct.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-11",
+      "name": "membership-token",
+      "trigger": "Reuse input from another operation with identical member list",
+      "expected": "Refuse before host dispatch; no descriptor/identity-label shortcut.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-12",
+      "name": "duplicate-member",
+      "trigger": "Repeat an actual admission in the member set",
+      "expected": "Reject before acquiring raw leases or calling work.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-13",
+      "name": "partial-acquisition",
+      "trigger": "Second source/admission fails",
+      "expected": "Release acquired prefix in reverse order; rejected resource cleanup remains with host; no work callback.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-14",
+      "name": "primary-and-cleanup",
+      "trigger": "Acquisition/work/cancellation plus multiple cleanup failures",
+      "expected": "Preserve original exception object first and all cleanup failures in attempted reverse order; do not flatten.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-15",
+      "name": "canceled-wait",
+      "trigger": "Cancel an external wait while raw callback is blocked",
+      "expected": "All admitted resources remain held until actual raw work completes; no waiter-owned cleanup.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-16",
+      "name": "close-during-raw",
+      "trigger": "Close admission/session while raw work continues",
+      "expected": "Further guarded use refuses; resource release waits for raw ownership under selected owner contract.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-17",
+      "name": "nested-operations",
+      "trigger": "Enter nested operations over overlapping admissions",
+      "expected": "Independent raw leases; inner completion cannot release outer ownership; enforce provider reentry scope.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-18",
+      "name": "real-xmldb-owner",
+      "trigger": "Use actual BeginRead snapshot and persistent nodes",
+      "expected": "Retain/release actual reader/generation ownership with no eager source copy or product/store pin mutation.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-19",
+      "name": "typed-regression",
+      "trigger": "Repeat existing typed evidence/PSVI/list/constructor controls after any lifetime extraction",
+      "expected": "Preserve original assessment, cache, provenance and refusal rules; ordinary path must not weaken schema admission.",
+      "status": "NotRun"
+    },
+    {
+      "id": "W1-20",
+      "name": "default-path-and-gates",
+      "trigger": "Compare existing ordinary APIs and qualify full candidate",
+      "expected": "No accidental legacy/default/constant/ABI change; all tests/gates and ordinary-path measurements pass on exact candidate.",
+      "status": "NotRun"
+    }
+  ]
+}
