@@ -1,0 +1,17 @@
+{
+  "originalCandidateSha256": "dfb2efc9e406b239bd05cfe14d0606a27b35a1d734a7f25d25e974ea703931fa",
+  "correctedCandidatePath": "D:\\Development\\Bosak\\.guard-tmp\\xslt-context-qualification\\Corrected\\src\\Bosak.Xslt\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+  "correctedCandidateSha256": "b13e8f4c95d8197bc7dc6d996a777b91bc5f5069b94b3da6f98a07d270af0d98",
+  "originalProjectSha256": "0edf9681db165377565932d23e992dd52e6cb1740f3e8d4a7de5c61f6755dd98",
+  "correctedProjectSha256": "ebedaf9d194623cc244702e287284c73dc9b55bdadfa41cfeae5e8ce4413d4e2",
+  "restoredOriginalFriends": [
+    "Bosak.Xslt.Tests",
+    "Bosak.Xslt.Conformance"
+  ],
+  "candidateCSharpUnchanged": {
+    "Runtime/TransformEngine.cs": "6ecc91eb812be0f0ac379fdbe5a16c4cd4e85734b2ff46d9898cda0c5f7016c2",
+    "Api/XsltExecutable.cs": "75f01abd210e9b9c8da6f923c80076b5eca528b3ab9736eebfc2040703ebda59"
+  },
+  "newFriendGrants": false,
+  "canonicalChanged": false
+}

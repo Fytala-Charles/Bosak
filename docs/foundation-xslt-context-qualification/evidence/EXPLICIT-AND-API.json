@@ -1,0 +1,11 @@
+{
+  "explicitCases": 22,
+  "explicitPassed": 22,
+  "repeatIdentical": true,
+  "publicDeclarationsIdentical": true,
+  "publicTypes": 157,
+  "declarationRows": 2961,
+  "probeSha256": "80d5545a52a9f2f26f54bcc0d749e1554e91a9b76249506e33c85d55bbbcbf17",
+  "candidateSha256": "b13e8f4c95d8197bc7dc6d996a777b91bc5f5069b94b3da6f98a07d270af0d98",
+  "inventorySourceSha256": "a00a9a156678696a7b0c3276146278f7a644b400f92b92b57d85e93ba0fbd4c9"
+}
