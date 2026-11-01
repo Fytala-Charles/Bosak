@@ -1,0 +1,76 @@
+{
+  "processId": 19224,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "87f8023dbdc5253982c743650ab653c7db99328b230301ff34cc583c0ef9a7d7",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "707951c7988dcd635fefac3aaad6d6b09f47f394e0482b38171590fda4ad55ab",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Conformance",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "sha256": "c648abe3b21461bbfefc8327fb3aea31bd53cb336e2b022fd4289ffeeb04fb44",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "2e67eddbd172c2969e35251ca186c09acea9b021cd3a7ce2e97c8834eff7ae29",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "77e9395bac7ec0b5689b53b76bdf2ed118e2d1c047628d267ee5339e549b7515",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "feed752b59990035d08dc3a3c831465d3b85895aa987b92ff08d34801b12b2ce",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "4f581d21e0d255f47d6925905d54cee127a038eca155c22e764632b6d8a37be7",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "76c91eaa1221d62c296c1430940f3f2628806f4d246bb16f6c6d7970d5b72e53",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XQuery",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "34e217980f1040553aa7e2d4e365bb567a5866cb31e2d95f20db5b56d579878a",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.Xslt",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakXsltContext140-4wnvasnq\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "90334f6af4667bde9e393014c3b698c2a1097eb265c2a27f3fc2cb228505259b",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

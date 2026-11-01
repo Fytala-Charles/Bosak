@@ -22,6 +22,10 @@ The [full 1.36 inventory and exact C45 proposal](docs/foundation-c45-delta136/RE
 
 Next C45 step: implement complete private compilation/binding factories above the [1.38.0 typed host boundary](docs/foundation-typed-host-inputs/README.md), capturing effective static context and actual provider/owner contracts. Independent multi-source ownership and exact numeric execution remain open before public acceptance; API freeze remains pending.
 
+## Private operation lease-set primitive — 1 November 2026
+
+Source 1.40.0 adds an internal bounded same-session lease-set primitive with ordered acquisition, cancellation/revocation checks, reverse rollback, exactly-once completion and preservation of all work/cleanup failures. [Fresh qualification](docs/foundation-operation-lease-set/README.md): 24,362 unit passes (21 new primitive cases), unchanged QT3/qt4 gates and public declarations. Bookkeeping allocation for 0/1/2/8 members is 136/288/304/984 bytes with fixture no-op leases; provider/host costs are excluded. The primitive is not connected to host execution yet; all complete composite acceptance cases remain pending. Next integrate actual snapshot/assessment membership, typed capture and XSLT roles. No publication, C45/consumer acceptance or API freeze. Delivery: `git log -1 --format=%H -- docs/foundation-operation-lease-set/README.md`.
+
 ## Composite operation design — 1 November 2026
 
 [Selected internal ownership contract](docs/foundation-composite-ownership/README.md): hosts acquire source resources; the session retains an immutable same-session operation lease set, rolls back partial lease acquisition and preserves all completion failures. No new public group or provider disposal requirement is selected. Mixed authorities and native ownership routing remain unsupported pending design. All 24 acceptance cases are NotRun; production remains unchanged 1.39.0. Next implement and qualify the private lease-set primitive before extending typed capture and XSLT role admission. Consumer/C45 acceptance and API freeze remain pending. Delivery: `git log -1 --format=%H -- docs/foundation-composite-ownership/README.md`.
