@@ -8,7 +8,7 @@ The internal foundation is qualified within its bounded private profile. The rem
 |---|---|---|---|
 | R0 Private engine foundation | Qualified | Core | 1.42.0 source/build, 24,390 unit passes, unchanged frozen gates; private capture, evidence and multi-source execution. [Qualification](../foundation-xslt-source-membership/README.md). |
 | R1 Actual owner capability mapping | Audited | Core | Exact read-only source/requirement pins and explicit gaps. [Mapping](OWNER-CAPABILITIES.md). This is not runtime owner acceptance. |
-| R2 Final public contract disposition | **Next** | Core with Schema/XmlDb/Braid | Finite declaration/requirement decision ledger, supported/refused scope, immutable semantic basis and actual owner dispositions. |
+| R2 Final public contract disposition | In review; Core ledger recorded | Core with Schema/XmlDb/Braid | Finite declaration/requirement decision ledger, supported/refused scope, immutable semantic basis and actual owner dispositions. |
 | R3 Accepted public implementation | Pending R2 | Core | Selected public members implemented and documented; fresh API/ABI inventory and functional/lifetime/error tests. Existing private implementation is reusable groundwork. |
 | R4 Real consumers and performance | Pending candidate; preparation parallel | Core/Schema/XmlDb/Braid | One immutable candidate; actual source and unchanged-binary consumer runs; representative PF-01–09 budgets; complete core/conformance qualification. |
 | R5 C45 acceptance and API freeze | Pending R4 | All four roles | Dated acceptance of exact manifest/profile/candidate; no unresolved required signature gap. Intended final breaking foundation change. |
@@ -21,13 +21,13 @@ The latest full production qualification passed **24,390 unit tests**, QT3 **31,
 
 The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. Notable decisions still needed are ordinary XmlDb admission without schema authority, neutral authority/assessment handles, exact numeric and list/union representation, advisor/compatible-view semantics, real resource failure preservation and finite concurrency profiles.
 
-## Immediate next task: R2 decision ledger
+## Immediate next task: close R2 owner dispositions
 
-- [ ] Map each of the 45 proposed types, six numeric member intents and all owner requirement rows to an exact accepted, revised, explicitly refused profile or deferred implementation disposition. Record whether a deferred item affects required signature completeness.
-- [ ] Select ordinary-XML source/lifetime admission and authentic node ownership, without adding a Schema dependency to XmlDb.
-- [ ] Resolve the five finite decision groups in [the capability map](OWNER-CAPABILITIES.md); distinguish Core changes from owner fixes and backend coverage.
-- [ ] Record exact implementation scope, specification revisions/sections/deviations where semantic changes are selected, and explicit owner dispositions. Proposal compilation and source inspection are not acceptance.
-- [ ] Produce the bounded R3 implementation queue and exact R4 consumer fixtures/budgets. Do not start another synthetic lifecycle experiment unless it discriminates a named unresolved decision.
+- [x] [Core ledger](../foundation-r2-ledger/README.md) maps all 45 proposed types, 615 baseline metadata/evidence rows, six numeric member intents and 43 requirement rows.
+- [x] Four boundary method changes compile in four isolated assemblies; 45 revised proposed types remain, with 619 metadata/evidence rows. Production is unchanged.
+- [ ] Obtain O1–O4 owner dispositions on actual source membership/issuance, typed/compatibility semantics, Braid invocation completeness and XmlDb resource failure/concurrency scope.
+- [ ] Record accepted implementation scope and any newly affected immutable specification revisions/sections/deviations before semantic implementation. The Core ledger is not owner acceptance.
+- [x] Publish a finite W1–W7 implementation/qualification queue, gated by the corresponding accepted R2 scope. Prepare fixtures in parallel; do not substitute more synthetic lifecycle experiments for these decisions.
 
 ## Work that can continue in parallel
 

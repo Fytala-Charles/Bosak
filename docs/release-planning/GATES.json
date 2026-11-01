@@ -27,12 +27,14 @@
     {
       "id": "R2",
       "title": "Final public contract disposition",
-      "status": "Next",
+      "status": "InReview",
       "owner": "Core with Schema/XmlDb/Braid",
       "dependsOn": [
         "R1"
       ],
-      "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions."
+      "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions.",
+      "coreLedger": "docs/foundation-r2-ledger/LEDGER.json",
+      "coreDecisionStatus": "RecordedForOwnerReview"
     },
     {
       "id": "R3",

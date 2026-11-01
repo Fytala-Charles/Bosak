@@ -1,0 +1,19 @@
+// Generated isolated declaration proposal; all operation bodies refuse execution.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using Bosak.XPath.Api.Schema;
+using Bosak.XPath.Core.Schema;
+namespace Bosak.XQuery.Api.Schema;
+/// <summary>Captures effective XQuery prolog/module settings into an opt-in schema session.</summary>
+public static class SchemaXQueryCompiler
+{
+    /// <summary>Compiles and captures effective context before assessor binding.</summary>
+    /// <param name="query">Query source including prolog.</param>
+    /// <param name="limits">Explicit finite operation limits.</param>
+    /// <param name="compiler">Settings copied from this compiler; later mutations must have no effect.</param>
+    /// <param name="assessor">Optional borrowed assessor.</param>
+    /// <param name="xml11LineEndings">Existing XQuery line-ending profile.</param>
+    /// <param name="cancellationToken">Compilation/binding cancellation.</param>
+    /// <returns>A shared session or explicit unsupported profile result.</returns>
+    public static SchemaResult<SchemaQuerySession> Compile(string query, SchemaQueryLimits limits, XQueryCompiler? compiler = null, ISchemaAssessor? assessor = null, bool xml11LineEndings = false, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+}

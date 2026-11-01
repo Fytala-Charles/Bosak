@@ -1,0 +1,57 @@
+{
+  "baselineRows": 615,
+  "revisedRows": 619,
+  "added": [
+    {
+      "assembly": "Bosak.XPath.Api.C45Proposal",
+      "row": "A Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedValue(Bosak.XPath.Api.Schema.SchemaQuerySnapshot snapshot:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Api.C45Proposal",
+      "row": "M Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedValue:Public, HideBySig:Standard, HasThis:Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Core.Xdm.XdmValue> :None:none:required=:optional=:attrs=(Bosak.XPath.Api.Schema.SchemaQuerySnapshot snapshot:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "A Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsNode(Bosak.XPath.Core.Xdm.IXdmNode node:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentInput input:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "A Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsTypedValue(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentInput input:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin originalAssessment:None:none:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)]):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "A Bosak.XPath.Core.Schema.ISchemaAssessmentInput.OwnsNode(Bosak.XPath.Core.Xdm.IXdmNode node:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "M Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsNode:Public, Virtual, HideBySig, VtableLayoutMask, Abstract:Standard, HasThis:System.Boolean :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.IXdmNode node:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentInput input:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "M Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsTypedValue:Public, Virtual, HideBySig, VtableLayoutMask, Abstract:Standard, HasThis:System.Boolean :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentInput input:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin originalAssessment:None:none:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)]):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "M Bosak.XPath.Core.Schema.ISchemaAssessmentInput.OwnsNode:Public, Virtual, HideBySig, VtableLayoutMask, Abstract:Standard, HasThis:System.Boolean :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.IXdmNode node:None:none:required=:optional=:attrs=):"
+    }
+  ],
+  "removed": [
+    {
+      "assembly": "Bosak.XPath.Api.C45Proposal",
+      "row": "A Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedValue(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Api.C45Proposal",
+      "row": "M Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedValue:Public, HideBySig:Standard, HasThis:Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Core.Xdm.XdmValue> :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "A Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsTypedValue(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    },
+    {
+      "assembly": "Bosak.XPath.Core.C45Proposal",
+      "row": "M Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor.OwnsTypedValue:Public, Virtual, HideBySig, VtableLayoutMask, Abstract:Standard, HasThis:System.Boolean :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+    }
+  ],
+  "productionChanged": false
+}

@@ -6,7 +6,7 @@ i=json.loads((P/'INPUTS.json').read_text());g=json.loads((P/'GATES.json').read_t
 assert not i['ownerAcceptance'] and i['productionVersion']==g['sourceVersion']=='1.42.0'
 assert g['targetReleaseVersion'] is None and g['releaseDate'] is None and not g['apiFrozen'] and not g['publicationAuthorized']
 assert [x['id'] for x in g['gates']]==['R'+str(n) for n in range(8)]
-assert [x['status'] for x in g['gates']]==['Qualified','Audited','Next','Pending','Pending','Pending','Pending','Pending']
+assert [x['status'] for x in g['gates']]==['Qualified','Audited','InReview','Pending','Pending','Pending','Pending','Pending']
 seen=set()
 for row in g['gates']:
  assert set(row['dependsOn'])<=seen and row['owner'] and row['exitEvidence'];seen.add(row['id'])

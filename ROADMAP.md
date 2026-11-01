@@ -14,7 +14,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 |---|---|---|
 | R0 Internal engine foundation | Qualified within bounded private profile | Preserve the existing implementation and regression/conformance baseline. |
 | R1 Owner capability mapping | Audited, not owner accepted | Exact source pins and explicit Schema/XmlDb/Braid contract gaps. |
-| R2 Final public contract disposition | **Next** | Select the finite public surface and supported/refused profiles; record owner decisions. |
+| R2 Final public contract disposition | In review | Core ledger and isolated revised declarations are ready; collect O1–O4 owner dispositions. |
 | R3 Public implementation | Pending R2 | Implement and document accepted contracts with API/ABI and semantic/lifetime tests. |
 | R4 Actual consumer/performance qualification | Pending candidate; preparation parallel | Same immutable candidate for Schema, XmlDb and Braid; source/unchanged binaries, owner resources and agreed workload budgets. |
 | R5 C45 acceptance/API freeze | Pending R4 | Explicit Core/Schema/XmlDb/Braid acceptance of the exact manifest/profile. |
@@ -23,7 +23,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 
 ## Immediate Core task
 
-Produce R2's declaration/requirement decision ledger. Resolve ordinary XmlDb source admission without fabricated schema authority; neutral component/assessment identities; exact numeric and list/union transport; advisor/compatible-view semantics; finite ownership/concurrency and all-host limits. Map the 45 proposed types, six numeric member intents and all owner requirement rows. Keep backend coverage separate from required signature completeness.
+The [R2 Core ledger](docs/foundation-r2-ledger/README.md) now covers all declarations and owner rows. Next collect its four explicit owner returns and close accepted implementation scope. Resolve ordinary XmlDb source admission without fabricated schema authority; neutral component/assessment identities; exact numeric and list/union transport; advisor/compatible-view semantics; finite ownership/concurrency and all-host limits. The ledger maps all 45 proposed types, six numeric member intents and 43 owner requirement rows; proposal compilation is not acceptance. Keep backend coverage separate from required signature completeness.
 
 The [capability audit](docs/release-planning/OWNER-CAPABILITIES.md) identifies actual source paths and remaining owner evidence, including XmlDb acquisition cleanup/failure preservation. Core owns contract selection and implementation; external implementation remains delegated. Do not add more synthetic lifecycle experiments unless they resolve a named decision.
 
