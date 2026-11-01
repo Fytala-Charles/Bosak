@@ -1,0 +1,4 @@
+System.Exception: xslt-public-match-only-template-focus-absent
+   at Experiment.Check(String id, Boolean ok) in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 59
+   at Experiment.Run() in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 94
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 15
