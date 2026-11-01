@@ -52,6 +52,8 @@
 //                      |                  |       |                | MaxEngineOperations), pre-run cancellation check, gate cleared in finally             |
 //                      | Charles Korthout | 1.18  | 11-10-2026     | C-F1/D-F1: document bounded profiles and unconditional terminal observations.            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 01-11-2026     | Add internal bounded explicit-context transform entry point. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -106,6 +108,22 @@ public sealed class XsltExecutable
     /// during the last transformation, if any.
     /// </summary>
     internal Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
+
+    /// <summary>Returns the raw principal result with independent document-match and node-global inputs.</summary>
+    /// <param name="matchInput">Document-root initial match input, or null for named-template work.</param>
+    /// <param name="globalInput">Explicit global context node; null means absent without source fallback.</param>
+    /// <param name="initialTemplate">Optional initial named template.</param>
+    /// <param name="context">Borrowed dynamic context, subject to transform context mutation.</param>
+    /// <returns>The raw principal result; secondary results are captured without external delivery.</returns>
+    /// <exception cref="NotSupportedException">The match input is not a document node.</exception>
+    internal XdmValue TransformWithExplicitContext(IXdmNode? matchInput, IXdmNode? globalInput, string? initialTemplate, EvaluationContext? context)
+    {
+        if (matchInput != null && matchInput.NodeKind != XdmNodeKind.Document)
+            throw new NotSupportedException("Explicit-context transforms admit only document-root initial match inputs.");
+        return RunWithStack(() => new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError)
+            .TransformCore(matchInput, initialTemplate, null, true, null, null, true, true, globalInput, false), DefaultTransformStackSize);
+    }
+
 
     /// <summary>
     /// Default stack size (bytes) allocated for the transformation thread.  A larger
