@@ -1,0 +1,9 @@
+D:\Development\Bosak\.guard-tmp\bcap-controls-v2\Host\Program.cs(108,85): error CS0819: Implicitly-typed variables cannot have multiple declarators [D:\Development\Bosak\.guard-tmp\bcap-controls-v2\Host\Host.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\bcap-controls-v2\Host\Program.cs(108,85): error CS0819: Implicitly-typed variables cannot have multiple declarators [D:\Development\Bosak\.guard-tmp\bcap-controls-v2\Host\Host.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.84

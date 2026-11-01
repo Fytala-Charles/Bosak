@@ -1,0 +1,82 @@
+--- a/src/Bosak.Xslt/Api/XsltExecutable.cs
++++ b/src/Bosak.Xslt/Api/XsltExecutable.cs
+@@ -56,6 +56,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 1.20  | 01-11-2026     | Expose effective static values internally for bounded capture. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 1.21 | 01-11-2026 | Isolated BCAP-01 capture feasibility; not adopted. |
++//                      | Charles Korthout | 1.22 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
+ // ===========================================================================================================================================================
+ 
+ using System.Xml.Linq;
+@@ -374,6 +376,70 @@
+         return session.BuildResult(failure);
+     }
+ 
++    private static Action<long>? CandidateProductionObserver;
++    internal static void SetCandidateProductionObserver(Action<long>? observer) => CandidateProductionObserver = observer;
++    internal XsltCaptureResult CaptureExplicitCandidate(IXdmNode? source, IXdmNode? global, XsltCaptureOptions options)
++    {
++        options ??= new XsltCaptureOptions();
++        var context = options.Context ?? new EvaluationContext();
++
++        // REQ-125 Slice D: one execution gate per controlled run. A gate already on the context
++        // (a nested controlled run) is inherited — its remaining budget and deadline are shared —
++        // and the options' controls apply only when no gate is present yet.
++        var gate = context.ExecutionGate;
++        var stamped = false;
++        if (gate is null &&
++            (options.CancellationToken.HasValue || options.TimeLimit.HasValue || options.MaxEngineOperations.HasValue))
++        {
++            gate = ExecutionGate.Create(
++                options.CancellationToken ?? default,
++                options.TimeLimit,
++                options.MaxEngineOperations);
++            context.ExecutionGate = gate;
++            stamped = true;
++        }
++
++        var session = new XsltCaptureSession(options, _messageListener, gate, CandidateProductionObserver);
++        Exception? failure = null;
++        try
++        {
++            // A token triggered before the run starts cancels immediately, before any output is
++            // produced and before the transformation thread starts.
++            gate?.Checkpoint();
++
++            RunWithStack<object?>(() =>
++            {
++                var engine = new Runtime.TransformEngine(_stylesheet, context, session.MessageListener, _treatRecoverableAmbiguousMatchAsError);
++                engine.ResultDocumentCaptureObserver = session.ObserveResultDocument;
++                if (source is not null && source.NodeKind != XdmNodeKind.Document)
++                    throw new NotSupportedException("Document-root match only.");
++                var result = engine.TransformCore(source, options.InitialTemplate, options.InitialMode,
++                    false, options.BaseOutputUri, null, true, false, global, false);
++                LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
++
++                // A principal xsl:result-document (no href) supplies the effective output properties,
++                // overriding the stylesheet-level xsl:output defaults. Clone before stamping
++                // run-specific inference state so concurrent captures never share mutable state.
++                var principalProps = (engine.PrincipalResultDocumentProperties ?? OutputProperties).Clone();
++                principalProps.EffectiveVersion ??= _stylesheet.Version;
++                principalProps.ImplicitResultTree = engine.PrincipalResultDocumentProperties == null;
++                session.CapturePrincipal(result, principalProps);
++                return null;
++            }, DefaultTransformStackSize);
++        }
++        catch (Exception ex)
++        {
++            failure = ex;
++        }
++        finally
++        {
++            if (stamped)
++                context.ExecutionGate = null;
++        }
++
++        return session.BuildResult(failure);
++    }
++
+     /// <summary>
+     /// Runs a transformation on behalf of <c>fn:transform</c>: secondary result
+     /// documents are captured rather than written to disk, and both the principal

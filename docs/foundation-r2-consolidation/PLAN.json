@@ -63,8 +63,8 @@
       "title": "Qualify the named capture feasibility gap",
       "work": "Execute targeted isolated capture controls on the exact candidate; test outputs/messages/failures/receipts and leases, not another generic lifetime model.",
       "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit.",
-      "evidence": "docs/foundation-bcap-runtime/evidence/STATUS.json",
-      "progress": "26 real-engine controls twice plus 631 selected existing regressions; incomplete C06/C08/C09/C10 and no native/full qualification"
+      "evidence": "docs/foundation-bcap-controls/evidence/STATUS.json",
+      "progress": "48 real-engine controls twice and 631 selected regressions; sequential gate composition, serializer cancellation/fault and Core cleanup order exercised; public result/drain orchestration, native/full qualification remain"
     },
     {
       "id": "P04",

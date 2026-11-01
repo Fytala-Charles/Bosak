@@ -16,10 +16,7 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
 
-Current execution update (1 November): [P02 isolated capture declaration candidate](../foundation-bcap-candidate/README.md) compiles; owner feature requests are registered locally. P03 real capture-producer feasibility and C01–C10 are next. BCAP-01 remains open pending runtime evidence and Braid review.
-
-
-P03 progress (1 November): [real capture feasibility](../foundation-bcap-runtime/README.md) passes 26 bounded controls twice and 631 selected existing regressions on isolated binaries. P03 remains InProgress for controls/fault/native qualification; production and owner acceptance remain unchanged.
+Current Core work: [P03 gate/serializer controls](../foundation-bcap-controls/README.md) exercise the isolated capture path. Next resolve capture plus cleanup outcome orchestration and the original serializer exception requirement; native/full qualification and owner review remain. Production and release acceptance are unchanged.
 
 ## What is already demonstrated
 
@@ -31,7 +28,7 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 
 - [x] Core ledger covers all proposed type/member/requirement rows; the isolated review draft compiles. Core O2/O4 and XmlDb O1 have scoped design accepts, not runtime acceptance.
 - [x] [Consolidate five submitted returns and Schema checklist guidance](../foundation-r2-consolidation/README.md); independently verify XmlDb's newer b09c7341 source/evidence pins.
-- [ ] **Core P02/P03:** prepare and qualify the minimal operation-bound bounded capture route/declaration candidate for BCAP-01; obtain Braid's P04 disposition. This is the next concrete Core deliverable.
+- [ ] **Core P03:** gate/serializer controls pass in isolation; resolve capture/drain outcome and original-exception requirements, complete qualification and obtain Braid's P04 disposition.
 - [ ] **XmlDb P06/P07, parallel:** resolve actual cleanup/failure/profile revision XDB-LIFE-01 and implement/qualify provider-local membership. No additional required Core disposal signature has been demonstrated.
 - [ ] **Schema P05, parallel:** submit actual O1/O2 dispositions using the eight checklist work items, with actual methods/profile/gaps/evidence. The issue comment is guidance, not those responses.
 - [ ] **P08:** reconcile changed draft hashes and all owner dispositions, then close accepted R2 scope. R3 production implementation remains gated; W1–W7 and targeted follow-up controls are prepared, not completed.

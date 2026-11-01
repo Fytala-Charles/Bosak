@@ -62,9 +62,10 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P03: complete gate/cancellation/serialization and cleanup fault feasibility; native and full qualification remain",
+      "nextCoreTask": "P03: resolve public capture/drain outcome and original serializer exception disposition, then complete profile/native/full qualification",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
-      "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json"
+      "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
+      "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json"
     },
     {
       "id": "R3",

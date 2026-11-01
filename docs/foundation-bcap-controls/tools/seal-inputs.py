@@ -1,0 +1,26 @@
+"""Retain isolated source/binary archives and precise cohort status."""
+from pathlib import Path
+import hashlib,json,zipfile,subprocess
+R=Path(__file__).resolve().parents[3];P=Path(__file__).resolve().parents[1];E=P/'evidence';W=R/'.guard-tmp/bcap-controls-v3'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+if any((W/n).exists() for n in ['qualified-source.zip','qualified-binaries.zip']):
+ raise RuntimeError('Qualified archives already exist; preserve them and use a new candidate for a new cohort')
+production={n:sha(R/n) for n in subprocess.check_output(['git','ls-files','src'],text=True).splitlines() if (R/n).is_file()}
+assert subprocess.run(['git','diff','--quiet','HEAD','--','src']).returncode==0
+source={p.relative_to(W).as_posix():sha(p) for p in (W/'src').rglob('*') if p.is_file() and not {'bin','obj'}&set(p.relative_to(W).parts)}
+with zipfile.ZipFile(W/'qualified-source.zip','w',zipfile.ZIP_DEFLATED) as z:
+ for n in source:z.write(W/n,n)
+ for n in ['license.md','NOTICE']:
+  if (R/n).exists():z.write(R/n,n)
+with zipfile.ZipFile(W/'qualified-binaries.zip','w',zipfile.ZIP_DEFLATED) as z:
+ for p in (W/'Host/bin/Release/net10.0').iterdir():
+  if p.is_file():z.write(p,p.name)
+ for n in ['license.md','NOTICE']:
+  if (R/n).exists():z.write(R/n,n)
+archives={p.name:{'path':str(p),'sha256':sha(p)} for p in [W/'qualified-source.zip',W/'qualified-binaries.zip']}
+(E/'INPUTS.json').write_text(json.dumps({'sourceRevision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'productionChanged':False,'productionSources':production,'candidateSources':source,'archives':archives,'probeSourceSha256':sha(P/'tools/Probe.cs.txt'),'candidateProducerSourceSha256':sha(P/'tools/SchemaCaptureCandidate.cs.txt'),'setupReflectionOnly':True,'newFriendGrants':0,'nativeConsumersTested':False,'fullSolutionTestsRun':False,'frozenGatesRun':False},indent=2)+'\n')
+rows=[]
+for id in ['C01','C02','C03','C04','C05','C06','C07','C08','C09','C10']:
+ rows.append({'id':id,'status':'PartiallyExercised' if id in ['C09','C10'] else 'ExercisedBoundedSequentialProfile','ownerAcceptance':False})
+(E/'STATUS.json').write_text(json.dumps({'p03':'InProgress','cohortChecks':48,'includesPrevious26':True,'repetitions':2,'existingRuntimeRegressions':366,'existingFocusedXsltRegressions':265,'bcap01Closed':False,'publicCandidateImplemented':False,'scope':'Private real-engine sequential gate composition and synthetic serializer/release faults; no native authority/full qualification','cases':rows,'remaining':['Reviewed public capture plus raw cleanup outcome orchestration','Original serializer exception identity is not exposed by existing classified capture result','Initial mode and broader option/authority profiles','Cold and native workload cost/latency, cancellation latency','Actual Schema/XmlDb consumer and worker handoff qualification','Concurrent/reentrant gate reuse remains unsupported','Full engine/conformance qualification before promotion','Braid review and exact revised API binding']},indent=2)+'\n')
+print('Retained source/binary archives, all source pins and honest partial cohort status.')

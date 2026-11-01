@@ -1,0 +1,43 @@
+--- a/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
++++ b/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
+@@ -24,6 +24,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.7 | 01-11-2026     | Reuse the captured composite ownership delegate for role validation. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.8 | 01-11-2026 | Isolated BCAP-01 capture feasibility; not adopted. |
++//                      | Charles Korthout | 0.9 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+ using System.Security.Cryptography;
+@@ -179,6 +181,9 @@
+         { RequireMember(snapshot); return _owner._kernel.AttachValue(_owner._kernel.Read(snapshot, value, _cancellationToken)); }
+         internal SchemaOperationInputs CaptureInputs(EvaluationContext caller,
+             Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces)
++            => CaptureInputs(caller, ownsNode, maxBindings, maxNamespaces, false);
++        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller,
++            Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, bool allowExecutionGate)
+         {
+             Check();
+             if (_leaseSet is null) throw new NotSupportedException("Explicit source membership requires a composite operation.");
+@@ -198,7 +203,7 @@
+                 return owners == 1;
+             }
+             Func<IXdmNode, bool> owns = Owns;
+-            var inputs = caller.CaptureSchemaInputs(owns, maxBindings, maxNamespaces).ForOperation(this, owns);
++            var inputs = caller.CaptureSchemaInputs(owns, maxBindings, maxNamespaces, null, allowExecutionGate).ForOperation(this, owns);
+             Check(); return inputs;
+         }
+         internal void RequireNodeInput(SchemaOperationInputs inputs, IXdmNode? node)
+@@ -220,6 +225,12 @@
+             _owner._kernel.CheckSnapshot(_snapshot);
+         }
+         internal void ValidateAccess() => Check();
++        internal CancellationToken RequireOwner(SchemaQuerySession owner)
++        {
++            Check();
++            if (!ReferenceEquals(_owner, owner)) throw new ArgumentException("Foreign executable operation.");
++            return _cancellationToken;
++        }
+         internal XdmValue ReadValue(ISchemaIssuedScalar value)
+         { Check(); RequireSingle(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
+         internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)

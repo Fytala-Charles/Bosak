@@ -1,0 +1,27 @@
+# BCAP-01 gate composition and serialization faults
+
+The next isolated P03 cohort passes **48 controls twice**, including the previous 26. It uses the real compiled stylesheet, capture engine, bounded writer and operation leases. **366 existing Runtime and 265 focused XSLT regressions pass** on the final candidate; both candidate and probe compile with zero warnings/errors. Production remains 1.42.0 and unchanged. [Status and remaining work](evidence/STATUS.json).
+
+## What this candidate establishes
+
+An explicit internal input-capture overload can retain an engine-owned execution gate under sequential borrowed use. The ordinary overload still refuses caller gates. The composed gate checks both the inherited gate and the local capture gate; it retains the inherited object's remaining budget, deadline and token. Either operation budget can terminate capture, a spent parent budget is not reset, and an already-expired parent deadline is not extended. Existing internal signatures remain present so old compiled callers/tests continue to bind. This is a private opt-in experiment, not permission to accept arbitrary mutable context services.
+
+Actual bounded serialization is paused through its existing production-observation seam. Tests cancel either the operation token or capture token during the second secondary output: the result stays Cancelled, retains the completed first output, and releases the snapshot only after raw capture returns. A cancelled caller wait and snapshot close while serialization is paused leave the raw lease retained. Inherited-token cancellation during serialization and a local deadline expiring during serialization are also classified correctly. These bounded schedules are not a general cancellation-latency guarantee.
+
+An injected serializer IOException during the second output produces Partial with the completed first output and a classified failure. After options are copied, changing the original options during a serializer pause does not alter the active run. A separate fault cohort closes two actual Core evidence snapshots during the raw callback, making both deferred release callbacks throw: the original exception objects survive in reverse acquisition order, preceded by the original raw callback exception when one is thrown. Both releases are attempted once. These are real Core lease paths with synthetic provider callbacks, not native XmlDb reader/generation release faults.
+
+The captured result is retained separately when outer cleanup fails. Its `IsSuccess` describes capture only; the failed raw operation must not be reported successful. The current private tuple adapter does not provide an accepted public result-plus-cleanup outcome. Existing capture also classifies serializer exceptions into data and does not expose the original serializer exception object. That distinction needs an explicit contract disposition; a synthetic callback exception is not proof that the original serializer exception survives across the public boundary.
+
+## Remaining gate
+
+P03 stays InProgress. Next resolve capture/drain outcome orchestration and the original-exception requirement, complete initial-mode/profile coverage, then qualify native providers, worker handoff, cold/workload cost and cancellation latency. Full engine/conformance qualification is required before promotion; it was not run for this isolated cohort. Concurrent/reentrant use of a borrowed gate, arbitrary resource authority and native consumer acceptance remain outside this evidence. BCAP-01, Braid review, R2, freeze and publication remain open.
+
+The private test-only observer is restored after every case and has no public callback API. It is global within the isolated test assembly, so these controls run sequentially. Production sources, friend grants, external owner registries and product pins are untouched.
+
+## Evidence and reproduction
+
+Read [immutable specification/profile basis](SPEC-BASIS.md), [source delta](evidence/SOURCE-DELTA.json), [binary pins](evidence/BINARY-PINS.json), [input/archive hashes](evidence/INPUTS.json), [two probe runs](evidence/probe-0.json) and [selected regression receipts](evidence/REGRESSIONS.json). Process-wide warmed source-free measurements remain observations, not owner budgets. All prior cohort receipts stay unchanged.
+
+`tools/prepare.py` creates `.guard-tmp/bcap-controls-v3` from the retained first candidate and refuses overwrite. It then emits the cumulative production-relative patches. Run `python docs/foundation-bcap-controls/tools/run.py`, `tools/regressions.py`, `tools/seal-inputs.py` and `tools/verify.py` with the same full directory prefix. Source and binary archives are retained and hash-pinned; sealing refuses to replace them.
+
+Retained development failures include a probe declaration typo; assuming observer-call counts correspond to output counts (empty encoder flushes also notify); and 37 missing-method failures in old Runtime test binaries after changing internal signatures (329 passed). The final candidate preserves original overloads and all 366 pass. The initial preparation attempt encountered a source file without a using directive and produced documentation warnings; the persistent incomplete candidate is retained separately, while the final candidate builds without warnings. Negative probes catch exceptions under the scoped child error-mode wrapper; no deliberately unhandled crash or machine-wide setting is used.

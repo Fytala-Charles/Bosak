@@ -1,0 +1,140 @@
+// Generated isolated actual-host feasibility probe; exceptions caught by Main wrapper.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Xml.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Security.Cryptography;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Runtime;
+using Bosak.XPath.Runtime.Resources;
+using Bosak.Xslt.Api;
+using Bosak.Xslt.Capture;
+using Capture = System.Func<Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation, Bosak.XPath.Runtime.Vm.SchemaOperationInputs, Bosak.XPath.Core.Xdm.IXdmNode?, Bosak.XPath.Core.Xdm.IXdmNode?, string?, string?, string?, Bosak.Xslt.Capture.XsltCaptureOptions, (Bosak.Xslt.Capture.XsltCaptureResult Capture, System.Collections.Generic.IReadOnlyList<Bosak.XPath.Runtime.Resources.ControlledResourceReceipt> Receipts)>;
+try { await Probe.Run(); } catch(Exception e) { Console.Error.WriteLine(e);Environment.ExitCode=1; }
+static class Probe
+{
+ internal static readonly List<object> Rows=new();
+ static object? Measurements;
+ static void Check(string id,bool ok){if(!ok)throw new Exception(id);Rows.Add(new{id,passed=true});}
+ static void Refuse<T>(Action work) where T:Exception {try{work();}catch(T){return;}throw new Exception("Expected "+typeof(T).Name);}
+ static XsltCaptureOptions Options()=>new(){MaxSecondaryOutputCount=4,MaxBytesPerOutput=4096,MaxTotalBytes=8192,MaxMessages=4,MaxEngineOperations=10000,TimeLimit=TimeSpan.FromSeconds(5)};
+ const string Head="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:output method='text' encoding='UTF-8' byte-order-mark='no'/>";
+ const string Tail="</xsl:stylesheet>";
+ const string Sheet=Head+"<xsl:variable name='g' select='string(/*)'/><xsl:template match='/' name='main'><xsl:message>one</xsl:message><xsl:result-document href='one.txt' method='text'>one</xsl:result-document><xsl:result-document href='two.txt' method='text'>two</xsl:result-document><xsl:value-of select=\"concat(string(/*),'|',$g)\"/></xsl:template>"+Tail;
+ static (SchemaQuerySession Session,Capture Capture,Provider Provider) Compile(string sheet=Sheet){var p=new Provider();if(!Factory.Compile(sheet,new XsltCompiler(),null,null,null,null,_=>true,p,4,16,out var s,out var c,out var why))throw new Exception(why);return(s!,c!,p);}
+ static string Bytes(XsltCapturedOutput? o)=>o is null?"":Encoding.UTF8.GetString(o.Bytes.ToArray());
+ static (XsltCaptureResult Capture,IReadOnlyList<ControlledResourceReceipt> Receipts) Empty(string sheet,XsltCaptureOptions? options=null){var(s,c,p)=Compile(sheet);using(s)return s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,"https://example.test/out/main.txt",options??Options()));}
+ internal static async Task Run(){
+  foreach(bool shared in new[]{false,true}){
+   var(s,c,p)=Compile();using(s){int released=0;using var a=s.OpenSnapshot(s.Environment,new object(),p.A,()=>released++);using var b=shared?null:s.OpenSnapshot(s.Environment,new object(),p.B,()=>released++);
+    var match=new XDocumentNode(XDocument.Parse("<n>A</n>"));IXdmNode global=shared?match:new XDocumentNode(XDocument.Parse("<n>B</n>"));
+    s.Run(s.Environment,shared?[a]:[a,b!],op=>{var input=op.CaptureInputs(new EvaluationContext(),(snap,node)=>ReferenceEquals(snap,a)?ReferenceEquals(node,match):ReferenceEquals(snap,b)&&ReferenceEquals(node,global),16,16);var r=c(op,input,match,global,null,null,"https://example.test/out/main.txt",Options());Check("C02:"+(shared?"shared":"distinct"),r.Capture.IsSuccess&&Bytes(r.Capture.Principal)==(shared?"A|A":"A|B"));Check("C03:bytes-order-properties:"+shared,r.Capture.SecondaryOutputs.Select(Bytes).SequenceEqual(new[]{"one","two"})&&r.Capture.SecondaryOutputs.Select(x=>x.ResolvedUri).SequenceEqual(new[]{"https://example.test/out/one.txt","https://example.test/out/two.txt"})&&r.Capture.Principal!.OutputProperties.Method=="text"&&r.Capture.Messages.SequenceEqual(new[]{"one"}));a.Dispose();b?.Dispose();Check("C08:leases-through-serialization:"+shared,released==0);return 0;});Check("C08:released-after-raw:"+shared,released==(shared?1:2));
+   }
+  }
+  string empty=Head+"<xsl:template name='main'>42</xsl:template>"+Tail;Check("C02:source-free",Bytes(Empty(empty).Capture.Principal)=="42");
+  {
+   var(s,c,p)=Compile(empty);var(other,_,_p)=Compile(empty);using(s)using(other){var poison=new PoisonNode();other.Run(other.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{var input=op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16);Refuse<ArgumentException>(()=>c(op,input,poison,poison,"main",null,null,Options()));return 0;});Check("C01:foreign-executable-before-getter",poison.Reads==0);
+    SchemaQuerySession.Operation? closed=null;SchemaOperationInputs? captured=null;s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{closed=op;captured=op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16);Refuse<ArgumentException>(()=>c(op,captured,poison,null,"main",null,null,Options()));Refuse<ArgumentException>(()=>c(op,captured,null,poison,"main",null,null,Options()));return 0;});Check("C01:foreign-roles-before-getter",poison.Reads==0);Refuse<ObjectDisposedException>(()=>c(closed!,captured!,poison,null,"main",null,null,Options()));Check("C01:closed-before-getter",poison.Reads==0);
+    s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{Refuse<ArgumentException>(()=>c(op,captured!,null,null,"main",null,null,Options()));var input=op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16);foreach(int kind in Enumerable.Range(0,5)){var opts=Options();if(kind==0)opts.Context=new();if(kind==1)opts.InitialTemplate="main";if(kind==2)opts.InitialMode="x";if(kind==3)opts.BaseOutputUri="x";if(kind==4)opts.MaxTotalBytes=null;Refuse<ArgumentException>(()=>c(op,input,null,null,"main",null,null,opts));}return 0;});Check("C09:foreign-input-and-conflicting-options",true);
+   }
+  }
+  string outputs=Head+"<xsl:template name='main'><xsl:message>a</xsl:message><xsl:message>b</xsl:message><xsl:result-document href='one.txt' method='text'>one</xsl:result-document><xsl:result-document href='two.txt' method='text'>two</xsl:result-document>main</xsl:template>"+Tail;
+  foreach(int kind in Enumerable.Range(0,4)){var o=Options();if(kind==0)o.MaxSecondaryOutputCount=1;if(kind==1)o.MaxBytesPerOutput=2;if(kind==2)o.MaxTotalBytes=3;if(kind==3)o.MaxMessages=1;var r=Empty(outputs,o).Capture;Check("C04:production-bound:"+kind,!r.IsSuccess&&r.Failures.Count>0&&(kind!=3||r.Messages.Count==1));}
+  string fail=Head+"<xsl:template name='main'><xsl:result-document href='one.txt' method='text'>one</xsl:result-document><xsl:sequence select=\"error()\"/></xsl:template>"+Tail;
+  var partial=Empty(fail).Capture;Check("C05:completed-secondary-retained",partial.Outcome==XsltCaptureOutcome.Partial&&Bytes(partial.SecondaryOutputs.Single())=="one");
+  Check("C05:failure-before-output",Empty(Head+"<xsl:template name='main'><xsl:sequence select='error()'/></xsl:template>"+Tail).Capture.Outcome==XsltCaptureOutcome.Failed);
+  {using var cancel=new CancellationTokenSource();cancel.Cancel();var o=Options();o.CancellationToken=cancel.Token;Check("C06:pre-cancelled-capture",Empty(empty,o).Capture.Outcome==XsltCaptureOutcome.Cancelled);}
+  {var o=Options();o.MaxEngineOperations=1;Check("C06:operation-limit",!Empty(outputs,o).Capture.IsSuccess);}
+  string resource=Head+"<xsl:param name='read' select='true()'/><xsl:template name='main'><xsl:choose><xsl:when test='$read'><xsl:value-of select=\"doc-available('https://user:password@example.test/resource.xml')\"/></xsl:when><xsl:otherwise>clean</xsl:otherwise></xsl:choose></xsl:template>"+Tail;
+  {var(s,c,p)=Compile(resource);using(s){var r=s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,null,Options()));Check("C07:actual-unsupported-receipt",r.Receipts.Count==1&&r.Receipts[0].Outcome==ControlledResourceReceiptOutcome.RefusedUnsupported&&!r.Receipts[0].RequestedUri.Contains("password"));var clean=s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>c(op,op.CaptureInputs(new EvaluationContext().WithVariable("read",XdmValue.FromBoolean(false)),(_,_)=>false,16,16),null,null,"main",null,null,Options()));Check("C07:per-run-isolation",clean.Receipts.Count==0&&r.Receipts.Count==1);}}
+  {
+   var(s,c,p)=Compile(empty);using(s){int releases=0;using var snap=s.OpenSnapshot(s.Environment,new object(),p.A,()=>releases++);var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var raw=s.RunAsync(s.Environment,[snap],async op=>{var input=op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16);var result=c(op,input,null,null,"main",null,null,Options());entered.SetResult();await resume.Task;return result;});await entered.Task;snap.Dispose();using var waitCancel=new CancellationTokenSource();waitCancel.Cancel();try{await raw.WaitAsync(waitCancel.Token);}catch(OperationCanceledException){}Check("C08:cancelled-wait-retains-lease",releases==0&&!raw.IsCompleted);resume.SetResult();var r=await raw;Check("C08:raw-completion-releases",r.Capture.IsSuccess&&releases==1);}
+  }
+  {
+   var(s,c,p)=Compile(empty);using(s){var warm=Options();long before=0,allocated=0;var watch=System.Diagnostics.Stopwatch.StartNew();
+    for(int i=0;i<120;i++){if(i==20){before=GC.GetTotalAllocatedBytes(true);watch.Restart();}s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,null,warm));}
+    watch.Stop();allocated=GC.GetTotalAllocatedBytes(true)-before;Measurements=new{scope="100 warmed source-free real captures; includes dedicated worker/thread startup, operation/input/context/policy and serialization; process-wide allocation, not an accepted workload budget",iterations=100,totalAllocatedBytes=allocated,totalMilliseconds=watch.Elapsed.TotalMilliseconds};Check("C10:source-free-measurement",allocated>0);
+   }
+  }
+  await Controls();
+  var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+  Console.WriteLine(JsonSerializer.Serialize(new{passed=true,checks=Rows.Count,rows=Rows,bindings,measurements=Measurements},new JsonSerializerOptions{WriteIndented=true}));
+ }
+ static readonly Action<Action<long>?> Observe=typeof(XsltExecutable).GetMethod("SetCandidateProductionObserver",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic)!.CreateDelegate<Action<Action<long>?>>();
+ static async Task Controls()
+ {
+  string empty=Head+"<xsl:template name='main'>42</xsl:template>"+Tail;
+  foreach(bool parentStrict in new[]{false,true}){
+   var(s,c,p)=Compile(empty);using(s){var gate=ExecutionGate.Create(default,null,parentStrict?1:10000);var caller=new EvaluationContext{ExecutionGate=gate};
+    s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{Refuse<NotSupportedException>(()=>op.CaptureInputs(caller,(_,_)=>false,16,16));var input=op.CaptureInputs(caller,(_,_)=>false,16,16,allowExecutionGate:true);var o=Options();if(!parentStrict)o.MaxEngineOperations=1;var r=c(op,input,null,null,"main",null,null,o);Check("C06:both-gate-budgets:"+parentStrict,r.Capture.Failures.Any(f=>f.Code=="XV0012"));return 0;});
+    Check("C06:gate-identity-retained:"+parentStrict,ReferenceEquals(caller.ExecutionGate,gate));
+   }
+  }
+  {
+   var(s,c,p)=Compile(empty);using(s){var gate=ExecutionGate.Create(default,null,1);gate.Checkpoint();s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{var input=op.CaptureInputs(new EvaluationContext{ExecutionGate=gate},(_,_)=>false,16,16,true);Check("C06:spent-parent-budget-not-reset",c(op,input,null,null,"main",null,null,Options()).Capture.Failures.Any(f=>f.Code=="XV0012"));return 0;});}
+  }
+  {
+   var(s,c,p)=Compile(empty);using(s){var parent=ExecutionGate.Create(default,TimeSpan.FromMilliseconds(1),10000);await Task.Delay(25);s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{var input=op.CaptureInputs(new EvaluationContext{ExecutionGate=parent},(_,_)=>false,16,16,true);Check("C06:expired-parent-deadline-not-reset",c(op,input,null,null,"main",null,null,Options()).Capture.Failures.Any(f=>f.Code=="XV0011"));return 0;});}
+  }
+  string outputs=Head+"<xsl:template name='main'><xsl:result-document href='one.txt' method='text'>one</xsl:result-document><xsl:result-document href='two.txt' method='text'>second</xsl:result-document>main</xsl:template>"+Tail;
+  {
+   Observe(n=>{if(n==6)throw new IOException("controlled-serialization-fault");});
+   try{var r=Empty(outputs).Capture;Check("C05:injected-serializer-fault-retains-output",r.Outcome==XsltCaptureOutcome.Partial&&Bytes(r.SecondaryOutputs.Single())=="one"&&r.Failures.Any(f=>f.Message.Contains("controlled-serialization-fault")));}finally{Observe(null);}
+  }
+  foreach(bool operationCancel in new[]{false,true}){
+   var(s,c,p)=Compile(outputs);using(s)using(var cancel=new CancellationTokenSource())using(var entered=new ManualResetEventSlim())using(var resume=new ManualResetEventSlim()){
+    int releases=0,calls=0;using var snapshot=s.OpenSnapshot(s.Environment,new object(),p.A,()=>releases++);var opts=Options();if(!operationCancel)opts.CancellationToken=cancel.Token;
+    Observe(n=>{if(n==6 && Interlocked.Increment(ref calls)==1){entered.Set();if(!resume.Wait(TimeSpan.FromSeconds(10)))throw new TimeoutException("Serializer test pause");}});
+    try{
+     var raw=Task.Run(()=>s.Run(s.Environment,[snapshot],op=>c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,null,opts),operationCancel?cancel.Token:default));
+     if(!await Task.Run(()=>entered.Wait(TimeSpan.FromSeconds(10))))throw new TimeoutException("No serializer entry");
+     snapshot.Dispose();Check("C08:lease-retained-inside-serializer:"+operationCancel,releases==0&&!raw.IsCompleted);
+     using var waitCancel=new CancellationTokenSource();waitCancel.Cancel();try{await raw.WaitAsync(waitCancel.Token);}catch(OperationCanceledException){}Check("C08:cancelled-wait-inside-serializer:"+operationCancel,releases==0&&!raw.IsCompleted);
+     cancel.Cancel();resume.Set();var result=await raw;Check("C06:mid-serialization-cancel:"+operationCancel,result.Capture.Outcome==XsltCaptureOutcome.Cancelled&&Bytes(result.Capture.SecondaryOutputs.Single())=="one");Check("C08:release-after-cancelled-serialization:"+operationCancel,releases==1);
+    }finally{resume.Set();Observe(null);}
+   }
+  }
+  {
+   var(s,c,p)=Compile(outputs);using(s)using(var entered=new ManualResetEventSlim())using(var resume=new ManualResetEventSlim()){
+    int calls=0;var opts=Options();Observe(_=>{if(Interlocked.Increment(ref calls)==1){entered.Set();if(!resume.Wait(TimeSpan.FromSeconds(10)))throw new TimeoutException();}});
+    try{var raw=Task.Run(()=>s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,null,opts)));if(!await Task.Run(()=>entered.Wait(TimeSpan.FromSeconds(10))))throw new TimeoutException();opts.MaxSecondaryOutputCount=0;opts.MaxBytesPerOutput=0;opts.MaxTotalBytes=0;opts.MaxMessages=0;opts.InitialTemplate="invalid";opts.Context=new EvaluationContext();resume.Set();Check("C09:options-mutation-after-copy",(await raw).Capture.IsSuccess);}finally{resume.Set();Observe(null);}
+   }
+  }
+  {
+   var(s,c,p)=Compile(outputs);using(s)using(var cancel=new CancellationTokenSource()){
+    var parent=ExecutionGate.Create(cancel.Token,null,10000);Observe(n=>{if(n==6)cancel.Cancel();});
+    try{s.Run(s.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{var input=op.CaptureInputs(new EvaluationContext{ExecutionGate=parent},(_,_)=>false,16,16,true);var r=c(op,input,null,null,"main",null,null,Options());Check("C06:inherited-token-cancel-inside-serializer",r.Capture.Outcome==XsltCaptureOutcome.Cancelled&&Bytes(r.Capture.SecondaryOutputs.Single())=="one");return 0;});}finally{Observe(null);}
+   }
+  }
+  {
+   var opts=Options();opts.TimeLimit=TimeSpan.FromMilliseconds(100);int observed=0;
+   Observe(_=>{Interlocked.Increment(ref observed);Thread.Sleep(150);});
+   try{var r=Empty(outputs,opts).Capture;Check("C06:local-deadline-during-serialization",observed>0&&!r.IsSuccess&&r.Failures.Any(f=>f.Code=="XV0011"));}finally{Observe(null);}
+  }
+  foreach(bool throwPrimary in new[]{false,true}){
+   var(s,c,p)=Compile(outputs);using(s){int attempts=0;var order=new List<string>();IOException aError=new IOException("release-A"),bError=new IOException("release-B");var primary=new InvalidOperationException("raw-callback-failure");using var a=s.OpenSnapshot(s.Environment,new object(),p.A,()=>{attempts++;order.Add("A");throw aError;});using var b=s.OpenSnapshot(s.Environment,new object(),p.B,()=>{attempts++;order.Add("B");throw bError;});XsltCaptureResult? capture=null;AggregateException? observed=null;
+    try{s.Run(s.Environment,[a,b],op=>{capture=c(op,op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16),null,null,"main",null,null,Options()).Capture;a.Dispose();b.Dispose();if(throwPrimary)throw primary;return 0;});}catch(AggregateException error){observed=error;}
+    var expected=throwPrimary?new Exception[]{primary,bError,aError}:new Exception[]{bError,aError};Check("C10:actual-raw-cleanup-objects-order:"+throwPrimary,observed is not null&&observed.InnerExceptions.SequenceEqual(expected)&&order.SequenceEqual(new[]{"B","A"})&&attempts==2);Check("C10:capture-retained-separately-on-cleanup-failure:"+throwPrimary,capture is not null&&capture.IsSuccess&&capture.SecondaryOutputs.Count==2);
+   }
+  }
+ }
+
+}
+sealed class Provider:ISchemaSessionProvider,ISchemaEvidenceIssuer {
+ internal readonly object A=new(),B=new();
+ sealed class Binding(Provider p,SchemaQueryEnvironment e):ISchemaSessionBinding {public SchemaQueryEnvironment Environment=>e;public ISchemaEvidenceIssuer Issuer=>p;public void ThrowIfUnavailable(){} }
+ public ISchemaSessionBinding Bind(SchemaQueryEnvironment e)=>new Binding(this,e);
+ public bool OwnsAssessment(object a)=>ReferenceEquals(a,A)||ReferenceEquals(a,B);public bool OwnsValue(ISchemaIssuedScalar v)=>false;public bool OwnsType(object t)=>false;public bool IsSameType(object a,object b)=>ReferenceEquals(a,b);
+}
+static class Factory {
+ internal delegate bool CompileDelegate(string source,XsltCompiler compiler,string? baseUri,IXdmNode? match,IXdmNode? global,string? template,Func<IXdmNode,bool> owns,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out Capture? capture,out string? unsupported,CancellationToken cancellation=default);
+ internal static readonly CompileDelegate Compile=typeof(XsltExecutable).Assembly.GetType("Bosak.Xslt.Api.SchemaHostSessionCompilation")!.GetMethod("TryCompileCaptureCandidate",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic)!.CreateDelegate<CompileDelegate>();
+}
+sealed class PoisonNode:IXdmNode {
+ internal int Reads;Exception Read(){Reads++;return new InvalidOperationException("Unexpected node getter");}
+ public XdmNodeKind NodeKind=>throw Read();public string LocalName=>throw Read();public string NamespaceUri=>throw Read();public string Prefix=>throw Read();public string StringValue=>throw Read();public XdmValue TypedValue=>throw Read();public bool HasNoTypedValue=>throw Read();public bool IsComplexType=>throw Read();public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>throw Read();public IXdmNode? Parent=>throw Read();public IXdmNode? Document=>throw Read();public long DocumentOrder=>throw Read();public string BaseUri=>throw Read();public string DocumentUri=>throw Read();public XdmSequence Children(XdmNodeKind kind)=>throw Read();public XdmSequence Attributes(string? localName,string? namespaceUri)=>throw Read();public XdmSequence Axis(XdmAxis axis)=>throw Read();public bool IsSameNode(IXdmNode other)=>throw Read();public string ToXmlString()=>throw Read();
+}
