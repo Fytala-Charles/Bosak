@@ -26,7 +26,8 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 - [x] [Core ledger](../foundation-r2-ledger/README.md) maps all 45 proposed types, 615 baseline metadata/evidence rows, six numeric member intents and 43 requirement rows.
 - [x] Four boundary method changes compile in four isolated assemblies; 45 revised proposed types remain, with 619 metadata/evidence rows. Production is unchanged.
 - [x] Prepare [O1–O4 owner packets](../foundation-r2-owner-review/README.md), seven unanswered role-specific return forms and draft-bound completeness checks. Delivery and acceptance are not claimed.
-- [ ] Obtain O1–O4 owner dispositions on actual source membership/issuance, typed/compatibility semantics, Braid invocation completeness and XmlDb resource failure/concurrency scope.
+- [x] Record [O2-Core and O4-Core scoped design returns](../foundation-r2-core-returns/README.md), authored by Codex on the Core engineering task; no external/runtime/C45 acceptance is inferred.
+- [ ] Obtain five external role returns: O1-Schema, O1-XmlDb, O2-Schema, O3-Braid and O4-XmlDb. Resolve all demonstrated required gaps before R2 closes.
 - [ ] Record accepted implementation scope and any newly affected immutable specification revisions/sections/deviations before semantic implementation. The Core ledger is not owner acceptance.
 - [x] Publish a finite W1–W7 implementation/qualification queue, gated by the corresponding accepted R2 scope. Prepare fixtures in parallel; do not substitute more synthetic lifecycle experiments for these decisions.
 

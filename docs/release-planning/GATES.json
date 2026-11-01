@@ -39,7 +39,10 @@
       "ownerReviewPacketPrepared": true,
       "ownerDeliveryConfirmed": false,
       "requiredRoleReturns": 7,
-      "recordedAcceptedReturns": 0
+      "recordedAcceptedReturns": 2,
+      "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
+      "recordedReturnScope": "Two scoped Core design dispositions only; not runtime or C45 acceptance",
+      "externalRoleReturnsPending": 5
     },
     {
       "id": "R3",
