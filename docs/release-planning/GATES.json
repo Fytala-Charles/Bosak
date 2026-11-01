@@ -62,10 +62,11 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P03: resolve public capture/drain outcome and original serializer exception disposition, then complete profile/native/full qualification",
+      "nextCoreTask": "P03: finish initial-mode/profile controls and prepare full qualification; obtain exact revised outcome contract disposition before promotion",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
-      "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json"
+      "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
+      "captureOutcomeCandidate": "docs/foundation-bcap-outcomes/evidence/STATUS.json"
     },
     {
       "id": "R3",

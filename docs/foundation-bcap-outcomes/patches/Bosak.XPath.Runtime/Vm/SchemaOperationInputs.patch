@@ -1,0 +1,48 @@
+--- a/src/Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs
++++ b/src/Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs
+@@ -17,6 +17,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.3 | 01-11-2026     | Retain exact-operation source ownership checks for host input roles. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.4 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
++//                      | Charles Korthout | 0.5 | 01-11-2026 | Isolated capture and cleanup outcome preservation. |
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Xdm;
+ 
+@@ -32,10 +34,11 @@
+     private readonly string? _baseUri, _defaultNamespace, _definingNamespace;
+     private readonly string _collation;
+     internal SchemaEvidenceKernel.Snapshot? Snapshot { get; }
++    internal ExecutionGate? Gate { get; }
+     private Func<IXdmNode, bool>? _ownsNode;
+     internal object? OperationIdentity { get; private init; }
+     internal SchemaOperationInputs ForOperation(object identity, Func<IXdmNode, bool> ownsNode) => new(_focus, _position, _size, _variables,
+-        _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null) { OperationIdentity = identity, _ownsNode = ownsNode };
++        _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null, Gate) { OperationIdentity = identity, _ownsNode = ownsNode };
+     internal bool OwnsNode(object operation, IXdmNode node) => ReferenceEquals(OperationIdentity, operation) && _ownsNode is not null && _ownsNode(node);
+ 
+     // Capture owns these freshly copied arrays; no caller-owned array is retained.
+@@ -43,8 +46,13 @@
+         KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>[] variables,
+         KeyValuePair<string, string>[] namespaces, string? baseUri,
+         string? defaultNamespace, string? definingNamespace, string collation, SchemaEvidenceKernel.Snapshot? snapshot)
++        : this(focus, position, size, variables, namespaces, baseUri, defaultNamespace, definingNamespace, collation, snapshot, null) { }
++    internal SchemaOperationInputs(XdmValue focus, int position, int size,
++        KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>[] variables,
++        KeyValuePair<string, string>[] namespaces, string? baseUri,
++        string? defaultNamespace, string? definingNamespace, string collation, SchemaEvidenceKernel.Snapshot? snapshot, ExecutionGate? gate)
+     {
+-        _focus = focus; _position = position; _size = size;
++        Gate = gate; _focus = focus; _position = position; _size = size;
+         _variables = variables; _namespaces = namespaces;
+         _baseUri = baseUri; _defaultNamespace = defaultNamespace;
+         _definingNamespace = definingNamespace; _collation = collation;
+@@ -55,7 +63,7 @@
+     {
+         var context = new EvaluationContext
+         {
+-            BaseUri = _baseUri, DefaultElementNamespace = _defaultNamespace,
++            ExecutionGate = Gate, BaseUri = _baseUri, DefaultElementNamespace = _defaultNamespace,
+             DefiningElementDefaultNamespace = _definingNamespace, DefaultCollation = _collation
+         };
+         context.WithFocus(_focus, _position, _size);

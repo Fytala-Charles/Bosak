@@ -16,7 +16,7 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
 
-Current Core work: [P03 gate/serializer controls](../foundation-bcap-controls/README.md) exercise the isolated capture path. Next resolve capture plus cleanup outcome orchestration and the original serializer exception requirement; native/full qualification and owner review remain. Production and release acceptance are unchanged.
+Current Core work: [P03 capture/drain outcome candidate](../foundation-bcap-outcomes/README.md) retains original execution and cleanup diagnostics without masking completed capture. Next finish invocation/profile controls and prepare full qualification; revised 47-type declarations still require exact owner review. Production and release acceptance remain unchanged.
 
 ## What is already demonstrated
 
@@ -28,7 +28,7 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 
 - [x] Core ledger covers all proposed type/member/requirement rows; the isolated review draft compiles. Core O2/O4 and XmlDb O1 have scoped design accepts, not runtime acceptance.
 - [x] [Consolidate five submitted returns and Schema checklist guidance](../foundation-r2-consolidation/README.md); independently verify XmlDb's newer b09c7341 source/evidence pins.
-- [ ] **Core P03:** gate/serializer controls pass in isolation; resolve capture/drain outcome and original-exception requirements, complete qualification and obtain Braid's P04 disposition.
+- [ ] **Core P03:** capture/drain outcome controls and 47-type declarations pass in isolation; finish invocation/profile controls and full qualification and obtain Braid's P04 disposition.
 - [ ] **XmlDb P06/P07, parallel:** resolve actual cleanup/failure/profile revision XDB-LIFE-01 and implement/qualify provider-local membership. No additional required Core disposal signature has been demonstrated.
 - [ ] **Schema P05, parallel:** submit actual O1/O2 dispositions using the eight checklist work items, with actual methods/profile/gaps/evidence. The issue comment is guidance, not those responses.
 - [ ] **P08:** reconcile changed draft hashes and all owner dispositions, then close accepted R2 scope. R3 production implementation remains gated; W1–W7 and targeted follow-up controls are prepared, not completed.

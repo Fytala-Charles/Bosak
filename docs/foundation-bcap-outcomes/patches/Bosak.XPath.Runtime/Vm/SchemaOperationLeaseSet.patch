@@ -1,0 +1,26 @@
+--- a/src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs
++++ b/src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs
+@@ -13,6 +13,7 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.2 | 01-11-2026 | Isolated capture and cleanup outcome preservation. |
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+ using System.Runtime.ExceptionServices;
+@@ -93,6 +94,15 @@
+         Release(leases, leases.Length, primary);
+     }
+ 
++    internal IReadOnlyList<Exception> CompleteWithErrors()
++    {
++        var leases = Interlocked.Exchange(ref _leases, null);
++        if (leases is null) return Array.Empty<Exception>();
++        var errors = new List<Exception>();
++        for (int i = leases.Length - 1; i >= 0; i--)
++            try { leases[i].Dispose(); } catch (Exception error) { errors.Add(error); }
++        return Array.AsReadOnly(errors.ToArray());
++    }
+     private static void Release(IDisposable[] leases, int count, Exception? primary)
+     {
+         List<Exception>? failures = null;

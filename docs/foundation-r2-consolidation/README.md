@@ -5,7 +5,7 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 **Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
 
 
-Current Core work: [P03 gate/serializer controls](../foundation-bcap-controls/README.md) exercise the isolated capture path. Next resolve capture plus cleanup outcome orchestration and the original serializer exception requirement; native/full qualification and owner review remain. Production and release acceptance are unchanged.
+Current Core work: [P03 capture/drain outcome candidate](../foundation-bcap-outcomes/README.md) retains original execution and cleanup diagnostics without masking completed capture. Next finish invocation/profile controls and prepare full qualification; revised 47-type declarations still require exact owner review. Production and release acceptance remain unchanged.
 
 ## Consolidated answers
 

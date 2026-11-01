@@ -1,0 +1,107 @@
+// Generated isolated declaration proposal; all operation bodies refuse execution.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using Bosak.Xslt.Capture;
+using Bosak.XPath.Runtime.Resources;
+using Bosak.XPath.Api.Schema;
+using Bosak.XPath.Core.Schema;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+namespace Bosak.Xslt.Api.Schema;
+/// <summary>Captures stylesheet settings and package state into an opt-in executable.</summary>
+public static class SchemaXsltCompiler
+{
+    /// <summary>Compiles and freezes effective static context before binding.</summary>
+    /// <param name="stylesheet">Stylesheet source.</param>
+    /// <param name="limits">Explicit finite limits.</param>
+    /// <param name="compiler">Compiler settings/package closure copied under the selected policy.</param>
+    /// <param name="assessor">Optional borrowed assessor.</param>
+    /// <param name="baseUri">Explicit stylesheet base URI.</param>
+    /// <param name="cancellationToken">Compilation/binding cancellation.</param>
+    /// <returns>An executable or explicit unsupported profile result.</returns>
+    public static SchemaResult<SchemaXsltExecutable> Compile(string stylesheet, SchemaQueryLimits limits, XsltCompiler? compiler = null, ISchemaAssessor? assessor = null, string? baseUri = null, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+}
+/// <summary>Separates initial-match and global-context document roots for a bounded transform profile.</summary>
+public readonly struct SchemaXsltInvocation
+{
+    /// <summary>Specifies invocation inputs; absence of match input does not supply global context.</summary>
+    /// <param name="initialMatchInput">Admitted document root for initial matching, or absent.</param>
+    /// <param name="globalContextInput">Separately admitted document root for global context, or absent.</param>
+    /// <param name="initialTemplate">Initial expanded template name using the existing host convention.</param>
+    /// <param name="initialMode">Initial expanded mode name using the existing host convention.</param>
+    /// <param name="rawResult">Whether to preserve the ordinary raw result sequence.</param>
+    /// <param name="baseOutputUri">Output base URI under the captured resource policy.</param>
+    public SchemaXsltInvocation(SchemaQuerySnapshot? initialMatchInput = null, SchemaQuerySnapshot? globalContextInput = null, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null) => throw new NotSupportedException("Proposal only");
+    /// <summary>The separately identified initial-match root admission.</summary>
+    public SchemaQuerySnapshot? InitialMatchInput => throw new NotSupportedException("Proposal only");
+    /// <summary>The separately identified global-context root admission.</summary>
+    public SchemaQuerySnapshot? GlobalContextInput => throw new NotSupportedException("Proposal only");
+    /// <summary>The initial named template.</summary>
+    public string? InitialTemplate => throw new NotSupportedException("Proposal only");
+    /// <summary>The initial mode.</summary>
+    public string? InitialMode => throw new NotSupportedException("Proposal only");
+    /// <summary>Whether to return the ordinary raw result graph.</summary>
+    public bool RawResult => throw new NotSupportedException("Proposal only");
+    /// <summary>The base output URI.</summary>
+    public string? BaseOutputUri => throw new NotSupportedException("Proposal only");
+}
+/// <summary>A captured executable whose transformations borrow a shared session operation.</summary>
+public sealed class SchemaXsltExecutable
+{
+    /// <summary>Captures under an owned raw operation and returns only after its admission cleanup attempts finish.</summary>
+    /// <param name="snapshots">Same-session snapshot admissions; empty for source-free work.</param>
+    /// <param name="invocation">Explicit source roles and invocation choices.</param>
+    /// <param name="options">Explicit finite capture controls; duplicate context/selection settings refuse.</param>
+    /// <param name="context">Sole dynamic input context under the supported captured policy.</param>
+    /// <param name="cancellationToken">Raw operation cancellation, distinct from cancelling a caller wait.</param>
+    /// <returns>Capture when produced and separate local admission/work/cleanup diagnostics; cleanup failure prevents overall success.</returns>
+    public SchemaXsltRunResult RunCaptureTransform(ImmutableArray<SchemaQuerySnapshot> snapshots, SchemaXsltInvocation invocation, XsltCaptureOptions options, EvaluationContext? context = null, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+
+    /// <summary>Captures bounded serialized outputs under this executable's exact session operation.</summary>
+    /// <param name="operation">Live operation from Session; retained through serialization.</param>
+    /// <param name="invocation">Sole match/global, template/mode and output-base selection; RawResult must be false.</param>
+    /// <param name="options">Copied finite capture controls; Context, InitialTemplate, InitialMode and BaseOutputUri must be absent.</param>
+    /// <param name="context">Sole dynamic context; captured authority cannot be replaced.</param>
+    /// <returns>Explicit admission failure or detached output and actual per-run receipts.</returns>
+    public SchemaResult<SchemaXsltCaptureResult> CaptureTransform(SchemaQueryOperation operation, SchemaXsltInvocation invocation, XsltCaptureOptions options, EvaluationContext? context = null) => throw new NotSupportedException("Proposal only");
+
+    private SchemaXsltExecutable() { }
+    /// <summary>The engine-created session owning admissions and close/drain behavior.</summary>
+    public SchemaQuerySession Session => throw new NotSupportedException("Proposal only");
+    /// <summary>Executes inside an operation belonging to this executable's session.</summary>
+    /// <param name="operation">Live borrowed operation including every invocation/context node input.</param>
+    /// <param name="invocation">Explicit input, template/mode and output selections.</param>
+    /// <param name="context">Dynamic inputs subject to admission and captured resource policy.</param>
+    /// <returns>A borrowed ordinary result graph or explicit unsupported profile result.</returns>
+    public SchemaResult<XdmValue> Transform(SchemaQueryOperation operation, SchemaXsltInvocation invocation, EvaluationContext? context = null) => throw new NotSupportedException("Proposal only");
+}
+
+/// <summary>Serialized capture, immutable receipts and original local execution diagnostics from one invocation.</summary>
+public sealed class SchemaXsltCaptureResult
+{
+    /// <summary>Original exceptions observed during execution/serialization; identity-deduplicated, not flattened or recursively detached, and not an IPC payload.</summary>
+    public IReadOnlyList<Exception> ExecutionErrors => throw new NotSupportedException("Proposal only");
+
+    private SchemaXsltCaptureResult() { }
+    /// <summary>Existing classified capture outputs, properties, messages and failures.</summary>
+    public XsltCaptureResult Capture => throw new NotSupportedException("Proposal only");
+    /// <summary>Actual immutable per-run acquisition receipts, excluding compile-time and other runs.</summary>
+    public IReadOnlyList<ControlledResourceReceipt> ResourceReceipts => throw new NotSupportedException("Proposal only");
+}
+
+/// <summary>Final local capture-operation outcome after all admission cleanup attempts; never proof of native release when cleanup fails.</summary>
+public sealed class SchemaXsltRunResult
+{
+    private SchemaXsltRunResult() { }
+    /// <summary>Capture and receipts when execution produced them, retained even if cleanup failed.</summary>
+    public SchemaXsltCaptureResult? Result => throw new NotSupportedException("Proposal only");
+    /// <summary>Original entry/rollback diagnostic when admission failed; provider aggregates are not flattened.</summary>
+    public Exception? AdmissionError => throw new NotSupportedException("Proposal only");
+    /// <summary>Original work diagnostic when capture could not return its envelope.</summary>
+    public Exception? WorkError => throw new NotSupportedException("Proposal only");
+    /// <summary>Every original cleanup exception in reverse acquisition attempt order; provider aggregate boundaries remain intact.</summary>
+    public IReadOnlyList<Exception> CleanupErrors => throw new NotSupportedException("Proposal only");
+    /// <summary>True only for a successful capture with no execution, admission, work or cleanup error; Partial and Cancelled remain unsuccessful.</summary>
+    public bool IsSuccess => throw new NotSupportedException("Proposal only");
+}
