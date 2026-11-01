@@ -1,0 +1,12 @@
+{
+  "baselineSha256": "d38afe1512430d484d918be8fc206df8f70aea99e763d977a02920f6cf701795",
+  "inventoryBaseSourceSha256": "a00a9a156678696a7b0c3276146278f7a644b400f92b92b57d85e93ba0fbd4c9",
+  "inventorySourceSha256": "e93d8313e17d8908210ed1b1c4ffb364a84bc8fc5d99cf5a57db4ba976b703aa",
+  "assemblies": 11,
+  "exportedTypes": 270,
+  "declarationRows": 5770,
+  "declarationsIdentical": true,
+  "assemblyVersions": "1.41.0.0",
+  "xsltFriendsIdentical": true,
+  "baselineXsltSha256": "b13e8f4c95d8197bc7dc6d996a777b91bc5f5069b94b3da6f98a07d270af0d98"
+}

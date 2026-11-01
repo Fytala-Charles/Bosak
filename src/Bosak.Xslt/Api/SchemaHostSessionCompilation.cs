@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2 | 01-11-2026     | Refuse composite XSLT until source-role membership is implemented. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Globalization;
@@ -100,7 +102,7 @@ internal static class SchemaHostSessionCompilation
             supplied = Describe(copied), effective = Describe(statics)
         }));
         session = SchemaProviderSessionBinding.Create(environment, SchemaHostExecution.BindXslt(executable, match, global, initialTemplate, ownsNode),
-            provider, snapshots, values, cancellationToken); return true;
+            provider, snapshots, values, cancellationToken, compositeEvaluation: false); return true;
     }
 
     private static bool PlainStatic(XdmValue value) => XdmValue.SchemaTransportMarker(value) is null

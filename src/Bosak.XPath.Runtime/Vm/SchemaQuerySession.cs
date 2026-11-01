@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4  | 01-11-2026     | Check borrowed provider availability and require typed factory execution. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5 | 01-11-2026     | Integrate same-session composite leases and operation-stamped typed inputs. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Security.Cryptography;
@@ -46,13 +48,15 @@ internal sealed class SchemaQuerySession : IDisposable
     private readonly Func<EvaluationContext, XdmValue> _evaluate;
     private readonly Action? _ensureAvailable;
     private readonly bool _typedInputsOnly;
+    private readonly bool _compositeEvaluation;
+    private readonly int _snapshotLimit;
 
     internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
         ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit)
         : this(environment, evaluate, issuer, snapshotLimit, valueLimit, null, false) { }
 
     internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
-        ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit, Action? ensureAvailable, bool typedInputsOnly)
+        ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit, Action? ensureAvailable, bool typedInputsOnly, bool compositeEvaluation = true)
     {
         ArgumentNullException.ThrowIfNull(environment);
         ArgumentNullException.ThrowIfNull(evaluate);
@@ -60,6 +64,8 @@ internal sealed class SchemaQuerySession : IDisposable
         _evaluate = evaluate;
         _ensureAvailable = ensureAvailable;
         _typedInputsOnly = typedInputsOnly;
+        _compositeEvaluation = compositeEvaluation;
+        _snapshotLimit = snapshotLimit;
         _kernel = new SchemaEvidenceKernel(environment, issuer, snapshotLimit, valueLimit);
     }
 
@@ -98,6 +104,45 @@ internal sealed class SchemaQuerySession : IDisposable
         finally { operation.Complete(); }
     }
 
+    private Operation OpenOperation(SchemaQueryEnvironment environment, ImmutableArray<SchemaEvidenceKernel.Snapshot> snapshots, CancellationToken cancellation)
+    {
+        _ensureAvailable?.Invoke();
+        _kernel.AdmitEnvironment(environment);
+        if (snapshots.IsDefault || snapshots.Length > _snapshotLimit)
+            throw new ArgumentException("Explicit bounded membership is required.", nameof(snapshots));
+        var unique = new HashSet<SchemaEvidenceKernel.Snapshot>(ReferenceEqualityComparer.Instance);
+        foreach (var snapshot in snapshots)
+        {
+            _kernel.CheckSnapshot(snapshot);
+            if (!unique.Add(snapshot)) throw new ArgumentException("Duplicate snapshot admission.", nameof(snapshots));
+        }
+        void CheckSession() { _ensureAvailable?.Invoke(); _kernel.AdmitEnvironment(environment); }
+        var members = snapshots.Select(snapshot => new SchemaOperationLeaseSet.Member(this,
+            () => _kernel.CheckSnapshot(snapshot), snapshot.Enter)).ToImmutableArray();
+        var leases = SchemaOperationLeaseSet.Acquire(this, members, _snapshotLimit, CheckSession, cancellation);
+        return new Operation(this, snapshots, leases, cancellation);
+    }
+
+    internal T Run<T>(SchemaQueryEnvironment environment, ImmutableArray<SchemaEvidenceKernel.Snapshot> snapshots,
+        Func<Operation, T> work, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(work);
+        var operation = OpenOperation(environment, snapshots, cancellationToken);
+        try { return work(operation); }
+        catch (Exception primary) { operation.Complete(primary); throw; }
+        finally { operation.Complete(); }
+    }
+
+    internal async Task<T> RunAsync<T>(SchemaQueryEnvironment environment, ImmutableArray<SchemaEvidenceKernel.Snapshot> snapshots,
+        Func<Operation, Task<T>> work, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(work);
+        var operation = OpenOperation(environment, snapshots, cancellationToken);
+        try { return await work(operation).ConfigureAwait(false); }
+        catch (Exception primary) { operation.Complete(primary); throw; }
+        finally { operation.Complete(); }
+    }
+
     /// <summary>Closes admissions without disposing the borrowed issuer.</summary>
     public void Dispose() => _kernel.Close();
 
@@ -108,10 +153,49 @@ internal sealed class SchemaQuerySession : IDisposable
         private readonly SchemaEvidenceKernel.Snapshot _snapshot;
         private readonly CancellationToken _cancellationToken;
         private IDisposable? _lease;
+        private readonly SchemaOperationLeaseSet? _leaseSet;
+        private readonly ImmutableArray<SchemaEvidenceKernel.Snapshot> _snapshots;
         internal Operation(SchemaQuerySession owner, SchemaEvidenceKernel.Snapshot snapshot, IDisposable lease, CancellationToken cancellationToken)
         { _owner = owner; _snapshot = snapshot; _lease = lease; _cancellationToken = cancellationToken; }
+        internal Operation(SchemaQuerySession owner, ImmutableArray<SchemaEvidenceKernel.Snapshot> snapshots,
+            SchemaOperationLeaseSet leases, CancellationToken cancellation)
+        { _owner = owner; _snapshot = null!; _snapshots = snapshots; _leaseSet = leases; _cancellationToken = cancellation; }
+        private void RequireMember(SchemaEvidenceKernel.Snapshot snapshot)
+        {
+            Check();
+            if (_leaseSet is null ? !ReferenceEquals(snapshot, _snapshot) : !_snapshots.Any(s => ReferenceEquals(s, snapshot)))
+                throw new ArgumentException("Snapshot is not an operation member.", nameof(snapshot));
+        }
+        private void RequireSingle()
+        { if (_leaseSet is not null) throw new NotSupportedException("Composite reads require an explicit source snapshot."); }
+        internal XdmValue ReadValue(SchemaEvidenceKernel.Snapshot snapshot, ISchemaIssuedScalar value)
+        { RequireMember(snapshot); return _owner._kernel.AttachValue(_owner._kernel.Read(snapshot, value, _cancellationToken)); }
+        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller,
+            Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces)
+        {
+            Check();
+            if (_leaseSet is null) throw new NotSupportedException("Explicit source membership requires a composite operation.");
+            ArgumentNullException.ThrowIfNull(caller);
+            ArgumentNullException.ThrowIfNull(ownsNode);
+            foreach (var value in caller.SnapshotVariables().Values)
+            {
+                if (XdmValue.SchemaTransportMarker(value) is null) continue;
+                var evidence = _owner._kernel.ReadValue(value)
+                    ?? throw new ArgumentException("Unadmitted scalar evidence.", nameof(caller));
+                if (evidence.Snapshot is not null) RequireMember(evidence.Snapshot);
+            }
+            bool Owns(IXdmNode node)
+            {
+                Check(); int owners = 0;
+                foreach (var snapshot in _snapshots) { if (ownsNode(snapshot, node)) owners++; Check(); }
+                return owners == 1;
+            }
+            var inputs = caller.CaptureSchemaInputs(Owns, maxBindings, maxNamespaces).ForOperation(this);
+            Check(); return inputs;
+        }
         private void Check()
         {
+            if (_leaseSet is not null) { _leaseSet.Check(); return; }
             ObjectDisposedException.ThrowIf(Volatile.Read(ref _lease) is null, this);
             _cancellationToken.ThrowIfCancellationRequested();
             _owner._ensureAvailable?.Invoke();
@@ -119,10 +203,11 @@ internal sealed class SchemaQuerySession : IDisposable
         }
         internal void ValidateAccess() => Check();
         internal XdmValue ReadValue(ISchemaIssuedScalar value)
-        { Check(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
+        { Check(); RequireSingle(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
         internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)
         {
             Check();
+            RequireSingle();
             var evidence = _owner._kernel.ReadValue(source)
                 ?? throw new ArgumentException("An admitted source value is required.", nameof(source));
             if (evidence.Snapshot is not null && !ReferenceEquals(evidence.Snapshot, _snapshot))
@@ -133,6 +218,7 @@ internal sealed class SchemaQuerySession : IDisposable
         {
             Check();
             ArgumentNullException.ThrowIfNull(caller);
+            RequireSingle();
             var inputs = caller.CaptureSchemaInputs(ownsNode, maxBindings, maxNamespaces, _snapshot);
             Check();
             return inputs;
@@ -142,20 +228,28 @@ internal sealed class SchemaQuerySession : IDisposable
             Check();
             ArgumentNullException.ThrowIfNull(inputs);
             if (maxAtoms <= 0) throw new ArgumentOutOfRangeException(nameof(maxAtoms));
-            if (!ReferenceEquals(inputs.Snapshot, _snapshot))
+            if (_leaseSet is not null && !_owner._compositeEvaluation)
+                throw new NotSupportedException("This host has no composite source-role admission.");
+            if (_leaseSet is not null ? !ReferenceEquals(inputs.OperationIdentity, this) : !ReferenceEquals(inputs.Snapshot, _snapshot))
                 throw new ArgumentException("Captured inputs belong to another operation snapshot.", nameof(inputs));
             return new SchemaAtomicResult(this, _owner._evaluate(inputs.CreateContext()), maxAtoms);
         }
         internal XdmValue Evaluate(EvaluationContext context)
         {
             Check();
+            RequireSingle();
             if (_owner._typedInputsOnly) throw new NotSupportedException("Bound host sessions require typed isolated inputs.");
             return _owner._evaluate(context);
         }
         internal SchemaEvidenceKernel.Evidence Read(ISchemaIssuedScalar value)
-        { Check(); return _owner._kernel.Read(_snapshot, value, _cancellationToken); }
+        { Check(); RequireSingle(); return _owner._kernel.Read(_snapshot, value, _cancellationToken); }
         internal SchemaEvidenceKernel.Evidence AdmitConversion(SchemaEvidenceKernel.Evidence source, ISchemaIssuedScalar constructed)
-        { Check(); return _owner._kernel.AdmitConversion(source, constructed, _cancellationToken); }
-        internal void Complete() => Interlocked.Exchange(ref _lease, null)?.Dispose();
+        { Check(); RequireSingle(); return _owner._kernel.AdmitConversion(source, constructed, _cancellationToken); }
+        internal void Complete() { if (_leaseSet is not null) _leaseSet.Complete(); else Interlocked.Exchange(ref _lease, null)?.Dispose(); }
+        internal void Complete(Exception primary)
+        {
+            if (_leaseSet is not null) _leaseSet.Complete(primary);
+            else SchemaEvidenceKernel.PreserveFailure(primary, Complete);
+        }
     }
 }

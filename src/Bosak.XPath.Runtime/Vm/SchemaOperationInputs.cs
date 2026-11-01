@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2 | 01-11-2026     | Stamp composite inputs with their exact operation membership token. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -28,6 +30,9 @@ internal sealed class SchemaOperationInputs
     private readonly string? _baseUri, _defaultNamespace, _definingNamespace;
     private readonly string _collation;
     internal SchemaEvidenceKernel.Snapshot? Snapshot { get; }
+    internal object? OperationIdentity { get; private init; }
+    internal SchemaOperationInputs ForOperation(object identity) => new(_focus, _position, _size, _variables,
+        _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null) { OperationIdentity = identity };
 
     // Capture owns these freshly copied arrays; no caller-owned array is retained.
     internal SchemaOperationInputs(XdmValue focus, int position, int size,

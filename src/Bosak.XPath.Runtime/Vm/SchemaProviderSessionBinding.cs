@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2 | 01-11-2026     | Carry explicit host composite-evaluation capability. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Resources;
@@ -51,7 +53,7 @@ internal static class SchemaProviderSessionBinding
         cancellationToken.ThrowIfCancellationRequested();
     }
     internal static SchemaQuerySession Create(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
-        ISchemaSessionProvider provider, int snapshots, int values, CancellationToken cancellationToken)
+        ISchemaSessionProvider provider, int snapshots, int values, CancellationToken cancellationToken, bool compositeEvaluation = true)
     {
         Validate(provider, snapshots, values, cancellationToken);
         var binding = provider.Bind(environment) ?? throw new ArgumentException("Provider returned no binding.", nameof(provider));
@@ -71,6 +73,6 @@ internal static class SchemaProviderSessionBinding
             Check();
             context.ResourcePolicy = ClosedResources();
             return evaluate(context);
-        }, issuer, snapshots, values, Check, true);
+        }, issuer, snapshots, values, Check, true, compositeEvaluation);
     }
 }

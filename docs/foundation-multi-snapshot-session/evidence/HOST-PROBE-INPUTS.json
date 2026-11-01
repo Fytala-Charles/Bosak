@@ -1,0 +1,7 @@
+{
+  "sourceSha256": "0b442bedbec60cdca069849a6cddce727633dc226b4ff2897607ef7dd7d1cb06",
+  "probeAssemblySha256": "d53d7a101bc82823c9647537095dfc208b79528458fc391f887782a3914ed91d",
+  "setupReflectionOnly": true,
+  "checks": 3,
+  "assertions": 11
+}

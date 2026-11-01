@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-01",
+  "version": "1.41.0",
+  "productionSourceApplied": true,
+  "unitTests": {
+    "passed": 24380,
+    "failed": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Parser.Tests": 202,
+      "Bosak.XPath.Runtime.Tests": 356,
+      "Bosak.XPath.Api.Tests": 489,
+      "Bosak.XPath.Standard.Tests": 13797,
+      "Bosak.XPath.Compiler.Tests": 66,
+      "Bosak.Xslt.Tests": 8234,
+      "Bosak.XQuery.Tests": 804,
+      "Bosak.XPath.Providers.Tests": 223,
+      "Bosak.XPath.Providers.Database.Tests": 47
+    }
+  },
+  "newRegressionCases": [
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.EmptyOperation",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsInvalidMembership(kind: 2)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: False)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsImplicitSingleSourceMethods",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.CanceledWaitAndCloseRetainRawSources",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.InputsRequireExactOperation",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RevocationIsGroupWide",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsNonmemberEvidenceInInputs",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.KeepsOriginalAssessments",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsInvalidMembership(kind: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsWrongAssessment",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.SingleInputsCannotTransfer",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsNonmemberBeforeScalarGetter",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsInvalidMembership(kind: 3)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.NestedOperations",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.PreservesWorkAndEveryCleanupFailure",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsInvalidMembership(kind: 1)",
+      "outcome": "Passed"
+    }
+  ],
+  "fnTransformControls": [
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_MissingSource_RaisesFOXT0002",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Stylesheet_Params",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_Basic_Transform",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_DenyAll_RefusesStylesheetAcquisitionWithoutFallback",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_InheritsPolicy_AcquisitionsAuthorized",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_ResultDocumentTextContent_IsCaptured",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Initial_Template",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Limits.SliceDExecutionControlTests.D_NestedTransformInheritsSharedOperationBudget",
+      "outcome": "Passed"
+    }
+  ],
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchanged": true,
+  "solutionRebuilt": true,
+  "publicDeclarationsUnchanged": true,
+  "assemblyMetadataCaptured": true,
+  "productArchiveSha256": "658bfe35ee162ea137ffc02fb046e5bd6a35420936b02651f78dc65d194a80d5",
+  "published": false,
+  "publicFacadeImplemented": false,
+  "ownerAcceptance": "Pending",
+  "apiFreeze": false
+}
