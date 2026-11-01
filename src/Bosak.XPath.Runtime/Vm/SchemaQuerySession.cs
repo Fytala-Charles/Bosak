@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3  | 01-11-2026     | Add typed isolated input and guarded atomic result operations. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4  | 01-11-2026     | Check borrowed provider availability and require typed factory execution. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Security.Cryptography;
@@ -42,27 +44,36 @@ internal sealed class SchemaQuerySession : IDisposable
 {
     private readonly SchemaEvidenceKernel _kernel;
     private readonly Func<EvaluationContext, XdmValue> _evaluate;
+    private readonly Action? _ensureAvailable;
+    private readonly bool _typedInputsOnly;
 
     internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
         ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit)
+        : this(environment, evaluate, issuer, snapshotLimit, valueLimit, null, false) { }
+
+    internal SchemaQuerySession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate,
+        ISchemaEvidenceIssuer issuer, int snapshotLimit, int valueLimit, Action? ensureAvailable, bool typedInputsOnly)
     {
         ArgumentNullException.ThrowIfNull(environment);
         ArgumentNullException.ThrowIfNull(evaluate);
         Environment = environment;
         _evaluate = evaluate;
+        _ensureAvailable = ensureAvailable;
+        _typedInputsOnly = typedInputsOnly;
         _kernel = new SchemaEvidenceKernel(environment, issuer, snapshotLimit, valueLimit);
     }
 
     internal SchemaQueryEnvironment Environment { get; }
-    internal SchemaEvidenceKernel.Evidence? ReadEvidence(XdmValue value) => _kernel.ReadValue(value);
+    internal SchemaEvidenceKernel.Evidence? ReadEvidence(XdmValue value) { _ensureAvailable?.Invoke(); return _kernel.ReadValue(value); }
     internal SchemaEvidenceKernel.Snapshot OpenSnapshot(SchemaQueryEnvironment environment, object identity,
         object assessment, Action release, CancellationToken cancellationToken = default)
-        => _kernel.Open(environment, identity, assessment, release, cancellationToken);
+        { _ensureAvailable?.Invoke(); return _kernel.Open(environment, identity, assessment, release, cancellationToken); }
 
     internal T Run<T>(SchemaQueryEnvironment environment, SchemaEvidenceKernel.Snapshot snapshot,
         Func<Operation, T> work, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(work);
+        _ensureAvailable?.Invoke();
         _kernel.AdmitEnvironment(environment);
         _kernel.CheckSnapshot(snapshot);
         cancellationToken.ThrowIfCancellationRequested();
@@ -76,6 +87,7 @@ internal sealed class SchemaQuerySession : IDisposable
         Func<Operation, Task<T>> work, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(work);
+        _ensureAvailable?.Invoke();
         _kernel.AdmitEnvironment(environment);
         _kernel.CheckSnapshot(snapshot);
         cancellationToken.ThrowIfCancellationRequested();
@@ -102,6 +114,7 @@ internal sealed class SchemaQuerySession : IDisposable
         {
             ObjectDisposedException.ThrowIf(Volatile.Read(ref _lease) is null, this);
             _cancellationToken.ThrowIfCancellationRequested();
+            _owner._ensureAvailable?.Invoke();
             _owner._kernel.CheckSnapshot(_snapshot);
         }
         internal void ValidateAccess() => Check();
@@ -136,6 +149,7 @@ internal sealed class SchemaQuerySession : IDisposable
         internal XdmValue Evaluate(EvaluationContext context)
         {
             Check();
+            if (_owner._typedInputsOnly) throw new NotSupportedException("Bound host sessions require typed isolated inputs.");
             return _owner._evaluate(context);
         }
         internal SchemaEvidenceKernel.Evidence Read(ISchemaIssuedScalar value)

@@ -22,6 +22,10 @@ The [full 1.36 inventory and exact C45 proposal](docs/foundation-c45-delta136/RE
 
 Next C45 step: implement complete private compilation/binding factories above the [1.38.0 typed host boundary](docs/foundation-typed-host-inputs/README.md), capturing effective static context and actual provider/owner contracts. Independent multi-source ownership and exact numeric execution remain open before public acceptance; API freeze remains pending.
 
+## Private compilation/provider checkpoint — 1 November 2026
+
+Source 1.39.0 adds internal effective-context compilation factories and borrowed provider binding for XPath/XQuery/XSLT under an explicit closed-resource profile. Provider identity, cancellation, revocation and deferred cleanup are qualified; unsupported mutable services refuse before binding. [Checkpoint and limits](docs/foundation-private-host-factories/README.md): 24,341 unit passes, 103 repeated integration checks, unchanged QT3/qt4 gates and public declarations. Native assessment, independent multi-source ownership, exact numeric execution, owner acceptance, C45 and API freeze remain pending. Next qualify independent multi-source acquisition and cleanup through these factories. Delivery commit: `git log -1 --format=%H -- docs/foundation-private-host-factories/README.md`.
+
 ## Immediate foundation work
 
 Core 1.35.0 now has [private production admission and operation ownership](docs/foundation-production-admission/README.md). The reviewed public schema contracts remain proposals; atomic VM transport and full provider/advisor integration are the next implementation work.

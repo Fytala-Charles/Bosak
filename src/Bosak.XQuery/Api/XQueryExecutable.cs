@@ -59,9 +59,13 @@
 //                      | Charles Korthout | 2.17  | 28-10-2026     | Isolate lazy initializer and declared-function constructor namespace frames (1.31.0). |
 //                      | Charles Korthout | 2.18  | 01-11-2026     | Factor direct internal evaluation while retaining the public wrapper. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.19  | 01-11-2026     | Capture effective private prolog environment after compilation. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml;
+using System.Collections.Immutable;
+using System.Text.Json;
 using System.Xml.Schema;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
@@ -113,6 +117,20 @@ public sealed class XQueryExecutable
     private readonly IrModule _module;
     private readonly IrModule? _contextInitializer;
     private readonly XQueryStaticContext _staticContext;
+
+    internal SchemaQueryEnvironment CaptureSchemaEnvironment(string sourceDescriptor)
+    {
+        var namespaces = _staticContext.Namespaces.ToImmutableDictionary(StringComparer.Ordinal);
+        return new SchemaQueryEnvironment(namespaces, JsonSerializer.Serialize(new
+        {
+            format = SchemaQueryEnvironment.DescriptorFormat, host = "XQuery", profile = SchemaProviderSessionBinding.Profile,
+            engine = typeof(XQueryExecutable).Assembly.GetName().Version!.ToString(), sourceDescriptor,
+            namespaces = namespaces.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => new[] { p.Key, p.Value }).ToArray(),
+            _staticContext.DefaultElementNamespace, _staticContext.DefaultFunctionNamespace, _staticContext.DefaultCollation,
+            _staticContext.BaseUri, _staticContext.DefaultEmptyOrderLeast, _staticContext.ContextItemTypeName,
+            _staticContext.BoundarySpaceStrip, _staticContext.ConstructionMode, _staticContext.PreserveNamespaces, _staticContext.InheritNamespaces
+        }));
+    }
 
     /// <summary>Gets declared main-module schema imports for conformance host initialization.</summary>
     internal IReadOnlyList<SchemaImport> ConformanceSchemaImports => _staticContext.ImportedSchemas;

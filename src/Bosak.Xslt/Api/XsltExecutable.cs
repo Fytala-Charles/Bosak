@@ -54,6 +54,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.19  | 01-11-2026     | Add internal bounded explicit-context transform entry point. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 01-11-2026     | Expose effective static values internally for bounded capture. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -108,6 +110,10 @@ public sealed class XsltExecutable
     /// during the last transformation, if any.
     /// </summary>
     internal Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
+
+    /// <summary>Copies effective static values after the selected compilation profile has resolved them.</summary>
+    internal IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> CaptureSchemaStaticValues()
+        => _stylesheet.StaticVariables;
 
     /// <summary>Returns the raw principal result with independent document-match and node-global inputs.</summary>
     /// <param name="matchInput">Document-root initial match input, or null for named-template work.</param>

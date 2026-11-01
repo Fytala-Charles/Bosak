@@ -67,6 +67,8 @@
 //                      | Charles Korthout | 3.7   | 28-10-2026     | Compile module-local namespace-copy modes for bodies, initializers and functions (1.31.0). |
 //                      | Charles Korthout | 3.8   | 28-10-2026     | Compile declaring-module construction modes for bodies and declarations (1.32.0). |
 //                      | Charles Korthout | 3.9  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
+//                      | Charles Korthout | 3.10  | 01-11-2026     | Freeze private registered modules and namespace settings before binding. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -78,6 +80,8 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XQuery.Compiler;
+
+using System.Text.Json;
 
 namespace Bosak.XQuery.Api;
 
@@ -236,6 +240,29 @@ public sealed class XQueryCompiler
         }
 
         return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames, contextInitializer);
+    }
+
+    internal bool TryCaptureSchemaCompilation(string query, bool xml11LineEndings, out XQueryExecutable? executable,
+        out SchemaQueryEnvironment? environment, out string? unsupported)
+    {
+        executable = null; environment = null; unsupported = null;
+        var modules = _moduleSources.ToArray();
+        var namespaces = _externalNamespaces.ToArray();
+        if (XQueryParser.Parse(query, xml11LineEndings).StaticContext.ImportedSchemas.Count != 0
+            || modules.Any(m => XQueryParser.Parse(m.Source, xml11LineEndings).StaticContext.ImportedSchemas.Count != 0))
+        { unsupported = "Schema imports need a separate immutable provider capture profile."; return false; }
+        var frozen = new XQueryCompiler();
+        foreach (var pair in namespaces) frozen._externalNamespaces.Add(pair.Key, pair.Value);
+        // Registered records already contain normalized URIs; do not normalize them twice.
+        frozen._moduleSources.AddRange(modules);
+        executable = frozen.Compile(query, xml11LineEndings);
+        environment = executable.CaptureSchemaEnvironment(JsonSerializer.Serialize(new
+        {
+            query, xml11LineEndings,
+            namespaces = namespaces.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => new[] { p.Key, p.Value }).ToArray(),
+            modules = modules.Select(m => new { m.Uri, m.Location, m.Source }).ToArray()
+        }));
+        return true;
     }
 
     private static EmptyOrder? ToEmptyOrder(bool? least)

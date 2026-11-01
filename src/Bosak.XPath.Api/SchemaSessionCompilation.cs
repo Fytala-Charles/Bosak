@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 31-10-2026     | Creation: private foundation admission (1.35.0)                                          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2  | 01-11-2026     | Separate captured compilation from provider binding. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -30,7 +32,16 @@ internal static class SchemaSessionCompilation
         ArgumentNullException.ThrowIfNull(options);
         ArgumentNullException.ThrowIfNull(issuer);
         session = null;
-        unsupportedReason = null;
+        if (!TryCaptureCompilation(expression, options, out var environment, out var evaluate, out unsupportedReason)) return false;
+        session = new SchemaQuerySession(environment!, evaluate!, issuer, snapshotLimit, valueLimit);
+        return true;
+    }
+
+    internal static bool TryCaptureCompilation(string expression, CompileOptions options,
+        out SchemaQueryEnvironment? environment, out Func<EvaluationContext, XdmValue>? evaluate, out string? unsupportedReason)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        environment = null; evaluate = null; unsupportedReason = null;
         // Delegates can capture mutable host state. A delegate reference or ToString is not a snapshot.
         if (options.FunctionParameterNames is not null || options.FunctionMinimumArity is not null || options.SchemaSet is not null)
         {
@@ -61,8 +72,8 @@ internal static class SchemaSessionCompilation
             EnableJit = options.EnableJit
         };
         var compiled = XPath31Expression.Compile(expression, frozen);
-        var environment = compiled.CaptureSchemaEnvironment(frozen);
-        session = new SchemaQuerySession(environment, compiled.Evaluate, issuer, snapshotLimit, valueLimit);
+        environment = compiled.CaptureSchemaEnvironment(frozen);
+        evaluate = compiled.Evaluate;
         return true;
     }
 
