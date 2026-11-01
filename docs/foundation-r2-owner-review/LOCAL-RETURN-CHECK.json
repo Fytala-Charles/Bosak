@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-01",
+  "pattern": "foundation-r2-ledger|0890592e|O1\u2013O4|R2 Core public.contract|OwnsTypedValue",
+  "scope": "Inspected local documentation only; no remote issues/messages searched or sent. Nonmatches are not proof that no external answer exists.",
+  "repositories": [
+    {
+      "name": "schema-assessment",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+      "revision": "c3624998eca8c83018e121fa84af611f834a0501",
+      "observedStatus": "clean",
+      "matchingLocalDocuments": []
+    },
+    {
+      "name": "schema-public",
+      "root": "D:\\Development\\Bosak.Schema.Public",
+      "revision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "observedStatus": "clean",
+      "matchingLocalDocuments": []
+    },
+    {
+      "name": "xmldb",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.XmlDb.Foundation",
+      "revision": "080859542786d514150d74f7ac9dd1ef56c6399a",
+      "observedStatus": "clean",
+      "matchingLocalDocuments": []
+    },
+    {
+      "name": "braid",
+      "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Braid.ReadOnly",
+      "revision": "d81f195f63a534099391220536f9885c44fddb30",
+      "observedStatus": "clean",
+      "matchingLocalDocuments": []
+    },
+    {
+      "name": "braid-active",
+      "root": "D:\\Development\\Bosak.Braid",
+      "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "observedStatus": "clean",
+      "matchingLocalDocuments": []
+    }
+  ],
+  "explicitRevisedDraftReturnFound": false
+}

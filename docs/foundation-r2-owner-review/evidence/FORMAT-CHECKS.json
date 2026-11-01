@@ -1,0 +1,45 @@
+{
+  "scope": "Synthetic response-format controls only; no actual owner return, authentication, runtime or gate acceptance",
+  "checks": [
+    {
+      "id": "unsubmitted-is-not-acceptance",
+      "passed": true
+    },
+    {
+      "id": "complete-synthetic-format",
+      "passed": true
+    },
+    {
+      "id": "foreign-draft",
+      "passed": true
+    },
+    {
+      "id": "wrong-owner",
+      "passed": true
+    },
+    {
+      "id": "missing-signer",
+      "passed": true
+    },
+    {
+      "id": "missing-answer",
+      "passed": true
+    },
+    {
+      "id": "unresolved-signature",
+      "passed": true
+    },
+    {
+      "id": "unknown-gap-assessment",
+      "passed": true
+    },
+    {
+      "id": "missing-evidence",
+      "passed": true
+    },
+    {
+      "id": "premature-freeze",
+      "passed": true
+    }
+  ]
+}

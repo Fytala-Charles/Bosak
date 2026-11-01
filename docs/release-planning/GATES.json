@@ -34,7 +34,12 @@
       ],
       "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions.",
       "coreLedger": "docs/foundation-r2-ledger/LEDGER.json",
-      "coreDecisionStatus": "RecordedForOwnerReview"
+      "coreDecisionStatus": "RecordedForOwnerReview",
+      "ownerReviewPacket": "docs/foundation-r2-owner-review/PACKETS.json",
+      "ownerReviewPacketPrepared": true,
+      "ownerDeliveryConfirmed": false,
+      "requiredRoleReturns": 7,
+      "recordedAcceptedReturns": 0
     },
     {
       "id": "R3",
