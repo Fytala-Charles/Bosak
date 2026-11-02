@@ -5,7 +5,7 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 **Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
 
 
-Current Core direction (2 November): [bounded capture cost/cancellation evidence](../foundation-bcap-cost/README.md) completes P03 Core feasibility on the unchanged qualified private candidate. Next prepare P04 exact 47-type/profile review inputs for Braid; Schema/XmlDb follow-ups and native R4 budgets remain parallel. BCAP-01 and release acceptance stay open.
+Current Core direction (2 November): [P04 exact candidate review](../foundation-bcap-owner-review/README.md) is prepared and locally registered with owners. Next record explicit revised Core/owner dispositions against the pinned 47-type proposal; the known limits and any required final hardening must be resolved before R2 closes. Production, native acceptance and release gates remain unchanged.
 
 ## Consolidated answers
 

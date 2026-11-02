@@ -62,14 +62,17 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P04 coordination: exact revised capture/outcome review inputs for Braid; other owner returns/revisions parallel",
+      "nextCoreTask": "P04: Core explicit carry-forward/outcome delta returns and owner-review reconciliation; public production remains gated",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
       "captureOutcomeCandidate": "docs/foundation-bcap-outcomes/evidence/STATUS.json",
       "captureProfileQualification": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
       "captureCostEvidence": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
-      "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility"
+      "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility",
+      "revisedCaptureReview": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+      "revisedCaptureReviewSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+      "revisedRoleReturnsSubmitted": 0
     },
     {
       "id": "R3",

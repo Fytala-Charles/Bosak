@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O1-Schema",
+  "packet": "BCAP-O1",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "NotSubmitted",
+  "decision": null,
+  "sourceRevision": null,
+  "signer": null,
+  "date": null,
+  "profile": null,
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": null
+    },
+    {
+      "id": "O1-Q2",
+      "answer": null
+    },
+    {
+      "id": "O1-Q3",
+      "answer": null
+    },
+    {
+      "id": "O1-Q4",
+      "answer": null
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": null,
+  "evidence": null,
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O1-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": null,
+  "originalExceptionGraphDisposition": null,
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null
+}

@@ -16,7 +16,7 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
 
-Current Core direction (2 November): [bounded capture cost/cancellation evidence](../foundation-bcap-cost/README.md) completes P03 Core feasibility on the unchanged qualified private candidate. Next prepare P04 exact 47-type/profile review inputs for Braid; Schema/XmlDb follow-ups and native R4 budgets remain parallel. BCAP-01 and release acceptance stay open.
+Current Core direction (2 November): [P04 exact candidate review](../foundation-bcap-owner-review/README.md) is prepared and locally registered with owners. Next record explicit revised Core/owner dispositions against the pinned 47-type proposal; the known limits and any required final hardening must be resolved before R2 closes. Production, native acceptance and release gates remain unchanged.
 
 ## What is already demonstrated
 
@@ -29,7 +29,7 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 - [x] Core ledger covers all proposed type/member/requirement rows; the isolated review draft compiles. Core O2/O4 and XmlDb O1 have scoped design accepts, not runtime acceptance.
 - [x] [Consolidate five submitted returns and Schema checklist guidance](../foundation-r2-consolidation/README.md); independently verify XmlDb's newer b09c7341 source/evidence pins.
 - [x] **Core P03 complete within its bounded profile:** qualification and cost/cancellation observations are recorded.
-- [ ] **Core P04 coordination:** prepare exact review inputs; Braid owns its revised-contract disposition.
+- [ ] **Core P04 coordination:** exact review inputs prepared/locally registered; Core supplies its revised returns and Braid owns its disposition.
 - [ ] **XmlDb P06/P07, parallel:** resolve actual cleanup/failure/profile revision XDB-LIFE-01 and implement/qualify provider-local membership. No additional required Core disposal signature has been demonstrated.
 - [ ] **Schema P05, parallel:** submit actual O1/O2 dispositions using the eight checklist work items, with actual methods/profile/gaps/evidence. The issue comment is guidance, not those responses.
 - [ ] **P08:** reconcile changed draft hashes and all owner dispositions, then close accepted R2 scope. R3 production implementation remains gated; W1–W7 and targeted follow-up controls are prepared, not completed.

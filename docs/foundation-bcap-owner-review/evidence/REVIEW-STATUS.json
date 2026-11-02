@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "coreSourceBase": "da4a945e81a9ab203ab119c1c00a853fc51a63f7",
+  "ownerCheckouts": {
+    "Braid": {
+      "path": "D:/Development/Bosak.Braid",
+      "head": "0f1d949e758645f7944f617f2b4613e49161a195"
+    },
+    "Schema": {
+      "path": "D:/Development/Bosak.Schema.Public",
+      "head": "20090180755d0427d824b091cf838e9a03ca9adc"
+    },
+    "XmlDb": {
+      "path": "D:/Development/Bosal.XmlDb",
+      "head": "99c8636e2f718a1804ac717c217e2158f5f70b26"
+    }
+  },
+  "issueCommentIds": [
+    6532577021,
+    6532702411,
+    6562337494,
+    6563123351
+  ],
+  "newSchemaFormalReturnsFound": false,
+  "priorDecisions": {
+    "O1-XmlDb": "AcceptWithScope",
+    "O2-Core": "AcceptWithScope",
+    "O3-Braid": "Revise",
+    "O4-Core": "AcceptWithScope",
+    "O4-XmlDb": "Revise"
+  },
+  "revisedReturnsSubmitted": 0,
+  "revisedReturnsAccepted": 0,
+  "coreFeasibility": "CompleteBoundedCoreFeasibility",
+  "bcap01Closed": false,
+  "r2Closed": false,
+  "apiFrozen": false,
+  "productionPromoted": false,
+  "messagesSent": false
+}
