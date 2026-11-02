@@ -1,0 +1,97 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "nativeRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+  "files": {
+    "inputs/native/src/Bosak.Schema/Assessment/AssessedDocument.cs.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:src/Bosak.Schema/Assessment/AssessedDocument.cs",
+      "sha256": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b"
+    },
+    "inputs/native/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+      "sha256": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed"
+    },
+    "inputs/native/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+      "sha256": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610"
+    },
+    "inputs/native/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+      "sha256": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d"
+    },
+    "inputs/native/docs/DOCUMENT-ASSESSMENT.md.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:docs/DOCUMENT-ASSESSMENT.md",
+      "sha256": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91"
+    },
+    "inputs/native/docs/S009-02-PROVIDER-FACT-MAPPING.md.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:docs/S009-02-PROVIDER-FACT-MAPPING.md",
+      "sha256": "7f183f9a3704eea8cf0ad8a0c7590b379f8f02f97cb3023da2f121867b5d67bb"
+    },
+    "inputs/native/docs/S009-04-FOUNDATION-REQUIREMENTS.md.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:docs/S009-04-FOUNDATION-REQUIREMENTS.md",
+      "sha256": "03f81b3714394c81ed953935d82f80443eee16a40e05b2d2ebdb9ca0bf360dc8"
+    },
+    "inputs/native/LICENSE.md.txt": {
+      "origin": "public Schema assessment c3624998eca8c83018e121fa84af611f834a0501:LICENSE.md",
+      "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da"
+    },
+    "inputs/core/PROPOSAL-MANIFEST.json": {
+      "origin": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+      "sha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688"
+    },
+    "inputs/core/Provider.cs.txt": {
+      "origin": "docs/foundation-bcap-owner-review/inputs/proposal/Provider.cs.txt",
+      "sha256": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784"
+    },
+    "inputs/core/QueryFacade.cs.txt": {
+      "origin": "docs/foundation-bcap-owner-review/inputs/proposal/QueryFacade.cs.txt",
+      "sha256": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37"
+    },
+    "inputs/core/ExactNumeric.cs.txt": {
+      "origin": "docs/foundation-bcap-owner-review/inputs/proposal/ExactNumeric.cs.txt",
+      "sha256": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364"
+    },
+    "inputs/core/BCAP-O2-Core.response.json": {
+      "origin": "docs/foundation-bcap-core-review/returns/BCAP-O2-Core.response.json",
+      "sha256": "68833ceb38c024045197169d049ac03cc3d9caad23106140eac19852e1606017"
+    },
+    "inputs/core/BCAP-O4-Core.response.json": {
+      "origin": "docs/foundation-bcap-core-review/returns/BCAP-O4-Core.response.json",
+      "sha256": "b6ea838ca81537b2c586089d4ddc7abbc4acdd7f853d06b81cee045d935a0f42"
+    },
+    "inputs/core/native-facts-0.json": {
+      "origin": "docs/foundation-schema-reconciliation/evidence/native-facts-0.json",
+      "sha256": "9a457c5ff1d1456cc4db17cff5cfafca0ffd36082de51300c31ab2245338efcd"
+    },
+    "inputs/core/native-facts-1.json": {
+      "origin": "docs/foundation-schema-reconciliation/evidence/native-facts-1.json",
+      "sha256": "9a457c5ff1d1456cc4db17cff5cfafca0ffd36082de51300c31ab2245338efcd"
+    },
+    "inputs/prior-returns/BCAP-O1-Schema.json": {
+      "origin": "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O1-Schema.response.json",
+      "sha256": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf"
+    },
+    "inputs/prior-returns/BCAP-O2-Schema.json": {
+      "origin": "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O2-Schema.response.json",
+      "sha256": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a"
+    },
+    "inputs/core/RECONCILIATION.md.txt": {
+      "origin": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
+      "sha256": "065e13f5a4cee69445af1badb841b04172477d54197ecec757654d50f563d1b1"
+    },
+    "inputs/core/SPEC-BASIS.md.txt": {
+      "origin": "docs/foundation-schema-reconciliation/SPEC-BASIS.md",
+      "sha256": "c5710f1b5529b4a0e6bb048087a6e462fc30b0e27797a1734f26794324634758"
+    },
+    "inputs/core/DECISIONS.md.txt": {
+      "origin": "docs/foundation-r2-ledger/DECISIONS.md",
+      "sha256": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c"
+    },
+    "inputs/core/REQUIREMENTS.md.txt": {
+      "origin": "docs/foundation-r2-ledger/REQUIREMENTS.md",
+      "sha256": "d8123fc1de38e2cc058d270c06ae9015c23ac40cb63a37d49f8387aa55cdc041"
+    }
+  },
+  "readOnlyEvidence": true,
+  "responseCreatedOnBehalfOfSchema": false
+}

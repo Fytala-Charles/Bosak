@@ -7,6 +7,9 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 
 Current ecosystem (2 November): [four-project status](../foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
 
+
+Schema decision handoff: [three precise questions and localized source evidence](../schema-precise-disposition/REQUEST.md) are available inside Schema's workspace. Updated owner dispositions remain pending; all current counts and gates are unchanged.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

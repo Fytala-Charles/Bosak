@@ -1,0 +1,105 @@
+{
+  "passed": true,
+  "checks": 14,
+  "rows": [
+    {
+      "id": "native-supported-profile",
+      "passed": true
+    },
+    {
+      "id": "root-no-typed-value",
+      "passed": true
+    },
+    {
+      "id": "decimal-leaf-actual-value",
+      "passed": true
+    },
+    {
+      "id": "copy-original-owner-components",
+      "passed": true
+    },
+    {
+      "id": "copy-assessment-label-preserved-snapshot-distinct",
+      "passed": true
+    },
+    {
+      "id": "preserved-owner-state-reference",
+      "passed": true
+    },
+    {
+      "id": "copy-export-owner-distinct-label-not-authority",
+      "passed": true
+    },
+    {
+      "id": "legacy-carrier-is-not-node-membership-proof",
+      "passed": true
+    },
+    {
+      "id": "stripped-export-no-carrier",
+      "passed": true
+    },
+    {
+      "id": "edited-export-carrier-refuses-stale",
+      "passed": true
+    },
+    {
+      "id": "caller-edit-does-not-mutate-owned-assessment",
+      "passed": true
+    },
+    {
+      "id": "independent-components-not-digest-authority",
+      "passed": true
+    },
+    {
+      "id": "native-pre-cancellation-throws",
+      "passed": true
+    },
+    {
+      "id": "invalid-no-assessed-document",
+      "passed": true
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.Schema",
+      "version": "1.0.0.0",
+      "sha256": "411422f9005123ef18082081350df2a1342e6d667ad7435d4d529924b536558e"
+    },
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.34.2.0",
+      "sha256": "adb4f2b74df02975462f20c0896aa1f877d362cbd6fe00203fc08661e3794fc1"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.34.2.0",
+      "sha256": "41d39d1340fc495299f4f4adc62a9e7ab29f0617ab311238f92612c4bfdf72a4"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.34.2.0",
+      "sha256": "615c874dde4a240c4ca9d23cdc82a0e2693a9940b14a1bf193302d5903e65486"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.34.2.0",
+      "sha256": "bdc43090a6361db7d44e81dc90bb063956d02ec0ee3166f27d62274ffef126c0"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.34.2.0",
+      "sha256": "b0df93101264284d12df1d79ea08a35f2346e8a5e81c40d7681205f936ae95ca"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.34.2.0",
+      "sha256": "e635e1139367aa227b2d4fcc929bd3ff8af51857412037691e66706d5ec8f945"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.34.2.0",
+      "sha256": "cd932a32786831fb658429bbe6195afe22d1671f41eaa0c6e3da651378f5442b"
+    }
+  ],
+  "scope": "Fresh pinned native source under observed historical Core dependencies, not BCAP adapter/runtime qualification"
+}

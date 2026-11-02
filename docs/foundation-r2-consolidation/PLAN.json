@@ -96,7 +96,9 @@
       "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
       "evidence": "docs/foundation-schema-response-review/README.md",
       "remaining": "Schema retains Revise; now disposition the source-mapped private adapter feasibility and explicit finite/no-default policy, or identify precise required Core change.",
-      "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md"
+      "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
+      "localizedDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
+      "ownerAnswerPending": true
     },
     {
       "id": "P06",

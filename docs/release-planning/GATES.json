@@ -103,7 +103,9 @@
       "xmlDbFixScope": "Qualified current-pin provider only; new-Core/BCAP/XSLT R4 remains pending",
       "resolvedScopedProviderRequests": [
         "XDB-LIFE-01"
-      ]
+      ],
+      "schemaPreciseDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
+      "schemaDecisionRequestDelivery": "Local self-contained source/evidence inbox; no owner acknowledgement or amended disposition inferred"
     },
     {
       "id": "R3",

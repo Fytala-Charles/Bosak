@@ -11,6 +11,9 @@ The [release plan and checklist](docs/release-planning/README.md) is the single 
 
 Current ecosystem (2 November): [four-project status](docs/foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
 
+
+Schema decision handoff: [three precise questions and localized source evidence](docs/schema-precise-disposition/REQUEST.md) are available inside Schema's workspace. Updated owner dispositions remain pending; all current counts and gates are unchanged.
+
 ## Publication path
 
 | Gate | Status | Required outcome |
