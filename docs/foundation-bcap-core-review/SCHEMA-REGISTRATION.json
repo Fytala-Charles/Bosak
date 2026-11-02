@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02",
+  "files": [
+    {
+      "project": "D:\\Development\\Bosak.Schema.Public",
+      "file": "docs/FEATURE_REQUESTS.md",
+      "beforeSha256": "0a7dfd7cb96ea65948f8881a6308eac16cbf552958ebe72932946f79a7a528e1",
+      "afterSha256": "bcfed63560c32b2acdb2c792259a3baf1e30433aa32680356617a8b1fc7987b0",
+      "ownerCommitPush": false
+    },
+    {
+      "project": "D:\\Development\\Bosak.Schema.Public",
+      "file": "docs/INTEGRATION.md",
+      "beforeSha256": "926b67efcb32693da79b4e5bda66a20b53233444f8b68463db295ed81d572564",
+      "afterSha256": "e8ed3041f55a151a5ae49bddfdeb20f9e3d7c571743e094d7890e61fad771221",
+      "ownerCommitPush": false
+    }
+  ],
+  "scope": "Local follow-up registration only; Schema decisions remain Revise",
+  "messagesSent": false
+}

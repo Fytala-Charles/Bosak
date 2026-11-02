@@ -9,7 +9,7 @@ Updated 1 November 2026. Source is **1.42.0**; the next publication version/date
 The [release plan and checklist](docs/release-planning/README.md) is the single planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance.
 
 
-Current revised-draft status (2 November): [Schema O1/O2 reviewed](docs/foundation-schema-response-review/README.md), both Revise. All five external role forms are submitted: two scoped accepts/three revisions; only Core O2/O4 remain unsubmitted. Next Core records its own reviews and clarifies existing explicit-limit policy; Schema source/profile and XmlDb native lifetime revisions remain open. R2/freeze/publication stay pending.
+Current revised-draft status (2 November): [Core O2/O4 completed](docs/foundation-bcap-core-review/README.md); all seven forms submitted, four scoped accepts/three revisions. Reconcile Schema O1/O2 with the focused source/policy follow-up and XmlDb O4 native lifetime revision before R2 closes. Accepted public implementation, native budgets, freeze and publication remain pending.
 
 ## Publication path
 
@@ -17,7 +17,7 @@ Current revised-draft status (2 November): [Schema O1/O2 reviewed](docs/foundati
 |---|---|---|
 | R0 Internal engine foundation | Qualified within bounded private profile | Preserve the existing implementation and regression/conformance baseline. |
 | R1 Owner capability mapping | Audited, not owner accepted | Exact source pins and explicit Schema/XmlDb/Braid contract gaps. |
-| R2 Final public contract disposition | In review | Revised draft: 5/7 submitted; two scoped accepts/three Revise; only Core O2/O4 missing. |
+| R2 Final public contract disposition | In review | Revised draft: 7/7 submitted; four scoped accepts/three Revise; no missing forms. |
 | R3 Public implementation | Pending R2 | Implement and document accepted contracts with API/ABI and semantic/lifetime tests. |
 | R4 Actual consumer/performance qualification | Pending candidate; preparation parallel | Same immutable candidate for Schema, XmlDb and Braid; source/unchanged binaries, owner resources and agreed workload budgets. |
 | R5 C45 acceptance/API freeze | Pending R4 | Explicit Core/Schema/XmlDb/Braid acceptance of the exact manifest/profile. |
@@ -26,7 +26,7 @@ Current revised-draft status (2 November): [Schema O1/O2 reviewed](docs/foundati
 
 ## Immediate Core task
 
-Use the [current response review](docs/foundation-bcap-response-review/README.md) and [dependency plan](docs/foundation-r2-consolidation/PLAN.json). **Core next: its exact-manifest O2 carry-forward and O4 capture/outcome review.** Braid accepts the bounded capture design; public implementation remains pending. In parallel, Schema resolves its O1/O2 source/profile/policy revisions and XmlDb resolves native cleanup/fault/profile work. No additional required Core signature is demonstrated by the revised Braid/XmlDb returns. Resolve all known needs and exact dispositions before R2/public implementation/freeze. Full XSD 1.1 backend completion remains separate from representing foundation needs.
+Use the [current response review](docs/foundation-bcap-response-review/README.md) and [dependency plan](docs/foundation-r2-consolidation/PLAN.json). **Core next: reconcile the three remaining scoped revisions with their owners.** Braid accepts the bounded capture design; public implementation remains pending. In parallel, Schema resolves its O1/O2 source/profile/policy revisions and XmlDb resolves native cleanup/fault/profile work. No additional required Core signature is demonstrated by the revised Braid/XmlDb returns. Resolve all known needs and exact dispositions before R2/public implementation/freeze. Full XSD 1.1 backend completion remains separate from representing foundation needs.
 
 The [capability audit](docs/release-planning/OWNER-CAPABILITIES.md) identifies actual source paths and remaining owner evidence, including XmlDb acquisition cleanup/failure preservation. Core owns contract selection and implementation; external implementation remains delegated. Do not add more synthetic lifecycle experiments unless they resolve a named decision.
 

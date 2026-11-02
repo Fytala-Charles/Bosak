@@ -1,0 +1,18 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  ".gitignore": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+  "evidence/DOCUMENTATION-CHECKS.json": "7f88bff970099994594e66cbccda82940f9f2c0b51c0acbf057232409fb441a5",
+  "inputs/BCAP-O1-Schema.json": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+  "inputs/BCAP-O1-XmlDb.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+  "inputs/BCAP-O2-Schema.json": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+  "inputs/BCAP-O3-Braid.json": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+  "inputs/BCAP-O4-XmlDb.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "README.md": "d0803df4e0b597faada8e32c867db83cfa5989e2d07eac1aa6ebb7bc913e4526",
+  "returns/BCAP-O2-Core.response.json": "68833ceb38c024045197169d049ac03cc3d9caad23106140eac19852e1606017",
+  "returns/BCAP-O4-Core.response.json": "b6ea838ca81537b2c586089d4ddc7abbc4acdd7f853d06b81cee045d935a0f42",
+  "SCHEMA-FOLLOWUP.md": "45b84cd6aa7e7c0b63a7092b5961368f62553718aa200e9a4152e642292e205b",
+  "SCHEMA-REGISTRATION.json": "461ffef3f67b27156235aac0a6c322f27ebb7ba7646d7d3c29c318bad3cb32db",
+  "STATUS.json": "b845f50b010e5f291c7e5ddfdf3ec0a8a31c5aca73ba31338fe194fba08e560e",
+  "tools/prepare.py": "2bc90200598365e581193dff3fb42d73a76559eb7ffa11566e3f332e51bbd20a",
+  "tools/verify.py": "39d7f2cd43a5a39a0a93fa8bc637ca6267e947935835956a4a3601ebdf56d092"
+}

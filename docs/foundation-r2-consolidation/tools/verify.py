@@ -18,7 +18,7 @@ assert sha(P/'inputs/Schema-alignment-comment.json')==i['schemaCommentSha256'] a
 comment=json.loads((P/'inputs/Schema-alignment-comment.json').read_text());assert comment['id']==6563123351 and 'proposed work/acceptance checklist' in comment['body'] and 'not a claim' in comment['body']
 seen=set()
 for task in plan['tasks']:assert set(task['dependsOn'])<=seen and task['exitEvidence'];seen.add(task['id'])
-assert len(seen)==10 and plan['nextCoreTask']=='P04' and {x['id'] for x in plan['openItems']}=={'BCAP-01','XDB-LIFE-01'}
+assert len(seen)==10 and plan['nextCoreTask']=='P08' and {x['id'] for x in plan['openItems']}=={'BCAP-01','XDB-LIFE-01'}
 assert next(t for t in plan['tasks'] if t['id']=='P03')['status']=='CompleteBoundedCoreFeasibility'
 assert next(t for t in plan['tasks'] if t['id']=='P02')['status']=='CompleteIsolatedDeclaration'
 assert len(cases['cases'])==18 and len({x['id'] for x in cases['cases']})==18 and all(x['status']=='NotRun' for x in cases['cases'])
@@ -35,4 +35,4 @@ for value in engines.values():assert sha(Path(value['path']))==value['sha256']
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha(P/name)==digest,name
-print('Verified five returns (three scoped accepts/two revisions), two missing Schema returns, pinned XmlDb evidence and ten tasks; original 18-case planning matrix retained, later capture execution is recorded separately; production unchanged.')
+print('Verified historical 45-type snapshot (five returns, three scoped accepts/two revisions, two then-missing Schema returns), pinned evidence and current ten-task dependencies. Revised-draft dispositions are recorded separately; production unchanged.')

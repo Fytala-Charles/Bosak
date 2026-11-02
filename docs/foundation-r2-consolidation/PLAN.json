@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextCoreTask": "P04",
+  "nextCoreTask": "P08",
   "parallelOwnerTasks": [
     "P05",
     "P06",
@@ -80,7 +80,7 @@
       "title": "Review BCAP-01 resolution",
       "work": "Review route evidence or exact declaration change and confirm required preview capture is represented.",
       "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets.",
-      "coreCoordinationNext": "Record revised Core O2/O4 returns; keep Schema O1/O2 and XmlDb provider revision pending.",
+      "coreCoordinationNext": "Core O2/O4 scoped reviews complete; reconcile Schema O1/O2 and XmlDb O4 revisions without assuming external acceptance.",
       "evidence": "docs/foundation-bcap-response-review/README.md"
     },
     {
@@ -93,7 +93,8 @@
       "work": "Use the eight checklist work items and actual pinned provider facts; answer every Q with supported/refused scope and precise gaps.",
       "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
       "evidence": "docs/foundation-schema-response-review/README.md",
-      "remaining": "Schema owner reviews available c3624998 native source and pinpoints source/profile/policy design blockers; no extra required Core signature declared."
+      "remaining": "Schema owner reviews available c3624998 native source and pinpoints source/profile/policy design blockers; no extra required Core signature declared.",
+      "coreFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md"
     },
     {
       "id": "P06",

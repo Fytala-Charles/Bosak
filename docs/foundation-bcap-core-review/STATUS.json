@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "submitted": 7,
+  "required": 7,
+  "scopedDesignAccepts": 4,
+  "revise": 3,
+  "missing": [],
+  "coreO2": "AcceptWithScope",
+  "coreO4": "AcceptWithScope",
+  "openRevisions": [
+    "BCAP-O1-Schema",
+    "BCAP-O2-Schema",
+    "BCAP-O4-XmlDb"
+  ],
+  "r2Closed": false,
+  "apiFrozen": false,
+  "nativeConsumersQualified": false,
+  "productionChanged": false,
+  "scope": "Core-scoped design dispositions; no external decision or human authentication inferred"
+}

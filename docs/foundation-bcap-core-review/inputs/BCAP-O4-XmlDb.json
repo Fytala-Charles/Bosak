@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O4-XmlDb",
+  "packet": "BCAP-O4",
+  "owner": "XmlDb",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "Revise",
+  "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+  "signer": "Codex - XmlDb exact-manifest source/design review requested by repository owner; not a human acceptance signature",
+  "date": "2026-11-02",
+  "profile": "Codex-authored XmlDb source/design review only. Committed base 99c8636e2f718a1804ac717c217e2158f5f70b26; separate local/uncommitted internal membership work is pinned in XmlDb docs/foundation-requirements/membership/results.json. Product Core remains 1.26.2. No actual BCAP public SDK, native capture, R4, human acceptance, performance budget or product adoption is claimed.",
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": "BeginRead/OpenPinnedSnapshot acquires the actual GenerationLease and attaches it to ImmutableXmlSnapshot; coordinator disposal is not independent snapshot disposal. Internal OpenAdmittedEpoch attaches child admission plus optional generation via EpochSnapshotLifetime. BCAP RunCaptureTransform must retain this actual borrowed ownership through raw serialization and all cleanup attempts, with one admission per unique snapshot across shared/distinct roles. Enter/rejected-admission rollback cannot transfer store/coordinator ownership or create per-node leases. Core synthetic releases exercise Core paths, not these native handles. Current source mapping and prior O4-Q1 SHA-256 7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243 remain applicable."
+    },
+    {
+      "id": "O4-Q2",
+      "answer": "XDB-LIFE-01 remains Revise, with no fix pin or actual failure-injection evidence. OpenPinnedSnapshot still disposes the lease before latching _faulted/rethrow: cleanup can mask the acquisition error and skip the latch. OpenAdmittedEpoch catch and EpochSnapshotLifetime.Dispose still use nested try/finally that can replace original/generation errors with admission cleanup errors. Snapshot.Dispose still clears the stored lease before its release call; a throw is not confirmed release or permission to retry. BCAP original-error channels can preserve exceptions delivered to Core, but cannot recover already masked provider failures. Require actual owner-controlled before/after-release faults, original object plus all cleanup failures in reverse order, fault latching and uncertainty retention. Local membership or Core synthetic outcomes do not close this issue."
+    },
+    {
+      "id": "O4-Q3",
+      "answer": "Target only sequential per-snapshot access; refuse same-owner overlap/reentry and serialize actual disposal after admitted raw work/deferred consumption/serialization ends. Current snapshot caches and documented unsupported concurrent disposal remain unchanged. Cancellation is cooperative; canceled waits cannot end raw work or release snapshots. The observed local Task.Run membership/value handoff is not qualified BCAP/XSLT dedicated-worker use. Cached public sequence Current, constants/identity helpers, nested maps/arrays and materialization are not universal availability guards or recursive detachment; copied scalar strings can be independent, borrowed node graphs cannot escape as live authority. Original exception graphs are an additional local borrowed/sensitive diagnostic channel, not a reason to traverse revoked provider objects. No new node/enumerator Dispose is required."
+    },
+    {
+      "id": "O4-Q4",
+      "answer": "The exact new manifest and declared admission/work/execution/cleanup channels appear sufficient for this finite design profile; no additional required Core signature is demonstrated. O4 nevertheless remains Revise for provider implementation/failure-profile evidence, not an empty accepted obligation list. Source base is 99c8636e2f718a1804ac717c217e2158f5f70b26 with separately hash-pinned uncommitted membership work and unchanged native cleanup paths; product pin 1.26.2 is not upgraded. Before R4: qualify actual lease rollback and before/after native release uncertainty, error identity/order and fault latching, rejection before getters, duplicate/same-session inputs, close during raw serialization, canceled wait, reentry/concurrent-close refusal, dedicated worker sequential handoff and currentness/kill/recovery on the agreed actual candidate. Public declarations throw, Core measurements establish no native budgets, and no R4/C45/API freeze/publication is accepted."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "Exact BCAP manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688; REVIEW.md R01-R08; inputs/proposal/Xslt.cs.txt and original role response 7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243. No proposed public body executed."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb 99c8636e2f718a1804ac717c217e2158f5f70b26: src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs OpenPinnedSnapshot; ImmutableXmlSnapshot.cs OpenAdmittedEpoch/EpochSnapshotLifetime/Dispose. Current working hashes and normalized committed equality recorded in docs/foundation-requirements/bcap-owner-review/INPUTS.json."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Separate uncommitted membership evidence: docs/foundation-requirements/membership/results.json and README.md, PersistentXdmNode.OwnsNode/PersistentMembershipTests. 20 added/4292 current-pin cases per platform retain original scope; not native BCAP capture or public SDK qualification."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Hash-bound Core foundation-bcap-outcomes/profile/cost dossiers: private synthetic-provider Core feasibility only; original-error graphs local; no native/worker/budget acceptance."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O4-XmlDb",
+  "reviewMode": "DeltaAndExistingProviderRevision",
+  "deltaApplicability": "R01: the declared owning and borrowing entries represent raw lifetime through capture/serialization and cleanup attempts in principle, not a running public/native SDK. R02: produced captures/receipts can survive cleanup failure as diagnostics; IsSuccess must remain false on admission/work/execution/cleanup error or partial/cancelled capture. Copy mutable backing output bytes/properties under an explicit owner policy before export; never call the capture deeply immutable by inference. R03: separate original AdmissionError/WorkError/ExecutionErrors/ordered CleanupErrors and retain provider aggregate boundaries; cleanup attempt completion is not proven native release and must not trigger blind retry. R04: honor sole invocation selection, duplicate-option/RawResult refusal, finite output/time/operation bounds and only qualified sequential borrowed-gate composition; reject arbitrary resource-policy replacement. Message count is not message-byte/whole-memory quota. No actual XmlDb capture workload establishes an extra Core limit now. R05: reject foreign/closed operations and unadmitted match/global/context roles before node getters; hold each actual unique snapshot through raw serialization even when an await is canceled. R06: original graphs are local references, not safe detached IPC; see the explicit projection/refusal policy. R07: native acquisition/release, same-owner no-overlap/no-reentry, dedicated XSLT worker handoff, kill/recovery/currentness and workload budgets are unqualified; the local joined membership handoff and Core synthetic/cost controls do not prove them. R08: native XDB-LIFE-01 remains Revise; no new required Core signature is demonstrated, no old acceptance automatically transfers and no R4/C45/freeze/pin change follows.",
+  "originalExceptionGraphDisposition": "R03/R06: original exceptions are local diagnostic references only. Preserve original object identity, reference-deduplicated execution observations, provider AggregateException boundaries and reverse-acquisition cleanup order; admission/rollback belongs in AdmissionError rather than later CleanupErrors. These channels cannot reconstruct a failure already masked inside XmlDb. Exception/Data/InnerException graphs may retain live provider nodes, paths or sensitive state; retention is not detachment, immutable data or renewed authority. Do not serialize/publish the raw exception or run-result graph, blindly call arbitrary exception getters/ToString, or traverse Data/inner provider objects after revocation. Any future export needs owner-controlled bounded allowlisted primitive projection/redaction while required resources remain valid; default to withholding unknown payloads and sensitive paths/URIs. No generic recursive sanitizer, safe-IPC guarantee, automatic release retry or native cleanup success is inferred. No additional Core signature for this local-only diagnostic profile is demonstrated.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+  "unresolvedProviderQualificationItems": [
+    "XDB-LIFE-01 original acquisition plus every cleanup failure and coordinator fault latching",
+    "Actual before/after native reader/generation/admission release uncertainty without retry",
+    "Actual BCAP/candidate adapter, dedicated worker sequential handoff and finite cancellation/reentry/concurrent-close profile"
+  ]
+}

@@ -34,15 +34,15 @@
       ],
       "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions.",
       "coreLedger": "docs/foundation-r2-ledger/LEDGER.json",
-      "coreDecisionStatus": "RevisedCoreReturnsPending",
+      "coreDecisionStatus": "ScopedDesignAcceptedOnExactRevisedDraft",
       "ownerReviewPacket": "docs/foundation-bcap-owner-review/PACKETS.json",
       "ownerReviewPacketPrepared": true,
       "ownerDeliveryConfirmed": false,
       "requiredRoleReturns": 7,
-      "recordedAcceptedReturns": 2,
-      "recordedReturnScope": "Current 47-type: two scoped design accepts, three Revise; no native/human/freeze acceptance",
+      "recordedAcceptedReturns": 4,
+      "recordedReturnScope": "Current 47-type: four scoped agent-authored design accepts, three Revise; no native/human/freeze acceptance",
       "externalRoleReturnsPending": 0,
-      "recordedSubmittedRoleReturns": 5,
+      "recordedSubmittedRoleReturns": 7,
       "externalRoleReturnsPendingIds": [],
       "braidDecision": "AcceptWithScope",
       "openRevisionRequests": [
@@ -52,14 +52,14 @@
       ],
       "schemaRegistrationConfirmed": true,
       "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
-      "latestResponseReview": "docs/foundation-schema-response-review/STATUS.json",
+      "latestResponseReview": "docs/foundation-bcap-core-review/STATUS.json",
       "externalRoleReturnsPendingScope": "All five external role forms submitted; three require revision. Only Core O2/O4 are unsubmitted.",
       "xmlDbO1Decision": "AcceptWithScope",
       "xmlDbO4Decision": "Revise",
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "Complete BCAP-O2-Core/O4-Core; clarify explicit finite/no-default policy and distinguish owner R2 source/profile blockers from R3/R4 implementation qualification",
+      "nextCoreTask": "P08 reconciliation: resolve exact Schema API/policy/source feasibility and XmlDb native lifetime revisions; R3 implementation stays gated",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -69,17 +69,14 @@
       "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility",
       "revisedCaptureReview": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
       "revisedCaptureReviewSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
-      "revisedRoleReturnsSubmitted": 5,
+      "revisedRoleReturnsSubmitted": 7,
       "resolvedBoundedDesignRequests": [
         "BCAP-01"
       ],
       "legacyReviewCountsHistorical": true,
-      "revisedRoleReturnsScopedAccepts": 2,
+      "revisedRoleReturnsScopedAccepts": 4,
       "revisedRoleReturnsRevise": 3,
-      "revisedRoleReturnsPending": [
-        "BCAP-O2-Core",
-        "BCAP-O4-Core"
-      ],
+      "revisedRoleReturnsPending": [],
       "legacy45TypeReview": {
         "recordedAcceptedReturns": 3,
         "recordedSubmittedRoleReturns": 5,
@@ -95,7 +92,9 @@
       },
       "schemaO1Decision": "Revise",
       "schemaO2Decision": "Revise",
-      "schemaSubmissionEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6573672774"
+      "schemaSubmissionEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6573672774",
+      "coreDesignReturnPacket": "docs/foundation-bcap-core-review/STATUS.json",
+      "schemaFocusedFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md"
     },
     {
       "id": "R3",
