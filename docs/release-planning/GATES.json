@@ -62,12 +62,14 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P03: bounded cold/workload allocation and cancellation-latency evidence, then exact revised contract review; native owner qualification separate",
+      "nextCoreTask": "P04 coordination: exact revised capture/outcome review inputs for Braid; other owner returns/revisions parallel",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
       "captureOutcomeCandidate": "docs/foundation-bcap-outcomes/evidence/STATUS.json",
-      "captureProfileQualification": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json"
+      "captureProfileQualification": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+      "captureCostEvidence": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility"
     },
     {
       "id": "R3",

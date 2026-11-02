@@ -1,0 +1,336 @@
+{
+  "passed": true,
+  "data": {
+    "profile": "cancellation",
+    "rows": [
+      {
+        "channel": "capture",
+        "repetition": 0,
+        "requestToRawOutcomeMilliseconds": 2.9514,
+        "requestToLastReleaseMilliseconds": 2.7804,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 1,
+        "requestToRawOutcomeMilliseconds": 0.2664,
+        "requestToLastReleaseMilliseconds": 0.2638,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 2,
+        "requestToRawOutcomeMilliseconds": 0.2461,
+        "requestToLastReleaseMilliseconds": 0.2437,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 3,
+        "requestToRawOutcomeMilliseconds": 0.1627,
+        "requestToLastReleaseMilliseconds": 0.1616,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 4,
+        "requestToRawOutcomeMilliseconds": 0.249,
+        "requestToLastReleaseMilliseconds": 0.247,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 5,
+        "requestToRawOutcomeMilliseconds": 0.1993,
+        "requestToLastReleaseMilliseconds": 0.1979,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 6,
+        "requestToRawOutcomeMilliseconds": 0.1903,
+        "requestToLastReleaseMilliseconds": 0.1881,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 7,
+        "requestToRawOutcomeMilliseconds": 0.163,
+        "requestToLastReleaseMilliseconds": 0.1621,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 8,
+        "requestToRawOutcomeMilliseconds": 0.1519,
+        "requestToLastReleaseMilliseconds": 0.1513,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 9,
+        "requestToRawOutcomeMilliseconds": 0.1834,
+        "requestToLastReleaseMilliseconds": 0.1809,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 10,
+        "requestToRawOutcomeMilliseconds": 0.2205,
+        "requestToLastReleaseMilliseconds": 0.2181,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "capture",
+        "repetition": 11,
+        "requestToRawOutcomeMilliseconds": 0.1696,
+        "requestToLastReleaseMilliseconds": 0.1688,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 0,
+        "requestToRawOutcomeMilliseconds": 0.1848,
+        "requestToLastReleaseMilliseconds": 0.1831,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 1,
+        "requestToRawOutcomeMilliseconds": 0.1746,
+        "requestToLastReleaseMilliseconds": 0.174,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 2,
+        "requestToRawOutcomeMilliseconds": 0.2474,
+        "requestToLastReleaseMilliseconds": 0.2465,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 3,
+        "requestToRawOutcomeMilliseconds": 0.1812,
+        "requestToLastReleaseMilliseconds": 0.1804,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 4,
+        "requestToRawOutcomeMilliseconds": 0.1891,
+        "requestToLastReleaseMilliseconds": 0.1879,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 5,
+        "requestToRawOutcomeMilliseconds": 0.1679,
+        "requestToLastReleaseMilliseconds": 0.1671,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 6,
+        "requestToRawOutcomeMilliseconds": 0.1879,
+        "requestToLastReleaseMilliseconds": 0.1862,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 7,
+        "requestToRawOutcomeMilliseconds": 0.1671,
+        "requestToLastReleaseMilliseconds": 0.1659,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 8,
+        "requestToRawOutcomeMilliseconds": 0.2089,
+        "requestToLastReleaseMilliseconds": 0.2068,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 9,
+        "requestToRawOutcomeMilliseconds": 0.2168,
+        "requestToLastReleaseMilliseconds": 0.215,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 10,
+        "requestToRawOutcomeMilliseconds": 0.4384,
+        "requestToLastReleaseMilliseconds": 0.436,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "operation",
+        "repetition": 11,
+        "requestToRawOutcomeMilliseconds": 0.1887,
+        "requestToLastReleaseMilliseconds": 0.1878,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 0,
+        "requestToRawOutcomeMilliseconds": 0.1969,
+        "requestToLastReleaseMilliseconds": 0.195,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 1,
+        "requestToRawOutcomeMilliseconds": 0.1967,
+        "requestToLastReleaseMilliseconds": 0.1948,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 2,
+        "requestToRawOutcomeMilliseconds": 0.1838,
+        "requestToLastReleaseMilliseconds": 0.1817,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 3,
+        "requestToRawOutcomeMilliseconds": 0.1954,
+        "requestToLastReleaseMilliseconds": 0.1937,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 4,
+        "requestToRawOutcomeMilliseconds": 0.1817,
+        "requestToLastReleaseMilliseconds": 0.1801,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 5,
+        "requestToRawOutcomeMilliseconds": 0.1923,
+        "requestToLastReleaseMilliseconds": 0.1908,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 6,
+        "requestToRawOutcomeMilliseconds": 0.1676,
+        "requestToLastReleaseMilliseconds": 0.1655,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 7,
+        "requestToRawOutcomeMilliseconds": 0.203,
+        "requestToLastReleaseMilliseconds": 0.2012,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 8,
+        "requestToRawOutcomeMilliseconds": 0.1891,
+        "requestToLastReleaseMilliseconds": 0.1876,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 9,
+        "requestToRawOutcomeMilliseconds": 0.1818,
+        "requestToLastReleaseMilliseconds": 0.1805,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 10,
+        "requestToRawOutcomeMilliseconds": 0.194,
+        "requestToLastReleaseMilliseconds": 0.1923,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      },
+      {
+        "channel": "inherited",
+        "repetition": 11,
+        "requestToRawOutcomeMilliseconds": 0.2988,
+        "requestToLastReleaseMilliseconds": 0.2955,
+        "releaseBeforeOutcome": true,
+        "completedSecondaryBytes": 5
+      }
+    ],
+    "scope": "Request during a controlled pause inside actual second-output serialization; includes cancellation, serializer unpause/unwind, two synthetic admission releases and caller scheduling; not a bound for expressions between checkpoints, native cleanup or process termination"
+  },
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "cf3b312a6e259d021bef065245d2be68fb8c8460f90fa8dc00827f9c2b54b6c3"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "fdbb3a22a572372fbda3aa1f4ffc59df90527b3a3bbbd8f7e41d3bac902c12fe"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "39b911e9a699de9f2e6a029ef1455d72094fe988493311ced64d8708381597d9"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "160b7f515a7380b1a8c4b5f66b1a8313958e929bbe5d7657ba338064c68bc462"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "02d55b1347ef22eff9707df71cca04f5e23d623998f8ce60d5a51c6f6d0f6395"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "337dd4ed48d9b3192211cf495cbe1cf9fe570325146cf31293346f8879c352a1"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "23178b52f5c8d02bd10d7fc2d7e9401df9d367feb75d911fdb5d501e6e4de3cc"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "32472e850430d70f8f9043f73ad058905b0205d7a8111d623bded3188845bc04"
+    }
+  ],
+  "runtime": ".NET 10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "processorCount": 24,
+  "stopwatchFrequency": 10000000,
+  "serverGC": false
+}

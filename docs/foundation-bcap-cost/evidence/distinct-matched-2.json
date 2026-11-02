@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "data": {
+    "profile": "distinct-matched",
+    "members": 2,
+    "bytesPerCapture": 49155,
+    "compile": {
+      "milliseconds": 157.3483,
+      "managedAllocatedBytes": 2126824
+    },
+    "firstCapture": {
+      "milliseconds": 291.4993,
+      "managedAllocatedBytes": 1364088
+    },
+    "warmupCaptures": 20,
+    "warmCaptures": 80,
+    "warmManagedAllocatedBytes": 25868688,
+    "warmManagedBytesPerCapture": 323358.6,
+    "warmMilliseconds": [
+      0.8117,
+      0.6899,
+      0.7805,
+      2.3133,
+      0.7929,
+      0.6735,
+      0.7577,
+      0.668,
+      0.8132,
+      2.0736,
+      0.9781,
+      0.6746,
+      0.7679,
+      0.8321,
+      0.7005,
+      0.7403,
+      0.8034,
+      0.7273,
+      0.776,
+      0.7773,
+      0.7411,
+      0.7036,
+      0.6959,
+      0.7253,
+      0.7022,
+      1.563,
+      1.1237,
+      0.8193,
+      0.7529,
+      2.8365,
+      2.3229,
+      0.7749,
+      0.657,
+      0.7144,
+      0.695,
+      0.6826,
+      0.6532,
+      0.5511,
+      0.5474,
+      0.7118,
+      1.6287,
+      0.6135,
+      0.6536,
+      0.6436,
+      0.7387,
+      0.6226,
+      2.3491,
+      0.8348,
+      0.5852,
+      0.7218,
+      0.7657,
+      0.631,
+      0.565,
+      0.605,
+      0.7956,
+      0.5915,
+      0.6869,
+      0.6226,
+      0.5555,
+      0.6629,
+      0.5964,
+      0.5947,
+      0.5843,
+      0.6402,
+      0.7255,
+      0.6235,
+      2.0453,
+      0.8649,
+      0.6484,
+      0.5668,
+      0.5598,
+      0.8184,
+      0.67,
+      0.6219,
+      0.5907,
+      0.5241,
+      0.5539,
+      0.6904,
+      0.6294,
+      0.6447
+    ],
+    "providerReleases": 2,
+    "scope": "Compiler excludes host stylesheet preparation/process launch; capture uses preopened synthetic inputs and includes copied inputs, raw operation, dedicated worker, serialization, validation and receipt/error outcome; managed process-wide allocation excludes native/stack/peak retained memory"
+  },
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "cf3b312a6e259d021bef065245d2be68fb8c8460f90fa8dc00827f9c2b54b6c3"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "f3e6ab9339a77d251ae08a65cbe20008de6bde5c5712b84089959ed710a507d8"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "fdbb3a22a572372fbda3aa1f4ffc59df90527b3a3bbbd8f7e41d3bac902c12fe"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "39b911e9a699de9f2e6a029ef1455d72094fe988493311ced64d8708381597d9"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "160b7f515a7380b1a8c4b5f66b1a8313958e929bbe5d7657ba338064c68bc462"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "02d55b1347ef22eff9707df71cca04f5e23d623998f8ce60d5a51c6f6d0f6395"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "a4518cf849d5f7b43467ead76227e5ed4954a4e985bf614ada59fe87df91364d"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "23178b52f5c8d02bd10d7fc2d7e9401df9d367feb75d911fdb5d501e6e4de3cc"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "32472e850430d70f8f9043f73ad058905b0205d7a8111d623bded3188845bc04"
+    }
+  ],
+  "runtime": ".NET 10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "processorCount": 24,
+  "stopwatchFrequency": 10000000,
+  "serverGC": false
+}

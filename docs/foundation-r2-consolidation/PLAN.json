@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "nextCoreTask": "P03",
+  "nextCoreTask": "P04",
   "parallelOwnerTasks": [
     "P05",
     "P06",
@@ -55,7 +55,7 @@
     {
       "id": "P03",
       "owner": "Core",
-      "status": "InProgress",
+      "status": "CompleteBoundedCoreFeasibility",
       "dependsOn": [
         "P02"
       ],
@@ -63,8 +63,8 @@
       "title": "Qualify the named capture feasibility gap",
       "work": "Execute targeted isolated capture controls on the exact candidate; test outputs/messages/failures/receipts and leases, not another generic lifetime model.",
       "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit.",
-      "evidence": "docs/foundation-bcap-profile/evidence/STATUS.json",
-      "progress": "83 controls twice; full isolated solution build, 24,390 unit passes and exact frozen gates; shipping metadata/friends unchanged. Cold/workload cost and cancellation latency plus exact public/owner scope remain."
+      "evidence": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "progress": "83 controls/full isolated qualification plus 12 first-use, 960 warm and 108 controlled cancellation observations on unchanged DLLs. Complete only in bounded synthetic-provider profile; native/accepted budgets and public SDK remain separate."
     },
     {
       "id": "P04",
@@ -77,7 +77,8 @@
       "canPrepareBeforeR2Closure": true,
       "title": "Review BCAP-01 resolution",
       "work": "Review route evidence or exact declaration change and confirm required preview capture is represented.",
-      "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets."
+      "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets.",
+      "coreCoordinationNext": "Prepare exact revised declaration/candidate/profile/measurement review inputs; Braid owns its disposition."
     },
     {
       "id": "P05",
