@@ -63,8 +63,8 @@
       "title": "Qualify the named capture feasibility gap",
       "work": "Execute targeted isolated capture controls on the exact candidate; test outputs/messages/failures/receipts and leases, not another generic lifetime model.",
       "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit.",
-      "evidence": "docs/foundation-bcap-outcomes/evidence/STATUS.json",
-      "progress": "70 real-engine controls twice and 631 selected regressions; owned capture/drain tuple retains original exceptions and ordered cleanup errors; 47-type review declarations compile, exact public implementation/owner acceptance and profile/native/full qualification remain"
+      "evidence": "docs/foundation-bcap-profile/evidence/STATUS.json",
+      "progress": "83 controls twice; full isolated solution build, 24,390 unit passes and exact frozen gates; shipping metadata/friends unchanged. Cold/workload cost and cancellation latency plus exact public/owner scope remain."
     },
     {
       "id": "P04",
