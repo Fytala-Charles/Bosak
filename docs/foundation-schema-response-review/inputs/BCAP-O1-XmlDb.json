@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O1-XmlDb",
+  "packet": "BCAP-O1",
+  "owner": "XmlDb",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+  "signer": "Codex - XmlDb exact-manifest source/design review requested by repository owner; not a human acceptance signature",
+  "date": "2026-11-02",
+  "profile": "Codex-authored XmlDb source/design review only. Committed base 99c8636e2f718a1804ac717c217e2158f5f70b26; separate local/uncommitted internal membership work is pinned in XmlDb docs/foundation-requirements/membership/results.json. Product Core remains 1.26.2. No actual BCAP public SDK, native capture, R4, human acceptance, performance budget or product adoption is claimed.",
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": "Explicit carry-forward of prior O1-Q1, response SHA-256 59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a, source b09c7341: neutral OwnsNode must establish actual persistent-snapshot membership before foreign getters, without graph copying or labels-as-authority. The BCAP delta does not alter that accepted design scope. Supplement only: the separately uncommitted current-pin PersistentXdmNode.OwnsNode implementation checks a trusted live owner, sealed type, actual private snapshot reference and owned metadata ID. Its 20 local tests are not BCAP adapter/native capture qualification; see pinned working evidence."
+    },
+    {
+      "id": "O1-Q2",
+      "answer": "Explicit carry-forward of prior O1-Q2, same response SHA-256 59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a: ordinary XmlDb source membership does not issue Schema node facts, origins/components or preserved-copy PSVI. Matching labels/bytes in another snapshot do not authorize it. The new capture/output/error envelopes confer no such authority and change no untyped TypedValue/numeric policy."
+    },
+    {
+      "id": "O1-Q3",
+      "answer": "Explicit carry-forward of prior O1-Q3, same response SHA-256 59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a: assessor/advisor/originalAssessment remain absent for ordinary XML; do not fabricate schema typed containers. Snapshot-specific ReadTypedValue/issuer checks remain Schema obligations and are reasonedly not applicable to this unassessed profile. BCAP capture does not make them applicable or implement a Schema adapter."
+    },
+    {
+      "id": "O1-Q4",
+      "answer": "Explicit carry-forward of prior O1-Q4, same response SHA-256 59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a: the positive/foreign/copy/disposed/same-label/generation plan and exact-candidate follow-up remain the accepted design feasibility scope. New local internal membership evidence covers those listed provider cases and a joined sequential handoff on pinned 1.26.2 only; it does not qualify the new public throwing SDK, native capture, operation revocation/cleanup or dedicated XSLT worker. No additional required Core signature is identified; R4 and human authentication remain separate."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "Exact BCAP manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688; REVIEW.md R01-R08; inputs/proposal/Xslt.cs.txt and original role response 59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a. No proposed public body executed."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb 99c8636e2f718a1804ac717c217e2158f5f70b26: src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs OpenPinnedSnapshot; ImmutableXmlSnapshot.cs OpenAdmittedEpoch/EpochSnapshotLifetime/Dispose. Current working hashes and normalized committed equality recorded in docs/foundation-requirements/bcap-owner-review/INPUTS.json."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Separate uncommitted membership evidence: docs/foundation-requirements/membership/results.json and README.md, PersistentXdmNode.OwnsNode/PersistentMembershipTests. 20 added/4292 current-pin cases per platform retain original scope; not native BCAP capture or public SDK qualification."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Hash-bound Core foundation-bcap-outcomes/profile/cost dossiers: private synthetic-provider Core feasibility only; original-error graphs local; no native/worker/budget acceptance."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O1-XmlDb",
+  "reviewMode": "ExplicitUnchangedScopeCarryForward",
+  "deltaApplicability": "R01/R05/R08: the additive same-session operation-borrowing CaptureTransform and owning RunCaptureTransform do not change XmlDb ordinary source membership or authorize provider objects. Initial-match/global/shared/source-free roles still require the exact admitted set; serialization is inside raw completion. Optional assessor/advisor/origin stay absent for ordinary XmlDb. R02: capture buffers/properties are managed serialized data, not live node authority, but not certified deeply immutable; a future consumer must take its own safe copies of backing bytes and mutable output properties before publication. R03/R06: retain local original error identities and preserve uncertainty; see originalExceptionGraphDisposition. R04: invocation alone selects template/mode/output base, duplicate option context/selection fields refuse, RawResult capture refuses and explicit finite controls remain required. MaxMessages is count-only; tree/compiler/native/stack and individual-message memory are not bounded by those output controls. No current XmlDb capture workload demonstrates a missing Core limit/signature. R07: Core cost/cancellation observations are not XmlDb budgets or worker qualification. All changes apply only as a design extension to this explicitly ordinary profile; proposed public bodies still throw. Prior design scope is rebound explicitly to this manifest, not extended to actual BCAP/native integration.",
+  "originalExceptionGraphDisposition": "R03/R06: original exceptions are local diagnostic references only. Preserve original object identity, reference-deduplicated execution observations, provider AggregateException boundaries and reverse-acquisition cleanup order; admission/rollback belongs in AdmissionError rather than later CleanupErrors. These channels cannot reconstruct a failure already masked inside XmlDb. Exception/Data/InnerException graphs may retain live provider nodes, paths or sensitive state; retention is not detachment, immutable data or renewed authority. Do not serialize/publish the raw exception or run-result graph, blindly call arbitrary exception getters/ToString, or traverse Data/inner provider objects after revocation. Any future export needs owner-controlled bounded allowlisted primitive projection/redaction while required resources remain valid; default to withholding unknown payloads and sensitive paths/URIs. No generic recursive sanitizer, safe-IPC guarantee, automatic release retry or native cleanup success is inferred. No additional Core signature for this local-only diagnostic profile is demonstrated.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a"
+}

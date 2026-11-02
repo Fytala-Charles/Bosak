@@ -16,7 +16,7 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
 
-Current revised-draft status (2 November): [three owner responses reviewed](../foundation-bcap-response-review/README.md); Braid capture design and XmlDb ordinary-input scope accepted with scope, XmlDb native lifetime revision remains. Schema O1/O2 and revised Core O2/O4 are missing. Next Core records its own two scoped returns. BCAP-01 design is resolved; public implementation, R2/native/freeze/publication remain pending.
+Current revised-draft status (2 November): [Schema O1/O2 reviewed](../foundation-schema-response-review/README.md), both Revise. All five external role forms are submitted: two scoped accepts/three revisions; only Core O2/O4 remain unsubmitted. Next Core records its own reviews and clarifies existing explicit-limit policy; Schema source/profile and XmlDb native lifetime revisions remain open. R2/freeze/publication stay pending.
 
 ## What is already demonstrated
 
@@ -29,7 +29,7 @@ The [owner mapping](OWNER-CAPABILITIES.md) is completed as a read-only audit. No
 - [x] Core ledger covers all proposed type/member/requirement rows; the isolated review draft compiles. Core O2/O4 and XmlDb O1 have scoped design accepts, not runtime acceptance.
 - [x] [Consolidate five submitted returns and Schema checklist guidance](../foundation-r2-consolidation/README.md); independently verify XmlDb's newer b09c7341 source/evidence pins.
 - [x] **Core P03 complete within its bounded profile:** qualification and cost/cancellation observations are recorded.
-- [ ] **Core P04 coordination:** Braid scoped design acceptance recorded; Core O2/O4 revised returns, Schema full returns and XmlDb provider revision remain.
+- [ ] **Core P04 coordination:** Braid scoped design acceptance recorded; Core O2/O4 revised returns, Schema O1/O2 revisions and XmlDb provider revision remain.
 - [ ] **XmlDb P06/P07, parallel:** resolve actual cleanup/failure/profile revision XDB-LIFE-01 and implement/qualify provider-local membership. No additional required Core disposal signature has been demonstrated.
 - [ ] **Schema P05, parallel:** submit actual O1/O2 dispositions using the eight checklist work items, with actual methods/profile/gaps/evidence. The issue comment is guidance, not those responses.
 - [ ] **P08:** reconcile changed draft hashes and all owner dispositions, then close accepted R2 scope. R3 production implementation remains gated; W1–W7 and targeted follow-up controls are prepared, not completed.

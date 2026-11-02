@@ -34,34 +34,32 @@
       ],
       "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions.",
       "coreLedger": "docs/foundation-r2-ledger/LEDGER.json",
-      "coreDecisionStatus": "RecordedForOwnerReview",
-      "ownerReviewPacket": "docs/foundation-r2-owner-review/PACKETS.json",
+      "coreDecisionStatus": "RevisedCoreReturnsPending",
+      "ownerReviewPacket": "docs/foundation-bcap-owner-review/PACKETS.json",
       "ownerReviewPacketPrepared": true,
       "ownerDeliveryConfirmed": false,
       "requiredRoleReturns": 7,
-      "recordedAcceptedReturns": 3,
-      "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
-      "recordedReturnScope": "Three scoped agent-authored design accepts, two Revise returns; no runtime/C45 acceptance",
-      "externalRoleReturnsPending": 2,
+      "recordedAcceptedReturns": 2,
+      "recordedReturnScope": "Current 47-type: two scoped design accepts, three Revise; no native/human/freeze acceptance",
+      "externalRoleReturnsPending": 0,
       "recordedSubmittedRoleReturns": 5,
-      "externalRoleReturnsPendingIds": [
-        "O1-Schema",
-        "O2-Schema"
-      ],
+      "externalRoleReturnsPendingIds": [],
       "braidDecision": "AcceptWithScope",
       "openRevisionRequests": [
-        "XDB-LIFE-01"
+        "XDB-LIFE-01",
+        "BCAP-O1-Schema",
+        "BCAP-O2-Schema"
       ],
       "schemaRegistrationConfirmed": true,
       "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
-      "latestResponseReview": "docs/foundation-bcap-response-review/STATUS.json",
-      "externalRoleReturnsPendingScope": "Missing submissions only; received Revise returns are separate open work",
+      "latestResponseReview": "docs/foundation-schema-response-review/STATUS.json",
+      "externalRoleReturnsPendingScope": "All five external role forms submitted; three require revision. Only Core O2/O4 are unsubmitted.",
       "xmlDbO1Decision": "AcceptWithScope",
       "xmlDbO4Decision": "Revise",
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "Complete exact-manifest BCAP-O2-Core carry-forward and BCAP-O4-Core delta review; Schema full returns/XmlDb provider revision parallel",
+      "nextCoreTask": "Complete BCAP-O2-Core/O4-Core; clarify explicit finite/no-default policy and distinguish owner R2 source/profile blockers from R3/R4 implementation qualification",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -71,19 +69,33 @@
       "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility",
       "revisedCaptureReview": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
       "revisedCaptureReviewSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
-      "revisedRoleReturnsSubmitted": 3,
+      "revisedRoleReturnsSubmitted": 5,
       "resolvedBoundedDesignRequests": [
         "BCAP-01"
       ],
       "legacyReviewCountsHistorical": true,
       "revisedRoleReturnsScopedAccepts": 2,
-      "revisedRoleReturnsRevise": 1,
+      "revisedRoleReturnsRevise": 3,
       "revisedRoleReturnsPending": [
-        "BCAP-O1-Schema",
-        "BCAP-O2-Schema",
         "BCAP-O2-Core",
         "BCAP-O4-Core"
-      ]
+      ],
+      "legacy45TypeReview": {
+        "recordedAcceptedReturns": 3,
+        "recordedSubmittedRoleReturns": 5,
+        "recordedReturnScope": "Three scoped agent-authored design accepts, two Revise returns; no runtime/C45 acceptance",
+        "externalRoleReturnsPending": 2,
+        "externalRoleReturnsPendingIds": [
+          "O1-Schema",
+          "O2-Schema"
+        ],
+        "externalRoleReturnsPendingScope": "Missing submissions only; received Revise returns are separate open work",
+        "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
+        "scope": "Historical original-draft snapshot only; not revised 47-type counts or carry-forward acceptance."
+      },
+      "schemaO1Decision": "Revise",
+      "schemaO2Decision": "Revise",
+      "schemaSubmissionEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6573672774"
     },
     {
       "id": "R3",

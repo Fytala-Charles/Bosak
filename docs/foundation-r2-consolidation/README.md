@@ -5,7 +5,7 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 **Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
 
 
-Current revised-draft status (2 November): [three owner responses reviewed](../foundation-bcap-response-review/README.md); Braid capture design and XmlDb ordinary-input scope accepted with scope, XmlDb native lifetime revision remains. Schema O1/O2 and revised Core O2/O4 are missing. Next Core records its own two scoped returns. BCAP-01 design is resolved; public implementation, R2/native/freeze/publication remain pending.
+Current revised-draft status (2 November): [Schema O1/O2 reviewed](../foundation-schema-response-review/README.md), both Revise. All five external role forms are submitted: two scoped accepts/three revisions; only Core O2/O4 remain unsubmitted. Next Core records its own reviews and clarifies existing explicit-limit policy; Schema source/profile and XmlDb native lifetime revisions remain open. R2/freeze/publication stay pending.
 
 ## Consolidated answers
 

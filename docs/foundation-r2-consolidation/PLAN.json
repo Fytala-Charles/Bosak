@@ -86,12 +86,14 @@
     {
       "id": "P05",
       "owner": "Schema",
-      "status": "Requested",
+      "status": "SubmittedRevise",
       "dependsOn": [],
       "canPrepareBeforeR2Closure": true,
       "title": "Complete O1/O2 formal dispositions",
       "work": "Use the eight checklist work items and actual pinned provider facts; answer every Q with supported/refused scope and precise gaps.",
-      "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment."
+      "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
+      "evidence": "docs/foundation-schema-response-review/README.md",
+      "remaining": "Schema owner reviews available c3624998 native source and pinpoints source/profile/policy design blockers; no extra required Core signature declared."
     },
     {
       "id": "P06",
@@ -153,5 +155,9 @@
       "exitEvidence": "R4\u2013R7 gates individually evidenced; no automatic product pin upgrade, release version or date commitment."
     }
   ],
-  "ownerRequestsRegistered": "docs/foundation-bcap-candidate/evidence/owner-registration.json"
+  "ownerRequestsRegistered": "docs/foundation-bcap-candidate/evidence/owner-registration.json",
+  "schemaRevisions": [
+    "BCAP-O1-Schema",
+    "BCAP-O2-Schema"
+  ]
 }

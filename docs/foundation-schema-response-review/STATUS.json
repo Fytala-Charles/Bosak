@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-02",
+  "submitted": 5,
+  "required": 7,
+  "scopedDesignAccepts": 2,
+  "revise": 3,
+  "missing": [
+    "BCAP-O2-Core",
+    "BCAP-O4-Core"
+  ],
+  "decisions": {
+    "BCAP-O1-Schema": "Revise",
+    "BCAP-O2-Schema": "Revise",
+    "BCAP-O1-XmlDb": "AcceptWithScope",
+    "BCAP-O3-Braid": "AcceptWithScope",
+    "BCAP-O4-XmlDb": "Revise"
+  },
+  "schemaRequiredSignatureGaps": [],
+  "schemaDecision": "Both Revise; not accepted",
+  "schemaNativeAccess": "Exact cited candidate exists in clean Core assessment worktree",
+  "policyClarification": "Explicit caller finite limits/no defaults is already proposed; implementation and native workload budgets are separate",
+  "r2Closed": false,
+  "apiFrozen": false,
+  "nativeConsumersQualified": false,
+  "humanSignaturesAuthenticated": false,
+  "productionChanged": false,
+  "nextCoreTask": "Complete own O2/O4 reviews and clarify explicit-limit policy; Schema owner reviews exact assessment source and identifies precise design blockers versus later implementation obligations"
+}
