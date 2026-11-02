@@ -11,12 +11,14 @@
       "id": "BCAP-01",
       "owner": "Core with Braid review",
       "kind": "Required Core capability/route or signature decision",
-      "state": "Open",
+      "state": "ClosedForBoundedDesign",
       "resolvedBy": [
         "P02",
         "P03",
         "P04"
-      ]
+      ],
+      "implementationPending": true,
+      "evidence": "docs/foundation-bcap-response-review/STATUS.json"
     },
     {
       "id": "XDB-LIFE-01",
@@ -69,7 +71,7 @@
     {
       "id": "P04",
       "owner": "Braid",
-      "status": "AwaitingExactOwnerDisposition",
+      "status": "BraidScopedDesignAccepted",
       "dependsOn": [
         "P02",
         "P03"
@@ -78,8 +80,8 @@
       "title": "Review BCAP-01 resolution",
       "work": "Review route evidence or exact declaration change and confirm required preview capture is represented.",
       "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets.",
-      "coreCoordinationNext": "Exact seven-role review forms prepared/registered. Core supplies its explicit carry-forward/delta returns; Braid/impacted owners own their scoped dispositions.",
-      "evidence": "docs/foundation-bcap-owner-review/README.md"
+      "coreCoordinationNext": "Record revised Core O2/O4 returns; keep Schema O1/O2 and XmlDb provider revision pending.",
+      "evidence": "docs/foundation-bcap-response-review/README.md"
     },
     {
       "id": "P05",

@@ -1,0 +1,17 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  ".gitignore": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+  "evidence/DOCUMENTATION-CHECKS.json": "151cd618b4d11d9fdfc1828afddd30b7afa505a256aa87957817da147dd2c54f",
+  "inputs/BCAP-O1-XmlDb.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+  "inputs/BCAP-O3-Braid.json": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+  "inputs/BCAP-O4-XmlDb.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "inputs/issue-468-comments.json": "d28c8c77980be2292202587d2099f0335a0a623f2edc7974b2f4984bc298feed",
+  "inputs/Schema-status-comment.json": "ca7d461cb3bf4377f35cc708a2c5e853a01b0334dd4939dee93c01849aa6f117",
+  "inputs/XmlDb-INPUTS.json": "95afbb7244713f2dfae457dea1e4611e5ecd683fd0290cf887e9b73615efed2d",
+  "inputs/XmlDb-membership-results.json": "1809e3e3ac690f48dbc7fc27d0d2812755e679990c3b132354238d57e05faafe",
+  "INPUTS.json": "d95cea9f652447e7f1e9f1a5008ad606e7e513c16c6898fbf9718950fc499d89",
+  "README.md": "184752e689b0582834ab7b8d83adadb4fab8171d128d9c836ce674aed5dc0f69",
+  "STATUS.json": "3f2862f94dceff93fa821f7618ccfed1e5a6104f9b36655e06df9d99ead6bb77",
+  "tools/check.py": "b7813ab0d2b77a28dea90fe227be41633e680733f8165d1e75df60ac9ed3094c",
+  "tools/verify.py": "1495570846c2d98c6fde2bcc70e021f6e9745ce01acee0a21652413c90b9fe5d"
+}

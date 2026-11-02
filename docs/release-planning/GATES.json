@@ -48,21 +48,20 @@
         "O1-Schema",
         "O2-Schema"
       ],
-      "braidDecision": "Revise",
+      "braidDecision": "AcceptWithScope",
       "openRevisionRequests": [
-        "BCAP-01",
         "XDB-LIFE-01"
       ],
       "schemaRegistrationConfirmed": true,
       "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
-      "latestResponseReview": "docs/foundation-r2-consolidation/STATUS.json",
+      "latestResponseReview": "docs/foundation-bcap-response-review/STATUS.json",
       "externalRoleReturnsPendingScope": "Missing submissions only; received Revise returns are separate open work",
       "xmlDbO1Decision": "AcceptWithScope",
       "xmlDbO4Decision": "Revise",
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P04: Core explicit carry-forward/outcome delta returns and owner-review reconciliation; public production remains gated",
+      "nextCoreTask": "Complete exact-manifest BCAP-O2-Core carry-forward and BCAP-O4-Core delta review; Schema full returns/XmlDb provider revision parallel",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -72,7 +71,19 @@
       "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility",
       "revisedCaptureReview": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
       "revisedCaptureReviewSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
-      "revisedRoleReturnsSubmitted": 0
+      "revisedRoleReturnsSubmitted": 3,
+      "resolvedBoundedDesignRequests": [
+        "BCAP-01"
+      ],
+      "legacyReviewCountsHistorical": true,
+      "revisedRoleReturnsScopedAccepts": 2,
+      "revisedRoleReturnsRevise": 1,
+      "revisedRoleReturnsPending": [
+        "BCAP-O1-Schema",
+        "BCAP-O2-Schema",
+        "BCAP-O2-Core",
+        "BCAP-O4-Core"
+      ]
     },
     {
       "id": "R3",
