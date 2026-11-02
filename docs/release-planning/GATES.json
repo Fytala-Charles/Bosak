@@ -59,7 +59,7 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "P08 reconciliation: resolve exact Schema API/policy/source feasibility and XmlDb native lifetime revisions; R3 implementation stays gated",
+      "nextCoreTask": "Reconcile actual Schema disposition using the concrete source/policy map; XmlDb native cleanup revision independent. No full-XSD runtime prerequisite invented for R2.",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -94,7 +94,12 @@
       "schemaO2Decision": "Revise",
       "schemaSubmissionEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6573672774",
       "coreDesignReturnPacket": "docs/foundation-bcap-core-review/STATUS.json",
-      "schemaFocusedFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md"
+      "schemaFocusedFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md",
+      "schemaSourceReconciliation": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
+      "schemaNativeSourceFactChecks": 14,
+      "schemaFactObservedCoreVersion": "1.34.2.0",
+      "schemaGuideCoreVersion": "1.34.1",
+      "schemaNativeBcapAdapterQualified": false
     },
     {
       "id": "R3",

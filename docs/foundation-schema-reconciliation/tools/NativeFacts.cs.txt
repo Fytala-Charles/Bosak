@@ -1,0 +1,33 @@
+// Generated standalone existing-source fact probe; no production implementation.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Xml.Linq;
+using System.Text.Json;
+using System.Security.Cryptography;
+using Bosak.Schema;
+using Bosak.XPath.Providers.Xml;
+try {
+ var checks=new List<object>();
+ void Check(string id,bool ok){if(!ok)throw new Exception(id);checks.Add(new{id,passed=true});}
+ const string schema="<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' version='1.1'><xs:element name='order'><xs:complexType><xs:sequence><xs:element name='amount' type='xs:decimal'/><xs:element name='shipped' type='xs:decimal'/></xs:sequence><xs:assert test='amount gt 0 and shipped le amount'/></xs:complexType></xs:element></xs:schema>";
+ var assessor=SchemaServices.CreateDocumentAssessor(XDocument.Parse(schema));Check("native-supported-profile",assessor.IsSupported);
+ var input=XDocument.Parse("<order><amount>12.50</amount><shipped>2</shipped></order>");var assessed=assessor.Assess(input).Document??throw new Exception("Assessment refused");
+ Check("root-no-typed-value",assessed.Elements[0].HasNoTypedValue&&assessed.Elements[0].TypedValue is null);
+ Check("decimal-leaf-actual-value",assessed.Elements[1].TypedValue!.Value.DecimalValue==12.50m&&!assessed.Elements[1].IsNilled);
+ var copy=assessed.Copy();Check("copy-original-owner-components",ReferenceEquals(copy.Schema,assessed.Schema)&&ReferenceEquals(copy.Elements[1],assessed.Elements[1])&&ReferenceEquals(copy.Elements[1].Declaration,assessed.Elements[1].Declaration));
+ Check("copy-assessment-label-preserved-snapshot-distinct",copy.AssessmentIdentity==assessed.AssessmentIdentity&&copy.SnapshotIdentity!=assessed.SnapshotIdentity);
+ var preserved=assessed.CreateDocumentCopy(true);var carrier=XdmElementAssessment.Get(preserved.Root!.Element("amount")!)!;
+ Check("preserved-owner-state-reference",ReferenceEquals(carrier.Owner,assessed)&&ReferenceEquals(carrier.State,assessed.Elements[1])&&carrier.TypedValue!.Value.DecimalValue==12.50m);
+ var copiedExport=copy.CreateDocumentCopy(true);var copiedCarrier=XdmElementAssessment.Get(copiedExport.Root!.Element("amount")!)!;
+ Check("copy-export-owner-distinct-label-not-authority",ReferenceEquals(copiedCarrier.Owner,copy)&&!ReferenceEquals(copiedCarrier.Owner,assessed)&&ReferenceEquals(copiedCarrier.State,carrier.State)&&copy.AssessmentIdentity==assessed.AssessmentIdentity);
+ var foreign=XElement.Parse("<amount>12.50</amount>");XdmElementAssessment.Decimal(assessed,assessed.Elements[1],12.50m).AttachTo(foreign);var foreignCarrier=XdmElementAssessment.Get(foreign)!;
+ Check("legacy-carrier-is-not-node-membership-proof",ReferenceEquals(foreignCarrier.Owner,carrier.Owner)&&ReferenceEquals(foreignCarrier.State,carrier.State)&&!ReferenceEquals(foreign,preserved.Root!.Element("amount")));
+ var stripped=assessed.CreateDocumentCopy(false);Check("stripped-export-no-carrier",XdmElementAssessment.Get(stripped.Root!.Element("amount")!) is null);
+ preserved.Root!.Element("amount")!.Value="99";bool stale=false;try{_ = XdmElementAssessment.Get(preserved.Root.Element("amount")!);}catch(NotSupportedException){stale=true;}Check("edited-export-carrier-refuses-stale",stale);
+ input.Root!.Element("amount")!.Value="999";Check("caller-edit-does-not-mutate-owned-assessment",assessed.Elements[1].TypedValue!.Value.DecimalValue==12.50m&&assessed.CreateDocumentCopy(false).Root!.Element("amount")!.Value=="12.50");
+ var other=SchemaServices.CreateDocumentAssessor(XDocument.Parse(schema));Check("independent-components-not-digest-authority",other.SchemaDigest==assessor.SchemaDigest&&!ReferenceEquals(other.RootDeclaration,assessor.RootDeclaration)&&!ReferenceEquals(other.RootDeclaration!.Type,assessor.RootDeclaration!.Type));
+ using var cancel=new CancellationTokenSource();cancel.Cancel();bool cancelled=false;try{assessor.Assess(input,cancel.Token);}catch(OperationCanceledException){cancelled=true;}Check("native-pre-cancellation-throws",cancelled);
+ var invalid=assessor.Assess(XDocument.Parse("<order><amount>1</amount><shipped>2</shipped></order>"));Check("invalid-no-assessed-document",invalid.Outcome==SchemaAssessmentOutcome.Invalid&&invalid.Document is null);
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,version=a.GetName().Version!.ToString(),sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{passed=true,checks=checks.Count,rows=checks,bindings,scope="Fresh pinned native source under observed historical Core dependencies, not BCAP adapter/runtime qualification"},new JsonSerializerOptions{WriteIndented=true}));
+}catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}

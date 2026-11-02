@@ -9,7 +9,7 @@ Updated 1 November 2026. Source is **1.42.0**; the next publication version/date
 The [release plan and checklist](docs/release-planning/README.md) is the single planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance.
 
 
-Current revised-draft status (2 November): [Core O2/O4 completed](docs/foundation-bcap-core-review/README.md); all seven forms submitted, four scoped accepts/three revisions. Reconcile Schema O1/O2 with the focused source/policy follow-up and XmlDb O4 native lifetime revision before R2 closes. Accepted public implementation, native budgets, freeze and publication remain pending.
+Current reconciliation (2 November): [Schema source/policy map](docs/foundation-schema-reconciliation/RECONCILIATION.md) is backed by 14 existing native-source controls twice and explicit dependency identities. Schema should disposition represented policy and private adapter feasibility, or name a precise Core gap; its O1/O2 remain Revise. XmlDb native lifetime revision remains parallel. All seven forms are submitted; R2/public implementation/freeze/publication remain pending.
 
 ## Publication path
 

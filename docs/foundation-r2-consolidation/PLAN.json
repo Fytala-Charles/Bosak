@@ -86,15 +86,15 @@
     {
       "id": "P05",
       "owner": "Schema",
-      "status": "SubmittedRevise",
+      "status": "SourcePolicyReconciledAwaitingOwnerDisposition",
       "dependsOn": [],
       "canPrepareBeforeR2Closure": true,
       "title": "Complete O1/O2 formal dispositions",
       "work": "Use the eight checklist work items and actual pinned provider facts; answer every Q with supported/refused scope and precise gaps.",
       "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
       "evidence": "docs/foundation-schema-response-review/README.md",
-      "remaining": "Schema owner reviews available c3624998 native source and pinpoints source/profile/policy design blockers; no extra required Core signature declared.",
-      "coreFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md"
+      "remaining": "Schema retains Revise; now disposition the source-mapped private adapter feasibility and explicit finite/no-default policy, or identify precise required Core change.",
+      "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md"
     },
     {
       "id": "P06",

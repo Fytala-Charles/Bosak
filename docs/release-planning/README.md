@@ -16,7 +16,7 @@ The [consolidated answers and execution plan](../foundation-r2-consolidation/REA
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
 
 
-Current revised-draft status (2 November): [Core O2/O4 completed](../foundation-bcap-core-review/README.md); all seven forms submitted, four scoped accepts/three revisions. Reconcile Schema O1/O2 with the focused source/policy follow-up and XmlDb O4 native lifetime revision before R2 closes. Accepted public implementation, native budgets, freeze and publication remain pending.
+Current reconciliation (2 November): [Schema source/policy map](../foundation-schema-reconciliation/RECONCILIATION.md) is backed by 14 existing native-source controls twice and explicit dependency identities. Schema should disposition represented policy and private adapter feasibility, or name a precise Core gap; its O1/O2 remain Revise. XmlDb native lifetime revision remains parallel. All seven forms are submitted; R2/public implementation/freeze/publication remain pending.
 
 ## What is already demonstrated
 
