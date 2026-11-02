@@ -24,10 +24,12 @@
       "id": "XDB-LIFE-01",
       "owner": "XmlDb with Core profile review",
       "kind": "Provider implementation/failure-profile issue; no additional Core signature demonstrated",
-      "state": "Open",
+      "state": "ResolvedWithinQualifiedCurrentPinProviderScope",
       "resolvedBy": [
         "P06"
-      ]
+      ],
+      "evidence": "docs/foundation-ecosystem-status/README.md",
+      "candidateIntegrationPending": true
     }
   ],
   "tasks": [
@@ -99,12 +101,14 @@
     {
       "id": "P06",
       "owner": "XmlDb",
-      "status": "Requested",
+      "status": "ProviderFixScopedAccepted",
       "dependsOn": [],
       "canPrepareBeforeR2Closure": true,
       "title": "Resolve XDB-LIFE-01 in owner source/profile",
       "work": "Preserve primary and all cleanup failures, establish fault state despite cleanup errors and qualify actual release uncertainty and sequential/reentry/close scope.",
-      "exitEvidence": "Updated O4 disposition tied to actual fix/profile and targeted X01\u2013X08 evidence; no Core API addition inferred."
+      "exitEvidence": "Updated O4 disposition tied to actual fix/profile and targeted X01\u2013X08 evidence; no Core API addition inferred.",
+      "evidence": "docs/foundation-ecosystem-status/README.md",
+      "remaining": "Actual implemented Core/BCAP/XSLT adapter and R4 integration remain separate; do not reopen current-pin fix without new evidence."
     },
     {
       "id": "P07",
@@ -114,7 +118,8 @@
       "canPrepareBeforeR2Closure": true,
       "title": "Prepare provider-local membership bridge",
       "work": "Implement or concretely map same-snapshot membership before foreign getters; no required IXdmNode member or eager graph copy. Final R2 interface binding follows the accepted candidate.",
-      "exitEvidence": "Actual root/child/attribute/namespace, foreign/same-label/different-snapshot and disposed controls; product/store pins unchanged unless separately selected."
+      "exitEvidence": "Actual root/child/attribute/namespace, foreign/same-label/different-snapshot and disposed controls; product/store pins unchanged unless separately selected.",
+      "progress": "Internal membership is committed in 0d18e91; actual public candidate binding remains pending R3/R4."
     },
     {
       "id": "P08",

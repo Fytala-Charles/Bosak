@@ -9,7 +9,7 @@ Updated 1 November 2026. Source is **1.42.0**; the next publication version/date
 The [release plan and checklist](docs/release-planning/README.md) is the single planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance.
 
 
-Current reconciliation (2 November): [Schema source/policy map](docs/foundation-schema-reconciliation/RECONCILIATION.md) is backed by 14 existing native-source controls twice and explicit dependency identities. Schema should disposition represented policy and private adapter feasibility, or name a precise Core gap; its O1/O2 remain Revise. XmlDb native lifetime revision remains parallel. All seven forms are submitted; R2/public implementation/freeze/publication remain pending.
+Current ecosystem (2 November): [four-project status](docs/foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
 
 ## Publication path
 
@@ -17,7 +17,7 @@ Current reconciliation (2 November): [Schema source/policy map](docs/foundation-
 |---|---|---|
 | R0 Internal engine foundation | Qualified within bounded private profile | Preserve the existing implementation and regression/conformance baseline. |
 | R1 Owner capability mapping | Audited, not owner accepted | Exact source pins and explicit Schema/XmlDb/Braid contract gaps. |
-| R2 Final public contract disposition | In review | Revised draft: 7/7 submitted; four scoped accepts/three Revise; no missing forms. |
+| R2 Final public contract disposition | In review | Revised draft: 7/7 submitted; five scoped accepts/two Schema Revise; no missing forms. |
 | R3 Public implementation | Pending R2 | Implement and document accepted contracts with API/ABI and semantic/lifetime tests. |
 | R4 Actual consumer/performance qualification | Pending candidate; preparation parallel | Same immutable candidate for Schema, XmlDb and Braid; source/unchanged binaries, owner resources and agreed workload budgets. |
 | R5 C45 acceptance/API freeze | Pending R4 | Explicit Core/Schema/XmlDb/Braid acceptance of the exact manifest/profile. |
@@ -26,7 +26,7 @@ Current reconciliation (2 November): [Schema source/policy map](docs/foundation-
 
 ## Immediate Core task
 
-Use the [current response review](docs/foundation-bcap-response-review/README.md) and [dependency plan](docs/foundation-r2-consolidation/PLAN.json). **Core next: reconcile the three remaining scoped revisions with their owners.** Braid accepts the bounded capture design; public implementation remains pending. In parallel, Schema resolves its O1/O2 source/profile/policy revisions and XmlDb resolves native cleanup/fault/profile work. No additional required Core signature is demonstrated by the revised Braid/XmlDb returns. Resolve all known needs and exact dispositions before R2/public implementation/freeze. Full XSD 1.1 backend completion remains separate from representing foundation needs.
+Use the [current response review](docs/foundation-bcap-response-review/README.md) and [dependency plan](docs/foundation-r2-consolidation/PLAN.json). **Core next: reconcile Schema O1/O2 against the concrete source/policy map.** Braid accepts the bounded capture design; public implementation remains pending. In parallel, Schema resolves its O1/O2 source/profile/policy revisions and XmlDb prepares actual new-Core integration after its qualified provider fix. No additional required Core signature is demonstrated by the revised Braid/XmlDb returns. Resolve all known needs and exact dispositions before R2/public implementation/freeze. Full XSD 1.1 backend completion remains separate from representing foundation needs.
 
 The [capability audit](docs/release-planning/OWNER-CAPABILITIES.md) identifies actual source paths and remaining owner evidence, including XmlDb acquisition cleanup/failure preservation. Core owns contract selection and implementation; external implementation remains delegated. Do not add more synthetic lifecycle experiments unless they resolve a named decision.
 

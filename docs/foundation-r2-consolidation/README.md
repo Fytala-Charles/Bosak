@@ -5,7 +5,7 @@ Updated 1 November 2026. This is the current consolidated view of all supplied r
 **Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
 
 
-Current reconciliation (2 November): [Schema source/policy map](../foundation-schema-reconciliation/RECONCILIATION.md) is backed by 14 existing native-source controls twice and explicit dependency identities. Schema should disposition represented policy and private adapter feasibility, or name a precise Core gap; its O1/O2 remain Revise. XmlDb native lifetime revision remains parallel. All seven forms are submitted; R2/public implementation/freeze/publication remain pending.
+Current ecosystem (2 November): [four-project status](../foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
 
 ## Consolidated answers
 
