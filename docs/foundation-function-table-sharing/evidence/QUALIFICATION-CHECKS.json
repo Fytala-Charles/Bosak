@@ -1,0 +1,6 @@
+{
+  "date": "2026-11-03",
+  "sourceVersion": "1.44.1",
+  "result": "Verified 1.44.1 allocation fix: 24467 unit passes, 20 registry/33 association/24 ordinary controls, exact gates/skip maps/API and 19256-byte captured-operation savings. Public/native/freeze work remains pending.",
+  "scope": "Private registry allocation fix; public/native/freeze remain pending"
+}

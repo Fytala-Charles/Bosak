@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.44.0",
+  "sourceVersion": "1.44.1",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,17 +118,18 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-w1-schema-association/README.md",
+      "w1ReadinessPlan": "docs/foundation-function-table-sharing/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Privately optimize measured captured-context allocation, then W1-C/D public/all-host integration; wider typed/list/numeric/compatibility work remains pending",
+      "nextCoreTask": "Accepted thin ordinary-source public facade and all-host integration; wider typed/numeric/native and performance budgets remain pending",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "associationControlsPassed": 33
+      "associationControlsPassed": 33,
+      "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json"
     },
     {
       "id": "R4",

@@ -129,6 +129,8 @@
 //                      | Charles Korthout | 2.49  | 28-10-2026     | Add internal semantic-focus resolution and per-variable lazy-cache invalidation for XQuery. |
 //                      | Charles Korthout | 2.50  | 01-11-2026     | Add nonreflective bounded private input capture. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.51  | 03-11-2026     | Share ordered standard tables for isolated contexts with copy-on-write (1.44.1).       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -251,7 +253,31 @@ public sealed class EvaluationContext
     private readonly Dictionary<string, string> _namespaces;
 
     // Function libraries, indexed by (namespace, localName, arity)
-    private Dictionary<(string, string, int), FunctionSignature> _functions;
+    // Existing registry slot is tagged: public contexts own a Dictionary; isolated contexts
+    // may use a private read-only standard snapshot until their first mutation.
+    private object _functions;
+    private int FunctionCount => _functions is SharedStandardFunctionTable shared ? shared.Count : ((Dictionary<(string, string, int), FunctionSignature>)_functions).Count;
+    private FunctionEntries Functions => new(_functions);
+    private readonly struct FunctionEntries(object registry)
+    {
+        /// <summary>Enumerates the effective ordered table without boxing.</summary>
+        /// <returns>A dictionary struct enumerator over the selected mapping.</returns>
+        public Dictionary<(string, string, int), FunctionSignature>.Enumerator GetEnumerator() =>
+            registry is SharedStandardFunctionTable shared ? shared.GetEnumerator() : ((Dictionary<(string, string, int), FunctionSignature>)registry).GetEnumerator();
+    }
+    private Dictionary<(string, string, int), FunctionSignature> MutableFunctions()
+    {
+        if (_functions is SharedStandardFunctionTable shared)
+        {
+            _functions = shared.CopyFunctions(); shared.CopyVariadicTo(_variadicMinArity);
+        }
+        return (Dictionary<(string, string, int), FunctionSignature>)_functions;
+    }
+    internal static EvaluationContext CreateIsolated() => new() { _functions = SharedStandardFunctionTable.Empty };
+    private bool TryGetFunction((string, string, int) key, out FunctionSignature signature) =>
+        _functions is SharedStandardFunctionTable shared ? shared.TryGetFunction(key, out signature!) : ((Dictionary<(string, string, int), FunctionSignature>)_functions).TryGetValue(key, out signature!);
+    private bool TryGetVariadic((string, string) key, out int arity) =>
+        _functions is SharedStandardFunctionTable shared ? shared.TryGetVariadic(key, out arity) : _variadicMinArity.TryGetValue(key, out arity);
 
     // Variadic function index: (namespace, localName) -> minimum declared arity, so an
     // exact-arity lookup miss resolves variadic candidates without a full table scan.
@@ -355,7 +381,7 @@ public sealed class EvaluationContext
             || SuppressLazySequenceConstructorGlobals || SkipStandardFunctionPopulation || UnsuppliedExternalVariables.Count != 0
             || CollationComparer is not null || ElementConstructorHook is not null || ContentNodeConstructorHook is not null
             || AttributeConstructorHook is not null || DocumentConstructorHook is not null || StaticOutputParameters is not null
-            || _evaluatedLazyGlobals.Count != 0 || _functions.Count != 0 || _variadicMinArity.Count != 0 || _documentCache.Count != 0
+            || _evaluatedLazyGlobals.Count != 0 || FunctionCount != 0 || _variadicMinArity.Count != 0 || _documentCache.Count != 0
             || _schemaSet is not null || SchemaResolver is not null || _currentDateTimeSnapshot is not null
             || _implicitTimezoneOffsetSet || _implicitTimezoneOffsetMinutes != 0 || _namedDecimalFormats.Count != 0
             || CurrentOutputUri is not null || IsStaticEvaluation || IsXPath40 || IsXPath40Experimental || IsXsltMode
@@ -1305,7 +1331,7 @@ public sealed class EvaluationContext
     public EvaluationContext RegisterFunction(FunctionSignature signature)
     {
         var key = (signature.NamespaceUri, signature.LocalName, signature.Arity);
-        _functions[key] = signature;
+        MutableFunctions()[key] = signature;
         if (signature.IsVariadic)
         {
             var variadicKey = (signature.NamespaceUri, signature.LocalName);
@@ -1325,14 +1351,26 @@ public sealed class EvaluationContext
     /// <param name="template">The shared standard function table to install (never mutated).</param>
     internal void InstallStandardFunctionTable(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> template)
     {
-        if (_functions.Count == 0)
+        if (_functions is SharedStandardFunctionTable shared)
+        {
+            if (ReferenceEquals(shared.Source, template)) return;
+            if (shared.Source is null)
+            {
+                _functions = SharedStandardFunctionTable.Get(template);
+                return;
+            }
+            // Changing profiles must preserve previous non-overwritten entries, as legacy Populate does.
+            MutableFunctions();
+        }
+        var functions = (Dictionary<(string, string, int), FunctionSignature>)_functions;
+        if (functions.Count == 0)
         {
             _functions = new Dictionary<(string, string, int), FunctionSignature>(template);
             RebuildVariadicIndex();
             return;
         }
         foreach (var kvp in template)
-            _functions[kvp.Key] = kvp.Value;
+            functions[kvp.Key] = kvp.Value;
         foreach (var ((ns, name, arity), sig) in template)
         {
             if (!sig.IsVariadic) continue;
@@ -1364,22 +1402,22 @@ public sealed class EvaluationContext
     /// <returns><c>true</c> when a matching function is registered.</returns>
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
     {
-        if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
+        if (TryGetFunction((namespaceUri, localName, arity), out signature!))
             return (!signature.IsXPath40Only || IsXPath40)
                 && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental);
         // Variadic fallback via the (namespace, localName) index: a variadic signature
         // accepts any arity >= its minimum declared arity (e.g. fn:concat#99 resolves
         // against the variadic fn:concat registration).
-        if (_variadicMinArity.TryGetValue((namespaceUri, localName), out var minVariadicArity))
+        if (TryGetVariadic((namespaceUri, localName), out var minVariadicArity))
         {
             if (arity >= minVariadicArity
-                && _functions.TryGetValue((namespaceUri, localName, minVariadicArity), out signature!)
+                && TryGetFunction((namespaceUri, localName, minVariadicArity), out signature!)
                 && (!signature.IsXPath40Only || IsXPath40)
                 && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental))
                 return true;
             // Rare: the minimum-arity variadic slot was explicitly unregistered — rescan
             // for another variadic registration of the same name.
-            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            foreach (var ((ns, name, candidateArity), sig) in Functions)
             {
                 if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= candidateArity
                     && (!sig.IsXPath40Only || IsXPath40)
@@ -1403,12 +1441,12 @@ public sealed class EvaluationContext
     /// <returns><c>true</c> when a registration was removed.</returns>
     public bool UnregisterFunction(string namespaceUri, string localName, int arity)
     {
-        bool removed = _functions.Remove((namespaceUri, localName, arity));
+        bool removed = MutableFunctions().Remove((namespaceUri, localName, arity));
         if (removed && _variadicMinArity.TryGetValue((namespaceUri, localName), out var min) && min == arity)
         {
             // Recompute the minimum from the remaining variadic registrations (removals are rare).
             int? newMin = null;
-            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            foreach (var ((ns, name, candidateArity), sig) in Functions)
             {
                 if (ns == namespaceUri && name == localName && sig.IsVariadic)
                     newMin = newMin is null ? candidateArity : Math.Min(newMin.Value, candidateArity);
@@ -1426,7 +1464,7 @@ public sealed class EvaluationContext
     internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? SnapshotBoundFunctionAliases()
     {
         Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? snapshot = null;
-        foreach (var (key, signature) in _functions)
+        foreach (var (key, signature) in Functions)
             if (signature.IsHiddenFromFunctionLookup && signature.FunctionItemTarget is { IsBoundFunctionItem: true })
                 (snapshot ??= new())[key] = signature;
         return snapshot;
@@ -1449,7 +1487,7 @@ public sealed class EvaluationContext
     /// </summary>
     /// <returns>A copy of the function registry, keyed by (namespace URI, local name, arity).</returns>
     internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
-        => new Dictionary<(string, string, int), FunctionSignature>(_functions);
+        => _functions is SharedStandardFunctionTable shared ? shared.CopyFunctions() : new Dictionary<(string, string, int), FunctionSignature>((Dictionary<(string, string, int), FunctionSignature>)_functions);
 
     /// <summary>
     /// Replaces the current function library with the supplied snapshot.
@@ -1457,10 +1495,11 @@ public sealed class EvaluationContext
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotFunctions"/>.</param>
     internal void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
     {
-        _functions.Clear();
+        if (_functions is SharedStandardFunctionTable) _functions = new Dictionary<(string, string, int), FunctionSignature>();
+        else ((Dictionary<(string, string, int), FunctionSignature>)_functions).Clear();
         _variadicMinArity.Clear();
         foreach (var (key, value) in snapshot)
-            _functions[key] = value;
+            ((Dictionary<(string, string, int), FunctionSignature>)_functions)[key] = value;
         RebuildVariadicIndex();
     }
 
@@ -1469,13 +1508,14 @@ public sealed class EvaluationContext
     /// </summary>
     public void ClearFunctions()
     {
-        _functions.Clear();
+        if (_functions is SharedStandardFunctionTable) _functions = new Dictionary<(string, string, int), FunctionSignature>();
+        else ((Dictionary<(string, string, int), FunctionSignature>)_functions).Clear();
         _variadicMinArity.Clear();
     }
 
     private void RebuildVariadicIndex()
     {
-        foreach (var ((ns, name, arity), sig) in _functions)
+        foreach (var ((ns, name, arity), sig) in Functions)
         {
             if (!sig.IsVariadic) continue;
             var variadicKey = (ns, name);

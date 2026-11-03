@@ -1,0 +1,19 @@
+// Generated allocation phase observer; no deliberate unhandled failures.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Text.Json;
+using System.Security.Cryptography;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+using Bosak.XPath.Core.Xdm;
+try{
+ var rows=new List<object>();rows.Add(Measure("fresh-context",()=>GC.KeepAlive(new EvaluationContext())));
+ rows.Add(Measure("fresh-context-and-populate",()=>{var c=new EvaluationContext();FunctionLibrary.Populate(c);GC.KeepAlive(c);}));
+ var caller=new EvaluationContext();var inputs=caller.CaptureSchemaInputs(_=>false,16,16);
+ rows.Add(Measure("copied-context",()=>GC.KeepAlive(inputs.CreateContext())));
+ rows.Add(Measure("copied-context-and-populate",()=>{var c=inputs.CreateContext();FunctionLibrary.Populate(c);GC.KeepAlive(c);}));
+ var table=new EvaluationContext();FunctionLibrary.Populate(table);
+ Console.WriteLine(JsonSerializer.Serialize(new{passed=true,rows,standardFunctions=table.SnapshotFunctions().Count,bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name!.StartsWith("Bosak.")&&!a.IsDynamic).Select(a=>new{name=a.GetName().Name,version=a.GetName().Version!.ToString(),sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()})},new JsonSerializerOptions{WriteIndented=true}));return 0;
+}catch(Exception e){Console.Error.WriteLine(e);return 1;}
+static object Measure(string name,Action action){for(int i=0;i<200;i++)action();long start=GC.GetAllocatedBytesForCurrentThread();var clock=Stopwatch.StartNew();for(int i=0;i<4000;i++)action();clock.Stop();return new{name,iterations=4000,allocatedBytes=GC.GetAllocatedBytesForCurrentThread()-start,milliseconds=clock.Elapsed.TotalMilliseconds};}

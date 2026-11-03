@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 03-11-2026     | Validate copied scalar provenance without allocating another variable dictionary.     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 03-11-2026     | Create isolated contexts eligible for read-only standard function sharing.              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -66,11 +68,9 @@ internal sealed class SchemaOperationInputs
 
     internal EvaluationContext CreateContext()
     {
-        var context = new EvaluationContext
-        {
-            BaseUri = _baseUri, DefaultElementNamespace = _defaultNamespace,
-            DefiningElementDefaultNamespace = _definingNamespace, DefaultCollation = _collation
-        };
+        var context = EvaluationContext.CreateIsolated();
+        context.BaseUri = _baseUri; context.DefaultElementNamespace = _defaultNamespace;
+        context.DefiningElementDefaultNamespace = _definingNamespace; context.DefaultCollation = _collation;
         context.WithFocus(_focus, _position, _size);
         foreach (var pair in _variables) context.WithVariable(pair.Key.LocalName, pair.Value, pair.Key.NamespaceUri);
         foreach (var pair in _namespaces) context.WithNamespace(pair.Key, pair.Value);

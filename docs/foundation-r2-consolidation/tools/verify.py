@@ -25,7 +25,7 @@ assert next(t for t in plan['tasks'] if t['id']=='P08')['status']=='ClosedWithSc
 assert next(t for t in plan['tasks'] if t['id']=='P09')['status']=='InProgress'
 subprocess.run(['python',str(R/'docs/foundation-r2-closure/tools/verify.py')],check=True,capture_output=True)
 assert len(cases['cases'])==18 and len({x['id'] for x in cases['cases']})==18 and all(x['status']=='NotRun' for x in cases['cases'])
-current=json.loads((R/'docs/foundation-w1-schema-association/evidence/SOURCE-AND-BINARY-PINS.json').read_text())
+current=json.loads((R/'docs/foundation-function-table-sharing/evidence/SOURCE-AND-BINARY-PINS.json').read_text())
 for name,digest in i['reviewInputs'].items():assert sha(R/name)==current['sources'].get(name,digest),name
 audit=i['xmlDbSourceAudit'];assert sha(P/'inputs/XmlDb-owner-INPUTS.json')==audit['ownerReceiptSha256']
 owner=json.loads((P/'inputs/XmlDb-owner-INPUTS.json').read_text());assert owner['sourceRevision']==audit['revision']
@@ -33,12 +33,12 @@ for name,v in audit['files'].items():
  assert owner['sourceHashes'][name]==v['ownerRecordedSha256'];data=subprocess.check_output(['git','show',audit['revision']+':'+name],cwd=audit['root']);assert hashlib.sha256(data).hexdigest()==v['committedBytesSha256']
 for id in ['O1-XmlDb','O4-XmlDb']:assert sha(P/'inputs'/(id+'.json'))==owner['responses'][id+'.response.json']
 source=json.loads((R/'docs/foundation-xslt-source-membership/evidence/SOURCE.json').read_text())
-current=json.loads((R/'docs/foundation-w1-schema-association/evidence/SOURCE-AND-BINARY-PINS.json').read_text())
+current=json.loads((R/'docs/foundation-function-table-sharing/evidence/SOURCE-AND-BINARY-PINS.json').read_text())
 for name,digest in source['files'].items():assert sha(R/name)==current['sources'].get(name,digest),name
 engines=json.loads((R/'docs/foundation-xslt-source-membership/evidence/INPUTS.json').read_text())['engines']
 for value in current['engines'].values():assert sha(Path(value['path']))==value['sha256']
-subprocess.run(['python',str(R/'docs/foundation-w1-schema-association/tools/verify.py')],check=True,capture_output=True)
+subprocess.run(['python',str(R/'docs/foundation-function-table-sharing/tools/verify.py')],check=True,capture_output=True)
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha(P/name)==digest,name
-print('Verified historical 45-type snapshot (five returns, three scoped accepts/two revisions, two then-missing Schema returns), pinned evidence and current ten-task dependencies. Revised-draft dispositions are recorded separately; historical receipts unchanged; qualified current bounded W1-B overlay is verified separately.')
+print('Verified historical 45-type snapshot (five returns, three scoped accepts/two revisions, two then-missing Schema returns), pinned evidence and current ten-task dependencies. Revised-draft dispositions are recorded separately; historical receipts unchanged; qualified current allocation-fix overlay is verified separately.')

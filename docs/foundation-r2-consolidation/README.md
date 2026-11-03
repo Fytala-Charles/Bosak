@@ -25,6 +25,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [bounded internal W1-B schema association is qualified at source 1.44.0](../foundation-w1-schema-association/README.md). Ordinary inputs stay issuer-free; optimize context allocations before public/all-host integration and R4 budgets. Wider typed/numeric/native work remains pending.
 
+
+3 November: [private allocation fix qualified at source 1.44.1](../foundation-function-table-sharing/README.md), saving 19,256 bytes per captured evaluation with public allocations/API unchanged. Continue accepted public/all-host integration; native and budget qualification remain pending.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |
