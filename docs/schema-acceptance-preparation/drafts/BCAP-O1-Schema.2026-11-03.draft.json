@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O1-Schema",
+  "packet": "BCAP-O1",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "NotSubmitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": null,
+  "signer": null,
+  "date": "2026-11-03",
+  "profile": "DRAFT Core transcription of user-supplied Schema prose; not submitted or signed by Schema. Design acceptance only; independent source/signature audit not performed.",
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": "Proposed transcription: immutable admitted graphs have private owners; sealed projections retain exact owner and registered node identity. Availability, trusted projection type, owner reference and admitted-node association precede content getters. Every parent/document/axis/attribute/namespace route retains association. This is accepted design feasibility, not a verified existing native method; actual adapter implementation is R3/R4."
+    },
+    {
+      "id": "O1-Q2",
+      "answer": "Trusted copies register a distinct snapshot and node-to-original-fact mapping. Preserve copies retain original assessment/component facts; strip copies expose no assessment authority. Stale evidence must not authenticate. Labels, digests and copied carrier references are insufficient. Actual copy/stale/independent-component controls remain R3/R4."
+    },
+    {
+      "id": "O1-Q3",
+      "answer": "Typed containers are privately issued and registered against exact input, node, facts and origin. Authenticate before enumeration/value access, then validate each atomic actual type and provenance. No fabricated assessment for ordinary XML. Adapter correctness remains unproved."
+    },
+    {
+      "id": "O1-Q4",
+      "answer": "Implement positive owned-node and complete projection routes, foreign poison-getter, unavailable/revoked, preserve/strip, stale and forged/foreign/wrong-origin typed-container controls in R3/R4. No additional Core member is demonstrated necessary by the supplied map. Source reference is declared, not independently inspected in this review."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "../inputs/Schema-owner-prose.txt",
+      "sha256": "f41f74ed53270f5e11b66c332eec5f986c5f88a5d71f731529e2afee640a0853"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O1-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": null,
+  "originalExceptionGraphDisposition": null,
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null,
+  "declaredNativeSourceReference": "c3624998eca8c83018e121fa84af611f834a0501",
+  "draftPreparation": {
+    "preparedBy": "Core",
+    "ownerConfirmationRequired": true,
+    "previousBcapResponseSha256": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+    "pendingFields": [
+      "sourceRevision",
+      "signer",
+      "deltaApplicability",
+      "originalExceptionGraphDisposition"
+    ],
+    "proposedCarryForwardForConfirmation": {
+      "deltaApplicabilityVerbatim": "R01: capture entry/result APIs do not establish native source membership; the source owner must still check exact membership before foreign getters and must not eagerly copy the graph. The public proposal bodies throw, and no native capture route is qualified. R02: serialized capture outputs are not XDM nodes, schema authority or retained PSVI; no new Schema membership claim follows. R03: preserve Schema execution/validation failure identity locally and keep it distinct from capture/cleanup failure; do not infer successful validation from a capture envelope. R04: no new Schema-specific input limits or capture policy were qualified here; finite operation/numeric policies still require explicit adoption at their relevant boundary. R05: capture must remain within the same raw operation and retain actual provider resources through work/cleanup; no Schema lease/resource transfer is implied. R06: original exception graphs are local diagnostic references only and do not authorize node getters or traversal after revocation. R07: Core private measurements are not Schema workload budgets or native performance qualification. R08: this is Revise for this exact design review; no C45, API-freeze, public SDK, native integration or release acceptance is implied.",
+      "originalExceptionGraphDispositionVerbatim": "Schema/provider exceptions and capture diagnostics may be retained only as local diagnostic references with original identity and aggregate boundaries preserved. They are not detached, immutable, sanitized or safe for IPC. Do not recursively inspect Exception.Data, InnerException, arbitrary provider payloads or node-bearing objects, especially after revocation; do not publish raw exception graphs. If export is needed, require an owner-controlled bounded allowlist/projection and redaction policy. Capture or exception retention confers no Schema authority and does not establish release success.",
+      "warning": "Old R08 says Revise. Confirm scope-preserving AcceptWithScope replacement explicitly; do not carry that obsolete decision forward silently. O2 prior detailed six-member numeric disposition also requires confirmation."
+    }
+  }
+}

@@ -14,6 +14,9 @@ Current ecosystem (2 November): [four-project status](docs/foundation-ecosystem-
 
 Schema decision handoff: [three precise questions and localized source evidence](docs/schema-precise-disposition/REQUEST.md) are available inside Schema's workspace. Updated owner dispositions remain pending; all current counts and gates are unchanged.
 
+
+3 November: [Schema accepts O1/O2 design with scope](docs/schema-acceptance-preparation/README.md); versioned carry-forward confirmation remains pending. R2 stays InReview; the next neutral admission slice is prepared.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

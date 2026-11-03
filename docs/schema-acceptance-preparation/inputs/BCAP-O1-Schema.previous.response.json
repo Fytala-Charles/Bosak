@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O1-Schema",
+  "packet": "BCAP-O1",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "Revise",
+  "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "signer": "Copilot - Schema design reviewer, submitted on explicit user direction; designated signer fytala-charles@fytala.com (not independently authenticated)",
+  "date": "2026-11-02",
+  "profile": "Schema source/design disposition only, bound to the exact BCAP manifest. Public Bosak.Schema checkout reviewed at 20090180755d0427d824b091cf838e9a03ca9adc; the separate native assessor candidate is pinned by the owner audit at c3624998eca8c83018e121fa84af611f834a0501 and is not present in this checkout for method-level verification. The bounded native profile is exact-decimal leaves and an element-only root with no typed value. No public SDK implementation, native adapter integration, R4 runtime qualification, C45 acceptance, API freeze or product adoption is claimed.",
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": "The contract is that the trusted input owner establishes exact live source/snapshot membership before any getter is called on a purported node, without copying/materializing the graph; this is ordinary source membership, not schema authority. The owner audit identifies XsdDocumentAssessor.Assess and AssessedDocument.CreateDocumentCopy, but neither is shown to be the concrete membership predicate, and this checkout does not contain the pinned native assessor source. I therefore cannot supply a verified native method implementing ISchemaAssessmentInput.OwnsNode or claim the before-getter case is qualified. The exact method mapping and negative foreign-node evidence remain required for the native profile. XmlDb's persistent source membership is a separate owner disposition and is not claimed here."
+    },
+    {
+      "id": "O1-Q2",
+      "answer": "Required invariant: facts are bound to the exact node, input snapshot and original origin/assessment. The revised advisor association check OwnsNode(node, facts, input, origin), in addition to OwnsNodeFacts and input membership, must authenticate that tuple; copied facts or component handles with matching QNames/digests do not. Preserve-copy may retain original PSVI only if the provider can prove the copied node's association with the original evidence and bind it to the new snapshot; otherwise strip facts and reassess. Any edit that can stale evidence must invalidate/strip it or require reassessment. Independently compiled components remain distinct authority. The owner audit says AssessedDocument.Copy preserves original assessment/component references while creating a new snapshot identity and that supported annotations can be preserved or stripped, but no method-level copy mapping or stale-edit qualification is available here; implementation proof remains open."
+    },
+    {
+      "id": "O1-Q3",
+      "answer": "ReadTypedValue must be called through the exact admitted SchemaQuerySnapshot. Before reading any typed-value container member or enumerating its atomics, the bound advisor must verify OwnsTypedValue(value, input, originalAssessment), with the exact admitted input and optional original assessment; each atomic's current type/provenance must then be checked against the same authority and snapshot. Ordinary unassessed XmlDb XML has no assessor, advisor or original assessment, and must not receive fabricated Schema facts; schema-issued typed-value checks are not applicable to that profile. Fresh construction supplies current constructed type evidence only and does not mint original PSVI. The proposed public operation bodies throw, and no production implementation of this ordering is claimed."
+    },
+    {
+      "id": "O1-Q4",
+      "answer": "Feasibility plan against native candidate c3624998eca8c83018e121fa84af611f834a0501: (1) same admitted input and native decimal leaf succeeds; (2) a node from another snapshot, instrumented so any getter fails the test, is rejected by OwnsNode before that getter; (3) a preserved copy succeeds only with an authenticated old-to-new node/facts/origin mapping, while the strip-copy has no original facts and requires reassessment; (4) edit after preservation invalidates/rejects the old facts; (5) an independently compiled component handle is rejected despite matching name/digest; and (6) revocation prevents further node or typed-value reads. The available audit supports only a bounded decimal profile and does not supply these executed cases or the exact membership method. No additional required public signature is identified from the packet; method mapping and source-specific cases remain the reasons for Revise, not a claim that runtime qualification has occurred."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "Bosak.Schema public source revision 20090180755d0427d824b091cf838e9a03ca9adc; the public checkout contains no native XsdDocumentAssessor/AssessedDocument source mapping for ISchemaAssessmentInput.OwnsNode."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "BCAP manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688; REVIEW.md R01-R08; O1 questions in PACKETS.json; proposal inputs/proposal/Provider.cs.txt and QueryFacade.cs.txt. Proposed declarations are not a production implementation."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak/docs/release-planning/OWNER-CAPABILITIES.md: bounded native decimal profile, separate assessment/snapshot identities, preserve/strip behavior and missing production adapter binding; native candidate c3624998eca8c83018e121fa84af611f834a0501."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak.Schema.Public/docs/XSD11_GAP_MATRIX.md and docs/AGENT_HANDOVER.md: full XSD 1.1 and core session/PSVI integration remain incomplete; no public Schema BCAP runtime qualification is inferred."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O1-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": "R01: capture entry/result APIs do not establish native source membership; the source owner must still check exact membership before foreign getters and must not eagerly copy the graph. The public proposal bodies throw, and no native capture route is qualified. R02: serialized capture outputs are not XDM nodes, schema authority or retained PSVI; no new Schema membership claim follows. R03: preserve Schema execution/validation failure identity locally and keep it distinct from capture/cleanup failure; do not infer successful validation from a capture envelope. R04: no new Schema-specific input limits or capture policy were qualified here; finite operation/numeric policies still require explicit adoption at their relevant boundary. R05: capture must remain within the same raw operation and retain actual provider resources through work/cleanup; no Schema lease/resource transfer is implied. R06: original exception graphs are local diagnostic references only and do not authorize node getters or traversal after revocation. R07: Core private measurements are not Schema workload budgets or native performance qualification. R08: this is Revise for this exact design review; no C45, API-freeze, public SDK, native integration or release acceptance is implied.",
+  "originalExceptionGraphDisposition": "Schema/provider exceptions and capture diagnostics may be retained only as local diagnostic references with original identity and aggregate boundaries preserved. They are not detached, immutable, sanitized or safe for IPC. Do not recursively inspect Exception.Data, InnerException, arbitrary provider payloads or node-bearing objects, especially after revocation; do not publish raw exception graphs. If export is needed, require an owner-controlled bounded allowlist/projection and redaction policy. Capture or exception retention confers no Schema authority and does not establish release success.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null
+}

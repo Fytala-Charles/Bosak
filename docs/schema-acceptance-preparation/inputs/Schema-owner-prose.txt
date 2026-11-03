@@ -1,0 +1,55 @@
+To: Bosak Core — R2 / REQ-139
+From: Schema review, prepared by Codex at the repository owner’s request
+Date: 3 November 2026
+Disposition: AcceptWithScope — O1 and O2 contract design
+
+Proposal manifest: ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688
+Native assessment source: c3624998eca8c83018e121fa84af611f834a0501
+
+This decision is based on the supplied request and source/policy reconciliation. Copied source, full proposal declarations and earlier response forms have not been independently inspected in this session. It therefore records the explicit design decision below, without claiming a completed source audit or signature-level verification.
+
+O1 — contract and source feasibility: AcceptWithScope
+
+The represented OwnsNode, advisor node/facts/input/origin checks, and snapshot-specific typed-container issuance/read shapes can express Schema’s required authentication through this concrete provider-local design:
+- Each admitted immutable graph belongs to a private input owner. Sealed node projections retain that exact owner and their registered underlying node identity.
+- Membership checks input availability, the trusted projection type, exact owner reference and admitted-node association before invoking content getters.
+- Every node-producing route preserves the association, including parent, document, axes, attributes and namespace projections.
+- Trusted copy operations register a distinct snapshot and its node-to-original-fact associations. Preserve copies retain original assessment/component facts; strip copies expose no assessment authority. Labels, equal digests and copied carrier references do not authenticate membership.
+- Typed containers are privately issued and registered against the precise input, node, facts and origin. Authentication precedes enumeration or value access; reads validate each atomic value’s actual type and provenance.
+This is a feasible design direction accepted for implementation. The legacy public assessment carrier remains a trusted-host annotation mechanism and is insufficient for BCAP authentication.
+
+No additional Core member is demonstrated as necessary by the supplied map. Actual adapter correctness remains unproved.
+
+O2 — finite policy and represented requirements: AcceptWithScope
+
+Schema accepts:
+- Required caller-supplied positive finite snapshot/cache/atom/digit limits and nonnegative scale.
+- An invalid default SchemaQueryLimits value, with explicit validation.
+- Explicit exact-decimal coefficient-digit and scale capacity before normalization, plus explicit formatting output capacity.
+- No implicit workload defaults or unlimited fallback.
+Selecting workload ceilings is R4 work; it is not an unresolved R2 policy decision.
+
+The accepted design retains list shape, per-atomic actual type/provenance, union-member distinctions, nil and no-typed-value as separate concepts. The native decimal-leaf/element-only-root evidence does not qualify general list, union, nil or full XSD 1.1 behavior.
+
+Known N1–N8 requirements remain mapped to authority/advisor/context/episode/lifetime shapes. Unsupported operations must report Unsupported, rather than false or empty success.
+
+Compatibility remains directional across source, target and environment, with explicit Compatible, Incompatible and Unsupported outcomes. Copying, matching QNames, equal digests or shared labels do not constitute compatibility proof.
+
+Remaining work and stage
+Item	Stage	Required evidence
+Owned-node authentication and complete projection routes	R3Implementation / R4Qualification	Adapter plus foreign, poison-getter, unavailable/revoked and route-completeness controls
+Original facts, preserve/strip copies and stale handling	R3Implementation / R4Qualification	Registered-copy mapping and independent-component/stale controls
+Typed-container issuance and atomic provenance	R3Implementation / R4Qualification	Authentication-before-access and forged/foreign/wrong-origin rejection
+Numeric limits and exact operations	R3Implementation	Parsing, arithmetic, casts, map keys, serialization, wrong-kind and narrowing controls
+Workload capacities and budgets	R4Qualification	Measured Schema workloads with explicit caller limits
+Wider schema profiles and N1–N8	R3Implementation / R4Qualification	Implemented supported answers and explicit refusal coverage
+Directional compatibility	R3Implementation / R4Qualification	Actual positive and negative source/target/environment proofs
+
+
+Within the design scope described above, no concrete R2 API/policy or source-feasibility blocker remains identified. The listed R3/R4 obligations do not prevent this scoped R2 acceptance.
+
+Capture, delta and error-graph boundary
+
+This response does not accept raw exception-graph serialization or claim qualification of capture/delta/error-graph behavior. The exact applicability and prior dispositions must be carried forward from the original forms; those forms were not available in the supplied text. Consequently, this prose response is not yet a complete replacement for the required versioned BCAP forms.
+
+Preserve earlier responses unchanged. No dependency upgrade, product adoption, runtime acceptance, full XSD 1.1 qualification, global R2 closure or API freeze follows from this decision.

@@ -105,7 +105,9 @@
         "XDB-LIFE-01"
       ],
       "schemaPreciseDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
-      "schemaDecisionRequestDelivery": "Local self-contained source/evidence inbox; no owner acknowledgement or amended disposition inferred"
+      "schemaDecisionRequestDelivery": "Local self-contained source/evidence inbox; no owner acknowledgement or amended disposition inferred",
+      "schemaLatestDesignDisposition": "AcceptWithScope in user-supplied 2026-11-03 prose; formal replacement completion pending",
+      "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md"
     },
     {
       "id": "R3",

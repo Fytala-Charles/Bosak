@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O2-Schema",
+  "packet": "BCAP-O2",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "NotSubmitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": null,
+  "signer": null,
+  "date": "2026-11-03",
+  "profile": "DRAFT Core transcription of user-supplied Schema prose; not submitted or signed by Schema. Design acceptance only; independent source/signature audit not performed.",
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": "Required positive finite caller snapshot/cache/atom/digit limits and nonnegative scale; default SchemaQueryLimits invalid with explicit validation. Exact-decimal coefficient-digit/scale capacity precedes normalization; formatting has explicit output capacity. No implicit workload default or unlimited fallback. Workload ceiling selection is R4. Parsing/arithmetic/casts/map keys/serialization/wrong-kind/narrowing controls remain R3. The prose does not independently verify every one of the six member declarations; retain prior numeric detail only on owner confirmation."
+    },
+    {
+      "id": "O2-Q2",
+      "answer": "Retain list shape including empty/singleton, per-atomic actual type/provenance and union-member distinctions. Nil and no-typed-value stay distinct. Bounded decimal-leaf/element-only-root evidence does not qualify wider list/union/nil/full-XSD behavior. Original versus fresh-construction evidence remains distinct; wider implementation is R3/R4."
+    },
+    {
+      "id": "O2-Q3",
+      "answer": "Known N1-N8 requirements remain mapped to authority/advisor/context/episode/lifetime shapes. Unsupported operations report Unsupported rather than false or empty success. Within the described design scope no concrete R2 API/policy or source-feasibility blocker remains identified. Wider supported answers and refusal coverage remain R3/R4."
+    },
+    {
+      "id": "O2-Q4",
+      "answer": "Compatibility is directional across source, target and environment with Compatible, Incompatible and Unsupported outcomes. Copies, QNames, digests and labels are not proof. Actual positive and negative proofs remain R3/R4; no general runtime compatibility is qualified."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "../inputs/Schema-owner-prose.txt",
+      "sha256": "f41f74ed53270f5e11b66c332eec5f986c5f88a5d71f731529e2afee640a0853"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O2-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": null,
+  "originalExceptionGraphDisposition": null,
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null,
+  "declaredNativeSourceReference": "c3624998eca8c83018e121fa84af611f834a0501",
+  "draftPreparation": {
+    "preparedBy": "Core",
+    "ownerConfirmationRequired": true,
+    "previousBcapResponseSha256": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+    "pendingFields": [
+      "sourceRevision",
+      "signer",
+      "deltaApplicability",
+      "originalExceptionGraphDisposition"
+    ],
+    "proposedCarryForwardForConfirmation": {
+      "deltaApplicabilityVerbatim": "R01: capture is an XSLT output route and does not widen Schema numeric or compatible-view support. R02: principal/secondary serialized output, properties and messages are not typed XDM values or PSVI and must not be used to infer Schema provenance. R03: preserve original provider failures and keep them separate from typed-value/assessment outcomes; a captured output does not convert Unsupported or Invalid into success. R04: existing finite snapshot/atom/digit/scale controls are design intents, not selected workload defaults; parsing, arithmetic, map-key work and serialization need bounded policy, while no new Schema-specific capture limit is accepted here. R05: typed values and their provider evidence are borrowed within the exact admitted operation; capture does not transfer authority or extend resource lifetime. R06: raw exception graphs remain local diagnostics and are not traversed or serialized as schema evidence. R07: Core cost measurements are observations, not accepted Schema performance budgets; actual Schema numeric, list/union and compatibility workloads remain unqualified. R08: this is Revise for the exact design review; no public SDK/runtime support, C45, API freeze or product release acceptance is implied.",
+      "originalExceptionGraphDispositionVerbatim": "Exception, Data and InnerException graphs are local diagnostic references only, not immutable/detached schema evidence and not safe for IPC. Preserve object identity and aggregate boundaries for local diagnosis; do not recursively inspect provider objects, treat exception payloads as schema facts, or traverse nodes after admission revocation. Do not serialize or publish raw exception graphs. Any external diagnostic projection requires a separate owner-controlled bounded allowlist/redaction policy. Exception retention does not establish typed-value validity, authority, compatibility or successful cleanup.",
+      "warning": "Old R08 says Revise. Confirm scope-preserving AcceptWithScope replacement explicitly; do not carry that obsolete decision forward silently. O2 prior detailed six-member numeric disposition also requires confirmation."
+    }
+  }
+}

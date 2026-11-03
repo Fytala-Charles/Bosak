@@ -98,7 +98,10 @@
       "remaining": "Schema retains Revise; now disposition the source-mapped private adapter feasibility and explicit finite/no-default policy, or identify precise required Core change.",
       "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
       "localizedDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
-      "ownerAnswerPending": true
+      "ownerAnswerPending": false,
+      "formalReplacementPending": true,
+      "latestSchemaDesignDisposition": "AcceptWithScope prose 2026-11-03",
+      "completionPreparation": "docs/schema-acceptance-preparation/README.md"
     },
     {
       "id": "P06",
