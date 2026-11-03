@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2  | 01-11-2026     | Separate captured compilation from provider binding. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 03-11-2026     | Compile internal ordinary-source sessions without a schema issuer.                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -26,6 +28,16 @@ namespace Bosak.XPath.Api;
 /// <summary>Opt-in private compilation path; ordinary Compile and Evaluate remain unchanged.</summary>
 internal static class SchemaSessionCompilation
 {
+    internal static bool TryCompileOrdinary(string expression, CompileOptions options, int snapshotLimit,
+        out QuerySourceSession? session, out string? unsupportedReason)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(snapshotLimit);
+        session = null;
+        if (!TryCaptureCompilation(expression, options, out var environment, out var evaluate, out unsupportedReason)) return false;
+        session = new QuerySourceSession(environment!, evaluate!, snapshotLimit);
+        return true;
+    }
+
     internal static bool TryCompile(string expression, CompileOptions options, ISchemaEvidenceIssuer issuer,
         int snapshotLimit, int valueLimit, out SchemaQuerySession? session, out string? unsupportedReason)
     {

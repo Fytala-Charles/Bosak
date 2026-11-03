@@ -1,0 +1,6 @@
+{
+  "date": "2026-11-03",
+  "result": "Verified W1-A 1.43 source/binary cohort, 24414 unit passes, 18 acceptance prefixes, 83 private regressions twice, exact skip maps and unchanged public metadata. Dependent slices/native/freeze remain pending.",
+  "sourceVersion": "1.43.0",
+  "runtimeQualificationScope": "Internal W1-A and shared lifetime; public SDK/native integration remain pending"
+}

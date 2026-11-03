@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.42.0",
+  "sourceVersion": "1.43.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -105,24 +105,27 @@
       "schemaDecisionRequestDelivery": "Schema supplied versioned v2 submitted returns; exact bytes preserved locally and validated",
       "schemaLatestDesignDisposition": "Submitted v2 AcceptWithScope forms validated 2026-11-03",
       "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md",
-      "w1ImplementationStatus": "Ready for implementation; not started",
+      "w1ImplementationStatus": "Internal W1-A qualified; dependent slices pending",
       "w1GateEvidence": "docs/foundation-r2-closure/GATE.json",
       "scopedClosure": "docs/foundation-r2-closure/CLOSURE.json"
     },
     {
       "id": "R3",
       "title": "Accepted public contract implementation",
-      "status": "Pending",
+      "status": "InProgress",
       "owner": "Core",
       "dependsOn": [
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-r2-closure/README.md",
+      "w1ReadinessPlan": "docs/foundation-w1-neutral-admission/README.md",
       "w1PlanPrepared": true,
-      "w1ImplementationStarted": false,
-      "w1AcceptanceCasesNotRun": 20,
-      "w1EntryGate": "Ready for implementation"
+      "w1ImplementationStarted": true,
+      "w1AcceptanceCasesNotRun": 3,
+      "w1EntryGate": "Ready for implementation",
+      "w1InternalAcceptancePassed": 18,
+      "w1Qualification": "docs/foundation-w1-neutral-admission/STATUS.json",
+      "nextCoreTask": "W1-B optional schema association over neutral admission, then public/all-host integration; optimize bounded context allocations before R4"
     },
     {
       "id": "R4",

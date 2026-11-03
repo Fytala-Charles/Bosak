@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3 | 01-11-2026     | Retain exact-operation source ownership checks for host input roles. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 03-11-2026     | Recheck captured neutral source membership before scalar dispatch.                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -37,6 +39,14 @@ internal sealed class SchemaOperationInputs
     internal SchemaOperationInputs ForOperation(object identity, Func<IXdmNode, bool> ownsNode) => new(_focus, _position, _size, _variables,
         _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null) { OperationIdentity = identity, _ownsNode = ownsNode };
     internal bool OwnsNode(object operation, IXdmNode node) => ReferenceEquals(OperationIdentity, operation) && _ownsNode is not null && _ownsNode(node);
+
+    internal void ValidateNodeInputs(object operation)
+    {
+        if (!ReferenceEquals(OperationIdentity, operation)) throw new ArgumentException("Foreign operation.", nameof(operation));
+        if (_focus.IsNode && !OwnsNode(operation, _focus.NodeValue!)) throw new ArgumentException("Focus no longer has exactly one admitted owner.");
+        foreach (var pair in _variables)
+            if (pair.Value.IsNode && !OwnsNode(operation, pair.Value.NodeValue!)) throw new ArgumentException("Variable no longer has exactly one admitted owner.");
+    }
 
     // Capture owns these freshly copied arrays; no caller-owned array is retained.
     internal SchemaOperationInputs(XdmValue focus, int position, int size,

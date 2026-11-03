@@ -1,0 +1,79 @@
+{
+  "passed": 24414,
+  "failed": 0,
+  "projects": [
+    {
+      "project": "Bosak.XPath.Parser.Tests",
+      "passed": 202,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_32_net10.0.trx",
+      "sha256": "d31aa9d3a65c6a0dddec7c2643c60ffd4d44d4a64cfb1cf6ed73748f08dfb874"
+    },
+    {
+      "project": "Bosak.XPath.Core.Tests",
+      "passed": 162,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_32_net10.0[2].trx",
+      "sha256": "145696785cee5e134e6f35125dd1d57bb96c3f069a4fd4d40950837242d35d96"
+    },
+    {
+      "project": "Bosak.XPath.Compiler.Tests",
+      "passed": 66,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_33_net10.0.trx",
+      "sha256": "5fa6d6297c6ec439c958ef5814e21a49474d0b6a003faa6db13ec3a47e71293a"
+    },
+    {
+      "project": "Bosak.XPath.Api.Tests",
+      "passed": 489,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_33_net10.0[1].trx",
+      "sha256": "65fdafd4c9596c5c907b8f0b99bd3dd50989456f0d4b2f181d46634e48b446ed"
+    },
+    {
+      "project": "Bosak.XQuery.Tests",
+      "passed": 804,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_33_net10.0[2].trx",
+      "sha256": "3cf168e92713b4cd12271d34a64ca71ece4546cd98ae663bffcb313e25bf60b2"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Tests",
+      "passed": 223,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_33_net10.0[3].trx",
+      "sha256": "b7e74c0bf279987fa13410955db42b7c91db9b2beb389f2c3b01b03e557ed0bb"
+    },
+    {
+      "project": "Bosak.XPath.Standard.Tests",
+      "passed": 13797,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_34_net10.0.trx",
+      "sha256": "003a2694f89724aaab6c2eed7642ec8a379189759d23ccd50fd38bdc4913363c"
+    },
+    {
+      "project": "Bosak.Xslt.Tests",
+      "passed": 8234,
+      "failed": 0,
+      "trx": "unit-trx/charl_CHARLES_2026-11-03_18_00_35_net10.0.trx",
+      "sha256": "8383d27561d1762af878ed936d5b3b0717a6f94b7d66d66c23163c94b372332a"
+    },
+    {
+      "project": "Bosak.XPath.Runtime.Tests",
+      "passed": 390,
+      "failed": 0,
+      "trx": "runtime-trx/runtime-final.trx",
+      "sha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Database.Tests",
+      "passed": 47,
+      "failed": 0,
+      "trx": "database-trx/database-loopback.trx",
+      "sha256": "a27f5ec446643502bac20efeb2584ace8297faf2f94ae67e307602838a6adfa4"
+    }
+  ],
+  "databaseScope": "Original full-suite Database 45 HttpListener failures retained; same DLLs rerun with authorized loopback: 47 passed",
+  "runtimeScope": "390 passed after two extra lifetime controls; all engine binary hashes unchanged from full-suite/gates",
+  "xsltScope": "8234 passed in normal layout; no Application Control workaround needed in this run"
+}

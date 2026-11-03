@@ -14,6 +14,8 @@
 //                      | Charles Korthout | 0.1   | 31-10-2026     | Creation: private foundation admission (1.35.0)                                          |
 //                      | Charles Korthout | 0.2   | 31-10-2026     | Bind private scalar transport and retain stack-owned cached-read leases (1.36.0)         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 03-11-2026     | Reuse neutral raw-operation lifetime without changing evidence admission.               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -268,39 +270,27 @@ internal sealed class SchemaEvidenceKernel
     /// <summary>Revocable snapshot admission; raw operations defer cleanup until completion.</summary>
     internal sealed class Snapshot : IDisposable
     {
-        private readonly object _gate = new();
+        private readonly QuerySnapshotLifetime _lifetime;
+        private object _gate => _lifetime.SyncRoot;
         private readonly int _valueLimit;
         private readonly Dictionary<ISchemaIssuedScalar, Evidence> _values = new(ReferenceEqualityComparer.Instance);
-        private Action? _release;
-        private int _operations;
-        private bool _closing;
 
         internal Snapshot(SchemaEvidenceKernel owner, object assessment, int valueLimit, Action release)
-        { Owner = owner; Assessment = assessment; _valueLimit = valueLimit; _release = release; }
+        {
+            Owner = owner; Assessment = assessment; _valueLimit = valueLimit;
+            _lifetime = new QuerySnapshotLifetime(() => { lock (_gate) _values.Clear(); release(); });
+        }
         internal SchemaEvidenceKernel Owner { get; }
         internal object Assessment { get; }
         internal int CachedValues { get { lock (_gate) return _values.Count; } }
-        internal void Check() { lock (_gate) ObjectDisposedException.ThrowIf(_closing, this); }
-        internal IDisposable Enter()
-        {
-            lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new Lease(this); }
-        }
-        internal ReadLease EnterRead()
-        {
-            lock (_gate) { ObjectDisposedException.ThrowIf(_closing, this); _operations++; return new ReadLease(this); }
-        }
-        // Synchronous stack-owned local only; no interface boxing or async escape.
-        internal ref struct ReadLease
-        {
-            private Snapshot? _snapshot;
-            internal ReadLease(Snapshot snapshot) => _snapshot = snapshot;
-            internal void Dispose() { var snapshot = _snapshot; _snapshot = null; snapshot?.Leave(); }
-        }
+        internal void Check() => _lifetime.Check();
+        internal IDisposable Enter() => _lifetime.Enter();
+        internal QuerySnapshotLifetime.ReadLease EnterRead() => _lifetime.EnterRead();
         internal Evidence? ReadCached(ISchemaIssuedScalar value)
         {
             lock (_gate)
             {
-                ObjectDisposedException.ThrowIf(_closing, this);
+                _lifetime.Check();
                 return _values.TryGetValue(value, out var existing) ? existing : null;
             }
         }
@@ -311,36 +301,14 @@ internal sealed class SchemaEvidenceKernel
             var evidence = create();
             lock (_gate)
             {
-                ObjectDisposedException.ThrowIf(_closing, this);
+                _lifetime.Check();
                 if (_values.TryGetValue(value, out var existing)) return existing;
                 if (_values.Count >= _valueLimit) throw new InvalidOperationException("Snapshot evidence cache limit reached.");
                 _values.Add(value, evidence);
                 return evidence;
             }
         }
-        private Action? TakeRelease()
-        {
-            if (!_closing || _operations != 0 || _release is null) return null;
-            var release = _release; _release = null; _values.Clear(); return release;
-        }
         /// <summary>Revokes new access and schedules owned cleanup after raw operations finish.</summary>
-        public void Dispose()
-        {
-            Action? release;
-            lock (_gate) { _closing = true; release = TakeRelease(); }
-            release?.Invoke();
-        }
-        private void Leave()
-        {
-            Action? release;
-            lock (_gate) { _operations--; release = TakeRelease(); }
-            release?.Invoke();
-        }
-        private sealed class Lease(Snapshot snapshot) : IDisposable
-        {
-            private int _disposed;
-            /// <summary>Releases this raw operation once.</summary>
-            public void Dispose() { if (Interlocked.Exchange(ref _disposed, 1) == 0) snapshot.Leave(); }
-        }
+        public void Dispose() => _lifetime.Dispose();
     }
 }

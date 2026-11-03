@@ -23,6 +23,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [R2 is ClosedWithScope; W1-A entry is Ready for implementation](docs/foundation-r2-closure/README.md). Seven exact scoped returns are validated; semantic adoption precedes source edits. Implementation, native qualification, freeze and publication remain pending.
 
+
+3 November: [internal W1-A neutral admission is implemented and qualified at source 1.43.0](docs/foundation-w1-neutral-admission/README.md). R3 is InProgress; optional schema composition, public/all-host integration and native/performance qualification remain ahead.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

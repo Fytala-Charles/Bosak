@@ -1,0 +1,17 @@
+{
+  "scope": "Separate fresh private BCAP extension cohort carrying W1-A shared lifetime and ordinary code; not new production capture implementation",
+  "controls": 83,
+  "repetitions": 2,
+  "engines": {
+    "Bosak.XPath.Api": "c059a836885832d3419a9e4a1f440475d33eba8746e95f4661abb4021260f31d",
+    "Bosak.XPath.Compiler": "290774ef30f335edb4839c4f49ed6731785f5337e169afbc66f1554d72573ea7",
+    "Bosak.XPath.Core": "b71eafe9770b072d05a319f7244f55ba1e5fae793fd3365fdf5df54286a05d6f",
+    "Bosak.XPath.Parser": "92af5ccc486839dbd5d76d065abb6988567532e3b41bd76ae5ec42c336955e2b",
+    "Bosak.XPath.Providers": "f2f0bbe5cdbc6677873d8c717e61ddc41ef3f7688c085f591d9642d4bddcb678",
+    "Bosak.XPath.Runtime": "07c11fb7193d8af1a344ca2a4ab085cca5f131990b323971b7d8e1eb0d245cd6",
+    "Bosak.XPath.Standard": "c2b456078822048675ad6a0385edbe09748a7f3d23883b0febb9c3ffc3e24b39",
+    "Bosak.XQuery": "2d8e25b9e12d25cd591151570e5978b46b1fea712e3b11ed48c93dbeaba7b89c",
+    "Bosak.Xslt": "2bf6070e71f1e99e2c4b2745d13714af7b085f0404f1608f78e51b5954a4f0f2",
+    "Bosak.XPath.Runtime.Tests": "5f088f72701b0da3fc7f1744a4322a242c6bdcbdd73bafc5cab2034745c05b7b"
+  }
+}
