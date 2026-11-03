@@ -35,6 +35,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [open-session drain qualified at source 1.44.2](docs/foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
 
+
+3 November: [public ordinary-source facade qualified at source 1.45.0](docs/foundation-public-ordinary/README.md), with 38 public controls and the reviewed additive signature subset. Continue numeric/schema transport and all-host implementation before owner qualification and freeze.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

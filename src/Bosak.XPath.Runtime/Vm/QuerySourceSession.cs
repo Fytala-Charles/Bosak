@@ -17,6 +17,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 03-11-2026     | Allow open-session drain to observe current raw work (1.44.2).                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 03-11-2026     | Propagate raw cancellation to public source and owner availability (1.45.0).             |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 03-11-2026     | Check exact public snapshot membership before unsupported typed reads (1.45.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -28,6 +32,8 @@ internal interface IQuerySourceInput
 {
     IXdmNode Root { get; }
     void ThrowIfUnavailable();
+    void ThrowIfUnavailable(CancellationToken cancellation)
+    { cancellation.ThrowIfCancellationRequested(); ThrowIfUnavailable(); cancellation.ThrowIfCancellationRequested(); }
     bool OwnsNode(IXdmNode node);
 }
 
@@ -73,7 +79,7 @@ internal sealed class QuerySourceSession : IDisposable
         try
         {
             retained = enterOwner() ?? throw new InvalidOperationException("Owner returned no admission lease.");
-            input.ThrowIfUnavailable(); cancellation.ThrowIfCancellationRequested();
+            input.ThrowIfUnavailable(cancellation); cancellation.ThrowIfCancellationRequested();
             lock (_gate)
             {
                 ObjectDisposedException.ThrowIf(_closing, this);
@@ -123,7 +129,7 @@ internal sealed class QuerySourceSession : IDisposable
                 throw new ArgumentException("Members must be unique admissions from this session.", nameof(snapshots));
         var members = ImmutableArray.CreateBuilder<SchemaOperationLeaseSet.Member>(snapshots.Length + 1);
         members.Add(new(this, () => CheckEnvironment(environment), _lifetime.Enter));
-        foreach (var snapshot in snapshots) members.Add(new(this, snapshot.Check, snapshot.Lifetime.Enter));
+        foreach (var snapshot in snapshots) members.Add(new(this, () => snapshot.Check(cancellation), snapshot.Lifetime.Enter));
         var leases = SchemaOperationLeaseSet.Acquire(this, members.ToImmutable(), _snapshotLimit == int.MaxValue ? int.MaxValue : _snapshotLimit + 1, () => CheckEnvironment(environment), cancellation);
         return new Operation(this, snapshots, leases, cancellation);
     }
@@ -169,8 +175,10 @@ internal sealed class QuerySourceSession : IDisposable
         internal QuerySchemaAssociation? Schema { get; set; }
         internal Snapshot(QuerySourceSession owner, IQuerySourceInput input, Action release)
         { Owner = owner; Input = input; Lifetime = new QuerySnapshotLifetime(release); }
-        internal void CheckSource() { Lifetime.Check(); Input.ThrowIfUnavailable(); Lifetime.Check(); }
-        internal void Check() { CheckSource(); Schema?.Check(); CheckSource(); }
+        internal void CheckSource() => CheckSource(default);
+        internal void CheckSource(CancellationToken cancellation) { Lifetime.Check(); Input.ThrowIfUnavailable(cancellation); cancellation.ThrowIfCancellationRequested(); Lifetime.Check(); }
+        internal void Check() => Check(default);
+        internal void Check(CancellationToken cancellation) { CheckSource(cancellation); Schema?.Check(); CheckSource(cancellation); }
         /// <summary>Revokes access without releasing an active raw-operation resource.</summary>
         public void Dispose() { try { Lifetime.Dispose(); } finally { Schema?.Dispose(); } }
     }
@@ -189,11 +197,17 @@ internal sealed class QuerySourceSession : IDisposable
             foreach (var snapshot in _snapshots) { if (snapshot.Input.OwnsNode(node)) owners++; Check(); }
             return owners == 1;
         }
+        internal void RequireMember(Snapshot snapshot)
+        {
+            Check();
+            if (!_snapshots.Any(s => ReferenceEquals(s, snapshot))) throw new ArgumentException("Snapshot is not a member.", nameof(snapshot));
+            snapshot.Check(_cancellation);
+        }
         internal IXdmNode GetRoot(Snapshot snapshot)
         {
             Check();
             if (!_snapshots.Any(s => ReferenceEquals(s, snapshot))) throw new ArgumentException("Snapshot is not a member.", nameof(snapshot));
-            snapshot.Check(); var root = snapshot.Input.Root;
+            snapshot.Check(_cancellation); var root = snapshot.Input.Root;
             if (root is null || !OwnsNode(root)) throw new ArgumentException("Root must have exactly one admitted owner.", nameof(snapshot));
             Check(); return root;
         }

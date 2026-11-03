@@ -1,8 +1,12 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 1 November 2026. This is the current consolidated view of all supplied role returns and Schema's alignment guidance. [STATUS.json](STATUS.json) and [PLAN.json](PLAN.json) are the machine-readable status and dependency queue. Earlier dossiers remain historical receipts; this page supersedes their “still waiting on XmlDb” and five-/four-missing-return counts.
+Updated 3 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.45.0 implements the [public ordinary-source string/boolean facade](../foundation-public-ordinary/README.md); R3 remains InProgress for numeric/schema transport and wider typed/all-host behavior. Native qualification, C45/freeze and publication remain pending.
 
-**Five of seven role returns are submitted: three scoped design accepts and two revisions. Only Schema's two formal returns are missing.** R2 remains InReview; production remains unchanged 1.42.0. No runtime/C45/freeze or publication acceptance is inferred.
+[PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
+
+## Earlier disposition checkpoints
+
+The entries below preserve the earlier decisions and gates in date order; the current summary above supersedes their then-pending statuses.
 
 
 Current ecosystem (2 November): [four-project status](../foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
@@ -30,6 +34,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 
 3 November: [open-session drain qualified at source 1.44.2](../foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
+
+
+3 November: [public ordinary-source facade qualified at source 1.45.0](../foundation-public-ordinary/README.md), with 38 public controls and the reviewed additive signature subset. Continue numeric/schema transport and all-host implementation before owner qualification and freeze.
 
 ## Consolidated answers
 

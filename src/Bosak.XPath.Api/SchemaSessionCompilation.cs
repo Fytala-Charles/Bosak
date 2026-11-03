@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 03-11-2026     | Compile internal ordinary-source sessions without a schema issuer.                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 03-11-2026     | Share immutable option capture with bounded public profile validation (1.45.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Text.Json;
@@ -54,6 +56,17 @@ internal static class SchemaSessionCompilation
     {
         ArgumentNullException.ThrowIfNull(options);
         environment = null; evaluate = null; unsupportedReason = null;
+        if (!TrySnapshotOptions(options, out var frozen, out unsupportedReason)) return false;
+        var compiled = XPath31Expression.Compile(expression, frozen!);
+        environment = compiled.CaptureSchemaEnvironment(frozen!);
+        evaluate = compiled.Evaluate;
+        return true;
+    }
+
+    internal static bool TrySnapshotOptions(CompileOptions options, out CompileOptions? frozen, out string? unsupportedReason)
+    {
+        ArgumentNullException.ThrowIfNull(options);
+        frozen = null; unsupportedReason = null;
         // Delegates can capture mutable host state. A delegate reference or ToString is not a snapshot.
         if (options.FunctionParameterNames is not null || options.FunctionMinimumArity is not null || options.SchemaSet is not null)
         {
@@ -67,7 +80,7 @@ internal static class SchemaSessionCompilation
             unsupportedReason = "A custom/non-ordinal collection cannot be captured without changing its lookup semantics.";
             return false;
         }
-        var frozen = new CompileOptions
+        frozen = new CompileOptions
         {
             Compatibility = options.Compatibility,
             Namespaces = Copy(options.Namespaces),
@@ -83,9 +96,6 @@ internal static class SchemaSessionCompilation
             Xml11LineEndings = options.Xml11LineEndings,
             EnableJit = options.EnableJit
         };
-        var compiled = XPath31Expression.Compile(expression, frozen);
-        environment = compiled.CaptureSchemaEnvironment(frozen);
-        evaluate = compiled.Evaluate;
         return true;
     }
 
