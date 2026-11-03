@@ -38,6 +38,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [public ordinary-source facade qualified at source 1.45.0](docs/foundation-public-ordinary/README.md), with 38 public controls and the reviewed additive signature subset. Continue numeric/schema transport and all-host implementation before owner qualification and freeze.
 
+
+3 November: [exact-decimal representation qualified at source 1.46.0](docs/foundation-exact-decimal/README.md); 46 new controls and allocation-before-refusal checks pass. Next exact XdmValue transport and checked legacy accessors, then numeric/schema/all-host integration.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

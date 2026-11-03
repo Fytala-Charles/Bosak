@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.45.0",
+  "sourceVersion": "1.46.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,20 +118,21 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-public-ordinary/README.md",
+      "w1ReadinessPlan": "docs/foundation-exact-decimal/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Numeric quota/exact-value and schema transport implementation; wider typed and all-host facade, then native/performance qualification.",
+      "nextCoreTask": "Exact XdmValue storage/accessors and checked legacy narrowing; then bounded numeric parser/arithmetic/schema and all-host integration.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
       "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json",
       "openSessionDrain": "docs/foundation-open-session-drain/STATUS.json",
-      "publicOrdinaryFacade": "docs/foundation-public-ordinary/STATUS.json"
+      "publicOrdinaryFacade": "docs/foundation-public-ordinary/STATUS.json",
+      "exactDecimalPrimitive": "docs/foundation-exact-decimal/STATUS.json"
     },
     {
       "id": "R4",

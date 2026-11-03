@@ -118,6 +118,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 |---|---|
 | [Integration](docs/INTEGRATION.md) | Public APIs and supported usage profiles. |
 | [Ordinary-source sessions](docs/foundation-public-ordinary/GUIDE.md) | Opt-in string/boolean queries with explicit source ownership and lifetime. |
+| [Exact decimals](docs/foundation-exact-decimal/GUIDE.md) | Exact coefficient/scale values with explicit capacity and output bounds. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
