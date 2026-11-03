@@ -1,0 +1,21 @@
+# Scoped R2 closure and W1-A gate transition
+
+3 November 2026. **R2 ClosedWithScope; W1-A Ready for implementation; implementation not started.** [Closure record](CLOSURE.json), [all-seven validation](ALL-SEVEN-VALIDATION.json), [W1-A gate](GATE.json).
+
+Both Schema v2 submitted returns are preserved byte-for-byte alongside the other five role returns. All seven validate as AcceptWithScope against unchanged proposal `ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688` (47 types, 651 metadata rows). Schema v2 explicitly answers R01-R08 and local exception-graph dispositions, binds its superseded Revise bytes separately from the original-packet priorResponseSha256, and identifies no remaining R2 API/policy/source-feasibility blocker. The author acts under owner direction; independently authenticated human signatures are not claimed.
+
+## Exact closure scope
+
+Core closes the representation/design/source-feasibility stage using the authored role scopes, not a joint runtime acceptance. The [43-row requirement overlay and 14 decisions](REQUIREMENT-DISPOSITIONS.json) preserve historical requirement text and trace reviewed roles, supported/refused implementation boundaries and pending qualification. Original ledgers, Revise returns, prose, unsigned drafts and blocked gate receipts remain historical evidence unchanged. D06â€™s original narrow profile is superseded by the exact reviewed BCAP modes/capture scope. No required design signature gap remains identified for this packet; a future demonstrated gap must reopen and rebind the affected scope rather than silently change accepted declarations.
+
+Ordinary XML uses its own host-selected trusted input adapter predicate, with availability/private membership and exactly-one-owner checks before getters. Schema issuers are optional. Schema-owned projection/registry authentication, exact facts and trusted copies, privately issued containers, all six numeric intents with caller-finite/no-default policies, list/union/nil/no-value, N1-N8 and directional compatibility remain implementation obligations. Unsupported answers must be explicit rather than false/empty success.
+
+The selected capture profile is bounded in-process, exact-operation and sequential gate composition. Raw exception graphs remain local diagnostics; no recursive serialization/IPC safety is implied. Output buffers/properties require consumer copies/snapshots before retention or handoff. Message count does not bound message bytes or total native/compiler allocation. Original primary/cleanup failures and actual host resource obligations remain distinct, with no retry/release-success inference from uncertain cleanup.
+
+## Gate review and next action
+
+The [new gate](GATE.json) names and hashes both submitted replacements, their validation receipt and the scoped closure record. It supersedes the [historical blocked snapshot](../schema-w1-gate-review/GATE.json); the original preparation verifier still verifies that snapshot. All 20 retained acceptance cases remain NotRun; 17 plus the drain control are W1-A requirements, W1-09/10 remain W1-D and W1-18 remains actual XmlDb R4. No implementation or acceptance execution occurred in this step.
+
+Next: record exact immutable semantic/adoption sources for W1-A before code changes, then implement neutral source admission composed with optional schema evidence using the [tightened ownership and slice plan](../schema-w1-gate-review/README.md). Preserve no-issuer ordinary XML and shared rollback/raw-lifetime behavior. Qualification baseline and commands remain in the [current runbook](RUNBOOK.md), using `docs/foundation-r2-closure/tools/run.py` and fresh execution receipt paths. The acceptance checker still writes its original W1 checklist receipts; record those separately and do not overwrite earlier evidence. The new launcher verifies all closure bindings before execution. No production .NET run is needed for this documentation/gate step.
+
+R3 implementation, R4 actual native consumers/dependency lane and PF-01â€“09 budgets, R5 four-owner C45/freeze, R6 packages/version and R7 publication remain pending. Production stays 1.42.0; target version/date remain null. No owner checkout, package pin, production source, public tag or release is changed.

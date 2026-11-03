@@ -16,6 +16,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [W1-A is explicitly blocked pending gate evidence](../schema-w1-gate-review/README.md). Trusted ordinary-source membership, complete retained acceptance checklist and exact qualification commands are now specified; no implementation has started.
 
+
+3 November: [R2 is ClosedWithScope; W1-A entry is Ready for implementation](../foundation-r2-closure/README.md). Seven exact scoped returns are validated; semantic adoption precedes source edits. Implementation, native qualification, freeze and publication remain pending.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

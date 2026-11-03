@@ -1,9 +1,7 @@
 {
   "schemaVersion": 1,
-  "nextCoreTask": "P08",
+  "nextCoreTask": "P09",
   "parallelOwnerTasks": [
-    "P05",
-    "P06",
     "P07"
   ],
   "openItems": [
@@ -82,25 +80,25 @@
       "title": "Review BCAP-01 resolution",
       "work": "Review route evidence or exact declaration change and confirm required preview capture is represented.",
       "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets.",
-      "coreCoordinationNext": "Core O2/O4 scoped reviews complete; reconcile Schema O1/O2 and XmlDb O4 revisions without assuming external acceptance.",
+      "coreCoordinationNext": "All seven exact roles validated; scoped R2 closure recorded.",
       "evidence": "docs/foundation-bcap-response-review/README.md"
     },
     {
       "id": "P05",
       "owner": "Schema",
-      "status": "SourcePolicyReconciledAwaitingOwnerDisposition",
+      "status": "SchemaScopedDesignAccepted",
       "dependsOn": [],
       "canPrepareBeforeR2Closure": true,
       "title": "Complete O1/O2 formal dispositions",
       "work": "Use the eight checklist work items and actual pinned provider facts; answer every Q with supported/refused scope and precise gaps.",
       "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
-      "evidence": "docs/foundation-schema-response-review/README.md",
-      "remaining": "Schema retains Revise; now disposition the source-mapped private adapter feasibility and explicit finite/no-default policy, or identify precise required Core change.",
+      "evidence": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json",
+      "remaining": "Actual adapter/numeric/wider profile R3/R4 implementation and qualification remain pending",
       "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
       "localizedDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
       "ownerAnswerPending": false,
-      "formalReplacementPending": true,
-      "latestSchemaDesignDisposition": "AcceptWithScope prose 2026-11-03",
+      "formalReplacementPending": false,
+      "latestSchemaDesignDisposition": "Submitted v2 AcceptWithScope 2026-11-03",
       "completionPreparation": "docs/schema-acceptance-preparation/README.md"
     },
     {
@@ -129,7 +127,7 @@
     {
       "id": "P08",
       "owner": "Core with Schema/XmlDb/Braid",
-      "status": "Pending",
+      "status": "ClosedWithScope",
       "dependsOn": [
         "P04",
         "P05",
@@ -138,12 +136,13 @@
       "canPrepareBeforeR2Closure": true,
       "title": "Close R2 accepted implementation scope",
       "work": "Reconcile all known gaps and any revised declaration manifest. Rebind impacted owner returns explicitly; never silently carry old hash-bound acceptance to a changed draft.",
-      "exitEvidence": "Seven explicit role dispositions, complete requirement ledger and finite supported/refused implementation scope; R2 close recorded."
+      "exitEvidence": "Seven explicit role dispositions, complete requirement ledger and finite supported/refused implementation scope; R2 close recorded.",
+      "evidence": "docs/foundation-r2-closure/CLOSURE.json"
     },
     {
       "id": "P09",
       "owner": "Core",
-      "status": "Gated",
+      "status": "ReadyForImplementation",
       "dependsOn": [
         "P08"
       ],
@@ -151,8 +150,8 @@
       "title": "Implement accepted W1\u2013W6 production slices",
       "work": "Neutral source admission, authority/facts, numeric/list/union, advisor/compatibility and public all-host/capture implementation under selected scope.",
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
-      "gateStatus": "Blocked pending gate evidence",
-      "preparation": "docs/schema-w1-gate-review/README.md"
+      "gateStatus": "Ready for implementation; immutable semantic adoption before code",
+      "preparation": "docs/foundation-r2-closure/README.md"
     },
     {
       "id": "P10",
@@ -169,8 +168,5 @@
     }
   ],
   "ownerRequestsRegistered": "docs/foundation-bcap-candidate/evidence/owner-registration.json",
-  "schemaRevisions": [
-    "BCAP-O1-Schema",
-    "BCAP-O2-Schema"
-  ]
+  "schemaRevisions": []
 }

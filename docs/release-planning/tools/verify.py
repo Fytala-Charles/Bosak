@@ -6,7 +6,10 @@ i=json.loads((P/'INPUTS.json').read_text());g=json.loads((P/'GATES.json').read_t
 assert not i['ownerAcceptance'] and i['productionVersion']==g['sourceVersion']=='1.42.0'
 assert g['targetReleaseVersion'] is None and g['releaseDate'] is None and not g['apiFrozen'] and not g['publicationAuthorized']
 assert [x['id'] for x in g['gates']]==['R'+str(n) for n in range(8)]
-assert [x['status'] for x in g['gates']]==['Qualified','Audited','InReview','Pending','Pending','Pending','Pending','Pending']
+assert [x['status'] for x in g['gates']]==['Qualified','Audited','ClosedWithScope','Pending','Pending','Pending','Pending','Pending']
+closure=json.loads((R/'docs/foundation-r2-closure/CLOSURE.json').read_text());assert closure['r2Closed'] and closure['status']=='ClosedWithScope' and not closure['runtimeQualification'] and not closure['apiFrozen']
+assert g['gates'][2]['recordedAcceptedReturns']==7 and not g['gates'][2]['openRevisionRequests']
+subprocess.run(['python',str(R/'docs/foundation-r2-closure/tools/verify.py')],check=True,capture_output=True)
 seen=set()
 for row in g['gates']:
  assert set(row['dependsOn'])<=seen and row['owner'] and row['exitEvidence'];seen.add(row['id'])
@@ -22,4 +25,4 @@ roadmap=(R/'ROADMAP.md').read_text(encoding='utf-8');assert len(roadmap.splitlin
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha((P/name).read_bytes())==digest,name
-print('Verified R0–R7 gate dependencies/statuses, four clean observed owner pins, archived roadmap and unchanged production source. No runtime/owner acceptance claimed.')
+print('Verified R0â€“R7 gate dependencies/statuses, four clean observed owner pins, archived roadmap and unchanged production source. Scoped R2 design closure only; no runtime/freeze acceptance claimed.')

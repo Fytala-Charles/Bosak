@@ -27,7 +27,7 @@
     {
       "id": "R2",
       "title": "Final public contract disposition",
-      "status": "InReview",
+      "status": "ClosedWithScope",
       "owner": "Core with Schema/XmlDb/Braid",
       "dependsOn": [
         "R1"
@@ -39,26 +39,23 @@
       "ownerReviewPacketPrepared": true,
       "ownerDeliveryConfirmed": false,
       "requiredRoleReturns": 7,
-      "recordedAcceptedReturns": 5,
-      "recordedReturnScope": "Current 47-type: five scoped agent-authored design accepts, two Schema Revise; no joint native/freeze acceptance",
+      "recordedAcceptedReturns": 7,
+      "recordedReturnScope": "Seven exact scoped agent-authored design returns; Core recorded design-stage closure only, no independently authenticated human or runtime acceptance",
       "externalRoleReturnsPending": 0,
       "recordedSubmittedRoleReturns": 7,
       "externalRoleReturnsPendingIds": [],
       "braidDecision": "AcceptWithScope",
-      "openRevisionRequests": [
-        "BCAP-O1-Schema",
-        "BCAP-O2-Schema"
-      ],
+      "openRevisionRequests": [],
       "schemaRegistrationConfirmed": true,
       "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
-      "latestResponseReview": "docs/foundation-ecosystem-status/STATUS.json",
-      "externalRoleReturnsPendingScope": "All five external role forms submitted; three require revision. Only Core O2/O4 are unsubmitted.",
+      "latestResponseReview": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json",
+      "externalRoleReturnsPendingScope": "No missing or Revise role returns for the exact revised packet",
       "xmlDbO1Decision": "AcceptWithScope",
       "xmlDbO4Decision": "AcceptWithScope",
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "Complete and validate versioned Schema O1/O2 replacements and all seven roles; record scoped R2 closure before any W1 implementation",
+      "nextCoreTask": "Record immutable W1-A semantic adoption, then implement neutral ordinary-source admission under accepted scope",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -73,8 +70,8 @@
         "BCAP-01"
       ],
       "legacyReviewCountsHistorical": true,
-      "revisedRoleReturnsScopedAccepts": 5,
-      "revisedRoleReturnsRevise": 2,
+      "revisedRoleReturnsScopedAccepts": 7,
+      "revisedRoleReturnsRevise": 0,
       "revisedRoleReturnsPending": [],
       "legacy45TypeReview": {
         "recordedAcceptedReturns": 3,
@@ -89,9 +86,9 @@
         "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
         "scope": "Historical original-draft snapshot only; not revised 47-type counts or carry-forward acceptance."
       },
-      "schemaO1Decision": "Revise",
-      "schemaO2Decision": "Revise",
-      "schemaSubmissionEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6573672774",
+      "schemaO1Decision": "AcceptWithScope",
+      "schemaO2Decision": "AcceptWithScope",
+      "schemaSubmissionEvidence": "docs/foundation-r2-closure/returns",
       "coreDesignReturnPacket": "docs/foundation-bcap-core-review/STATUS.json",
       "schemaFocusedFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md",
       "schemaSourceReconciliation": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
@@ -105,11 +102,12 @@
         "XDB-LIFE-01"
       ],
       "schemaPreciseDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
-      "schemaDecisionRequestDelivery": "Local self-contained source/evidence inbox; no owner acknowledgement or amended disposition inferred",
-      "schemaLatestDesignDisposition": "AcceptWithScope in user-supplied 2026-11-03 prose; formal replacement completion pending",
+      "schemaDecisionRequestDelivery": "Schema supplied versioned v2 submitted returns; exact bytes preserved locally and validated",
+      "schemaLatestDesignDisposition": "Submitted v2 AcceptWithScope forms validated 2026-11-03",
       "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md",
-      "w1ImplementationStatus": "Blocked pending gate evidence",
-      "w1GateEvidence": "docs/schema-w1-gate-review/GATE.json"
+      "w1ImplementationStatus": "Ready for implementation; not started",
+      "w1GateEvidence": "docs/foundation-r2-closure/GATE.json",
+      "scopedClosure": "docs/foundation-r2-closure/CLOSURE.json"
     },
     {
       "id": "R3",
@@ -120,10 +118,11 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-w1-readiness/README.md",
+      "w1ReadinessPlan": "docs/foundation-r2-closure/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": false,
-      "w1AcceptanceCasesNotRun": 20
+      "w1AcceptanceCasesNotRun": 20,
+      "w1EntryGate": "Ready for implementation"
     },
     {
       "id": "R4",

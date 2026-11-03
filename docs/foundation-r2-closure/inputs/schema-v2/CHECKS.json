@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-03",
+  "scope": "Public Schema solution and documentation only; not Core W1/native/BCAP qualification",
+  "checks": [
+    {
+      "name": "public-tests",
+      "command": [
+        "dotnet",
+        "test",
+        "Bosak.Schema.slnx",
+        "--logger",
+        "console;verbosity=normal"
+      ],
+      "exitCode": 0,
+      "log": "public-tests.log",
+      "sha256": "56e0efb63c07b09333e0329f41cfe7874ee3929d4dd6be5cf449ea95caa8dec8"
+    },
+    {
+      "name": "documentation",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "tools/check-docs.ps1",
+        "-ProjectPath",
+        "."
+      ],
+      "exitCode": 0,
+      "log": "documentation.log",
+      "sha256": "013068658ed7f06ea5a488ca7c3253c87d39549baffcf7a8c8fba65cb81dbc14"
+    }
+  ]
+}
