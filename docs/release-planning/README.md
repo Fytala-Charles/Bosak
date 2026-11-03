@@ -1,19 +1,24 @@
 # Release plan and acceptance checklist
 
-Updated 1 November 2026. Current source version: **1.42.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
+Updated 3 November 2026. Current source version: **1.44.2**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
 
-The [consolidated answers and execution plan](../foundation-r2-consolidation/README.md) is the current owner-disposition index: five submitted returns, three scoped design accepts, two revisions and two missing Schema returns. The internal foundation is qualified within its bounded private profile. The remaining critical path is **public contract disposition → public implementation → actual consumer/performance qualification → four-owner acceptance → release candidate → publication**. [Owner capability mapping](OWNER-CAPABILITIES.md) identifies concrete gaps from pinned source, rather than treating synthetic tests as consumer acceptance. [GATES.json](GATES.json) is the machine-readable gate registry.
+The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven role returns as AcceptWithScope against the reviewed declaration manifest. R3 is in progress: internal ordinary admission, original-schema association, allocation reduction and [open-session draining](../foundation-open-session-drain/README.md) are qualified. Public facade implementation remains next. The remaining critical path is public implementation, actual consumer/performance qualification, four-owner acceptance, release candidate and publication. [Owner capability mapping](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain the requirements and machine-readable gates.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
 | R0 Private engine foundation | Qualified | Core | 1.42.0 source/build, 24,390 unit passes, unchanged frozen gates; private capture, evidence and multi-source execution. [Qualification](../foundation-xslt-source-membership/README.md). |
 | R1 Actual owner capability mapping | Audited | Core | Exact read-only source/requirement pins and explicit gaps. [Mapping](OWNER-CAPABILITIES.md). This is not runtime owner acceptance. |
-| R2 Final public contract disposition | In review; Core ledger recorded | Core with Schema/XmlDb/Braid | Finite declaration/requirement decision ledger, supported/refused scope, immutable semantic basis and actual owner dispositions. |
-| R3 Accepted public implementation | Pending R2 | Core | Selected public members implemented and documented; fresh API/ABI inventory and functional/lifetime/error tests. Existing private implementation is reusable groundwork. |
+| R2 Final public contract disposition | ClosedWithScope | Core with Schema/XmlDb/Braid | Seven validated scoped role returns and the immutable R2 closure; no runtime acceptance inferred. |
+| R3 Accepted public implementation | InProgress | Core | Qualified private prerequisites at 1.44.2; public facade remains pending, followed by fresh API/ABI and functional/lifetime/error qualification. |
 | R4 Real consumers and performance | Pending candidate; preparation parallel | Core/Schema/XmlDb/Braid | One immutable candidate; actual source and unchanged-binary consumer runs; representative PF-01–09 budgets; complete core/conformance qualification. |
 | R5 C45 acceptance and API freeze | Pending R4 | All four roles | Dated acceptance of exact manifest/profile/candidate; no unresolved required signature gap. Intended final breaking foundation change. |
 | R6 Release candidate packages/docs | Pending freeze; preparation parallel | Core | Selected SemVer, package provenance, migration/release notes, complete docs and fresh-cache package-only consumer tests. |
 | R7 Publish and verify | Pending reviewed artifacts and release approval | Core | Approved package/tag/release identities, publication receipts, downloaded public artifact verification. Consumer pin adoption remains separate. |
+
+
+## Earlier planning checkpoints
+
+The dated entries below retain earlier dispositions; the summary and gate table above describe current status.
 
 
 Current ecosystem (2 November): [four-project status](../foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
@@ -38,6 +43,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 
 3 November: [private allocation fix qualified at source 1.44.1](../foundation-function-table-sharing/README.md), saving 19,256 bytes per captured evaluation with public allocations/API unchanged. Continue accepted public/all-host integration; native and budget qualification remain pending.
+
+
+3 November: [open-session drain qualified at source 1.44.2](../foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
 
 ## What is already demonstrated
 

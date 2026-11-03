@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 03-11-2026     | Compose optional exact-input original schema evidence (1.44.0).                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 03-11-2026     | Allow open-session drain to observe current raw work (1.44.2).                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -157,7 +159,7 @@ internal sealed class QuerySourceSession : IDisposable
     }
     internal Task DrainAsync()
     {
-        lock (_gate) return _drain ?? throw new InvalidOperationException("Close the session before draining.");
+        lock (_gate) return _drain ?? _lifetime.WaitForIdleAsync();
     }
     internal sealed class Snapshot : IDisposable
     {

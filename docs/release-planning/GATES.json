@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.44.1",
+  "sourceVersion": "1.44.2",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,7 +118,7 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-function-table-sharing/README.md",
+      "w1ReadinessPlan": "docs/foundation-open-session-drain/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
@@ -129,7 +129,8 @@
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
-      "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json"
+      "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json",
+      "openSessionDrain": "docs/foundation-open-session-drain/STATUS.json"
     },
     {
       "id": "R4",

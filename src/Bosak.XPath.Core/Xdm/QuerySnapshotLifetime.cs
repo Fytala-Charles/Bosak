@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-11-2026     | Creation; W1-A neutral admission (1.43.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 03-11-2026     | Observe open-session idle epochs without revoking admissions (1.44.2).                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -24,7 +26,7 @@ internal sealed class QuerySnapshotLifetime(Action release) : IDisposable
     private int _operations;
     private bool _closing, _finished;
     private Exception? _failure;
-    private TaskCompletionSource<bool>? _drained;
+    private TaskCompletionSource<bool>? _drained, _idle;
 
     internal void Check() { lock (SyncRoot) ObjectDisposedException.ThrowIf(_closing, this); }
     internal IDisposable Enter()
@@ -48,6 +50,13 @@ internal sealed class QuerySnapshotLifetime(Action release) : IDisposable
             if (_finished) return _failure is null ? Task.CompletedTask : Task.FromException(_failure);
             return (_drained ??= new(TaskCreationOptions.RunContinuationsAsynchronously)).Task;
         }
+    }
+    /// <summary>Observes the current busy epoch without revoking future admissions.</summary>
+    internal Task WaitForIdleAsync()
+    {
+        lock (SyncRoot)
+            return _operations == 0 ? Task.CompletedTask
+                : (_idle ??= new(TaskCreationOptions.RunContinuationsAsynchronously)).Task;
     }
     private Action? TakeRelease()
     {
@@ -77,8 +86,15 @@ internal sealed class QuerySnapshotLifetime(Action release) : IDisposable
     private void Leave()
     {
         Action? action;
-        lock (SyncRoot) { _operations--; action = TakeRelease(); }
-        Release(action);
+        TaskCompletionSource<bool>? idle = null;
+        lock (SyncRoot)
+        {
+            _operations--;
+            if (_operations == 0) { idle = _idle; _idle = null; }
+            action = TakeRelease();
+        }
+        try { Release(action); idle?.TrySetResult(true); }
+        catch (Exception error) { idle?.TrySetException(error); throw; }
     }
     private sealed class Lease(QuerySnapshotLifetime owner) : IDisposable
     {

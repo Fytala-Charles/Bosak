@@ -28,6 +28,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [private allocation fix qualified at source 1.44.1](../foundation-function-table-sharing/README.md), saving 19,256 bytes per captured evaluation with public allocations/API unchanged. Continue accepted public/all-host integration; native and budget qualification remain pending.
 
+
+3 November: [open-session drain qualified at source 1.44.2](../foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

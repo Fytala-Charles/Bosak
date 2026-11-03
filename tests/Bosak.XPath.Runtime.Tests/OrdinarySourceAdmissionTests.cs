@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-11-2026     | Creation; W1-A neutral admission (1.43.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 03-11-2026     | Verify open-session drain epochs, cancellation and rollback (1.44.2).                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Xml.Linq;
@@ -234,6 +236,89 @@ public sealed class OrdinarySourceAdmissionTests
         var s=Compile("1+2");var finish=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
         var raw=s.RunAsync(s.Environment,[],async _=>{await finish.Task;return 3;});s.Dispose();Assert.False(s.DrainAsync().IsCompleted);
         finish.SetResult(true);Assert.Equal(3,await raw);await s.DrainAsync();s.Dispose();
+    }
+
+    /// <summary>Idle observation preserves later source admission and execution.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task OpenIdleDrainDoesNotCloseSession()
+    {
+        using var s=Compile();Assert.True(s.DrainAsync().IsCompletedSuccessfully);await s.DrainAsync();
+        var i=new Input();var a=Open(s,i);Assert.True(s.DrainAsync().IsCompletedSuccessfully);
+        s.Run(s.Environment,[a],op=>{Assert.Same(i.Candidate,op.GetRoot(a));return 0;});Assert.Equal(0,i.Releases);
+    }
+    /// <summary>Busy observation includes source-free callbacks and gives later work its own epoch.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task OpenDrainTracksSeparateBusyEpochs()
+    {
+        using var s=Compile();
+        for(int epoch=0;epoch<2;epoch++)
+        {
+            var finish=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var raw=s.RunAsync(s.Environment,[],async _=>{await finish.Task;return 7;});
+            var drain=s.DrainAsync();Assert.False(drain.IsCompleted);Assert.Same(drain,s.DrainAsync());
+            finish.SetResult(true);Assert.Equal(7,await raw);await drain;Assert.True(s.DrainAsync().IsCompletedSuccessfully);
+        }
+    }
+    /// <summary>All overlapping operations must leave before an open busy epoch completes.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task OpenDrainWaitsForEveryRawOperation()
+    {
+        using var s=Compile();var i=new Input();var a=Open(s,i);
+        var first=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var second=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var r1=s.RunAsync(s.Environment,[a],async _=>{await first.Task;return 1;});
+        var r2=s.RunAsync(s.Environment,[a],async _=>{await second.Task;return 2;});var drain=s.DrainAsync();
+        first.SetResult(true);await r1;Assert.False(drain.IsCompleted);Assert.Equal(0,i.Releases);
+        second.SetResult(true);await r2;await drain;Assert.Equal(0,i.Releases);
+    }
+    /// <summary>Canceling one wait neither completes the shared observation nor releases retained resources.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task CanceledOpenDrainWaitRetainsRawWork()
+    {
+        using var s=Compile();var i=new Input();var a=Open(s,i);
+        var finish=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var raw=s.RunAsync(s.Environment,[a],async _=>{await finish.Task;return 1;});var drain=s.DrainAsync();
+        using var cancel=new CancellationTokenSource();cancel.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(()=>drain.WaitAsync(cancel.Token));
+        Assert.False(drain.IsCompleted);Assert.Equal(0,i.Releases);finish.SetResult(true);await raw;await drain;
+        s.Run(s.Environment,[a],op=>{op.Check();return 0;});Assert.Equal(0,i.Releases);
+    }
+    /// <summary>Pending owner admission participates even before a snapshot is registered.</summary>
+    [Fact] public void OpenDrainWaitsForAdmission()
+    {
+        using var s=Compile();var i=new Input();Task? drain=null;
+        i.EnterAction=()=>{drain=s.DrainAsync();Assert.False(drain.IsCompleted);};
+        var a=Open(s,i);Assert.True(drain!.IsCompletedSuccessfully);Assert.Equal(0,i.Releases);
+        s.Run(s.Environment,[a],op=>{op.Check();return 0;});
+    }
+    /// <summary>Failed admission drains only after rollback finishes.</summary>
+    [Fact] public void OpenDrainWaitsForAdmissionRollback()
+    {
+        using var s=Compile();var i=new Input();Task? drain=null;
+        i.EnterAction=()=>{drain=s.DrainAsync();};i.CheckAction=()=>throw new InvalidOperationException("unavailable");
+        i.ReleaseAction=()=>Assert.False(drain!.IsCompleted);
+        Assert.Throws<InvalidOperationException>(()=>Open(s,i));Assert.True(drain!.IsCompletedSuccessfully);Assert.Equal(1,i.Releases);
+    }
+    /// <summary>Close preserves deferred cleanup failure for both the open and closed observations.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task ClosingDuringOpenDrainRetainsCleanupFailure()
+    {
+        var s=Compile();var i=new Input{ReleaseAction=()=>throw new InvalidOperationException("cleanup")};var a=Open(s,i);
+        var finish=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var raw=s.RunAsync(s.Environment,[a],async _=>{await finish.Task;return 1;});var open=s.DrainAsync();
+        s.Dispose();var closed=s.DrainAsync();Assert.False(open.IsCompleted);Assert.False(closed.IsCompleted);
+        finish.SetResult(true);await Assert.ThrowsAnyAsync<Exception>(()=>raw);
+        // Session idle observes raw completion; closed drain additionally reports snapshot release errors.
+        await open;await Assert.ThrowsAnyAsync<Exception>(()=>closed);Assert.Equal(1,i.Releases);
+    }
+    /// <summary>A failed callback ends the busy epoch without poisoning future open observations.</summary>
+    /// <returns>The completed verification.</returns>
+    [Fact] public async Task OpenDrainCompletesAfterCallbackFailure()
+    {
+        using var s=Compile();var finish=new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var raw=s.RunAsync<int>(s.Environment,[],async _=>{await finish.Task;throw new InvalidOperationException("work");});
+        var drain=s.DrainAsync();finish.SetResult(true);await Assert.ThrowsAsync<InvalidOperationException>(()=>raw);await drain;
+        Assert.Equal(3,s.Run(s.Environment,[],_=>3));
     }
 
 }
