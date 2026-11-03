@@ -22,6 +22,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [internal W1-A neutral admission is implemented and qualified at source 1.43.0](../foundation-w1-neutral-admission/README.md). R3 is InProgress; optional schema composition, public/all-host integration and native/performance qualification remain ahead.
 
+
+3 November: [bounded internal W1-B schema association is qualified at source 1.44.0](../foundation-w1-schema-association/README.md). Ordinary inputs stay issuer-free; optimize context allocations before public/all-host integration and R4 budgets. Wider typed/numeric/native work remains pending.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

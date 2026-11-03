@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 03 November 2026
-// PURPOSE              : Admits ordinary source snapshots without fabricating schema evidence.
+// PURPOSE              : Admits neutral source snapshots with optional original schema evidence.
 // SPECIAL NOTES        : Part of the register-based virtual machine execution engine.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,8 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-11-2026     | Creation; W1-A neutral admission (1.43.0)                                                |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 03-11-2026     | Compose optional exact-input original schema evidence (1.44.0).                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
@@ -27,7 +29,7 @@ internal interface IQuerySourceInput
     bool OwnsNode(IXdmNode node);
 }
 
-/// <summary>Neutral internal admission layer; optional schema composition is a dependent slice.</summary>
+/// <summary>Neutral internal admission layer with optional original schema evidence.</summary>
 internal sealed class QuerySourceSession : IDisposable
 {
     private readonly object _gate = new();
@@ -90,6 +92,25 @@ internal sealed class QuerySourceSession : IDisposable
         }
         finally { lock (_gate) _opening--; openingLease.Dispose(); }
     }
+    internal Snapshot OpenAssessedSnapshot(SchemaQueryEnvironment environment, IQuerySourceInput input,
+        Func<IDisposable> enterOwner, IQuerySchemaAdvisor advisor, object originalAssessment, int valueLimit,
+        CancellationToken cancellation = default)
+    {
+        CheckEnvironment(environment); ArgumentNullException.ThrowIfNull(advisor); ArgumentNullException.ThrowIfNull(originalAssessment);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(valueLimit);
+        var snapshot = OpenSnapshot(environment, input, enterOwner, cancellation: cancellation);
+        try
+        {
+            Run(environment, [snapshot], operation =>
+            {
+                snapshot.Schema = new QuerySchemaAssociation(environment, input, advisor, originalAssessment, valueLimit, snapshot.CheckSource, cancellation);
+                operation.Check(); return 0;
+            }, cancellation);
+            return snapshot;
+        }
+        catch (Exception primary) { SchemaEvidenceKernel.PreserveFailure(primary, snapshot.Dispose); throw; }
+    }
+
     private Operation OpenOperation(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, CancellationToken cancellation)
     {
         CheckEnvironment(environment);
@@ -102,7 +123,7 @@ internal sealed class QuerySourceSession : IDisposable
         members.Add(new(this, () => CheckEnvironment(environment), _lifetime.Enter));
         foreach (var snapshot in snapshots) members.Add(new(this, snapshot.Check, snapshot.Lifetime.Enter));
         var leases = SchemaOperationLeaseSet.Acquire(this, members.ToImmutable(), _snapshotLimit == int.MaxValue ? int.MaxValue : _snapshotLimit + 1, () => CheckEnvironment(environment), cancellation);
-        return new Operation(this, snapshots, leases);
+        return new Operation(this, snapshots, leases, cancellation);
     }
     internal T Run<T>(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, Func<Operation, T> work, CancellationToken cancellation = default)
     {
@@ -143,19 +164,22 @@ internal sealed class QuerySourceSession : IDisposable
         internal QuerySourceSession Owner { get; }
         internal IQuerySourceInput Input { get; }
         internal QuerySnapshotLifetime Lifetime { get; }
+        internal QuerySchemaAssociation? Schema { get; set; }
         internal Snapshot(QuerySourceSession owner, IQuerySourceInput input, Action release)
         { Owner = owner; Input = input; Lifetime = new QuerySnapshotLifetime(release); }
-        internal void Check() { Lifetime.Check(); Input.ThrowIfUnavailable(); Lifetime.Check(); }
+        internal void CheckSource() { Lifetime.Check(); Input.ThrowIfUnavailable(); Lifetime.Check(); }
+        internal void Check() { CheckSource(); Schema?.Check(); CheckSource(); }
         /// <summary>Revokes access without releasing an active raw-operation resource.</summary>
-        public void Dispose() => Lifetime.Dispose();
+        public void Dispose() { try { Lifetime.Dispose(); } finally { Schema?.Dispose(); } }
     }
     internal sealed class Operation
     {
         private readonly QuerySourceSession _owner;
         private readonly ImmutableArray<Snapshot> _snapshots;
         private readonly SchemaOperationLeaseSet _leases;
-        internal Operation(QuerySourceSession owner, ImmutableArray<Snapshot> snapshots, SchemaOperationLeaseSet leases)
-        { _owner = owner; _snapshots = snapshots; _leases = leases; }
+        private readonly CancellationToken _cancellation;
+        internal Operation(QuerySourceSession owner, ImmutableArray<Snapshot> snapshots, SchemaOperationLeaseSet leases, CancellationToken cancellation)
+        { _owner = owner; _snapshots = snapshots; _leases = leases; _cancellation = cancellation; }
         internal void Check() => _leases.Check();
         private bool OwnsNode(IXdmNode node)
         {
@@ -178,11 +202,39 @@ internal sealed class QuerySourceSession : IDisposable
                 throw new ArgumentException("Input requires this exact operation and one owner.", nameof(inputs));
             Check();
         }
+        private QuerySchemaAssociation RequireSchema(Snapshot snapshot)
+        {
+            Check();
+            if (!_snapshots.Any(s => ReferenceEquals(s, snapshot))) throw new ArgumentException("Snapshot is not an operation member.", nameof(snapshot));
+            return snapshot.Schema ?? throw new NotSupportedException("This ordinary admission has no selected schema advisor.");
+        }
+        internal void ValidateNodeFacts(Snapshot snapshot, IXdmNode node, object facts)
+        {
+            var schema = RequireSchema(snapshot);
+            if (!OwnsNode(node)) throw new ArgumentException("Node requires exactly one admitted input.", nameof(node));
+            schema.ValidateNodeFacts(node, facts); Check();
+        }
+        internal XdmValue ReadScalar(Snapshot snapshot, ISchemaIssuedScalar value)
+        {
+            var result = RequireSchema(snapshot).ReadScalar(value, _cancellation); Check(); return result;
+        }
+        private void ValidateTransport(XdmValue value)
+        {
+            if (XdmValue.SchemaTransportMarker(value) is null) return;
+            if (!_snapshots.Any(s => s.Schema is not null)) throw new NotSupportedException("Schema evidence requires an explicitly bound advisor.");
+            int owners = 0;
+            foreach (var snapshot in _snapshots)
+            {
+                if (snapshot.Schema?.TryValidateTransport(value, out _) == true) owners++;
+                Check();
+            }
+            if (owners != 1) throw new ArgumentException("Scalar evidence requires exactly one admitted schema association.", nameof(value));
+        }
         internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, int maxBindings, int maxNamespaces)
         {
             Check(); ArgumentNullException.ThrowIfNull(caller);
             foreach (var value in caller.SnapshotVariables().Values)
-                if (XdmValue.SchemaTransportMarker(value) is not null) throw new NotSupportedException("Schema evidence requires an explicitly bound advisor.");
+                ValidateTransport(value);
             var inputs = caller.CaptureSchemaInputs(OwnsNode, maxBindings, maxNamespaces).ForOperation(this, OwnsNode);
             Check(); return inputs;
         }
@@ -191,12 +243,13 @@ internal sealed class QuerySourceSession : IDisposable
             Check(); ArgumentNullException.ThrowIfNull(inputs);
             if (!ReferenceEquals(inputs.OperationIdentity, this)) throw new ArgumentException("Inputs belong to another operation.", nameof(inputs));
             inputs.ValidateNodeInputs(this);
-            var context = inputs.CreateContext(); context.ResourcePolicy = SchemaProviderSessionBinding.ClosedResources();
+            var context = inputs.CreateContext();
+            foreach (var pair in inputs.VariableBindings) ValidateTransport(pair.Value);
+            context.ResourcePolicy = SchemaProviderSessionBinding.ClosedResources();
             var result = _owner._evaluate(context); Check();
-            if (result.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.String or XdmValueKind.Boolean)
-                || XdmValue.SchemaTransportMarker(result) is not null)
-                throw new NotSupportedException("Only plain copied scalar results are supported by this slice.");
-            return result;
+            if (result.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.String or XdmValueKind.Boolean))
+                throw new NotSupportedException("Only copied scalar results are supported by this slice.");
+            ValidateTransport(result); Check(); return result;
         }
         internal void Complete(Exception? primary = null) => _leases.Complete(primary);
     }

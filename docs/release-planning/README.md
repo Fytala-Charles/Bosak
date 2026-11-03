@@ -33,6 +33,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [internal W1-A neutral admission is implemented and qualified at source 1.43.0](../foundation-w1-neutral-admission/README.md). R3 is InProgress; optional schema composition, public/all-host integration and native/performance qualification remain ahead.
 
+
+3 November: [bounded internal W1-B schema association is qualified at source 1.44.0](../foundation-w1-schema-association/README.md). Ordinary inputs stay issuer-free; optimize context allocations before public/all-host integration and R4 budgets. Wider typed/numeric/native work remains pending.
+
 ## What is already demonstrated
 
 The latest full production qualification passed **24,390 unit tests**, QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** and 11 experimental passes. Public metadata remains **270 types / 5,770 declarations**. The private factories, same-session snapshot leases, typed input stamps, separate XSLT source roles and deferred cleanup are implemented. A further [57 host acquisition/rollback controls](../foundation-host-acquisition-rollback/README.md) passed twice without production changes. These receipts do not export or accept the proposed public SDK.

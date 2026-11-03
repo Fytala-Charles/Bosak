@@ -7,27 +7,27 @@
     },
     {
       "source": "ROADMAP.md",
-      "htmlSha256": "4c9ca3ebf30d072d87324d15011a12b7c812143fbaab03bade3933fb42e2160a"
+      "htmlSha256": "501c87e99416a50d73085bf2a2fd78a57c5734c767b3bc836c6e15fba38c53cb"
     },
     {
       "source": "docs/ARCHITECTURE.md",
-      "htmlSha256": "1a4d6bb367142325a36eae98c2d459ab9e5eebc9ee3ad047849dc821c5782cb2"
+      "htmlSha256": "033c5d91a33cdddb56cc7866354a334db7358630c8f9c639b36c50dd0b6c7c5b"
     },
     {
       "source": "docs/FEATURE_REQUESTS.md",
-      "htmlSha256": "c63fe68cea031d9a88eb94c61571e0567968a79c55417b3fd34b1f55e796ca38"
+      "htmlSha256": "f966742e170a9f45d9d3ab56277236100f45a1a5ad3a26443cc981961f3382ce"
     },
     {
       "source": "docs/INTEGRATION.md",
-      "htmlSha256": "f0d6a80115ee073fbf286cfee0e4426ce2221760beffe85e283076edced1c1b5"
+      "htmlSha256": "a6cdc92b0e8656184b185c5b92a90107c6d62fcc2cb47b3de2bdbd883a7ec464"
     },
     {
       "source": "docs/AGENT_HANDOVER.md",
-      "htmlSha256": "d10c063b9b6d845924b423aa4283d1f982efcc6b3c87a4a78f6d317c372b3d24"
+      "htmlSha256": "300d295edfc5c2468be30d5e1987b9db42c196d738b5255e03d64a896ce194ae"
     },
     {
       "source": "docs/IMPLEMENTATION_STATUS.md",
-      "htmlSha256": "831416e4b2b5abc0ccc92ae67fbcb33d39426726a37b13d7b268aff170814fe9"
+      "htmlSha256": "905c0b61429602e0a5812ab0cbbb73343de3c79674602c543056d88fd5d0e0a1"
     },
     {
       "source": "docs/RESTART-2026-10-29.md",
@@ -83,7 +83,7 @@
     },
     {
       "source": "docs/DEVELOPMENT_HISTORY.md",
-      "htmlSha256": "3f28bbd8516dc13951a60258b37723095c19f1d61be615b1ae722cc48665cb23"
+      "htmlSha256": "df4d54634de31acd67dc9e9897c0ec70935b534ee07968949671dac52885ab77"
     },
     {
       "source": "docs/foundation-external-dependencies/README.md",
@@ -399,7 +399,7 @@
     },
     {
       "source": "docs/release-planning/README.md",
-      "htmlSha256": "895fecb47a8972d4433ee5ab2e4503e07752081a3cb6c174fd8d7aaf3bac41a4"
+      "htmlSha256": "01a2b2f01191016000101b8c8ff94bc58e563b537bfafda5ae0bb1d1ea0deba9"
     },
     {
       "source": "docs/release-planning/OWNER-CAPABILITIES.md",
@@ -455,7 +455,7 @@
     },
     {
       "source": "docs/foundation-r2-consolidation/README.md",
-      "htmlSha256": "903f5e94a73bead142200c3a56d300f3974789ada3bd425aad86b6a7c5ae3588"
+      "htmlSha256": "1c8c1a054b0f10b9b1576501240847040b70a67277e2beaa1be8e729c7662b65"
     },
     {
       "source": "docs/foundation-bcap-candidate/README.md",
@@ -542,6 +542,14 @@
       "htmlSha256": "edcd3bcb9510cc79b6a2146b2664c45db376665e19e3cf17644643a0e63fb84d"
     },
     {
+      "source": "docs/foundation-w1-schema-association/README.md",
+      "htmlSha256": "d94b2097a5bd0dafd566b8c8e91264a95326abc8f202f1e59195e1916f97ac2a"
+    },
+    {
+      "source": "docs/foundation-w1-schema-association/SPEC-BASIS.md",
+      "htmlSha256": "7f9f5cb4163b66ba856bbe7ed999586a6263480b6a5f11a31b27697479660c38"
+    },
+    {
       "source": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
       "htmlSha256": "48b69f5e4876d47b7c83464a6affa93ba28960c882fe9039ac5d9345b052849a"
     },
@@ -622,7 +630,7 @@
       "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
     }
   ],
-  "localLinks": 4054,
+  "localLinks": 4078,
   "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
   "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
 }

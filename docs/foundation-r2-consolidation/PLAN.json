@@ -150,9 +150,9 @@
       "title": "Implement accepted W1\u2013W6 production slices",
       "work": "Neutral source admission, authority/facts, numeric/list/union, advisor/compatibility and public all-host/capture implementation under selected scope.",
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
-      "gateStatus": "R2 closed; internal W1-A qualified",
-      "preparation": "docs/foundation-w1-neutral-admission/README.md",
-      "progress": "1.43.0 neutral admission/shared lifetime/internal XPath factory qualified. W1-B/C/D and wider accepted implementation remain pending."
+      "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
+      "preparation": "docs/foundation-w1-schema-association/README.md",
+      "progress": "1.44.0 optional original-scalar/node-association profile qualified; optimize context allocations before public/all-host and wider typed/numeric implementation."
     },
     {
       "id": "P10",

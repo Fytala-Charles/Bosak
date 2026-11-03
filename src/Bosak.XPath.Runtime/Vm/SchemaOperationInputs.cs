@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 03-11-2026     | Recheck captured neutral source membership before scalar dispatch.                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 03-11-2026     | Validate copied scalar provenance without allocating another variable dictionary.     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -36,6 +38,7 @@ internal sealed class SchemaOperationInputs
     internal SchemaEvidenceKernel.Snapshot? Snapshot { get; }
     private Func<IXdmNode, bool>? _ownsNode;
     internal object? OperationIdentity { get; private init; }
+    internal ReadOnlySpan<KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>> VariableBindings => _variables;
     internal SchemaOperationInputs ForOperation(object identity, Func<IXdmNode, bool> ownsNode) => new(_focus, _position, _size, _variables,
         _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null) { OperationIdentity = identity, _ownsNode = ownsNode };
     internal bool OwnsNode(object operation, IXdmNode node) => ReferenceEquals(OperationIdentity, operation) && _ownsNode is not null && _ownsNode(node);
