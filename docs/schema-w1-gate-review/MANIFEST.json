@@ -1,0 +1,14 @@
+{
+  ".gitattributes": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8",
+  ".gitignore": "4ab5a764c2c5f461cedc9116f587b6f0afe95f13e68b0b17ff1332e71ea7dc0d",
+  "ACCEPTANCE.json": "4351b21a4a85a51f24812deb28db7c2bbf58aab3e018c2aa7f53fa1432e367d1",
+  "evidence/DOCUMENTATION-CHECKS.json": "e6e10c51cd77a56c61524586d45a3d983124e80733150c4075ad0468d61fe1dc",
+  "evidence/PREPARATION-CHECKS.json": "b2b97bb0d40a70fd1c1b658f4b7d2d20ad9db08482bfecef582b968923055fb7",
+  "GATE.json": "36ab011857c3d45111ec60a2bc6151881b3965a27b0ec0921ef6bddd25df9788",
+  "inputs/Schema-followup.txt": "17adf87f59d4170689fd12ee031c4638512e8ba88cbcd5500f07f9baea7080d4",
+  "README.md": "c4b8391fb138cebd340c3cf0d5f2b102cdcfff6807756b8f024346095bb954dd",
+  "RUNBOOK.md": "45cabf563ea0d0fd28fe3f82331e3360f740f8f76f28601404e5286e659b4c67",
+  "tools/check-acceptance.py": "0d51215aabbe46c6ad98b8b82340a5afe25f906c4a0f4a31bd9476ef53f41302",
+  "tools/run.py": "6784b2bfc1981d0f58e5767be331245c6eb1cd8706bdf450f908d68ee788a1ff",
+  "tools/verify.py": "1c07a67e5125de0918ae383de87599e1a9a94d3b96f1ba89b0f9728d502b7d7a"
+}

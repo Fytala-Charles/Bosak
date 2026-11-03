@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "status": "Blocked pending gate evidence",
+  "implementationStarted": false,
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "requiredReplacements": [
+    {
+      "returnId": "BCAP-O1-Schema",
+      "path": null,
+      "sha256": null,
+      "validationReceipt": null
+    },
+    {
+      "returnId": "BCAP-O2-Schema",
+      "path": null,
+      "sha256": null,
+      "validationReceipt": null
+    }
+  ],
+  "scopedR2Closure": {
+    "path": null,
+    "sha256": null,
+    "allSevenRoleValidationReceipt": null
+  },
+  "implementationCandidateCommit": null,
+  "baseline": {
+    "productionCommit": "b2ca55fc078b0cc44555545b90d31e2d7f585fd0",
+    "isolatedQualificationCommit": "2ebe366382397867e899b3663d960b103a49b53a",
+    "sourceBase": "1ed1f82c8fb18d8518f01d8280dcb741279b4303",
+    "sourceInputs": "docs/foundation-bcap-profile/evidence/SOURCE-INPUTS.json",
+    "sourceInputsSha256": "28b3e37c821c94b6274a9d9371a9e7bae958035357cb349037782b5ad9e455b6",
+    "qualificationReceipt": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+    "qualificationReceiptSha256": "9ea447ed168687144284c7f628c145956f693f7a1cd6ce95f9d60736e352a922"
+  },
+  "reason": "Scoped prose and Core NotSubmitted drafts do not establish validated formal replacements or scoped R2 closure."
+}

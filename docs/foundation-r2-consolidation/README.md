@@ -13,6 +13,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [Schema accepts O1/O2 design with scope](../schema-acceptance-preparation/README.md); versioned carry-forward confirmation remains pending. R2 stays InReview; the next neutral admission slice is prepared.
 
+
+3 November: [W1-A is explicitly blocked pending gate evidence](../schema-w1-gate-review/README.md). Trusted ordinary-source membership, complete retained acceptance checklist and exact qualification commands are now specified; no implementation has started.
+
 ## Consolidated answers
 
 | Return | Decision/state | What it establishes | What remains |

@@ -58,7 +58,7 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "Prioritize Schema exact R2 source/policy dispositions; prepare R3 neutral admission scope in parallel, keep production implementation gated",
+      "nextCoreTask": "Complete and validate versioned Schema O1/O2 replacements and all seven roles; record scoped R2 closure before any W1 implementation",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -107,7 +107,9 @@
       "schemaPreciseDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
       "schemaDecisionRequestDelivery": "Local self-contained source/evidence inbox; no owner acknowledgement or amended disposition inferred",
       "schemaLatestDesignDisposition": "AcceptWithScope in user-supplied 2026-11-03 prose; formal replacement completion pending",
-      "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md"
+      "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md",
+      "w1ImplementationStatus": "Blocked pending gate evidence",
+      "w1GateEvidence": "docs/schema-w1-gate-review/GATE.json"
     },
     {
       "id": "R3",

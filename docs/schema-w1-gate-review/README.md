@@ -1,0 +1,31 @@
+# W1-A preparation: gate, ownership and executable acceptance
+
+3 November 2026. **Blocked pending gate evidence. Implementation not started.** This clarification supersedes the [earlier R3 preparation](../schema-acceptance-preparation/R3-W1.md). [Schema’s relayed follow-up](inputs/Schema-followup.txt) confirms the plan direction while requiring evidence before execution. The earlier prose and unsigned drafts do not close R2.
+
+## Entry gate
+
+[GATE.json](GATE.json) deliberately contains null replacement paths/hashes/validation receipts and a null scoped R2 closure reference. Before implementation, record actual versioned O1/O2 submitted replacements, hash their original bytes, validate each against the unchanged proposal, validate all seven role bindings, and link/hash the scoped closure record. Confirm capture/delta/error-graph applicability explicitly; no raw exception serialization acceptance is inferred. Gate status cannot advance on prose or a NotSubmitted draft. Record immutable semantic adoption sources before code, then candidate commit and source hashes before qualification. No Schema checkout changes are required by this ordinary-source slice.
+
+## Trusted ordinary-source membership
+
+The mechanism is the **host-selected trusted input adapter’s `ISchemaAssessmentInput.OwnsNode(IXdmNode)` predicate**, bound to the exact retained source/snapshot resource and operation. The interface name does not require a Schema issuer. The host must select the adapter as trusted composition; arbitrary caller predicates are not self-authenticating. Core cannot derive ownership from an arbitrary IXdmNode’s public getters or descriptive labels.
+
+For W1-A controls, implement a trusted ordinary fixture input with a private owner token and reference-identity registry of its sealed node projections. Register projections when the trusted provider creates them; all document/parent/axis/attribute/namespace routes preserve the exact owner and registry association. The predicate checks availability, trusted sealed type, exact owner and registered identity using private state only, before any purported node getter. No Schema projection or legacy annotation is reused as ordinary ownership proof. Unsupported arbitrary external node implementations are refused on this route rather than automatically wrapped/admitted. Do not eagerly enumerate or copy a graph to build membership.
+
+For an exact admitted operation, check availability, query only its trusted input predicates, and require exactly one distinct owning admission before any node/content/facts getter or host dispatch. Zero owners means foreign; multiple owners means ambiguous and is rejected. Duplicate admissions are rejected before lease acquisition. A throwing/unavailable predicate fails closed with acquisition rollback; availability is rechecked before dispatch. The fixture must include poison-getter foreign nodes and deliberately overlapping trusted test predicates. Predicate invocations can read their own retained provider state, never foreign IXdmNode properties.
+
+Concrete persistent feasibility evidence is XmlDb’s internal `PersistentXdmNode.OwnsNode(ImmutableXmlSnapshot, IXdmNode?)` at owner commit `0d18e91dc42db4831e50bf9e902f95fae7077d6d`: check snapshot availability, sealed provider type, reference-equal private snapshot, then validate its private node id. That internal member is not callable directly by Core and is not an integrated public adapter. The owner must bind it through its trusted local adapter in R4. W1-A fixture success does not qualify native XmlDb or arbitrary ordinary XML providers.
+
+## Slice and retained obligations
+
+Implement neutral admission and shared lifetime composition first in runtime, using the [earlier file map](../schema-acceptance-preparation/R3-W1.md). Preserve optional schema checks and existing lease rollback. Public facade introduction remains subject to the accepted contract dependency order; no throwing placeholders. Host-role integration remains W1-D. Actual provider adapters remain R4.
+
+The [complete checklist](ACCEPTANCE.json) retains all 20 original cases with expected outcomes, planned test prefixes and per-case receipt destinations. W1-A requires 17 of them plus an explicit drain control. W1-09/10 remain W1-D obligations; W1-18 remains actual XmlDb R4 qualification. None is dropped or counted as passed. Full final W1/owner qualification must resolve the deferred obligations before claiming that wider scope.
+
+## Qualification baseline and execution
+
+Production baseline: `b2ca55fc078b0cc44555545b90d31e2d7f585fd0` (1.42.0). Qualified isolated profile receipt commit: `2ebe366382397867e899b3663d960b103a49b53a`; its actual source base is `1ed1f82c8fb18d8518f01d8280dcb741279b4303` plus the exact candidate source hashes, not a claim that checkout at the receipt commit reproduces the isolated engine. [Pinned source inputs](../foundation-bcap-profile/evidence/SOURCE-INPUTS.json) and [full qualification](../foundation-bcap-profile/evidence/FULL-QUALIFICATION.json) have hashes recorded in GATE.json. Baseline: 24,390 unit passes; QT3 31,397/0/424; gated qt4 8,941/0/1,918 and 11 experimental passes. Added tests increase totals; no original regression or skip-map change is permitted.
+
+[RUNBOOK.md](RUNBOOK.md) gives exact commands and receipt destinations. The new launcher applies the existing scoped process error mode, preserves exit code/log, refuses overwriting logs and does not alter global Windows settings. No .NET runner is launched while the gate is blocked. Historic qualification scripts and `.guard-tmp/bcap-profile` are retained and must not be rerun into sealed destinations.
+
+Allocation/callback measurements must use a fresh candidate layout with original and candidate source/binary hashes, caller limits, cold/warm/rollback/cancellation scenarios and raw observations recorded under `evidence/execution/performance/`. Do not infer accepted owner budgets from Core observations. Source/API/friend metadata comparison goes under `evidence/execution/api/`, against the accepted declaration manifest and original compatibility inventory. This plan adds no production APIs, adoption, freeze or publication decision.
