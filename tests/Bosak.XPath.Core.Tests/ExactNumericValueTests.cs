@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; exact numeric carrier transport (1.47.0).                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Replace temporary wide-map refusal expectations with exact key retention (1.49.0).       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -140,14 +142,14 @@ public sealed class ExactNumericValueTests
         var rebound=XdmValue.SchemaTransportAttach(changed,XdmValue.SchemaTransportMarker(marked)!);
         Assert.Throws<ArgumentException>(()=>kernel.ReadValue(rebound));snapshot.Dispose();Assert.Throws<ObjectDisposedException>(()=>kernel.ReadValue(marked));kernel.Close();
     }
-    /// <summary>Legacy map keys accept exact values in legacy range and refuse wider values before mutation.</summary>
-    [Fact] public void LegacyMapKeysDoNotCollapseWideValues()
+    /// <summary>Numeric map keys retain wide values and preserve existing exact equivalence.</summary>
+    [Fact] public void NumericMapKeysDoNotCollapseWideValues()
     {
         var map=new XdmMap();map.Add(XdmValue.FromInteger(1),XdmValue.True);
         Assert.True(XdmValueEqualityComparer.Instance.Equals(XdmValue.FromDecimal(Exact("100",2)),XdmValue.FromInteger(1)));
         Assert.Equal(XdmValueEqualityComparer.Instance.GetHashCode(XdmValue.FromDecimal(Exact("100",2))),XdmValueEqualityComparer.Instance.GetHashCode(XdmValue.FromInteger(1)));
-        Assert.Throws<OverflowException>(()=>map.Add(Carrier(0),XdmValue.False));Assert.Equal(1,map.Count);
-        Assert.Throws<OverflowException>(()=>map.Add(Carrier(2),XdmValue.False));Assert.Equal(1,map.Count);
+        map.Add(Carrier(0),XdmValue.False);Assert.Equal(2,map.Count);
+        map.Add(Carrier(2),XdmValue.False);Assert.Equal(3,map.Count);
     }
     /// <summary>Numeric payloads add no XdmValue instance fields in the qualified 64-bit process.</summary>
     [Fact] public void ValueCarrierSizeRemainsUnchanged()

@@ -1,0 +1,9 @@
+{
+  "scope": "Pre-owned coefficients; 500 warmups, 10000 iterations; key operations only, no owner budget acceptance.",
+  "bytesPerOperation": {
+    "wide-integer-key-hash": 0,
+    "wide-decimal-key-hash": 0,
+    "extreme-scale-key-equality": 0
+  },
+  "budgetsAccepted": false
+}

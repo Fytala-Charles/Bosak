@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; bounded exact arithmetic profile (1.48.0).                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Promote scalar cases and qualify both profile dispatch lifetimes (1.49.0).              |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -31,7 +33,7 @@ public sealed class BoundedNumericSessionTests
     private static SchemaQueryLimits Limits(int digits=128,int scale=64)=>new(4,8,8,digits,scale);
     private static Session Compile(string expression,int digits=128,int scale=64)
     {var result=Session.CompileXPath(expression,Limits(digits,scale));Assert.Equal(SchemaResultKind.Supported,result.Kind);return result.Value;}
-    private static string Text(XdmValue value)=>value.Kind==XdmValueKind.Integer?value.BigIntegerValue.ToString(CultureInfo.InvariantCulture):value.ExactDecimalValue.ToInvariantString(512);
+    private static string Text(XdmValue value)=>value.Kind==XdmValueKind.String?value.StringValue:value.Kind==XdmValueKind.Integer?value.BigIntegerValue.ToString(CultureInfo.InvariantCulture):value.ExactDecimalValue.ToInvariantString(512);
     private static XdmValue Evaluate(Session s,EvaluationContext? context=null)=>s.Run([],op=>op.Evaluate(context??new EvaluationContext()));
     /// <summary>Literals, signs, precedence and primitive promotion stay exact.</summary>
     /// <param name="source">Arithmetic query.</param>
@@ -51,7 +53,7 @@ public sealed class BoundedNumericSessionTests
     /// <param name="source">Query outside the finite arithmetic grammar.</param>
     [Theory]
     [InlineData("1 div 2")][InlineData("1 idiv 2")][InlineData("1 mod 2")][InlineData("1e2")]
-    [InlineData("1 = 1")][InlineData("string(1+2)")][InlineData("count(/n)")][InlineData("$p:x + 1")]
+    [InlineData("1 instance of xs:integer")][InlineData("string(1 div 2)")][InlineData("count(/n)")][InlineData("$p:x + 1")]
     [InlineData("xs:decimal('1.2')")][InlineData("(1,2)")][InlineData("1 + true()")]
     public void RefusesUnavailableSyntax(string source)
     {Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath(source,Limits()).Kind);}
@@ -127,18 +129,20 @@ public sealed class BoundedNumericSessionTests
         }
     }
     /// <summary>Close during numeric dispatch revokes access and defers actual owner release to raw completion.</summary>
+    /// <param name="scalar">Whether to exercise the new bounded scalar dispatcher.</param>
     /// <returns>The completed lifetime verification.</returns>
-    [Fact] public async Task CloseDuringArithmeticRetainsRawLease()
+    [Theory][InlineData(false)][InlineData(true)] public async Task CloseDuringArithmeticRetainsRawLease(bool scalar)
     {
-        var s=Compile(string.Join("+",Enumerable.Repeat("1",500)));var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(scalar?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         input.OnCheck=()=>{if(input.Checks==100){s.Dispose();Assert.Equal(0,input.Releases);}};
         Assert.Throws<ObjectDisposedException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext())));
         await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
     }
-    /// <summary>Cancellation inside arithmetic is observed without ending the reusable source admission.</summary>
-    [Fact] public void CancellationDuringArithmeticPreservesAdmission()
+    /// <summary>Cancellation inside arithmetic/scalar dispatch preserves the reusable source admission.</summary>
+    /// <param name="scalar">Whether to exercise the new bounded scalar dispatcher.</param>
+    [Theory][InlineData(false)][InlineData(true)] public void CancellationDuringArithmeticPreservesAdmission(bool scalar)
     {
-        using var s=Compile(string.Join("+",Enumerable.Repeat("1",500)));var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(scalar?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         using var cancellation=new CancellationTokenSource();input.OnCheck=()=>{if(input.Checks==100)cancellation.Cancel();};
         Assert.ThrowsAny<OperationCanceledException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()),cancellation.Token));Assert.Equal(0,input.Releases);
         input.OnCheck=null;Assert.Equal("500",Text(s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()))));Assert.Equal(0,input.RootReads);

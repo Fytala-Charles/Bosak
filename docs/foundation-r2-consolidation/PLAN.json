@@ -151,8 +151,8 @@
       "work": "Neutral source admission, authority/facts, numeric/list/union, advisor/compatibility and public all-host/capture implementation under selected scope.",
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
-      "preparation": "docs/foundation-bounded-numeric/README.md",
-      "progress": "1.48.0 bounded exact primitive arithmetic qualified; 44 new controls, 24635 tests, frozen gates and unchanged public metadata. Next exact comparison/map/serialization and wider numeric/schema/all-host routing; native/source migration acceptance pending."
+      "preparation": "docs/foundation-exact-scalars/README.md",
+      "progress": "1.49.0 exact comparisons/map keys/bounded strings qualified; 50 new controls, 24685 tests and unchanged frozen gates/public metadata. Wider numeric/schema/all-host/native and migration acceptance remain pending."
     },
     {
       "id": "P10",

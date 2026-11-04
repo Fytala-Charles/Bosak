@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-11-2026     | Creation; exact-decimal capacity foundation (1.46.0).                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Avoid quotient allocation on failed normalization divisibility checks (1.49.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -42,15 +44,13 @@ public readonly struct XdmExactDecimal : IEquatable<XdmExactDecimal>
         // Remove long zero suffixes in blocks; do not divide a large coefficient once per zero.
         while (scale >= 9)
         {
-            var quotient = BigInteger.DivRem(coefficient, 1_000_000_000, out var remainder);
-            if (!remainder.IsZero) break;
-            coefficient = quotient; scale -= 9;
+            if (!(coefficient % 1_000_000_000).IsZero) break;
+            coefficient /= 1_000_000_000; scale -= 9;
         }
         while (scale > 0)
         {
-            var quotient = BigInteger.DivRem(coefficient, 10, out var remainder);
-            if (!remainder.IsZero) break;
-            coefficient = quotient; scale--;
+            if (!(coefficient % 10).IsZero) break;
+            coefficient /= 10; scale--;
         }
         Coefficient = coefficient; Scale = scale;
     }

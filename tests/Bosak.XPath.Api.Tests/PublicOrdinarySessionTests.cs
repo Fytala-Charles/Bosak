@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 03-11-2026     | Creation; bounded public ordinary-source facade (1.45.0).                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Move newly supported string(arithmetic) case to exact scalar positive coverage (1.49.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Xml.Linq;
@@ -149,7 +151,7 @@ public sealed class PublicOrdinarySessionTests
     /// <param name="expression">A query outside the declared profile.</param>
     [Theory]
     [InlineData("999999999999999999999999999999999999999999999999999999999999999999999999999")]
-    [InlineData("string(1 + 2)")]
+    [InlineData("string(1 div 2)")]
     [InlineData("xs:integer('123')")]
     [InlineData("count(/n)")]
     [InlineData("string(position())")]

@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; bounded exact arithmetic profile (1.48.0).                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Compare decimal order before bounded alignment and derive scalar output capacity (1.49.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 
@@ -60,6 +62,34 @@ internal readonly struct ExactArithmeticLimits
         if (delta>=_digits || !ExactNumericCapacity.FitsCoefficient(value.Coefficient,_digits-delta))
             throw new NotSupportedException("Scale alignment exceeds numeric digit capacity.");
         return value.Coefficient*BigInteger.Pow(10,delta);
+    }
+    private int Digits(BigInteger coefficient,Action check)
+    {
+        var magnitude=BigInteger.Abs(coefficient);if(magnitude.IsZero)return 1;
+        // 0.301029995 is a strict lower bound on log10(2). UInt128 avoids bit-count multiplication overflow.
+        int digits=checked((int)(((UInt128)(magnitude.GetBitLength()-1)*301_029_995)/1_000_000_000+1));
+        check();var threshold=BigInteger.Pow(10,digits);
+        while(magnitude>=threshold){check();threshold*=10;digits++;}
+        return digits;
+    }
+    internal int Compare(ExactNumber left,ExactNumber right,Action check)
+    {
+        check();Validate(left);Validate(right);
+        int sign=left.Coefficient.Sign.CompareTo(right.Coefficient.Sign);if(sign!=0)return sign;
+        if(left.Coefficient.IsZero)return 0;
+        if(left.Scale==right.Scale)return left.Coefficient.CompareTo(right.Coefficient);
+        long leftOrder=(long)Digits(left.Coefficient,check)-left.Scale;
+        long rightOrder=(long)Digits(right.Coefficient,check)-right.Scale;
+        check();int order=leftOrder.CompareTo(rightOrder);
+        if(order!=0)return left.Coefficient.Sign*order;
+        // Equal decimal order bounds necessary alignment by the admitted coefficient width.
+        int scale=Math.Max(left.Scale,right.Scale);var a=Align(left,scale);check();var b=Align(right,scale);check();return a.CompareTo(b);
+    }
+    internal int StringCapacity
+        =>(int)Math.Min(int.MaxValue,Math.Max(5L,Math.Max((long)_digits+2,(long)_scale+3)));
+    internal string Format(ExactNumber value,Action check)
+    {
+        check();Validate(value);var result=new XdmExactDecimal(value.Coefficient,value.Scale,_digits,_scale).ToInvariantString(StringCapacity);check();return result;
     }
     internal ExactNumber Add(ExactNumber left,ExactNumber right,Action check)
     {

@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Select exact arithmetic with captured numeric limits and guarded raw dispatch (1.48.0).  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 04-11-2026     | Describe exact scalar profiles and admit checked Boolean/string results (1.49.0).        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -26,7 +28,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XPath.Api.Schema;
 /// <summary>Engine-created ordinary-source XPath session with an explicit bounded semantic profile.</summary>
-/// <remarks>String/boolean queries and a selected exact arithmetic subset are supported. Schema operations remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
+/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Schema operations remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
 public sealed class SchemaQuerySession : IDisposable
 {
     private bool _closed;
@@ -35,8 +37,8 @@ public sealed class SchemaQuerySession : IDisposable
     private readonly Dictionary<ISchemaAssessmentInput, InputAdmission> _inputs = new(ReferenceEqualityComparer.Instance);
     private readonly SchemaQueryLimits _limits;
     private readonly bool _numeric;
-    private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false)
-    { _runtime=runtime;_limits=limits;_numeric=numeric;Environment=new SemanticEnvironment(runtime.Environment,numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name); }
+    private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null)
+    { _runtime=runtime;_limits=limits;_numeric=numeric;Environment=new SemanticEnvironment(runtime.Environment,numeric?(profile??ExactArithmeticPlan.Profile):OrdinaryQueryProfile.Name); }
     internal static SchemaResult<T> Unsupported<T>() => new Outcome<T>(default!, false);
     private static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
     private sealed class Outcome<T>(T value, bool supported) : SchemaResult<T>
@@ -54,7 +56,7 @@ public sealed class SchemaQuerySession : IDisposable
     /// <param name="options">Existing options copied under the selected capture policy.</param>
     /// <param name="assessor">Optional borrowed schema assessor.</param>
     /// <param name="cancellationToken">Compilation/binding cancellation.</param>
-    /// <returns>A string/boolean or bounded exact arithmetic session, or Unsupported for unavailable syntax, options, capacity or assessors.</returns>
+    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or Unsupported for unavailable syntax, options, capacity or assessors.</returns>
     /// <exception cref="ArgumentException">The source or explicit limits are invalid.</exception>
     /// <exception cref="OperationCanceledException">Compilation was canceled.</exception>
     public static SchemaResult<SchemaQuerySession> CompileXPath(string expression, SchemaQueryLimits limits, CompileOptions? options = null, ISchemaAssessor? assessor = null, CancellationToken cancellationToken = default)
@@ -62,7 +64,7 @@ public sealed class SchemaQuerySession : IDisposable
         ArgumentNullException.ThrowIfNull(expression); limits.Validate(); cancellationToken.ThrowIfCancellationRequested();
         if (assessor is not null) return Unsupported<SchemaQuerySession>();
         if (!SchemaSessionCompilation.TrySnapshotOptions(options ?? CompileOptions.Default,out var frozen,out _))return Unsupported<SchemaQuerySession>();
-        QuerySourceSession? runtime;bool numeric=false;
+        QuerySourceSession? runtime;bool numeric=false;string? profile=null;
         if(OrdinaryQueryProfile.Supports(expression,frozen!))
         {
             if(!SchemaSessionCompilation.TryCompileOrdinary(expression,frozen!,limits.MaxOpenSnapshots,out runtime,out _))return Unsupported<SchemaQuerySession>();
@@ -70,12 +72,15 @@ public sealed class SchemaQuerySession : IDisposable
         else
         {
             if(!ExactArithmeticPlan.TryCompile(expression,frozen!,limits.MaxNumericDigits,limits.MaxDecimalScale,out var plan,cancellationToken))return Unsupported<SchemaQuerySession>();
-            numeric=true;
+            numeric=true;profile=plan!.ProfileName;
             var captured=SchemaSessionCompilation.Capture(frozen!,frozen!.Namespaces,frozen.DefaultElementNamespace);
-            var environment=new SchemaQueryEnvironment(captured.Namespaces,JsonSerializer.Serialize(new{format=ExactArithmeticPlan.DescriptorFormat,staticContext=captured.Fingerprint,profile=ExactArithmeticPlan.Profile,limits.MaxNumericDigits,limits.MaxDecimalScale}));
+            var descriptor=plan!.ProfileName==ExactArithmeticPlan.Profile
+                ?JsonSerializer.Serialize(new{format=plan.DescriptorName,staticContext=captured.Fingerprint,profile=plan.ProfileName,limits.MaxNumericDigits,limits.MaxDecimalScale})
+                :JsonSerializer.Serialize(new{format=plan.DescriptorName,staticContext=captured.Fingerprint,profile=plan.ProfileName,limits.MaxNumericDigits,limits.MaxDecimalScale,serializationCapacity=plan.SerializationCapacity});
+            var environment=new SchemaQueryEnvironment(captured.Namespaces,descriptor);
             runtime=new QuerySourceSession(environment,plan!.Evaluate,limits.MaxOpenSnapshots);
         }
-        try { cancellationToken.ThrowIfCancellationRequested(); return Supported(new SchemaQuerySession(runtime!,limits,numeric)); }
+        try { cancellationToken.ThrowIfCancellationRequested(); return Supported(new SchemaQuerySession(runtime!,limits,numeric,profile)); }
         catch { runtime!.Dispose(); throw; }
     }
     /// <summary>The exact engine-issued immutable compilation environment.</summary>
@@ -168,7 +173,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
@@ -269,7 +274,7 @@ public sealed class SchemaQueryOperation
     }
     /// <summary>Evaluates captured XPath or XQuery; XSLT uses its typed transform producer instead.</summary>
     /// <param name="context">Dynamic inputs whose selected policy must be enforced.</param>
-    /// <returns>A copied string/boolean scalar, or an exact integer/decimal in the arithmetic profile.</returns>
+    /// <returns>A copied scalar selected by the ordinary, exact arithmetic or exact scalar profile.</returns>
     /// <exception cref="NotSupportedException">Context state, numeric or structured inputs, or the result is outside this profile.</exception>
     /// <exception cref="ArgumentException">Incoming nodes do not have exactly one admitted owner.</exception>
     /// <exception cref="ObjectDisposedException">The operation or a required admission is revoked.</exception>
@@ -283,7 +288,7 @@ public sealed class SchemaQueryOperation
         var inputs = _runtime.CaptureInputs(context, Math.Max(1, variables.Count), Math.Max(1, context.SnapshotNamespaces().Count));
         foreach (var pair in inputs.VariableBindings)ValidateInput(pair.Value);
         var result = _runtime.EvaluateAtomic(inputs);
-        if(_numeric){_ = new ExactArithmeticLimits(_limits.MaxNumericDigits,_limits.MaxDecimalScale).Read(result);_runtime.Check();}
+        if(_numeric){if(result.Kind is not(XdmValueKind.Boolean or XdmValueKind.String))_ = new ExactArithmeticLimits(_limits.MaxNumericDigits,_limits.MaxDecimalScale).Read(result);_runtime.Check();}
         else if(result.Kind is not(XdmValueKind.String or XdmValueKind.Boolean))
             throw new NotSupportedException("The ordinary profile returns copied string/boolean scalars only.");
         return result;

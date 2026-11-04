@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; bounded exact arithmetic profile (1.48.0).                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Compile typed scalar comparisons and top-level bounded string conversion (1.49.0).       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using Bosak.XPath.Core.Xdm;
@@ -26,25 +28,47 @@ internal sealed class ExactArithmeticPlan
 {
     internal const string Profile="bosak-exact-arithmetic-v1";
     internal const string DescriptorFormat="bosak-exact-arithmetic-static-v1";
-    private enum Op { Literal,Variable,Positive,Negative,Add,Subtract,Multiply,Open }
+    internal const string ScalarProfile="bosak-exact-scalars-v2";
+    internal const string ScalarDescriptorFormat="bosak-exact-scalars-static-v2";
+    private enum Op { Literal,Variable,Positive,Negative,Add,Subtract,Multiply,Equal,NotEqual,Less,LessEqual,Greater,GreaterEqual,Open }
+    private static bool Comparison(Op op)=>op is Op.Equal or Op.NotEqual or Op.Less or Op.LessEqual or Op.Greater or Op.GreaterEqual;
+    private static Op? ComparisonToken(TokenKind token)=>token switch
+    {
+        TokenKind.Equal or TokenKind.ValueEq=>Op.Equal,TokenKind.NotEqual or TokenKind.ValueNe=>Op.NotEqual,
+        TokenKind.LessThan or TokenKind.ValueLt=>Op.Less,TokenKind.LessThanOrEqual or TokenKind.ValueLe=>Op.LessEqual,
+        TokenKind.GreaterThan or TokenKind.ValueGt=>Op.Greater,TokenKind.GreaterThanOrEqual or TokenKind.ValueGe=>Op.GreaterEqual,_=>null
+    };
     private readonly record struct Instruction(Op Code,ExactNumber Number=default,string? Variable=null);
     private readonly Instruction[] _code;
     private readonly int _stackDepth;
     private readonly ExactArithmeticLimits _limits;
-    private ExactArithmeticPlan(Instruction[] code,int depth,ExactArithmeticLimits limits) { _code=code;_stackDepth=depth;_limits=limits; }
-    private static int Priority(Op op)=>op is Op.Positive or Op.Negative ? 3 : op==Op.Multiply ? 2 : op is Op.Add or Op.Subtract ? 1 : 0;
+    private readonly bool _extended,_serialize;
+    internal string ProfileName=>_extended?ScalarProfile:Profile;
+    internal string DescriptorName=>_extended?ScalarDescriptorFormat:DescriptorFormat;
+    internal int SerializationCapacity=>_limits.StringCapacity;
+    private ExactArithmeticPlan(Instruction[] code,int depth,ExactArithmeticLimits limits,bool extended,bool serialize)
+    { _code=code;_stackDepth=depth;_limits=limits;_extended=extended;_serialize=serialize; }
+    private static int Priority(Op op)=>op is Op.Positive or Op.Negative ? 3 : op==Op.Multiply ? 2 : op is Op.Add or Op.Subtract ? 1 : Comparison(op)?0:-1;
     internal static bool TryCompile(string source,CompileOptions options,int digits,int scale,out ExactArithmeticPlan? plan,CancellationToken cancellation=default)
     {
         plan=null;
         if(options.Compatibility!=XPathCompatibility.XPath31 || options.BackwardsCompatible || options.Xml11LineEndings
             || options.EnableJit || options.StrictStaticTyping || options.EnumerationItemTypes is not null || options.ItemTypeAliases is not null
             || options.StaticVariableTypes is not null || options.NamedRecordTypeNames is not null)return false;
-        var code=new List<Instruction>();var operators=new Stack<Op>();var lexer=new XPathLexer(source.AsSpan());
-        bool operand=true,selected=false;int depth=0,maximum=0;
+        ReadOnlySpan<char> body=source.AsSpan();bool serialize=UnwrapString(source,options,out int start,out int length,cancellation);
+        if(serialize)body=body.Slice(start,length);
+        var code=new List<Instruction>();var operators=new Stack<Op>();var kinds=new Stack<bool>();var lexer=new XPathLexer(body);
+        bool operand=true,selected=serialize,extended=serialize;int depth=0,maximum=0;
         bool Emit(Op op)
         {
             if(depth<(op is Op.Positive or Op.Negative ? 1 : 2))return false;
-            if(op is not(Op.Positive or Op.Negative))depth--;code.Add(new(op));return true;
+            if(op is Op.Positive or Op.Negative){if(kinds.Peek())return false;}
+            else
+            {
+                bool right=kinds.Pop(),left=kinds.Pop();if(left||right)return false;
+                kinds.Push(Comparison(op));depth--;
+            }
+            code.Add(new(op));return true;
         }
         try
         {
@@ -54,15 +78,15 @@ internal sealed class ExactArithmeticPlan
                 if(token.Kind is TokenKind.IntegerLiteral or TokenKind.DecimalLiteral)
                 {
                     if(!operand)return false;
-                    var value=ExactDecimalLexical.Parse(token.Text(source.AsSpan()),digits,scale);
+                    var value=ExactDecimalLexical.Parse(token.Text(body),digits,scale);
                     code.Add(new(Op.Literal,new(value.Coefficient,value.Scale,token.Kind==TokenKind.IntegerLiteral)));
-                    maximum=Math.Max(maximum,++depth);operand=false;selected=true;
+                    maximum=Math.Max(maximum,++depth);kinds.Push(false);operand=false;selected=true;
                 }
                 else if(token.Kind==TokenKind.Dollar)
                 {
                     if(!operand)return false;token=lexer.NextToken();if(token.Kind!=TokenKind.Name)return false;
-                    var name=token.Text(source.AsSpan());if(name.IndexOfAny(':','{','}')>=0)return false;
-                    code.Add(new(Op.Variable,Variable:name.ToString()));maximum=Math.Max(maximum,++depth);operand=false;
+                    var name=token.Text(body);if(name.IndexOfAny(':','{','}')>=0)return false;
+                    code.Add(new(Op.Variable,Variable:name.ToString()));maximum=Math.Max(maximum,++depth);kinds.Push(false);operand=false;
                 }
                 else if(token.Kind==TokenKind.LParen) { if(!operand)return false;operators.Push(Op.Open); }
                 else if(token.Kind==TokenKind.RParen)
@@ -80,17 +104,44 @@ internal sealed class ExactArithmeticPlan
                     while(operators.TryPeek(out var top)&&Priority(top)>=Priority(op))if(!Emit(operators.Pop()))return false;
                     operators.Push(op);operand=true;
                 }
+                else if(ComparisonToken(token.Kind) is Op comparison)
+                {
+                    if(operand)return false;selected=true;extended=true;
+                    while(operators.TryPeek(out var top)&&Priority(top)>=0)
+                    {if(Comparison(top)||!Emit(operators.Pop()))return false;}
+                    operators.Push(comparison);operand=true;
+                }
                 else return false;
             }
             if(operand||!selected)return false;
             while(operators.TryPop(out var op))if(op==Op.Open||!Emit(op))return false;
             if(depth!=1)return false;
-            plan=new(code.ToArray(),maximum,new(digits,scale));return true;
+            plan=new(code.ToArray(),maximum,new(digits,scale),extended,serialize);return true;
         }
         catch(NotSupportedException){return false;}
         catch(FormatException){return false;}
     }
+    private static bool UnwrapString(string source,CompileOptions options,out int start,out int length,CancellationToken cancellation)
+    {
+        start=0;length=source.Length;var lexer=new XPathLexer(source.AsSpan());var token=lexer.NextToken();
+        if(token.Kind!=TokenKind.Name)return false;
+        var name=token.Text(source.AsSpan());
+        if(!name.SequenceEqual("string")&&!name.SequenceEqual("fn:string"))return false;
+        if(name.SequenceEqual("fn:string")&&options.Namespaces?.TryGetValue("fn",out var ns)==true&&ns!="http://www.w3.org/2005/xpath-functions")return false;
+        token=lexer.NextToken();if(token.Kind!=TokenKind.LParen)return false;
+        start=token.Start+token.Length;int depth=1;
+        while((token=lexer.NextToken()).Kind!=TokenKind.Eof)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            if(token.Kind==TokenKind.LParen)depth++;
+            else if(token.Kind==TokenKind.RParen&&--depth==0)
+            {length=token.Start-start;return lexer.NextToken().Kind==TokenKind.Eof;}
+        }
+        return false;
+    }
     internal XdmValue Evaluate(EvaluationContext context,Action check)
+        =>_extended?EvaluateScalars(context,check):EvaluateNumeric(context,check);
+    private XdmValue EvaluateNumeric(EvaluationContext context,Action check)
     {
         var values=ArrayPool<ExactNumber>.Shared.Rent(_stackDepth);int count=0;
         try
@@ -114,4 +165,39 @@ internal sealed class ExactArithmeticPlan
         }
         finally { ArrayPool<ExactNumber>.Shared.Return(values,clearArray:true); }
     }
+    private readonly record struct Cell(ExactNumber Number,bool Boolean=false,bool IsBoolean=false);
+    private XdmValue EvaluateScalars(EvaluationContext context,Action check)
+    {
+        var values=ArrayPool<Cell>.Shared.Rent(_stackDepth);int count=0;
+        try
+        {
+            foreach(var instruction in _code)
+            {
+                check();
+                if(instruction.Code==Op.Literal){values[count++]=new(instruction.Number);continue;}
+                if(instruction.Code==Op.Variable)
+                {
+                    if(!context.TryGetVariable(instruction.Variable!,out var value))throw new InvalidOperationException($"XPST0008: Variable ${instruction.Variable} is not defined.");
+                    values[count++]=new(_limits.Read(value));continue;
+                }
+                if(instruction.Code==Op.Positive)continue;
+                if(instruction.Code==Op.Negative){values[count-1]=new(_limits.Negate(values[count-1].Number));continue;}
+                var right=values[--count].Number;var left=values[count-1].Number;
+                if(Comparison(instruction.Code))
+                {
+                    int cmp=_limits.Compare(left,right,check);bool result=instruction.Code switch
+                    { Op.Equal=>cmp==0,Op.NotEqual=>cmp!=0,Op.Less=>cmp<0,Op.LessEqual=>cmp<=0,Op.Greater=>cmp>0,_=>cmp>=0 };
+                    values[count-1]=new(default,result,true);
+                }
+                else values[count-1]=new(instruction.Code==Op.Multiply?_limits.Multiply(left,right,check)
+                    :_limits.Add(left,instruction.Code==Op.Subtract?_limits.Negate(right):right,check));
+            }
+            check();var final=values[0];XdmValue output;
+            if(_serialize)output=XdmValue.FromString(final.IsBoolean?(final.Boolean?"true":"false"):_limits.Format(final.Number,check));
+            else output=final.IsBoolean?XdmValue.FromBoolean(final.Boolean):_limits.ToValue(final.Number);
+            check();return output;
+        }
+        finally{ArrayPool<Cell>.Shared.Return(values,clearArray:true);}
+    }
+
 }

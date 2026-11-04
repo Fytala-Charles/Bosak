@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.48.0 adds the [bounded exact arithmetic profile](../foundation-bounded-numeric/README.md) over the retained facade/carriers. R3 remains InProgress for comparisons/maps/serialization, wider numeric/schema/all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.49.0 qualifies [exact comparisons/map keys and bounded scalar strings](../foundation-exact-scalars/README.md) over the retained facade/carriers/arithmetic. R3 remains InProgress for wider numeric/schema/all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -12,6 +12,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 
 
 4 November: [bounded exact arithmetic qualified at source 1.48.0](../foundation-bounded-numeric/README.md), with 44 new controls and unchanged public declarations. Next exact comparisons/map keys and bounded serialization, then broader numeric/schema/all-host/native qualification.
+
+4 November: [exact comparisons, map keys and scalar output qualified at 1.49.0](../foundation-exact-scalars/README.md); 50 new controls, unchanged public metadata. Next wider numeric operators, schema/all-host/native qualification.
 
 ## Earlier disposition checkpoints
 

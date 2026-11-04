@@ -8,44 +8,33 @@ Updated 1 November 2026. Source is **1.42.0**; the next publication version/date
 
 The [release plan and checklist](docs/release-planning/README.md) is the single planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance.
 
-
 Current ecosystem (2 November): [four-project status](docs/foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
-
 
 Schema decision handoff: [three precise questions and localized source evidence](docs/schema-precise-disposition/REQUEST.md) are available inside Schema's workspace. Updated owner dispositions remain pending; all current counts and gates are unchanged.
 
-
 3 November: [Schema accepts O1/O2 design with scope](docs/schema-acceptance-preparation/README.md); versioned carry-forward confirmation remains pending. R2 stays InReview; the next neutral admission slice is prepared.
-
 
 3 November: [W1-A is explicitly blocked pending gate evidence](docs/schema-w1-gate-review/README.md). Trusted ordinary-source membership, complete retained acceptance checklist and exact qualification commands are now specified; no implementation has started.
 
-
 3 November: [R2 is ClosedWithScope; W1-A entry is Ready for implementation](docs/foundation-r2-closure/README.md). Seven exact scoped returns are validated; semantic adoption precedes source edits. Implementation, native qualification, freeze and publication remain pending.
-
 
 3 November: [internal W1-A neutral admission is implemented and qualified at source 1.43.0](docs/foundation-w1-neutral-admission/README.md). R3 is InProgress; optional schema composition, public/all-host integration and native/performance qualification remain ahead.
 
-
 3 November: [bounded internal W1-B schema association is qualified at source 1.44.0](docs/foundation-w1-schema-association/README.md). Ordinary inputs stay issuer-free; optimize context allocations before public/all-host integration and R4 budgets. Wider typed/numeric/native work remains pending.
-
 
 3 November: [private allocation fix qualified at source 1.44.1](docs/foundation-function-table-sharing/README.md), saving 19,256 bytes per captured evaluation with public allocations/API unchanged. Continue accepted public/all-host integration; native and budget qualification remain pending.
 
-
 3 November: [open-session drain qualified at source 1.44.2](docs/foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
-
 
 3 November: [public ordinary-source facade qualified at source 1.45.0](docs/foundation-public-ordinary/README.md), with 38 public controls and the reviewed additive signature subset. Continue numeric/schema transport and all-host implementation before owner qualification and freeze.
 
-
 3 November: [exact-decimal representation qualified at source 1.46.0](docs/foundation-exact-decimal/README.md); 46 new controls and allocation-before-refusal checks pass. Next exact XdmValue transport and checked legacy accessors, then numeric/schema/all-host integration.
-
 
 4 November: [exact XdmValue carrier transport qualified at source 1.47.0](docs/foundation-exact-value-transport/README.md); 32 new controls and all previous API fields/rows retained. Record typed-default source migration; next bounded numeric operation limits and exact execution routing.
 
-
 4 November: [bounded exact arithmetic qualified at source 1.48.0](docs/foundation-bounded-numeric/README.md), with 44 new controls and unchanged public declarations. Next exact comparisons/map keys and bounded serialization, then broader numeric/schema/all-host/native qualification.
+
+4 November: [exact comparisons, map keys and scalar output qualified at 1.49.0](docs/foundation-exact-scalars/README.md); 50 new controls, unchanged public metadata. Next wider numeric operators, schema/all-host/native qualification.
 
 ## Publication path
 
