@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.56.0 qualifies the [TA-04 internal public-contract advisor adapter](../foundation-advisor-adapter/README.md) over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for explicit typed identity VM profile/public activation/typed-projection implementation, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.57.0 qualifies [TA-05 internal compiled typed identity](../foundation-typed-identity/README.md) over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for bounded public typed identity activation/authorized numeric projection, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -34,6 +34,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [TA-03 private evidence attachment qualified](../foundation-typed-evidence/README.md), source 1.55.0: 24,925 tests, 25 new controls, unchanged gates/API. Next public adapter and explicit VM identity qualification; existing VM/public guards remain unchanged.
 
 4 November: [TA-04 public-contract adapter internally qualified](../foundation-advisor-adapter/README.md), source 1.56.0: 24,960 tests, 35 new controls, exact gates/exported metadata unchanged. Next explicit typed identity VM profile; public activation remains pending.
+
+4 November: [TA-05 internal compiled typed identity qualified](../foundation-typed-identity/README.md), source 1.57.0: 25,006 tests, 46 new controls, unchanged gates/exported metadata. Next bounded public identity activation with explicit advisor/container scope; no public schema activation inferred.
 
 ## Earlier disposition checkpoints
 

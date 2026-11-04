@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 04-11-2026     | Qualify internal public-contract advisor binding and input adapter (1.56.0).               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 04-11-2026     | Capture an internal typed identity profile and candidate evaluation route (1.57.0).         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -46,7 +48,14 @@ public sealed class SchemaQuerySession : IDisposable
     private readonly SchemaQueryLimits _limits;
     private readonly bool _numeric;
     private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null)
-    { _runtime=runtime;_limits=limits;_numeric=numeric;Environment=new SemanticEnvironment(runtime.Environment,numeric?(profile??ExactArithmeticPlan.Profile):OrdinaryQueryProfile.Name); }
+    { _runtime=runtime;_limits=limits;_numeric=numeric;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name)); }
+    internal static SchemaResult<SchemaQuerySession> CompileTypedIdentityCandidate(string expression,SchemaQueryLimits limits,CompileOptions? options=null,CancellationToken token=default)
+    {
+        ArgumentNullException.ThrowIfNull(expression);limits.Validate();token.ThrowIfCancellationRequested();
+        if(!TypedIdentityPlan.TryCompile(expression,limits,options??CompileOptions.Default,token,out var runtime))return Unsupported<SchemaQuerySession>();
+        try{token.ThrowIfCancellationRequested();return Supported(new SchemaQuerySession(runtime!,limits,profile:TypedIdentityPlan.Profile));}
+        catch{runtime!.Dispose();throw;}
+    }
     internal static SchemaResult<T> Unsupported<T>() => new Outcome<T>(default!, false);
     private static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
     private sealed class Outcome<T>(T value, bool supported) : SchemaResult<T>
@@ -199,7 +208,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
@@ -292,6 +301,11 @@ public sealed class SchemaQueryOperation
     {
         ArgumentNullException.ThrowIfNull(snapshot);_runtime.RequireMember(snapshot.Runtime);
         return _runtime.ReadRegisteredTypedContainer(snapshot.Runtime,issuer,input,origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+    }
+    internal XdmValue EvaluateTypedIdentityCandidate(SchemaQuerySnapshot snapshot,XdmValue value)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);
+        return _runtime.EvaluateTypedIdentity(snapshot.Runtime,value,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
     }
     /// <summary>Requests explicit provider-owned simple construction and admits its result.</summary>
     /// <param name="input">Atomic/lexical input under the selected constructor profile.</param>

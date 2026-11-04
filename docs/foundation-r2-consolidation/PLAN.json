@@ -152,13 +152,15 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.56.0 public-contract assessor/advisor adapter internally qualified: 24960 tests, 35 new controls, exact frozen gates and unchanged exported metadata/friends. Real public environment/input/lifetime/raw callbacks with internal candidate methods; borrowed resources remain caller-owned. Next explicit typed identity VM profile before public activation, then typed numeric projection. No public schema activation or freeze.",
+      "progress": "1.57.0 explicitly identified internal typed identity profile executes actual compiled VM: 25006 tests, 46 new controls, exact gates and unchanged exported metadata/friends. Selected-snapshot marker/representation checks pre/post VM, frozen context/all-limit fingerprints, closed general entry points and retained constructor signatures qualified. Next bounded public identity activation with explicit advisor/container scope, then authorized numeric projection. No public schema activation or freeze.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
       "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
       "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
-      "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json"
+      "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
+      "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
+      "performanceFollowup": "Typed identity measured 23360 bytes/call locally; attribute/reduce setup allocation before public activation. No owner performance budget accepted."
     },
     {
       "id": "P10",

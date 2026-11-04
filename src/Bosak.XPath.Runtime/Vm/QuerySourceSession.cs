@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 04-11-2026     | Validate private transport through an explicit admitted snapshot (1.55.0).                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 04-11-2026     | Guard an explicitly selected compiled typed identity VM route (1.57.0).                    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -51,6 +53,7 @@ internal sealed class QuerySourceSession : IDisposable
     private readonly object _gate = new();
     private readonly object _evaluate;
     private readonly int _snapshotLimit;
+    private readonly bool _typedIdentity;
     private readonly Dictionary<IQuerySourceInput, Snapshot> _snapshots = new(ReferenceEqualityComparer.Instance);
     private readonly QuerySnapshotLifetime _lifetime = new(() => { });
     private bool _closing;
@@ -58,7 +61,9 @@ internal sealed class QuerySourceSession : IDisposable
     private Task? _drain;
 
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit)
-        : this(environment,(object)evaluate,snapshotLimit) { }
+        : this(environment,evaluate,snapshotLimit,false) { }
+    internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit,bool typedIdentity)
+        : this(environment,(object)evaluate,snapshotLimit) { _typedIdentity=typedIdentity; }
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit)
         : this(environment,(object)evaluate,snapshotLimit) { }
     private QuerySourceSession(SchemaQueryEnvironment environment, object evaluate, int snapshotLimit)
@@ -255,6 +260,19 @@ internal sealed class QuerySourceSession : IDisposable
             RequireMember(snapshot);
             return snapshot.RequireTypedScalars().ValidateTransport(this,value,maxAtoms,digits,scale,_cancellation);
         }
+        internal XdmValue EvaluateTypedIdentity(Snapshot snapshot,XdmValue value,int maxAtoms,int digits,int scale)
+        {
+            Check();
+            if(!_owner._typedIdentity)throw new NotSupportedException("This session has no typed identity profile.");
+            ValidateTypedTransport(snapshot,value,maxAtoms,digits,scale);
+            var context=new EvaluationContext().WithVariable("value",value);
+            context.ResourcePolicy=SchemaProviderSessionBinding.ClosedResources();
+            Check();var result=((Func<EvaluationContext,XdmValue>)_owner._evaluate)(context);Check();
+            ValidateTypedTransport(snapshot,result,maxAtoms,digits,scale);
+            if(!ReferenceEquals(XdmValue.SchemaTransportMarker(value),XdmValue.SchemaTransportMarker(result))||!value.SchemaTransportMatches(result))
+                throw new ArgumentException("Typed identity changed scalar evidence or representation.");
+            Check();return result;
+        }
         internal QueryTypedScalarRegistration PrepareTypedRegistration(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
             Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxCached,int maxAtoms,int digits,int scale)
@@ -333,6 +351,7 @@ internal sealed class QuerySourceSession : IDisposable
         internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, int maxBindings, int maxNamespaces)
         {
             Check(); ArgumentNullException.ThrowIfNull(caller);
+            if(_owner._typedIdentity)throw new NotSupportedException("Typed identity requires an explicit snapshot and marked scalar.");
             foreach (var value in caller.SnapshotVariables().Values)
                 ValidateTransport(value);
             var inputs = caller.CaptureSchemaInputs(OwnsNode, maxBindings, maxNamespaces).ForOperation(this, OwnsNode);
@@ -341,6 +360,7 @@ internal sealed class QuerySourceSession : IDisposable
         internal XdmValue EvaluateAtomic(SchemaOperationInputs inputs)
         {
             Check(); ArgumentNullException.ThrowIfNull(inputs);
+            if(_owner._typedIdentity)throw new NotSupportedException("Typed identity does not admit general evaluation inputs.");
             if (!ReferenceEquals(inputs.OperationIdentity, this)) throw new ArgumentException("Inputs belong to another operation.", nameof(inputs));
             inputs.ValidateNodeInputs(this);
             var context = inputs.CreateContext();

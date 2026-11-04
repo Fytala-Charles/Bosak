@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; public-contract adapter controls (1.56.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Reuse actual public-contract fixture for typed identity qualification (1.57.0).             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Api.Schema;
@@ -35,7 +37,7 @@ public sealed class SchemaAdvisorAdapterTests(ITestOutputHelper output)
 {
     private sealed class Source:ISchemaSourceBinding { }
     private sealed class Stamp:ISchemaSnapshotBinding { }
-    private sealed class Input:ISchemaAssessmentInput,IQueryOperationLifetime
+    internal sealed class Input:ISchemaAssessmentInput,IQueryOperationLifetime
     {
         internal bool Available=true;internal int Roots,Releases,Checks;internal Stream? Resource;
         private readonly Source _source=new();private readonly Stamp _stamp=new();
@@ -64,7 +66,7 @@ public sealed class SchemaAdvisorAdapterTests(ITestOutputHelper output)
         /// <inheritdoc/>
         public override string? DiagnosticCode=>throw new Exception("diagnostic poison");
     }
-    private sealed class Assessor:ISchemaAssessor,IDisposable
+    internal sealed class Assessor:ISchemaAssessor,IDisposable
     {
         internal ISchemaAuthority Selected=new Authority();internal Advisor? Advisor;internal IQuerySemanticEnvironment? Seen;
         internal Func<SchemaResult<ISchemaAssessmentAdvisor>>? Outcome;internal Action<string>? Hook;internal int Disposals,Binds;
@@ -76,7 +78,7 @@ public sealed class SchemaAdvisorAdapterTests(ITestOutputHelper output)
         /// <inheritdoc/>
         public void Dispose()=>Disposals++;
     }
-    private sealed class Advisor(Assessor assessor):ISchemaAssessmentAdvisor,IDisposable
+    internal sealed class Advisor(Assessor assessor):ISchemaAssessmentAdvisor,IDisposable
     {
         internal ISchemaAssessor Endpoint=assessor;internal IQuerySemanticEnvironment Environment=null!;internal bool Available=true;
         internal readonly Dictionary<ISchemaTypedValue,(ISchemaAssessmentInput Input,ISchemaAssessmentOrigin? Origin)> Values=new(ReferenceEqualityComparer.Instance);
@@ -95,13 +97,14 @@ public sealed class SchemaAdvisorAdapterTests(ITestOutputHelper output)
         /// <inheritdoc/>
         public void Dispose()=>Disposals++;
     }
-    private sealed class Fixture:IDisposable
+    internal sealed class Fixture:IDisposable
     {
-        internal readonly Session Session=Compile();internal readonly Input Input=new();internal readonly Assessor Assessor=new();
+        internal readonly Session Session;internal readonly Input Input=new();internal readonly Assessor Assessor=new();
         internal readonly Advisor Advisor;internal readonly Handle Governing=new(),Actual=new();internal readonly Origin Origin=new();
         internal readonly SchemaQuerySnapshot Snapshot;internal readonly SchemaAdvisorBinding Binding;internal readonly IQueryTypedContainerIssuer Issuer;
-        internal Fixture()
+        internal Fixture(bool typedIdentity=false,Bosak.XPath.Api.CompileOptions? options=null)
         {
+            Session=typedIdentity?global::Bosak.XPath.Api.Schema.SchemaQuerySession.CompileTypedIdentityCandidate("$value",new SchemaQueryLimits(4,8,8,2048,2048),options).Value:Compile();
             Advisor=new(Assessor);Assessor.Advisor=Advisor;((Authority)Assessor.Selected).Types.UnionWith([Governing,Actual]);Advisor.Origins.Add(Origin);
             Binding=Session.BindAdvisorCandidate(Assessor)!;Snapshot=Session.OpenSnapshot(Input,Input).Value;Issuer=Session.CreateIssuerCandidate(Binding,Snapshot,Input);
         }
