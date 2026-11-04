@@ -1,11 +1,14 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 3 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.46.0 retains the qualified public ordinary-source facade and adds the [exact decimal representation](../foundation-exact-decimal/README.md). R3 remains InProgress for exact XdmValue transport, numeric/schema routing and wider typed/all-host behavior. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.47.0 retains the ordinary facade and decimal representation, and adds [exact XdmValue carrier transport](../foundation-exact-value-transport/README.md). R3 remains InProgress for bounded numeric execution, schema/all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
 
 3 November: [exact-decimal representation qualified at source 1.46.0](../foundation-exact-decimal/README.md); 46 new controls and allocation-before-refusal checks pass. Next exact XdmValue transport and checked legacy accessors, then numeric/schema/all-host integration.
+
+
+4 November: [exact XdmValue carrier transport qualified at source 1.47.0](../foundation-exact-value-transport/README.md); 32 new controls and all previous API fields/rows retained. Record typed-default source migration; next bounded numeric operation limits and exact execution routing.
 
 ## Earlier disposition checkpoints
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.46.0",
+  "sourceVersion": "1.47.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,21 +118,23 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-exact-decimal/README.md",
+      "w1ReadinessPlan": "docs/foundation-exact-value-transport/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Exact XdmValue storage/accessors and checked legacy narrowing; then bounded numeric parser/arithmetic/schema and all-host integration.",
+      "nextCoreTask": "Explicit operation numeric limits and exact parsing/arithmetic/comparison/map/serialization routing before numeric enablement; then schema/all-host/native qualification.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
       "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json",
       "openSessionDrain": "docs/foundation-open-session-drain/STATUS.json",
       "publicOrdinaryFacade": "docs/foundation-public-ordinary/STATUS.json",
-      "exactDecimalPrimitive": "docs/foundation-exact-decimal/STATUS.json"
+      "exactDecimalPrimitive": "docs/foundation-exact-decimal/STATUS.json",
+      "exactValueTransport": "docs/foundation-exact-value-transport/STATUS.json",
+      "knownSourceMigration": "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json"
     },
     {
       "id": "R4",
@@ -152,7 +154,7 @@
       "dependsOn": [
         "R4"
       ],
-      "exitEvidence": "Dated explicit dispositions over exact manifest/profile/candidate; no unresolved required signature gap."
+      "exitEvidence": "Dated explicit dispositions over exact manifest/profile/candidate; no unresolved required signature gap. Include explicit disposition of the recorded typed-default source migration."
     },
     {
       "id": "R6",
@@ -162,7 +164,7 @@
       "dependsOn": [
         "R5"
       ],
-      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel."
+      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel. Final release SemVer and migration notes must account for the source-default overload ambiguity."
     },
     {
       "id": "R7",

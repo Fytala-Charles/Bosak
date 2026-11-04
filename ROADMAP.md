@@ -41,6 +41,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 3 November: [exact-decimal representation qualified at source 1.46.0](docs/foundation-exact-decimal/README.md); 46 new controls and allocation-before-refusal checks pass. Next exact XdmValue transport and checked legacy accessors, then numeric/schema/all-host integration.
 
+
+4 November: [exact XdmValue carrier transport qualified at source 1.47.0](docs/foundation-exact-value-transport/README.md); 32 new controls and all previous API fields/rows retained. Record typed-default source migration; next bounded numeric operation limits and exact execution routing.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

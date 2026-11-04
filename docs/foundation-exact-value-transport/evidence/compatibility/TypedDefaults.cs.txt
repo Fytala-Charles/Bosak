@@ -1,0 +1,9 @@
+// Generated isolated source compatibility probe.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Numerics;
+using Bosak.XPath.Core.Xdm;
+_ = XdmValue.FromInteger(default(long));
+_ = XdmValue.FromInteger(default(BigInteger));
+_ = XdmValue.FromDecimal(default(decimal));
+_ = XdmValue.FromDecimal(default(XdmExactDecimal));

@@ -1,0 +1,19 @@
+{
+  "scope": "Warm current-thread allocated bytes over 10000 iterations per row, 500 warmups; numeric inputs/marker already owned. Qualified 64-bit process; no throughput, retained-memory or owner budget.",
+  "iterations": 10000,
+  "warmups": 500,
+  "bytesPerOperation": {
+    "legacy-inline-factory": 0,
+    "exact-inline-factory": 0,
+    "wide-integer-factory": 32,
+    "exact-decimal-factory": 40,
+    "mark-inline": 0,
+    "mark-wide-integer": 32,
+    "mark-exact-decimal": 32,
+    "read-wide-integer": 0,
+    "read-exact-decimal": 0,
+    "read-checked-legacy-decimal": 0
+  },
+  "xdmValueBytes": 48,
+  "budgetsAccepted": false
+}

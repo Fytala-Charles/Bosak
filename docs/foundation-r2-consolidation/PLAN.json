@@ -151,8 +151,8 @@
       "work": "Neutral source admission, authority/facts, numeric/list/union, advisor/compatibility and public all-host/capture implementation under selected scope.",
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
-      "preparation": "docs/foundation-exact-decimal/README.md",
-      "progress": "1.46.0 exact decimal representation/internal bounded lexical ingress qualified; 46 new controls, 24559 tests, frozen gates and reviewed public type. Next exact XdmValue storage/accessors and checked legacy narrowing, then numeric/schema/all-host routing."
+      "preparation": "docs/foundation-exact-value-transport/README.md",
+      "progress": "1.47.0 exact XdmValue carrier transport qualified; 32 new controls, 24591 tests, frozen gates and six reviewed witness signatures. Typed-default source migration is recorded. Next explicit numeric limits/exact execution routing and schema/all-host integration."
     },
     {
       "id": "P10",
