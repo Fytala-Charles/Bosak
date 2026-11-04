@@ -1,0 +1,14 @@
+{
+  "before": {
+    "scalar": 4448,
+    "list-three": 12360,
+    "limit-refusal": 9400
+  },
+  "after": {
+    "scalar": 312,
+    "list-three": 832,
+    "limit-refusal": 864
+  },
+  "getterCountsUnchanged": true,
+  "scope": "Same owned fixtures/pre-held raw operation and cold admissions; membership closure removed; no retained-memory/latency/owner-budget acceptance."
+}

@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 04-11-2026     | Retain raw availability checks inside selected compiled arithmetic dispatch (1.48.0).    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 04-11-2026     | Admit typed containers; remove repeated membership closure allocation (1.53.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -197,6 +199,13 @@ internal sealed class QuerySourceSession : IDisposable
         internal Operation(QuerySourceSession owner, ImmutableArray<Snapshot> snapshots, SchemaOperationLeaseSet leases, CancellationToken cancellation)
         { _owner = owner; _snapshots = snapshots; _leases = leases; _cancellation = cancellation; }
         internal void Check() => _leases.Check();
+        internal QueryTypedContainer ReadTypedContainer(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
+            Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
+            Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxAtoms,int digits,int scale)
+        {
+            RequireMember(snapshot);
+            return new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation).Read();
+        }
         private bool OwnsNode(IXdmNode node)
         {
             Check(); int owners = 0;
@@ -206,7 +215,9 @@ internal sealed class QuerySourceSession : IDisposable
         internal void RequireMember(Snapshot snapshot)
         {
             Check();
-            if (!_snapshots.Any(s => ReferenceEquals(s, snapshot))) throw new ArgumentException("Snapshot is not a member.", nameof(snapshot));
+            bool member=false;
+            foreach(var candidate in _snapshots)if(ReferenceEquals(candidate,snapshot)){member=true;break;}
+            if(!member)throw new ArgumentException("Snapshot is not a member.",nameof(snapshot));
             snapshot.Check(_cancellation);
         }
         internal IXdmNode GetRoot(Snapshot snapshot)

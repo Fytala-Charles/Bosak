@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.52.0",
+  "sourceVersion": "1.53.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-exact-constructors/README.md",
+      "w1ReadinessPlan": "docs/foundation-typed-container/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "TA-01 internal uncached container admission with governing/list/provenance preservation and adversarial getter/enumerator/lifetime controls; resolve cache/typed-profile policy before public adapter activation.",
+      "nextCoreTask": "Explicit container/scalar-evidence cache and typed numeric projection policy, then public adapter qualification. Facts/construction/compatibility/all-host/native/migration and final acceptance remain pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -142,7 +142,8 @@
       "exactDivisionProfile": "docs/foundation-exact-division/STATUS.json",
       "decimalDivisionPolicyScope": "Historical Core preparation; current finite runtime qualification is exactDivisionProfile",
       "numericConstructorProfile": "docs/foundation-exact-constructors/STATUS.json",
-      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/STATUS.json"
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/STATUS.json",
+      "typedContainerQualification": "docs/foundation-typed-container/STATUS.json"
     },
     {
       "id": "R4",

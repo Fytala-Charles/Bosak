@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.52.0 qualifies [primitive numeric constructors](../foundation-exact-constructors/README.md) over the retained facade/carriers/arithmetic/scalars/division. R3 remains InProgress for wider casts/rounding/error policy, issuer-backed typed/schema admission, all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.53.0 qualifies [TA-01 internal typed containers](../foundation-typed-container/README.md) over the retained ordinary facade/numeric profiles. R3 remains InProgress for public schema adapter/cache/typed-projection policy, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -24,6 +24,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [primitive numeric constructors qualified at 1.52.0](../foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
 
 4 November: [issuer-backed typed admission audited; TA-01 prepared](../foundation-typed-admission-plan/README.md). Next internal uncached container reader, then explicit cache/typed-profile policy and public adapter qualification; source remains 1.52.0.
+
+4 November: [TA-01 internal typed containers qualified at 1.53.0](../foundation-typed-container/README.md); 94 new controls and unchanged public API source/metadata. Next cache/evidence and typed numeric projection policy before public adapter activation.
 
 ## Earlier disposition checkpoints
 
