@@ -152,7 +152,8 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-exact-quotient/README.md",
-      "progress": "1.50.0 exact idiv/mod qualified; 29 new controls, 24714 tests and unchanged frozen gates/public metadata. Decimal division policy, schema/all-host/native and migration acceptance remain pending."
+      "progress": "1.50.0 idiv/mod runtime qualification retained. Exact terminating div policy selected with independent reference controls; no production div yet. Next finite implementation and runtime qualification; wider rounded decimal/error policy, schema/all-host/native and migration acceptance remain pending.",
+      "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md"
     },
     {
       "id": "P10",

@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.50.0 qualifies [exact quotient/remainder](../foundation-exact-quotient/README.md) over the retained facade/carriers/arithmetic/scalars. R3 remains InProgress for decimal division policy, schema/all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.50.0 qualifies [exact quotient/remainder](../foundation-exact-quotient/README.md) over the retained facade/carriers/arithmetic/scalars. R3 remains InProgress for exact terminating division implementation, wider decimal rounding/error policy, schema/all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -16,6 +16,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [exact comparisons, map keys and scalar output qualified at 1.49.0](../foundation-exact-scalars/README.md); 50 new controls, unchanged public metadata. Next wider numeric operators, schema/all-host/native qualification.
 
 4 November: [exact quotient/remainder qualified at 1.50.0](../foundation-exact-quotient/README.md); 29 new controls, unchanged public metadata. Next decimal division policy and schema/all-host/native qualification.
+
+4 November: [exact terminating division policy selected and reference-checked](../foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
 
 ## Earlier disposition checkpoints
 

@@ -38,6 +38,8 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 4 November: [exact quotient/remainder qualified at 1.50.0](docs/foundation-exact-quotient/README.md); 29 new controls, unchanged public metadata. Next decimal division policy and schema/all-host/native qualification.
 
+4 November: [exact terminating division policy selected and reference-checked](docs/foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

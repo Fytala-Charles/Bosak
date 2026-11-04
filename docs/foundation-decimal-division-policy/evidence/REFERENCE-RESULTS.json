@@ -1,0 +1,11 @@
+{
+  "cornerCases": 22,
+  "randomOracleCases": 5000,
+  "randomExactResults": 51,
+  "randomNonterminatingRefusals": 4949,
+  "constructedTerminatingOracleCases": 2000,
+  "entryAvailabilityCases": 3,
+  "factorOrGrowthAvailabilityCases": 2,
+  "runtimeTestsRun": false,
+  "performanceBudgetsAccepted": false
+}

@@ -125,7 +125,7 @@
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Decimal div precision/rounding and bounded-work policy, then schema/all-host/native qualification and migration disposition.",
+      "nextCoreTask": "Implement and qualify exact terminating div using the policy checklist; wider rounded decimal/error policy, schema/all-host/native and migration acceptance remain open.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -137,7 +137,8 @@
       "knownSourceMigration": "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json",
       "boundedNumericProfile": "docs/foundation-bounded-numeric/STATUS.json",
       "exactScalarProfile": "docs/foundation-exact-scalars/STATUS.json",
-      "exactQuotientProfile": "docs/foundation-exact-quotient/STATUS.json"
+      "exactQuotientProfile": "docs/foundation-exact-quotient/STATUS.json",
+      "decimalDivisionPolicy": "docs/foundation-decimal-division-policy/STATUS.json"
     },
     {
       "id": "R4",
