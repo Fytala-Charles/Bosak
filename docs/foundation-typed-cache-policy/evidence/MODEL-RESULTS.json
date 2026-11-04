@@ -1,0 +1,15 @@
+{
+  "accountingCases": 12,
+  "emptyContainerIterations": 1000,
+  "rollbackFaultPoints": 4,
+  "interleavingCases": 2,
+  "cancelCommitDeliveryCases": 3,
+  "precommitRevocationCases": 1,
+  "numericComputedCases": 4,
+  "numericFamiliesChecked": 3,
+  "seededScenarios": 1000,
+  "operationsPerScenario": 30,
+  "runtimeConcurrencyTested": false,
+  "productionImplemented": false,
+  "budgetsAccepted": false
+}

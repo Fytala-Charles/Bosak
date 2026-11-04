@@ -152,9 +152,10 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.53.0 TA-01 internal uncached container reader qualified: 94 new controls, 24865 tests and unchanged frozen gates/public metadata/API source. Public routes remain refused. Next cache/evidence and typed numeric projection policy before public adapter activation; remaining owner/native/migration/freeze gates unchanged.",
+      "progress": "1.53.0 TA-01 qualification retained. TA-02 scalar accounting/atomic commit and typed numeric projection policies selected; reference model and 231 distinct existing controls pass (261 executions with binding correction). Next internal transactional registry; no runtime cache/public/typed numeric activation yet.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
-      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md"
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
+      "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md"
     },
     {
       "id": "P10",

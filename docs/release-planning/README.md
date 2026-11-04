@@ -2,14 +2,16 @@
 
 Updated 4 November 2026. Current source version: **1.53.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
 
-The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven role returns as AcceptWithScope against the reviewed declaration manifest. R3 is in progress: internal prerequisites and the [ordinary-source public facade](../foundation-public-ordinary/README.md) are qualified. The ordinary-source public facade is qualified within its string/boolean profile. The bounded exact arithmetic profile is qualified for literals/variables, unary signs and +,-,*. Exact numeric arithmetic/scalars, map keys, terminating division and primitive numeric constructors are qualified and TA-01 internal containers are qualified at 1.53.0; public schema adapter activation, all-host routing and migration remain next; cache/typed-projection and wider casts/rounding/error policy remain open. The remaining critical path is public implementation, actual consumer/performance qualification, four-owner acceptance, release candidate and publication. [Owner capability mapping](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain the requirements and machine-readable gates.
+The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. R3 is in progress: the ordinary facade, finite numeric profiles and TA-01 internal container reader are qualified at source 1.53.0. TA-02's cache/projection policies are selected; their runtime implementation remains pending.
+
+Next implement the internal transactional scalar registry, then qualify evidence attachment, the public schema adapter and typed numeric projection. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
 | R0 Private engine foundation | Qualified | Core | 1.42.0 source/build, 24,390 unit passes, unchanged frozen gates; private capture, evidence and multi-source execution. [Qualification](../foundation-xslt-source-membership/README.md). |
 | R1 Actual owner capability mapping | Audited | Core | Exact read-only source/requirement pins and explicit gaps. [Mapping](OWNER-CAPABILITIES.md). This is not runtime owner acceptance. |
 | R2 Final public contract disposition | ClosedWithScope | Core with Schema/XmlDb/Braid | Seven validated scoped role returns and the immutable R2 closure; no runtime acceptance inferred. |
-| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, finite numeric profiles and TA-01 internal containers at 1.53.0. Public schema adapter/cache/typed-projection policy, wider numeric/error and all-host integration remain pending. |
+| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, finite numeric profiles and TA-01 internal containers at 1.53.0. Internal transactional registry, public schema adapter/typed projection, wider numeric/error and all-host integration remain pending. |
 | R4 Real consumers and performance | Pending candidate; preparation parallel | Core/Schema/XmlDb/Braid | One immutable candidate; actual source and unchanged-binary consumer runs; representative PF-01–09 budgets; complete core/conformance qualification. |
 | R5 C45 acceptance and API freeze | Pending R4 | All four roles | Dated acceptance of exact manifest/profile/candidate; no unresolved required signature gap. Intended final breaking foundation change. |
 | R6 Release candidate packages/docs | Pending freeze; preparation parallel | Core | Selected SemVer, package provenance, migration/release notes, complete docs and fresh-cache package-only consumer tests. |
@@ -41,6 +43,8 @@ The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven ro
 4 November: [issuer-backed typed admission audited; TA-01 prepared](../foundation-typed-admission-plan/README.md). Next internal uncached container reader, then explicit cache/typed-profile policy and public adapter qualification; source remains 1.52.0.
 
 4 November: [TA-01 internal typed containers qualified at 1.53.0](../foundation-typed-container/README.md); 94 new controls and unchanged public API source/metadata. Next cache/evidence and typed numeric projection policy before public adapter activation.
+
+4 November: [TA-02 cache/projection policies selected and model-checked](../foundation-typed-cache-policy/README.md); source remains 1.53.0. Next internal transactional scalar registry, followed by evidence/public adapter and typed numeric qualification.
 
 ## Earlier planning checkpoints
 

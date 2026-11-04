@@ -25,6 +25,7 @@ current=json.loads((R/'docs/foundation-typed-container/evidence/SOURCE-AND-BINAR
 for name,digest in source['files'].items():assert sha((R/name).read_bytes())==current['sources'].get(name,digest),name
 subprocess.run(['python',str(R/'docs/foundation-typed-container/tools/verify.py')],check=True,capture_output=True)
 roadmap=(R/'ROADMAP.md').read_text(encoding='utf-8');assert len(roadmap.splitlines())<90 and 'Immediate foundation work' not in roadmap and 'release-planning/README.md' in roadmap
+subprocess.run(['python',str(R/'docs/foundation-typed-cache-policy/tools/verify.py')],check=True,capture_output=True)
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha((P/name).read_bytes())==digest,name

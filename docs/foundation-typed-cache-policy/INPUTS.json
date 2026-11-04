@@ -1,0 +1,34 @@
+{
+  "revision": "b77727b97ca75d49508d964a7a7336dba1cf10b9",
+  "sourceVersion": "1.53.0",
+  "files": {
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "64018bc6908f767f0e9387da8906cd3a1724257bae64502c61cf176bdc15bd9d",
+    "docs/foundation-r2-ledger/DECISIONS.md": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-typed-container/MANIFEST.json": "d7ffda3e006f7acf74285f1ce9797fe16865726c525ea07b7aa6d7a7b08f8816"
+  },
+  "committedFiles": {
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "64018bc6908f767f0e9387da8906cd3a1724257bae64502c61cf176bdc15bd9d",
+    "docs/foundation-r2-ledger/DECISIONS.md": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-typed-container/MANIFEST.json": "d7ffda3e006f7acf74285f1ce9797fe16865726c525ea07b7aa6d7a7b08f8816"
+  },
+  "normalizedFiles": {
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "64018bc6908f767f0e9387da8906cd3a1724257bae64502c61cf176bdc15bd9d",
+    "docs/foundation-r2-ledger/DECISIONS.md": "d4f8706049980b4faaf2afab48eeaa77da600435bbcaab795ca2c271a38b2bff",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-typed-container/MANIFEST.json": "d7ffda3e006f7acf74285f1ce9797fe16865726c525ea07b7aa6d7a7b08f8816"
+  }
+}

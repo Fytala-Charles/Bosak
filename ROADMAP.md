@@ -23,7 +23,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the plannin
 
 ## Immediate Core task
 
-Use the [current dependency plan](docs/foundation-r2-consolidation/PLAN.json). [TA-01 internal container admission](docs/foundation-typed-container/README.md) is qualified. Next settle explicit container/scalar-evidence cache accounting and authorized typed numeric identity/computed-result policy, then implement and qualify the public advisor/container adapter. Original facts, nil/no-value, provider construction, compatibility and all-host routes remain separate work. Do not bypass public Unsupported boundaries or infer schema authority from annotation strings.
+Use the [current dependency plan](docs/foundation-r2-consolidation/PLAN.json). [TA-01 internal container admission](docs/foundation-typed-container/README.md) is qualified. [TA-02 cache/projection policies](docs/foundation-typed-cache-policy/README.md) are selected and reference-checked. Next implement the internal transactional scalar registry, then qualify evidence attachment and the public advisor/container adapter under those policies. Original facts, nil/no-value, provider construction, compatibility and all-host routes remain separate work. Do not bypass public Unsupported boundaries or infer schema authority from annotation strings.
 
 The [owner capability audit](docs/release-planning/OWNER-CAPABILITIES.md) retains actual source requirements. External implementation stays delegated. Actual candidate source/binary/resource and representative performance qualification precede four-owner C45 acceptance. Full XSD 1.1 backend completion is separate from representing and testing the foundation's required capabilities.
 
