@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.51.0 qualifies [exact terminating division](../foundation-exact-division/README.md) over the retained facade/carriers/arithmetic/scalars/quotient. R3 remains InProgress for wider decimal rounding/error policy, typed/schema numeric integration, all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.52.0 qualifies [primitive numeric constructors](../foundation-exact-constructors/README.md) over the retained facade/carriers/arithmetic/scalars/division. R3 remains InProgress for wider casts/rounding/error policy, issuer-backed typed/schema admission, all-host routing and source migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -20,6 +20,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [exact terminating division policy selected and reference-checked](../foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
 
 4 November: [exact terminating division qualified at 1.51.0](../foundation-exact-division/README.md); 33 new controls, unchanged public metadata. Next typed/schema numeric and all-host/native qualification; wider rounding/error policy remains pending.
+
+4 November: [primitive numeric constructors qualified at 1.52.0](../foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
 
 ## Earlier disposition checkpoints
 

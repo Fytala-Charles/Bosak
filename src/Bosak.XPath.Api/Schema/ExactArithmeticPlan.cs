@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 04-11-2026     | Select separately identified exact terminating division (1.51.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 04-11-2026     | Select bounded numeric constructor profile (1.52.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using Bosak.XPath.Core.Xdm;
@@ -38,6 +40,8 @@ internal sealed class ExactArithmeticPlan
     internal const string QuotientDescriptorFormat="bosak-exact-quotient-static-v3";
     internal const string DivisionProfile="bosak-exact-division-v4";
     internal const string DivisionDescriptorFormat="bosak-exact-division-static-v4";
+    internal const string ConstructorProfile="bosak-exact-constructors-v5";
+    internal const string ConstructorDescriptorFormat="bosak-exact-constructors-static-v5";
     private enum Op { Literal,Variable,Positive,Negative,Add,Subtract,Multiply,Divide,IntegerDivide,Remainder,Equal,NotEqual,Less,LessEqual,Greater,GreaterEqual,Open }
     private static bool Comparison(Op op)=>op is Op.Equal or Op.NotEqual or Op.Less or Op.LessEqual or Op.Greater or Op.GreaterEqual;
     private static Op? ComparisonToken(TokenKind token)=>token switch
@@ -51,11 +55,12 @@ internal sealed class ExactArithmeticPlan
     private readonly int _stackDepth;
     private readonly ExactArithmeticLimits _limits;
     private readonly bool _extended,_serialize,_quotient,_division;
-    internal string ProfileName=>_division?DivisionProfile:_quotient?QuotientProfile:_extended?ScalarProfile:Profile;
-    internal string DescriptorName=>_division?DivisionDescriptorFormat:_quotient?QuotientDescriptorFormat:_extended?ScalarDescriptorFormat:DescriptorFormat;
+    private readonly int _constructorTarget;
+    internal string ProfileName=>_constructorTarget!=0?ConstructorProfile:_division?DivisionProfile:_quotient?QuotientProfile:_extended?ScalarProfile:Profile;
+    internal string DescriptorName=>_constructorTarget!=0?ConstructorDescriptorFormat:_division?DivisionDescriptorFormat:_quotient?QuotientDescriptorFormat:_extended?ScalarDescriptorFormat:DescriptorFormat;
     internal int SerializationCapacity=>_limits.StringCapacity;
-    private ExactArithmeticPlan(Instruction[] code,int depth,ExactArithmeticLimits limits,bool extended,bool serialize,bool quotient,bool division)
-    { _code=code;_stackDepth=depth;_limits=limits;_extended=extended;_serialize=serialize;_quotient=quotient;_division=division; }
+    private ExactArithmeticPlan(Instruction[] code,int depth,ExactArithmeticLimits limits,bool extended,bool serialize,bool quotient,bool division,int constructorTarget)
+    { _code=code;_stackDepth=depth;_limits=limits;_extended=extended;_serialize=serialize;_quotient=quotient;_division=division;_constructorTarget=constructorTarget; }
     private static int Priority(Op op)=>op is Op.Positive or Op.Negative ? 3 : op is Op.Multiply or Op.Divide or Op.IntegerDivide or Op.Remainder ? 2 : op is Op.Add or Op.Subtract ? 1 : Comparison(op)?0:-1;
     internal static bool TryCompile(string source,CompileOptions options,int digits,int scale,out ExactArithmeticPlan? plan,CancellationToken cancellation=default)
     {
@@ -65,8 +70,10 @@ internal sealed class ExactArithmeticPlan
             || options.StaticVariableTypes is not null || options.NamedRecordTypeNames is not null)return false;
         ReadOnlySpan<char> body=source.AsSpan();bool serialize=UnwrapString(source,options,out int start,out int length,cancellation);
         if(serialize)body=body.Slice(start,length);
+        int constructorTarget=UnwrapConstructor(body,options,out int constructorStart,out int constructorLength,cancellation);
+        if(constructorTarget!=0)body=body.Slice(constructorStart,constructorLength);
         var code=new List<Instruction>();var operators=new Stack<Op>();var kinds=new Stack<bool>();var lexer=new XPathLexer(body);
-        bool operand=true,selected=serialize,extended=serialize,quotient=false,division=false;int depth=0,maximum=0;
+        bool operand=true,selected=serialize||constructorTarget!=0,extended=serialize||constructorTarget!=0,quotient=false,division=false;int depth=0,maximum=0;
         bool Emit(Op op)
         {
             if(depth<(op is Op.Positive or Op.Negative ? 1 : 2))return false;
@@ -125,8 +132,8 @@ internal sealed class ExactArithmeticPlan
             }
             if(operand||!selected)return false;
             while(operators.TryPop(out var op))if(op==Op.Open||!Emit(op))return false;
-            if(depth!=1)return false;
-            plan=new(code.ToArray(),maximum,new(digits,scale),extended,serialize,quotient,division);return true;
+            if(depth!=1 || constructorTarget!=0&&kinds.Peek())return false;
+            plan=new(code.ToArray(),maximum,new(digits,scale),extended,serialize,quotient,division,constructorTarget);return true;
         }
         catch(NotSupportedException){return false;}
         catch(FormatException){return false;}
@@ -148,6 +155,21 @@ internal sealed class ExactArithmeticPlan
             {length=token.Start-start;return lexer.NextToken().Kind==TokenKind.Eof;}
         }
         return false;
+    }
+    private static int UnwrapConstructor(ReadOnlySpan<char> source,CompileOptions options,out int start,out int length,CancellationToken cancellation)
+    {
+        start=0;length=source.Length;var lexer=new XPathLexer(source);var token=lexer.NextToken();
+        if(token.Kind!=TokenKind.Name)return 0;
+        var name=token.Text(source);int target=name.SequenceEqual("xs:integer")?1:name.SequenceEqual("xs:decimal")?2:0;
+        if(target==0 || options.Namespaces?.TryGetValue("xs",out var ns)==true&&ns!="http://www.w3.org/2001/XMLSchema")return 0;
+        token=lexer.NextToken();if(token.Kind!=TokenKind.LParen)return 0;start=token.Start+token.Length;int depth=1;
+        while((token=lexer.NextToken()).Kind!=TokenKind.Eof)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            if(token.Kind==TokenKind.LParen)depth++;
+            else if(token.Kind==TokenKind.RParen&&--depth==0){length=token.Start-start;return lexer.NextToken().Kind==TokenKind.Eof?target:0;}
+        }
+        return 0;
     }
     internal XdmValue Evaluate(EvaluationContext context,Action check)
         =>_extended?EvaluateScalars(context,check):EvaluateNumeric(context,check);
@@ -203,6 +225,7 @@ internal sealed class ExactArithmeticPlan
                     :_limits.Add(left,instruction.Code==Op.Subtract?_limits.Negate(right):right,check));
             }
             check();var final=values[0];XdmValue output;
+            if(_constructorTarget!=0)final=new(_limits.ConvertNumeric(final.Number,_constructorTarget==1,check));
             if(_serialize)output=XdmValue.FromString(final.IsBoolean?(final.Boolean?"true":"false"):_limits.Format(final.Number,check));
             else output=final.IsBoolean?XdmValue.FromBoolean(final.Boolean):_limits.ToValue(final.Number);
             check();return output;

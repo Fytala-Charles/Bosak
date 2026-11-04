@@ -124,6 +124,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Exact comparisons, keys and strings](docs/foundation-exact-scalars/GUIDE.md) | Exact numeric comparisons and map keys with bounded scalar output. |
 | [Exact quotient and remainder](docs/foundation-exact-quotient/GUIDE.md) | Bounded integer division and remainder for primitive integer/decimal values. |
 | [Exact terminating division](docs/foundation-exact-division/GUIDE.md) | Decimal division with explicit quotas and refusal instead of rounding. |
+| [Primitive numeric constructors](docs/foundation-exact-constructors/GUIDE.md) | Bounded integer/decimal conversion over the exact numeric grammar. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |

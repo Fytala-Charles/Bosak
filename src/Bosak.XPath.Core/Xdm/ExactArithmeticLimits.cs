@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 04-11-2026     | Preflight exact terminating division with factor chunks (1.51.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 04-11-2026     | Bound primitive numeric conversion without scale expansion (1.52.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 
@@ -177,6 +179,16 @@ internal readonly struct ExactArithmeticLimits
         var coefficient=GrowFactor(GrowFactor(reduced,2,twos,check),5,fives,check);check();
         if(left.Coefficient.Sign!=right.Coefficient.Sign)coefficient=-coefficient;
         return Normalize(coefficient,(int)scale,false);
+    }
+    internal ExactNumber ConvertNumeric(ExactNumber value,bool integer,Action check)
+    {
+        check();Validate(value);
+        if(!integer)return value with {Integer=false};
+        if(value.Scale==0)return value with {Integer=true};
+        if(value.Coefficient.IsZero || value.Scale>=Digits(value.Coefficient,check))return new(BigInteger.Zero,0,true);
+        // A nonzero integral part bounds this exponent by actual admitted coefficient width.
+        check();var divisor=BigInteger.Pow(10,value.Scale);check();var coefficient=value.Coefficient/divisor;check();
+        return new(coefficient,0,true);
     }
     private ExactNumber Normalize(BigInteger coefficient,int scale,bool integer)
     {

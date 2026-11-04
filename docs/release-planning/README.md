@@ -1,15 +1,15 @@
 # Release plan and acceptance checklist
 
-Updated 4 November 2026. Current source version: **1.51.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
+Updated 4 November 2026. Current source version: **1.52.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
 
-The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven role returns as AcceptWithScope against the reviewed declaration manifest. R3 is in progress: internal prerequisites and the [ordinary-source public facade](../foundation-public-ordinary/README.md) are qualified. The ordinary-source public facade is qualified within its string/boolean profile. The bounded exact arithmetic profile is qualified for literals/variables, unary signs and +,-,*. Exact comparisons/map keys, bounded strings, idiv/mod and exact terminating div are qualified at 1.51.0; typed/schema numeric integration, all-host routing and typed-default migration remain next; wider decimal rounding/error policy remains open. The remaining critical path is public implementation, actual consumer/performance qualification, four-owner acceptance, release candidate and publication. [Owner capability mapping](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain the requirements and machine-readable gates.
+The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven role returns as AcceptWithScope against the reviewed declaration manifest. R3 is in progress: internal prerequisites and the [ordinary-source public facade](../foundation-public-ordinary/README.md) are qualified. The ordinary-source public facade is qualified within its string/boolean profile. The bounded exact arithmetic profile is qualified for literals/variables, unary signs and +,-,*. Exact numeric arithmetic/scalars, map keys, terminating division and primitive numeric constructors are qualified at 1.52.0; issuer-backed typed/schema admission, all-host routing and migration remain next; wider casts/rounding/error policy remains open. The remaining critical path is public implementation, actual consumer/performance qualification, four-owner acceptance, release candidate and publication. [Owner capability mapping](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain the requirements and machine-readable gates.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
 | R0 Private engine foundation | Qualified | Core | 1.42.0 source/build, 24,390 unit passes, unchanged frozen gates; private capture, evidence and multi-source execution. [Qualification](../foundation-xslt-source-membership/README.md). |
 | R1 Actual owner capability mapping | Audited | Core | Exact read-only source/requirement pins and explicit gaps. [Mapping](OWNER-CAPABILITIES.md). This is not runtime owner acceptance. |
 | R2 Final public contract disposition | ClosedWithScope | Core with Schema/XmlDb/Braid | Seven validated scoped role returns and the immutable R2 closure; no runtime acceptance inferred. |
-| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, exact carriers, arithmetic/scalars, idiv/mod and exact terminating div at 1.51.0. Wider decimal rounding/error policy, typed/schema and all-host integration remain pending. |
+| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, exact carriers, finite arithmetic/scalars and primitive numeric constructors at 1.52.0. Wider casts/rounding/error policy, issuer-backed typed/schema and all-host integration remain pending. |
 | R4 Real consumers and performance | Pending candidate; preparation parallel | Core/Schema/XmlDb/Braid | One immutable candidate; actual source and unchanged-binary consumer runs; representative PF-01–09 budgets; complete core/conformance qualification. |
 | R5 C45 acceptance and API freeze | Pending R4 | All four roles | Dated acceptance of exact manifest/profile/candidate; no unresolved required signature gap. Intended final breaking foundation change. |
 | R6 Release candidate packages/docs | Pending freeze; preparation parallel | Core | Selected SemVer, package provenance, migration/release notes, complete docs and fresh-cache package-only consumer tests. |
@@ -35,6 +35,8 @@ The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven ro
 4 November: [exact terminating division policy selected and reference-checked](../foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
 
 4 November: [exact terminating division qualified at 1.51.0](../foundation-exact-division/README.md); 33 new controls, unchanged public metadata. Next typed/schema numeric and all-host/native qualification; wider rounding/error policy remains pending.
+
+4 November: [primitive numeric constructors qualified at 1.52.0](../foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
 
 ## Earlier planning checkpoints
 

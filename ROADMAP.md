@@ -42,6 +42,8 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 4 November: [exact terminating division qualified at 1.51.0](docs/foundation-exact-division/README.md); 33 new controls, unchanged public metadata. Next typed/schema numeric and all-host/native qualification; wider rounding/error policy remains pending.
 
+4 November: [primitive numeric constructors qualified at 1.52.0](docs/foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

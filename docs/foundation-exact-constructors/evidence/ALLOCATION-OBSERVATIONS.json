@@ -1,0 +1,10 @@
+{
+  "scope": "Owned coefficients; 500 warmups, 10000 iterations; successful conversion and caught input refusal; exception allocation included for refusal. Not an owner budget, retained-memory or latency qualification.",
+  "bytesPerOperation": {
+    "tiny-integer": 0,
+    "integer-to-decimal": 0,
+    "input-refusal": 464
+  },
+  "regressionCeilingBytes": 16384,
+  "budgetsAccepted": false
+}

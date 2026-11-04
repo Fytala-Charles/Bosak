@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.51.0",
+  "sourceVersion": "1.52.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-exact-division/README.md",
+      "w1ReadinessPlan": "docs/foundation-exact-constructors/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Typed/schema numeric integration and all-host/native qualification; wider rounded division/error policy, migration and final acceptance remain open.",
+      "nextCoreTask": "Issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy and migration/final acceptance remain open.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -140,7 +140,8 @@
       "exactQuotientProfile": "docs/foundation-exact-quotient/STATUS.json",
       "decimalDivisionPolicy": "docs/foundation-decimal-division-policy/STATUS.json",
       "exactDivisionProfile": "docs/foundation-exact-division/STATUS.json",
-      "decimalDivisionPolicyScope": "Historical Core preparation; current finite runtime qualification is exactDivisionProfile"
+      "decimalDivisionPolicyScope": "Historical Core preparation; current finite runtime qualification is exactDivisionProfile",
+      "numericConstructorProfile": "docs/foundation-exact-constructors/STATUS.json"
     },
     {
       "id": "R4",

@@ -19,6 +19,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 04-11-2026     | Promote finite division controls and retain unavailable grammar checks (1.51.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 04-11-2026     | Exercise constructor raw close/cancel dispatch (1.52.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -133,20 +135,20 @@ public sealed class BoundedNumericSessionTests
         }
     }
     /// <summary>Close during numeric dispatch revokes access and defers actual owner release to raw completion.</summary>
-    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons.</param>
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons, six for constructors, seven for constructor strings.</param>
     /// <returns>The completed lifetime verification.</returns>
-    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)] public async Task CloseDuringArithmeticRetainsRawLease(int profile)
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)][InlineData(6)][InlineData(7)] public async Task CloseDuringArithmeticRetainsRawLease(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(profile==7?"string(xs:integer("+source+"))":profile==6?"xs:decimal("+source+")":profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         input.OnCheck=()=>{if(input.Checks==100){s.Dispose();Assert.Equal(0,input.Releases);}};
         Assert.Throws<ObjectDisposedException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext())));
         await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
     }
     /// <summary>Cancellation inside arithmetic/scalar dispatch preserves the reusable source admission.</summary>
-    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons.</param>
-    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)] public void CancellationDuringArithmeticPreservesAdmission(int profile)
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons, six for constructors, seven for constructor strings.</param>
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)][InlineData(6)][InlineData(7)] public void CancellationDuringArithmeticPreservesAdmission(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(profile==7?"string(xs:integer("+source+"))":profile==6?"xs:decimal("+source+")":profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         using var cancellation=new CancellationTokenSource();input.OnCheck=()=>{if(input.Checks==100)cancellation.Cancel();};
         Assert.ThrowsAny<OperationCanceledException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()),cancellation.Token));Assert.Equal(0,input.Releases);
         input.OnCheck=null;Assert.Equal(profile==5?"true":"500",Text(s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()))));Assert.Equal(0,input.RootReads);

@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 04-11-2026     | Bind exact division policy and algorithm into descriptor (1.51.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 04-11-2026     | Capture numeric constructor and retained division policies (1.52.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -78,7 +80,9 @@ public sealed class SchemaQuerySession : IDisposable
             if(!ExactArithmeticPlan.TryCompile(expression,frozen!,limits.MaxNumericDigits,limits.MaxDecimalScale,out var plan,cancellationToken))return Unsupported<SchemaQuerySession>();
             numeric=true;profile=plan!.ProfileName;
             var captured=SchemaSessionCompilation.Capture(frozen!,frozen!.Namespaces,frozen.DefaultElementNamespace);
-            var descriptor=plan!.ProfileName==ExactArithmeticPlan.DivisionProfile
+            var descriptor=plan!.ProfileName==ExactArithmeticPlan.ConstructorProfile
+                ?JsonSerializer.Serialize(new{format=plan.DescriptorName,staticContext=captured.Fingerprint,profile=plan.ProfileName,limits.MaxNumericDigits,limits.MaxDecimalScale,serializationCapacity=plan.SerializationCapacity,constructorPolicy="primitive-numeric-v1",integerConversion="truncate-toward-zero",divisionPolicy="exact-terminating",divisionAlgorithm="gcd-factor-chunks-v1"})
+                :plan!.ProfileName==ExactArithmeticPlan.DivisionProfile
                 ?JsonSerializer.Serialize(new{format=plan.DescriptorName,staticContext=captured.Fingerprint,profile=plan.ProfileName,limits.MaxNumericDigits,limits.MaxDecimalScale,serializationCapacity=plan.SerializationCapacity,divisionPolicy="exact-terminating",divisionAlgorithm="gcd-factor-chunks-v1"})
                 :plan!.ProfileName==ExactArithmeticPlan.Profile
                 ?JsonSerializer.Serialize(new{format=plan.DescriptorName,staticContext=captured.Fingerprint,profile=plan.ProfileName,limits.MaxNumericDigits,limits.MaxDecimalScale})
@@ -179,7 +183,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
