@@ -1,0 +1,10 @@
+{
+  "scope": "Owned coefficients; 500 warmups, 1000 iterations; exception allocation included. Not an owner budget, retained-memory or latency qualification.",
+  "bytesPerCaughtRefusal": {
+    "huge-scale": 296,
+    "nonterminating": 296,
+    "growth": 296
+  },
+  "regressionCeilingBytes": 16384,
+  "budgetsAccepted": false
+}

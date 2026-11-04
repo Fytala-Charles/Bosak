@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; bounded quotient/remainder profile (1.50.0).                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Promote finite division controls and retain unavailable grammar checks (1.51.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 using Bosak.XPath.Api.Schema;
@@ -70,7 +72,7 @@ public sealed class ExactQuotientSessionTests
     /// <summary>Floating values, Boolean operands and decimal division remain outside the profile.</summary>
     [Fact] public void RetainedRefusalsAndFreshBindings()
     {
-        foreach(var query in new[]{"1 div 2","1e2 idiv 2","(1 eq 1) mod 2","idiv 2","1 mod","string(1 div 2)"})
+        foreach(var query in new[]{"1 treat as xs:integer","1e2 idiv 2","(1 eq 1) mod 2","idiv 2","1 mod","string(1 to 2)"})
             Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath(query,new SchemaQueryLimits(4,8,8,128,128)).Kind);
         using var s=Compile("$x mod 3");Assert.Throws<NotSupportedException>(()=>Eval(s,new EvaluationContext().WithVariable("x",XdmValue.FromDouble(4))));
         for(int i=0;i<30;i++)Assert.Equal(new BigInteger(i%3),Eval(s,new EvaluationContext().WithVariable("x",XdmValue.FromInteger(i))).BigIntegerValue);

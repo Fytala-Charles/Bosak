@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 04-11-2026     | Promote idiv/mod cases and qualify quotient dispatch lifetime (1.50.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 04-11-2026     | Promote finite division controls and retain unavailable grammar checks (1.51.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -35,7 +37,7 @@ public sealed class BoundedNumericSessionTests
     private static SchemaQueryLimits Limits(int digits=128,int scale=64)=>new(4,8,8,digits,scale);
     private static Session Compile(string expression,int digits=128,int scale=64)
     {var result=Session.CompileXPath(expression,Limits(digits,scale));Assert.Equal(SchemaResultKind.Supported,result.Kind);return result.Value;}
-    private static string Text(XdmValue value)=>value.Kind==XdmValueKind.String?value.StringValue:value.Kind==XdmValueKind.Integer?value.BigIntegerValue.ToString(CultureInfo.InvariantCulture):value.ExactDecimalValue.ToInvariantString(512);
+    private static string Text(XdmValue value)=>value.Kind==XdmValueKind.Boolean?(value.BooleanValue?"true":"false"):value.Kind==XdmValueKind.String?value.StringValue:value.Kind==XdmValueKind.Integer?value.BigIntegerValue.ToString(CultureInfo.InvariantCulture):value.ExactDecimalValue.ToInvariantString(512);
     private static XdmValue Evaluate(Session s,EvaluationContext? context=null)=>s.Run([],op=>op.Evaluate(context??new EvaluationContext()));
     /// <summary>Literals, signs, precedence and primitive promotion stay exact.</summary>
     /// <param name="source">Arithmetic query.</param>
@@ -54,8 +56,8 @@ public sealed class BoundedNumericSessionTests
     /// <summary>Unsupported numeric syntax never falls back to legacy rounding, functions or floating point.</summary>
     /// <param name="source">Query outside the finite arithmetic grammar.</param>
     [Theory]
-    [InlineData("1 div 2")][InlineData("1 to 2")][InlineData("if (1) then 2 else 3")][InlineData("1e2")]
-    [InlineData("1 instance of xs:integer")][InlineData("string(1 div 2)")][InlineData("count(/n)")][InlineData("$p:x + 1")]
+    [InlineData("1 treat as xs:integer")][InlineData("1 to 2")][InlineData("if (1) then 2 else 3")][InlineData("1e2")]
+    [InlineData("1 instance of xs:integer")][InlineData("string(1 to 2)")][InlineData("count(/n)")][InlineData("$p:x + 1")]
     [InlineData("xs:decimal('1.2')")][InlineData("(1,2)")][InlineData("1 + true()")]
     public void RefusesUnavailableSyntax(string source)
     {Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath(source,Limits()).Kind);}
@@ -131,22 +133,53 @@ public sealed class BoundedNumericSessionTests
         }
     }
     /// <summary>Close during numeric dispatch revokes access and defers actual owner release to raw completion.</summary>
-    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient dispatch.</param>
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons.</param>
     /// <returns>The completed lifetime verification.</returns>
-    [Theory][InlineData(0)][InlineData(1)][InlineData(2)] public async Task CloseDuringArithmeticRetainsRawLease(int profile)
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)] public async Task CloseDuringArithmeticRetainsRawLease(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         input.OnCheck=()=>{if(input.Checks==100){s.Dispose();Assert.Equal(0,input.Releases);}};
         Assert.Throws<ObjectDisposedException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext())));
         await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
     }
     /// <summary>Cancellation inside arithmetic/scalar dispatch preserves the reusable source admission.</summary>
-    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient dispatch.</param>
-    [Theory][InlineData(0)][InlineData(1)][InlineData(2)] public void CancellationDuringArithmeticPreservesAdmission(int profile)
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient, three for division, four for division strings, five for comparisons.</param>
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)] public void CancellationDuringArithmeticPreservesAdmission(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(profile==5?"("+source+") div 1 eq 500":profile==4?"string(("+source+") div 1)":profile==3?"("+source+") div 1":profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         using var cancellation=new CancellationTokenSource();input.OnCheck=()=>{if(input.Checks==100)cancellation.Cancel();};
         Assert.ThrowsAny<OperationCanceledException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()),cancellation.Token));Assert.Equal(0,input.Releases);
-        input.OnCheck=null;Assert.Equal("500",Text(s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()))));Assert.Equal(0,input.RootReads);
+        input.OnCheck=null;Assert.Equal(profile==5?"true":"500",Text(s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()))));Assert.Equal(0,input.RootReads);
     }
+    private static EvaluationContext DivisionInputs()=>new EvaluationContext().WithVariable("x",XdmValue.FromInteger(1)).WithVariable("y",XdmValue.FromInteger(BigInteger.Pow(5,500)));
+    /// <summary>Closing inside division factor work revokes the raw operation before owner release.</summary>
+    /// <returns>Completion of the actual session drain.</returns>
+    [Fact] public async Task CloseDuringDivisionFactorsDefersRelease()
+    {
+        var s=Compile("$x div $y",1024,1024);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        input.OnCheck=()=>{if(input.Checks==100){s.Dispose();Assert.Equal(0,input.Releases);}};
+        Assert.Throws<ObjectDisposedException>(()=>s.Run([snapshot],op=>op.Evaluate(DivisionInputs())));
+        await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
+    }
+    /// <summary>Cancellation inside factor work unwinds raw use and permits another exact evaluation.</summary>
+    [Fact] public void CancellationDuringDivisionFactorsPreservesAdmission()
+    {
+        using var s=Compile("$x div $y",1024,1024);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        using var cancellation=new CancellationTokenSource();input.OnCheck=()=>{if(input.Checks==100)cancellation.Cancel();};
+        Assert.ThrowsAny<OperationCanceledException>(()=>s.Run([snapshot],op=>op.Evaluate(DivisionInputs()),cancellation.Token));Assert.Equal(0,input.Releases);
+        input.OnCheck=null;var result=s.Run([snapshot],op=>op.Evaluate(DivisionInputs())).ExactDecimalValue;
+        Assert.Equal(BigInteger.Pow(2,500),result.Coefficient);Assert.Equal(500,result.Scale);Assert.Equal(0,input.RootReads);
+        s.Dispose();Assert.Equal(1,input.Releases);
+    }
+    /// <summary>Zero and unsupported quotients leave admitted sources reusable and release exactly once on close.</summary>
+    /// <returns>Completion of drain after the final successful evaluation.</returns>
+    [Fact] public async Task DivisionErrorsRetainAdmissionUntilClose()
+    {
+        var s=Compile("1 div $y");var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        Assert.Throws<DivideByZeroException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext().WithVariable("y",XdmValue.FromInteger(0)))));
+        Assert.Throws<NotSupportedException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext().WithVariable("y",XdmValue.FromInteger(3)))));
+        Assert.Equal(0,input.Releases);Assert.Equal(0.125m,s.Run([snapshot],op=>op.Evaluate(new EvaluationContext().WithVariable("y",XdmValue.FromInteger(8)))).DecimalValue);
+        s.Dispose();await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
+    }
+
 }

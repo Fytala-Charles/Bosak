@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Move newly supported string(arithmetic) case to exact scalar positive coverage (1.49.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 04-11-2026     | Promote finite division controls and retain unavailable grammar checks (1.51.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Xml.Linq;
@@ -151,7 +153,7 @@ public sealed class PublicOrdinarySessionTests
     /// <param name="expression">A query outside the declared profile.</param>
     [Theory]
     [InlineData("999999999999999999999999999999999999999999999999999999999999999999999999999")]
-    [InlineData("string(1 div 2)")]
+    [InlineData("string(1 to 2)")]
     [InlineData("xs:integer('123')")]
     [InlineData("count(/n)")]
     [InlineData("string(position())")]

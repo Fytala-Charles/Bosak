@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; exact scalar/key integration   (1.49.0).                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Promote finite division controls and retain unavailable grammar checks (1.51.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -57,7 +59,7 @@ public sealed class ExactScalarSessionTests
     /// <param name="source">An unsupported expression.</param>
     [Theory]
     [InlineData("1 lt 2 lt 3")][InlineData("1 = 1 = 1")][InlineData("(1 lt 2) + 3")][InlineData("-(1 lt 2)")]
-    [InlineData("(1 lt 2) eq (2 lt 3)")][InlineData("1 lt 2 and 3 lt 4")][InlineData("string(1 div 2)")]
+    [InlineData("(1 lt 2) eq (2 lt 3)")][InlineData("1 lt 2 and 3 lt 4")][InlineData("string(1 to 2)")]
     [InlineData("string(string(1+2))")][InlineData("string(1+2)+3")][InlineData("concat('x',1)")]
     [InlineData("1e2 = 100")][InlineData("$p:x eq 1")]
     public void RefusesUnavailableScalarCombinations(string source)

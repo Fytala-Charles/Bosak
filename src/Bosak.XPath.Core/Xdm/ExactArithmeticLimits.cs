@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 04-11-2026     | Bounded exact quotient/remainder (1.50.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 04-11-2026     | Preflight exact terminating division with factor chunks (1.51.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 
@@ -129,6 +131,52 @@ internal readonly struct ExactArithmeticLimits
         var a=Align(left,scale);check();var b=Align(right,scale);check();
         var result=remainder?a%b:a/b;check();
         return Normalize(result,remainder?scale:0,integer);
+    }
+    private static (BigInteger Value,long Count) StripFactors(BigInteger value,int factor,Action check)
+    {
+        int width=factor==2?30:13;int chunk=factor==2?1<<30:1_220_703_125;long count=0;
+        check();
+        while((value%chunk).IsZero){check();value/=chunk;count=checked(count+width);check();}
+        while((value%factor).IsZero){check();value/=factor;count=checked(count+1);check();}
+        return (value,count);
+    }
+    private BigInteger GrowFactor(BigInteger value,int factor,long count,Action check)
+    {
+        int width=factor==2?30:13;int chunk=factor==2?1<<30:1_220_703_125;
+        while(count>0)
+        {
+            check();int take=(int)Math.Min(width,count);var multiplier=take==width?new BigInteger(chunk):BigInteger.Pow(factor,take);
+            long upperBits=value.GetBitLength()+multiplier.GetBitLength();
+            if(upperBits>3L*_digits)
+            {
+                if(upperBits-1>4L*_digits)throw new NotSupportedException("Exact division exceeds coefficient capacity.");
+                var maximum=BigInteger.Pow(10,_digits)-1;check();
+                if(value>maximum/multiplier)throw new NotSupportedException("Exact division exceeds coefficient capacity.");
+            }
+            check();value*=multiplier;count-=take;check();
+        }
+        return value;
+    }
+    internal ExactNumber Divide(ExactNumber left,ExactNumber right,Action check)
+    {
+        check();Validate(left);Validate(right);
+        if(right.Coefficient.IsZero)throw new DivideByZeroException("FOAR0001: Numeric divisor is zero.");
+        if(left.Coefficient.IsZero)return new(BigInteger.Zero,0,false);
+        var a=BigInteger.Abs(left.Coefficient);var b=BigInteger.Abs(right.Coefficient);
+        check();var common=BigInteger.GreatestCommonDivisor(a,b);check();var n=a/common;var d=b/common;check();
+        var (d2,p)=StripFactors(d,2,check);var (rest,q)=StripFactors(d2,5,check);
+        if(!rest.IsOne)throw new NotSupportedException("The exact division profile requires a terminating decimal result.");
+        var (n2,u)=StripFactors(n,2,check);var (reduced,v)=StripFactors(n2,5,check);
+        long k=Math.Max(p,q),scale=checked(k+(long)left.Scale-right.Scale);
+        long twos=checked(u+k-p),fives=checked(v+k-q);
+        if(scale>0){long cancel=Math.Min(scale,Math.Min(twos,fives));twos-=cancel;fives-=cancel;scale-=cancel;}
+        else if(scale<0){twos=checked(twos-scale);fives=checked(fives-scale);scale=0;}
+        check();
+        if(scale>_scale || twos>=4L*_digits || fives>=2L*_digits)
+            throw new NotSupportedException("Exact division exceeds coefficient or scale capacity.");
+        var coefficient=GrowFactor(GrowFactor(reduced,2,twos,check),5,fives,check);check();
+        if(left.Coefficient.Sign!=right.Coefficient.Sign)coefficient=-coefficient;
+        return Normalize(coefficient,(int)scale,false);
     }
     private ExactNumber Normalize(BigInteger coefficient,int scale,bool integer)
     {

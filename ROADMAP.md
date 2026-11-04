@@ -40,6 +40,8 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 4 November: [exact terminating division policy selected and reference-checked](docs/foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
 
+4 November: [exact terminating division qualified at 1.51.0](docs/foundation-exact-division/README.md); 33 new controls, unchanged public metadata. Next typed/schema numeric and all-host/native qualification; wider rounding/error policy remains pending.
+
 ## Publication path
 
 | Gate | Status | Required outcome |
