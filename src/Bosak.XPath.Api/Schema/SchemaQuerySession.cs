@@ -23,6 +23,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 04-11-2026     | Capture numeric constructor and retained division policies (1.52.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 04-11-2026     | Qualify internal public-contract advisor binding and input adapter (1.56.0).               |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -97,6 +99,20 @@ public sealed class SchemaQuerySession : IDisposable
     public IQuerySemanticEnvironment Environment { get; }
     /// <summary>The exact bound advisor, or null for the ordinary-XML profile.</summary>
     public ISchemaAssessmentAdvisor? Advisor => null;
+    private void CheckCandidate(CancellationToken token)
+    {token.ThrowIfCancellationRequested();lock(_gate)ObjectDisposedException.ThrowIf(_closed,this);}
+    internal SchemaAdvisorBinding? BindAdvisorCandidate(ISchemaAssessor assessor,CancellationToken token=default)
+        =>SchemaAdvisorBinding.Bind(_runtime,Environment,assessor,CheckCandidate,token);
+    internal IQueryTypedContainerIssuer CreateIssuerCandidate(SchemaAdvisorBinding binding,SchemaQuerySnapshot snapshot,ISchemaAssessmentInput input,CancellationToken token=default)
+    {
+        ArgumentNullException.ThrowIfNull(binding);ArgumentNullException.ThrowIfNull(snapshot);ArgumentNullException.ThrowIfNull(input);CheckCandidate(token);
+        lock(_gate)
+            if(!ReferenceEquals(snapshot.Runtime.Owner,_runtime)||!_inputs.TryGetValue(input,out var projection)||!ReferenceEquals(projection,snapshot.Runtime.Input))
+                throw new ArgumentException("Input is not this exact session admission.");
+        snapshot.Runtime.Check(token);
+        var issuer=binding.ForInput(_runtime,input,snapshot.Runtime.Input,token);
+        snapshot.Runtime.Check(token);CheckCandidate(token);return issuer;
+    }
     /// <summary>Admits one borrowed input identity and its actual resource lifetime.</summary>
     /// <param name="input">Immutable/version-guarded input.</param>
     /// <param name="lifetime">Admission over already-owned resources.</param>
@@ -271,6 +287,11 @@ public sealed class SchemaQueryOperation
     {
         ArgumentNullException.ThrowIfNull(snapshot); ArgumentNullException.ThrowIfNull(value);
         _runtime.RequireMember(snapshot.Runtime); return SchemaQuerySession.Unsupported<XdmValue>();
+    }
+    internal QueryRegisteredTypedContainer ReadTypedCandidate(SchemaQuerySnapshot snapshot,IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin,ISchemaTypedValue value)
+    {
+        ArgumentNullException.ThrowIfNull(snapshot);_runtime.RequireMember(snapshot.Runtime);
+        return _runtime.ReadRegisteredTypedContainer(snapshot.Runtime,issuer,input,origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
     }
     /// <summary>Requests explicit provider-owned simple construction and admits its result.</summary>
     /// <param name="input">Atomic/lexical input under the selected constructor profile.</param>

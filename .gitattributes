@@ -410,3 +410,6 @@ docs/foundation-typed-scalar-cache/** -text whitespace=cr-at-eol,-blank-at-eof,-
 
 # Preserve exact TA-03 qualification receipts and sealed manifest bytes.
 docs/foundation-typed-evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-04 qualification receipts and sealed manifest bytes.
+docs/foundation-advisor-adapter/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

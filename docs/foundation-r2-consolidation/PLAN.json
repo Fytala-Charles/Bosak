@@ -152,12 +152,13 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.55.0 private marker attachment/explicit snapshot validation qualified: 24925 tests, 25 new controls, exact frozen gates and unchanged public metadata/API source. Copies/tamper/revocation/close/concurrent markers qualified without second registry. Existing VM capture refuses new markers. Next exact public advisor adapter and explicit VM identity route, then authorized typed numeric projection; no public activation or freeze.",
+      "progress": "1.56.0 public-contract assessor/advisor adapter internally qualified: 24960 tests, 35 new controls, exact frozen gates and unchanged exported metadata/friends. Real public environment/input/lifetime/raw callbacks with internal candidate methods; borrowed resources remain caller-owned. Next explicit typed identity VM profile before public activation, then typed numeric projection. No public schema activation or freeze.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
       "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
-      "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json"
+      "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
+      "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json"
     },
     {
       "id": "P10",
