@@ -1,7 +1,7 @@
 {
   ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
   "CORE-CAPTURE-PLAN.md": "8d805f8741cf12fe9d07b83fe8ab00c83e1f9469ba8d1580eb6bc3d7e85d52bd",
-  "evidence/DOCUMENTATION-CHECKS.json": "3237f25569a9dd6a01ab276b04caa9a54f5e23785ba97d9a38351c7693f6d89f",
+  "evidence/DOCUMENTATION-CHECKS.json": "51af5cee0309e0c1e50331dbdff159973813cd1e5efffe87a444e20fa1276fb7",
   "FOLLOWUP-CASES.json": "554d16934f03f3f375fe73c3de1ce9b0324ab49067eb435c4a06bde5bfa237dd",
   "inputs/issue-468-comments.json": "6019d2b8084c28797ce89b6b10b9938a2e5e456f5916e6a197a63fee5beff29f",
   "inputs/O1-XmlDb.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
@@ -13,8 +13,8 @@
   "inputs/XmlDb-owner-INPUTS.json": "c338f649967399c1af83e14ca6a5d5b1fcded1bbeeb464552a33d727a411c179",
   "INPUTS.json": "99a0bc03ade96cd734ba46ffa4fba472d482ccee7f904ceb4c978bdda6fa796e",
   "OWNER-ACTIONS.md": "0e025e310c8dbbf6a49f262f863e3710fc8693d6b19af4d793228f37c2b5ed5b",
-  "PLAN.json": "5ca82810b33663d12fe9dc9d5ce3b24d01d36a6d6e95c1ac781a00901c3f2134",
-  "README.md": "1ed8f2e6a67d2aa32d886e390ca2183ed2c7af4160d82df6bf66b70898110c36",
+  "PLAN.json": "096f29fff136d25206eee004ca9ae149a6d2dcf18a6ccd4a1c1ea806028ea8cb",
+  "README.md": "5dc31b6b4a3ec2b9ff8e4d80eb4e7560986d3349cc5a34fbe81c952e5804aaf5",
   "STATUS.json": "d2c2f265685d9afb19dc10c4a4a0f4452111632b04d6f87f6a449cd05fd914b5",
-  "tools/verify.py": "0d11266c35d4c3343680b9342614d9a1236162f4cfb6ebbd2a2bf547ced84949"
+  "tools/verify.py": "d34d9f0e217cd05fb3f2c8f70f6346413226397755932ec43c400b9d1fccb35b"
 }

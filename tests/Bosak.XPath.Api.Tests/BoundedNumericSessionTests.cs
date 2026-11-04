@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Promote scalar cases and qualify both profile dispatch lifetimes (1.49.0).              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 04-11-2026     | Promote idiv/mod cases and qualify quotient dispatch lifetime (1.50.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -52,7 +54,7 @@ public sealed class BoundedNumericSessionTests
     /// <summary>Unsupported numeric syntax never falls back to legacy rounding, functions or floating point.</summary>
     /// <param name="source">Query outside the finite arithmetic grammar.</param>
     [Theory]
-    [InlineData("1 div 2")][InlineData("1 idiv 2")][InlineData("1 mod 2")][InlineData("1e2")]
+    [InlineData("1 div 2")][InlineData("1 to 2")][InlineData("if (1) then 2 else 3")][InlineData("1e2")]
     [InlineData("1 instance of xs:integer")][InlineData("string(1 div 2)")][InlineData("count(/n)")][InlineData("$p:x + 1")]
     [InlineData("xs:decimal('1.2')")][InlineData("(1,2)")][InlineData("1 + true()")]
     public void RefusesUnavailableSyntax(string source)
@@ -129,20 +131,20 @@ public sealed class BoundedNumericSessionTests
         }
     }
     /// <summary>Close during numeric dispatch revokes access and defers actual owner release to raw completion.</summary>
-    /// <param name="scalar">Whether to exercise the new bounded scalar dispatcher.</param>
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient dispatch.</param>
     /// <returns>The completed lifetime verification.</returns>
-    [Theory][InlineData(false)][InlineData(true)] public async Task CloseDuringArithmeticRetainsRawLease(bool scalar)
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)] public async Task CloseDuringArithmeticRetainsRawLease(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(scalar?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));var s=Compile(profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         input.OnCheck=()=>{if(input.Checks==100){s.Dispose();Assert.Equal(0,input.Releases);}};
         Assert.Throws<ObjectDisposedException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext())));
         await s.DrainAsync();Assert.Equal(1,input.Releases);Assert.Equal(0,input.RootReads);
     }
     /// <summary>Cancellation inside arithmetic/scalar dispatch preserves the reusable source admission.</summary>
-    /// <param name="scalar">Whether to exercise the new bounded scalar dispatcher.</param>
-    [Theory][InlineData(false)][InlineData(true)] public void CancellationDuringArithmeticPreservesAdmission(bool scalar)
+    /// <param name="profile">Zero for arithmetic, one for scalar, two for quotient dispatch.</param>
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)] public void CancellationDuringArithmeticPreservesAdmission(int profile)
     {
-        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(scalar?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
+        var source=string.Join("+",Enumerable.Repeat("1",500));using var s=Compile(profile==2?"("+source+") idiv 1":profile==1?"string("+source+")":source);var input=new Input();var snapshot=s.OpenSnapshot(input,input).Value;
         using var cancellation=new CancellationTokenSource();input.OnCheck=()=>{if(input.Checks==100)cancellation.Cancel();};
         Assert.ThrowsAny<OperationCanceledException>(()=>s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()),cancellation.Token));Assert.Equal(0,input.Releases);
         input.OnCheck=null;Assert.Equal("500",Text(s.Run([snapshot],op=>op.Evaluate(new EvaluationContext()))));Assert.Equal(0,input.RootReads);

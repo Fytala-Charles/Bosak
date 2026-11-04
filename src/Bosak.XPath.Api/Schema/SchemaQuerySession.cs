@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 04-11-2026     | Describe exact scalar profiles and admit checked Boolean/string results (1.49.0).        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 04-11-2026     | Identify bounded quotient profile in captured environment (1.50.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -173,7 +175,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }

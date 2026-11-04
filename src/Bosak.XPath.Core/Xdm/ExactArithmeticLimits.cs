@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Compare decimal order before bounded alignment and derive scalar output capacity (1.49.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 04-11-2026     | Bounded exact quotient/remainder (1.50.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 
@@ -112,6 +114,21 @@ internal readonly struct ExactArithmeticLimits
             if (a>maximum/b) throw new NotSupportedException("Numeric multiplication exceeds digit capacity.");
         }
         check();var product=left.Coefficient*right.Coefficient;check();return Normalize(product,(int)scale,left.Integer&&right.Integer);
+    }
+    internal ExactNumber QuotientOrRemainder(ExactNumber left,ExactNumber right,bool remainder,Action check)
+    {
+        check();Validate(left);Validate(right);
+        if(right.Coefficient.IsZero)throw new DivideByZeroException("FOAR0001: Numeric divisor is zero.");
+        bool integer=remainder?left.Integer&&right.Integer:true;
+        if(left.Coefficient.IsZero)return new(BigInteger.Zero,0,integer);
+        int magnitude=Compare(left with {Coefficient=BigInteger.Abs(left.Coefficient)},right with {Coefficient=BigInteger.Abs(right.Coefficient)},check);
+        check();
+        if(magnitude<0)return remainder?Normalize(left.Coefficient,left.Scale,integer):new(BigInteger.Zero,0,true);
+        if(magnitude==0)return new(remainder?BigInteger.Zero:left.Coefficient.Sign*right.Coefficient.Sign,0,integer);
+        int scale=Math.Max(left.Scale,right.Scale);
+        var a=Align(left,scale);check();var b=Align(right,scale);check();
+        var result=remainder?a%b:a/b;check();
+        return Normalize(result,remainder?scale:0,integer);
     }
     private ExactNumber Normalize(BigInteger coefficient,int scale,bool integer)
     {

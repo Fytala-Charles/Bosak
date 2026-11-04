@@ -36,6 +36,8 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 4 November: [exact comparisons, map keys and scalar output qualified at 1.49.0](docs/foundation-exact-scalars/README.md); 50 new controls, unchanged public metadata. Next wider numeric operators, schema/all-host/native qualification.
 
+4 November: [exact quotient/remainder qualified at 1.50.0](docs/foundation-exact-quotient/README.md); 29 new controls, unchanged public metadata. Next decimal division policy and schema/all-host/native qualification.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

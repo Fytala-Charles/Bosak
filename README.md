@@ -122,6 +122,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Exact XDM numeric carriers](docs/foundation-exact-value-transport/GUIDE.md) | Full numeric access with checked legacy views and source migration guidance. |
 | [Bounded exact arithmetic](docs/foundation-bounded-numeric/GUIDE.md) | Opt-in integer/decimal arithmetic with explicit coefficient and scale limits. |
 | [Exact comparisons, keys and strings](docs/foundation-exact-scalars/GUIDE.md) | Exact numeric comparisons and map keys with bounded scalar output. |
+| [Exact quotient and remainder](docs/foundation-exact-quotient/GUIDE.md) | Bounded integer division and remainder for primitive integer/decimal values. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
