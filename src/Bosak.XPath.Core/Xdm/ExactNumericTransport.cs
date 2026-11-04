@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; exact numeric carrier transport (1.47.0).                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Expose raw CLR decimal parts for pre-normalization admission quotas (1.48.0).            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers.Binary;
 using System.Numerics;
@@ -35,6 +37,11 @@ internal static class ExactNumericTransport
     }
     internal static XdmExactDecimal FromLegacyDecimal(decimal value)
     {
+        var (coefficient, scale) = LegacyParts(value);
+        return new XdmExactDecimal(coefficient, scale, 29, 28);
+    }
+    internal static (BigInteger Coefficient, int Scale) LegacyParts(decimal value)
+    {
         Span<int> bits = stackalloc int[4]; decimal.GetBits(value, bits);
         Span<byte> bytes = stackalloc byte[12];
         BinaryPrimitives.WriteInt32LittleEndian(bytes, bits[0]);
@@ -43,6 +50,6 @@ internal static class ExactNumericTransport
         var coefficient = new BigInteger(bytes, isUnsigned: true, isBigEndian: false);
         if (bits[3] < 0) coefficient = -coefficient;
         // These bounds describe CLR decimal storage, not a selected query workload.
-        return new XdmExactDecimal(coefficient, (bits[3] >> 16) & 255, 29, 28);
+        return (coefficient, (bits[3] >> 16) & 255);
     }
 }

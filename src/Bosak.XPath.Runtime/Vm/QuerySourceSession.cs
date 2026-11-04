@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 03-11-2026     | Check exact public snapshot membership before unsupported typed reads (1.45.0).          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 04-11-2026     | Retain raw availability checks inside selected compiled arithmetic dispatch (1.48.0).    |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -41,7 +43,7 @@ internal interface IQuerySourceInput
 internal sealed class QuerySourceSession : IDisposable
 {
     private readonly object _gate = new();
-    private readonly Func<EvaluationContext, XdmValue> _evaluate;
+    private readonly object _evaluate;
     private readonly int _snapshotLimit;
     private readonly Dictionary<IQuerySourceInput, Snapshot> _snapshots = new(ReferenceEqualityComparer.Instance);
     private readonly QuerySnapshotLifetime _lifetime = new(() => { });
@@ -50,6 +52,10 @@ internal sealed class QuerySourceSession : IDisposable
     private Task? _drain;
 
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit)
+        : this(environment,(object)evaluate,snapshotLimit) { }
+    internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit)
+        : this(environment,(object)evaluate,snapshotLimit) { }
+    private QuerySourceSession(SchemaQueryEnvironment environment, object evaluate, int snapshotLimit)
     {
         ArgumentNullException.ThrowIfNull(environment); ArgumentNullException.ThrowIfNull(evaluate);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(snapshotLimit);
@@ -262,7 +268,8 @@ internal sealed class QuerySourceSession : IDisposable
             var context = inputs.CreateContext();
             foreach (var pair in inputs.VariableBindings) ValidateTransport(pair.Value);
             context.ResourcePolicy = SchemaProviderSessionBinding.ClosedResources();
-            var result = _owner._evaluate(context); Check();
+            var result = _owner._evaluate is Func<EvaluationContext,Action,XdmValue> guarded
+                ? guarded(context,Check) : ((Func<EvaluationContext,XdmValue>)_owner._evaluate)(context); Check();
             if (result.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.String or XdmValueKind.Boolean))
                 throw new NotSupportedException("Only copied scalar results are supported by this slice.");
             ValidateTransport(result); Check(); return result;

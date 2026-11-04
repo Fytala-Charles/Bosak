@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.47.0",
+  "sourceVersion": "1.48.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -55,7 +55,7 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "Record immutable W1-A semantic adoption, then implement neutral ordinary-source admission under accepted scope",
+      "nextCoreTask": "R2 is ClosedWithScope; continue the qualified R3 implementation queue recorded by the current R3 gate.",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-exact-value-transport/README.md",
+      "w1ReadinessPlan": "docs/foundation-bounded-numeric/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Explicit operation numeric limits and exact parsing/arithmetic/comparison/map/serialization routing before numeric enablement; then schema/all-host/native qualification.",
+      "nextCoreTask": "Exact comparisons/map-key equality/hashing and bounded serialization; then wider numeric operators, schema/all-host/native qualification.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -134,7 +134,8 @@
       "publicOrdinaryFacade": "docs/foundation-public-ordinary/STATUS.json",
       "exactDecimalPrimitive": "docs/foundation-exact-decimal/STATUS.json",
       "exactValueTransport": "docs/foundation-exact-value-transport/STATUS.json",
-      "knownSourceMigration": "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json"
+      "knownSourceMigration": "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json",
+      "boundedNumericProfile": "docs/foundation-bounded-numeric/STATUS.json"
     },
     {
       "id": "R4",

@@ -120,6 +120,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Ordinary-source sessions](docs/foundation-public-ordinary/GUIDE.md) | Opt-in string/boolean queries with explicit source ownership and lifetime. |
 | [Exact decimals](docs/foundation-exact-decimal/GUIDE.md) | Exact coefficient/scale values with explicit capacity and output bounds. |
 | [Exact XDM numeric carriers](docs/foundation-exact-value-transport/GUIDE.md) | Full numeric access with checked legacy views and source migration guidance. |
+| [Bounded exact arithmetic](docs/foundation-bounded-numeric/GUIDE.md) | Opt-in integer/decimal arithmetic with explicit coefficient and scale limits. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |

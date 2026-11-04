@@ -44,6 +44,9 @@ Schema decision handoff: [three precise questions and localized source evidence]
 
 4 November: [exact XdmValue carrier transport qualified at source 1.47.0](docs/foundation-exact-value-transport/README.md); 32 new controls and all previous API fields/rows retained. Record typed-default source migration; next bounded numeric operation limits and exact execution routing.
 
+
+4 November: [bounded exact arithmetic qualified at source 1.48.0](docs/foundation-bounded-numeric/README.md), with 44 new controls and unchanged public declarations. Next exact comparisons/map keys and bounded serialization, then broader numeric/schema/all-host/native qualification.
+
 ## Publication path
 
 | Gate | Status | Required outcome |

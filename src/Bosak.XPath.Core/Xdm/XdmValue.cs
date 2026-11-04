@@ -63,6 +63,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.12  | 04-11-2026     | Store exact numeric payloads without marker collision; checked legacy access (1.47.0).    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.13  | 04-11-2026     | Retain supplied CLR decimal scale/coefficient for numeric limit admission (1.48.0).      |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -402,6 +404,10 @@ public readonly struct XdmValue
                 ? ExactNumericTransport.ToLegacyDecimal(payload.Value) : (decimal)SchemaTransportPayload!;
         }
     }
+
+    internal (BigInteger Coefficient, int Scale) DecimalRepresentation
+        => SchemaTransportPayload is ExactDecimalPayload payload
+            ? (payload.Value.Coefficient, payload.Value.Scale) : ExactNumericTransport.LegacyParts((decimal)SchemaTransportPayload!);
 
     /// <summary>Gets the complete decimal payload, including an exact view of a legacy CLR decimal.</summary>
     /// <exception cref="InvalidOperationException">The value is not a decimal.</exception>
