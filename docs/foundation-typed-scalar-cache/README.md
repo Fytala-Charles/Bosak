@@ -1,0 +1,11 @@
+# TA-02: internal transactional typed scalar registry
+
+4 November 2026. Source **1.54.0**, based on `d2ba4d0b`, implements the [selected cache policy](../foundation-typed-cache-policy/POLICY.md) inside actual QuerySourceSession raw operations. Each retained atomic cell consumes one slot. A validated batch installs atomically, preserves existing identities on failure, and can be reused under a fresh operation guard. Empty containers leave no resident record. R3 remains InProgress.
+
+All **24,900 tests** pass, including **35 new registry controls**, the retained 94 container controls, 33 association controls and 38 public ordinary/refusal controls. Runtime passes 580 cases. QT3 remains **31,397/0/424**; gated qt4 remains **8,941/0/1,918**, including 11 experimental passes, with byte-identical skip maps. Eleven assemblies retain **310 public types / 6,369 declaration rows** and original friend grants. Public API source is unchanged from the preceding qualification. Build, LanguageServer, exact loaded assembly hashes, logs/TRX and source/binary archives are retained under `evidence/`.
+
+[Design](DESIGN.md), [acceptance checklist](ACCEPTANCE.md), [case results](ACCEPTANCE.json), [adoption record](SPEC-BASIS.md), [policy input](PLAN-INPUT.json) and [status](STATUS.json) define the qualification. Run `python docs/foundation-typed-scalar-cache/tools/verify.py` without rebuilding to verify this exact candidate. Earlier reader and policy dossiers remain sealed historical evidence.
+
+The registry stores internal identities and plain payloads. It does not attach schema evidence to XdmValue or activate a public schema/numeric route. Local cold/warm/refusal allocation observations establish regression controls, not accepted owner latency, retained-memory or native budgets. Actual file-handle tests exercise retained source ownership and cleanup; they are not native provider qualification.
+
+Next: qualify private evidence attachment and the exact public advisor/container adapter. Authorized typed numeric projection, original facts/nil/no-value, source-free construction, compatibility, all-host/native/migration qualification, four-owner C45, final release version and publication remain pending.

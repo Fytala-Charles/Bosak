@@ -1,0 +1,10 @@
+{
+  "scope": "Owned inputs, pre-held raw operation; JIT/runtime warmup 100 reads, 1000 measured reads. Cold admits distinct scalar containers; warm revalidates three cached cells without rereading payload getters; refusal includes caught exception. No retained-memory/latency/native/owner budget acceptance.",
+  "bytesPerRead": {
+    "warm-list-three": 200,
+    "capacity-refusal": 1008,
+    "cold-scalar": 797
+  },
+  "regressionCeilingBytes": 32768,
+  "budgetsAccepted": false
+}

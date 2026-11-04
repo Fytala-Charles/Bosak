@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "e347c478091d5b4ca6ea564f4adc1a523a764d291476daf5440960a1e7e1caac",
+  "qualifiedInternalSlice": "TA-02-internal-transactional-v1",
+  "scope": "Unchanged exported metadata/friends and XdmValue field layout; internal scalar registry slice qualified separately. No new public profile, native ABI or freeze acceptance."
+}

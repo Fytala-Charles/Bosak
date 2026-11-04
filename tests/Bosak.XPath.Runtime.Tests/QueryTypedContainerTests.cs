@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; typed-container controls (1.53.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Share issued-resource fixtures with transactional registry controls (1.54.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections;
 using System.Collections.Immutable;
@@ -31,10 +33,11 @@ namespace Bosak.XPath.Runtime.Tests;
 /// <param name="output">Records local cold-read allocation observations.</param>
 public sealed class QueryTypedContainerTests(ITestOutputHelper output)
 {
-    private sealed class Input : IQuerySourceInput,ISchemaAssessmentInput
+    internal sealed class Input : IQuerySourceInput,ISchemaAssessmentInput
     {
         internal bool Available=true;
         internal int Roots,Releases;
+        internal Stream? Resource;
         IXdmNode IQuerySourceInput.Root {get{Roots++;throw new Exception("root");}}
         IXdmNode ISchemaAssessmentInput.Root {get{Roots++;throw new Exception("public root");}}
         ISchemaSourceBinding ISchemaAssessmentInput.Source=>throw new Exception("source getter");
@@ -49,14 +52,14 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
         {
             private int _closed;
             /// <inheritdoc/>
-            public void Dispose(){if(Interlocked.Exchange(ref _closed,1)==0)input.Releases++;}
+            public void Dispose(){if(Interlocked.Exchange(ref _closed,1)==0){input.Releases++;input.Resource?.Dispose();}}
         }
     }
-    private sealed class Origin : ISchemaAssessmentOrigin
+    internal sealed class Origin : ISchemaAssessmentOrigin
     {ISchemaSourceBinding ISchemaAssessmentOrigin.Source=>throw new Exception("origin source getter");}
-    private sealed class Handle : ISchemaComponentHandle
+    internal sealed class Handle : ISchemaComponentHandle
     {ISchemaAuthority ISchemaComponentHandle.Authority=>throw new Exception("self-claimed authority getter");}
-    private sealed class Authority : ISchemaAuthority
+    internal sealed class Authority : ISchemaAuthority
     {
         internal bool Available=true;
         internal readonly HashSet<ISchemaComponentHandle> Types=new(ReferenceEqualityComparer.Instance);
@@ -69,11 +72,12 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
         SchemaResult<bool> ISchemaAuthority.IsAffiliatedWith(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t)=>throw new Exception("lookup");
         SchemaResult<ImmutableArray<ISchemaComponentHandle>> ISchemaAuthority.GetComponentClosure(ISchemaComponentHandle a,CancellationToken t)=>throw new Exception("lookup");
     }
-    private sealed class Issuer(SchemaQueryEnvironment environment,Input input,Authority authority,Origin origin) : IQueryTypedContainerIssuer
+    internal sealed class Issuer(SchemaQueryEnvironment environment,Input input,Authority authority,Origin origin) : IQueryTypedContainerIssuer
     {
         internal SchemaQueryEnvironment Env=environment;
         internal ISchemaAuthority SelectedAuthority=authority;
         internal bool Available=true,InputOwned=true,OriginOwned=true;
+        internal Action? OnOwn;
         internal readonly HashSet<ISchemaTypedValue> Values=new(ReferenceEqualityComparer.Instance);
         SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment=>Env;
         ISchemaAuthority IQueryTypedContainerIssuer.Authority=>SelectedAuthority;
@@ -81,9 +85,9 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
         bool IQueryTypedContainerIssuer.OwnsInput(ISchemaAssessmentInput original,IQuerySourceInput current)=>InputOwned&&ReferenceEquals(original,input)&&ReferenceEquals(current,input);
         bool IQueryTypedContainerIssuer.OwnsOrigin(ISchemaAssessmentOrigin o,ISchemaAssessmentInput original,IQuerySourceInput current)=>OriginOwned&&ReferenceEquals(o,origin)&&ReferenceEquals(original,input)&&ReferenceEquals(current,input);
         bool IQueryTypedContainerIssuer.OwnsContainer(ISchemaTypedValue value,ISchemaAssessmentInput original,IQuerySourceInput current,ISchemaAssessmentOrigin? o)
-            =>Values.Contains(value)&&ReferenceEquals(original,input)&&ReferenceEquals(current,input)&&(o is null||ReferenceEquals(o,origin));
+        {OnOwn?.Invoke();return Values.Contains(value)&&ReferenceEquals(original,input)&&ReferenceEquals(current,input)&&(o is null||ReferenceEquals(o,origin));}
     }
-    private sealed class Provenance(Container container,ISchemaComponentHandle declared,ISchemaComponentHandle actual,ISchemaAssessmentOrigin? origin):ISchemaAtomicProvenance
+    internal sealed class Provenance(Container container,ISchemaComponentHandle declared,ISchemaComponentHandle actual,ISchemaAssessmentOrigin? origin):ISchemaAtomicProvenance
     {
         internal ISchemaComponentHandle Declared=declared,Actual=actual;
         internal ISchemaAssessmentOrigin? Origin=origin;
@@ -91,7 +95,7 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
         ISchemaComponentHandle ISchemaAtomicProvenance.ActualType {get{container.Trace("actual");return Actual;}}
         ISchemaAssessmentOrigin? ISchemaAtomicProvenance.OriginalAssessment {get{container.Trace("origin");return Origin;}}
     }
-    private sealed class Container : ISchemaTypedValue,IEnumerable<SchemaAtomicItem>
+    internal sealed class Container : ISchemaTypedValue,IEnumerable<SchemaAtomicItem>
     {
         internal ISchemaComponentHandle Governing=null!;
         internal bool List,Fast,InvalidOut,Record=true;
@@ -121,7 +125,7 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
             public void Dispose(){owner.Disposals++;owner.Trace("dispose");}
         }
     }
-    private sealed class Fixture : IDisposable
+    internal sealed class Fixture : IDisposable
     {
         internal readonly QuerySourceSession Session;
         internal readonly Input Input=new();

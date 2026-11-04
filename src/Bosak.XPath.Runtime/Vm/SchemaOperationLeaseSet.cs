@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Expose engine-only active-state check for callback-free registration (1.54.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.ExceptionServices;
@@ -75,6 +77,10 @@ internal sealed class SchemaOperationLeaseSet
             throw;
         }
     }
+
+    // Deliberately no provider/session delegates: safe under an internal registration lock.
+    internal void CheckActive()
+    { ObjectDisposedException.ThrowIf(Volatile.Read(ref _leases) is null,this);_cancellation.ThrowIfCancellationRequested(); }
 
     internal void Check()
     {

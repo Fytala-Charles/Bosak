@@ -1,10 +1,10 @@
 {
   ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
-  "evidence/DOCUMENTATION-CHECKS.json": "978a1570ee2e50234d3f2fbffa61d05e3aa09c9542cdca4e6390a4bb032ae2a0",
-  "GATES.json": "5bce2708f3dabbd631cde1856113fc5be86d3507b26daa5c3e0a77c2d98e7c3a",
+  "evidence/DOCUMENTATION-CHECKS.json": "ed0d808c9246a62f66af4951407b575f89b1c98037e10cd2c21313ada9491c0d",
+  "GATES.json": "c6f96ad39a43c786425a54836927736232488abd1df496733a5c3fa9d767d6f1",
   "inputs/ROADMAP-before-consolidation.txt": "18c56cf90761b92742c59f8ebeceee41cddec004b171a0fa3d30e22ddffc5aa4",
   "INPUTS.json": "231acf7af952195e2192db48fbc5cf7927b7f4b67e47f0834d61c99ec9901430",
   "OWNER-CAPABILITIES.md": "18553a52a7ee740a0bea72c89adba4f92dfaa5668cdd4b82753137665ec774c6",
-  "README.md": "60c92ebcb391ebf0bbe3761085acc65fb6c322b2c30752de82eb86e3baa8a1d4",
-  "tools/verify.py": "4159d0560db4003f05a9f7f914c75153cdbafeaef692e35cceb8769cdd83c890"
+  "README.md": "b9c595e8214475b1b5284df3718c9e438978e009eb0f30e9edacdb84dda51f09",
+  "tools/verify.py": "0ed78319a5b0b1b02e2e636c94bc45105740f23147f0b566bb13af602e600ffe"
 }

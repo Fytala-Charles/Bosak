@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; internal typed container reader (1.53.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Stage immutable cells and revalidate registered data without getter replay (1.54.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Schema;
@@ -45,6 +47,8 @@ internal sealed class QueryTypedContainer
     internal bool IsList {get{_check();return _isList;}}
     internal int Count {get{_check();return _cells.Length;}}
     internal AtomicView GetAtomic(int index){_check();ArgumentOutOfRangeException.ThrowIfNegative(index);if(index>=_cells.Length)throw new ArgumentOutOfRangeException(nameof(index));return new(this,index);}
+    internal (ISchemaComponentHandle Governing,bool List,ImmutableArray<Cell> Cells) Capture()
+    {_check();return (_governing,_isList,_cells);}
     internal readonly struct AtomicView(QueryTypedContainer owner,int index)
     {
         private Cell Read(){if(owner is null)throw new InvalidOperationException("No admitted atomic view.");owner._check();return owner._cells[index];}
@@ -102,10 +106,27 @@ internal sealed class QueryTypedContainerReader
         var origin=Read(evidence,static e=>e.OriginalAssessment);
         if(!ReferenceEquals(origin,_origin))throw new ArgumentException("Atomic evidence has a different original assessment.");
         var value=item.Value;
+        ValidatePayload(value);
+        CheckContainer();return new(value,declared,actual,origin);
+    }
+    internal ISchemaAuthority SelectedAuthority {get{CheckContainer();return _authority;}}
+    internal void ValidateStored(ISchemaComponentHandle governing,ImmutableArray<QueryTypedContainer.Cell> cells)
+    {
+        CheckContainer();OwnType(governing);
+        if(cells.Length>_maxAtoms)throw new NotSupportedException("Typed result exceeds atomic capacity.");
+        foreach(var cell in cells)
+        {
+            OwnType(cell.Declared);OwnType(cell.Actual);
+            if(!ReferenceEquals(cell.Origin,_origin))throw new ArgumentException("Cached original assessment differs.");
+            ValidatePayload(cell.Value);CheckContainer();
+        }
+        CheckContainer();
+    }
+    private void ValidatePayload(XdmValue value)
+    {
         if(XdmValue.SchemaTransportMarker(value) is not null||value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)throw new ArgumentException("Plain atomic payload required.");
         if(value.Kind==XdmValueKind.Integer)_=new XdmExactDecimal(value.BigIntegerValue,0,_digits,_scale);
         else if(value.Kind==XdmValueKind.Decimal){var(c,s)=value.DecimalRepresentation;_=new XdmExactDecimal(c,s,_digits,_scale);}
-        CheckContainer();return new(value,declared,actual,origin);
     }
     internal QueryTypedContainer Read()
     {

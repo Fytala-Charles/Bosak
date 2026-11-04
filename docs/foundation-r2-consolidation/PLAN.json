@@ -152,10 +152,11 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.53.0 TA-01 qualification retained. TA-02 scalar accounting/atomic commit and typed numeric projection policies selected; reference model and 231 distinct existing controls pass (261 executions with binding correction). Next internal transactional registry; no runtime cache/public/typed numeric activation yet.",
+      "progress": "1.54.0 TA-02 internal transactional scalar registry qualified: 24900 tests, 35 new controls, exact frozen gates and unchanged public metadata/API source. Whole-batch rollback/reuse, empty accounting, concurrent winners, scalar-mode exclusivity and actual file-handle cleanup qualified. Next private evidence/public adapter qualification then authorized typed numeric projection; no public activation or freeze.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
-      "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md"
+      "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
+      "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json"
     },
     {
       "id": "P10",

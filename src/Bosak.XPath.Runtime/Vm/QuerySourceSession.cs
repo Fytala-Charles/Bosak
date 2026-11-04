@@ -25,6 +25,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 04-11-2026     | Admit typed containers; remove repeated membership closure allocation (1.53.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 04-11-2026     | Own lazy transactional scalar registry and close it with admission (1.54.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -119,7 +121,9 @@ internal sealed class QuerySourceSession : IDisposable
         {
             Run(environment, [snapshot], operation =>
             {
-                snapshot.Schema = new QuerySchemaAssociation(environment, input, advisor, originalAssessment, valueLimit, snapshot.CheckSource, cancellation);
+                var association=new QuerySchemaAssociation(environment,input,advisor,originalAssessment,valueLimit,snapshot.CheckSource,cancellation);
+                try{snapshot.Schema=association;}
+                catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,association.Dispose);throw;}
                 operation.Check(); return 0;
             }, cancellation);
             return snapshot;
@@ -180,7 +184,32 @@ internal sealed class QuerySourceSession : IDisposable
         internal QuerySourceSession Owner { get; }
         internal IQuerySourceInput Input { get; }
         internal QuerySnapshotLifetime Lifetime { get; }
-        internal QuerySchemaAssociation? Schema { get; set; }
+        private QuerySchemaAssociation? _schema;
+        private int _scalarMode; // 0 undecided, 1 legacy association, 2 transactional registry.
+        internal QuerySchemaAssociation? Schema
+        {
+            get=>Volatile.Read(ref _schema);
+            set
+            {
+                if(value is not null&&Interlocked.CompareExchange(ref _scalarMode,1,0)==2)throw new NotSupportedException("Legacy association cannot share a typed registry.");
+                Volatile.Write(ref _schema,value);
+            }
+        }
+        private QueryTypedScalarCache? _typedScalars;
+        internal int TypedScalarCount=>Volatile.Read(ref _typedScalars)?.Count??0;
+        internal QueryTypedScalarCache GetTypedScalars(IQueryTypedContainerIssuer issuer,Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAuthority authority,int limit)
+        {
+            Lifetime.Check();
+            if(Interlocked.CompareExchange(ref _scalarMode,2,0)==1)throw new NotSupportedException("Typed registry cannot share a legacy scalar association.");
+            var cache=Volatile.Read(ref _typedScalars);
+            if(cache is null)
+            {
+                var candidate=new QueryTypedScalarCache(this,issuer,originalInput,authority,limit);
+                cache=Interlocked.CompareExchange(ref _typedScalars,candidate,null)??candidate;
+            }
+            try{Lifetime.Check();}catch{cache.Close();throw;}
+            cache.RequireScope(issuer,originalInput,authority,limit);return cache;
+        }
         internal Snapshot(QuerySourceSession owner, IQuerySourceInput input, Action release)
         { Owner = owner; Input = input; Lifetime = new QuerySnapshotLifetime(release); }
         internal void CheckSource() => CheckSource(default);
@@ -188,7 +217,12 @@ internal sealed class QuerySourceSession : IDisposable
         internal void Check() => Check(default);
         internal void Check(CancellationToken cancellation) { CheckSource(cancellation); Schema?.Check(); CheckSource(cancellation); }
         /// <summary>Revokes access without releasing an active raw-operation resource.</summary>
-        public void Dispose() { try { Lifetime.Dispose(); } finally { Schema?.Dispose(); } }
+        public void Dispose()
+        {
+            Volatile.Read(ref _typedScalars)?.Close();
+            try{Lifetime.Dispose();}
+            finally{Volatile.Read(ref _typedScalars)?.Close();Schema?.Dispose();}
+        }
     }
     internal sealed class Operation
     {
@@ -206,6 +240,31 @@ internal sealed class QuerySourceSession : IDisposable
             RequireMember(snapshot);
             return new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation).Read();
         }
+        internal void CheckRegistrationActive(Snapshot snapshot)
+        {
+            _leases.CheckActive();_owner.CheckEnvironment(_owner.Environment);
+            bool member=false;foreach(var candidate in _snapshots)if(ReferenceEquals(candidate,snapshot)){member=true;break;}
+            if(!ReferenceEquals(snapshot.Owner,_owner)||!member)throw new ArgumentException("Foreign registration snapshot.",nameof(snapshot));
+            snapshot.Lifetime.Check();
+        }
+        internal QueryTypedScalarRegistration PrepareTypedRegistration(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
+            Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
+            Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxCached,int maxAtoms,int digits,int scale)
+        {
+            RequireMember(snapshot);ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxCached);
+            var reader=new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation);
+            var cache=snapshot.GetTypedScalars(issuer,originalInput,reader.SelectedAuthority,maxCached);
+            var existing=cache.Find(value,origin);
+            QueryTypedScalarCache.Group group;
+            if(existing is not null)group=existing;
+            else{var data=reader.Read().Capture();group=new QueryTypedScalarCache.Group(cache,value,origin,data.Governing,data.List,data.Cells);}
+            reader.ValidateStored(group.Governing,group.Cells);
+            return new QueryTypedScalarRegistration(cache,this,snapshot,reader,group);
+        }
+        internal QueryRegisteredTypedContainer ReadRegisteredTypedContainer(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
+            Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
+            Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxCached,int maxAtoms,int digits,int scale)
+            =>PrepareTypedRegistration(snapshot,issuer,originalInput,origin,value,maxCached,maxAtoms,digits,scale).Commit();
         private bool OwnsNode(IXdmNode node)
         {
             Check(); int owners = 0;

@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.53.0 qualifies [TA-01 internal typed containers](../foundation-typed-container/README.md) over the retained ordinary facade/numeric profiles. R3 remains InProgress for the selected internal registry/public adapter/typed-projection implementation, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.54.0 qualifies the [TA-02 internal transactional scalar registry](../foundation-typed-scalar-cache/README.md) over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for private evidence attachment/public adapter/typed-projection implementation, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -28,6 +28,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [TA-01 internal typed containers qualified at 1.53.0](../foundation-typed-container/README.md); 94 new controls and unchanged public API source/metadata. Next cache/evidence and typed numeric projection policy before public adapter activation.
 
 4 November: [TA-02 cache/projection policies selected and model-checked](../foundation-typed-cache-policy/README.md); source remains 1.53.0. Next internal transactional scalar registry, followed by evidence/public adapter and typed numeric qualification.
+
+4 November: [TA-02 internal transactional registry qualified](../foundation-typed-scalar-cache/README.md), source 1.54.0: 24,900 tests, 35 new controls, unchanged gates and public metadata. Next private evidence/public adapter qualification, then typed numeric projection. R3 remains InProgress.
 
 ## Earlier disposition checkpoints
 

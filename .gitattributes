@@ -404,3 +404,6 @@ docs/conformance/k04-xib-admission/adoption/** -text whitespace=cr-at-eol,-blank
 # C41 preserves schema-profile originals, independent contract witnesses and readiness snapshots.
 docs/conformance/k04-schema-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-schema-profile-review/RESULTS.json -text whitespace=cr-at-eol
+
+# Preserve exact TA-02 qualification receipts and sealed manifest bytes.
+docs/foundation-typed-scalar-cache/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
