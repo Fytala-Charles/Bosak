@@ -4,7 +4,7 @@
   <p>From the qualified engine foundation to an accepted public API and publication</p>
 </div>
 
-Updated 4 November 2026. Source is **1.54.0**; target publication version/date are **not selected**. R2 is ClosedWithScope and R3 is InProgress. The ordinary public facade, bounded primitive numeric profiles and internal typed-container reader are qualified within their recorded scope. Public schema/all-host activation, actual consumer acceptance and API freeze remain pending.
+Updated 4 November 2026. Source is **1.55.0**; target publication version/date are **not selected**. R2 is ClosedWithScope and R3 is InProgress. The ordinary public facade, bounded primitive numeric profiles and internal typed-container reader are qualified within their recorded scope. Public schema/all-host activation, actual consumer acceptance and API freeze remain pending.
 
 The [release plan and checklist](docs/release-planning/README.md) is the planning entry point. Its [owner capability map](docs/release-planning/OWNER-CAPABILITIES.md) and [machine-readable gates](docs/release-planning/GATES.json) separate implementation evidence from release acceptance. Engineering checkpoints are retained in the development history and sealed dossiers rather than repeated here.
 
@@ -15,7 +15,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the plannin
 | R0 Internal engine foundation | Qualified within bounded private profile | Preserve the existing implementation and regression/conformance baseline. |
 | R1 Owner capability mapping | Audited, not owner accepted | Exact source pins and explicit Schema/XmlDb/Braid contract gaps. |
 | R2 Final public contract disposition | ClosedWithScope | Seven exact scoped role returns validated; design-stage closure is separate from runtime acceptance. |
-| R3 Public implementation | InProgress | Ordinary facade and finite numeric profiles qualified; TA-01 containers and TA-02 internal scalar registry qualified. Public schema/all-host integration remains. |
+| R3 Public implementation | InProgress | Ordinary facade and finite numeric profiles qualified; TA-01 containers, TA-02 registry and TA-03 private attachment qualified. Public schema/all-host integration remains. |
 | R4 Actual consumer/performance qualification | Pending candidate; preparation parallel | Same immutable candidate for Schema, XmlDb and Braid; source/unchanged binaries, owner resources and agreed workload budgets. |
 | R5 C45 acceptance/API freeze | Pending R4 | Explicit Core/Schema/XmlDb/Braid acceptance of the exact manifest/profile. |
 | R6 Release candidate | Pending freeze; preparation parallel | Select version; package/provenance, migration/docs and fresh-cache package-only verification. |
@@ -23,7 +23,7 @@ The [release plan and checklist](docs/release-planning/README.md) is the plannin
 
 ## Immediate Core task
 
-Use the [current dependency plan](docs/foundation-r2-consolidation/PLAN.json). [TA-01 internal container admission](docs/foundation-typed-container/README.md) is qualified. [TA-02 cache/projection policies](docs/foundation-typed-cache-policy/README.md) are selected and reference-checked. [TA-02 transactional registry](docs/foundation-typed-scalar-cache/README.md) is qualified. Next qualify private evidence attachment and the public advisor/container adapter under those policies, followed by authorized typed numeric projection. Original facts, nil/no-value, provider construction, compatibility and all-host routes remain separate work. Do not bypass public Unsupported boundaries or infer schema authority from annotation strings.
+Use the [current dependency plan](docs/foundation-r2-consolidation/PLAN.json). [TA-01 internal container admission](docs/foundation-typed-container/README.md) is qualified. [TA-02 cache/projection policies](docs/foundation-typed-cache-policy/README.md) are selected and reference-checked. [TA-02 transactional registry](docs/foundation-typed-scalar-cache/README.md) is qualified. [TA-03 private attachment](docs/foundation-typed-evidence/README.md) is qualified. Next qualify the exact public advisor/container adapter and explicit VM identity route, followed by authorized typed numeric projection. Original facts, nil/no-value, provider construction, compatibility and all-host routes remain separate work. Do not bypass public Unsupported boundaries or infer schema authority from annotation strings.
 
 The [owner capability audit](docs/release-planning/OWNER-CAPABILITIES.md) retains actual source requirements. External implementation stays delegated. Actual candidate source/binary/resource and representative performance qualification precede four-owner C45 acceptance. Full XSD 1.1 backend completion is separate from representing and testing the foundation's required capabilities.
 

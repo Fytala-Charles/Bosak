@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 04-11-2026     | Own lazy transactional scalar registry and close it with admission (1.54.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 04-11-2026     | Validate private transport through an explicit admitted snapshot (1.55.0).                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -197,6 +199,7 @@ internal sealed class QuerySourceSession : IDisposable
         }
         private QueryTypedScalarCache? _typedScalars;
         internal int TypedScalarCount=>Volatile.Read(ref _typedScalars)?.Count??0;
+        internal QueryTypedScalarCache RequireTypedScalars()=>Volatile.Read(ref _typedScalars)??throw new ArgumentException("Snapshot has no typed scalar registry.");
         internal QueryTypedScalarCache GetTypedScalars(IQueryTypedContainerIssuer issuer,Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAuthority authority,int limit)
         {
             Lifetime.Check();
@@ -246,6 +249,11 @@ internal sealed class QuerySourceSession : IDisposable
             bool member=false;foreach(var candidate in _snapshots)if(ReferenceEquals(candidate,snapshot)){member=true;break;}
             if(!ReferenceEquals(snapshot.Owner,_owner)||!member)throw new ArgumentException("Foreign registration snapshot.",nameof(snapshot));
             snapshot.Lifetime.Check();
+        }
+        internal QueryRegisteredTypedContainer ValidateTypedTransport(Snapshot snapshot,XdmValue value,int maxAtoms,int digits,int scale)
+        {
+            RequireMember(snapshot);
+            return snapshot.RequireTypedScalars().ValidateTransport(this,value,maxAtoms,digits,scale,_cancellation);
         }
         internal QueryTypedScalarRegistration PrepareTypedRegistration(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,

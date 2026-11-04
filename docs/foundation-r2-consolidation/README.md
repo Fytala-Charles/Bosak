@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.54.0 qualifies the [TA-02 internal transactional scalar registry](../foundation-typed-scalar-cache/README.md) over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for private evidence attachment/public adapter/typed-projection implementation, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.55.0 qualifies [TA-03 private scalar evidence](../foundation-typed-evidence/README.md) over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for explicit VM identity/public adapter/typed-projection implementation, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -30,6 +30,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [TA-02 cache/projection policies selected and model-checked](../foundation-typed-cache-policy/README.md); source remains 1.53.0. Next internal transactional scalar registry, followed by evidence/public adapter and typed numeric qualification.
 
 4 November: [TA-02 internal transactional registry qualified](../foundation-typed-scalar-cache/README.md), source 1.54.0: 24,900 tests, 35 new controls, unchanged gates and public metadata. Next private evidence/public adapter qualification, then typed numeric projection. R3 remains InProgress.
+
+4 November: [TA-03 private evidence attachment qualified](../foundation-typed-evidence/README.md), source 1.55.0: 24,925 tests, 25 new controls, unchanged gates/API. Next public adapter and explicit VM identity qualification; existing VM/public guards remain unchanged.
 
 ## Earlier disposition checkpoints
 

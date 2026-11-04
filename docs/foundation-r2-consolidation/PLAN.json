@@ -152,11 +152,12 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.54.0 TA-02 internal transactional scalar registry qualified: 24900 tests, 35 new controls, exact frozen gates and unchanged public metadata/API source. Whole-batch rollback/reuse, empty accounting, concurrent winners, scalar-mode exclusivity and actual file-handle cleanup qualified. Next private evidence/public adapter qualification then authorized typed numeric projection; no public activation or freeze.",
+      "progress": "1.55.0 private marker attachment/explicit snapshot validation qualified: 24925 tests, 25 new controls, exact frozen gates and unchanged public metadata/API source. Copies/tamper/revocation/close/concurrent markers qualified without second registry. Existing VM capture refuses new markers. Next exact public advisor adapter and explicit VM identity route, then authorized typed numeric projection; no public activation or freeze.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
-      "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json"
+      "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
+      "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json"
     },
     {
       "id": "P10",

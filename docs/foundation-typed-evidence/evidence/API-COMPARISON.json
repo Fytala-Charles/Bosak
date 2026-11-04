@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "35da8bbed5e2fa93bff2aeb7481974a9c2b780bed1f5de7214cfb966887f2e07",
+  "qualifiedInternalSlice": "TA-03-private-attachment-v1",
+  "scope": "Unchanged exported metadata/friends and XdmValue field layout; private attachment slice qualified separately. No new public profile, native ABI or freeze acceptance."
+}

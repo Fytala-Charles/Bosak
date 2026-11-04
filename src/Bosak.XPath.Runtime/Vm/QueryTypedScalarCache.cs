@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; transactional typed scalar registry (1.54.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 04-11-2026     | Attach and validate private resident scalar transport (1.55.0).                           |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -56,8 +58,14 @@ internal sealed class QueryTypedScalarCache
             for(int i=0;i<Entries.Length;i++)Entries[i]=new Entry(this,i);
         }
     }
-    internal sealed class Entry(Group group,int ordinal)
-    {internal Group Group {get;}=group;internal int Ordinal {get;}=ordinal;}
+    internal sealed class Entry
+    {
+        internal Group Group {get;}
+        internal int Ordinal {get;}
+        internal XdmValue Transport {get;}
+        internal Entry(Group group,int ordinal)
+        {Group=group;Ordinal=ordinal;Transport=XdmValue.SchemaTransportAttach(group.Cells[ordinal].Value,this);}
+    }
     internal QueryTypedScalarCache(QuerySourceSession.Snapshot snapshot,IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAuthority authority,int limit)
     {ArgumentOutOfRangeException.ThrowIfNegativeOrZero(limit);_snapshot=snapshot;_issuer=issuer;_input=input;_authority=authority;_limit=limit;}
     internal int Count {get{lock(_gate)return _entries.Count;}}
@@ -101,6 +109,18 @@ internal sealed class QueryTypedScalarCache
             ObjectDisposedException.ThrowIf(_closed,this);
             if(!ReferenceEquals(group.Owner,this)||group.Entries.Length!=0&&(!_entries.TryGetValue(new(group.Container,group.Origin,0),out var first)||!ReferenceEquals(first,group.Entries[0])))throw new ArgumentException("Unregistered scalar group.");
         }
+    }
+    internal QueryRegisteredTypedContainer ValidateTransport(QuerySourceSession.Operation operation,XdmValue value,int maxAtoms,int digits,int scale,CancellationToken cancellation)
+    {
+        operation.RequireMember(_snapshot);
+        if(XdmValue.SchemaTransportMarker(value) is not Entry entry||!ReferenceEquals(entry.Group.Owner,this))throw new ArgumentException("Foreign or missing typed scalar evidence.",nameof(value));
+        var group=entry.Group;
+        Check(group);
+        if((uint)entry.Ordinal>=(uint)group.Entries.Length||!ReferenceEquals(group.Entries[entry.Ordinal],entry)
+            ||!value.SchemaTransportMatches(group.Cells[entry.Ordinal].Value))throw new ArgumentException("Typed scalar representation or registration changed.",nameof(value));
+        var reader=new QueryTypedContainerReader(operation,_snapshot,_snapshot.Owner.Environment,_issuer,_input,group.Origin,group.Container,maxAtoms,digits,scale,cancellation);
+        RequireScope(_issuer,_input,reader.SelectedAuthority,_limit);
+        var result=new QueryRegisteredTypedContainer(this,reader,group);result.Check();return result;
     }
     internal void Close(){lock(_gate){_closed=true;_entries.Clear();}}
 }
@@ -149,4 +169,5 @@ internal sealed class QueryRegisteredTypedContainer
         internal ISchemaAssessmentOrigin? OriginalAssessment=>Read().Origin;
     }
     internal object GetIdentity(int index){Check();return _group.Entries[index];}
+    internal XdmValue GetTransport(int index){Check();return _group.Entries[index].Transport;}
 }

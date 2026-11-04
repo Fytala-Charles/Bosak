@@ -1,0 +1,9 @@
+{
+  "bytesPerRead": {
+    "warm-validation": 144
+  },
+  "warmupReads": 100,
+  "measuredReads": 1000,
+  "scope": "Owned input, pre-held current raw operation, immutable three-cell registered batch; no payload getters, no accepted owner/latency/retained-memory budgets.",
+  "budgetsAccepted": false
+}
