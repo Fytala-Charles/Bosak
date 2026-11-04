@@ -416,3 +416,6 @@ docs/foundation-advisor-adapter/** -text whitespace=cr-at-eol,-blank-at-eof,-bla
 
 # Preserve exact TA-05 qualification receipts and sealed manifest bytes.
 docs/foundation-typed-identity/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-06 allocation qualification receipts and sealed manifest bytes.
+docs/foundation-typed-identity-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

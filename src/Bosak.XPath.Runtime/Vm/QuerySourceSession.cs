@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 04-11-2026     | Guard an explicitly selected compiled typed identity VM route (1.57.0).                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 04-11-2026     | Share immutable standard functions in fresh identity contexts (1.57.1).                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -265,7 +267,7 @@ internal sealed class QuerySourceSession : IDisposable
             Check();
             if(!_owner._typedIdentity)throw new NotSupportedException("This session has no typed identity profile.");
             ValidateTypedTransport(snapshot,value,maxAtoms,digits,scale);
-            var context=new EvaluationContext().WithVariable("value",value);
+            var context=EvaluationContext.CreateIsolated().WithVariable("value",value);
             context.ResourcePolicy=SchemaProviderSessionBinding.ClosedResources();
             Check();var result=((Func<EvaluationContext,XdmValue>)_owner._evaluate)(context);Check();
             ValidateTypedTransport(snapshot,result,maxAtoms,digits,scale);

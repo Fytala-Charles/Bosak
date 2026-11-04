@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.57.0",
+  "sourceVersion": "1.57.1",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-typed-identity/README.md",
+      "w1ReadinessPlan": "docs/foundation-typed-identity-cost/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Investigate/reduce measured typed identity setup allocation (23360 bytes/call locally), then qualify bounded public typed-identity activation with exact advisor/container projection/refusal scope; authorized numeric projection follows. Other R3/R4-R7 gates remain pending.",
+      "nextCoreTask": "Qualify bounded public typed-identity activation with exact advisor binding and container projection/refusal scope; authorized numeric projection follows. Local setup allocation is reduced to 4104 bytes/call; representative owner performance budgets and other R3/R4-R7 gates remain pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -148,7 +148,8 @@
       "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
       "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
       "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
-      "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json"
+      "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
+      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json"
     },
     {
       "id": "R4",
