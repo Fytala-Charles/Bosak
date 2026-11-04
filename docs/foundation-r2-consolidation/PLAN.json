@@ -152,8 +152,9 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-exact-constructors/README.md",
-      "progress": "1.52.0 primitive numeric constructors qualified; 24 new controls, 24771 tests, unchanged frozen gates/public metadata and twelve earlier-profile fingerprints. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy and migration acceptance remain pending.",
-      "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md"
+      "progress": "1.52.0 runtime qualification retained. Typed admission gap audit and 104 existing controls complete; TA-01 internal uncached container reader is next. Cache/typed numeric policy precedes public activation; all-host/native/migration/freeze acceptance remains pending.",
+      "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md"
     },
     {
       "id": "P10",

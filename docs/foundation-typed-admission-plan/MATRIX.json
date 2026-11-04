@@ -1,0 +1,53 @@
+{
+  "scope": "Core source/read-only contract audit, not native/owner acceptance",
+  "rows": [
+    {
+      "id": "TA-G01",
+      "area": "Exact environment/advisor binding",
+      "observed": "Public assessor argument refuses before Bind; private advisor has exact private environment identity.",
+      "required": "Explicit caller-selected assessor, exact returned advisor/assessor/environment identities and guarded borrowed resources before public activation.",
+      "state": "PublicPending",
+      "source": "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs"
+    },
+    {
+      "id": "TA-G02",
+      "area": "Original scalar membership",
+      "observed": "Private QuerySchemaAssociation authenticates scalar/input/non-null original origin and guards getters.",
+      "required": "Retain identity-before-getter and revocation checks; do not infer container, list or originless coverage.",
+      "state": "PrivateScalarQualifiedOnly",
+      "source": "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs"
+    },
+    {
+      "id": "TA-G03",
+      "area": "Typed container and scalar fast path",
+      "observed": "Public ISchemaTypedValue exposes GoverningType/IsList/AtomicItems/TryGetSingleAtomic; public reader remains Unsupported.",
+      "required": "Retain container shape and ordered per-atomic selected type/evidence; empty/singleton lists are not ordinary scalar containers.",
+      "state": "InternalReaderNext",
+      "source": "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs"
+    },
+    {
+      "id": "TA-G04",
+      "area": "Optional origin, facts and constructors",
+      "observed": "Kernel scalar origin may be null; current association requires original origin; public construction/facts routes are not activated.",
+      "required": "Separate original-assessment and originless-construction issuance; nil/no-typed-value stay facts states, not inferred from empty atoms.",
+      "state": "LaterSlice",
+      "source": "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs"
+    },
+    {
+      "id": "TA-G05",
+      "area": "Limits/cache and transaction",
+      "observed": "MaxTypedValueAtoms bounds one result; MaxCachedValuesPerSnapshot documents scalar cache entries.",
+      "required": "Uncached first reader; separate later container/evidence cache accounting and all-or-nothing registration/rollback before public activation.",
+      "state": "PolicyDecisionBeforeActivation",
+      "source": "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs"
+    },
+    {
+      "id": "TA-G06",
+      "area": "Typed numeric transport",
+      "observed": "Current finite numeric profiles reject transport markers and derived/user annotations.",
+      "required": "New explicit typed profile with authorized numeric projection, preserved identity provenance and deliberate computed-result evidence rules; no annotation shortcut.",
+      "state": "PolicyDecisionBeforeActivation",
+      "source": "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs"
+    }
+  ]
+}

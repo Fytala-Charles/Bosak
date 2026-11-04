@@ -125,7 +125,7 @@
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy and migration/final acceptance remain open.",
+      "nextCoreTask": "TA-01 internal uncached container admission with governing/list/provenance preservation and adversarial getter/enumerator/lifetime controls; resolve cache/typed-profile policy before public adapter activation.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -141,7 +141,8 @@
       "decimalDivisionPolicy": "docs/foundation-decimal-division-policy/STATUS.json",
       "exactDivisionProfile": "docs/foundation-exact-division/STATUS.json",
       "decimalDivisionPolicyScope": "Historical Core preparation; current finite runtime qualification is exactDivisionProfile",
-      "numericConstructorProfile": "docs/foundation-exact-constructors/STATUS.json"
+      "numericConstructorProfile": "docs/foundation-exact-constructors/STATUS.json",
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/STATUS.json"
     },
     {
       "id": "R4",

@@ -1,0 +1,52 @@
+{
+  "revision": "2981d3957703b2fbfb8bee4a6bd516d69cdcf267",
+  "sourceVersion": "1.52.0",
+  "files": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "bf7a38f61cdd2d54fb7436946b924b167e62539451d3516bdb38ca36a1a5eef8",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "tests/Bosak.XPath.Runtime.Tests/QuerySchemaAssociationTests.cs": "f40e851f1e6c547b7063a420ac9856a0ab66d56f908c8711bec239a66eb44cc2",
+    "tests/Bosak.XPath.Core.Tests/SchemaEvidenceKernelTests.cs": "125fa54b6f37934380f2a199587bb5127fd63d5cca128a316f939b2962a83e2a",
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": "944a8676962dd642638ff062a6c5d848fa81811e52522b00b7a17d5361eb6d3d",
+    "tests/Bosak.XPath.Api.Tests/PublicOrdinarySessionTests.cs": "64bba16c13a8ddc0b97644598425b35092469e760ed7fb36c267690d9326f829",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-r2-closure/REQUIREMENT-DISPOSITIONS.json": "9b951c4cf94a8caf923d13c1ad7989cf6dd638d00f132a8ccd14f6b50405c1d8",
+    "docs/foundation-exact-constructors/MANIFEST.json": "e1e1539ee4045f544b35fd2a5c91a546fddbdbb55a259c1a5127ebbe74d38d0c"
+  },
+  "committedFiles": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "81cd033b47b6761499d5cb5b91031885a959588f178e3fc95ef138986cbc66d9",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "bf7a38f61cdd2d54fb7436946b924b167e62539451d3516bdb38ca36a1a5eef8",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "tests/Bosak.XPath.Runtime.Tests/QuerySchemaAssociationTests.cs": "f40e851f1e6c547b7063a420ac9856a0ab66d56f908c8711bec239a66eb44cc2",
+    "tests/Bosak.XPath.Core.Tests/SchemaEvidenceKernelTests.cs": "8bf5af22e030e255f193a83eb1ce64292decb77c225a72ef214d52bf0a4e6105",
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": "a2997404d8e40bbeba63ed170aa8675d8744052d2392c2b41be158b37f1854d0",
+    "tests/Bosak.XPath.Api.Tests/PublicOrdinarySessionTests.cs": "64bba16c13a8ddc0b97644598425b35092469e760ed7fb36c267690d9326f829",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-r2-closure/REQUIREMENT-DISPOSITIONS.json": "9b951c4cf94a8caf923d13c1ad7989cf6dd638d00f132a8ccd14f6b50405c1d8",
+    "docs/foundation-exact-constructors/MANIFEST.json": "e1e1539ee4045f544b35fd2a5c91a546fddbdbb55a259c1a5127ebbe74d38d0c"
+  },
+  "normalizedFiles": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "81cd033b47b6761499d5cb5b91031885a959588f178e3fc95ef138986cbc66d9",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "bf7a38f61cdd2d54fb7436946b924b167e62539451d3516bdb38ca36a1a5eef8",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "9a0ca6fd6db3bbc90e42eef76bd45da7426e8bc458a09027391f30e43233ac7c",
+    "tests/Bosak.XPath.Runtime.Tests/QuerySchemaAssociationTests.cs": "f40e851f1e6c547b7063a420ac9856a0ab66d56f908c8711bec239a66eb44cc2",
+    "tests/Bosak.XPath.Core.Tests/SchemaEvidenceKernelTests.cs": "8bf5af22e030e255f193a83eb1ce64292decb77c225a72ef214d52bf0a4e6105",
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": "a2997404d8e40bbeba63ed170aa8675d8744052d2392c2b41be158b37f1854d0",
+    "tests/Bosak.XPath.Api.Tests/PublicOrdinarySessionTests.cs": "64bba16c13a8ddc0b97644598425b35092469e760ed7fb36c267690d9326f829",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-r2-closure/REQUIREMENT-DISPOSITIONS.json": "9b951c4cf94a8caf923d13c1ad7989cf6dd638d00f132a8ccd14f6b50405c1d8",
+    "docs/foundation-exact-constructors/MANIFEST.json": "e1e1539ee4045f544b35fd2a5c91a546fddbdbb55a259c1a5127ebbe74d38d0c"
+  }
+}

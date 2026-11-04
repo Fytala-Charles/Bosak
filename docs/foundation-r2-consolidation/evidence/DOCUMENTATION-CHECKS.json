@@ -7,27 +7,27 @@
     },
     {
       "source": "ROADMAP.md",
-      "htmlSha256": "f0c201746e5e1da751f8539ecdf359e9adc15d68633c8fc6639ab9c7bd824e9d"
+      "htmlSha256": "d1e1237b12f325b7675b64ca0e11b7fa21962ae2f10404dd170f35511caf88b9"
     },
     {
       "source": "docs/ARCHITECTURE.md",
-      "htmlSha256": "89a8cdc999d53a5dd2bd5a53e233330ef08c33cfcc0c14e3c6cb034033292975"
+      "htmlSha256": "281fcc906c1704ab4164bf7d07d7ba5c9f6cf318b703250539d2e5e5e48009e6"
     },
     {
       "source": "docs/FEATURE_REQUESTS.md",
-      "htmlSha256": "a298c07740cfdc7981908079b26f891a60c79f30a27657218ec539d4be9d8e76"
+      "htmlSha256": "f8cfe066e670d2a1daab03f8e69cf1cceb7935812cc6f1368c4fd90d97bd2c02"
     },
     {
       "source": "docs/INTEGRATION.md",
-      "htmlSha256": "26309f27efbaf4b65f96038e2fd9bf1414c7def05ccb38c9b8915ec4789ee001"
+      "htmlSha256": "066b4ae8a547e37391ef7b409cfb8b03ec701138a1802eb6fe02c5d11a331ee4"
     },
     {
       "source": "docs/AGENT_HANDOVER.md",
-      "htmlSha256": "22bdb2b1000068798caab68a05446eaf9e1d1584fd8aaf869cc808ca17a89d8b"
+      "htmlSha256": "fc337ee5fe4f804a57ed896c1645bcd47ad559fa8d6b7dfb291a7f525e5c0334"
     },
     {
       "source": "docs/IMPLEMENTATION_STATUS.md",
-      "htmlSha256": "48b7c79a88f84e3be1121e5235fd111a39c7358abfcf8c36cbcbd709cdc3affe"
+      "htmlSha256": "460686d1fd21951d6952caafd2385309e2c705e6f9168db0a5487d7d5340264e"
     },
     {
       "source": "docs/RESTART-2026-10-29.md",
@@ -83,7 +83,7 @@
     },
     {
       "source": "docs/DEVELOPMENT_HISTORY.md",
-      "htmlSha256": "6246ff5ce06050923214e0ae93a5b12413851a9d5be25c4919a39064a52aaefc"
+      "htmlSha256": "8d3c150313f1c3147683bdfa2a36e63d7ddd3fcf82626038ebfa0a4cfd24a6dc"
     },
     {
       "source": "docs/foundation-external-dependencies/README.md",
@@ -399,7 +399,7 @@
     },
     {
       "source": "docs/release-planning/README.md",
-      "htmlSha256": "8be8404ae29ebeff253d9456132d9803c351e435ea32260515bddbe42f842ec4"
+      "htmlSha256": "fe501fbf54ce90bc673ac76f31723d0158853ea53ff05a008453459f218551e3"
     },
     {
       "source": "docs/release-planning/OWNER-CAPABILITIES.md",
@@ -455,7 +455,7 @@
     },
     {
       "source": "docs/foundation-r2-consolidation/README.md",
-      "htmlSha256": "08923fb4bf45ce8e719094aa454e105e827fc76c563137026b1389896b1e8ce4"
+      "htmlSha256": "defaa7d0ef1c3d1f8c6e9e9ce3dddd22ff0bb76bb9343d5e4424a121f26a092b"
     },
     {
       "source": "docs/foundation-bcap-candidate/README.md",
@@ -686,6 +686,22 @@
       "htmlSha256": "d0b9413e65ad7363bf954593ebf7e85e6cdd0b84c9b0da0fff6f6eefce38f713"
     },
     {
+      "source": "docs/foundation-typed-admission-plan/README.md",
+      "htmlSha256": "e58769625ddb6e0861f03f7af02528174930c04e908af4c294e9d82376526655"
+    },
+    {
+      "source": "docs/foundation-typed-admission-plan/AUDIT.md",
+      "htmlSha256": "b414070067a5cf1aa86d32b56a554fabc3cf4b924daa782c14a101032b388f3f"
+    },
+    {
+      "source": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
+      "htmlSha256": "8e9ad63af70444aeb14fd11faf3e5213258348278d17ac5fe79252c6b8668e0f"
+    },
+    {
+      "source": "docs/foundation-typed-admission-plan/SPEC-BASIS.md",
+      "htmlSha256": "587c13f9367532a9e259fcc53bc5643760ddace1f65c6f3864939f024b12f69f"
+    },
+    {
       "source": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
       "htmlSha256": "48b69f5e4876d47b7c83464a6affa93ba28960c882fe9039ac5d9345b052849a"
     },
@@ -766,7 +782,7 @@
       "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
     }
   ],
-  "localLinks": 4360,
+  "localLinks": 4383,
   "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
   "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
 }

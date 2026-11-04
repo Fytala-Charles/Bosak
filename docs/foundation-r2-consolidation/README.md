@@ -23,6 +23,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 
 4 November: [primitive numeric constructors qualified at 1.52.0](../foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
 
+4 November: [issuer-backed typed admission audited; TA-01 prepared](../foundation-typed-admission-plan/README.md). Next internal uncached container reader, then explicit cache/typed-profile policy and public adapter qualification; source remains 1.52.0.
+
 ## Earlier disposition checkpoints
 
 The entries below preserve the earlier decisions and gates in date order; the current summary above supersedes their then-pending statuses.
