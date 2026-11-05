@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; compiled typed identity controls (1.57.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Retain unavailable grammar control after public identity activation (1.58.0).                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Numerics;
@@ -110,7 +112,7 @@ public sealed class TypedIdentityVmTests(ITestOutputHelper output)
     [Fact] public void PublicBoundariesRemainUnchanged()
     {
         using var f=new Fixture(true);var c=f.Value();f.Run(op=>{var marked=f.Read(op,c).GetTransport(0);Assert.Equal(SchemaResultKind.Unsupported,op.ReadTypedValue(f.Snapshot,c).Kind);Assert.Throws<NotSupportedException>(()=>op.Evaluate(new EvaluationContext().WithVariable("value",marked)));Assert.Throws<NotSupportedException>(()=>op.Evaluate(new EvaluationContext().WithVariable("value",XdmValue.FromString("plain"))));return 0;});Assert.Null(f.Session.Advisor);
-        Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath("$value",Limits,assessor:f.Assessor).Kind);
+        Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath("$value + 0",Limits,assessor:f.Assessor).Kind);
     }
     /// <summary>Observes compiled VM identity allocation under real endpoint/input guards with no payload getter replay.</summary>
     [Fact] public void AllocationObservation()

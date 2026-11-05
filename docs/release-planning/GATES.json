@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.57.1",
+  "sourceVersion": "1.58.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-typed-identity-cost/README.md",
+      "w1ReadinessPlan": "docs/foundation-public-typed-identity/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Qualify bounded public typed-identity activation with exact advisor binding and container projection/refusal scope; authorized numeric projection follows. Local setup allocation is reduced to 4104 bytes/call; representative owner performance budgets and other R3/R4-R7 gates remain pending.",
+      "nextCoreTask": "Qualify authorized typed numeric projection under a separate profile. Public single-atomic identity is active; broader projection/facts/construction/compatibility/all-host/native/migration and other R3/R4-R7 gates remain pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -149,7 +149,8 @@
       "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
       "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
       "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
-      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json"
+      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
+      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json"
     },
     {
       "id": "R4",

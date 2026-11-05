@@ -1,17 +1,17 @@
 # Release plan and acceptance checklist
 
-Updated 4 November 2026. Current source version: **1.57.1**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
+Updated 5 November 2026. Current source version: **1.58.0**. Target publication version and date: **not selected**. Source version increments identify engineering checkpoints; they do not mean a package was published or an API frozen.
 
-The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. R3 is in progress: the ordinary facade, finite numeric profiles, TA-01 container reader, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal compiled identity and TA-06 allocation reduction are qualified at source 1.57.1. Public adapter routing and public schema/typed numeric activation remain pending.
+The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. R3 is in progress: the ordinary facade, finite numeric profiles, TA-01 container reader, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal compiled identity and TA-06 allocation reduction and TA-07 bounded public identity are qualified at source 1.58.0. Typed numeric and broader schema activation remain pending.
 
-Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. Next qualify bounded public typed-identity activation with exact advisor binding and container projection/refusal scope, followed by authorized typed numeric projection. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
+Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. Next qualify authorized typed numeric projection under a separate profile. Bounded public single-atomic identity is active. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
 | R0 Private engine foundation | Qualified | Core | 1.42.0 source/build, 24,390 unit passes, unchanged frozen gates; private capture, evidence and multi-source execution. [Qualification](../foundation-xslt-source-membership/README.md). |
 | R1 Actual owner capability mapping | Audited | Core | Exact read-only source/requirement pins and explicit gaps. [Mapping](OWNER-CAPABILITIES.md). This is not runtime owner acceptance. |
 | R2 Final public contract disposition | ClosedWithScope | Core with Schema/XmlDb/Braid | Seven validated scoped role returns and the immutable R2 closure; no runtime acceptance inferred. |
-| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, finite numeric profiles, TA-01 containers, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal identity and TA-06 allocation reduction at 1.57.1. Public typed identity activation, public schema adapter/typed projection, wider numeric/error and all-host integration remain pending. |
+| R3 Accepted public implementation | InProgress | Core | Qualified ordinary facade, finite numeric profiles, TA-01 containers, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal identity and TA-06 cost reduction and TA-07 public single-atomic identity at 1.58.0. Typed numeric projection, public schema adapter/typed projection, wider numeric/error and all-host integration remain pending. |
 | R4 Real consumers and performance | Pending candidate; preparation parallel | Core/Schema/XmlDb/Braid | One immutable candidate; actual source and unchanged-binary consumer runs; representative PF-01–09 budgets; complete core/conformance qualification. |
 | R5 C45 acceptance and API freeze | Pending R4 | All four roles | Dated acceptance of exact manifest/profile/candidate; no unresolved required signature gap. Intended final breaking foundation change. |
 | R6 Release candidate packages/docs | Pending freeze; preparation parallel | Core | Selected SemVer, package provenance, migration/release notes, complete docs and fresh-cache package-only consumer tests. |
@@ -55,6 +55,8 @@ Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain p
 4 November: [TA-05 internal compiled typed identity qualified](../foundation-typed-identity/README.md), source 1.57.0: 25,006 tests, 46 new controls, unchanged gates/exported metadata. Next bounded public identity activation with explicit advisor/container scope; no public schema activation inferred.
 
 4 November: [TA-06 allocation attribution and reduction qualified](../foundation-typed-identity-cost/README.md), source 1.57.1: 25,009 tests, unchanged gates/API/descriptor, compiled identity 23,360 to 4,104 bytes/call. Next bounded public activation; owner performance acceptance remains separate.
+
+5 November: [TA-07 bounded public typed identity qualified](../foundation-public-typed-identity/README.md), source 1.58.0: 25,044 tests, 35 new public controls, unchanged gates/exported metadata. Next typed numeric projection; public single-atomic identity does not imply broader/native/schema acceptance or freeze.
 
 ## Earlier planning checkpoints
 

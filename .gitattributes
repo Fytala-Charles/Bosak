@@ -419,3 +419,6 @@ docs/foundation-typed-identity/** -text whitespace=cr-at-eol,-blank-at-eof,-blan
 
 # Preserve exact TA-06 allocation qualification receipts and sealed manifest bytes.
 docs/foundation-typed-identity-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-07 public typed identity receipts and sealed manifest bytes.
+docs/foundation-public-typed-identity/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

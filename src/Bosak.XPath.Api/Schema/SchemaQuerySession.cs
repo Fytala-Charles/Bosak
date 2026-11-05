@@ -27,6 +27,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 04-11-2026     | Capture an internal typed identity profile and candidate evaluation route (1.57.0).         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -37,8 +39,8 @@ using Bosak.XPath.Core.Schema;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XPath.Api.Schema;
-/// <summary>Engine-created ordinary-source XPath session with an explicit bounded semantic profile.</summary>
-/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Schema operations remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
+/// <summary>Engine-created XPath session with an explicit bounded ordinary, numeric or typed identity profile.</summary>
+/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound $value supports single-atomic typed identity. Construction and compatibility remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
 public sealed class SchemaQuerySession : IDisposable
 {
     private bool _closed;
@@ -47,6 +49,7 @@ public sealed class SchemaQuerySession : IDisposable
     private readonly Dictionary<ISchemaAssessmentInput, InputAdmission> _inputs = new(ReferenceEqualityComparer.Instance);
     private readonly SchemaQueryLimits _limits;
     private readonly bool _numeric;
+    private SchemaAdvisorBinding? _binding;
     private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null)
     { _runtime=runtime;_limits=limits;_numeric=numeric;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name)); }
     internal static SchemaResult<SchemaQuerySession> CompileTypedIdentityCandidate(string expression,SchemaQueryLimits limits,CompileOptions? options=null,CancellationToken token=default)
@@ -57,15 +60,16 @@ public sealed class SchemaQuerySession : IDisposable
         catch{runtime!.Dispose();throw;}
     }
     internal static SchemaResult<T> Unsupported<T>() => new Outcome<T>(default!, false);
-    private static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
-    private sealed class Outcome<T>(T value, bool supported) : SchemaResult<T>
+    internal static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
+    internal static SchemaResult<T> UnsupportedTyped<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-IDENTITY-UNSUPPORTED");
+    private sealed class Outcome<T>(T value, bool supported,string diagnostic="BOSAK-ORDINARY-PROFILE-UNSUPPORTED") : SchemaResult<T>
     {
         /// <inheritdoc/>
         public override SchemaResultKind Kind => supported ? SchemaResultKind.Supported : SchemaResultKind.Unsupported;
         /// <inheritdoc/>
         public override T Value => supported ? value : throw new InvalidOperationException("Unsupported outcomes have no value.");
         /// <inheritdoc/>
-        public override string? DiagnosticCode => supported ? null : "BOSAK-ORDINARY-PROFILE-UNSUPPORTED";
+        public override string? DiagnosticCode => supported ? null : diagnostic;
     }
     /// <summary>Captures the actual immutable environment and optionally binds a compiled assessor.</summary>
     /// <param name="expression">XPath source.</param>
@@ -73,13 +77,24 @@ public sealed class SchemaQuerySession : IDisposable
     /// <param name="options">Existing options copied under the selected capture policy.</param>
     /// <param name="assessor">Optional borrowed schema assessor.</param>
     /// <param name="cancellationToken">Compilation/binding cancellation.</param>
-    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or Unsupported for unavailable syntax, options, capacity or assessors.</returns>
-    /// <exception cref="ArgumentException">The source or explicit limits are invalid.</exception>
+    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or an assessor-bound typed identity session; Unsupported for unavailable syntax, options or provider binding.</returns>
+    /// <exception cref="ArgumentException">The source, explicit limits or provider binding are invalid.</exception>
     /// <exception cref="OperationCanceledException">Compilation was canceled.</exception>
     public static SchemaResult<SchemaQuerySession> CompileXPath(string expression, SchemaQueryLimits limits, CompileOptions? options = null, ISchemaAssessor? assessor = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(expression); limits.Validate(); cancellationToken.ThrowIfCancellationRequested();
-        if (assessor is not null) return Unsupported<SchemaQuerySession>();
+        if (assessor is not null)
+        {
+            if(!TypedIdentityPlan.TryCompilePublic(expression,limits,options??CompileOptions.Default,cancellationToken,out var typedRuntime))return UnsupportedTyped<SchemaQuerySession>();
+            var typed=new SchemaQuerySession(typedRuntime!,limits,profile:TypedIdentityPlan.PublicProfile);
+            try
+            {
+                typed._binding=typed.BindAdvisorCandidate(assessor,cancellationToken);
+                if(typed._binding is null){typed.Dispose();return UnsupportedTyped<SchemaQuerySession>();}
+                cancellationToken.ThrowIfCancellationRequested();return Supported(typed);
+            }
+            catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,typed.Dispose);throw;}
+        }
         if (!SchemaSessionCompilation.TrySnapshotOptions(options ?? CompileOptions.Default,out var frozen,out _))return Unsupported<SchemaQuerySession>();
         QuerySourceSession? runtime;bool numeric=false;string? profile=null;
         if(OrdinaryQueryProfile.Supports(expression,frozen!))
@@ -107,7 +122,7 @@ public sealed class SchemaQuerySession : IDisposable
     /// <summary>The exact engine-issued immutable compilation environment.</summary>
     public IQuerySemanticEnvironment Environment { get; }
     /// <summary>The exact bound advisor, or null for the ordinary-XML profile.</summary>
-    public ISchemaAssessmentAdvisor? Advisor => null;
+    public ISchemaAssessmentAdvisor? Advisor => _binding?.Advisor;
     private void CheckCandidate(CancellationToken token)
     {token.ThrowIfCancellationRequested();lock(_gate)ObjectDisposedException.ThrowIf(_closed,this);}
     internal SchemaAdvisorBinding? BindAdvisorCandidate(ISchemaAssessor assessor,CancellationToken token=default)
@@ -128,7 +143,7 @@ public sealed class SchemaQuerySession : IDisposable
     /// <param name="originalAssessment">Issued original assessment, absent for ordinary XML.</param>
     /// <param name="compatibilityView">Explicit admitted source/target proof when required.</param>
     /// <param name="cancellationToken">Admission cancellation.</param>
-    /// <returns>An ordinary-source admission; original assessment and compatibility return Unsupported in this profile.</returns>
+    /// <returns>An ordinary or typed identity admission; original assessment requires the bound advisor. Compatibility remains Unsupported.</returns>
     /// <exception cref="ArgumentException">Input or lifetime is null, duplicated or has invalid bindings.</exception>
     /// <exception cref="InvalidOperationException">The admission quota is full or input binding changes.</exception>
     /// <exception cref="ObjectDisposedException">The session or owner admission is revoked.</exception>
@@ -138,7 +153,9 @@ public sealed class SchemaQuerySession : IDisposable
         ArgumentNullException.ThrowIfNull(input); ArgumentNullException.ThrowIfNull(lifetime);
         cancellationToken.ThrowIfCancellationRequested();
         lock (_gate) ObjectDisposedException.ThrowIf(_closed, this);
-        if (originalAssessment is not null || compatibilityView is not null) return Unsupported<SchemaQuerySnapshot>();
+        if (compatibilityView is not null||originalAssessment is not null&&_binding is null) return _binding is null?Unsupported<SchemaQuerySnapshot>():UnsupportedTyped<SchemaQuerySnapshot>();
+        lock(_gate)if(_inputs.ContainsKey(input))throw new ArgumentException("Input is already admitted or entering.",nameof(input));
+        _binding?.ValidateOrigin(originalAssessment,cancellationToken);
         var adapter = new InputAdmission(this, input, lifetime, cancellationToken);
         lock (_gate)
         {
@@ -148,7 +165,17 @@ public sealed class SchemaQuerySession : IDisposable
         try
         {
             var snapshot = _runtime.OpenSnapshot(_runtime.Environment, adapter, adapter.Enter, cancellation: cancellationToken);
-            return Supported(new SchemaQuerySnapshot(snapshot, adapter.Binding));
+            try
+            {
+                var result=new SchemaQuerySnapshot(snapshot,adapter.Binding);
+                if(_binding is not null)
+                {
+                    _binding.ValidateOrigin(originalAssessment,cancellationToken);
+                    result.TypedState=new SchemaQuerySnapshot.TypedAdmission(CreateIssuerCandidate(_binding,result,input,cancellationToken),input,originalAssessment);
+                }
+                return Supported(result);
+            }
+            catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,snapshot.Dispose);throw;}
         }
         catch { Remove(adapter); throw; }
     }
@@ -161,7 +188,7 @@ public sealed class SchemaQuerySession : IDisposable
     public T Run<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, T> work, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(work);
-        return _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric)), cancellationToken);
+        return _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null)), cancellationToken);
     }
     /// <summary>Retains admissions until the raw callback task completes, independent of canceled waits.</summary>
     /// <typeparam name="T">Caller result type.</typeparam>
@@ -172,7 +199,7 @@ public sealed class SchemaQuerySession : IDisposable
     public Task<T> RunAsync<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, Task<T>> work, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(work);
-        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric)), cancellationToken);
+        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null)), cancellationToken);
     }
     /// <summary>Waits for admitted raw work; canceling this wait does not end that work.</summary>
     /// <param name="cancellationToken">Wait cancellation only.</param>
@@ -208,7 +235,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
@@ -257,6 +284,13 @@ public sealed class SchemaQuerySession : IDisposable
 /// <summary>Engine-created revocable admission over a caller-owned input snapshot.</summary>
 public sealed class SchemaQuerySnapshot : IDisposable
 {
+    internal sealed class TypedAdmission(IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin)
+    {
+        internal readonly IQueryTypedContainerIssuer Issuer=issuer;
+        internal readonly ISchemaAssessmentInput Input=input;
+        internal readonly ISchemaAssessmentOrigin? Origin=origin;
+    }
+    internal TypedAdmission? TypedState {get;set;}
     internal QuerySourceSession.Snapshot Runtime { get; }
     internal SchemaQuerySnapshot(QuerySourceSession.Snapshot runtime, ISchemaSnapshotBinding binding)
     { Runtime = runtime; Binding = binding; }
@@ -272,8 +306,11 @@ public sealed class SchemaQueryOperation
     private readonly QuerySourceSession.Operation _runtime;
     private readonly SchemaQueryLimits _limits;
     private readonly bool _numeric;
+    private readonly bool _publicTyped;
     internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric)
-    { _runtime=runtime;_limits=limits;_numeric=numeric; }
+        :this(runtime,limits,numeric,false) { }
+    internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric,bool publicTyped)
+    { _runtime=runtime;_limits=limits;_numeric=numeric;_publicTyped=publicTyped; }
     private void ValidateInput(XdmValue value)
     {
         _runtime.Check();
@@ -291,11 +328,15 @@ public sealed class SchemaQueryOperation
     /// <summary>Admits an authority-issued atomic/list/union container before reading its contents.</summary>
     /// <param name="snapshot">The exact source admission in this operation.</param>
     /// <param name="value">The immutable issued provider value.</param>
-    /// <returns>Unsupported in the ordinary-source profile; no provider getters are invoked.</returns>
+    /// <returns>A single authenticated atomic value in the typed identity profile. Other profiles and empty/multi-atomic shapes return Unsupported.</returns>
     public SchemaResult<XdmValue> ReadTypedValue(SchemaQuerySnapshot snapshot, ISchemaTypedValue value)
     {
         ArgumentNullException.ThrowIfNull(snapshot); ArgumentNullException.ThrowIfNull(value);
-        _runtime.RequireMember(snapshot.Runtime); return SchemaQuerySession.Unsupported<XdmValue>();
+        _runtime.RequireMember(snapshot.Runtime);
+        if(!_publicTyped)return SchemaQuerySession.Unsupported<XdmValue>();
+        var typed=snapshot.TypedState??throw new ArgumentException("Snapshot has no bound typed input.",nameof(snapshot));
+        var staged=_runtime.PrepareTypedRegistration(snapshot.Runtime,typed.Issuer,typed.Input,typed.Origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+        return staged.TryCommitSingle(out var result)?SchemaQuerySession.Supported(result):SchemaQuerySession.UnsupportedTyped<XdmValue>();
     }
     internal QueryRegisteredTypedContainer ReadTypedCandidate(SchemaQuerySnapshot snapshot,IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin,ISchemaTypedValue value)
     {
@@ -315,18 +356,19 @@ public sealed class SchemaQueryOperation
     public SchemaResult<XdmValue> ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode)
     {
         _runtime.Check(); ArgumentNullException.ThrowIfNull(targetType); ArgumentNullException.ThrowIfNull(episode);
-        return SchemaQuerySession.Unsupported<XdmValue>();
+        return _publicTyped?SchemaQuerySession.UnsupportedTyped<XdmValue>():SchemaQuerySession.Unsupported<XdmValue>();
     }
     /// <summary>Evaluates captured XPath or XQuery; XSLT uses its typed transform producer instead.</summary>
     /// <param name="context">Dynamic inputs whose selected policy must be enforced.</param>
-    /// <returns>A copied scalar selected by the ordinary, exact arithmetic or exact scalar profile.</returns>
+    /// <returns>A scalar selected by the ordinary/numeric profile, or the same authenticated marked value in the typed identity profile.</returns>
     /// <exception cref="NotSupportedException">Context state, numeric or structured inputs, or the result is outside this profile.</exception>
-    /// <exception cref="ArgumentException">Incoming nodes do not have exactly one admitted owner.</exception>
+    /// <exception cref="ArgumentException">Inputs do not have exactly one admitted owner or contain invalid typed scalar evidence.</exception>
     /// <exception cref="ObjectDisposedException">The operation or a required admission is revoked.</exception>
     /// <exception cref="OperationCanceledException">Raw work was canceled.</exception>
     public XdmValue Evaluate(EvaluationContext context)
     {
         _runtime.Check(); ArgumentNullException.ThrowIfNull(context);
+        if(_publicTyped)return _runtime.EvaluatePublicTypedIdentity(context.CaptureTypedIdentityScalar(),_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
         // These exact cardinalities bound copying, not owner workload defaults. Capture rechecks both counts.
         var variables = context.SnapshotVariables();
         foreach (var value in variables.Values)ValidateInput(value);

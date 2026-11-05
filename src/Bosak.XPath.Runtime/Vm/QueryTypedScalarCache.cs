@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Attach and validate private resident scalar transport (1.55.0).                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -123,6 +125,11 @@ internal sealed class QueryTypedScalarCache
         var result=new QueryRegisteredTypedContainer(this,reader,group);result.Check();return result;
     }
     internal void Close(){lock(_gate){_closed=true;_entries.Clear();}}
+    internal bool ContainsTransport(XdmValue value)
+    {
+        if(XdmValue.SchemaTransportMarker(value) is not Entry entry||!ReferenceEquals(entry.Group.Owner,this))return false;
+        lock(_gate)return !_closed&&_entries.TryGetValue(new(entry.Group.Container,entry.Group.Origin,entry.Ordinal),out var stored)&&ReferenceEquals(stored,entry);
+    }
 }
 
 /// <summary>Private staged registration with a fixed insertion-fault test seam and no provider callbacks under commit.</summary>
@@ -143,6 +150,12 @@ internal sealed class QueryTypedScalarRegistration
         var result=new QueryRegisteredTypedContainer(_cache,_reader,_group);
         var committed=_cache.Install(_operation,_group,faultAfter);result.Select(committed);
         result.Check();return result;
+    }
+    internal bool TryCommitSingle(out XdmValue value)
+    {
+        CheckProvider();value=default;
+        if(_group.Cells.Length!=1)return false;
+        value=Commit().GetTransport(0);return true;
     }
 }
 

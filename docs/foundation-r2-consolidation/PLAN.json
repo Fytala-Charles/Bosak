@@ -152,7 +152,7 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.57.1 typed identity setup allocation qualified: 25009 tests, 3 new cost/isolation controls, exact frozen gates and unchanged public metadata/API source/descriptor. Existing isolated factory shares immutable functions while retaining fresh state; measured 23360 to 4104 bytes/call (82.4%). Next bounded public identity activation with explicit advisor/container scope; no public schema activation or freeze.",
+      "progress": "1.58.0 bounded public single-atomic typed identity activated through existing signatures: 25044 tests, 35 public controls, exact gates and unchanged exported declarations/nullability/friends. Exact assessor/input/origin binding, no publication for unsupported shapes, pre/post guarded public evaluation and actual owner lifetimes qualified. Next authorized typed numeric projection; broader/native/owner/freeze work remains pending.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
@@ -161,7 +161,8 @@
       "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
       "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
       "performanceFollowup": "Local registry-copy attribution/reduction complete. Continue representative native/owner latency, retained-memory and PF-01-09 budget qualification; no owner budgets accepted.",
-      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json"
+      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
+      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json"
     },
     {
       "id": "P10",

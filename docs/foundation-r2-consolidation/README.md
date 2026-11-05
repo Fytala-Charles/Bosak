@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.57.1 qualifies [TA-06 typed identity allocation reduction](../foundation-typed-identity-cost/README.md) over retained TA-05 compiled identity over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for bounded public typed identity activation/authorized numeric projection, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.58.0 qualifies [TA-07 bounded public typed identity](../foundation-public-typed-identity/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for authorized typed numeric projection and broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -38,6 +38,8 @@ Updated 4 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [TA-05 internal compiled typed identity qualified](../foundation-typed-identity/README.md), source 1.57.0: 25,006 tests, 46 new controls, unchanged gates/exported metadata. Next bounded public identity activation with explicit advisor/container scope; no public schema activation inferred.
 
 4 November: [TA-06 allocation attribution and reduction qualified](../foundation-typed-identity-cost/README.md), source 1.57.1: 25,009 tests, unchanged gates/API/descriptor, compiled identity 23,360 to 4,104 bytes/call. Next bounded public activation; owner performance acceptance remains separate.
+
+5 November: [TA-07 bounded public typed identity qualified](../foundation-public-typed-identity/README.md), source 1.58.0: 25,044 tests, 35 new public controls, unchanged gates/exported metadata. Next typed numeric projection; public single-atomic identity does not imply broader/native/schema acceptance or freeze.
 
 ## Earlier disposition checkpoints
 

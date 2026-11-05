@@ -101,11 +101,11 @@
 //                      | Charles Korthout | 2.34  | 08-10-2026     | REQ-118: internal IsXPath40 flag (4.0-S0 gate) stamped by the Api layer so               |
 //                      |                  |       |                | FunctionLibrary.Populate can hide XPath 4.0-only functions from 3.1 contexts             |
 //                      |==================|=======|================|=========================================================================================
-//                      | Charles Korthout | 2.35  | 09-10-2026     | REQ-123: internal IsXPath40Experimental flag (4.0-Exp S1) — exposes                       |
+//                      | Charles Korthout | 2.35  | 09-10-2026     | REQ-123: internal IsXPath40Experimental flag (4.0-Exp S1) â€” exposes                       |
 //                      |                  |       |                | IsXPath40ExperimentalOnly functions at the experimental compatibility level              |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.36  | 16-10-2026     | REQ-123 PR1131: TryGetDirectVariable for lexical let scoping (SaveVariables must not   |
-//                      |                  |       |                | trigger lazy global resolution — K2-FunctionProlog-15)                                   |
+//                      |                  |       |                | trigger lazy global resolution â€” K2-FunctionProlog-15)                                   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.37  | 10-10-2026     | REQ-125 Slice B: ResourcePolicy + controlled LoadDocument (authority-approved bytes,     |
 //                      |                  |       |                | no disk/network fallback, DTD-prohibited parse, per-route purpose tagging)               |
@@ -130,6 +130,8 @@
 //                      | Charles Korthout | 2.50  | 01-11-2026     | Add nonreflective bounded private input capture. |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.51  | 03-11-2026     | Share ordered standard tables for isolated contexts with copy-on-write (1.44.1).       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.52   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -204,7 +206,7 @@ public sealed class EvaluationContext
     /// <summary>
     /// Names of variables declared <c>external</c> in the XQuery prolog for which the host
     /// supplied no value and no default exists. Referencing such a variable is a dynamic
-    /// error (XPDY0002), not a static "not defined" error (XPST0008) — XQuery 3.1 §4.16.
+    /// error (XPDY0002), not a static "not defined" error (XPST0008) â€” XQuery 3.1 Â§4.16.
     /// </summary>
     public HashSet<(string LocalName, string NamespaceUri)> UnsuppliedExternalVariables { get; } = new();
 
@@ -286,9 +288,9 @@ public sealed class EvaluationContext
     // Document cache for fn:doc / fn:collection identity.
     // Legacy (no controlled policy) entries are keyed by (URI, load policy) exactly as
     // before REQ-125: the policy slot lets an XSLT host keep a distinct stripped tree per
-    // distinct xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 §2.13.4), and the
+    // distinct xsl:strip-space / xsl:preserve-space rule set (XSLT 3.0 Â§2.13.4), and the
     // two trailing slots are (null, Document) constants. Legacy entries never carry digest
-    // evidence (null slots) — the legacy path never consults it.
+    // evidence (null slots) â€” the legacy path never consults it.
     // Controlled-profile entries add the effective policy identity (the ControlledResourcePolicy
     // instance, which owns its authority) and the purpose route: cached content must never
     // bypass the requested route's authority decision or unsupported-route check (consumer
@@ -296,7 +298,7 @@ public sealed class EvaluationContext
     // different route or authority. Each controlled entry also stores the SHA-256 of the
     // bytes its node was parsed from and the effective URI they were acquired under: a cache
     // hit is served only when the newly approved bytes digest-match the entry (and the
-    // effective URI agrees), otherwise the fresh bytes are parsed and the entry replaced —
+    // effective URI agrees), otherwise the fresh bytes are parsed and the entry replaced â€”
     // so the acquisition receipt always describes the content actually returned
     // (consumer review B-F3).
     private readonly Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), DocumentCacheEntry> _documentCache;
@@ -373,6 +375,15 @@ public sealed class EvaluationContext
 
     /// <summary>Captures the bounded data-only profile; services and populated execution state refuse.</summary>
     internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null)
+        =>CaptureSchemaInputsCore(ownsNode,maxBindings,maxNamespaces,snapshot,false);
+    internal XdmValue CaptureTypedIdentityScalar()
+    {
+        if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=1||!_variables.ContainsKey(("value","")))
+            throw new NotSupportedException("Typed identity requires only an unprefixed value variable and no focus.");
+        var inputs=CaptureSchemaInputsCore(static _=>false,1,Math.Max(1,_namespaces.Count),null,true);
+        return inputs.VariableBindings[0].Value;
+    }
+    private SchemaOperationInputs CaptureSchemaInputsCore(Func<IXdmNode,bool> ownsNode,int maxBindings,int maxNamespaces,SchemaEvidenceKernel.Snapshot? snapshot,bool typedIdentity)
     {
         ArgumentNullException.ThrowIfNull(ownsNode);
         if (maxBindings <= 0) throw new ArgumentOutOfRangeException(nameof(maxBindings));
@@ -408,7 +419,8 @@ public sealed class EvaluationContext
             {
                 if (!ownsNode(value.NodeValue!)) throw new NotSupportedException("Unadmitted variable node.");
             }
-            else if (value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+            else if (typedIdentity ? value.Kind is < XdmValueKind.String or > XdmValueKind.Binary
+                : value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
                 or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))
                 throw new NotSupportedException("Only direct scalar or admitted node bindings are supported.");
         }
@@ -508,7 +520,7 @@ public sealed class EvaluationContext
     /// <summary>
     /// When true, map constructors are evaluated inside an XSLT streaming construct
     /// (e.g. an <c>xsl:fork</c> branch), where a duplicate key raises the XSLT error
-    /// XTDE3365 instead of the XQuery map-constructor error XQDY0137 (XSLT 3.0 §19
+    /// XTDE3365 instead of the XQuery map-constructor error XQDY0137 (XSLT 3.0 Â§19
     /// streamability rules; si-fork-814). Set and restored by the XSLT engine.
     /// </summary>
     internal bool InStreamingMapContext { get; set; }
@@ -597,7 +609,7 @@ public sealed class EvaluationContext
 
     /// <summary>
     /// Optional host hook that resolves a collection URI to the member document URIs of the
-    /// collection (for example <c>basex://host/db/coll</c> → the document URIs listed by the
+    /// collection (for example <c>basex://host/db/coll</c> â†’ the document URIs listed by the
     /// database's REST API). Consulted by fn:collection and fn:uri-collection when the
     /// collection is neither a precomputed environment collection
     /// (<see cref="CollectionValues"/>) nor a registered collection (<see cref="Collections"/>).
@@ -607,7 +619,7 @@ public sealed class EvaluationContext
     /// The delegate receives the collection URI exactly as requested, absolutized against
     /// <see cref="BaseUri"/> when relative; for <c>fn:collection()</c> with no argument it
     /// receives the empty string (the default collection). Query and fragment components
-    /// (for example <c>?select=*.xml</c>) are passed through unstripped — interpreting them
+    /// (for example <c>?select=*.xml</c>) are passed through unstripped â€” interpreting them
     /// is the hook's responsibility.
     /// </para>
     /// <para>
@@ -654,7 +666,7 @@ public sealed class EvaluationContext
     internal Dictionary<string, List<(string? Location, string Source)>> XQueryModuleSources { get; } = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// Host-language loader for <c>fn:load-xquery-module</c> (F&amp;O 3.1 §15.3.1). The
+    /// Host-language loader for <c>fn:load-xquery-module</c> (F&amp;O 3.1 Â§15.3.1). The
     /// standard function library always registers a resolvable stub for the two arities;
     /// the stub dispatches through this delegate at invocation time, so hosts that
     /// support module loading (XQuery, XSLT) set it on their evaluation context. A null
@@ -691,7 +703,7 @@ public sealed class EvaluationContext
 
     /// <summary>
     /// Optional identity object describing the whitespace-stripping policy of the code
-    /// currently performing a document load (XSLT 3.0 §2.13.4: the strip/preserve rules
+    /// currently performing a document load (XSLT 3.0 Â§2.13.4: the strip/preserve rules
     /// of the package whose code calls fn:doc / fn:document / fn:collection apply).
     /// The document cache is keyed by (URI, policy), so the same URI loaded under
     /// different policies yields distinct trees. The default (null) is the host's
@@ -757,15 +769,15 @@ public sealed class EvaluationContext
     /// Foreign node providers (any other <see cref="IXdmNode"/> implementation) keep their
     /// own document-order story: they are cached and returned unchanged, and cross-tree
     /// ordering then follows the provider's <see cref="IXdmNode.DocumentOrder"/> semantics
-    /// rather than the load sequence — providers that need creation-sequence ordering must
+    /// rather than the load sequence â€” providers that need creation-sequence ordering must
     /// implement it themselves.
     /// </remarks>
     public IXdmNode LoadDocument(string uri)
         => LoadDocument(uri, ControlledResourceRoute.Document);
 
     /// <summary>
-    /// Loads a document by URI for the supplied acquisition route, using the cache and —
-    /// unless a <see cref="ResourcePolicy"/> is attached — <see cref="DocumentLoader"/>.
+    /// Loads a document by URI for the supplied acquisition route, using the cache and â€”
+    /// unless a <see cref="ResourcePolicy"/> is attached â€” <see cref="DocumentLoader"/>.
     /// </summary>
     /// <param name="uri">The document URI; relative URIs are resolved against <see cref="BaseUri"/>.</param>
     /// <param name="route">The acquisition route (purpose) the load is performed for; recorded on
@@ -780,7 +792,7 @@ public sealed class EvaluationContext
     /// Under a controlled policy, cache hits are digest-validated (REQ-125 consumer review B-F3):
     /// each controlled cache entry remembers the SHA-256 of the bytes its node was parsed from
     /// and the effective URI they were acquired under. A repeated load is served from the cache
-    /// — preserving document identity — only while the newly approved bytes digest-match the
+    /// â€” preserving document identity â€” only while the newly approved bytes digest-match the
     /// entry and the effective URI agrees; the approval receipt is then marked
     /// <see cref="ControlledResourceReceipt.ServedFromCache"/>. When the authority approves
     /// different bytes or a different effective URI for the same key, the fresh bytes are parsed
@@ -789,7 +801,7 @@ public sealed class EvaluationContext
     /// regardless of content changes.
     /// </remarks>
     /// <exception cref="InvalidOperationException">No document loader is configured, the document
-    /// cannot be loaded (FODC0002/FODC0005), or — under a controlled policy — the authority refused
+    /// cannot be loaded (FODC0002/FODC0005), or â€” under a controlled policy â€” the authority refused
     /// the acquisition (XV0004/XV0005). A refusal never triggers a disk/network fallback.</exception>
     public IXdmNode LoadDocument(string uri, ControlledResourceRoute route)
     {
@@ -848,7 +860,7 @@ public sealed class EvaluationContext
 
     /// <summary>
     /// Controlled-profile load: the policy's authority supplies authoritative bytes (or refuses);
-    /// the legacy mapper/loader — and therefore any disk/network fallback — is never consulted,
+    /// the legacy mapper/loader â€” and therefore any disk/network fallback â€” is never consulted,
     /// and the approved bytes are parsed with DTD processing prohibited.
     /// </summary>
     /// <remarks>
@@ -862,7 +874,7 @@ public sealed class EvaluationContext
     /// route is preserved as the concrete route on the request and receipt (consumer review B-F2).
     /// <para>Cache hits are digest-validated (consumer review B-F3): each controlled entry stores
     /// the SHA-256 of the bytes its node was parsed from and the effective URI they were acquired
-    /// under. The approval receipt is deferred until after the comparison — a matching entry is
+    /// under. The approval receipt is deferred until after the comparison â€” a matching entry is
     /// served unchanged (document identity preserved) with <see cref="ControlledResourceReceipt.ServedFromCache"/>
     /// set, while changed bytes or a changed effective URI are parsed into a fresh node that
     /// replaces the entry. The receipt therefore always describes the content actually returned.</para>
@@ -874,7 +886,7 @@ public sealed class EvaluationContext
 
         var (purpose, concrete) = ControlledRouteFor(route);
 
-        // Authorization first — never served from cache without the route's own decision.
+        // Authorization first â€” never served from cache without the route's own decision.
         // The approval receipt is deferred: it is recorded only once the cache comparison
         // below has decided whether the cached node or the fresh bytes are consumed (B-F3).
         var bytes = policy.AcquireBytesForCacheServe(uri, purpose, concrete, out var effectiveUri, out var byteCount, out var sha256);
@@ -886,7 +898,7 @@ public sealed class EvaluationContext
             && string.Equals(entry.EffectiveUri, effectiveUri, StringComparison.Ordinal))
         {
             // Digest-validated hit: the cached node was parsed from exactly these bytes under
-            // this effective URI — receipt and content agree.
+            // this effective URI â€” receipt and content agree.
             policy.RecordCacheServeApproval(uri, purpose, concrete, effectiveUri, byteCount, sha256, servedFromCache: true);
             DocumentLoaded?.Invoke(uri);
             return entry.Node;
@@ -942,7 +954,7 @@ public sealed class EvaluationContext
 
     /// <summary>
     /// Optional hook invoked by <c>fn:copy-of</c> / <c>fn:snapshot</c> after copying a node,
-    /// so the XSLT layer can attach accumulator values to the copy (XSLT 3.0 §19.2:
+    /// so the XSLT layer can attach accumulator values to the copy (XSLT 3.0 Â§19.2:
     /// accumulator values are copied by those functions). Arguments are the source node and
     /// the copy root node.
     /// </summary>
@@ -1393,7 +1405,7 @@ public sealed class EvaluationContext
     /// <summary>
     /// Resolves a function by namespace URI, local name, and arity. When no exact-arity
     /// registration exists, a variadic signature whose declared arity is not greater than
-    /// the requested arity matches (e.g. <c>fn:concat</c> resolves for any arity ≥ 2).
+    /// the requested arity matches (e.g. <c>fn:concat</c> resolves for any arity â‰¥ 2).
     /// </summary>
     /// <param name="namespaceUri">The function's namespace URI.</param>
     /// <param name="localName">The function's local name.</param>
@@ -1415,7 +1427,7 @@ public sealed class EvaluationContext
                 && (!signature.IsXPath40Only || IsXPath40)
                 && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental))
                 return true;
-            // Rare: the minimum-arity variadic slot was explicitly unregistered — rescan
+            // Rare: the minimum-arity variadic slot was explicitly unregistered â€” rescan
             // for another variadic registration of the same name.
             foreach (var ((ns, name, candidateArity), sig) in Functions)
             {

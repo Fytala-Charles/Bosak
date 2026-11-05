@@ -33,6 +33,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 04-11-2026     | Share immutable standard functions in fresh identity contexts (1.57.1).                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -207,6 +209,7 @@ internal sealed class QuerySourceSession : IDisposable
         private QueryTypedScalarCache? _typedScalars;
         internal int TypedScalarCount=>Volatile.Read(ref _typedScalars)?.Count??0;
         internal QueryTypedScalarCache RequireTypedScalars()=>Volatile.Read(ref _typedScalars)??throw new ArgumentException("Snapshot has no typed scalar registry.");
+        internal bool ContainsTypedTransport(XdmValue value)=>Volatile.Read(ref _typedScalars)?.ContainsTransport(value)==true;
         internal QueryTypedScalarCache GetTypedScalars(IQueryTypedContainerIssuer issuer,Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAuthority authority,int limit)
         {
             Lifetime.Check();
@@ -274,6 +277,14 @@ internal sealed class QuerySourceSession : IDisposable
             if(!ReferenceEquals(XdmValue.SchemaTransportMarker(value),XdmValue.SchemaTransportMarker(result))||!value.SchemaTransportMatches(result))
                 throw new ArgumentException("Typed identity changed scalar evidence or representation.");
             Check();return result;
+        }
+        internal XdmValue EvaluatePublicTypedIdentity(XdmValue value,int maxAtoms,int digits,int scale)
+        {
+            Check();Snapshot? owner=null;
+            foreach(var snapshot in _snapshots)
+                if(snapshot.ContainsTypedTransport(value)){if(owner is not null)throw new ArgumentException("Ambiguous typed scalar owner.");owner=snapshot;}
+            if(owner is null)throw new ArgumentException("Typed identity requires exactly one registered member owner.",nameof(value));
+            return EvaluateTypedIdentity(owner,value,maxAtoms,digits,scale);
         }
         internal QueryTypedScalarRegistration PrepareTypedRegistration(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,

@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 04-11-2026     | Creation; internal public-contract adapter (1.56.0).                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Schema;
 using Bosak.XPath.Runtime.Vm;
@@ -28,6 +30,13 @@ internal sealed class SchemaAdvisorBinding
     private readonly ISchemaAssessmentAdvisor _advisor;
     private readonly ISchemaAuthority _authority;
     private readonly Action<CancellationToken> _checkSession;
+    internal ISchemaAssessmentAdvisor Advisor=>_advisor;
+    internal void ValidateOrigin(ISchemaAssessmentOrigin? origin,CancellationToken token)
+    {
+        Check(token);
+        if(origin is not null&&!_advisor.OwnsAssessment(origin))throw new ArgumentException("Original assessment is not owned by the selected advisor.");
+        Check(token);
+    }
     private SchemaAdvisorBinding(QuerySourceSession runtime,IQuerySemanticEnvironment environment,ISchemaAssessor assessor,
         ISchemaAssessmentAdvisor advisor,ISchemaAuthority authority,Action<CancellationToken> checkSession)
     {_runtime=runtime;_environment=environment;_assessor=assessor;_advisor=advisor;_authority=authority;_checkSession=checkSession;}
