@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Stage immutable cells and revalidate registered data without getter replay (1.54.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Schema;
@@ -110,6 +112,46 @@ internal sealed class QueryTypedContainerReader
         CheckContainer();return new(value,declared,actual,origin);
     }
     internal ISchemaAuthority SelectedAuthority {get{CheckContainer();return _authority;}}
+    private T Supported<T>(SchemaResult<T>? outcome)
+    {
+        CheckContainer();
+        if(outcome is null)throw new ArgumentException("Authority returned no outcome.");
+        if(Read(outcome,static r=>r.Kind)!=SchemaResultKind.Supported)throw new NotSupportedException("Authority cannot authorize numeric projection.");
+        return Read(outcome,static r=>r.Value);
+    }
+    private ISchemaComponentHandle ResolveNumericType(string name)
+    {
+        var type=Supported(Read(_authority,a=>a.ResolveType(new("http://www.w3.org/2001/XMLSchema",name),_cancellation)));
+        OwnType(type);return type;
+    }
+    private bool NumericRelation(ISchemaComponentHandle actual,ISchemaComponentHandle expected,bool derived)
+    {
+        OwnType(actual);OwnType(expected);
+        bool answer=Supported(Read(_authority,a=>derived?a.IsDerivedFrom(actual,expected,_cancellation):a.IsSameComponent(actual,expected,_cancellation)));
+        OwnType(actual);OwnType(expected);return answer;
+    }
+    internal XdmValue ProjectNumeric(QueryTypedContainer.Cell cell)
+    {
+        CheckContainer();OwnType(cell.Actual);ValidatePayload(cell.Value);
+        var integer=ResolveNumericType("integer");
+        ISchemaComponentHandle selected=integer;
+        bool isInteger=NumericRelation(cell.Actual,integer,false)||NumericRelation(cell.Actual,integer,true);
+        XdmValue result;
+        if(isInteger)
+        {
+            if(cell.Value.Kind!=XdmValueKind.Integer)throw new ArgumentException("Integer type requires an Integer payload.");
+            result=XdmValue.FromInteger(cell.Value.BigIntegerValue);
+        }
+        else
+        {
+            var decimalType=ResolveNumericType("decimal");
+            selected=decimalType;
+            if(!(NumericRelation(cell.Actual,decimalType,false)||NumericRelation(cell.Actual,decimalType,true)))throw new NotSupportedException("Actual type is not an authorized numeric family.");
+            if(cell.Value.Kind!=XdmValueKind.Decimal)throw new ArgumentException("Decimal type requires a Decimal payload.");
+            result=XdmValue.FromDecimal(cell.Value.ExactDecimalValue);
+        }
+        CheckContainer();OwnType(cell.Actual);OwnType(selected);return result;
+    }
     internal void ValidateStored(ISchemaComponentHandle governing,ImmutableArray<QueryTypedContainer.Cell> cells)
     {
         CheckContainer();OwnType(governing);

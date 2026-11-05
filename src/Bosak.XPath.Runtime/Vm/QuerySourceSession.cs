@@ -35,6 +35,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.10   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -264,6 +266,11 @@ internal sealed class QuerySourceSession : IDisposable
         {
             RequireMember(snapshot);
             return snapshot.RequireTypedScalars().ValidateTransport(this,value,maxAtoms,digits,scale,_cancellation);
+        }
+        internal XdmValue ProjectTypedNumeric(Snapshot snapshot,XdmValue value,int maxAtoms,int digits,int scale)
+        {
+            var view=ValidateTypedTransport(snapshot,value,maxAtoms,digits,scale);
+            var result=view.ProjectNumeric(value);Check();return result;
         }
         internal XdmValue EvaluateTypedIdentity(Snapshot snapshot,XdmValue value,int maxAtoms,int digits,int scale)
         {

@@ -152,7 +152,7 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.58.0 bounded public single-atomic typed identity activated through existing signatures: 25044 tests, 35 public controls, exact gates and unchanged exported declarations/nullability/friends. Exact assessor/input/origin binding, no publication for unsupported shapes, pre/post guarded public evaluation and actual owner lifetimes qualified. Next authorized typed numeric projection; broader/native/owner/freeze work remains pending.",
+      "progress": "1.59.0 internal authority-authorized numeric projection qualified: 25079 tests, 35 new controls, exact gates and unchanged API source/exported metadata/friends. Integer-first positive actual-type relations and strict primitive-kind matching precede plain computation; original evidence retained. Next bounded public typed numeric execution. Existing public identity active; no public numeric/native/freeze acceptance.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
@@ -162,7 +162,8 @@
       "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
       "performanceFollowup": "Local registry-copy attribution/reduction complete. Continue representative native/owner latency, retained-memory and PF-01-09 budget qualification; no owner budgets accepted.",
       "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
-      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json"
+      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
+      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json"
     },
     {
       "id": "P10",

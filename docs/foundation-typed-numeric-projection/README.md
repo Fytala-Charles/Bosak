@@ -1,0 +1,11 @@
+# TA-08: authorized internal typed numeric projection
+
+5 November 2026. Source **1.59.0**, based on `e2068e01`, adds internal Integer/Decimal projection through the selected authority. Core authenticates the exact current marked scalar, resolves and owns numeric builtins, checks supported positive actual-type sameness/derivation, and rejects inconsistent primitive representations. Integer classification precedes decimal. Names, governing list type and numeric-looking values never substitute for authority.
+
+Projection produces plain bounded numeric data without modifying the original marked value. Tests feed it into the existing exact arithmetic lane and verify that computed results, including adding zero, carry no original evidence. The existing public identity profile continues to preserve evidence. Public numeric grammar/profile activation is not part of this slice.
+
+All **25,079 tests** pass, including **35 new controls**; Runtime passes 759 cases. QT3 remains **31,397/0/424**, gated qt4 **8,941/0/1,918**, with 11 experimental passes and identical skip maps. Eleven assemblies retain **310 public types / 6,369 declaration rows** and original friends. All API source is byte-identical to the preceding qualification. Local authorized projection measured **734 bytes/call in the full suite** (728 in the focused run), including provider outcome allocations, with no payload-getter replay; representative owner/native budgets remain pending.
+
+[Design](DESIGN.md), [acceptance](ACCEPTANCE.md), [case results](ACCEPTANCE.json), [adoption](SPEC-BASIS.md), [separate source review](SOURCE-REVIEW.md), [input pin](PLAN-INPUT.json) and [status](STATUS.json) define the scope. Exact source/binaries, actual loaded hashes, complete runner logs/TRX, local allocation and documentation receipts are retained under `evidence/`. Verify without rebuilding with `python docs/foundation-typed-numeric-projection/tools/verify.py`.
+
+Next: integrate authorized projection into a separately identified bounded public typed numeric profile, with current operation guards and plain computed results. Constructors, broader projection/facts/compatibility/all-host/native/migration qualification, owner budgets, C45/freeze and publication remain pending. R3 is InProgress.

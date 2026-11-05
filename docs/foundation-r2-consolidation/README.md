@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.58.0 qualifies [TA-07 bounded public typed identity](../foundation-public-typed-identity/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for authorized typed numeric projection and broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.59.0 qualifies [TA-08 internal authorized numeric projection](../foundation-typed-numeric-projection/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for public typed numeric execution and broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -40,6 +40,8 @@ Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 4 November: [TA-06 allocation attribution and reduction qualified](../foundation-typed-identity-cost/README.md), source 1.57.1: 25,009 tests, unchanged gates/API/descriptor, compiled identity 23,360 to 4,104 bytes/call. Next bounded public activation; owner performance acceptance remains separate.
 
 5 November: [TA-07 bounded public typed identity qualified](../foundation-public-typed-identity/README.md), source 1.58.0: 25,044 tests, 35 new public controls, unchanged gates/exported metadata. Next typed numeric projection; public single-atomic identity does not imply broader/native/schema acceptance or freeze.
+
+5 November: [TA-08 authorized internal numeric projection qualified](../foundation-typed-numeric-projection/README.md), source 1.59.0: 25,079 tests, 35 new controls, unchanged gates/API source/metadata. Next bounded public typed numeric execution; existing public identity remains unchanged.
 
 ## Earlier disposition checkpoints
 

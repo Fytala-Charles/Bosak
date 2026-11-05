@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -183,4 +185,10 @@ internal sealed class QueryRegisteredTypedContainer
     }
     internal object GetIdentity(int index){Check();return _group.Entries[index];}
     internal XdmValue GetTransport(int index){Check();return _group.Entries[index].Transport;}
+    internal XdmValue ProjectNumeric(XdmValue value)
+    {
+        Check();
+        if(XdmValue.SchemaTransportMarker(value) is not QueryTypedScalarCache.Entry entry||!ReferenceEquals(entry.Group,_group))throw new ArgumentException("Foreign numeric evidence.");
+        var result=_reader.ProjectNumeric(_group.Cells[entry.Ordinal]);Check();return result;
+    }
 }

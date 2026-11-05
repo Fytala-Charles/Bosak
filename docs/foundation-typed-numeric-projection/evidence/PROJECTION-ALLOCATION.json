@@ -1,0 +1,9 @@
+{
+  "bytesPerRead": {
+    "authorize": 734
+  },
+  "warmupReads": 100,
+  "measuredReads": 1000,
+  "scope": "Owned input, pre-held current raw operation, current raw snapshot and marker admission, authoritative builtin/actual-type checks and primitive projection; provider outcome allocations included; no payload getters, no accepted owner/latency/retained-memory budgets.",
+  "budgetsAccepted": false
+}
