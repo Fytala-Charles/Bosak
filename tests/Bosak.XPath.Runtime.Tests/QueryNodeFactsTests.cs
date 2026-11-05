@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; internal original-node facts reader (1.61.0).                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Qualify shared ownership guards and warm metadata allocation reduction (1.61.1).         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Xml.Linq;
@@ -179,7 +181,7 @@ public sealed class QueryNodeFactsTests(ITestOutputHelper output)
     {using var f=new Fixture();f.Run(op=>{var v=f.Read(op);var c=v.TypedValue;var a=c.GetAtomic(0);int reads=f.Facts.Reads.Count;f.Authority.Types.Remove(f.Actual);Assert.Throws<ArgumentException>(()=>a.Value);f.Authority.Types.Add(f.Actual);f.Issuer.TupleOwned=false;Assert.Throws<ArgumentException>(()=>v.Type);Assert.Throws<ArgumentException>(()=>c.Count);Assert.Equal(reads,f.Facts.Reads.Count);return 0;});}
     /// <summary>NF20 records cold read and warm observation allocation without retained fact caches or payload replay.</summary>
     [Fact] public void AllocationAndGetterObservation()
-    {using var f=new Fixture();f.Run(op=>{for(int i=0;i<10;i++)f.Read(op);long before=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<100;i++)f.Read(op);long cold=(GC.GetAllocatedBytesForCurrentThread()-before)/100;var v=f.Read(op);int reads=f.Facts.Reads.Count, payload=f.Facts.Value!.Reads.Count;for(int i=0;i<10;i++)_ = v.IsNilled;before=GC.GetAllocatedBytesForCurrentThread();int calls=f.Issuer.Calls;for(int i=0;i<100;i++)_ = v.IsNilled;long warm=(GC.GetAllocatedBytesForCurrentThread()-before)/100;output.WriteLine($"Node facts cold: {cold} bytes/read; warm: {warm} bytes/read; callbacks: {(f.Issuer.Calls-calls)/100} per observation");Assert.Equal(reads,f.Facts.Reads.Count);Assert.Equal(payload,f.Facts.Value.Reads.Count);Assert.InRange(cold,1,2000000);Assert.InRange(warm,0,100000);return 0;});}
+    {using var f=new Fixture();f.Run(op=>{for(int i=0;i<10;i++)f.Read(op);long before=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<100;i++)f.Read(op);long cold=(GC.GetAllocatedBytesForCurrentThread()-before)/100;var v=f.Read(op);int reads=f.Facts.Reads.Count, payload=f.Facts.Value!.Reads.Count;for(int i=0;i<10;i++)_ = v.IsNilled;before=GC.GetAllocatedBytesForCurrentThread();int calls=f.Issuer.Calls;for(int i=0;i<100;i++)_ = v.IsNilled;long warm=(GC.GetAllocatedBytesForCurrentThread()-before)/100;output.WriteLine($"Node facts cold: {cold} bytes/read; warm: {warm} bytes/read; callbacks: {(f.Issuer.Calls-calls)/100} per observation");Assert.Equal(reads,f.Facts.Reads.Count);Assert.Equal(payload,f.Facts.Value.Reads.Count);Assert.InRange(cold,1,2000000);Assert.Equal(0,warm);Assert.InRange((f.Issuer.Calls-calls)/100,1,54);return 0;});}
 
     /// <summary>NF16 cancellation at every fact/outcome getter prevents later provider reads.</summary>
     /// <param name="stage">Cancellation callback.</param>
@@ -192,4 +194,20 @@ public sealed class QueryNodeFactsTests(ITestOutputHelper output)
     /// <summary>NF13 original node facts require a non-null original origin before getter access.</summary>
     [Fact] public void MissingOriginalOrigin()
     {using var f=new Fixture();f.Run(op=>{Assert.Throws<ArgumentNullException>(()=>op.ReadNodeFacts(f.Snapshot,f.Issuer,f.Input,null!,f.Input.Node,f.Facts,8,128,128));return 0;});Assert.Empty(f.Facts.Reads);}
+
+    /// <summary>Authority callbacks cannot revoke required state between the shared metadata proof boundaries.</summary>
+    /// <param name="declaration">Interrupt the optional declaration callback rather than the governing type.</param>
+    /// <param name="mode">Required state revoked by authority ownership.</param>
+    [Theory][InlineData(false,"source")][InlineData(true,"source")][InlineData(false,"cancel")][InlineData(true,"cancel")][InlineData(false,"tuple")][InlineData(true,"tuple")][InlineData(false,"false-source")][InlineData(true,"false-source")]
+    public void MetadataAuthorityCallbackRevocation(bool declaration,string mode)
+    {
+        using var f=new Fixture();using var cancel=new CancellationTokenSource();
+        f.Run(op=>{var view=f.Read(op);int reads=f.Facts.Reads.Count;var target=declaration?f.Declaration:f.Type;
+            f.Authority.OnOwn=type=>{if(!ReferenceEquals(type,target))return;switch(mode){case "source":f.Input.Available=false;break;case "cancel":cancel.Cancel();break;case "tuple":f.Issuer.TupleOwned=false;break;default:f.Input.Available=false;f.Authority.Types.Remove(type);break;}};
+            if(mode=="cancel")Assert.Throws<OperationCanceledException>(()=>view.IsNilled);
+            else if(mode=="tuple")Assert.Throws<ArgumentException>(()=>view.IsNilled);
+            else Assert.Throws<ObjectDisposedException>(()=>view.IsNilled);
+            Assert.Equal(reads,f.Facts.Reads.Count);return 0;
+        },cancel.Token);
+    }
 }

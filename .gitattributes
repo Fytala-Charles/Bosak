@@ -434,3 +434,6 @@ docs/foundation-node-facts-plan/** -text whitespace=cr-at-eol,-blank-at-eof,-bla
 
 # Preserve exact TA-10 original-node facts qualification evidence.
 docs/foundation-node-facts-reader/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-11 original metadata guard cost evidence.
+docs/foundation-node-facts-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

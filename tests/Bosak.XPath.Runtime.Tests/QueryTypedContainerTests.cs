@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Share issued-resource fixtures with transactional registry controls (1.54.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Expose authority callback hooks for guarded metadata cost controls (1.61.1).             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections;
 using System.Collections.Immutable;
@@ -62,8 +64,9 @@ public sealed class QueryTypedContainerTests(ITestOutputHelper output)
     internal sealed class Authority : ISchemaAuthority
     {
         internal bool Available=true;
+        internal Action<ISchemaComponentHandle>? OnOwn;
         internal readonly HashSet<ISchemaComponentHandle> Types=new(ReferenceEqualityComparer.Instance);
-        bool ISchemaAuthority.Owns(ISchemaComponentHandle type)=>Types.Contains(type);
+        bool ISchemaAuthority.Owns(ISchemaComponentHandle type){OnOwn?.Invoke(type);return Types.Contains(type);}
         SchemaResult<ISchemaComponentHandle> ISchemaAuthority.ResolveType(SchemaExpandedName n,CancellationToken t)=>throw new Exception("lookup");
         SchemaResult<ISchemaComponentHandle> ISchemaAuthority.ResolveElementDeclaration(SchemaExpandedName n,CancellationToken t)=>throw new Exception("lookup");
         SchemaResult<ISchemaComponentHandle> ISchemaAuthority.ResolveAttributeDeclaration(SchemaExpandedName n,CancellationToken t)=>throw new Exception("lookup");

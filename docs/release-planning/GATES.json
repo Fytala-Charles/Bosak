@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.61.0",
+  "sourceVersion": "1.61.1",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-node-facts-reader/README.md",
+      "w1ReadinessPlan": "docs/foundation-node-facts-cost/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Attribute/reduce redundant node-fact guard callbacks while retaining exact tuple/currentness checks, before bounded public node-query profile selection. R3 InProgress; native/R4-R7 pending.",
+      "nextCoreTask": "Select a bounded public original-node query profile/descriptor with exact ownership, optional nilled results and absent-value atomization. R3 InProgress; native/R4-R7 pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -154,7 +154,8 @@
       "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
       "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
       "nodeFactsPreparation": "docs/foundation-node-facts-plan/STATUS.json",
-      "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json"
+      "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
+      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json"
     },
     {
       "id": "R4",

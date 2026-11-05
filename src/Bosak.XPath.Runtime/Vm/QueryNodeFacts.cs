@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; internal original-node facts reader (1.61.0).                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Share adjacent metadata guards and avoid authority delegate allocation (1.61.1).         |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Schema;
 using Bosak.XPath.Core.Xdm;
@@ -98,11 +100,21 @@ internal sealed class QueryNodeFactsReader
     private void OwnType(ISchemaComponentHandle? type)
     {
         CheckFacts();
-        if(type is null||!Call(()=>_authority.Owns(type)))throw new ArgumentException("Unowned original component.");
-        CheckFacts();
+        CheckOwnedType(type); CheckFacts();
+    }
+    private void CheckOwnedType(ISchemaComponentHandle? type)
+    {
+        CheckLive();
+        if(type is null)throw new ArgumentException("Unowned original component.");
+        bool owned=_authority.Owns(type); CheckLive();
+        if(!owned)throw new ArgumentException("Unowned original component.");
     }
     private void CheckStored()
-    { CheckFacts(); OwnType(_type); if(_declaration is not null)OwnType(_declaration); CheckFacts(); }
+    {
+        // The successful post-proof is also the next authority call's precondition.
+        CheckFacts(); CheckOwnedType(_type); CheckFacts();
+        if(_declaration is not null){CheckOwnedType(_declaration);CheckFacts();}
+    }
 
     internal QueryNodeFacts Read()
     {

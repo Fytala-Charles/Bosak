@@ -1,6 +1,6 @@
 # Consolidated R2 dispositions and execution plan
 
-Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.61.0 qualifies [TA-10 internal original-node facts](../foundation-node-facts-reader/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for bounded public node-fact activation and guarded atomization/provenance observation, broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.61.1 qualifies [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for bounded public node-fact activation and guarded atomization/provenance observation, broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
 
 [PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
 
@@ -48,6 +48,8 @@ Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 5 November: [TA-10 original node-fact preparation](../foundation-node-facts-plan/README.md) complete at unchanged 1.60.0. Fresh existing controls 235/0; 22 new fact cases remain NotRun. Current next task: implement the internal uncached reader before public node-query activation.
 
 5 November: [TA-10 internal original-facts reader](../foundation-node-facts-reader/README.md) qualified at 1.61.0: 25,185 tests, 71 new controls and unchanged frozen gates/API metadata. Current next task: reduce redundant guard callbacks before public node-query selection; no public node-facts/native/freeze activation. Earlier dated preparation entries retain their historical scope.
+
+5 November: [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) qualified at 1.61.1: 25,193 tests, 8 new callback controls, unchanged gates/API metadata. Cold allocation 1,396 bytes; warm 0; 54 issuer callbacks per metadata observation. Current next task: bounded public original-node query profile selection; native/owner budgets and freeze remain pending.
 
 ## Earlier disposition checkpoints
 
