@@ -17,3 +17,5 @@ The final focused run passes **306 controls**: 35 public, 3 cost/isolation, 46 i
 Public activation is deliberately bounded. It does not establish owner/native acceptance, full XSD 1.1 support, numeric projection, C45, API freeze, a publication version or publication authorization.
 
 The first full cohort passed its tests but exposed a compiler-generated nullable-context annotation shift during metadata comparison. Its source/binaries/bindings are preserved under `evidence/pre-nullability-holder/`. Final `*-qualified` receipts use the internal admission holder and preserve all original exported annotations; the initial cohort is not substituted for final qualification.
+
+Final source review restored 23 pre-existing UTF-8 documentation lines misdecoded by an editing helper. The intermediate source/binaries/bindings remain under `evidence/pre-utf8-restoration/`; final qualification uses the `*-utf8` rebuild, full-unit and gate receipts. No intermediate cohort substitutes for the final artifacts.

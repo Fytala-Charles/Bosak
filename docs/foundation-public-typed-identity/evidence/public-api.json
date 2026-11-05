@@ -9,7 +9,7 @@
     {
       "project": "src/Bosak.LanguageServer/Bosak.LanguageServer.csproj",
       "assembly": "Bosak.LanguageServer",
-      "sha256": "95DA6173A639FC806CBD5751A3F7E5DB6693B2B7827EEE2879341860FAE44614",
+      "sha256": "9DBEAD3CEEBCA3C197B808779CE8699E468BF7EF32C617280D39E3709984920D",
       "identity": "Bosak.LanguageServer, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Api",
@@ -448,7 +448,7 @@
     {
       "project": "src/Bosak.XPath.Api/Bosak.XPath.Api.csproj",
       "assembly": "Bosak.XPath.Api",
-      "sha256": "60A5AB2441F9C3A027B4CFECB5AEEDD8F368D641C4EFFA88B61F35B5329DE2F7",
+      "sha256": "2D0EA313C582186CCED3B121D4E127644D2EF7D618563DB3E897DA0075C6B7F9",
       "identity": "Bosak.XPath.Api, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Compiler",
@@ -730,7 +730,7 @@
     {
       "project": "src/Bosak.XPath.Compiler/Bosak.XPath.Compiler.csproj",
       "assembly": "Bosak.XPath.Compiler",
-      "sha256": "7B05A0100FAE1F3A780481E50F29B90E85DF9CBDC5ADAF65FEF799B5CF1C7CD7",
+      "sha256": "73A36C31116C39D24B2F1E2AB192DACA8782FA33C15BA8035EAE9DDF6EAF2B8A",
       "identity": "Bosak.XPath.Compiler, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Core",
@@ -757,7 +757,7 @@
     {
       "project": "src/Bosak.XPath.Core/Bosak.XPath.Core.csproj",
       "assembly": "Bosak.XPath.Core",
-      "sha256": "51ABC0DE6646E3FAAF15202FC678CD86A1859A4445940694F729946D86C31559",
+      "sha256": "F8C18D5D12A1424BE5F806903A184BFA6DA6322FF0DE708C97AEE8C846ED2062",
       "identity": "Bosak.XPath.Core, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "System.Collections",
@@ -2137,7 +2137,7 @@
     {
       "project": "src/Bosak.XPath.Parser/Bosak.XPath.Parser.csproj",
       "assembly": "Bosak.XPath.Parser",
-      "sha256": "FB0A753AA9AD2CBBFEC4F35CFD41B651A362CD85CB3A29024EB8A338A08B48AD",
+      "sha256": "06C62CB91DC44BDEF3EE4B779AC95BF84C095B0A31418DF70651537BA815D743",
       "identity": "Bosak.XPath.Parser, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Core",
@@ -2177,7 +2177,7 @@
     {
       "project": "src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj",
       "assembly": "Bosak.XPath.Providers.Database",
-      "sha256": "ABC325FBC19251560AF4ED1D53D7D85CDB257BF53A447B91D9D1EB6CE6D3E692",
+      "sha256": "69CE703F2F6F54A955607E3A83F7C72DB12D75CFCDEDB9814744E3DA0BAA951C",
       "identity": "Bosak.XPath.Providers.Database, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Core",
@@ -2263,7 +2263,7 @@
     {
       "project": "src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj",
       "assembly": "Bosak.XPath.Providers",
-      "sha256": "5991F94D18874DD894695317B0A9C1F0645B77C2E62D2898153D43A812E7275B",
+      "sha256": "5105E4D475C79954A6D55701851ECDA00A47C372B5401802065CD7E9378CA763",
       "identity": "Bosak.XPath.Providers, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Core",
@@ -2662,7 +2662,7 @@
     {
       "project": "src/Bosak.XPath.Runtime/Bosak.XPath.Runtime.csproj",
       "assembly": "Bosak.XPath.Runtime",
-      "sha256": "90B4622104F4B0206C0C71CF75E9ED3D9631B5FDCD4A6D1A960A5B60D8168A7C",
+      "sha256": "E18533E74525F4A408FF88FE4C2DBD338CE8B68D33B7772CC3BB0C3F262F5B67",
       "identity": "Bosak.XPath.Runtime, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Compiler",
@@ -3450,7 +3450,7 @@
     {
       "project": "src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj",
       "assembly": "Bosak.XPath.Standard",
-      "sha256": "3666F194C899C86D6A57DD90C8215D86652566884BE8F6A00CDE7876BF826FC1",
+      "sha256": "35FBED827CEA3688B0B9159DE6CA57B13C74362473DA3648C769EA919B769FD6",
       "identity": "Bosak.XPath.Standard, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Core",
@@ -3568,7 +3568,7 @@
     {
       "project": "src/Bosak.XQuery/Bosak.XQuery.csproj",
       "assembly": "Bosak.XQuery",
-      "sha256": "76BB3AAC45982629A64F51ECC8A51D6C20B5B6883A1B737196E143078F3ACEC8",
+      "sha256": "E37E4AAE7110D372444E1B3FD1D2029E1C97D181839A6F45A0FEB13822CCDF94",
       "identity": "Bosak.XQuery, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Compiler",
@@ -3734,7 +3734,7 @@
     {
       "project": "src/Bosak.Xslt/Bosak.Xslt.csproj",
       "assembly": "Bosak.Xslt",
-      "sha256": "7500E63BC7376C3797E646B4B8EF7A20F7925C1356979F78712241CE99F43D0A",
+      "sha256": "2422268B22EF2BC1F74FD35F5CA05B5428CF334DF09B122B80460C149BB52860",
       "identity": "Bosak.Xslt, Version=1.58.0.0, Culture=neutral, PublicKeyToken=null",
       "references": [
         "Bosak.XPath.Api",

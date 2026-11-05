@@ -887,5 +887,5 @@ Skip reasons (grouped):
       1  Implementation-defined range limit: 65 to 2^32+10 is not detected and would enumerate billions of integers
       1  External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap
 
-Elapsed: 64.56s
+Elapsed: 67.48s
 Skip details written to D:/Development/Bosak/docs/foundation-public-typed-identity/evidence/qt3-skips.txt

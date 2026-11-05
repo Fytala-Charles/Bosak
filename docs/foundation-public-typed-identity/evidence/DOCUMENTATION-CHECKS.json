@@ -23,7 +23,7 @@
     },
     {
       "source": "docs/AGENT_HANDOVER.md",
-      "htmlSha256": "203860e8d8a9e2156a4a791276120647a42626118044455ebbd8a0f4d8106eb1"
+      "htmlSha256": "609af628e95df4092def267afaf3f3da00a432ff8e17cdfbf06ab2a920ac60d4"
     },
     {
       "source": "docs/IMPLEMENTATION_STATUS.md",
@@ -823,7 +823,7 @@
     },
     {
       "source": "docs/foundation-public-typed-identity/ACCEPTANCE.md",
-      "htmlSha256": "8333358aaf4407ac1db3a29ba173a72a5b8aedb08befba05dd755a2af131c366"
+      "htmlSha256": "d0ef07a707b000b7285cb094887f96e27061ce7cf96ecbaceca73ccc63216c63"
     },
     {
       "source": "docs/foundation-public-typed-identity/SPEC-BASIS.md",
