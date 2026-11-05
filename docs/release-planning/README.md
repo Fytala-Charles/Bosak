@@ -4,7 +4,7 @@ Updated 5 November 2026. Current source version: **1.60.0**. Target publication 
 
 The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. R3 is in progress: the ordinary facade, finite numeric profiles, TA-01 container reader, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal compiled identity and TA-06 allocation reduction and TA-07 public identity and TA-08 internal numeric projection and TA-09 public typed numeric execution are qualified at source 1.60.0. Broader schema activation remains pending.
 
-Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. Next qualify original node facts/nil/no-value and guarded atomization/provenance observation. Bounded public single-atomic identity is active. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
+Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. Next implement the prepared internal uncached original-node facts reader and qualify its 22 cases. Bounded public single-atomic identity is active. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
@@ -61,6 +61,8 @@ Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain p
 5 November: [TA-08 authorized internal numeric projection qualified](../foundation-typed-numeric-projection/README.md), source 1.59.0: 25,079 tests, 35 new controls, unchanged gates/API source/metadata. Next bounded public typed numeric execution; existing public identity remains unchanged.
 
 5 November: [TA-09 bounded public typed numeric execution](../foundation-public-typed-numeric/README.md) qualified at source 1.60.0: 25,114 tests, 35 new controls and unchanged frozen gates/exported metadata. Current next task: original node facts/nil/no-value and guarded atomization/provenance observation. Earlier dated milestones below retain their historical scope.
+
+5 November: [TA-10 original node-fact preparation](../foundation-node-facts-plan/README.md) complete at unchanged 1.60.0. Fresh existing controls 235/0; 22 new fact cases remain NotRun. Current next task: implement the internal uncached reader before public node-query activation.
 
 ## Earlier planning checkpoints
 

@@ -125,7 +125,7 @@
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Qualify original node facts/nil/no-value and guarded atomization/provenance observation. R3 remains InProgress; R4-R7 pending.",
+      "nextCoreTask": "Implement internal uncached original-node facts reader and NF01-NF22 before a separate public node-query profile. R3 InProgress; R4-R7 pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -152,7 +152,8 @@
       "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
       "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
       "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
-      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json"
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
+      "nodeFactsPreparation": "docs/foundation-node-facts-plan/STATUS.json"
     },
     {
       "id": "R4",

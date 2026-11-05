@@ -1,0 +1,64 @@
+{
+  "rows": [
+    {
+      "id": "source",
+      "member": "ISchemaAssessmentInput.OwnsNode",
+      "status": "Available",
+      "disposition": "Live input membership without node contents; require selected snapshot plus exactly one owner across raw operation."
+    },
+    {
+      "id": "facts",
+      "member": "ISchemaAssessmentAdvisor.OwnsNodeFacts",
+      "status": "ContractOnly",
+      "disposition": "Public binding has no node-fact adapter; validate issuance before fact getters."
+    },
+    {
+      "id": "tuple",
+      "member": "ISchemaAssessmentAdvisor.OwnsNode",
+      "status": "ContractOnly",
+      "disposition": "Prove exact node/facts/original input/origin tuple after neutral ownership."
+    },
+    {
+      "id": "original",
+      "member": "ISchemaNodeFacts.Origin",
+      "status": "ContractOnly",
+      "disposition": "Require non-null admitted original origin, same reference and current selected-advisor ownership."
+    },
+    {
+      "id": "type",
+      "member": "ISchemaNodeFacts.Type / Declaration",
+      "status": "ContractOnly",
+      "disposition": "Required governing type; optional declaration; owned handles, no rewriting to compatible target."
+    },
+    {
+      "id": "flags",
+      "member": "ISchemaNodeFacts.HasNoTypedValue / IsNilled",
+      "status": "ContractOnly",
+      "disposition": "Read explicit independent facts; empty container count proves neither flag."
+    },
+    {
+      "id": "typed",
+      "member": "ISchemaNodeFacts.ReadTypedValue",
+      "status": "ContractOnly",
+      "disposition": "Guard result kind and payload; reuse complete TA-01 reader before publication; Unsupported is not empty."
+    },
+    {
+      "id": "legacy",
+      "member": "QuerySchemaAssociation.ValidateNodeFacts",
+      "status": "PrivateAssociationOnly",
+      "disposition": "Validates opaque original tuple; reads no ISchemaNodeFacts flags or typed payload."
+    },
+    {
+      "id": "public",
+      "member": "SchemaQueryOperation.ReadTypedValue",
+      "status": "ScalarContainerOnly",
+      "disposition": "Takes issued container, no node/facts association; empty/multiple atom shapes remain Unsupported."
+    },
+    {
+      "id": "vm",
+      "member": "VmEngine atomization",
+      "status": "SeparateLegacyRoute",
+      "disposition": "Do not enable global schema-node getter fallback or reinterpret existing plain profiles."
+    }
+  ]
+}

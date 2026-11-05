@@ -45,6 +45,8 @@ Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 
 5 November: [TA-09 bounded public typed numeric execution](../foundation-public-typed-numeric/README.md) qualified at source 1.60.0: 25,114 tests, 35 new controls and unchanged frozen gates/exported metadata. Current next task: original node facts/nil/no-value and guarded atomization/provenance observation. Earlier dated milestones below retain their historical scope.
 
+5 November: [TA-10 original node-fact preparation](../foundation-node-facts-plan/README.md) complete at unchanged 1.60.0. Fresh existing controls 235/0; 22 new fact cases remain NotRun. Current next task: implement the internal uncached reader before public node-query activation.
+
 ## Earlier disposition checkpoints
 
 The entries below preserve the earlier decisions and gates in date order; the current summary above supersedes their then-pending statuses.

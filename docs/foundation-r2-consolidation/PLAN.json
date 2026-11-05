@@ -152,7 +152,7 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.60.0 bounded public typed numeric profile qualified: 25114 tests, 35 new controls, exact frozen gates and unchanged exported metadata/friends. Original marker and authority are rechecked through plain computation. Next original node facts/nil/no-value and guarded atomization/provenance observation; native/freeze acceptance remains pending.",
+      "progress": "1.60.0 public typed numeric qualification retained. TA-10 original-node facts audited/prepared with 235 existing controls on unchanged binaries and 22 new cases NotRun. Next implement internal uncached original-facts reader before public profile selection; no native/freeze acceptance.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
@@ -164,7 +164,8 @@
       "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
       "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
       "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
-      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json"
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
+      "nodeFactsPreparation": "docs/foundation-node-facts-plan/IMPLEMENTATION.md"
     },
     {
       "id": "P10",
