@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; public typed identity controls (1.58.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Retain scope controls and reuse numeric authority fixture (1.60.0).                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Numerics;
 using Bosak.XPath.Api.Schema;
@@ -88,7 +90,7 @@ public sealed class PublicTypedIdentityTests(ITestOutputHelper output)
     }
     /// <summary>Unsupported grammar refuses before invoking a poisoned assessor.</summary>
     /// <param name="source">Unavailable source.</param>
-    [Theory][InlineData("true()")][InlineData("$v")][InlineData("$value+0")][InlineData("string($value)")]
+    [Theory][InlineData("true()")][InlineData("$v")][InlineData("$value + $other")][InlineData("string($value)")]
     public void GrammarRefusesBeforeBind(string source)
     {var a=new Assessor{Hook=_=>throw new Exception("bind poison")};Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath(source,new SchemaQueryLimits(4,8,8,2048,2048),assessor:a).Kind);Assert.Equal(0,a.Binds);}
     /// <summary>Public binding propagates Unsupported without reading Value and never disposes borrowed endpoints.</summary>

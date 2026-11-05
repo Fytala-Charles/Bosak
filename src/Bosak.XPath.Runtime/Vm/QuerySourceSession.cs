@@ -37,6 +37,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12   | 05-11-2026     | Execute bounded public typed numeric operations with live authorization (1.60.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -60,6 +62,8 @@ internal sealed class QuerySourceSession : IDisposable
     private readonly object _evaluate;
     private readonly int _snapshotLimit;
     private readonly bool _typedIdentity;
+    private readonly bool _typedNumeric;
+    internal bool TypedNumericProfile=>_typedNumeric;
     private readonly Dictionary<IQuerySourceInput, Snapshot> _snapshots = new(ReferenceEqualityComparer.Instance);
     private readonly QuerySnapshotLifetime _lifetime = new(() => { });
     private bool _closing;
@@ -71,7 +75,9 @@ internal sealed class QuerySourceSession : IDisposable
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit,bool typedIdentity)
         : this(environment,(object)evaluate,snapshotLimit) { _typedIdentity=typedIdentity; }
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit)
-        : this(environment,(object)evaluate,snapshotLimit) { }
+        : this(environment,evaluate,snapshotLimit,false) { }
+    internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit,bool typedNumeric)
+        : this(environment,(object)evaluate,snapshotLimit) { _typedNumeric=typedNumeric; }
     private QuerySourceSession(SchemaQueryEnvironment environment, object evaluate, int snapshotLimit)
     {
         ArgumentNullException.ThrowIfNull(environment); ArgumentNullException.ThrowIfNull(evaluate);
@@ -285,13 +291,27 @@ internal sealed class QuerySourceSession : IDisposable
                 throw new ArgumentException("Typed identity changed scalar evidence or representation.");
             Check();return result;
         }
-        internal XdmValue EvaluatePublicTypedIdentity(XdmValue value,int maxAtoms,int digits,int scale)
+        private Snapshot TypedOwner(XdmValue value)
         {
             Check();Snapshot? owner=null;
             foreach(var snapshot in _snapshots)
                 if(snapshot.ContainsTypedTransport(value)){if(owner is not null)throw new ArgumentException("Ambiguous typed scalar owner.");owner=snapshot;}
             if(owner is null)throw new ArgumentException("Typed identity requires exactly one registered member owner.",nameof(value));
-            return EvaluateTypedIdentity(owner,value,maxAtoms,digits,scale);
+            return owner;
+        }
+        internal XdmValue EvaluatePublicTypedIdentity(XdmValue value,int maxAtoms,int digits,int scale)
+            =>EvaluateTypedIdentity(TypedOwner(value),value,maxAtoms,digits,scale);
+        internal bool TypedNumericProfile=>_owner._typedNumeric;
+        internal XdmValue EvaluatePublicTypedNumeric(XdmValue value,int maxAtoms,int digits,int scale)
+        {
+            Check();if(!_owner._typedNumeric)throw new NotSupportedException("This session has no typed numeric profile.");
+            var owner=TypedOwner(value);var projected=ProjectTypedNumeric(owner,value,maxAtoms,digits,scale);
+            void Guard(){_ = ProjectTypedNumeric(owner,value,maxAtoms,digits,scale);}
+            var context=EvaluationContext.CreateIsolated().WithVariable("value",projected);context.ResourcePolicy=SchemaProviderSessionBinding.ClosedResources();
+            Guard();var result=((Func<EvaluationContext,Action,XdmValue>)_owner._evaluate)(context,Guard);Guard();
+            if(XdmValue.SchemaTransportMarker(result) is not null||result.UserSchemaTypeName is not null||result.Kind==XdmValueKind.Boolean&&result.SchemaTypeName is not(null or "boolean"))throw new ArgumentException("Computed numeric results must be plain primitives.");
+            if(result.Kind!=XdmValueKind.Boolean)_=new ExactArithmeticLimits(digits,scale).Read(result);
+            Guard();return result;
         }
         internal QueryTypedScalarRegistration PrepareTypedRegistration(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
@@ -371,7 +391,7 @@ internal sealed class QuerySourceSession : IDisposable
         internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, int maxBindings, int maxNamespaces)
         {
             Check(); ArgumentNullException.ThrowIfNull(caller);
-            if(_owner._typedIdentity)throw new NotSupportedException("Typed identity requires an explicit snapshot and marked scalar.");
+            if(_owner._typedIdentity||_owner._typedNumeric)throw new NotSupportedException("Typed execution requires an explicit authenticated operand route.");
             foreach (var value in caller.SnapshotVariables().Values)
                 ValidateTransport(value);
             var inputs = caller.CaptureSchemaInputs(OwnsNode, maxBindings, maxNamespaces).ForOperation(this, OwnsNode);
@@ -380,7 +400,7 @@ internal sealed class QuerySourceSession : IDisposable
         internal XdmValue EvaluateAtomic(SchemaOperationInputs inputs)
         {
             Check(); ArgumentNullException.ThrowIfNull(inputs);
-            if(_owner._typedIdentity)throw new NotSupportedException("Typed identity does not admit general evaluation inputs.");
+            if(_owner._typedIdentity||_owner._typedNumeric)throw new NotSupportedException("Typed execution does not admit general evaluation inputs.");
             if (!ReferenceEquals(inputs.OperationIdentity, this)) throw new ArgumentException("Inputs belong to another operation.", nameof(inputs));
             inputs.ValidateNodeInputs(this);
             var context = inputs.CreateContext();

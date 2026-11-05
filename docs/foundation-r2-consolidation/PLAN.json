@@ -152,7 +152,7 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.59.0 internal authority-authorized numeric projection qualified: 25079 tests, 35 new controls, exact gates and unchanged API source/exported metadata/friends. Integer-first positive actual-type relations and strict primitive-kind matching precede plain computation; original evidence retained. Next bounded public typed numeric execution. Existing public identity active; no public numeric/native/freeze acceptance.",
+      "progress": "1.60.0 bounded public typed numeric profile qualified: 25114 tests, 35 new controls, exact frozen gates and unchanged exported metadata/friends. Original marker and authority are rechecked through plain computation. Next original node facts/nil/no-value and guarded atomization/provenance observation; native/freeze acceptance remains pending.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
@@ -163,7 +163,8 @@
       "performanceFollowup": "Local registry-copy attribution/reduction complete. Continue representative native/owner latency, retained-memory and PF-01-09 budget qualification; no owner budgets accepted.",
       "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
       "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
-      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json"
+      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json"
     },
     {
       "id": "P10",

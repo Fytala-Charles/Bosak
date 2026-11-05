@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.9   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.10   | 05-11-2026     | Execute bounded public typed numeric operations with live authorization (1.60.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -40,7 +42,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XPath.Api.Schema;
 /// <summary>Engine-created XPath session with an explicit bounded ordinary, numeric or typed identity profile.</summary>
-/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound $value supports single-atomic typed identity. Construction and compatibility remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
+/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound typed profiles support single-atomic identity and bounded exact numeric computation. Construction and compatibility remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
 public sealed class SchemaQuerySession : IDisposable
 {
     private bool _closed;
@@ -61,6 +63,7 @@ public sealed class SchemaQuerySession : IDisposable
     }
     internal static SchemaResult<T> Unsupported<T>() => new Outcome<T>(default!, false);
     internal static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
+    internal static SchemaResult<T> UnsupportedNumeric<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-NUMERIC-UNSUPPORTED");
     internal static SchemaResult<T> UnsupportedTyped<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-IDENTITY-UNSUPPORTED");
     private sealed class Outcome<T>(T value, bool supported,string diagnostic="BOSAK-ORDINARY-PROFILE-UNSUPPORTED") : SchemaResult<T>
     {
@@ -77,7 +80,7 @@ public sealed class SchemaQuerySession : IDisposable
     /// <param name="options">Existing options copied under the selected capture policy.</param>
     /// <param name="assessor">Optional borrowed schema assessor.</param>
     /// <param name="cancellationToken">Compilation/binding cancellation.</param>
-    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or an assessor-bound typed identity session; Unsupported for unavailable syntax, options or provider binding.</returns>
+    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or an assessor-bound typed identity/numeric session; Unsupported for unavailable syntax, options or provider binding.</returns>
     /// <exception cref="ArgumentException">The source, explicit limits or provider binding are invalid.</exception>
     /// <exception cref="OperationCanceledException">Compilation was canceled.</exception>
     public static SchemaResult<SchemaQuerySession> CompileXPath(string expression, SchemaQueryLimits limits, CompileOptions? options = null, ISchemaAssessor? assessor = null, CancellationToken cancellationToken = default)
@@ -85,12 +88,13 @@ public sealed class SchemaQuerySession : IDisposable
         ArgumentNullException.ThrowIfNull(expression); limits.Validate(); cancellationToken.ThrowIfCancellationRequested();
         if (assessor is not null)
         {
-            if(!TypedIdentityPlan.TryCompilePublic(expression,limits,options??CompileOptions.Default,cancellationToken,out var typedRuntime))return UnsupportedTyped<SchemaQuerySession>();
-            var typed=new SchemaQuerySession(typedRuntime!,limits,profile:TypedIdentityPlan.PublicProfile);
+            bool identity=TypedIdentityPlan.TryCompilePublic(expression,limits,options??CompileOptions.Default,cancellationToken,out var typedRuntime);
+            if(!identity&&!TypedNumericPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime))return UnsupportedTyped<SchemaQuerySession>();
+            var typed=new SchemaQuerySession(typedRuntime!,limits,profile:identity?TypedIdentityPlan.PublicProfile:TypedNumericPlan.Profile);
             try
             {
                 typed._binding=typed.BindAdvisorCandidate(assessor,cancellationToken);
-                if(typed._binding is null){typed.Dispose();return UnsupportedTyped<SchemaQuerySession>();}
+                if(typed._binding is null){typed.Dispose();return identity?UnsupportedTyped<SchemaQuerySession>():UnsupportedNumeric<SchemaQuerySession>();}
                 cancellationToken.ThrowIfCancellationRequested();return Supported(typed);
             }
             catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,typed.Dispose);throw;}
@@ -153,7 +157,7 @@ public sealed class SchemaQuerySession : IDisposable
         ArgumentNullException.ThrowIfNull(input); ArgumentNullException.ThrowIfNull(lifetime);
         cancellationToken.ThrowIfCancellationRequested();
         lock (_gate) ObjectDisposedException.ThrowIf(_closed, this);
-        if (compatibilityView is not null||originalAssessment is not null&&_binding is null) return _binding is null?Unsupported<SchemaQuerySnapshot>():UnsupportedTyped<SchemaQuerySnapshot>();
+        if (compatibilityView is not null||originalAssessment is not null&&_binding is null) return _binding is null?Unsupported<SchemaQuerySnapshot>():_runtime.TypedNumericProfile?UnsupportedNumeric<SchemaQuerySnapshot>():UnsupportedTyped<SchemaQuerySnapshot>();
         lock(_gate)if(_inputs.ContainsKey(input))throw new ArgumentException("Input is already admitted or entering.",nameof(input));
         _binding?.ValidateOrigin(originalAssessment,cancellationToken);
         var adapter = new InputAdmission(this, input, lifetime, cancellationToken);
@@ -235,7 +239,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==TypedNumericPlan.Profile?TypedNumericPlan.Descriptor:profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
@@ -336,7 +340,7 @@ public sealed class SchemaQueryOperation
         if(!_publicTyped)return SchemaQuerySession.Unsupported<XdmValue>();
         var typed=snapshot.TypedState??throw new ArgumentException("Snapshot has no bound typed input.",nameof(snapshot));
         var staged=_runtime.PrepareTypedRegistration(snapshot.Runtime,typed.Issuer,typed.Input,typed.Origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
-        return staged.TryCommitSingle(out var result)?SchemaQuerySession.Supported(result):SchemaQuerySession.UnsupportedTyped<XdmValue>();
+        return staged.TryCommitSingle(out var result)?SchemaQuerySession.Supported(result):_runtime.TypedNumericProfile?SchemaQuerySession.UnsupportedNumeric<XdmValue>():SchemaQuerySession.UnsupportedTyped<XdmValue>();
     }
     internal QueryRegisteredTypedContainer ReadTypedCandidate(SchemaQuerySnapshot snapshot,IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin,ISchemaTypedValue value)
     {
@@ -356,11 +360,11 @@ public sealed class SchemaQueryOperation
     public SchemaResult<XdmValue> ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode)
     {
         _runtime.Check(); ArgumentNullException.ThrowIfNull(targetType); ArgumentNullException.ThrowIfNull(episode);
-        return _publicTyped?SchemaQuerySession.UnsupportedTyped<XdmValue>():SchemaQuerySession.Unsupported<XdmValue>();
+        return _publicTyped?(_runtime.TypedNumericProfile?SchemaQuerySession.UnsupportedNumeric<XdmValue>():SchemaQuerySession.UnsupportedTyped<XdmValue>()):SchemaQuerySession.Unsupported<XdmValue>();
     }
     /// <summary>Evaluates captured XPath or XQuery; XSLT uses its typed transform producer instead.</summary>
     /// <param name="context">Dynamic inputs whose selected policy must be enforced.</param>
-    /// <returns>A scalar selected by the ordinary/numeric profile, or the same authenticated marked value in the typed identity profile.</returns>
+    /// <returns>A scalar selected by the ordinary/numeric profile, the same authenticated value for typed identity, or a plain computed result for typed numeric execution.</returns>
     /// <exception cref="NotSupportedException">Context state, numeric or structured inputs, or the result is outside this profile.</exception>
     /// <exception cref="ArgumentException">Inputs do not have exactly one admitted owner or contain invalid typed scalar evidence.</exception>
     /// <exception cref="ObjectDisposedException">The operation or a required admission is revoked.</exception>
@@ -368,7 +372,12 @@ public sealed class SchemaQueryOperation
     public XdmValue Evaluate(EvaluationContext context)
     {
         _runtime.Check(); ArgumentNullException.ThrowIfNull(context);
-        if(_publicTyped)return _runtime.EvaluatePublicTypedIdentity(context.CaptureTypedIdentityScalar(),_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+        if(_publicTyped)
+        {
+            var value=context.CaptureTypedIdentityScalar();
+            return _runtime.TypedNumericProfile?_runtime.EvaluatePublicTypedNumeric(value,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale)
+                :_runtime.EvaluatePublicTypedIdentity(value,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+        }
         // These exact cardinalities bound copying, not owner workload defaults. Capture rechecks both counts.
         var variables = context.SnapshotVariables();
         foreach (var value in variables.Values)ValidateInput(value);

@@ -49,7 +49,9 @@ Above all, FYTALA is about keeping the desire to discover alive—and passing th
 
 Bosak and [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) are **Apache-2.0**. Schema compilation and validation require no activation or subscription. Schema's XSD 1.1 implementation is staged; complete structural validation and full engine integration remain in development.
 
-An opt-in [typed identity integration profile](docs/foundation-public-typed-identity/GUIDE.md) binds a supported assessor to a query session and preserves an issued scalar through `$value`. Broader schema operations remain staged.
+An opt-in [typed identity integration profile](docs/foundation-public-typed-identity/GUIDE.md) binds a supported assessor to a query session and preserves an issued scalar through `$value`. An opt-in
+[typed numeric profile](docs/foundation-public-typed-numeric/GUIDE.md) computes bounded exact arithmetic and
+comparisons from authenticated scalar operands. Broader schema operations remain staged.
 
 
 [Quick start](#quick-start) | [Integration](docs/INTEGRATION.md) | [Worked examples](docs/xpath40-catalog/worked-examples/README.md) | [Roadmap](ROADMAP.md)

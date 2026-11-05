@@ -13,6 +13,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; authorized numeric projection controls (1.59.0)                                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Retain scope controls and reuse numeric authority fixture (1.60.0).                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Numerics;
@@ -38,7 +40,7 @@ public sealed class TypedNumericProjectionTests(ITestOutputHelper output)
         /// <inheritdoc/>
         public override string? DiagnosticCode=>throw new Exception("diagnostic poison");
     }
-    private sealed class NumericAuthority(Handle actual,Handle governing):ISchemaAuthority
+    internal sealed class NumericAuthority(Handle actual,Handle governing):ISchemaAuthority
     {
         internal readonly Handle Integer=new(),Decimal=new();internal readonly HashSet<ISchemaComponentHandle> Owned=new(ReferenceEqualityComparer.Instance){actual,governing};
         internal string Family="integer",ForceStage="";internal SchemaResultKind ForceKind=SchemaResultKind.Supported;internal bool Same,NullOutcome,NullBuiltin,ForeignBuiltin,Record=true;internal int UnsupportedValueReads;internal Action<string>? Hook;internal Action<ISchemaComponentHandle>? OwnHook;internal readonly List<string> Calls=[];

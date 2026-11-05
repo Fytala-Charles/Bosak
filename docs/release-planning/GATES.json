@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.59.0",
+  "sourceVersion": "1.60.0",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-typed-numeric-projection/README.md",
+      "w1ReadinessPlan": "docs/foundation-public-typed-numeric/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Integrate authorized numeric projection into a separately identified bounded public typed numeric profile with guarded arithmetic and plain computed results. Other R3/R4-R7 gates remain pending.",
+      "nextCoreTask": "Qualify original node facts/nil/no-value and guarded atomization/provenance observation. R3 remains InProgress; R4-R7 pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -151,7 +151,8 @@
       "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
       "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
       "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
-      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json"
+      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json"
     },
     {
       "id": "R4",

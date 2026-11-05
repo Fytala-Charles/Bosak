@@ -21,6 +21,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 04-11-2026     | Select bounded numeric constructor profile (1.52.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 05-11-2026     | Execute bounded public typed numeric operations with live authorization (1.60.0).          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Buffers;
 using Bosak.XPath.Core.Xdm;
@@ -59,6 +61,7 @@ internal sealed class ExactArithmeticPlan
     internal string ProfileName=>_constructorTarget!=0?ConstructorProfile:_division?DivisionProfile:_quotient?QuotientProfile:_extended?ScalarProfile:Profile;
     internal string DescriptorName=>_constructorTarget!=0?ConstructorDescriptorFormat:_division?DivisionDescriptorFormat:_quotient?QuotientDescriptorFormat:_extended?ScalarDescriptorFormat:DescriptorFormat;
     internal int SerializationCapacity=>_limits.StringCapacity;
+    internal bool IsTypedNumericCandidate=>!_serialize&&_constructorTarget==0&&_code.Any(i=>i.Code==Op.Variable)&&_code.All(i=>i.Code!=Op.Variable||i.Variable=="value");
     private ExactArithmeticPlan(Instruction[] code,int depth,ExactArithmeticLimits limits,bool extended,bool serialize,bool quotient,bool division,int constructorTarget)
     { _code=code;_stackDepth=depth;_limits=limits;_extended=extended;_serialize=serialize;_quotient=quotient;_division=division;_constructorTarget=constructorTarget; }
     private static int Priority(Op op)=>op is Op.Positive or Op.Negative ? 3 : op is Op.Multiply or Op.Divide or Op.IntegerDivide or Op.Remainder ? 2 : op is Op.Add or Op.Subtract ? 1 : Comparison(op)?0:-1;

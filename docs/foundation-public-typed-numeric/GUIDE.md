@@ -1,0 +1,15 @@
+# Public typed numeric integration
+
+Use `SchemaQuerySession.CompileXPath(expression, limits, options, assessor)` with a supported assessor and explicit positive limits. Compilation selects typed identity first for bare `$value`; numeric expressions such as `$value + 0`, `$value div 2` or `$value eq 7` select `bosak-typed-exact-numeric-v1` and descriptor `bosak-typed-exact-numeric-descriptor-v1`.
+
+Open an input snapshot with its explicit lifetime and optional original assessment, begin an operation, and use `ReadTypedValue` to admit a scalar issued under that input. Pass the returned authenticated value as the sole `value` variable in an otherwise supported isolated evaluation context. `Evaluate` returns a plain computed primitive. Keep the original admitted operand when another authenticated evaluation is needed; computed outputs carry no source evidence and cannot themselves substitute for an authenticated operand.
+
+The retained exact arithmetic grammar supports parentheses, unary plus/minus, addition, subtraction, multiplication, exact terminating `div`, `idiv`, `mod` and numeric comparisons. Expressions must reference unprefixed `$value` and no other variable. A pure literal expression belongs to the existing plain profiles. Constructors, `string(...)`, sequences, resource access and other variables are outside this typed profile. Bare `$value` remains the original marker-preserving identity profile.
+
+Authority resolves owned Integer before Decimal and proves sameness or derivation of the actual atomic type. An annotation is insufficient. Primitive payload kind must agree with that relation. Ownership, marker registration, authority and lifetime are checked before computation, at arithmetic checkpoints and before delivery. Projection happens inside the guarded engine route; callers do not strip source evidence into plain profiles.
+
+`ReadTypedValue` accepts exactly one atomic cell, including a singleton list. Empty/multiple-cell shapes return Unsupported before committing cache admission. Foreign, plain or ambiguous operands refuse before provider payload getters. Existing cache, origin, rollback, cancellation and deferred cleanup rules apply. Unsupported numeric admission/binding results use `BOSAK-TYPED-NUMERIC-UNSUPPORTED`; unsupported syntax before a profile is selected retains the typed compilation refusal.
+
+Limits bound open snapshots, cached values, typed atom count, numeric coefficient digits and decimal scale. They cover admitted operands and arithmetic intermediates/results. Nonterminating division is Unsupported; zero division raises `DivideByZeroException` with FOAR0001. Cancellation and revoked input/authority stop delivery. Resource policy is closed. These controls do not impose hard wall-clock or arbitrary provider graph budgets.
+
+Local warm allocation measurements include repeated authorization and provider outcome objects, with no payload getter replay. See the [receipt](evidence/PUBLIC-NUMERIC-ALLOCATION.json); this is a regression observation, not an accepted owner latency, retained-memory or native workload budget.

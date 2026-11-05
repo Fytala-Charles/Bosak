@@ -425,3 +425,6 @@ docs/foundation-public-typed-identity/** -text whitespace=cr-at-eol,-blank-at-eo
 
 # Preserve exact TA-08 authorized projection receipts and sealed manifest bytes.
 docs/foundation-typed-numeric-projection/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-09 public typed numeric qualification receipts.
+docs/foundation-public-typed-numeric/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
