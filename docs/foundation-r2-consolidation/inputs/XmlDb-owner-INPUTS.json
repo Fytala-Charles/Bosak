@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-01",
+  "sourceRevision": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+  "coreObservedRevision": "2cf3797962adc8c858639c6ca79a22369a7856c0",
+  "reviewDraftRevision": "0890592eaf79ccb462f9635dd33e7536862685bb",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "sourceHashes": {
+    "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": "ade4e0c6255d89442d02c4b1a5b2ed756983ab38c5829763dd60b29418f9e590",
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b",
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": "6ec0491a69eab73312268bfd428faaa425fb95b35ec131797ddcaf1484f08d11",
+    "src/Bosak.XmlDb.Storage/GenerationLease.cs": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d",
+    "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": "357bff44834dd357c2d0dd090120df73dd686d329d74b24fba2b58cd3f08cc5c",
+    "tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687",
+    "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs": "12ee62a5a8f4837177910032f6c7e56c2c648c7f1ea114095a6bcfc850b0aba2"
+  },
+  "draftHashes": {
+    "docs/foundation-r2-owner-review/PACKETS.json": "6ca6b7418d401c6bed7772bda907b7a74d02eb38b28f40accb430af0734895c9",
+    "docs/foundation-r2-ledger/MANIFEST.json": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+    "docs/foundation-r2-ledger/DECISIONS.md": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c",
+    "docs/foundation-r2-ledger/proposal/Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+    "docs/foundation-r2-ledger/proposal/QueryFacade.cs.txt": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37",
+    "docs/foundation-r2-ledger/proposal/OperationLifetime.cs.txt": "4666976ab15ddd2792ad00f7f2995e9f5623baa1bfb85ca5caac6d0731234b1e"
+  },
+  "responses": {
+    "O1-XmlDb.response.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+    "O4-XmlDb.response.json": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243"
+  },
+  "runtimeQualification": false,
+  "humanSignature": false,
+  "publicApiOrPinChanged": false,
+  "delivery": "Byte-identical local submissions placed in Bosak owner-review returns/; no remote message or Core review receipt claimed",
+  "recordedUtc": "2026-11-01T19:20:27.411416+00:00",
+  "deliveredCopies": {
+    "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O1-XmlDb.response.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+    "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O4-XmlDb.response.json": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243"
+  },
+  "deliveredUtc": "2026-11-01T19:21:04.222522+00:00",
+  "staticChecks": {
+    "strictDocumentation": true,
+    "documentationPortability": true,
+    "gitWhitespace": true,
+    "sourceAndDraftPins": true,
+    "returnFormatAndDraftBinding": true,
+    "sealedBosakPacketVerification": true,
+    "deliveredBytesEqual": true,
+    "hi1cSourcesUnchanged": true
+  },
+  "checkArtifacts": {
+    ".tools/r2-owner-review-docs.log": "8457be9848a79a9f4fd65ea904357cacae36e4190b0ed0c326b967745f9cf9ff",
+    ".tools/r2-owner-review-portability.log": "822c14cc391c4361ad25ea6418c5e1b368886c5b323c811221f9aab3a03a105a",
+    ".tools/r2-owner-review-diff.log": "9959f76582d181599ddacd7a1f4ad74db950d7f2046ab2f03958f4c12cd60449"
+  },
+  "inheritedRuntimeEvidence": {
+    "path": "docs/implementation/m2-controlled-pilot-concurrency-results.json",
+    "sha256": "36326d375b65b83a37c0b46da8842e1dd6fda383c64fd81411d84320339d41c8",
+    "casesPerPlatform": 4272,
+    "freshReviewRuntimeRun": false
+  }
+}

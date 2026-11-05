@@ -1,0 +1,54 @@
+{"id":"verbatim-scan-running","profile":"XPath40Experimental","phase":"success","result":"0,1,3,6","error":null,"errorCode":null}
+{"id":"verbatim-scan-empty","profile":"XPath40Experimental","phase":"success","result":"start","error":null,"errorCode":null}
+{"id":"verbatim-computed-xquery","profile":"XQuery31","phase":"success","result":"dyn|1 2 3","error":null,"errorCode":null}
+{"id":"scan-sequence-states","profile":"XPath40Experimental","phase":"success","result":"1:0|1:1|1:2","error":null,"errorCode":null}
+{"id":"jnode-map-unwrap","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"jnode-map-unwrap","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"jnode-parent-root","profile":"XPath40","phase":"success","result":"0|1","error":null,"errorCode":null}
+{"id":"jnode-parent-root","profile":"XPath40Experimental","phase":"success","result":"0|1","error":null,"errorCode":null}
+{"id":"jnode-generic-current","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"jnode-generic-current","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"jnode-generic-required","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"jnode-generic-required","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"jnode-identity-current","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Node comparison operator \u0027is\u0027 requires single node operands.","errorCode":null}
+{"id":"jnode-identity-current","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Node comparison operator \u0027is\u0027 requires single node operands.","errorCode":null}
+{"id":"atomic-nan","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"atomic-nan","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"atomic-incomparable","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"atomic-incomparable","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"extrema-required-mixed","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"extrema-required-mixed","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"extrema-identity-required","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"extrema-identity-required","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"extrema-empty","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"extrema-empty","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"extrema-family-refusal","profile":"XPath40","phase":"evaluate","result":null,"error":"FORG0006: fn:min/fn:max requires arguments of a single comparable type","errorCode":null}
+{"id":"extrema-family-refusal","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FORG0006: fn:min/fn:max requires arguments of a single comparable type","errorCode":null}
+{"id":"while-empty-no-action","profile":"XPath40","phase":"success","result":"1|2","error":null,"errorCode":null}
+{"id":"while-empty-no-action","profile":"XPath40Experimental","phase":"success","result":"1|2","error":null,"errorCode":null}
+{"id":"until-action-first","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"until-action-first","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"partial-nonpositive-frozen","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","errorCode":null}
+{"id":"partial-nonpositive-frozen","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","errorCode":null}
+{"id":"partial-nonpositive-draft","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","errorCode":null}
+{"id":"partial-nonpositive-draft","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","errorCode":null}
+{"id":"partial-residual-order","profile":"XPath40","phase":"success","result":"A-B","error":null,"errorCode":null}
+{"id":"partial-residual-order","profile":"XPath40Experimental","phase":"success","result":"A-B","error":null,"errorCode":null}
+{"id":"identity-nodes","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"identity-nodes","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"partition-groups","profile":"XPath40","phase":"success","result":"AA|B|A","error":null,"errorCode":null}
+{"id":"partition-groups","profile":"XPath40Experimental","phase":"success","result":"AA|B|A","error":null,"errorCode":null}
+{"id":"partition-empty-no-callback","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"partition-empty-no-callback","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"csv-empty-bypass","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"csv-empty-bypass","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"csv-invalid-separator","profile":"XPath40","phase":"evaluate","result":null,"error":"FOCV0002: The separator option must be a single character.","errorCode":null}
+{"id":"csv-invalid-separator","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOCV0002: The separator option must be a single character.","errorCode":null}
+{"id":"equality-nan-distinct","profile":"XPath31","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"equality-nan-distinct","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"equality-nan-distinct","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"equality-order-sensitive","profile":"XPath31","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"equality-order-sensitive","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"equality-order-sensitive","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"equality-options-refused","profile":"XPath40","phase":"evaluate","result":null,"error":"FOTY0013","errorCode":null}
+{"id":"equality-options-refused","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOTY0013","errorCode":null}

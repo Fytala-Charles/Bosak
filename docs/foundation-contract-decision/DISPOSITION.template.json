@@ -1,0 +1,17 @@
+{
+  "recordFormatVersion": 1,
+  "status": "Pending; template only",
+  "matrixSha256": null,
+  "ownerResponsesAndRequirements": null,
+  "namedStableScopeVersion": null,
+  "acceptedSignaturesAndHashes": null,
+  "deferredOrRejectedSignaturesWithReasons": null,
+  "requiredGapsRemaining": null,
+  "immutableSpecificationAdoption": null,
+  "guardedImplementationScope": null,
+  "decidedBy": null,
+  "decidedAt": null,
+  "implementationAuthorized": false,
+  "freezeAccepted": false,
+  "releaseAuthorized": false
+}

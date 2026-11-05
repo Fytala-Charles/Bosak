@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "members": 0,
+      "bytesPerOperation": 4712
+    },
+    {
+      "members": 1,
+      "bytesPerOperation": 5288
+    },
+    {
+      "members": 2,
+      "bytesPerOperation": 5544
+    },
+    {
+      "members": 8,
+      "bytesPerOperation": 8248
+    }
+  ],
+  "iterations": 1000,
+  "runtimeSha256": "31da67d41bee82373c27eeea2e5293b6064325b5c964252a5adc2dd55faf9e1c",
+  "scope": "Real snapshot leases, composite entry, scalar input capture, fresh child context and guarded result visitation; stub evaluator. Excludes compilation, provider acquisition, bound closed-resource policy, actual host execution and concurrency throughput."
+}

@@ -1,0 +1,19 @@
+--- a/tests/Bosak.XPath.Conformance/TestExecutor.cs
++++ b/tests/Bosak.XPath.Conformance/TestExecutor.cs
+@@ -59,6 +59,7 @@
+ //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
+ //                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
+ //                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
++//                      | Charles Korthout | 0.32  | 28-10-2026     | Isolated C37 pragma review; normal source and policy remain unchanged.          |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -378,7 +379,7 @@
+     // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
+     // keep their "XQuery syntax not supported" skip instead of being routed.
+     private static readonly Regex UnsupportedXQueryConstructRegex = new(
+-        @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
++        @"(?!)",                         // pragma extension expressions (# ... #)
+         RegexOptions.Compiled);
+ 
+     /// <summary>

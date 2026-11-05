@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "9950e6807f6d22c9091b867e68646177bfb480c9",
+  "scope": "Read-only K03 trace: original map-to-element-053, public XPath conversion controls, platform and existing provider codec/serialization controls. No source, fixture, assertion, baseline or version change.",
+  "specifications": [
+    "https://www.w3.org/TR/2008/REC-xml-20081126/#NT-NameStartChar",
+    "https://www.w3.org/TR/2006/REC-xml11-20060816/#NT-NameStartChar"
+  ],
+  "fixtures": {
+    "tests/qt4tests/fn/map-to-element.xml": "618d1654be15cb0e461412bc666f21d8f1a65881bba7d2527291b8cd3e637601"
+  },
+  "qt4Revision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+}

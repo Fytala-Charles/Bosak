@@ -1,0 +1,66 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k03-storage-render/README.md.html",
+      "sha256": "2fa9a0fb40724cb921c3b3caf2f9dd91f500c14957861432516fb29e9a176cdf"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k03-storage-render/docs_ARCHITECTURE.md.html",
+      "sha256": "fefd3ced825add23423c78fb39f82326cb5a4b5e17ecfc2e10f0e9f36f91581b"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k03-storage-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "60ac31f9f07168fa4730ae724482423d3b52b50f880084d392c02ca5e5bec14e"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k03-storage-render/docs_INTEGRATION.md.html",
+      "sha256": "f70dafc95f80875d6c1a0c84d7e58ceb9aeb420fefcc2adee8e06f79785ef5e0"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k03-storage-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "c4f17ae5f906313405b9f0bd8192141462407b0514aa295b7196fbcf6f567b88"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k03-storage-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "552d1154fb83e1eef4b15842ab9b0f6e5029d4327d421d2549717b313ff76437"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k03-storage-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "6a9679292c8d98601d690d31f4ce9ea4699ae18314a745513ed5b3f57f6c4576"
+    },
+    {
+      "source": "docs/xpath40-catalog/functions/map-to-element.md",
+      "html": ".guard-tmp/k03-storage-render/docs_xpath40-catalog_functions_map-to-element.md.html",
+      "sha256": "0156893514a277d9b66f98906f353eab441946a01c3b23b5828a80d360d4b138"
+    },
+    {
+      "source": "docs/conformance/k03-unicode-names/README.md",
+      "html": ".guard-tmp/k03-storage-render/docs_conformance_k03-unicode-names_README.md.html",
+      "sha256": "ee4af80b78cd873138d80361532433342a41808eb09311e6e86e456b555671d1"
+    },
+    {
+      "source": "docs/conformance/k03-name-validation/README.md",
+      "html": ".guard-tmp/k03-storage-render/docs_conformance_k03-name-validation_README.md.html",
+      "sha256": "c735373a1269a4da529884c9640821bd1fd126f90bf91317021a36c60fc134cf"
+    },
+    {
+      "source": "docs/conformance/k03-serialization/README.md",
+      "html": ".guard-tmp/k03-storage-render/docs_conformance_k03-serialization_README.md.html",
+      "sha256": "a28b11a3e476b6859bad75723ab90b0713acff690e9e9ee8c70bd449bb64c7d8"
+    },
+    {
+      "source": "docs/conformance/k03-name-storage/README.md",
+      "html": ".guard-tmp/k03-storage-render/docs_conformance_k03-name-storage_README.md.html",
+      "sha256": "31efdc0f6095ccdaafeb0c5b2030469d094188adf868ffff0da5e0a67adc1f06"
+    }
+  ]
+}

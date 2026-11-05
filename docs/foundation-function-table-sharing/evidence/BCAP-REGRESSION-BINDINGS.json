@@ -1,0 +1,17 @@
+{
+  "scope": "Separate private capture extension with current table sharing and preserved prototype methods; not shipping public SDK",
+  "controls": 83,
+  "repetitions": 2,
+  "engines": {
+    "Bosak.XPath.Api": "a06a74215cd1dff370140a3a920e92268e005b0b916ca3a9e686c26b35ed7122",
+    "Bosak.XPath.Compiler": "2cb1a8a896e5860f678fdf93be48f5120acd7352b55b82286f29919be99e9d44",
+    "Bosak.XPath.Core": "c29e848c7cf1f7b5b36b93211308dab1831ad9bb869719e97f95427dd85954ac",
+    "Bosak.XPath.Parser": "617a886055f2c123e5a31d01a1e68e17e55333569aa9251d12127228cdfa7d1e",
+    "Bosak.XPath.Providers": "5130a9de737a665fc560cc295e82d1533fd4f2c5cb0bed2b75048de1841ea4f7",
+    "Bosak.XPath.Runtime": "c1bc8958c644a0a812de4b4109dea91da752e8f69d3ab0bc803a7215fd4c9946",
+    "Bosak.XPath.Standard": "220c1b0b6bf3623c2282dd12a464dcb8599e75ecf5943121fb41e8b3eb142218",
+    "Bosak.XQuery": "c83228280434b0b429221b3e6c76c7e055b1edf5f3aa6f2fa6ac6bf2953b9350",
+    "Bosak.Xslt": "1fd403f6c98dca6b2b745dd458785522bf64609d2756ec5bea6649fcbae44046",
+    "Bosak.XPath.Runtime.Tests": "57455809e554ada3e547c66c4e9dcc32dbd1d09319b586706bfb22c5cb532883"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-29",
+  "schemaSourceBase": "2f4bf417131ba70e1653eda3d9148d83a6ef6d8a",
+  "coreSourceBase": "da6c08141c03af34b537599b3ff5eadb77240ac9",
+  "schemaCandidate": "0.8",
+  "coreCandidate": "1.34.1",
+  "uncommitted": true,
+  "schemaPassed": 397,
+  "schemaFailed": 0,
+  "newCountCases": 63,
+  "originalCohort": {
+    "total": 57,
+    "beforePassed": 23,
+    "beforeFailed": 34,
+    "afterPassed": 57,
+    "additionalBoundaryCases": 6
+  },
+  "priorExpectationChanges": 1,
+  "unchangedPriorExpectationsPassed": 333,
+  "publicOverloadsAdded": 0,
+  "coreProductionChanged": false,
+  "build": {
+    "errors": 0,
+    "warnings": 0,
+    "scope": "Schema solution with explicit core source override"
+  },
+  "inheritedCore": {
+    "passed": 24214,
+    "qt3": [
+      31397,
+      0,
+      424
+    ],
+    "qt4": [
+      8941,
+      0,
+      1918
+    ],
+    "sets": 230,
+    "freshFullRun": false,
+    "proof": "evidence/core-inheritance-proof.json"
+  },
+  "example": {
+    "profile": "decimal-sequence-assertions-v4",
+    "nativeCountAssertions": true,
+    "optionalAbsenceCount": true,
+    "sharedDeclaration": true,
+    "distinctStates": true,
+    "total": 15,
+    "ambiguousProjectionRefused": true,
+    "preserve": true,
+    "strip": true
+  },
+  "receipts": [
+    {
+      "group": "before57",
+      "passed": 23,
+      "failed": 34,
+      "path": "evidence/before57.trx",
+      "sha256": "6abd6db39a27a2dbf2df855015eaf1830bd016f108c08d0bb587b8509f63ef95"
+    },
+    {
+      "group": "initial",
+      "passed": 391,
+      "failed": 0,
+      "path": "evidence/initial.trx",
+      "sha256": "443c4bdedecf0b1ceb1f46f54570c7f0d35537bfbc0ee288ad1b7450d85fba60"
+    },
+    {
+      "group": "final",
+      "passed": 397,
+      "failed": 0,
+      "path": "evidence/final.trx",
+      "sha256": "b64b0caab3f6f09d83f295dac75041c6db27d6cbc7c99ed09608c4122a707ff4"
+    }
+  ],
+  "preservedDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16,
+    "schema-repeated-implementation": 33,
+    "schema-repetition-review": 9,
+    "schema-count-assertions": 17
+  },
+  "prefixedCallsSupported": false,
+  "otherAggregatesAdmitted": false,
+  "productConsumerPinsChanged": false,
+  "publication": false
+}

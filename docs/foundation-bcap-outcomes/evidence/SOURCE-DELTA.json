@@ -1,0 +1,34 @@
+{
+  "Bosak.XPath.Runtime/ExecutionGate.cs": {
+    "originalSha256": "371cee85435390c45827c83ff8ebe33d82d85d9b52ed9403f246af53c214cddc",
+    "candidateSha256": "2d4169416737368c357cfbd2a6f2f2d3b68aa633c2c1f5ffc40aedca3c8e1628"
+  },
+  "Bosak.Xslt/Api/SchemaHostSessionCompilation.cs": {
+    "originalSha256": "26ebe054f88cc4682b0df6d9617e2881f9f60216f878b6e3912053aff4d7de15",
+    "candidateSha256": "3ce09012de79198ab4d763acb94fea125077122bd529bfd902adfb1e34a356cb"
+  },
+  "Bosak.Xslt/Api/XsltExecutable.cs": {
+    "originalSha256": "c2055cf39e1d58b06cb1347847589677996a16029791ce19b8ad4f05f35e8d32",
+    "candidateSha256": "ae2adfc149488cfe46c48786f0331d215b3a5b18bbf4e23f23a022fe7919fa1a"
+  },
+  "Bosak.Xslt/Capture/XsltCaptureSession.cs": {
+    "originalSha256": "89fb54e650f2e7ae7f5c88ff49b3f1f6f4d9a7fdfd82d56e2a8e5cd00fd5e9f4",
+    "candidateSha256": "8a7ad6633b82fde5509825be7c2dfa8d4b88d0ed1bf883e67e4b0ff1a1b8aee8"
+  },
+  "Bosak.XPath.Runtime/Vm/EvaluationContext.cs": {
+    "originalSha256": "9dcd861bc4159fbeb6e079f4d07e28e7de1f5da155468d28a3f9ee0e6764b16c",
+    "candidateSha256": "85efa9eb7e89127f8ae33a345b8d88e25f8a125506c02025259740c27addfb82"
+  },
+  "Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs": {
+    "originalSha256": "f92dba7ec05860db88a29d7b687ef1d9a083099faf1620648bb33d2480d6cfde",
+    "candidateSha256": "575c4962b3126daba2280a9e9dc840464fd663fe6e662d2ec5f59258011a9919"
+  },
+  "Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": {
+    "originalSha256": "539c82586a99c9e2e08a2319eb9dbe0e2f23fd824bed67ca221e1ba9fc0f316d",
+    "candidateSha256": "411b55b2d49276460213cee8cb552eea66aec5aac42272d76a1308ccacd4a99b"
+  },
+  "Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+    "originalSha256": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "candidateSha256": "5f0a46b767efbb70370f07d8aec73f2f64e1df1dc3a2ba5177b6afb86f730749"
+  }
+}

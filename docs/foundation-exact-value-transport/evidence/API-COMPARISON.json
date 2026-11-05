@@ -1,0 +1,42 @@
+{
+  "assemblies": 11,
+  "previousTypesRetained": 310,
+  "previousRowsRetained": 6355,
+  "previousDeclarationsUnchanged": true,
+  "friendsIdentical": true,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "newTypes": 0,
+  "addedRows": 14,
+  "reviewedFactorySignatures": 4,
+  "reviewedExactAccessors": 2,
+  "witnessSourceSha256": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364",
+  "previousInventorySha256": "213a6615d24e6c0b118bf56f207afb6241b54ba08ff91c4bfe7defc833918491",
+  "witnessSignaturesMatch": true,
+  "xdmValueInstanceFieldRowsIdentical": true,
+  "xdmValueInstanceFields": [
+    "L Bosak.XPath.Core.Xdm.XdmValue._double:System.Double:Private, InitOnly:",
+    "L Bosak.XPath.Core.Xdm.XdmValue._integer:System.Int64:Private, InitOnly:",
+    "L Bosak.XPath.Core.Xdm.XdmValue._kind:Bosak.XPath.Core.Xdm.XdmValueKind:Private, InitOnly:",
+    "L Bosak.XPath.Core.Xdm.XdmValue._reference:System.Object:Private, InitOnly:[System.Runtime.CompilerServices.NullableAttribute((Byte)2)]",
+    "L Bosak.XPath.Core.Xdm.XdmValue._schemaTypeName:System.String:Private, InitOnly:[System.Runtime.CompilerServices.NullableAttribute((Byte)2)]",
+    "L Bosak.XPath.Core.Xdm.XdmValue._userSchemaTypeName:System.String:Private, InitOnly:[System.Runtime.CompilerServices.NullableAttribute((Byte)2)]"
+  ],
+  "addedRowsDetail": [
+    "A Bosak.XPath.Core.Xdm.XdmValue.FromDecimal(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=):",
+    "A Bosak.XPath.Core.Xdm.XdmValue.FromDecimal(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "A Bosak.XPath.Core.Xdm.XdmValue.FromInteger(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=):",
+    "A Bosak.XPath.Core.Xdm.XdmValue.FromInteger(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "A Bosak.XPath.Core.Xdm.XdmValue.get_BigIntegerValue():",
+    "A Bosak.XPath.Core.Xdm.XdmValue.get_ExactDecimalValue():",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromDecimal:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromDecimal:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromInteger:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromInteger:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.get_BigIntegerValue:Public, HideBySig, SpecialName:Standard, HasThis:System.Numerics.BigInteger :None:none:required=:optional=:attrs=():",
+    "M Bosak.XPath.Core.Xdm.XdmValue.get_ExactDecimalValue:Public, HideBySig, SpecialName:Standard, HasThis:Bosak.XPath.Core.Xdm.XdmExactDecimal :None:none:required=:optional=:attrs=():",
+    "P Bosak.XPath.Core.Xdm.XdmValue.BigIntegerValue:System.Numerics.BigInteger():attrs=",
+    "P Bosak.XPath.Core.Xdm.XdmValue.ExactDecimalValue:Bosak.XPath.Core.Xdm.XdmExactDecimal():attrs="
+  ],
+  "qualificationScope": "Exact witness comparison and unchanged previous metadata. No claim of complete host numeric routing, source compatibility of untyped defaults, native ABI/owner acceptance or freeze."
+}

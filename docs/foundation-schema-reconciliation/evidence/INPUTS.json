@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-02",
+  "nativeRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeSources": {
+    "src/Bosak.Schema/ActivatedLicense.cs": "24f17e74adff9bdd682b841b92a684b746e0cfc68cbe1576ab674476079331d3",
+    "src/Bosak.Schema/AssemblyInfo.cs": "865e48ecc9ea09f78cbc5208adc64b5fee7816909f81a15225f44f88e27e01e4",
+    "src/Bosak.Schema/Bosak.Schema.csproj": "a1bade5fe569dfb0b2480edcac9102a043345a5bd02468e573b7adcd52ee724d",
+    "src/Bosak.Schema/License.cs": "2fd3fac43ebf5b69cfe8b9850ea41c506579dfb4d5c95355e0143bac8259dc68",
+    "src/Bosak.Schema/LicenseTier.cs": "7eb0f6d75ceb02e9f3498493880b3b3effe3fc4a7fcb4e4f38ef744d929ea0ed",
+    "src/Bosak.Schema/LicenseValidationException.cs": "6ac5bdaa049a94856c01dd6304867c304e0ff11285d5cc67a02a30a8e343825f",
+    "src/Bosak.Schema/SchemaAwareXslt.cs": "3a690217b31ab1222b40863cd8fa66368650ee6392abb6c3be5ad500e58fab9c",
+    "src/Bosak.Schema/SchemaServices.cs": "e4f3da62eb88979fb518c62356a23d9b7c17cad433aeb3c590649e9ffb7ed346",
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "src/Bosak.Schema/Compilation/SchemaCompileOptions.cs": "7a2445f11bab2446b16b22260ca1bbdefa9ff8c278bf56569dfb33567713111e",
+    "src/Bosak.Schema/Compilation/SchemaCompiler.cs": "c49da2651c7ed04a5a0d84e9f9c174cebc2395268f561818d028680c877b6c13",
+    "src/Bosak.Schema/Compilation/SchemaResolution.cs": "da8662cd0f10412578c48291cf3f862c3cdc526450ab5b649ae139e338dc0ddb",
+    "src/Bosak.Schema/Model/AssertionDefinition.cs": "07167ef0c02b6fa64816b567beab73a034e51b95e1914c024e6b639fe8dcdaf6",
+    "src/Bosak.Schema/Model/CompiledSchema.cs": "076fb215bbe59fd5a943c68723a53b59b212986d81cf47eef1d1a4d313f73336",
+    "src/Bosak.Schema/Model/DefaultAttributesDefinition.cs": "3b9e8ebfa334a2263a3bf9b691afb3dcbefcb9c5e1cff5bcaf9ebbc21067a701",
+    "src/Bosak.Schema/Model/ElementDeclaration.cs": "80ba0b93731397f68614e3d47022fb3dc90e8306ce1d4d7759ffc356369f97c2",
+    "src/Bosak.Schema/Model/OpenContentDefinition.cs": "9f6d3304b4c297c74b60933f8a1a2ab772f62c2d7a732af81f83b98a7bdcccdb",
+    "src/Bosak.Schema/Model/SchemaDiagnostic.cs": "ec2678dc44c0f370c30e7e795bd02b775d622320fda50546d94716f7d7bbeec0",
+    "src/Bosak.Schema/Model/SimpleTypeDeclaration.cs": "97081a6323259a0680c1e4eb947c4e7a9c13a5d55dfb5daed5e59af751208d34",
+    "src/Bosak.Schema/Model/XsdLanguageVersion.cs": "46492c27207405cc2532daa10d040689596abcd8180dd82b9e6aa77cb240b2d7",
+    "src/Bosak.Schema/Validation/SchemaValidationResult.cs": "7f97982eb642cb0c87b31f419974eb4edf71559f7bc24035e5a7b0ec9187ee39",
+    "src/Bosak.Schema/Validation/XsdValidationService.cs": "c9f523db3f42b5f24c0dcd8b02a5685a311600bcb63c876a076a69a0a7fd3ae8"
+  },
+  "historicalDependencies": {
+    "Bosak.XPath.Api": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "adb4f2b74df02975462f20c0896aa1f877d362cbd6fe00203fc08661e3794fc1"
+    },
+    "Bosak.XPath.Compiler": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "41d39d1340fc495299f4f4adc62a9e7ab29f0617ab311238f92612c4bfdf72a4"
+    },
+    "Bosak.XPath.Core": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "615c874dde4a240c4ca9d23cdc82a0e2693a9940b14a1bf193302d5903e65486"
+    },
+    "Bosak.XPath.Parser": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "bdc43090a6361db7d44e81dc90bb063956d02ec0ee3166f27d62274ffef126c0"
+    },
+    "Bosak.XPath.Providers": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "b0df93101264284d12df1d79ea08a35f2346e8a5e81c40d7681205f936ae95ca"
+    },
+    "Bosak.XPath.Runtime": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "e635e1139367aa227b2d4fcc929bd3ff8af51857412037691e66706d5ec8f945"
+    },
+    "Bosak.XPath.Standard": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "cd932a32786831fb658429bbe6195afe22d1671f41eaa0c6e3da651378f5442b"
+    },
+    "Bosak.XQuery": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "c274d9abae01afdf327c588c7703635bb17145dee940ecda9dae1e02aec4f986"
+    },
+    "Bosak.Xslt": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment\\src\\Bosak.Schema\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "c661549d66461f335b8def0a9bd2c2bde163a0f8e6af1e8f008402c6f89e9c48"
+    }
+  },
+  "observedNativeAssemblySha256": "411422f9005123ef18082081350df2a1342e6d667ad7435d4d529924b536558e",
+  "probeSourceSha256": "620f681fa880512957312a60f588f52eb2e90f5ed8174402f2fc5cd7ef02e557",
+  "ownerWorktreeUnchanged": true,
+  "productionChanged": false,
+  "bcapAdapterImplemented": false,
+  "nativeOwnerAcceptance": false
+}

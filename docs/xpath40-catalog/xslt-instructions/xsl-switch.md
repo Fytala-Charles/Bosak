@@ -4,6 +4,8 @@
   <p>Practical reference: Bosak XSLT 4.0 surface</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited selection; incomparable-comparison blocker**. C06-H02: both fresh host controls still return empty instead of XPTY0004. Ordinary dispatch success does not certify full general-comparison semantics. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **Grammar/version review — 21 October 2026:** [Current pinned mapping](../SWITCH-ARRAY-SELECT-GRAMMAR.md) and [complete dispatch comparison](../examples/dispatch-grammar/README.md) distinguish known-instruction recognition, effective XPath version, raw result types and actual text delivery. Public1.23.2 is verified; historical provenance gaps remain.
 
 
@@ -35,11 +37,11 @@ Route a task by a single priority selector. Match a selector against branch test
 
 ## 6. Language Alignment
 
-Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Tests are values compared with the selector, not boolean guards. The otherwise branch handles absent/unrecognized values.
+Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Tests are values compared with the selector using general comparison, not boolean guards. The otherwise branch handles absent/unrecognized values. Incomparable numeric/Boolean operands currently return empty instead of the required XPTY0004 in both hosts (C06-H02); the ordinary string-dispatch example does not cover that gap.
 
 ## 7. Applicability
 
-Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Tests are values compared with the selector, not boolean guards. The otherwise branch handles absent/unrecognized values.
+Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Tests are values compared with the selector using general comparison, not boolean guards. The otherwise branch handles absent/unrecognized values. Incomparable numeric/Boolean operands currently return empty instead of the required XPTY0004 in both hosts (C06-H02); the ordinary string-dispatch example does not cover that gap.
 
 ## 8. Structure
 
@@ -59,7 +61,7 @@ The case combines source values, the named feature, and explicit output formatti
 
 ## 11. Consequences
 
-Benefit: Match a selector against branch test values. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Tests are values compared with the selector, not boolean guards. The otherwise branch handles absent/unrecognized values.
+Benefit: Match a selector against branch test values. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Tests are values compared with the selector using general comparison, not boolean guards. The otherwise branch handles absent/unrecognized values. Incomparable numeric/Boolean operands currently return empty instead of the required XPTY0004 in both hosts (C06-H02); the ordinary string-dispatch example does not cover that gap.
 
 ## 12. Implementation
 

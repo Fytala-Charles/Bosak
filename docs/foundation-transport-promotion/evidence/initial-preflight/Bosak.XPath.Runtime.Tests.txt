@@ -1,0 +1,7 @@
+VSTest version 18.6.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\trx\Bosak.XPath.Runtime.Tests.trx
+
+Passed!  - Failed:     0, Passed:   281, Skipped:     0, Total:   281, Duration: 906 ms - Bosak.XPath.Runtime.Tests.dll (net10.0)

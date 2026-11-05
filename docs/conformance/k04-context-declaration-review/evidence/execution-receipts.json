@@ -1,0 +1,2167 @@
+[
+  {
+    "name": "original-qt3-contextDecl-014-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-014-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3042007000185549,
+    "log": "original-qt3-contextDecl-014-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-014",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-014-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-014-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.41712379999808036,
+    "log": "original-qt3-contextDecl-014-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-014",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare variable $x := . + 5;\n        declare context item := 17;\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>22</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-015-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-015-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30986459998530336,
+    "log": "original-qt3-contextDecl-015-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-015",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-015-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-015-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18638510000891984,
+    "log": "original-qt3-contextDecl-015-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-015",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": "\n        declare variable $y := /works/employee;\n        declare context item := $y[9];\n        declare variable $x external := if (./*) then fn:position() else 0;\n        ($x, $y)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-016-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-016-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17604370001936331,
+    "log": "original-qt3-contextDecl-016-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-016",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-016-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-016-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1866742999991402,
+    "log": "original-qt3-contextDecl-016-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-016",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare variable $y := (<a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a>);\n        declare context item := $y[3];\n        declare variable $x external := fn:position();\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-017-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-017-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17980529999476857,
+    "log": "original-qt3-contextDecl-017-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-017",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-017-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-017-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19134620000841096,
+    "log": "original-qt3-contextDecl-017-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-017",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare variable $y := <root><a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a></root>;\n        declare context item := $y;\n        declare variable $x external := fn:last();\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-018-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-018-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18131330001051538,
+    "log": "original-qt3-contextDecl-018-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-018",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-018-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-018-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18776880000950769,
+    "log": "original-qt3-contextDecl-018-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-018",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item := last() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-019-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-019-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.190073100005975,
+    "log": "original-qt3-contextDecl-019-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-019",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-019-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-019-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18395350000355393,
+    "log": "original-qt3-contextDecl-019-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-019",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item := position() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-020-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-020-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2458246999885887,
+    "log": "original-qt3-contextDecl-020-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-020",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-020-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-020-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2357367999793496,
+    "log": "original-qt3-contextDecl-020-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-020",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:integer external; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-021-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-021-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17875729998922907,
+    "log": "original-qt3-contextDecl-021-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-021",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-021-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-021-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19699930000933819,
+    "log": "original-qt3-contextDecl-021-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-021",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:integer := 'London'; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-022-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-022-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18526779999956489,
+    "log": "original-qt3-contextDecl-022-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-022",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-022-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-022-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1939620999910403,
+    "log": "original-qt3-contextDecl-022-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-022",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": " declare context item as xs:string := 2; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPTY0004\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-023-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-023-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18342519999714568,
+    "log": "original-qt3-contextDecl-023-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-023",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-023-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-023-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1830991000169888,
+    "log": "original-qt3-contextDecl-023-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-023",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer+ := (1 to 17)[position() = 5];\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-028-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-028-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1778684000018984,
+    "log": "original-qt3-contextDecl-028-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-028",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-028-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-028-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17994489998091012,
+    "log": "original-qt3-contextDecl-028-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-028",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item := 3; . + 4 ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-029-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-029-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18526540001039393,
+    "log": "original-qt3-contextDecl-029-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-029",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-029-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-029-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18415950000053272,
+    "log": "original-qt3-contextDecl-029-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-029",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item := <a>bananas</a>;\n        string-length()\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-030-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-030-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1847669999988284,
+    "log": "original-qt3-contextDecl-030-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-030",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-030-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-030-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1871576000121422,
+    "log": "original-qt3-contextDecl-030-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-030",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item := <a id=\"qwerty\">bananas</a>;\n        string-length(@id)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>6</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-031-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-031-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1853889999911189,
+    "log": "original-qt3-contextDecl-031-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-031",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-031-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-031-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1816683000070043,
+    "log": "original-qt3-contextDecl-031-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-031",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item := contains(?, \"e\");\n        .(\"raspberry\")\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-032-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-032-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1779456999793183,
+    "log": "original-qt3-contextDecl-032-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-032",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-032-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-032-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18567189999157563,
+    "log": "original-qt3-contextDecl-032-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-032",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := (1 to 17)[20]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-033-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-033-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17941380001138896,
+    "log": "original-qt3-contextDecl-033-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-033",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-033-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-033-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18874449998838827,
+    "log": "original-qt3-contextDecl-033-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-033",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := (1 to 17)[position() gt 5]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-034-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-034-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1873265000176616,
+    "log": "original-qt3-contextDecl-034-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-034",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-034-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-034-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18248070002300665,
+    "log": "original-qt3-contextDecl-034-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-034",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item as xs:integer := (1 to 17)[position() = 5]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>5</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-035-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-035-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17251669999677688,
+    "log": "original-qt3-contextDecl-035-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-035",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-035-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-035-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18596329999854788,
+    "log": "original-qt3-contextDecl-035-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-035",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:integer := (1 to 17)[position() = 5];\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>5</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-036-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-036-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18241169999237172,
+    "log": "original-qt3-contextDecl-036-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-036",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-036-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-036-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18854060000739992,
+    "log": "original-qt3-contextDecl-036-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-036",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:integer := current-date();\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-037-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-037-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18787840000004508,
+    "log": "original-qt3-contextDecl-037-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-037",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-037-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-037-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19566160000977106,
+    "log": "original-qt3-contextDecl-037-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-037",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:integer := <a>23</a>;\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-038-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-038-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1895506999862846,
+    "log": "original-qt3-contextDecl-038-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-038",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-038-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-038-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19724139999016188,
+    "log": "original-qt3-contextDecl-038-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-038",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:anyURI := \"http://www.w3.org/\";\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-039-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-039-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19005520001519471,
+    "log": "original-qt3-contextDecl-039-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-039",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-039-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-039-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18578580001485534,
+    "log": "original-qt3-contextDecl-039-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-039",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:double := 1.234;\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-042-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-042-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18263809999916703,
+    "log": "original-qt3-contextDecl-042-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-042",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-042-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-042-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18088109997916035,
+    "log": "original-qt3-contextDecl-042-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-042",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item external := 17;\n        . = 17\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-043-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-043-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18094300001394004,
+    "log": "original-qt3-contextDecl-043-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-043",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-043-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-043-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1880574000242632,
+    "log": "original-qt3-contextDecl-043-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-043",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n        declare context item as xs:integer external := 17;\n        . = 17\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-044-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-044-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1836250999767799,
+    "log": "original-qt3-contextDecl-044-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-044",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-044-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-044-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18349599998327903,
+    "log": "original-qt3-contextDecl-044-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-044",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:double external := 17; . = 17",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-045-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-045-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19002899999031797,
+    "log": "original-qt3-contextDecl-045-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-045",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-045-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-045-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18524160000379197,
+    "log": "original-qt3-contextDecl-045-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-045",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": " declare context item as xs:double external; . = 17",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPDY0002\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-053-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-053-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19240610001725145,
+    "log": "original-qt3-contextDecl-053-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-053",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-053-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-053-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1943461000046227,
+    "log": "original-qt3-contextDecl-053-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-053",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "any-of: none matched. [Expected error XPDY0002, got: Parse error at position 8: XPST0003: Unexpected token Name; Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name]",
+      "expression": "\n        declare variable $p := \"base-uri\";\n        declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n        declare context item := $f();\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-055-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-055-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18653920001816005,
+    "log": "original-qt3-contextDecl-055-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-055",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-055-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-055-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18930929998168722,
+    "log": "original-qt3-contextDecl-055-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-055",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n      declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n      declare context item := <e/>;\n      declare variable $p := \"local-name\";\n      $f()\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>\"e\"</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-059-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-059-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18431240000063553,
+    "log": "original-qt3-contextDecl-059-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-059",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-059-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-059-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18813590001082048,
+    "log": "original-qt3-contextDecl-059-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-059",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n      declare context item := 15 to 25;\n      . = 17\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-060-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-060-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1807742000091821,
+    "log": "original-qt3-contextDecl-060-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-060",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-060-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-060-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18411659999401309,
+    "log": "original-qt3-contextDecl-060-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-060",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n      declare context item := ();\n      . = 17\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-061-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-061-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1825261999911163,
+    "log": "original-qt3-contextDecl-061-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-061",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-061-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\original-qt3-contextDecl-061-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18871319998288527,
+    "log": "original-qt3-contextDecl-061-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-061",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "\n      declare context item := 'x';\n      declare variable $a := .;\n      1[$a]\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-arithmetic-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-baseline-arithmetic-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26539680000860244,
+    "log": "control-qt3-C24-baseline-arithmetic-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-arithmetic",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-arithmetic",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "3 + 4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-variable-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-baseline-variable-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26431050000246614,
+    "log": "control-qt3-C24-baseline-variable-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-variable",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-variable",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare variable $x := 3; $x+4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-external-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-baseline-external-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24859939998714253,
+    "log": "control-qt3-C24-baseline-external-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-external-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-external-focus",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": ".",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1935312999994494,
+    "log": "control-qt3-C24-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-internal",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := 3; .+4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-typed-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-typed-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19680209999205545,
+    "log": "control-qt3-C24-typed-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-typed-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-typed-internal",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item as xs:integer := 3; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>3</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-default-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-external-default-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18988330001593567,
+    "log": "control-qt3-C24-external-default-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-default",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-default",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item external := 5; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>5</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-supplied-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-external-supplied-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24874259997159243,
+    "log": "control-qt3-C24-external-supplied-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-supplied",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-supplied",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item as xs:integer external; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-overrides-default-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-external-overrides-default-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2578124000283424,
+    "log": "control-qt3-C24-external-overrides-default-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-overrides-default",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-overrides-default",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item external := 5; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-wrong-internal-type-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-wrong-internal-type-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19461899998714216,
+    "log": "control-qt3-C24-wrong-internal-type-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-wrong-internal-type",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-wrong-internal-type",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item as xs:integer := 'London'; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-wrong-external-type-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-wrong-external-type-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2750120999990031,
+    "log": "control-qt3-C24-wrong-external-type-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-wrong-external-type",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-wrong-external-type",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item as xs:integer external; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-empty-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-empty-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21377570001641288,
+    "log": "control-qt3-C24-empty-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-empty-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-empty-internal",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := (); .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-plural-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-plural-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.201936299999943,
+    "log": "control-qt3-C24-plural-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-plural-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-plural-internal",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := (1,2); .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-duplicate-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-duplicate-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19467310002073646,
+    "log": "control-qt3-C24-duplicate-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-duplicate",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-duplicate",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XQST0099, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := 1; declare context item := 2; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XQST0099\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-singleton-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-singleton-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1909227000141982,
+    "log": "control-qt3-C24-singleton-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-singleton-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-singleton-focus",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := 3; concat(position(), \":\",last())",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-string-value>1:1</ns0:assert-string-value>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-forward-variable-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-forward-variable-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19343370001297444,
+    "log": "control-qt3-C24-forward-variable-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-forward-variable",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-forward-variable",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare context item := $x; declare variable $x := 7; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-variable-uses-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-variable-uses-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2091188000049442,
+    "log": "control-qt3-C24-variable-uses-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-variable-uses-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-variable-uses-focus",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare variable $x := . + 5; declare context item := 17; $x",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>22</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-cycle-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-cycle-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1922408000100404,
+    "log": "control-qt3-C24-cycle-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-cycle",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-cycle",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XQDY0054, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare variable $x := .; declare context item := $x; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XQDY0054\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    }
+  },
+  {
+    "name": "control-qt3-C24-comments-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-qt3-C24-comments-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20759249999537133,
+    "log": "control-qt3-C24-comments-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-comments",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-comments",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 14: XPST0003: Unexpected token Name",
+      "expression": "declare (:c:) context (:c:) item := 3; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>3</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 14: XPST0003: Unexpected token Name"
+    }
+  }
+]

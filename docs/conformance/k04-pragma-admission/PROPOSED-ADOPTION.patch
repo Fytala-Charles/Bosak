@@ -1,0 +1,63 @@
+--- a/tests/Bosak.XPath.Conformance/TestExecutor.cs
++++ b/tests/Bosak.XPath.Conformance/TestExecutor.cs
+@@ -59,6 +59,7 @@
+ //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
+ //                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
+ //                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
++//                      | Charles Korthout | 0.32  | 28-10-2026     | Admit qualified ignored-pragma fallback; retain all independent dependency guards.|
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -282,24 +283,11 @@
+     }
+ 
+     /// <summary>
+-    /// True when the expression uses only XQuery constructs the Bosak.XQuery pipeline
+-    /// supports today: prolog-less queries, the basic prolog declarations (namespace,
+-    /// default element/function namespace, default collation, version), and full FLWOR
+-    /// (for/let/where/order by/count/group by/window). Queries using constructors,
+-    /// switch/typeswitch, try, unordered/ordered, or unsupported prolog forms
+-    /// stay skipped. String literals and comments are stripped before matching.
++    /// Indicates whether an expression may enter XQuery routing. The bounded grammar
++    /// refusal set is empty after qualified pragma adoption; dependency admission stays
++    /// separate and invalid syntax is reported by the parser.
+     /// </summary>
+-    internal static bool CanHandleAsXQuery(string expr)
+-    {
+-        var stripped = StripLiteralsAndComments(expr).TrimStart();
+-
+-        // Existing lexical normalization and the XQuery parser handle doubled quotes;
+-        // raw triple-double-quote substrings are not an unsupported-grammar predicate.
+-        if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
+-            return false;
+-
+-        return true;
+-    }
++    internal static bool CanHandleAsXQuery(string expr) => true;
+ 
+     /// <summary>
+     /// Heuristic: the expression uses XQuery-only grammar that our XPath parser cannot
+@@ -375,12 +363,6 @@
+         @"|\b(sliding|tumbling)\s+window\b",
+         RegexOptions.Compiled);
+ 
+-    // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
+-    // keep their "XQuery syntax not supported" skip instead of being routed.
+-    private static readonly Regex UnsupportedXQueryConstructRegex = new(
+-        @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
+-        RegexOptions.Compiled);
+-
+     /// <summary>
+     /// Removes string literals (with doubled-quote escapes) like
+     /// <see cref="StripLiteralsAndComments"/>, but replaces every XQuery comment with a
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@
+ 
+ Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
+ 
+-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,340/0/481** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions.
++- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,395/0/426** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions. The owner-approved K04 pragma update supersedes 31,340/0/481; its 55 eligible pragma admissions retain all 426 remaining skip names and reasons, including two independent exact-XQ10 pragma exclusions.
+ - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
+ 
+ ## Architecture Overview

@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "88960f3bdfa5373e1dd385fb589023544194f5aa",
+  "scope": "Isolated exact harness prototype removes only the raw triple-double-quote refusal; reuse existing literal/comment stripping and XQuery parser. Preserve every other routing/schema/dependency guard. No tracked source, normal admission or baseline change pending complete evidence and owner disposition.",
+  "candidate": "1.26.11",
+  "qt3": [
+    31145,
+    0,
+    676
+  ],
+  "fixtures": "a9ae998676389d2ca5f6c31e332af1eba0f8f33f1d94ec5673620ae75476cd2a"
+}

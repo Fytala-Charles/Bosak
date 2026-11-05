@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/README.md.html",
+      "sha256": "e9b7ee1190c7e2de2f09aafcc89e561b4582c32292755c79356a49e7b0cb63a9"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "9fd4a6ae2bcf45cd87ca17a2ed5509505f59fb831992fb42250f3ae8a9d26e47"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "93d0cd148089f12bea7ed7488cedbf808711c806c0b87d9c3502f44ea4812411"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "6a40f80761c0bc5907834ccd0f308b2775ad4f334919d23825cc49ac63fbcb4c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "0e09af083a9f85766c9fa0ad1ce9873827a1fbd2a80cb389d1e466dd533daaad"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "14e2155fb031b5f12df5e1cb4935bd66a6d23554ca39dfd0cdf33fb38fb3916e"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "aa1e131d57412f76ae7f0133be9f112a2b79a559ea7cb42c9e24491d54b59a37"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "22f873544de5964ca0e1edfbc7f93bfc04a8f8db14eedb069ad34c05fd3f4fe7"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-review/README.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_conformance_k04-cldr-review_README.md.html",
+      "sha256": "44e222dc8260f208577ce49af8c799f64dd477716979bc7446c1e9cb8d8583a8"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-fix/README.md",
+      "html": ".guard-tmp/k04-cldr-fix-render/docs_conformance_k04-cldr-fix_README.md.html",
+      "sha256": "c988cb29674d70df8c84fde15e25e7a77c3bd1c6caaa8cace6e9c0f0f93378e6"
+    }
+  ]
+}

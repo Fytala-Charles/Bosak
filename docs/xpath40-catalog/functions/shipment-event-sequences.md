@@ -4,6 +4,10 @@
   <p>Frozen 4.0 — identities, adjacent processing steps and event boundaries</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Use explicit presence/count guards for missing IDs; no complete carrier-state machine or unverified coercion contract. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
+**C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
+
 **Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
 
 
@@ -11,7 +15,7 @@
 
 **Shipment-event sequence checks — Frozen 4.0.** Functions: [fn:all-equal](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [fn:contains-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [fn:starts-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [fn:ends-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence).
 Initial engine delivery: [Bosak PR #83](https://github.com/Fytala-Charles/Bosak/pull/83),
-immutable revision [`532d04f4`](https://github.com/Fytala-Charles/Bosak/commit/532d04f40c3f1cbad93752e3158fc3cdfd4c7c39),
+immutable revision [`532d04f4`](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39),
 REQ-118 4.0-S1 part 2. Definitions reviewed **2026-10-11** against immutable
 [QT4CG function source `a014e1b4`](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml). This review pin does not recover
 the unavailable historical adopted specification snapshot.
@@ -120,6 +124,8 @@ when the identifier contract permits it. NaN grouping is an equality contract,
 not evidence that invalid measurement values are acceptable.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Contiguous segment/prefix/suffix matching with order and duplicates; Deep-equal default, asymmetric custom comparators and argument order; Empty requirements, boolean/empty callback conversion and atomic all-equal. **Boundaries:** Use explicit presence/count guards for missing IDs; no complete carrier-state machine or unverified coercion contract. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Source: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs),
 `ContainsSubsequence`, `StartsWithSubsequence`, `EndsWithSubsequence` and

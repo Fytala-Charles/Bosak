@@ -1,0 +1,5 @@
+# Bounded cost and cancellation observations
+
+2 November 2026. Measure the unchanged, fully qualified isolated candidate delivered in 2ebe3663. No engine/specification-semantic change, new quota default or performance acceptance. Inherit the immutable invocation/profile basis from [full qualification](../foundation-bcap-profile/SPEC-BASIS.md).
+
+Cold means first compile/first capture in a fresh harness process, excluding process launch and host workload preparation. Warm means repeated capture after 20 successful warmups. Process-wide precise managed allocation includes dedicated transform workers; it is not peak live memory, reserved stack, native allocation or an OS quota. Cancellation observations begin at the request made during a controlled pause in actual secondary serialization, and include unpause and caller scheduling. They do not bound a long XPath expression between cooperative checkpoints. Native providers, realistic workloads, OS/process kill policy and accepted owner budgets remain separate.

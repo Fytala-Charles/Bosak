@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-29",
+  "schemaVersion": "0.9 candidate",
+  "schemaBase": "119f766a9116fe2c5f78048892d467a24e7ce8d5",
+  "coreBase": "066ee8cc10c1365fe3708c0ea6ab8dd660a8e401",
+  "uncommitted": true,
+  "schemaPassed": 451,
+  "newPresenceCases": 54,
+  "legacyExpectationsUnchanged": 395,
+  "explicitAdoptionChanges": 2,
+  "coreVersion": "1.34.1",
+  "coreFullRuns": "inherited; source identity verified"
+}

@@ -1,0 +1,97 @@
+[
+  {
+    "id": "current-schema-refusal",
+    "expression": "count(amount) eq 2",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-schema-refusal",
+    "expression": "count ( amount ) eq 2",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-schema-refusal",
+    "expression": "count(amount) eq count(amount)",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-schema-refusal",
+    "expression": "fn:count(amount) eq 2",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-schema-refusal",
+    "expression": "sum(amount) gt 0",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "actual-engine-count",
+    "expected": 0,
+    "count": 0,
+    "kind": "Integer",
+    "schemaType": null,
+    "comparison": true,
+    "prefixedHostCount": 0,
+    "rootHasNoTypedValue": true
+  },
+  {
+    "id": "actual-engine-count",
+    "expected": 1,
+    "count": 1,
+    "kind": "Integer",
+    "schemaType": null,
+    "comparison": true,
+    "prefixedHostCount": 1,
+    "rootHasNoTypedValue": true
+  },
+  {
+    "id": "actual-engine-count",
+    "expected": 2,
+    "count": 2,
+    "kind": "Integer",
+    "schemaType": null,
+    "comparison": true,
+    "prefixedHostCount": 2,
+    "rootHasNoTypedValue": true
+  },
+  {
+    "id": "actual-engine-count",
+    "expected": 16,
+    "count": 16,
+    "kind": "Integer",
+    "schemaType": null,
+    "comparison": true,
+    "prefixedHostCount": 16,
+    "rootHasNoTypedValue": true
+  },
+  {
+    "id": "bare-count-child",
+    "supported": true,
+    "outcome": "Valid",
+    "hostFunctionCount": 1
+  },
+  {
+    "id": "native-validation-before-count",
+    "lexical": "bad",
+    "hostCount": 2,
+    "outcome": "Invalid",
+    "hasDocument": false
+  },
+  {
+    "id": "native-validation-before-count",
+    "lexical": "79228162514264337593543950336",
+    "hostCount": 2,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  }
+]

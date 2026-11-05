@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"format-date-1","kind":"HarnessException","exceptionType":"System.IO.FileLoadException","message":"Could not load file or assembly \u0027Bosak.XQuery, Version=1.28.1.0, Culture=neutral, PublicKeyToken=null\u0027. The located assembly\u0027s manifest definition does not match the assembly reference. (0x80131040)"}

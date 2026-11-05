@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-29",
+  "consumerHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "consumerStatus": [],
+  "coreHead": "fe8dda05a9dc003a122920ef41a0e2507e59c69c",
+  "schemaHead": "00ef44490687869998959b89e578b85fb24e7ced",
+  "method": "Read-only contract inspection; no implementation or execution",
+  "files": [
+    {
+      "path": "src/Bosak.Braid.Application/ISourceInspector.cs",
+      "sha256": "c056718a34813df36972456d6b813ee20e9815f30db4f3c7e380c60023909aa9"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/SourceAuthoringCapabilities.cs",
+      "sha256": "183ae30a2c80826e2cdf8b628c623c5c007c3fe20d01499795e3bbc07040e197"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/ILiteralElementEditor.cs",
+      "sha256": "9d33d83c702d239eac6c27e4e8dcaaaf565096b1673054f95d6f140a8b6dc4da"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/IResourceReader.cs",
+      "sha256": "4075450840f46a10b665ad49b785f752a5f40b2256cf29049888819eb2eb3428"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/RestrictedExportSession.cs",
+      "sha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+      "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.LiteralElements.cs",
+      "sha256": "517e76cbef9932dd1520c1a49b5a2a0b535b43dda6dbb57da4307b7cd17878a1"
+    }
+  ]
+}

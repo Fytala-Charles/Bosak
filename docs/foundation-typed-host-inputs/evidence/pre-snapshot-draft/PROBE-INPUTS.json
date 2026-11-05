@@ -1,0 +1,9 @@
+{
+  "baseFixtureSha256": "845ae1ce8260fd3567552556a256d20c07f942a1eb3c63894bc372b19baf9096",
+  "probeSourceSha256": "f719b151b8a706f296263c775c8861472497e9ec609f3a9c88ee4bd9103f40eb",
+  "typedNodeSourceSha256": "2476d907185517b794311eb6f7207e160eaddb6b8000a23e1e55fb12cf024741",
+  "probeAssemblySha256": "e147478293324dd2358801cae4f4a53764f61a2052555c7dd7231d827dfbb400",
+  "setupReflectionOnly": true,
+  "perEvaluationReflection": false,
+  "typedProductionCaptureAndResult": true
+}

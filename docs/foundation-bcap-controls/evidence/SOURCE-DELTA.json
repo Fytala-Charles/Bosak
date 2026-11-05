@@ -1,0 +1,26 @@
+{
+  "Bosak.XPath.Runtime/ExecutionGate.cs": {
+    "originalSha256": "371cee85435390c45827c83ff8ebe33d82d85d9b52ed9403f246af53c214cddc",
+    "candidateSha256": "af902a52638eb5a5b9a11d9d6d3f1623ee7d603239a54e4eb58b82227e172666"
+  },
+  "Bosak.Xslt/Api/SchemaHostSessionCompilation.cs": {
+    "originalSha256": "26ebe054f88cc4682b0df6d9617e2881f9f60216f878b6e3912053aff4d7de15",
+    "candidateSha256": "f7e9ba55183dfb8aa8dd2d806d4e22273c96659a1b0f546798e1dfcb654d9ae6"
+  },
+  "Bosak.Xslt/Api/XsltExecutable.cs": {
+    "originalSha256": "c2055cf39e1d58b06cb1347847589677996a16029791ce19b8ad4f05f35e8d32",
+    "candidateSha256": "726ace30917316a8b4f52bd866164d8793b7f9b717840ecf5d431fdaec04b006"
+  },
+  "Bosak.XPath.Runtime/Vm/EvaluationContext.cs": {
+    "originalSha256": "9dcd861bc4159fbeb6e079f4d07e28e7de1f5da155468d28a3f9ee0e6764b16c",
+    "candidateSha256": "31dd1e9b329d6baebf03d12e8fcb9d93c36ecb7945c1323358de8b11f38b21f2"
+  },
+  "Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs": {
+    "originalSha256": "f92dba7ec05860db88a29d7b687ef1d9a083099faf1620648bb33d2480d6cfde",
+    "candidateSha256": "248405365164bcba1323cae785cf61ff6362cfbeffa6cf93302895a59ade736d"
+  },
+  "Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+    "originalSha256": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "candidateSha256": "9b9e84265602b551b0758c894b1a2eec85d028af0285701f1bf8a38a9f54eecc"
+  }
+}

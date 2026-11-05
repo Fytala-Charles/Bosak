@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/README.md.html",
+      "sha256": "4f4c69f7fe861a32280ef9079b61e62ece1629cb152fff4aeac0e362e4f69f7c"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "e7094958f36675c43e7dc4a8efdd3f26528d588302b8221de7880a460c0a595f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "45d6346788654084c0390a8e8ef3dce5d03c4c0a7ef8fc34ac0366d38dab4cc7"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "e961a3fd717eec1e6ba5df49a7b8c7339d6499a17457d2a54bb1eee6b58f1db0"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "ebe94062fdcfd4b6e94c78fc8fb2997e09f913bc7fd3abf6db184f818bad33e4"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "59b1552e63181ac9293b0747c9fd6a33fd270e8f61b0f2f93941ab10b40eec8f"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "06c40446f9d44a39046de8d75c4f0b4b3254dcee5e4e614bd6f5e271db86f414"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "c7df32c8b196629f7c6a6fecda2eeb23e50f59667be4d22948232c00914a836b"
+    },
+    {
+      "source": "docs/conformance/k04-date-optional-fix/README.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_conformance_k04-date-optional-fix_README.md.html",
+      "sha256": "9f4c8a24a94defaed9494db572c2877c0b129faa01fd09cc5766980b3a6be2fc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CHANGED-31-CONTRACT-INVENTORY.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_xpath40-catalog_CHANGED-31-CONTRACT-INVENTORY.md.html",
+      "sha256": "8c2f74bda0ac6d4c6a5246c193dadab458e003da235f1a7b20247e4e3bd05bd7"
+    },
+    {
+      "source": "docs/xpath40-catalog/examples/changed31-contracts/README.md",
+      "html": ".guard-tmp/k04-date-optional-fix-render/docs_xpath40-catalog_examples_changed31-contracts_README.md.html",
+      "sha256": "5be2d0094899caebd88bed6384e96fc54c5ad10d5e84002a750fd467062eceb3"
+    }
+  ]
+}

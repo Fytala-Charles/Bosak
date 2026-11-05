@@ -1,0 +1,50 @@
+[
+  {
+    "suite": "qt3",
+    "name": "format-date-en152",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "CB",
+        "satisfied": "false"
+      }
+    ],
+    "expression": "format-date($b, '[M01]', 'en', 'CB', ())"
+  },
+  {
+    "suite": "qt3",
+    "name": "format-dateTime-en152",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "CB",
+        "satisfied": "false"
+      }
+    ],
+    "expression": "format-dateTime($b, '[M01]', 'en', 'CB', ())"
+  },
+  {
+    "suite": "qt4",
+    "name": "format-date-en152",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "CB",
+        "satisfied": "false"
+      }
+    ],
+    "expression": "format-date($b, '[M01]', 'en', 'CB', ())"
+  },
+  {
+    "suite": "qt4",
+    "name": "format-dateTime-en152",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "CB",
+        "satisfied": "false"
+      }
+    ],
+    "expression": "format-dateTime($b, '[M01]', 'en', 'CB', ())"
+  }
+]

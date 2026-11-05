@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 0.7   | 08-10-2026     | REQ-118 4.0-S3b: StringTemplate token kind for XPath 4.0 string templates (`...`)     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 08-10-2026     | REQ-118 4.0-S4: PipelineArrow (->) and MappingArrow (=!>) token kinds                 |
+//                      | Charles Korthout | 0.9  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Parser.Lexer;
@@ -243,4 +244,6 @@ internal enum TokenKind : short
     // ---- XQuery validate expression ----------------------------------
     /// <summary>The <c>validate</c> keyword of XQuery validate expressions.</summary>
     KeywordValidate,
+    /// <summary>A complete XQuery pragma, including its raw implementation-defined contents.</summary>
+    Pragma,
 }

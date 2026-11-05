@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><AssemblyName>LegacyCaller</AssemblyName><TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><IsPackable>false</IsPackable><NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(RetainedCallerSource)" Link="Program.cs" />
+    <PackageReference Include="Bosak.XPath.Api" Version="[1.34.2]" />
+  </ItemGroup>
+  <Target Name="RequirePinnedCaller" BeforeTargets="CoreCompile" Condition="!Exists('$(RetainedCallerSource)')">
+    <Error Text="Specify RetainedCallerSource pointing to the exact committed caller source." />
+  </Target>
+</Project>

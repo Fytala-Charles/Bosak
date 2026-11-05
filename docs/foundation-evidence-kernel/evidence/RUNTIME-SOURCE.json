@@ -1,0 +1,28 @@
+{
+  "revision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "files": {
+    "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+    "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+    "src/Bosak.XPath.Runtime/Bosak.XPath.Runtime.csproj": "9da431668ba3c8f6a6a0f48d5daa9050f5656ec58cc145bc710c33cce0e8d00a",
+    "src/Bosak.XPath.Runtime/ExecutionGate.cs": "ee444799ed993c037febcbc96ac54c5fc92fcb6ca932c619e57e8ce609b3bf31",
+    "src/Bosak.XPath.Runtime/Functions/CoercedFunctionItem.cs": "53a3e7c781433e8dd1ffb4139fba100f9cb4fb7aaaa548d37cc4ae429d6166cf",
+    "src/Bosak.XPath.Runtime/Functions/DelegateFunctionItem.cs": "ae72e7021c6233ae13e36905d73037b82b6b55e83166092852a0fa86a1b024ab",
+    "src/Bosak.XPath.Runtime/Functions/InlineFunctionItem.cs": "8f9982380b24e9e760295acee849f52d27d233d8410247246a6706744cebb2d0",
+    "src/Bosak.XPath.Runtime/Functions/XPathFunction.cs": "976325768d221710b1b500d577d9c2f81f94642ae2612de5b78330188f3f6f05",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourcePolicy.cs": "79ea0b32dbf999f47571ed26d07a7f363251fb89bcd28a7d65fae1312f2393a2",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourceReceipt.cs": "955ed31ed76a36bca21a490c4a82301b3d42d59c3f28fc5651e614eaf481e163",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourceRequest.cs": "5d8ab21e279e3dbe07de249dfa9254e612a552ec9194bf6770b2f9a97d5d1ba4",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourceResponse.cs": "fbd26b74a829553bee3c254bad861bf2f8ccb6c18b0ff598177b36194b26e5b4",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourceRoute.cs": "ce95857836c7fa438b4ffd0aae0d827ad72d6cd88295806b190ba568e1529018",
+    "src/Bosak.XPath.Runtime/Resources/ControlledSchemaResolver.cs": "fb751cbc4344e4fd027d41e4a80fb4f1660bc7496a60b87a5efd125e8244716c",
+    "src/Bosak.XPath.Runtime/Resources/IControlledResourceAuthority.cs": "477c990c455f8ee542d4e94dde0fbb3d38a029dc6631460027173056c80c1584",
+    "src/Bosak.XPath.Runtime/Vm/DecimalFormat.cs": "86a887605ec3796ccbaeb754a3f804ccfc111c06c5e302fc20311870d7de46c6",
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "4789d5478afa2a056a0c19397e8343b08bc67e7ff765c8ce011f1b1c7344481b",
+    "src/Bosak.XPath.Runtime/Vm/SinglePassXdmSequence.cs": "af08e6c5bdf869c3ff12a2f6d0ff965aaa7c840438e730b06e770096d3bc4df9",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee",
+    "src/Bosak.XPath.Runtime/Vm/XPathError.cs": "bea1580da62384c43933e369634fadfa662dc2d5574a6a5f502a044ec9a4456b",
+    "src/Bosak.XPath.Runtime/Vm/XdmConversions.cs": "816dc7afd13339cd9bf10160137d21ef9ee17558c2478aba04bfd8ebee33a6cf",
+    "src/Bosak.XPath.Runtime/Xdm/XdmValueComparer.cs": "3887b8017ef5109420896041f9f0b50784367e59b678a539cf24347169c2e120"
+  },
+  "modifications": "Only VmEngine TryCast success wrapper in guarded cohort; project references/assembly identity rewritten for isolated build."
+}

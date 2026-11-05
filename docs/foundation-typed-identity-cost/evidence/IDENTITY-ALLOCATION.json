@@ -1,0 +1,9 @@
+{
+  "bytesPerRead": {
+    "compiled-vm": 4104
+  },
+  "warmupReads": 100,
+  "measuredReads": 1000,
+  "scope": "Owned input, pre-held current raw operation, actual compiled VM with current pre/post endpoint checks and one selected marked scalar from a three-cell batch; no payload getters, no accepted owner/latency/retained-memory budgets.",
+  "budgetsAccepted": false
+}

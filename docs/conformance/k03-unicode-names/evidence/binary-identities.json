@@ -1,0 +1,8 @@
+{
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Conformance40.dll": "ff10dc7b6cce3c5f4c3c22f8dea28bce5913786c2cd9605935e5e2b673d684de",
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Api.dll": "3d252fa213b9ba3cc9f58cce12bc65bcdfc825b2a30531658306bfa18b5cceee",
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Standard.dll": "28986ff3c7c901973c51cd6823568a112fec34d9e7c4aae432520c52e38c949f",
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Providers.dll": "66f3e45ade941918a06d935ce30c7ef73751e538f3c4ed4279ee237018933f87",
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Runtime.dll": "1c42eb00e9dae8b9249313d574e220552e18829200e54e944b5ad1b7e8b7c499",
+  ".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance40/release/Bosak.XPath.Core.dll": "4bf23b6ccbacb657f1bbc4bc9ee3febfdb558af6f03544f2bead4966fe22e80f"
+}

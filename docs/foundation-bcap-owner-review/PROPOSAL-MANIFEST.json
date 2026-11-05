@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-02",
+  "purpose": "Exact additive public declaration review and bounded private feasibility binding; not public SDK implementation or owner acceptance",
+  "previousR2ProposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "publicTypes": 47,
+  "publicRows": 651,
+  "declarations": {
+    "inputs/declaration-inputs.json": "46d170f43b50d3c246be0567068d99c810e580601e021a531357fb7566512194",
+    "inputs/proposal/ExactNumeric.cs.txt": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364",
+    "inputs/proposal/OperationLifetime.cs.txt": "4666976ab15ddd2792ad00f7f2995e9f5623baa1bfb85ca5caac6d0731234b1e",
+    "inputs/proposal/Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+    "inputs/proposal/QueryFacade.cs.txt": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37",
+    "inputs/proposal/XQuery.cs.txt": "9c22a8d957f51f49d4214eaee760c498e95bb5cce00a0b3d7ad12ab26d5c00aa",
+    "inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b",
+    "inputs/proposed-api-0.json": "ddee75d656497e48ac2a85c83fd1db2a5b084e0f36e8085bb518538aa4e14426",
+    "inputs/proposed-api-1.json": "ddee75d656497e48ac2a85c83fd1db2a5b084e0f36e8085bb518538aa4e14426"
+  },
+  "qualifiedEvidenceManifests": {
+    "docs/foundation-bcap-outcomes/MANIFEST.json": "b9aa0957635c2d0ba35fd4acfbd5d9d5cd9634d0d48b71c991166d380bb65023",
+    "docs/foundation-bcap-profile/MANIFEST.json": "5bbbcb1cad99a041935ac962b449a46edd3783c74a530320c8d1496fe52116f7",
+    "docs/foundation-bcap-cost/MANIFEST.json": "b46e0bc6611cd264d768928a19d9fa5de3f03c262cfa5220472dda6279223d58"
+  },
+  "qualifiedArchives": {
+    "qualified-source.zip": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-profile\\qualified-source.zip",
+      "sha256": "0092136de8ead2f5d98e14c399df5271c732d14b9c58347c761f65c2bc7d1d5c"
+    },
+    "qualified-binaries.zip": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-profile\\qualified-binaries.zip",
+      "sha256": "d3745fda62e988faf2b9ee3d8ac7ae4521d73c6c45f496b4411980ff7535e42b"
+    }
+  },
+  "qualifiedEngineAssemblies": {
+    "Bosak.LanguageServer": "9fe81b90cc09ae25f3c03153715b12086e93de426fd5a82eec0b4f7017cb58d2",
+    "Bosak.XPath.Api": "cf3b312a6e259d021bef065245d2be68fb8c8460f90fa8dc00827f9c2b54b6c3",
+    "Bosak.XPath.Compiler": "f3e6ab9339a77d251ae08a65cbe20008de6bde5c5712b84089959ed710a507d8",
+    "Bosak.XPath.Core": "fdbb3a22a572372fbda3aa1f4ffc59df90527b3a3bbbd8f7e41d3bac902c12fe",
+    "Bosak.XPath.Parser": "39b911e9a699de9f2e6a029ef1455d72094fe988493311ced64d8708381597d9",
+    "Bosak.XPath.Providers.Database": "83f20a1bdc516d9e485d090ce6de516272bc9e0607c289168207f18446861156",
+    "Bosak.XPath.Providers": "160b7f515a7380b1a8c4b5f66b1a8313958e929bbe5d7657ba338064c68bc462",
+    "Bosak.XPath.Runtime": "02d55b1347ef22eff9707df71cca04f5e23d623998f8ce60d5a51c6f6d0f6395",
+    "Bosak.XPath.Standard": "23178b52f5c8d02bd10d7fc2d7e9401df9d367feb75d911fdb5d501e6e4de3cc",
+    "Bosak.XQuery": "20983d9c68b39644065116d342d9df90fc5a904209bba7594fcca5255c3b655a",
+    "Bosak.Xslt": "32472e850430d70f8f9043f73ad058905b0205d7a8111d623bded3188845bc04"
+  },
+  "runtimePublicDeclarationsUnchanged": true,
+  "proposedBodiesExecute": false,
+  "nativeConsumerAcceptance": false,
+  "performanceBudgetsAccepted": false
+}

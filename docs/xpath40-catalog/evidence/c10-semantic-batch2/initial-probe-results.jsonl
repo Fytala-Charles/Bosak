@@ -1,0 +1,74 @@
+{"id":"cleanup-xml-whitespace","profile":"XPath40","phase":"success","result":"A  B \u00A0","error":null,"errorCode":null}
+{"id":"cleanup-xml-whitespace","profile":"XPath40Experimental","phase":"success","result":"A  B \u00A0","error":null,"errorCode":null}
+{"id":"cleanup-no-truncation","profile":"XPath40","phase":"success","result":"ABCDE","error":null,"errorCode":null}
+{"id":"cleanup-no-truncation","profile":"XPath40Experimental","phase":"success","result":"ABCDE","error":null,"errorCode":null}
+{"id":"cleanup-grapheme-required","profile":"XPath40","phase":"success","result":"2","error":null,"errorCode":null}
+{"id":"cleanup-grapheme-required","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"errorCode":null}
+{"id":"array-empty-member","profile":"XPath40","phase":"success","result":"2|0","error":null,"errorCode":null}
+{"id":"array-empty-member","profile":"XPath40Experimental","phase":"success","result":"2|0","error":null,"errorCode":null}
+{"id":"array-one-level","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"array-one-level","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"hof-vacuous","profile":"XPath40","phase":"success","result":"false|true","error":null,"errorCode":null}
+{"id":"hof-vacuous","profile":"XPath40Experimental","phase":"success","result":"false|true","error":null,"errorCode":null}
+{"id":"hof-empty-predicate","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"hof-empty-predicate","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"files-overlap","profile":"XPath40","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"files-overlap","profile":"XPath40Experimental","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"files-empty-pattern","profile":"XPath40","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"files-empty-pattern","profile":"XPath40Experimental","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"files-last-empty","profile":"XPath40","phase":"success","result":"abc|","error":null,"errorCode":null}
+{"id":"files-last-empty","profile":"XPath40Experimental","phase":"success","result":"abc|","error":null,"errorCode":null}
+{"id":"uri-form-vs-raw-plus","profile":"XPath40","phase":"success","result":" |\u002B|\u002B","error":null,"errorCode":null}
+{"id":"uri-form-vs-raw-plus","profile":"XPath40Experimental","phase":"success","result":" |\u002B|\u002B","error":null,"errorCode":null}
+{"id":"uri-boolean-false","profile":"XPath40","phase":"success","result":"443","error":null,"errorCode":null}
+{"id":"uri-boolean-false","profile":"XPath40Experimental","phase":"success","result":"443","error":null,"errorCode":null}
+{"id":"uri-string-false-observed","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"uri-string-false-observed","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"compare-exact","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"compare-exact","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"compare-empty","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"compare-empty","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"compare-frozen-keywords","profile":"XPath40","phase":"success","result":"-1","error":null,"errorCode":null}
+{"id":"compare-frozen-keywords","profile":"XPath40Experimental","phase":"success","result":"-1","error":null,"errorCode":null}
+{"id":"compare-draft-keywords","profile":"XPath40","phase":"compile","result":null,"error":"XPST0017: Unknown keyword argument \u0027value1\u0027 in call of compare.","errorCode":null}
+{"id":"compare-draft-keywords","profile":"XPath40Experimental","phase":"compile","result":null,"error":"XPST0017: Unknown keyword argument \u0027value1\u0027 in call of compare.","errorCode":null}
+{"id":"calendar-local-month","profile":"XPath40","phase":"success","result":"31","error":null,"errorCode":null}
+{"id":"calendar-local-month","profile":"XPath40Experimental","phase":"success","result":"31","error":null,"errorCode":null}
+{"id":"calendar-century","profile":"XPath40","phase":"success","result":"28|29","error":null,"errorCode":null}
+{"id":"calendar-century","profile":"XPath40Experimental","phase":"success","result":"28|29","error":null,"errorCode":null}
+{"id":"calendar-fraction-required","profile":"XPath40","phase":"success","result":"4.267","error":null,"errorCode":null}
+{"id":"calendar-fraction-required","profile":"XPath40Experimental","phase":"success","result":"4.267","error":null,"errorCode":null}
+{"id":"numeric-annotation-empty-required","profile":"XPath40","phase":"success","result":"(map)","error":null,"errorCode":null}
+{"id":"numeric-annotation-empty-required","profile":"XPath40Experimental","phase":"success","result":"(map)","error":null,"errorCode":null}
+{"id":"numeric-nan-string","profile":"XPath40","phase":"success","result":"false|true","error":null,"errorCode":null}
+{"id":"numeric-nan-string","profile":"XPath40Experimental","phase":"success","result":"false|true","error":null,"errorCode":null}
+{"id":"numeric-op-callable","profile":"XPath40","phase":"success","result":"5","error":null,"errorCode":null}
+{"id":"numeric-op-callable","profile":"XPath40Experimental","phase":"success","result":"5","error":null,"errorCode":null}
+{"id":"sequence-default-direction","profile":"XPath40","phase":"success","result":"4,3,2","error":null,"errorCode":null}
+{"id":"sequence-default-direction","profile":"XPath40Experimental","phase":"success","result":"4,3,2","error":null,"errorCode":null}
+{"id":"sequence-whole-replicate","profile":"XPath40","phase":"success","result":"1,2,1,2","error":null,"errorCode":null}
+{"id":"sequence-whole-replicate","profile":"XPath40Experimental","phase":"success","result":"1,2,1,2","error":null,"errorCode":null}
+{"id":"queue-boundary","profile":"XPath40","phase":"success","result":"1,2,0,3,1","error":null,"errorCode":null}
+{"id":"queue-boundary","profile":"XPath40Experimental","phase":"success","result":"1,2,0,3,1","error":null,"errorCode":null}
+{"id":"hash-golden","profile":"XPath40","phase":"success","result":"612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4","error":null,"errorCode":null}
+{"id":"hash-golden","profile":"XPath40Experimental","phase":"success","result":"612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4","error":null,"errorCode":null}
+{"id":"hash-absence","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"hash-absence","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"closure-cycle","profile":"XPath40","phase":"success","result":"A,B","error":null,"errorCode":null}
+{"id":"closure-cycle","profile":"XPath40Experimental","phase":"success","result":"A,B","error":null,"errorCode":null}
+{"id":"map-build-combine","profile":"XPath40","phase":"success","result":"A,A","error":null,"errorCode":null}
+{"id":"map-build-combine","profile":"XPath40Experimental","phase":"success","result":"A,A","error":null,"errorCode":null}
+{"id":"map-filter-required-boolean","profile":"XPath40","phase":"success","result":"(map)","error":null,"errorCode":null}
+{"id":"map-filter-required-boolean","profile":"XPath40Experimental","phase":"success","result":"(map)","error":null,"errorCode":null}
+{"id":"distinct-nan","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 49: XPST0003: Unexpected token RParen","errorCode":null}
+{"id":"distinct-nan","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 49: XPST0003: Unexpected token RParen","errorCode":null}
+{"id":"shipment-contiguous","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"shipment-contiguous","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"shipment-asymmetric","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"shipment-asymmetric","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"sort-descending","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 43: XPST0003: Expected RBrace but found Dollar","errorCode":null}
+{"id":"sort-descending","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 43: XPST0003: Expected RBrace but found Dollar","errorCode":null}
+{"id":"ranking-boundary-observed","profile":"XPath40","phase":"success","result":"25","error":null,"errorCode":null}
+{"id":"ranking-boundary-observed","profile":"XPath40Experimental","phase":"success","result":"25","error":null,"errorCode":null}
+{"id":"ranking-published-example","profile":"XPath40","phase":"success","result":"25","error":null,"errorCode":null}
+{"id":"ranking-published-example","profile":"XPath40Experimental","phase":"success","result":"25","error":null,"errorCode":null}

@@ -1,0 +1,23 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Reflection;
+using System.Text.Json;
+using Bosak.XPath.Core.Xdm;
+var assembly=Assembly.LoadFrom(Path.GetFullPath(".guard-tmp/k04-schema-session-contracts/bin/Release/net10.0/C44.SchemaContracts.dll"));
+var api=assembly.GetExportedTypes().OrderBy(t=>t.FullName,StringComparer.Ordinal).Select(t=>new{type=t.FullName,members=t.GetMembers(BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.DeclaredOnly).Where(m=>m.MemberType is MemberTypes.Method or MemberTypes.Property or MemberTypes.Constructor or MemberTypes.Field).Select(m=>m.ToString()).OrderBy(x=>x,StringComparer.Ordinal).ToArray()}).ToArray();
+var actual=typeof(XdmValue).GetMembers(BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.DeclaredOnly).Select(m=>m.ToString()).OrderBy(x=>x,StringComparer.Ordinal).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new{kind="Compiled proposed API shape only, namespace C44.Proposed; no production hooks or semantic implementation",references=assembly.GetReferencedAssemblies().Select(x=>x.Name).OrderBy(x=>x).ToArray(),exportedTypes=api,actualXdmValuePublicMembers=actual},new JsonSerializerOptions{WriteIndented=true}));

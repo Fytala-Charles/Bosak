@@ -1,0 +1,65 @@
+// Generated bounded allocation observer; catches failures rather than crashing a child.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+try {
+ var issuer=new Issuer();var compile=Stopwatch.StartNew();
+ if(!SchemaSessionCompilation.TryCompile("1",new CompileOptions(),issuer,4,16,out var session,out var reason))throw new Exception(reason);
+ compile.Stop();using var typed=session!;var rows=new List<object>();
+ rows.Add(Measure("typed-open-close",()=>{var s=typed.OpenSnapshot(typed.Environment,new object(),issuer.Origin,()=>{});s.Dispose();}));
+ using(var snap=typed.OpenSnapshot(typed.Environment,new object(),issuer.Origin,()=>{})){
+  var scalar=new Scalar(issuer);rows.Add(Measure("typed-warm-read",()=>{var value=typed.Run(typed.Environment,snap,op=>op.ReadValue(scalar));if(value.IntegerValue!=7)throw new Exception("bad scalar");}));
+ }
+#if CANDIDATE
+ if(!SchemaSessionCompilation.TryCompileOrdinary("string(.)",new CompileOptions(),4,out var ordinary,out reason))throw new Exception(reason);
+ using var neutral=ordinary!;var input=new Input();
+ rows.Add(Measure("ordinary-open-close",()=>{neutral.OpenSnapshot(neutral.Environment,input,()=>new Lease()).Dispose();}));
+ using(var snap=neutral.OpenSnapshot(neutral.Environment,input,()=>new Lease())){
+  var context=new EvaluationContext().WithFocus(XdmValue.FromNode(input.Node),1,1);
+  rows.Add(Measure("ordinary-warm-operation",()=>{var value=neutral.Run(neutral.Environment,[snap],op=>op.EvaluateAtomic(op.CaptureInputs(context,16,16)));if(value.StringValue!="42")throw new Exception("bad ordinary result");}));
+ }
+ var advisor=new Advisor(neutral.Environment);var assessedInput=new Input();
+ rows.Add(Measure("assessed-open-close",()=>neutral.OpenAssessedSnapshot(neutral.Environment,assessedInput,()=>new Lease(),advisor,advisor.Evidence.Origin,8).Dispose()));
+ using(var assessed=neutral.OpenAssessedSnapshot(neutral.Environment,assessedInput,()=>new Lease(),advisor,advisor.Evidence.Origin,8)){
+  var scalar=new Scalar(advisor.Evidence);advisor.Register(scalar,assessedInput);
+  rows.Add(Measure("assessed-warm-read",()=>{var v=neutral.Run(neutral.Environment,[assessed],op=>op.ReadScalar(assessed,scalar));if(v.IntegerValue!=7)throw new Exception("bad assessed scalar");}));
+ }
+ if(!SchemaSessionCompilation.TryCompileOrdinary("$v",new CompileOptions(),4,out var identity,out reason))throw new Exception(reason);
+ using var identitySession=identity!;var identityAdvisor=new Advisor(identitySession.Environment);var identityInput=new Input();
+ using(var assessed=identitySession.OpenAssessedSnapshot(identitySession.Environment,identityInput,()=>new Lease(),identityAdvisor,identityAdvisor.Evidence.Origin,8)){
+  var scalar=new Scalar(identityAdvisor.Evidence);identityAdvisor.Register(scalar,identityInput);var v=identitySession.Run(identitySession.Environment,[assessed],op=>op.ReadScalar(assessed,scalar));
+  var context=new EvaluationContext().WithVariable("v",v);
+  rows.Add(Measure("assessed-warm-identity",()=>{var result=identitySession.Run(identitySession.Environment,[assessed],op=>op.EvaluateAtomic(op.CaptureInputs(context,16,16)));if(result.IntegerValue!=7)throw new Exception("bad assessed identity");}));
+ }
+
+#endif
+ Console.WriteLine(JsonSerializer.Serialize(new{passed=true,compileMilliseconds=compile.Elapsed.TotalMilliseconds,rows,bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name!.StartsWith("Bosak.")&&!a.IsDynamic).Select(a=>new{name=a.GetName().Name,version=a.GetName().Version!.ToString(),sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()})},new JsonSerializerOptions{WriteIndented=true}));return 0;
+}catch(Exception e){Console.Error.WriteLine(e);return 1;}
+static object Measure(string name,Action action){for(int i=0;i<200;i++)action();long start=GC.GetAllocatedBytesForCurrentThread();var clock=Stopwatch.StartNew();for(int i=0;i<4000;i++)action();clock.Stop();return new{name,iterations=4000,allocatedBytes=GC.GetAllocatedBytesForCurrentThread()-start,milliseconds=clock.Elapsed.TotalMilliseconds};}
+sealed class Issuer:ISchemaEvidenceIssuer{internal readonly object Origin=new(),Type=new();bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar value)=>value is Scalar;bool ISchemaEvidenceIssuer.OwnsType(object x)=>ReferenceEquals(x,Type);bool ISchemaEvidenceIssuer.OwnsAssessment(object x)=>ReferenceEquals(x,Origin);bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);}
+sealed class Scalar(Issuer issuer):ISchemaIssuedScalar{XdmValue ISchemaIssuedScalar.Value=>XdmValue.FromInteger(7);object ISchemaIssuedScalar.DeclaredType=>issuer.Type;object ISchemaIssuedScalar.ActualType=>issuer.Type;object ISchemaIssuedScalar.OriginalAssessment=>issuer.Origin;}
+#if CANDIDATE
+sealed class Input:IQuerySourceInput{internal IXdmNode Node{get;}=new XDocumentNode(XDocument.Parse("<n>42</n>"));IXdmNode IQuerySourceInput.Root=>Node;void IQuerySourceInput.ThrowIfUnavailable(){}bool IQuerySourceInput.OwnsNode(IXdmNode node)=>ReferenceEquals(node,Node);}
+sealed class Lease:IDisposable{public void Dispose(){}}
+#endif
+
+#if CANDIDATE
+sealed class Advisor(SchemaQueryEnvironment environment):IQuerySchemaAdvisor{
+ internal readonly Issuer Evidence=new();private readonly Dictionary<ISchemaIssuedScalar,IQuerySourceInput> _issued=new(ReferenceEqualityComparer.Instance);
+ internal void Register(ISchemaIssuedScalar value,IQuerySourceInput input)=>_issued.Add(value,input);
+ SchemaQueryEnvironment IQuerySchemaAdvisor.Environment=>environment;void IQuerySchemaAdvisor.ThrowIfUnavailable(){}
+ bool IQuerySchemaAdvisor.OwnsNodeFacts(object facts)=>false;bool IQuerySchemaAdvisor.OwnsNode(IXdmNode n,object f,IQuerySourceInput i,object o)=>false;
+ bool IQuerySchemaAdvisor.OwnsTypedValue(ISchemaIssuedScalar value,IQuerySourceInput input,object origin)=>_issued.TryGetValue(value,out var source)&&ReferenceEquals(source,input)&&ReferenceEquals(origin,Evidence.Origin);
+ bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar value)=>_issued.ContainsKey(value);
+ bool ISchemaEvidenceIssuer.OwnsType(object type)=>((ISchemaEvidenceIssuer)Evidence).OwnsType(type);
+ bool ISchemaEvidenceIssuer.OwnsAssessment(object origin)=>((ISchemaEvidenceIssuer)Evidence).OwnsAssessment(origin);
+ bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+}
+#endif

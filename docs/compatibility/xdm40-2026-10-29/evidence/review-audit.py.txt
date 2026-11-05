@@ -1,0 +1,50 @@
+import hashlib, json, pathlib, subprocess, shutil
+root=pathlib.Path('D:/Development/Bosak')
+out=root/'docs/compatibility/xdm40-2026-10-29/evidence'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(p,*args):
+    r=subprocess.run(['git','-c','safe.directory='+p.as_posix(),'-C',str(p),*args],capture_output=True,text=True,check=True)
+    return r.stdout.strip()
+selections={
+ 'Bosak': ('D:/Development/Bosak',[
+ 'src/Bosak.XPath.Core/Xdm/IXdmNode.cs','src/Bosak.XPath.Core/Xdm/XdmValue.cs','src/Bosak.XPath.Core/Xdm/XdmValueKind.cs','src/Bosak.XPath.Core/Xdm/XdmNodeKind.cs','src/Bosak.XPath.Core/Xdm/XdmJNode.cs','src/Bosak.XPath.Core/Xdm/XdmMap.cs','src/Bosak.XPath.Core/Xdm/XdmRecordType.cs','src/Bosak.XPath.Core/Xdm/XdmRecordField.cs','src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs','src/Bosak.XPath.Core/Xdm/XdmSequence.cs','src/Bosak.XPath.Runtime/Vm/VmEngine.cs','src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs','src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs','src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs','src/Bosak.XPath.Standard/Functions/XdmSerializer.cs','src/Bosak.XPath.Api/CompileOptions.cs','src/Bosak.XPath.Api/XPath31Expression.cs','src/Bosak.XQuery/Api/XQueryCompiler.cs','src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.cs','src/Bosak.Xslt/Api/XsltCompiler.cs','tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs','docs/conformance/k04-schema-session-prototype/API-PROPOSAL.md']),
+ 'XmlDb': ('D:/Development/Bosal.XmlDb',[
+ 'AGENTS.md','src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs','src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj','src/Bosak.XmlDb.Core/StorageNode.cs','src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs','docs/AGENT_HANDOVER.md','docs/ADR-002-immutable-format-and-snapshot.md','docs/ADR-003-pinned-bosak-dependency.md','docs/implementation/M2_XDM40_COMPATIBILITY_ASSESSMENT.md','docs/implementation/BINARY_FORMAT_V1.md']),
+ 'Schema': ('D:/Development/Bosak.Schema',[
+ 'AGENTS.md','src/Bosak.Schema/Bosak.Schema.csproj','src/Bosak.Schema/SchemaServices.cs','src/Bosak.Schema/SchemaAwareXslt.cs','src/Bosak.Schema/Model/CompiledSchema.cs','src/Bosak.Schema/Model/ElementDeclaration.cs','src/Bosak.Schema/Model/XsdLanguageVersion.cs','src/Bosak.Schema/Compilation/SchemaCompiler.cs','src/Bosak.Schema/Compilation/SchemaCompileOptions.cs','src/Bosak.Schema/Validation/XsdValidationService.cs','docs/AGENT_HANDOVER.md','docs/ADR-006-xsd11-engine-seam-compatibility.md']),
+ 'Braid': ('D:/Development/Bosak.Braid',[
+ 'AGENTS.md','Directory.Build.props','eng/Bosak.Dependency.props','src/Bosak.Braid.Infrastructure/Bosak.Braid.Infrastructure.csproj','src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs','src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs','src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs','src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs','src/Bosak.Braid.Application/Testing/RunEvidence.cs','src/Bosak.Braid.Application/SourceGraphProjection.cs','docs/AGENT_HANDOVER.md','docs/RESTART_CHECKPOINT.md','docs/SOURCE_GRAPH.md','docs/RUN_PROVENANCE.md'])
+}
+repos=[]
+for name,(location,files) in selections.items():
+ p=pathlib.Path(location)
+ repos.append(dict(name=name,path=p.as_posix(),revision=git(p,'rev-parse','HEAD'),status=git(p,'status','--short'),reviewedFiles=[dict(path=f,sha256=sha(p/f)) for f in files]))
+p=pathlib.Path('D:/Development/Bosak.Braid/.dependencies/bosak-6a3372fc3b91e733b71a426cf40f26feaaeb3bcb')
+repos.append(dict(name='Braid pinned engine checkout',path=p.as_posix(),revision=git(p,'rev-parse','HEAD'),status=git(p,'status','--short')))
+(out/'repositories.json').write_text(json.dumps(dict(date='2026-10-29',scope='Read-only sibling source inspection; no consumer build, test, activation or migration',repositories=repos),indent=2)+'\n',encoding='utf-8')
+for src,dst in [('xdm40-review-probe-run.log','initial-observations.json'),('xdm40-review-probe-final.log','expanded-observations.json'),('xdm40-review-probe-qualified.log','observations.json')]:
+ raw=(root/'.guard-tmp'/src).read_bytes()
+ data=json.loads(raw.decode('utf-16' if raw.startswith(b'\xff\xfe') else 'utf-8-sig'))
+ (out/dst).write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8')
+for f in ['Program.cs','Probe.csproj']:
+ shutil.copyfile(root/'.guard-tmp/xdm40-review-probe'/f,out/('probe-'+f+'.txt'))
+spec=[]
+for local,remote in [('xpath-datamodel.xml','specifications/xpath-datamodel-40/src/xpath-datamodel.xml'),('xpath.xml','specifications/xquery-40/src/xpath.xml'),('xquery.xml','specifications/xquery-40/src/xquery.xml'),('expressions.xml','specifications/xquery-40/src/expressions.xml'),('function-catalog.xml','specifications/xpath-functions-40/src/function-catalog.xml')]:
+ p=out/local if local=='xpath-datamodel.xml' else root/'.guard-tmp/xdm40-review-probe'/local
+ b=p.read_bytes()
+ spec.append(dict(path=remote,sha256=sha(p),gitBlob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest(),url='https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/'+remote))
+assert spec[0]['gitBlob']=='e4ce06699f4105f35053cceb60098134f66a0d38'
+(out/'spec-pin.json').write_text(json.dumps(dict(kind='Review pin only; no semantic adoption',repository='qt4cg/qtspecs',revision='3e9f3bddd38f39f8953750306f0c574a2fbd0387',commitDate='2026-10-28T14:09:16Z',mutableDisplayedEdition='22 October 2026',files=spec),indent=2)+'\n',encoding='utf-8')
+observed=json.loads((out/'observations.json').read_text())
+historical=json.loads((root/'docs/conformance/k04-schema-element-fix/evidence/binary-identities.json').read_text(encoding='utf-8-sig'))
+binary=[]
+for a in observed['Assemblies']:
+ name=pathlib.Path(a['Path']).name
+ key='tests/Bosak.XPath.Conformance/bin/Release/net10.0/'+name
+ match=historical.get(key)==a['Sha256'].lower()
+ assert match,(name,key)
+ binary.append(dict(assembly=name,sha256=a['Sha256'].lower(),c42ReceiptKey=key,matchesC42=True))
+assert len(observed['Observations'])==62
+assert all(r['status']=='' for r in repos if r['name']!='Bosak')
+(out/'verification.json').write_text(json.dumps(dict(observationCount=62,expressions=31,profiles=['XPath31','XPath40'],initialCount=50,expandedCount=56,productBinaryMatches=binary,siblingsClean=True,productionDiff=git(root,'diff','--stat','--','src','tests'),inheritedSolutionPasses=24203,inheritedQT3='31397/0/424',inheritedQT4='8941/0/1918',consumerRuntimeAcceptance=False),indent=2)+'\n',encoding='utf-8')
+print(f'{len(repos)} revision/status records; {sum(len(r.get("reviewedFiles",[])) for r in repos)} file hashes; 62 observations; {len(binary)} product binaries match C42.')

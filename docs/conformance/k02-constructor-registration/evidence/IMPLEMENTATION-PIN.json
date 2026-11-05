@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "79942741a06e7b9f441c324c4dbcc0bb1ece574e",
+  "revision": "W3C Recommendations 21 March 2017",
+  "specifications": [
+    "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#id-schema-import",
+    "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/#constructor-functions"
+  ],
+  "scope": "K02-C01: reuse existing simple-type constructor registration after fresh query-owned schema compilation. Preserve host bindings, XQST0034 collisions and SkipStandardFunctionPopulation. No public API, default harness, relative URI, XSD1.1 or baseline change.",
+  "schemaCoordination": {
+    "owner": "Bosak.Schema REQ-009",
+    "documents": {
+      "docs/XSD11_GAP_MATRIX.md": "689c3f6f493926a6234ea21d7fd0549e19a124c6a3bf6f47684d1e54e76e26ac",
+      "docs/Bosak_Schema_XSD11_Agent_Handover_v0.1.md": "2732173be10034bd6b14ae467ecf972b42b72e9cb440c7b76e3027923744c55c"
+    },
+    "boundary": "Current XmlSchemaSet path only; future XSD1.1 seam requires separate compatibility ADR."
+  }
+}

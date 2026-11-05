@@ -1,0 +1,128 @@
+# Consolidated R2 dispositions and execution plan
+
+Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. Source 1.61.1 qualifies [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) over retained private identity and cost qualification over retained TA-01 containers and ordinary facade/numeric profiles. R3 remains InProgress for bounded public node-fact activation and guarded atomization/provenance observation, broader schema/all-host integration, wider numeric/error scope, all-host routing and migration disposition. Native qualification, C45/freeze and publication remain pending.
+
+[PLAN.json](PLAN.json) is the current dependency queue. STATUS.json and the original response copies retain the historical five-return snapshot; current closure and implementation evidence are separate.
+
+
+3 November: [exact-decimal representation qualified at source 1.46.0](../foundation-exact-decimal/README.md); 46 new controls and allocation-before-refusal checks pass. Next exact XdmValue transport and checked legacy accessors, then numeric/schema/all-host integration.
+
+
+4 November: [exact XdmValue carrier transport qualified at source 1.47.0](../foundation-exact-value-transport/README.md); 32 new controls and all previous API fields/rows retained. Record typed-default source migration; next bounded numeric operation limits and exact execution routing.
+
+
+4 November: [bounded exact arithmetic qualified at source 1.48.0](../foundation-bounded-numeric/README.md), with 44 new controls and unchanged public declarations. Next exact comparisons/map keys and bounded serialization, then broader numeric/schema/all-host/native qualification.
+
+4 November: [exact comparisons, map keys and scalar output qualified at 1.49.0](../foundation-exact-scalars/README.md); 50 new controls, unchanged public metadata. Next wider numeric operators, schema/all-host/native qualification.
+
+4 November: [exact quotient/remainder qualified at 1.50.0](../foundation-exact-quotient/README.md); 29 new controls, unchanged public metadata. Next decimal division policy and schema/all-host/native qualification.
+
+4 November: [exact terminating division policy selected and reference-checked](../foundation-decimal-division-policy/README.md); source remains 1.50.0. Next implement/qualify the finite subset; general rounded decimal division remains unresolved.
+
+4 November: [exact terminating division qualified at 1.51.0](../foundation-exact-division/README.md); 33 new controls, unchanged public metadata. Next typed/schema numeric and all-host/native qualification; wider rounding/error policy remains pending.
+
+4 November: [primitive numeric constructors qualified at 1.52.0](../foundation-exact-constructors/README.md); 24 new controls, unchanged public metadata. Next issuer-backed typed/schema admission and all-host/native qualification; wider casts/rounding/error policy remain pending.
+
+4 November: [issuer-backed typed admission audited; TA-01 prepared](../foundation-typed-admission-plan/README.md). Next internal uncached container reader, then explicit cache/typed-profile policy and public adapter qualification; source remains 1.52.0.
+
+4 November: [TA-01 internal typed containers qualified at 1.53.0](../foundation-typed-container/README.md); 94 new controls and unchanged public API source/metadata. Next cache/evidence and typed numeric projection policy before public adapter activation.
+
+4 November: [TA-02 cache/projection policies selected and model-checked](../foundation-typed-cache-policy/README.md); source remains 1.53.0. Next internal transactional scalar registry, followed by evidence/public adapter and typed numeric qualification.
+
+4 November: [TA-02 internal transactional registry qualified](../foundation-typed-scalar-cache/README.md), source 1.54.0: 24,900 tests, 35 new controls, unchanged gates and public metadata. Next private evidence/public adapter qualification, then typed numeric projection. R3 remains InProgress.
+
+4 November: [TA-03 private evidence attachment qualified](../foundation-typed-evidence/README.md), source 1.55.0: 24,925 tests, 25 new controls, unchanged gates/API. Next public adapter and explicit VM identity qualification; existing VM/public guards remain unchanged.
+
+4 November: [TA-04 public-contract adapter internally qualified](../foundation-advisor-adapter/README.md), source 1.56.0: 24,960 tests, 35 new controls, exact gates/exported metadata unchanged. Next explicit typed identity VM profile; public activation remains pending.
+
+4 November: [TA-05 internal compiled typed identity qualified](../foundation-typed-identity/README.md), source 1.57.0: 25,006 tests, 46 new controls, unchanged gates/exported metadata. Next bounded public identity activation with explicit advisor/container scope; no public schema activation inferred.
+
+4 November: [TA-06 allocation attribution and reduction qualified](../foundation-typed-identity-cost/README.md), source 1.57.1: 25,009 tests, unchanged gates/API/descriptor, compiled identity 23,360 to 4,104 bytes/call. Next bounded public activation; owner performance acceptance remains separate.
+
+5 November: [TA-07 bounded public typed identity qualified](../foundation-public-typed-identity/README.md), source 1.58.0: 25,044 tests, 35 new public controls, unchanged gates/exported metadata. Next typed numeric projection; public single-atomic identity does not imply broader/native/schema acceptance or freeze.
+
+5 November: [TA-08 authorized internal numeric projection qualified](../foundation-typed-numeric-projection/README.md), source 1.59.0: 25,079 tests, 35 new controls, unchanged gates/API source/metadata. Next bounded public typed numeric execution; existing public identity remains unchanged.
+
+5 November: [TA-09 bounded public typed numeric execution](../foundation-public-typed-numeric/README.md) qualified at source 1.60.0: 25,114 tests, 35 new controls and unchanged frozen gates/exported metadata. Current next task: original node facts/nil/no-value and guarded atomization/provenance observation. Earlier dated milestones below retain their historical scope.
+
+5 November: [TA-10 original node-fact preparation](../foundation-node-facts-plan/README.md) complete at unchanged 1.60.0. Fresh existing controls 235/0; 22 new fact cases remain NotRun. Current next task: implement the internal uncached reader before public node-query activation.
+
+5 November: [TA-10 internal original-facts reader](../foundation-node-facts-reader/README.md) qualified at 1.61.0: 25,185 tests, 71 new controls and unchanged frozen gates/API metadata. Current next task: reduce redundant guard callbacks before public node-query selection; no public node-facts/native/freeze activation. Earlier dated preparation entries retain their historical scope.
+
+5 November: [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) qualified at 1.61.1: 25,193 tests, 8 new callback controls, unchanged gates/API metadata. Cold allocation 1,396 bytes; warm 0; 54 issuer callbacks per metadata observation. Current next task: bounded public original-node query profile selection; native/owner budgets and freeze remain pending.
+
+5 November: [TA-12 public original-node nilled profile selected](../foundation-node-query-profile/README.md) at unchanged 1.61.1: 349 existing controls pass, 24 new cases NotRun. Current next task: internal metadata-only mode with NotRequested, then public nilled implementation. Atomization remains separate; no public node activation/freeze.
+
+## Earlier disposition checkpoints
+
+The entries below preserve the earlier decisions and gates in date order; the current summary above supersedes their then-pending statuses.
+
+
+Current ecosystem (2 November): [four-project status](../foundation-ecosystem-status/README.md) records XmlDb native fix and fresh scoped O4 acceptance. All seven active returns: five scoped accepts/two Schema revisions. Next obtain Schema exact source/policy dispositions, with R3 scope preparation parallel; public implementation, actual candidate integration/budgets and freeze remain pending.
+
+
+Schema decision handoff: [three precise questions and localized source evidence](../schema-precise-disposition/REQUEST.md) are available inside Schema's workspace. Updated owner dispositions remain pending; all current counts and gates are unchanged.
+
+
+3 November: [Schema accepts O1/O2 design with scope](../schema-acceptance-preparation/README.md); versioned carry-forward confirmation remains pending. R2 stays InReview; the next neutral admission slice is prepared.
+
+
+3 November: [W1-A is explicitly blocked pending gate evidence](../schema-w1-gate-review/README.md). Trusted ordinary-source membership, complete retained acceptance checklist and exact qualification commands are now specified; no implementation has started.
+
+
+3 November: [R2 is ClosedWithScope; W1-A entry is Ready for implementation](../foundation-r2-closure/README.md). Seven exact scoped returns are validated; semantic adoption precedes source edits. Implementation, native qualification, freeze and publication remain pending.
+
+
+3 November: [internal W1-A neutral admission is implemented and qualified at source 1.43.0](../foundation-w1-neutral-admission/README.md). R3 is InProgress; optional schema composition, public/all-host integration and native/performance qualification remain ahead.
+
+
+3 November: [bounded internal W1-B schema association is qualified at source 1.44.0](../foundation-w1-schema-association/README.md). Ordinary inputs stay issuer-free; optimize context allocations before public/all-host integration and R4 budgets. Wider typed/numeric/native work remains pending.
+
+
+3 November: [private allocation fix qualified at source 1.44.1](../foundation-function-table-sharing/README.md), saving 19,256 bytes per captured evaluation with public allocations/API unchanged. Continue accepted public/all-host integration; native and budget qualification remain pending.
+
+
+3 November: [open-session drain qualified at source 1.44.2](../foundation-open-session-drain/README.md); active work can drain without closing admissions. Continue the accepted public facade and all-host integration.
+
+
+3 November: [public ordinary-source facade qualified at source 1.45.0](../foundation-public-ordinary/README.md), with 38 public controls and the reviewed additive signature subset. Continue numeric/schema transport and all-host implementation before owner qualification and freeze.
+
+## Consolidated answers
+
+| Return | Decision/state | What it establishes | What remains |
+|---|---|---|---|
+| O1-Schema | Missing; detailed checklist guidance received | The [Schema comment](https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351) specifies the required association/issuance/copy evidence | Actual source-specific answers, supported/refused profile, decision, gap list and evidence |
+| [O1-XmlDb](inputs/O1-XmlDb.json) | **AcceptWithScope** | Neutral ordinary-source design fits; no additional mandatory Core IXdmNode member demonstrated | Implement/test a provider-local exact snapshot membership bridge; no runtime adapter is claimed |
+| O2-Schema | Missing; detailed checklist guidance received | Checklist covers numeric/value-shape/N1–N8/compatibility disposition | Formal answers and any precise required signature/context gaps, beyond the decimal backend |
+| [O2-Core](inputs/O2-Core.json) | **AcceptWithScope** | Numeric/typed/authority/compatibility design direction selected by Core | Exact numeric execution and actual provider semantics remain unimplemented/unqualified |
+| [O3-Braid](inputs/O3-Braid.json) | **Revise** | Existing session/lifetime concepts appear sufficient; current invocation needs do not demonstrate arbitrary initial sequences or streaming | **BCAP-01:** demonstrate or add the complete operation-bound bounded capture route |
+| [O4-XmlDb](inputs/O4-XmlDb.json) | **Revise** | No additional required Core lifetime signature demonstrated; finite sequential target identified | **XDB-LIFE-01:** actual cleanup failure preservation, release uncertainty and supported concurrency profile |
+| [O4-Core](inputs/O4-Core.json) | **AcceptWithScope** | Host acquisition and raw operation ownership; complete failure preservation; no universal node/sequence disposal API | Actual owner behavior and corresponding implementation scope must be qualified |
+
+All five JSON returns match the exact R2 proposal manifest and pass its format checker. These are explicitly agent-authored source/design reviews, not authenticated human signatures or actual consumer integration. Schema's comment explicitly says it is a proposed work/acceptance checklist, not completed returns. It cannot be substituted for O1-Schema/O2-Schema.
+
+The newer XmlDb review is pinned to **`b09c7341e7961f90f2c320fd9a180367b35e0035`**, not the older `08085954` audit snapshot. Its evidence directory is **`D:/Development/Bosal.XmlDb/docs/foundation-requirements/r2-owner-review`**. Seven selected source/test/project files match both the owner's SHA-256 records and that commit's content; both delivered response hashes also match. The checkout contains unrelated owner work, which was neither modified nor qualified by this audit. [Input receipts](INPUTS.json) preserve this distinction.
+
+## Recommended next steps
+
+1. **Core now: resolve BCAP-01.** Prepare the smallest capture route/declaration candidate, then execute targeted capture feasibility controls. This is named R2 gap work, not blanket R3 production promotion. [Core capture plan](CORE-CAPTURE-PLAN.md).
+2. **XmlDb in parallel: resolve XDB-LIFE-01 and prepare membership.** Preserve actual primary/cleanup errors and fault state, qualify release uncertainty and the finite profile, and implement the provider-local membership bridge. This does not require inventing a Core disposal API. [Owner actions](OWNER-ACTIONS.md).
+3. **Schema in parallel: complete O1/O2 formal returns.** Use the eight specific work items distilled from the new checklist, naming actual methods/proofs or explicit unsupported/signature gaps. Full XSD 1.1 backend completion is not required to represent all known foundation needs. [Owner actions](OWNER-ACTIONS.md).
+4. **Reconcile the revised draft and close R2.** Obtain Braid's review of the capture solution, XmlDb's updated O4 disposition and Schema's two formal returns. Any changed proposal manifest requires explicit confirmation/rebinding of affected owner dispositions; old hash-bound acceptance is not silently carried over.
+5. **Open accepted R3 slices, then R4–R7.** Implement the finite W1–W6 queue under accepted scope, qualify actual providers/source/unchanged binaries and PF-01–09 budgets on one immutable candidate, obtain four-role C45/freeze, prepare release packages and publish only through the release gates.
+
+Core does **not** need to wait idle for XmlDb before doing the capture review work. Conversely, the three scoped design accepts do not waive Braid's capture gap, XmlDb's unresolved failure contract or Schema's required answers. Avoid another generic lifecycle experiment or planning-only checkpoint; the next Core deliverable should be the concrete capture candidate and its evidence.
+
+## Complemented plan and acceptance
+
+The [ten-task dependency queue](PLAN.json) separates immediate Core work, parallel owner work and gated production/publication. [Eighteen targeted follow-up controls](FOLLOWUP-CASES.json) supplement the existing W1 matrix: C01–C10 cover complete capture and X01–X08 cover actual XmlDb resource behavior. All are **NotRun** and overlap existing concerns; do not add them to historical pass totals.
+
+Important additions include preserving partial/secondary outputs and classified failures, per-run receipt ownership, option/context precedence, production byte/message bounds, actual failure injection and the sequential handoff to XSLT's dedicated worker thread. “One snapshot per evaluation thread” must be clarified so a claimed profile neither permits concurrent cache access nor accidentally rules out the engine's supported sequential thread handoff.
+
+The current capture defaults can be unbounded; selected limits must be explicit. Braid's proposed experiment ceilings are not Core defaults, total-memory bounds, agreed performance budgets or proof of compilation/worker time limits. Native resource retention, cancellation latency and serialized data movement require actual owner workloads.
+
+## Evidence and limits
+
+[INPUTS.json](INPUTS.json) pins byte-identical copies of all five returns, the exact Schema comment and paginated issue comments, source evidence and XmlDb's owner receipt. No original incoming response, external request, source checkout, product pin or store was changed. No outgoing message was sent.
+
+This step changes documentation and review tooling only. Production source and engine bytes remain unchanged; the preceding 24,390 unit passes and exact conformance gates remain inherited receipts, not fresh executions here. Target release version/date remain unselected. Read-only verification: `python -B docs/foundation-r2-consolidation/tools/verify.py`.

@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,197): error CS1009: Unrecognized escape sequence [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,167): error CS1010: Newline in constant [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,200): error CS1003: Syntax error, ',' expected [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(66,55): error CS1026: ) expected [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,197): error CS1009: Unrecognized escape sequence [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,167): error CS1010: Newline in constant [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(65,200): error CS1003: Syntax error, ',' expected [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Program.cs(66,55): error CS1026: ) expected [D:\Development\Bosak\.guard-tmp\private-transport\carrier\Host\Host.csproj]
+    0 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:01.20

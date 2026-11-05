@@ -1,0 +1,5 @@
+# Source reconciliation basis
+
+2 November 2026. This step adopts no new schema/language semantics. It audits exact public assessment source c3624998eca8c83018e121fa84af611f834a0501 and existing whole-document bridge behavior under the dependencies actually observed in the native output directory. The worktree guide records Core 1.34.1; the executed probes load hash-pinned Core 1.34.2.0 DLLs. Keep these documentary and observed runtime pins separate. The original pre-observation basis is retained in evidence/initial-facts. Native semantic adoption remains the immutable receipts in that worktree's ASSESSMENT-ADOPTION and documented optional/repeated/count/presence extensions. The BCAP proposal remains ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688.
+
+The isolated source build and API-fact controls are evidence for existing decimal/root/copy/stale behavior only. They do not implement or authenticate BCAP OwnsNode, original typed issuance, a public Core SDK, general XSD 1.1 or new authority/lifetime behavior. No owner source or original qualification receipt is changed.

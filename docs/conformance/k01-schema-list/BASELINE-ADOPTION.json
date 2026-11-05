@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-27",
+  "cluster": "K01",
+  "status": "Complete bounded correction and approved two-case admission",
+  "sourceCandidate": "1.26.4",
+  "publishedVersion": "1.26.3",
+  "sourceBase": "3f0aed6b4444424e2acc8ce69ade16eedeeaa71a",
+  "ownerApproval": "baseline-adoption/owner-approval.json",
+  "proposalSha256": "f7d9e7c06a9081e8aef32517a1d44e250683f82f6b995a897441404804726ed9",
+  "previousQt3": [
+    31142,
+    0,
+    679
+  ],
+  "currentQt3": [
+    31144,
+    0,
+    677
+  ],
+  "qt3Total": 31821,
+  "qt3FreshRun": true,
+  "removedDocumentedSkips": [
+    "CastAs-ListType-20",
+    "CastAs-ListType-28"
+  ],
+  "qt4": {
+    "results": [
+      8436,
+      0,
+      1894
+    ],
+    "gatedSets": 224,
+    "experimentalPasses": 11,
+    "inheritedEvidence": "evidence/manifest.json",
+    "freshRun": false
+  },
+  "solutionTests": {
+    "passed": 21816,
+    "failed": 0,
+    "skipped": 0,
+    "inheritedEvidence": "evidence/manifest.json",
+    "freshRun": false
+  },
+  "skipDelta": "baseline-adoption/skip-delta.json",
+  "remainingInvestigationClusters": [
+    "K02",
+    "K03",
+    "K04",
+    "K05",
+    "K06"
+  ],
+  "policy": "Only the two approved known skips and exact QT3 expectation change. Preserve fixtures, assertions, dependencies, routing, timeouts/retries, qt4, published version and all original receipts. K01 does not implement all schema/list capabilities; no release or upstream action."
+}

@@ -1,0 +1,219 @@
+{"id":"member-groups","profile":"XPath40","phase":"success","result":"2,0,1","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-groups","profile":"XPath40Experimental","phase":"success","result":"2,0,1","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-global-position","profile":"XPath40","phase":"success","result":"1,2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-global-position","profile":"XPath40Experimental","phase":"success","result":"1,2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-node-identity","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-node-identity","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0141: The binding collection of a \u0027for member\u0027 clause must contain only arrays.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"member-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0141: The binding collection of a \u0027for member\u0027 clause must contain only arrays.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"member-outer-focus","profile":"XPath40","phase":"success","result":"1:100|2:100","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-outer-focus","profile":"XPath40Experimental","phase":"success","result":"1:100|2:100","error":null,"errorCode":null,"exceptionType":null}
+{"id":"member-old","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: A \u0027for member\u0027 or \u0027for key value\u0027 binding requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"member-old","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: A \u0027for member\u0027 or \u0027for key value\u0027 binding requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"map-groups","profile":"XPath40","phase":"success","result":"a:2,b:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-groups","profile":"XPath40Experimental","phase":"success","result":"a:2,b:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-position","profile":"XPath40","phase":"success","result":"1,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-position","profile":"XPath40Experimental","phase":"success","result":"1,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-value-only","profile":"XPath40","phase":"success","result":"5","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-value-only","profile":"XPath40Experimental","phase":"success","result":"5","error":null,"errorCode":null,"exceptionType":null}
+{"id":"map-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0141: The binding collection of a \u0027for key value\u0027 clause must contain only maps.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"map-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0141: The binding collection of a \u0027for key value\u0027 clause must contain only maps.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"map-duplicate-variable","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 20: XQST0089: The key and value variables of a for binding must have distinct names (\u0027$k\u0027).","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"map-duplicate-variable","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 20: XQST0089: The key and value variables of a for binding must have distinct names (\u0027$k\u0027).","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"map-old","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: A \u0027for member\u0027 or \u0027for key value\u0027 binding requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"map-old","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: A \u0027for member\u0027 or \u0027for key value\u0027 binding requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"enum-cast","profile":"XPath40","phase":"success","result":"ready","error":null,"errorCode":null,"exceptionType":null}
+{"id":"enum-cast","profile":"XPath40Experimental","phase":"success","result":"ready","error":null,"errorCode":null,"exceptionType":null}
+{"id":"enum-castable","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"enum-castable","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-cast-first","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-cast-first","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-cast-reverse","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-cast-reverse","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-coerce-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-coerce-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-cardinality","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type (xs:integer|xs:string)","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"choice-cardinality","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type (xs:integer|xs:string)","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-cast-extra","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-cast-extra","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-cast-lexical","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-cast-lexical","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-cast-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-cast-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-string","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-string","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-missing-empty","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-missing-empty","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-missing-required","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-missing-required","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-missing","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-missing","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-order","profile":"XPath40","phase":"success","result":"b|a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-order","profile":"XPath40Experimental","phase":"success","result":"b|a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-plain-map","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-plain-map","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-record-star-plain","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-record-star-plain","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-record-star-assert","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-record-star-assert","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-castable-plain","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-castable-plain","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-castable-invalid","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-castable-invalid","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-lookup-unknown","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-lookup-unknown","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-map-get-unknown","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-map-get-unknown","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-typed-let-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-typed-let-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-typed-let-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-typed-let-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-coerce-original","profile":"XPath40","phase":"success","result":"true:true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-coerce-original","profile":"XPath40Experimental","phase":"success","result":"true:true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-refuse31-cast-lexical","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 128: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"retained-record-contract-refuse31-coerce-promote","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 99: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"retained-record-contract-update-value","profile":"XPath40","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-value","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-annotation","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-annotation","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-original","profile":"XPath40","phase":"success","result":"1|2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-original","profile":"XPath40Experimental","phase":"success","result":"1|2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-plain","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-plain","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-nonmap","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-nonmap","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-string","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-string","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-decimal","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-decimal","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-empty-optional","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-empty-optional","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-empty-required","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-empty-required","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-order","profile":"XPath40","phase":"success","result":"b|a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-order","profile":"XPath40Experimental","phase":"success","result":"b|a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"retained-record-contract-update-key-type","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-update-key-type","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"retained-record-contract-refuse31-update-value","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 126: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"destructure-seq-rest","profile":"XPath40","phase":"success","result":"1:2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-rest","profile":"XPath40Experimental","phase":"success","result":"1:2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-single","profile":"XPath40","phase":"success","result":"3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-single","profile":"XPath40Experimental","phase":"success","result":"3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-short","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-short","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-seq-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-array-group","profile":"XPath40","phase":"success","result":"2:3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-array-group","profile":"XPath40Experimental","phase":"success","result":"2:3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-array-surplus","profile":"XPath40","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-array-surplus","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-array-short","profile":"XPath40","phase":"evaluate","result":null,"error":"FOAY0001: Array index 2 is out of bounds (array size 1).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-array-short","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOAY0001: Array index 2 is out of bounds (array size 1).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-array-wrong","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: An array destructuring binding requires a single array, got Map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-array-wrong","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: An array destructuring binding requires a single array, got Map.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-map-missing","profile":"XPath40","phase":"success","result":"1:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-map-missing","profile":"XPath40Experimental","phase":"success","result":"1:0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-map-whole-type","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-map-whole-type","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-map-surplus","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-map-surplus","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-typed-value","profile":"XPath40","phase":"success","result":"3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-typed-value","profile":"XPath40Experimental","phase":"success","result":"3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-typed-error","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer\u002B","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-typed-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer\u002B","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-scope","profile":"XPath40","phase":"success","result":"1:9","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-scope","profile":"XPath40Experimental","phase":"success","result":"1:9","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-body-error","profile":"XPath40","phase":"evaluate","result":null,"error":"fn:error() called","errorCode":"FOER0000","exceptionType":"Bosak.XPath.Runtime.Vm.XPathErrorException"}
+{"id":"destructure-body-error","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"fn:error() called","errorCode":"FOER0000","exceptionType":"Bosak.XPath.Runtime.Vm.XPathErrorException"}
+{"id":"destructure-old","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 5: XPST0003: A destructuring let binding (\u0027$(...)\u0027, \u0027$[...]\u0027, or \u0027${...}\u0027) requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"destructure-old","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 5: XPST0003: A destructuring let binding (\u0027$(...)\u0027, \u0027$[...]\u0027, or \u0027${...}\u0027) requires XPath 4.0.","errorCode":null,"exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"constructor-direct","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-direct","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-reference","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-reference","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-missing","profile":"XPath40","phase":"evaluate","result":null,"error":"XPDY0002: xs:integer() called with no context item.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"constructor-missing","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPDY0002: xs:integer() called with no context item.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"constructor-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"constructor-old","profile":"XPath30","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}integer is defined in XPath 4.0 and is not available when targeting XPath 30; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"constructor-old","profile":"XPath31","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}integer is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-value","profile":"XPath40","phase":"success","result":"7","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-value","profile":"XPath40Experimental","phase":"success","result":"7","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key","profile":"XPath40","phase":"success","result":"a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key","profile":"XPath40Experimental","phase":"success","result":"a","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-parent","profile":"XPath40","phase":"success","result":"7","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-parent","profile":"XPath40Experimental","phase":"success","result":"7","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-root-parent","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-root-parent","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-absent-child","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-absent-child","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-type","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-type","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-attributes","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-attributes","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-wrong-value","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: fn:jvalue: the input must be a JNode","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-wrong-value","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: fn:jvalue: the input must be a JNode","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"members-key","profile":"XPath40","phase":"success","result":"1,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-key","profile":"XPath40Experimental","phase":"success","result":"1,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-values","profile":"XPath40","phase":"success","result":"0,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-values","profile":"XPath40Experimental","phase":"success","result":"0,2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-parent","profile":"XPath40","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-parent","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-roundtrip","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-roundtrip","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"of-members-empty","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"of-members-empty","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null,"exceptionType":null}
+{"id":"members-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert Map to array(*)","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"members-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert Map to array(*)","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"of-members-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type jnode()*","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"of-members-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type jnode()*","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"members-old","profile":"XPath30","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 30; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"members-old","profile":"XPath31","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-old","profile":"XPath30","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 30; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-old","profile":"XPath31","phase":"compile","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-generic-node","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-generic-node","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-identity","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Node comparison operator \u0027is\u0027 requires single node operands.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"jnode-identity","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Node comparison operator \u0027is\u0027 requires single node operands.","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"xnode-xml","profile":"XPath40","phase":"evaluate","result":null,"error":"XPST0051","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"xnode-xml","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPST0051","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"choice-argument-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-argument-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-return-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"choice-return-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-duplicate-names","profile":"XPath40","phase":"success","result":"2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-duplicate-names","profile":"XPath40Experimental","phase":"success","result":"2,3","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-per-variable-type","profile":"XPath40","phase":"success","result":"6","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-per-variable-type","profile":"XPath40Experimental","phase":"success","result":"6","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-per-variable-cardinality","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-per-variable-cardinality","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:integer","errorCode":null,"exceptionType":"System.InvalidOperationException"}
+{"id":"destructure-record-undeclared","profile":"XPath40","phase":"success","result":"()","error":null,"errorCode":null,"exceptionType":null}
+{"id":"destructure-record-undeclared","profile":"XPath40Experimental","phase":"success","result":"()","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-root-type","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-root-type","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key-type","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key-type","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key-mismatch","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-key-mismatch","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-value-type-mismatch","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}
+{"id":"jnode-value-type-mismatch","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null,"exceptionType":null}

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "qt3-format-integer-042",
+    "suite": "qt3",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-integer",
+      "format-integer-042"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.07830550000653602,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-qt3-format-integer-042.log"
+  },
+  {
+    "name": "qt4-format-integer-042",
+    "suite": "qt4",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-integer",
+      "format-integer-042"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09549070001230575,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-qt4-format-integer-042.log"
+  }
+]

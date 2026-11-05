@@ -1,0 +1,9 @@
+{
+  "initialPassed": 47,
+  "initialFailed": 1,
+  "expectedError": "FOER0000",
+  "reason": "fn:error() exposes CodeLocalName on XPathErrorException; its message is fn:error() called, without the code",
+  "correction": "Assert the structured error code when present; retain message-code checks for other existing exceptions",
+  "productionChanged": false,
+  "receipt": "supplemental-assertion-initial.log"
+}

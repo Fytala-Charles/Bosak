@@ -1,0 +1,10 @@
+{
+  "file": "tests/Bosak.XQuery.Tests/CopyNamespacesTests.cs",
+  "previousSha256": "26a744126459115a5644fd15ae400f4f9960c4361adb2b4b626ee1ab2a8fe8fc",
+  "removedCase": {
+    "query": "declare construction strip; 1",
+    "expected": "XPST0003"
+  },
+  "reason": "Construction declarations are intentionally supported by C34; this prior API refusal expectation is obsolete. All other 75 copy-policy regressions and every original conformance assertion remain unchanged.",
+  "failureReceipt": "xquery-tests-second.log"
+}

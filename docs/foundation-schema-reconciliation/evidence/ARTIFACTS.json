@@ -1,0 +1,7 @@
+{
+  "path": "D:\\Development\\Bosak\\.guard-tmp\\schema-reconciliation-v2\\source-and-probe.zip",
+  "sha256": "4a25a8ecd4b1ed1b62dc200c5db751ff29d45237a48c145e5fe12e3ec44356ad",
+  "freshSchemaProjectSha256": "86ec28737911d1f49f0dd5075835c46f6569e5fe96ecc755a5e6f1e9877ea4b2",
+  "freshProbeProjectSha256": "29c5a8df210ba908b0e1b1e4d9c629069fa8613f3f9a8611be38fc8db034f597",
+  "scope": "Fresh pinned public Schema sources and observed historical dependency binaries; not BCAP adapter/native acceptance"
+}

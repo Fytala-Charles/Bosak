@@ -1,0 +1,50 @@
+{
+  "status": "Complete:optional4.0calls and three qualified gate promotions",
+  "date": "2026-10-28",
+  "slice": "K04-C19",
+  "sourceBase": "ace5f2bf1884a23b38a2e9dbd5005064f46acf27",
+  "candidateVersion": "1.29.0",
+  "publishedVersion": "1.26.3",
+  "buildExitCode": 0,
+  "solutionExitCode": 0,
+  "solutionPassed": 23365,
+  "solutionProjects": 10,
+  "xsltPassed": 8196,
+  "newRegressionRows": 438,
+  "distinctBaseline": {
+    "failed": 276,
+    "passed": 162
+  },
+  "focusedPassed": 1167,
+  "originalPassed": 8,
+  "reviewControlsPassed": 96,
+  "catalogLiveExpectationRows": 12,
+  "catalogFocusedPassed": 18,
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4": [
+    8895,
+    0,
+    1914
+  ],
+  "promotedSets": [
+    "fn-format-date",
+    "fn-format-dateTime",
+    "fn-format-time"
+  ],
+  "gatedSets": 229,
+  "previousGatedSets": 226,
+  "experimentalPasses": 11,
+  "retainedQt3SkipNamesAndReasons": 657,
+  "retainedQt4SkipNamesAndReasons": 1892,
+  "addedExistingPromotedSetSkips": 22,
+  "boundedPostPromotionProcesses": 108,
+  "timeouts": 0,
+  "qt3BaselineChanged": false,
+  "dependencyAdmissionChanged": false,
+  "historicalReq126RecordsChanged": false,
+  "releaseApproved": false
+}

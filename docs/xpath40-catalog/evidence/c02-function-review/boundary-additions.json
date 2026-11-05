@@ -1,0 +1,212 @@
+{
+  "reason": "Explicit domain/empty/error controls supplement lexical manifest indexing; avoid treating an edge-named fixture as proof of every boundary.",
+  "additions": [
+    {
+      "id": "array-slice-empty",
+      "expression": "array:size(array:slice([],1,2))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "array-slice-invalid",
+      "expression": "array:slice('bad',1,2)",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "atomic-equal-empty",
+      "expression": "atomic-equal((),1)",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "atomic-annotation-empty",
+      "expression": "atomic-type-annotation(())",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "element-to-map-empty",
+      "expression": "count(element-to-map(()))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "map-to-element-empty",
+      "expression": "count(map-to-element(()))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "every-empty",
+      "expression": "every((),function($x){false()})",
+      "expected": "true",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "every-string-result",
+      "expression": "every((1),function($x){'yes'})",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "some-empty",
+      "expression": "some((),function($x){true()})",
+      "expected": "false",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "some-string-result",
+      "expression": "some((1),function($x){'yes'})",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "partition-empty",
+      "expression": "count(partition((),function($p,$i,$n){true()}))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "partition-string-result",
+      "expression": "partition((1,2),function($p,$i,$n){'yes'})",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "scan-empty",
+      "expression": "string-join(scan((),100,function($a,$b){$a+$b}) ! string(?1),',')",
+      "expected": "100",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "sort-with-empty",
+      "expression": "count(sort-with((),function($a,$b){0}))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "sort-with-invalid",
+      "expression": "sort-with((2,1),42)",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "transitive-empty",
+      "expression": "count(transitive-closure((),function($n){$n}))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    }
+  ]
+}

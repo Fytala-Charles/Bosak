@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-30",
+  "requirements": 12,
+  "pinnedCoreInputsVerified": 6,
+  "contractMatrixVerifier": "Passed",
+  "readinessVerifier": "Passed",
+  "documentation": {
+    "date": "2026-10-30",
+    "pages": [
+      {
+        "source": "README.md",
+        "htmlSha256": "304ed0b3ca19174a7b5a40a1129222d9122625a345a43d45462aaf80a82935b4"
+      },
+      {
+        "source": "ROADMAP.md",
+        "htmlSha256": "ce22628542560d51971f5c937bba2dec0adfc9460e0f4f0571e29c3a4ecdbde6"
+      },
+      {
+        "source": "docs/ARCHITECTURE.md",
+        "htmlSha256": "ef842faa1a45ca3573b129d532c680725ed79171b06b63816e048e954ddeb4de"
+      },
+      {
+        "source": "docs/FEATURE_REQUESTS.md",
+        "htmlSha256": "21a5b96a1bd94c08fe3970fbb46656b1a3b900569676e8b7be1cef4edbe08f5a"
+      },
+      {
+        "source": "docs/INTEGRATION.md",
+        "htmlSha256": "d36e70a8d8cd98411298888794987fb0cf6f1d0c6acb30bb06862b47289e0c79"
+      },
+      {
+        "source": "docs/AGENT_HANDOVER.md",
+        "htmlSha256": "b0d7a7bd0a526711d07972526b25d6122c246dde8b4bd1f9a2ac0a5085dc3769"
+      },
+      {
+        "source": "docs/IMPLEMENTATION_STATUS.md",
+        "htmlSha256": "a1049fc7c486268b605a35a6030b818326098d1d94fa057f60021d9d6bc25920"
+      },
+      {
+        "source": "docs/RESTART-2026-10-29.md",
+        "htmlSha256": "ea79d634bd71f8f74acc27c48b6e0fc3dc205029f5ea23515095db0676c8ea47"
+      },
+      {
+        "source": "docs/schema-document-bridge/README.md",
+        "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+      },
+      {
+        "source": "docs/schema-document-bridge/ADOPTION.md",
+        "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+      },
+      {
+        "source": "docs/FOUNDATION-API-FREEZE-PLAN.md",
+        "htmlSha256": "8686865a1575cd54e0895f6ea828deb946893f64c940d532d43729af3308f003"
+      },
+      {
+        "source": "docs/foundation-api-baseline/README.md",
+        "htmlSha256": "200daab3625b8b485e510ff1172a5ef370ffad3511efd575b6f4468028f9bfaa"
+      },
+      {
+        "source": "docs/foundation-api-baseline/CONTRACTS.md",
+        "htmlSha256": "314ecc5998193e49d4f699b7c7f24124b3ff36140d721e7f3900dba8add0580c"
+      },
+      {
+        "source": "docs/foundation-api-baseline/GAPS.md",
+        "htmlSha256": "c7b570dbea9dd86f67da91ca6b25b36ff000072d9dce8f2db4e02b4b51df9529"
+      },
+      {
+        "source": "docs/foundation-api-contract-draft/README.md",
+        "htmlSha256": "422e202251fa38b4d2e8274c81f29c00158c7141dad744c16e8e8b73fd05fdcf"
+      },
+      {
+        "source": "docs/foundation-api-contract-draft/COMPATIBILITY-MATRIX.md",
+        "htmlSha256": "66ca1ca465bc5862ae598c2565bd9aba670c7b8dec90ac447de451d327f2e866"
+      },
+      {
+        "source": "docs/foundation-result-ownership/README.md",
+        "htmlSha256": "d0e9157a55520e9ec98ac35c72bed665e24eb9fa56a7a237b621c544d614bd73"
+      },
+      {
+        "source": "docs/foundation-result-ownership/DECISION.md",
+        "htmlSha256": "a7c0513a41f7af1e9bff456244a1f01dd6c62d142a885bf531d5e4a28937e2bd"
+      },
+      {
+        "source": "docs/streaming-completion-cleanup/README.md",
+        "htmlSha256": "8c2baa92830ecd69e80a45391d8a838216981b42c1e6d069dd0a8e76069fb918"
+      },
+      {
+        "source": "docs/streaming-completion-cleanup/ADOPTION.md",
+        "htmlSha256": "c96c6cb7da4fcac032c6b5f220b009bbb10ed876d0ca5584aaaff7409aee4b08"
+      },
+      {
+        "source": "docs/DEVELOPMENT_HISTORY.md",
+        "htmlSha256": "6483a016dda1559190f5f1fb743254e8119b4dba2b190711179e476b98c69a7a"
+      },
+      {
+        "source": "docs/foundation-external-dependencies/README.md",
+        "htmlSha256": "47c98d92475f364f8c8ebf2da2a0c18cf3ea6032ca6e351cb92dcd7809ed9dfe"
+      },
+      {
+        "source": "docs/foundation-external-dependencies/BOUNDARY.md",
+        "htmlSha256": "dd74761231bdbd577b34a59f8cfb0594dfb0ea761130b9f110d403864e98c08b"
+      },
+      {
+        "source": "docs/foundation-legacy-compatibility/README.md",
+        "htmlSha256": "de8d6e9442aa59043fd104fa16b810510e58acf776022bafdee25b52e36c6fdb"
+      },
+      {
+        "source": "docs/foundation-legacy-compatibility/CASES.md",
+        "htmlSha256": "840405519b658dcb4fa516142d5411233dbe531c6f1f03491e6d06ae86cfd1ed"
+      },
+      {
+        "source": "docs/foundation-package-qualification/README.md",
+        "htmlSha256": "365bfc1e5a5108cf781c491c6ced6c773f236647886944e9071547e013c93754"
+      },
+      {
+        "source": "docs/foundation-package-gates/README.md",
+        "htmlSha256": "d65f4b190dce5e0a419e397b64eb3659d7579674b38e640d199088ea62add7a2"
+      },
+      {
+        "source": "docs/foundation-readiness/README.md",
+        "htmlSha256": "408c7d116e7925969d570743a4c84e2f11fa7fa701d923292f941c685ac55ac4"
+      },
+      {
+        "source": "docs/foundation-readiness/OWNER-ACCEPTANCE.md",
+        "htmlSha256": "119a19d1fcae4ff726cab7dc62111fa049db0682e1296873835b49560934277c"
+      },
+      {
+        "source": "docs/foundation-contract-decision/README.md",
+        "htmlSha256": "43035f960741610ffd69b6583130c0d171a1978b7bc52eb9ab25c0210e8a63f3"
+      },
+      {
+        "source": "docs/foundation-implementation-scope/README.md",
+        "htmlSha256": "815746ef01f37db602eca2e5bf26319584c8d6e6a8a7f8fdd0d720f698851437"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+        "htmlSha256": "c77d15aee82e141a2c97732eb86f6ab3a926ba799285ccf55f28cdfe6b0a48fb"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+        "htmlSha256": "83829d78d25c1dae137f8482623b02dea39a19ae115e006269b20185d2b1f94d"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+        "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+        "htmlSha256": "8fb72fd5ef18b278fa875a04b4adfc5288f617f97cb4bc39cbc35127638a00fa"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+        "htmlSha256": "9a4d1059b07190d7a52d0f7211b12f47fd4473f2055191aad7a337070ca291e4"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+        "htmlSha256": "46d6ecb969fe59d0d2b3d1bdcf80bd861ef196aad7a1dd636bd8301d582045d1"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+        "htmlSha256": "922465471f7fdae58b3c5f5784553e9c8763d9149ad396f405e78dc66e73a30a"
+      },
+      {
+        "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+        "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
+      }
+    ],
+    "localLinks": 3040,
+    "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+    "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim",
+    "readmeBasis": "Committed HEAD README; concurrent working attribution excluded"
+  },
+  "runtimeTests": "Not rerun; documentation-only step"
+}

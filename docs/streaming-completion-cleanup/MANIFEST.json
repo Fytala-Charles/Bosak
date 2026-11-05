@@ -1,0 +1,131 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "scope": "Cleanup dossier only; manifest excludes itself and generated Python bytecode",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "369400d6a03e116795f0f6c738b7d39b9303a550814ce5b9ebee2dad6e39d0ca"
+    },
+    {
+      "path": "ADOPTION.json",
+      "sha256": "6c965cfe2617466a15382fbac1bd700b1253059d55be50c62994489b39fd579b"
+    },
+    {
+      "path": "ADOPTION.md",
+      "sha256": "07bb279ebc20e2c55815f63d1f393b64d31ef91207e4ec474741c95af361021f"
+    },
+    {
+      "path": "evidence/api-comparison.json",
+      "sha256": "62ec59409702dc0384f6abf9e0911b9a3e3d17e4e9f3d1a8303c8817a3304630"
+    },
+    {
+      "path": "evidence/build-final.txt",
+      "sha256": "48ec8b073efa2ea8179f95ca0c5d60828a71618a05588cf5875c56778616e516"
+    },
+    {
+      "path": "evidence/build-initial.txt",
+      "sha256": "454300a2c762986bcab5c1acccf5bffe5a95c247b29f3e1cee3bd7c77ed8a77f"
+    },
+    {
+      "path": "evidence/candidate-source.json",
+      "sha256": "2b981247a05f6f8001abe69a7c6172cccc7997ccf56d6e94f53d344c0074162f"
+    },
+    {
+      "path": "evidence/focused-after.trx.gz",
+      "sha256": "659ca296bd3f7e86bb2c835c466342d3186fbf6817acbea58b6318928cea9337"
+    },
+    {
+      "path": "evidence/focused-after.txt",
+      "sha256": "d71078834f453f27e702670690d51ebebd6d8657a9322c322488d37d1316f502"
+    },
+    {
+      "path": "evidence/focused-before.trx.gz",
+      "sha256": "0d33ac1f2db7b976584e320d0c53a23ffb08174403adcd79cf588c7e87281298"
+    },
+    {
+      "path": "evidence/focused-before.txt",
+      "sha256": "f75adf7d93bf41ab009d443e31ed1a1b4238b34aa5c275a2534ef11b23fdbc33"
+    },
+    {
+      "path": "evidence/focused-final.trx.gz",
+      "sha256": "e4a243872a1d2181d08d512d24e485c2494ab324ec33e5a34724c60681f9e086"
+    },
+    {
+      "path": "evidence/focused-final.txt",
+      "sha256": "fa474a18ece6ca45f2f5b1ee6bb68ac7235a6b21de2eecabccfcc16d4d916054"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.api.tests.dll.trx.gz",
+      "sha256": "69ba11137e55d55e5ac195c3c48a1a3552ba93302dc3165e3b30cdefae7d3ffe"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.compiler.tests.dll.trx.gz",
+      "sha256": "1119e8aee5f69318ecb68870bce9537307a2eb786a58853571aba5a1d68ac479"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.core.tests.dll.trx.gz",
+      "sha256": "8307f8235d0482ca705d643920a6579e7c987487eac48733782c3df010a7f6c8"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.parser.tests.dll.trx.gz",
+      "sha256": "6979aa95bdb82aedf8fefb4d488a05b32013c4a8cb0405a6e9cbb916f87802fa"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.providers.database.tests.dll.trx.gz",
+      "sha256": "d4178c25f5e6e63c8d3de624f2ea18b4adb4c54f1eeaeacf43b0dfa679411dca"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.providers.tests.dll.trx.gz",
+      "sha256": "22f5279c382094e76a0db5903e985ff72aeda862476421b93588f8954f6afb15"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.runtime.tests.dll.trx.gz",
+      "sha256": "360de26199a523033ae4af1f1d30c3dc31438c73be9612b3d0e4e227648fc081"
+    },
+    {
+      "path": "evidence/full-bosak.xpath.standard.tests.dll.trx.gz",
+      "sha256": "125483cf785e2e4364ab7057915330adf34fa02c89e0e8b63c6017031fb66ffa"
+    },
+    {
+      "path": "evidence/full-bosak.xquery.tests.dll.trx.gz",
+      "sha256": "95f8dc56676e5dcdf90e2d7ad42f920f1f6fd35e73477a36f5740cbcef08e578"
+    },
+    {
+      "path": "evidence/full-bosak.xslt.tests.dll.trx.gz",
+      "sha256": "37242cfa4532409920bf4d2477cccb67ea40af06b0f7cc9a3462a3a2cb3289c7"
+    },
+    {
+      "path": "evidence/full-tests.txt",
+      "sha256": "1df0357c5b8b95b77d9584186fe21812e3d327381cc048077c90fed6d26a6abb"
+    },
+    {
+      "path": "evidence/qt3-skips.txt",
+      "sha256": "2c7a59c03ca54ea88314d5a851915bf3fe3a029600f089dc14c7f97405036613"
+    },
+    {
+      "path": "evidence/qt3.txt",
+      "sha256": "c99159b27dbd19f27daf705036e14259bc76f94d7e7c0b804d6ef3e8122c8c43"
+    },
+    {
+      "path": "evidence/qt4-skips.txt",
+      "sha256": "ca3d1f0651f257492bfb423d6769ceba00c726fc73b5e4d295e5afec06f1f1d0"
+    },
+    {
+      "path": "evidence/qt4.txt",
+      "sha256": "7859758c56e61dbf7391240f3c26b9a02be1f0bc8cd354b07cf10682ebe0f66d"
+    },
+    {
+      "path": "README.md",
+      "sha256": "85f2e18e855abe394994df047078801e19530a21c4f7b5c00db38df1473dc847"
+    },
+    {
+      "path": "RESULTS.json",
+      "sha256": "565811e710e698eb4985d08d9404d91f61b1e026ed830b02dd0952769ceffd9e"
+    },
+    {
+      "path": "verify.py",
+      "sha256": "1bdf554b88088015e50f3e1e60ae4e6cd3b461e7103648f55e91ed47531b4832"
+    }
+  ]
+}

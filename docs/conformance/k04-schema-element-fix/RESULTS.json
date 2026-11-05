@@ -1,0 +1,43 @@
+{
+  "slice": "K04-C42",
+  "date": "2026-10-29",
+  "base": "2e364d66",
+  "implementationComplete": true,
+  "regressions": {
+    "total": 39,
+    "beforePassed": 22,
+    "beforeFailed": 17,
+    "afterPassed": 39
+  },
+  "independentControlsPassed": 11,
+  "legacyOriginals": {
+    "total": 37,
+    "directPassed": 19,
+    "directFailed": 18,
+    "exactRepairedNames": [
+      "substitution-003",
+      "substitution-010",
+      "substitution-011",
+      "substitution-030"
+    ]
+  },
+  "exactQueryCompanionsPassed": 9,
+  "schemaPreparationErrorsRetained": 6,
+  "solutionPassed": 24203,
+  "qt3Normal": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Normal": [
+    8941,
+    0,
+    1918
+  ],
+  "normalBaselineChanged": false,
+  "schemaAdvisorAccepted": false,
+  "candidate": "1.33.1",
+  "published": "1.26.3",
+  "next": "C43 concrete schema-advisor compatibility proposal",
+  "releaseApproved": false
+}

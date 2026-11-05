@@ -1,0 +1,20 @@
+{
+  "Suite": "qt4",
+  "SuiteRoot": "tests/qt4tests",
+  "SetFile": "tests/qt4tests/fn/format-dateTime.xml",
+  "Name": "format-dateTime-en151",
+  "Expression": "format-dateTime($b, '[MNn]', 'xib', (), ())",
+  "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert>matches($result, \"en\")</ns0:assert>\n            <ns0:assert>matches($result, \"March\")</ns0:assert>\n         </ns0:all-of>\n      </ns0:result>\n   ",
+  "Dependencies": [
+    {
+      "Type": "spec",
+      "Value": "XP30+ XQ30+",
+      "Satisfied": true
+    },
+    {
+      "Type": "language",
+      "Value": "xib",
+      "Satisfied": false
+    }
+  ]
+}

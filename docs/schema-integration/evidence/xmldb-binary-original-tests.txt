@@ -1,0 +1,28 @@
+VSTest version 18.6.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.67]     Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads [FAIL]
+  Failed Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads [118 ms]
+  Error Message:
+   Assert.NotNull() Failure: Value is null
+  Stack Trace:
+     at Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads() in D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\ReopenTests.cs:line 32
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:27.46]     Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: "Published") [FAIL]
+  Failed Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: "Published") [1 m 26 s]
+  Error Message:
+   System.TimeoutException : The operation has timed out.
+  Stack Trace:
+     at Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(String stage) in D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\EpochBackupRestoreProcessTests.cs:line 53
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:51.35]     Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: "normal") [FAIL]
+  Failed Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: "normal") [1 m 23 s]
+  Error Message:
+   System.TimeoutException : The operation has timed out.
+  Stack Trace:
+     at Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(String stage) in D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\EpochBackupRestoreProcessTests.cs:line 53
+--- End of stack trace from previous location ---
+Results File: D:\Development\Bosak\.guard-tmp\xmldb-binary-results\charl_CHARLES_2026-10-29_12_11_03_net10.0.trx
+
+Failed!  - Failed:     3, Passed:   590, Skipped:     0, Total:   593, Duration: 13 m 8 s - Bosak.XmlDb.IntegrationTests.dll (net10.0)

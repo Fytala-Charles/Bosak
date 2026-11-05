@@ -1,0 +1,52 @@
+--- a/tests/Bosak.XPath.Conformance/DependencyFilter.cs
++++ b/tests/Bosak.XPath.Conformance/DependencyFilter.cs
+@@ -34,6 +34,7 @@
+ //                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+ //                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+ //                      | Charles Korthout | 0.18  | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
++//                      | Charles Korthout | 0.19  | 28-10-2026     | Isolated C40 canonical xib polarity review; normal policy remains unchanged. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -107,6 +108,15 @@
+ 
+         foreach (var dep in dependencies)
+         {
++            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
++            // Other language metadata retains the existing bounded admission policy.
++            if (dep.Type == "language" && dep.Value == "xib")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+             // Other calendar names retain their existing admission policy.
+             if (dep.Type == "calendar" && dep.Value == "CB")
+--- a/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
++++ b/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
+@@ -21,6 +21,7 @@
+ //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+ //                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+ //                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
++//                      | Charles Korthout | 0.9  | 28-10-2026     | Isolated C40 canonical xib polarity review; normal policy remains unchanged. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -103,6 +104,15 @@
+     {
+         foreach (var dep in dependencies)
+         {
++            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
++            // Other language metadata retains the existing bounded admission policy.
++            if (dep.Type == "language" && dep.Value == "xib")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+             // Other calendar names retain their existing admission policy.
+             if (dep.Type == "calendar" && dep.Value == "CB")

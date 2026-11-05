@@ -1,0 +1,2683 @@
+[
+  {
+    "name": "K2-MatchesFunc-16a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-MatchesFunc-16a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.49919250002130866,
+    "log": "K2-MatchesFunc-16a-resources.log",
+    "case": "K2-MatchesFunc-16a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-MatchesFunc-16a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-MatchesFunc-16a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-MatchesFunc-16a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.9513843000167981,
+    "log": "K2-MatchesFunc-16a-actual.log",
+    "case": "K2-MatchesFunc-16a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-MatchesFunc-16a",
+      "kind": "Failed",
+      "message": "Expected error FORX0002 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-210-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-210-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5087011000141501,
+    "log": "K2-SeqExprCast-210-resources.log",
+    "case": "K2-SeqExprCast-210",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-210",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-210-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-210-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.4368976999539882,
+    "log": "K2-SeqExprCast-210-actual.log",
+    "case": "K2-SeqExprCast-210",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-210",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-231-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-231-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12640760000795126,
+    "log": "K2-SeqExprCast-231-resources.log",
+    "case": "K2-SeqExprCast-231",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-231",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-231-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-231-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3015241000102833,
+    "log": "K2-SeqExprCast-231-actual.log",
+    "case": "K2-SeqExprCast-231",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-231",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-232-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-232-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12405980000039563,
+    "log": "K2-SeqExprCast-232-resources.log",
+    "case": "K2-SeqExprCast-232",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-232",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-232-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-232-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33412630000384524,
+    "log": "K2-SeqExprCast-232-actual.log",
+    "case": "K2-SeqExprCast-232",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-232",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-422-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-422-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11984539998229593,
+    "log": "K2-SeqExprCast-422-resources.log",
+    "case": "K2-SeqExprCast-422",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-422",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-422-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-422-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3342671999707818,
+    "log": "K2-SeqExprCast-422-actual.log",
+    "case": "K2-SeqExprCast-422",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-422",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-423-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-423-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12283910001860932,
+    "log": "K2-SeqExprCast-423-resources.log",
+    "case": "K2-SeqExprCast-423",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-423",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-423-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-423-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34964100003708154,
+    "log": "K2-SeqExprCast-423-actual.log",
+    "case": "K2-SeqExprCast-423",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-423",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-424-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-424-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1394898000289686,
+    "log": "K2-SeqExprCast-424-resources.log",
+    "case": "K2-SeqExprCast-424",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-424",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-424-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-424-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33371850004186854,
+    "log": "K2-SeqExprCast-424-actual.log",
+    "case": "K2-SeqExprCast-424",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-424",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-505-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-505-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.14588230004301295,
+    "log": "K2-SeqExprCast-505-resources.log",
+    "case": "K2-SeqExprCast-505",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-505",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-505-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-505-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29826349997892976,
+    "log": "K2-SeqExprCast-505-actual.log",
+    "case": "K2-SeqExprCast-505",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-505",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "K2-SeqExprCastable-6-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCastable-6-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1163067999877967,
+    "log": "K2-SeqExprCastable-6-resources.log",
+    "case": "K2-SeqExprCastable-6",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCastable-6",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastableExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCastable-6-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCastable-6-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2855718999635428,
+    "log": "K2-SeqExprCastable-6-actual.log",
+    "case": "K2-SeqExprCastable-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCastable-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-SeqExprCastable-7-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCastable-7-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10723970003891736,
+    "log": "K2-SeqExprCastable-7-resources.log",
+    "case": "K2-SeqExprCastable-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCastable-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastableExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCastable-7-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCastable-7-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29120490001514554,
+    "log": "K2-SeqExprCastable-7-actual.log",
+    "case": "K2-SeqExprCastable-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCastable-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-002-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-002-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10291750001488253,
+    "log": "cbcl-cast-gYear-002-resources.log",
+    "case": "cbcl-cast-gYear-002",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-002",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.derived.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-002-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-002-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29920309997396544,
+    "log": "cbcl-cast-gYear-002-actual.log",
+    "case": "cbcl-cast-gYear-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-002",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10712449997663498,
+    "log": "cbcl-cast-gYear-003-resources.log",
+    "case": "cbcl-cast-gYear-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.derived.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2930661999853328,
+    "log": "cbcl-cast-gYear-003-actual.log",
+    "case": "cbcl-cast-gYear-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-003",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "cbcl-cast-gYearMonth-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYearMonth-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10277120000682771,
+    "log": "cbcl-cast-gYearMonth-003-resources.log",
+    "case": "cbcl-cast-gYearMonth-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYearMonth-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.derived.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-cast-gYearMonth-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYearMonth-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3141659999964759,
+    "log": "cbcl-cast-gYearMonth-003-actual.log",
+    "case": "cbcl-cast-gYearMonth-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYearMonth-003",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-002-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-002-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09985200001392514,
+    "log": "cbcl-codepoints-to-string-002-resources.log",
+    "case": "cbcl-codepoints-to-string-002",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-002",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/codepoints-to-string.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-002-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-002-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33519909996539354,
+    "log": "cbcl-codepoints-to-string-002-actual.log",
+    "case": "cbcl-codepoints-to-string-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-002",
+      "kind": "Failed",
+      "message": "Expected error FOCH0001 but succeeded"
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10506290005287156,
+    "log": "cbcl-codepoints-to-string-003-resources.log",
+    "case": "cbcl-codepoints-to-string-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/codepoints-to-string.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3354577000136487,
+    "log": "cbcl-codepoints-to-string-003-actual.log",
+    "case": "cbcl-codepoints-to-string-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-003",
+      "kind": "Failed",
+      "message": "Expected error FOCH0001 but succeeded"
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-004-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-004-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11776079999981448,
+    "log": "cbcl-codepoints-to-string-004-resources.log",
+    "case": "cbcl-codepoints-to-string-004",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-004",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/codepoints-to-string.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-codepoints-to-string-004-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-codepoints-to-string-004-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31496759998844936,
+    "log": "cbcl-codepoints-to-string-004-actual.log",
+    "case": "cbcl-codepoints-to-string-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-codepoints-to-string-004",
+      "kind": "Failed",
+      "message": "Expected error FOCH0001 but succeeded"
+    }
+  },
+  {
+    "name": "fn-matches-50-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\fn-matches-50-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10681470000417903,
+    "log": "fn-matches-50-resources.log",
+    "case": "fn-matches-50",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "fn-matches-50",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches/perl-tests.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "fn-matches-50-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\fn-matches-50-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 3.5919570999685675,
+    "log": "fn-matches-50-actual.log",
+    "case": "fn-matches-50",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "fn-matches-50",
+      "kind": "Failed",
+      "message": "assert failed. Expression: empty($result//fail), Got: false"
+    }
+  },
+  {
+    "name": "re00056-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00056-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11338930000783876,
+    "log": "re00056-resources.log",
+    "case": "re00056",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00056",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00056-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00056-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36040599999250844,
+    "log": "re00056-actual.log",
+    "case": "re00056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00056",
+      "kind": "Failed",
+      "message": "Expected error FORX0002 but succeeded"
+    }
+  },
+  {
+    "name": "re00086-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00086-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12089199997717515,
+    "log": "re00086-resources.log",
+    "case": "re00086",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00086",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00086-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00086-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.325237900018692,
+    "log": "re00086-actual.log",
+    "case": "re00086",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00086",
+      "kind": "Failed",
+      "message": "Expected error FORX0002 but succeeded"
+    }
+  },
+  {
+    "name": "re00102a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00102a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12117469997610897,
+    "log": "re00102a-resources.log",
+    "case": "re00102a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00102a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00102a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00102a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3309560000197962,
+    "log": "re00102a-actual.log",
+    "case": "re00102a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00102a",
+      "kind": "Failed",
+      "message": "Expected error FORX0002 but succeeded"
+    }
+  },
+  {
+    "name": "substitution-001-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-001-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11189320002449676,
+    "log": "substitution-001-resources.log",
+    "case": "substitution-001",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-001",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-001-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-001-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3367629999993369,
+    "log": "substitution-001-actual.log",
+    "case": "substitution-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-001",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-002-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-002-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11560020002070814,
+    "log": "substitution-002-resources.log",
+    "case": "substitution-002",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-002",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-002-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-002-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3371177999651991,
+    "log": "substitution-002-actual.log",
+    "case": "substitution-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-002",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10483089997433126,
+    "log": "substitution-003-resources.log",
+    "case": "substitution-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-003",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33485580002889037,
+    "log": "substitution-003-actual.log",
+    "case": "substitution-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-003",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-004-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-004-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10822949995053932,
+    "log": "substitution-004-resources.log",
+    "case": "substitution-004",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-004",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-004-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-004-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3302106999908574,
+    "log": "substitution-004-actual.log",
+    "case": "substitution-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-004",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-005-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-005-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10645720001775771,
+    "log": "substitution-005-resources.log",
+    "case": "substitution-005",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-005",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-005-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-005-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32468859996879473,
+    "log": "substitution-005-actual.log",
+    "case": "substitution-005",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-005",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-006-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-006-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1128931000130251,
+    "log": "substitution-006-resources.log",
+    "case": "substitution-006",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-006",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-006-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-006-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.334803199977614,
+    "log": "substitution-006-actual.log",
+    "case": "substitution-006",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-006",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-007-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-007-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11321260000113398,
+    "log": "substitution-007-resources.log",
+    "case": "substitution-007",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-007",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-007-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-007-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3347730999812484,
+    "log": "substitution-007-actual.log",
+    "case": "substitution-007",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-007",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-008-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-008-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11032209999393672,
+    "log": "substitution-008-resources.log",
+    "case": "substitution-008",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-008",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-008-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-008-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3325629000319168,
+    "log": "substitution-008-actual.log",
+    "case": "substitution-008",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-008",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-009-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-009-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10652129998197779,
+    "log": "substitution-009-resources.log",
+    "case": "substitution-009",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-009",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-009-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-009-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3305049000191502,
+    "log": "substitution-009-actual.log",
+    "case": "substitution-009",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-009",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-010-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-010-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11223000002792105,
+    "log": "substitution-010-resources.log",
+    "case": "substitution-010",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-010",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-010-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-010-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34115699998801574,
+    "log": "substitution-010-actual.log",
+    "case": "substitution-010",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-010",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-011-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-011-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10942849999992177,
+    "log": "substitution-011-resources.log",
+    "case": "substitution-011",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-011",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-011-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-011-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3589063999825157,
+    "log": "substitution-011-actual.log",
+    "case": "substitution-011",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-011",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-030-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-030-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11886170000070706,
+    "log": "substitution-030-resources.log",
+    "case": "substitution-030",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-030",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-030-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-030-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29949970002053306,
+    "log": "substitution-030-actual.log",
+    "case": "substitution-030",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-030",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-031-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-031-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11554339999565855,
+    "log": "substitution-031-resources.log",
+    "case": "substitution-031",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-031",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-031-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-031-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29264399997191504,
+    "log": "substitution-031-actual.log",
+    "case": "substitution-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "substitution-032-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-032-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11073559999931604,
+    "log": "substitution-032-resources.log",
+    "case": "substitution-032",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-032",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution.xsd",
+          "XsdVersion": "1.0"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-032-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-032-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3104617000208236,
+    "log": "substitution-032-actual.log",
+    "case": "substitution-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "xs-double-004-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-004-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10338230000343174,
+    "log": "xs-double-004-resources.log",
+    "case": "xs-double-004",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-004",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/xs/double.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "xs-double-004-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-004-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2957981000072323,
+    "log": "xs-double-004-actual.log",
+    "case": "xs-double-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-004",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "xs-double-005-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-005-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1108521000132896,
+    "log": "xs-double-005-resources.log",
+    "case": "xs-double-005",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-005",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/xs/double.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "xs-double-005-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-005-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2972668000147678,
+    "log": "xs-double-005-actual.log",
+    "case": "xs-double-005",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-005",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "xs-float-004-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-float-004-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10587490000762045,
+    "log": "xs-float-004-resources.log",
+    "case": "xs-float-004",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-float-004",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/xs/float.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "xs-float-004-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-float-004-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2847459999611601,
+    "log": "xs-float-004-actual.log",
+    "case": "xs-float-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-float-004",
+      "kind": "Failed",
+      "message": "Expected error FORG0001 but succeeded"
+    }
+  },
+  {
+    "name": "substitution-020-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-020-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10973520000698045,
+    "log": "substitution-020-resources.log",
+    "case": "substitution-020",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-020",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-020-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-020-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19226189999608323,
+    "log": "substitution-020-actual.log",
+    "case": "substitution-020",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-020",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-021-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-021-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10696220002137125,
+    "log": "substitution-021-resources.log",
+    "case": "substitution-021",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-021",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-021-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-021-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19875590002629906,
+    "log": "substitution-021-actual.log",
+    "case": "substitution-021",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-021",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-022-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-022-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11812780000036582,
+    "log": "substitution-022-resources.log",
+    "case": "substitution-022",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-022",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-022-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-022-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20196120004402474,
+    "log": "substitution-022-actual.log",
+    "case": "substitution-022",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-022",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-023-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-023-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11126739997416735,
+    "log": "substitution-023-resources.log",
+    "case": "substitution-023",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-023",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-023-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-023-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20102560002123937,
+    "log": "substitution-023-actual.log",
+    "case": "substitution-023",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-023",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-024-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-024-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1106419000425376,
+    "log": "substitution-024-resources.log",
+    "case": "substitution-024",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-024",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-024-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-024-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1940455000149086,
+    "log": "substitution-024-actual.log",
+    "case": "substitution-024",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-024",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "substitution-025-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-025-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10996899998281151,
+    "log": "substitution-025-resources.log",
+    "case": "substitution-025",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-025",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/substitution11",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/substitution11.xsd",
+          "XsdVersion": "1.1"
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "substitution-025-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\substitution-025-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19816159998299554,
+    "log": "substitution-025-actual.log",
+    "case": "substitution-025",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-025",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "name": "K2-MatchesFunc-16-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-MatchesFunc-16-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10248780000256374,
+    "log": "K2-MatchesFunc-16-resources.log",
+    "case": "K2-MatchesFunc-16",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-MatchesFunc-16",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-MatchesFunc-16-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-MatchesFunc-16-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28527729999041185,
+    "log": "K2-MatchesFunc-16-actual.log",
+    "case": "K2-MatchesFunc-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-MatchesFunc-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-231a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-231a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12254670000402257,
+    "log": "K2-SeqExprCast-231a-resources.log",
+    "case": "K2-SeqExprCast-231a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-231a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-231a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-231a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2927927999990061,
+    "log": "K2-SeqExprCast-231a-actual.log",
+    "case": "K2-SeqExprCast-231a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-231a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-232a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-232a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11341489996993914,
+    "log": "K2-SeqExprCast-232a-resources.log",
+    "case": "K2-SeqExprCast-232a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-232a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-SeqExprCast-232a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\K2-SeqExprCast-232a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29253289999905974,
+    "log": "K2-SeqExprCast-232a-actual.log",
+    "case": "K2-SeqExprCast-232a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-SeqExprCast-232a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-003a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-003a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10351220000302419,
+    "log": "cbcl-cast-gYear-003a-resources.log",
+    "case": "cbcl-cast-gYear-003a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-003a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastExpr.derived.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-cast-gYear-003a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\cbcl-cast-gYear-003a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30244440003298223,
+    "log": "cbcl-cast-gYear-003a-actual.log",
+    "case": "cbcl-cast-gYear-003a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-cast-gYear-003a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "re00056a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00056a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11213669995777309,
+    "log": "re00056a-resources.log",
+    "case": "re00056a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00056a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00056a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00056a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34244349994696677,
+    "log": "re00056a-actual.log",
+    "case": "re00056a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00056a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "re00086a-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00086a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10406240000156686,
+    "log": "re00086a-resources.log",
+    "case": "re00086a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00086a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00086a-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00086a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30733959999633953,
+    "log": "re00086a-actual.log",
+    "case": "re00086a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00086a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "re00102-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00102-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11565360001986846,
+    "log": "re00102-resources.log",
+    "case": "re00102",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00102",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/matches.re.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "re00102-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\re00102-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3180339999962598,
+    "log": "re00102-actual.log",
+    "case": "re00102",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "re00102",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "xs-double-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1023744999547489,
+    "log": "xs-double-003-resources.log",
+    "case": "xs-double-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/xs/double.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "xs-double-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-double-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28210030001355335,
+    "log": "xs-double-003-actual.log",
+    "case": "xs-double-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-double-003",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "xs-float-003-resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-float-003-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10657229996286333,
+    "log": "xs-float-003-resources.log",
+    "case": "xs-float-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-float-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/xs/float.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "xs-float-003-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-element-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-schema-element-fix\\evidence\\xs-float-003-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28985360002843663,
+    "log": "xs-float-003-actual.log",
+    "case": "xs-float-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "xs-float-003",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

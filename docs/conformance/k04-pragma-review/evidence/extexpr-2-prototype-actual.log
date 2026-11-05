@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"extexpr-2","kind":"Failed","message":"Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."}

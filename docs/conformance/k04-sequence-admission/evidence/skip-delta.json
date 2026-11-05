@@ -1,0 +1,26 @@
+{
+  "qt3": {
+    "totals": [
+      31162,
+      0,
+      659
+    ],
+    "removed": {
+      "format-integer-042": "Unsupported dependency"
+    },
+    "added": {},
+    "retainedNamesAndReasons": 659
+  },
+  "qt4": {
+    "totals": [
+      8587,
+      0,
+      1892
+    ],
+    "removed": {
+      "format-integer-042": "Unsupported dependency"
+    },
+    "added": {},
+    "retainedNamesAndReasons": 1892
+  }
+}

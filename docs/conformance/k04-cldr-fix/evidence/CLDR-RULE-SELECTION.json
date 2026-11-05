@@ -1,0 +1,40 @@
+{
+  "source": "cldr-de in SPECIFICATION-ADOPTION.json",
+  "selectedRules": {
+    "spellout-ordinal": {
+      "present": true,
+      "selectedRules": {
+        "0": "nullte;",
+        "1": "erste;",
+        "20": "=%spellout-numbering=ste;"
+      }
+    },
+    "spellout-ordinal-s": {
+      "present": true,
+      "selectedRules": {
+        "0": "=%spellout-ordinal=s;"
+      }
+    },
+    "spellout-ordinal-r": {
+      "present": true,
+      "selectedRules": {
+        "0": "=%spellout-ordinal=r;"
+      }
+    },
+    "spellout-ordinal-n": {
+      "present": true,
+      "selectedRules": {
+        "0": "=%spellout-ordinal=n;"
+      }
+    },
+    "spellout-ordinal-feminine": {
+      "present": false,
+      "selectedRules": {}
+    },
+    "spellout-cardinal": {
+      "present": false,
+      "selectedRules": {}
+    }
+  },
+  "interpretation": "Pinned ordinal-s/r/n append s/r/n to the e-ending ordinary ordinal. Feminine and generic cardinal names are legacy Bosak aliases/fallbacks, not claims of those exact names existing in CLDR46 German data."
+}

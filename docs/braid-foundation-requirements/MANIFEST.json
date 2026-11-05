@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-31",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "README.md",
+      "sha256": "daed48a980e8682d5615bf6268f1e0d53501ef3dfc4458e13150ce392db1500e"
+    },
+    {
+      "path": "SOURCE-INPUTS.json",
+      "sha256": "475a21f2f16c8ccc5f56ca322415e1b57589ef9e9ee86a8e4916b192f6399063"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "8b3361ec8c1593f739ce09b42f4d0e0b20701af213b974465b8e65c251dcb0bb"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "a6bdf5758dbbf2e1e58bdc041caf8d483c657cfa91649d2066dabf48e134ecbc"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "sourceRevision": "8080b18ba69959f4fc33feebb6810914da3f817d",
+  "sourceSha256": "bb039fdcdff2b6f07c77561a13ccee9c85572e027010575e448515239b0b09d7",
+  "productSha256": "b2a11215be1857b3204bf5c581e347abd817ed3de22365aa9786e5ee5a1594a9",
+  "probeSha256": "6ec37abfd2b167c30da64a72229612abd96298683ee6c02a1a55508ed4e0c781",
+  "frozenFiles": {
+    "Probe.dll": "91cefc347741a47901cdf34cbbbd6031cf1da5e4293c10af0e8534ecdad93207",
+    "Probe.deps.json": "ac95642bddefd2ec48ae96cb600194c5746906dbcdb9db1f30782ab1ac7143cc",
+    "Probe.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+  },
+  "coreProject": "<Project Sdk=\"Microsoft.NET.Sdk\">\n\n  <PropertyGroup>\n    <Version>1.35.0</Version><AssemblyVersion>1.35.0.0</AssemblyVersion><AssemblyName>Bosak.XPath.Core</AssemblyName><GenerateDocumentationFile>true</GenerateDocumentationFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors><TargetFramework>net10.0</TargetFramework>\n    <ImplicitUsings>enable</ImplicitUsings>\n    <Nullable>enable</Nullable>\n    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>\n    <LangVersion>preview</LangVersion>\n  </PropertyGroup>\n\n  <PropertyGroup>\n    <PackageId>Bosak.XPath.Core</PackageId>\n    <Description>Bosak: XQuery Data Model (XDM) foundation types \u2014 XdmValue, nodes, sequences and axis navigation. Shared foundation of the Bosak XPath 3.1 / XSLT 3.0 / XQuery 3.1 stack for .NET.</Description>\n  </PropertyGroup>\n\n  <ItemGroup>\n    <InternalsVisibleTo Include=\"Bosak.XPath.Runtime\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Api\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Standard\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Providers\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Compiler\" />\n    <InternalsVisibleTo Include=\"Bosak.Xslt\" />\n    <InternalsVisibleTo Include=\"Bosak.XQuery\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Core.Tests\" />\n    <InternalsVisibleTo Include=\"Bosak.XPath.Runtime.Tests\" />\n  </ItemGroup>\n\n</Project>\n",
+  "callerProject": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup><Reference Include=\"Bosak.XPath.Api\"><HintPath>../product/lib/Bosak.XPath.Api.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Compiler\"><HintPath>../product/lib/Bosak.XPath.Compiler.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Core\"><HintPath>../product/lib/Bosak.XPath.Core.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Parser\"><HintPath>../product/lib/Bosak.XPath.Parser.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Providers\"><HintPath>../product/lib/Bosak.XPath.Providers.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Runtime\"><HintPath>../product/lib/Bosak.XPath.Runtime.dll</HintPath><Private>true</Private></Reference><Reference Include=\"Bosak.XPath.Standard\"><HintPath>../product/lib/Bosak.XPath.Standard.dll</HintPath><Private>true</Private></Reference></ItemGroup></Project>",
+  "variants": [
+    {
+      "mode": "product",
+      "layout": {
+        "Bosak.XPath.Api.dll": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+        "Bosak.XPath.Compiler.dll": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+        "Bosak.XPath.Core.dll": "cd2d323cec043c97c32f72fcaae820496f477326d82f468cd58b6b95cd8c6ac1",
+        "Bosak.XPath.Parser.dll": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+        "Bosak.XPath.Providers.dll": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+        "Bosak.XPath.Runtime.dll": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b",
+        "Bosak.XPath.Standard.dll": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+      }
+    },
+    {
+      "mode": "source",
+      "layout": {
+        "Bosak.XPath.Api.dll": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+        "Bosak.XPath.Compiler.dll": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+        "Bosak.XPath.Core.dll": "89a68768f68822b15e6ed773323b57c89a72d5135736dd1ade245d6ff3507151",
+        "Bosak.XPath.Parser.dll": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+        "Bosak.XPath.Providers.dll": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+        "Bosak.XPath.Runtime.dll": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b",
+        "Bosak.XPath.Standard.dll": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+      }
+    },
+    {
+      "mode": "equal-selective",
+      "layout": {
+        "Bosak.XPath.Api.dll": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+        "Bosak.XPath.Compiler.dll": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+        "Bosak.XPath.Core.dll": "d08eec2ab112d3b8263244b382046ddd221cabb8c82f7dd1cdd666e0523f8289",
+        "Bosak.XPath.Parser.dll": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+        "Bosak.XPath.Providers.dll": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+        "Bosak.XPath.Runtime.dll": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b",
+        "Bosak.XPath.Standard.dll": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+      }
+    },
+    {
+      "mode": "field-selective",
+      "layout": {
+        "Bosak.XPath.Api.dll": "4b3b609f11c9666732ad9b77af617a90e91bee3c144d40f5abc6422abebf38bd",
+        "Bosak.XPath.Compiler.dll": "7b8cf4780b10f7c7a10d41d9b867e77abb84ac8a32c8778b71ac3b694a244aa5",
+        "Bosak.XPath.Core.dll": "b06298a97474cf3b86175646b8eec818599c2aacb84eacc25f1495b53bde15be",
+        "Bosak.XPath.Parser.dll": "52c30d7518c5aea2e0786def32a3745e1507e9701449735b32e8df8dfd268a4b",
+        "Bosak.XPath.Providers.dll": "2b08efacf8a98387fab485876bbac2e5a4ef0a632ee655acddeb53371ed2c12c",
+        "Bosak.XPath.Runtime.dll": "3da44b5d0ffea7e7f95cfbef8d98a75e2d37aa09d7005847f6d7d4d243e1072b",
+        "Bosak.XPath.Standard.dll": "9b1520fc41584cb91913a1a9f89e8de3eb392cc06615810d667946b6859b0588"
+      }
+    }
+  ],
+  "samples": 7,
+  "warmups": 3,
+  "sizes": [
+    1000,
+    100000
+  ],
+  "frozenCallerSha256": "298ac2ea12fdf3bbf98d2bd982358527b748c28f3e736b8d84bce8ad5231b833",
+  "parentInputsSha256": "be706d907817f495d9fbe828a2adafdc0362a4c7161e7e8fab254fe1bcbfc69f",
+  "productionModified": false,
+  "checkedRunnerPath": "tools/run-retained-foundation-caller.py",
+  "checkedRunnerSha256": "36e822df48bc78d1781d187e2e0357a24d97c438c5b33187fea6de0d9c84708e"
+}

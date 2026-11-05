@@ -1,0 +1,38 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "12364bda0382b61e18209333888141c8fa71598c01ab2d638291b23c72e742de"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "29dac85a09bc24f1f4bdbde6a3616e09bd6b457ae054dcade1f9349936d8ed89"
+    },
+    {
+      "path": "OWNER-ACCEPTANCE.md",
+      "sha256": "0738867c4b7faad804d562459855397d27b12c8382d0d028f36665d522783626"
+    },
+    {
+      "path": "OWNER-RESPONSE.template.json",
+      "sha256": "aaeec9cdf71db8ebbf8cf0cf4052bc409d90854bafc4292523f1f3b8aa8d3624"
+    },
+    {
+      "path": "READINESS.json",
+      "sha256": "c220f6ddf1267e4fe79c4aa073ba76dfcaa27ac6d37ca2f484f630467279b546"
+    },
+    {
+      "path": "README.md",
+      "sha256": "fbbe5f004d94ad90ff8b9d43ccd9bbd3c49cd55bd580974b4192dfd09a1dfd15"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "849e8e7813e831b2ba1ad87784fd2ccf808970fdeaec97aab3f9db1c01ce61dc"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "df8788dd8a8a07991cc486d95abf32997d9bae2b0a05d7ec80f8fabe4d3c41d2"
+    }
+  ]
+}

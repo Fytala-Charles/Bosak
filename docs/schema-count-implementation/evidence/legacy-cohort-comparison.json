@@ -1,0 +1,7 @@
+{
+  "previousCases": 334,
+  "unchangedExpectationsPassed": 333,
+  "adoptedCaseBefore": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"count(a) eq 2\")",
+  "adoptedCaseAfter": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.CountAssertionCapability_IsSupported",
+  "adoptedCaseFinalPassed": true
+}

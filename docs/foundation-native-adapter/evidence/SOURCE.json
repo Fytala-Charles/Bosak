@@ -1,0 +1,35 @@
+{
+  "revision": "c3624998eca8c83018e121fa84af611f834a0501",
+  "files": [
+    {
+      "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+      "sha256": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d"
+    },
+    {
+      "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+      "sha256": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed"
+    },
+    {
+      "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+      "sha256": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610"
+    },
+    {
+      "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+      "sha256": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/SchemaDiagnostic.cs",
+      "sha256": "4d2a760cf508ec556d92ca02eb6eaf385f72d21ab9219c6a43923084c892537c"
+    },
+    {
+      "path": "src/Bosak.Schema/Model/XsdLanguageVersion.cs",
+      "sha256": "a4d56c055c2c76b5676f0f79dcd7ac0ef93cf1731014dde871b91584748d6ed0"
+    },
+    {
+      "path": "LICENSE.md",
+      "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da"
+    }
+  ],
+  "factory": "AssessmentProfileParser.Compile, the exact native factory called by SchemaServices.CreateDocumentAssessor; no substituted validation algorithm",
+  "scope": "Six unchanged native/diagnostic source files compiled in the isolated runner; not a full Schema package build"
+}

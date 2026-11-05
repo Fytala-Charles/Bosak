@@ -576,6 +576,9 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 7.60  | 23-10-2026     | Use the default mode for omitted apply-templates mode in function sequences.              |
+//                      | Charles Korthout | 7.61  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
+//                      | Charles Korthout | 7.62  | 01-11-2026     | Add explicit global-context core while preserving legacy source fallback. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1217,6 +1220,9 @@ internal sealed class TransformEngine
     /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
     /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
+        => TransformCore(source, initialTemplate, initialMode, rawResult, baseOutputUri, initialMatchSelection, captureResultDocuments, rawTransformResult, globalContextItem, true);
+
+    internal XdmValue TransformCore(IXdmNode? source, string? initialTemplate, string? initialMode, bool rawResult, string? baseOutputUri, XdmValue? initialMatchSelection, bool captureResultDocuments, bool rawTransformResult, IXdmNode? globalContextItem, bool useSourceAsGlobalContext)
     {
         _staticRecordFieldValues.Clear();
         _evaluatingRecordFields.Clear();
@@ -1245,7 +1251,7 @@ internal sealed class TransformEngine
             throw new InvalidOperationException("XTDE0040: Named template 'xsl:initial-template' not found (no source document or entry point was supplied).");
 
         // XTDE3086: a required global context item must be supplied.
-        if (_stylesheet.GlobalContextItemUse == "required" && source == null)
+        if (_stylesheet.GlobalContextItemUse == "required" && (useSourceAsGlobalContext ? source == null : globalContextItem == null))
             throw new InvalidOperationException("XTDE3086: A global context item is required but none was supplied.");
 
         // Ensure xsl:function registrations are present (re-entrant transforms)
@@ -1317,7 +1323,9 @@ internal sealed class TransformEngine
         // the value explicitly or supplies a wrapper document for non-document nodes.
         // When called directly without an explicit global context item, the source
         // node serves as the global context item for backward compatibility.
-        var effectiveGlobalContextItem = globalContextItem ?? source;
+        var effectiveGlobalContextItem = useSourceAsGlobalContext ? globalContextItem ?? source : globalContextItem;
+        if (!useSourceAsGlobalContext)
+            _context.WithFocus(XdmValue.Undefined, 0, 0);
 
         // xsl:global-context-item use="absent": the transformation runs with an absent
         // global context item even when a source is supplied (glob-cxt-item-003).
@@ -1426,11 +1434,12 @@ internal sealed class TransformEngine
             _isExecutingInitialTemplate = true;
             try
             {
-                if (entryRule.CompiledMatch != null && source != null)
+                if (useSourceAsGlobalContext && entryRule.CompiledMatch != null && source != null)
                     ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
                 else
                 {
-                    var initialContextItem = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
+                    var namedContext = useSourceAsGlobalContext ? source : effectiveGlobalContextItem;
+                    var initialContextItem = namedContext != null ? XdmValue.FromNode(namedContext) : XdmValue.Undefined;
                     CallTemplate(templateKey, initialContextItem, initCallParams, initTunnelParams);
                 }
             }
@@ -11395,6 +11404,8 @@ internal sealed class TransformEngine
                     {
                         copy.AddAnnotation(elemSchemaInfo);
                     }
+                    if (node is XDocumentNode nativeCopySource && nativeCopySource.UnderlyingObject is XElement nativeCopyElement)
+                        XdmElementAssessment.Copy(nativeCopyElement, copy);
                     foreach (var child in node.Axis(XdmAxis.Child))
                     {
                         CopyNodeToContainer(child.NodeValue!, copy, copyAllNamespaces, copyAccumulators);
@@ -11896,6 +11907,8 @@ internal sealed class TransformEngine
                     {
                         elem.AddAnnotation(elemSchemaInfo);
                     }
+                    if (node is XDocumentNode nativeContainerSource && nativeContainerSource.UnderlyingObject is XElement nativeContainerElement)
+                        XdmElementAssessment.Copy(nativeContainerElement, elem);
                     if (copyAccumulators)
                         AttachAccumulatorValues(node, elem);
                     AddElementToContainer(elem, container);
@@ -12398,6 +12411,7 @@ internal sealed class TransformEngine
                 {
                     copy.AddAnnotation(srcElemInfo);
                 }
+                XdmElementAssessment.Copy(srcElem, copy);
                 // REQ-114 (PB-3 C9, copy-5034): carry the element-level is-id/is-idref
                 // snapshot too, so fn:id/fn:idref keep working after a strip-copy.
                 if (srcElem.Annotation<XdmIdProperties>() is { } srcElemIdProperties)
@@ -16294,6 +16308,8 @@ internal sealed class TransformEngine
     /// </summary>
     private static XdmValue AtomizeForVariableCoercion(IXdmNode node)
     {
+        if (node is XDocumentNode { ElementAssessment.HasNoTypedValue: true })
+            throw new InvalidOperationException("FOTY0012: Cannot coerce an assessed element-only node to an atomic value.");
         if (node.SchemaTypeAnnotation is null || node.HasNoTypedValue)
             return XdmValue.FromString(node.StringValue, "untypedAtomic");
         var typed = node.TypedValue;

@@ -1,0 +1,9 @@
+{
+  "bytesPerRead": {
+    "compute": 12360
+  },
+  "warmupReads": 100,
+  "measuredReads": 1000,
+  "scope": "Warm public session with admitted typed operand; ownership, original marker and actual-type authority are rechecked at arithmetic checkpoints. Provider outcome allocations included; no payload getter replay. No accepted owner/latency/retained-memory budgets.",
+  "budgetsAccepted": false
+}

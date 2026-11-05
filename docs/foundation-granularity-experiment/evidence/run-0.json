@@ -1,0 +1,4318 @@
+{
+  "scope": "Synthetic immutable component graph, not XSD relations/real providers or remote IPC",
+  "round": 0,
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "architecture": "X64",
+  "processorCount": 24,
+  "serverGc": false,
+  "pointerSize": 8,
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "coreCandidateSurface": [
+    {
+      "name": "C13901.Draft.IQuerySemanticEnvironment",
+      "members": [
+        "C13901.Draft.IQueryStaticContext get_StaticContext()",
+        "C13901.Draft.IQueryStaticContext StaticContext",
+        "C13901.Draft.QueryHostLanguage get_HostLanguage()",
+        "C13901.Draft.QueryHostLanguage HostLanguage",
+        "System.String BehaviorProfile",
+        "System.String get_BehaviorProfile()",
+        "System.String get_HostVersion()",
+        "System.String HostVersion",
+        "System.Uri get_XdmSpecificationRevision()",
+        "System.Uri XdmSpecificationRevision"
+      ]
+    },
+    {
+      "name": "C13901.Draft.IQueryStaticContext",
+      "members": [
+        "Boolean BackwardsCompatible",
+        "Boolean get_BackwardsCompatible()",
+        "Boolean get_StrictStaticTyping()",
+        "Boolean get_Xml11LineEndings()",
+        "Boolean StrictStaticTyping",
+        "Boolean Xml11LineEndings",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] EnumerationItemTypes",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] get_EnumerationItemTypes()",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] get_Namespaces()",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] get_StaticVariableTypes()",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] Namespaces",
+        "System.Collections.Immutable.ImmutableDictionary\u00602[System.String,System.String] StaticVariableTypes",
+        "System.String DefaultCollation",
+        "System.String DefaultElementNamespace",
+        "System.String DefaultFunctionNamespace",
+        "System.String DefiningElementDefaultNamespace",
+        "System.String get_DefaultCollation()",
+        "System.String get_DefaultElementNamespace()",
+        "System.String get_DefaultFunctionNamespace()",
+        "System.String get_DefiningElementDefaultNamespace()",
+        "System.Uri BaseUri",
+        "System.Uri get_BaseUri()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAnnotatedNode",
+      "members": [
+        "C13901.Draft.ISchemaNodeFacts get_OriginalSchemaFacts()",
+        "C13901.Draft.ISchemaNodeFacts OriginalSchemaFacts"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentAdvisor",
+      "members": [
+        "Boolean OwnsAssessment(C13901.Draft.ISchemaAssessmentOrigin)",
+        "Boolean OwnsNodeFacts(C13901.Draft.ISchemaNodeFacts)",
+        "C13901.Draft.IQuerySemanticEnvironment get_QueryEnvironment()",
+        "C13901.Draft.IQuerySemanticEnvironment QueryEnvironment",
+        "C13901.Draft.ISchemaAssessmentResult Assess(C13901.Draft.SchemaAssessmentRequest, System.Threading.CancellationToken)",
+        "C13901.Draft.ISchemaAssessor Assessor",
+        "C13901.Draft.ISchemaAssessor get_Assessor()",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaTypedValue] ConstructSimpleValue(Bosak.XPath.Core.Xdm.XdmValue, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaAssessmentEpisode, System.Threading.CancellationToken)",
+        "Void ThrowIfUnavailable(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentEpisode",
+      "members": [
+        "Int32 get_ImplicitTimezoneOffsetMinutes()",
+        "Int32 ImplicitTimezoneOffsetMinutes",
+        "System.DateTimeOffset CurrentDateTime",
+        "System.DateTimeOffset get_CurrentDateTime()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentEvidence",
+      "members": [
+        "Boolean get_IsComplete()",
+        "Boolean IsComplete",
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.SchemaAssessmentStatus get_Status()",
+        "C13901.Draft.SchemaAssessmentStatus Status"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentInput",
+      "members": [
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Root()",
+        "Bosak.XPath.Core.Xdm.IXdmNode Root",
+        "C13901.Draft.ISchemaSnapshotBinding get_Snapshot()",
+        "C13901.Draft.ISchemaSnapshotBinding Snapshot",
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source",
+        "Void ThrowIfUnavailable(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentOrigin",
+      "members": [
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessmentResult",
+      "members": [
+        "Boolean DiagnosticsTruncated",
+        "Boolean get_DiagnosticsTruncated()",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_ValidatedRoot()",
+        "Bosak.XPath.Core.Xdm.IXdmNode ValidatedRoot",
+        "C13901.Draft.ISchemaAssessmentEvidence Evidence",
+        "C13901.Draft.ISchemaAssessmentEvidence get_Evidence()",
+        "C13901.Draft.SchemaAssessmentStatus get_Status()",
+        "C13901.Draft.SchemaAssessmentStatus Status",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] Diagnostics",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] get_Diagnostics()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAssessor",
+      "members": [
+        "C13901.Draft.ISchemaAuthority Authority",
+        "C13901.Draft.ISchemaAuthority get_Authority()",
+        "C13901.Draft.SchemaLanguageVersion get_SchemaLanguage()",
+        "C13901.Draft.SchemaLanguageVersion SchemaLanguage",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaAssessmentAdvisor] Bind(C13901.Draft.IQuerySemanticEnvironment, System.Threading.CancellationToken)",
+        "System.String AssessmentProfile",
+        "System.String get_AssessmentProfile()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAtomicProvenance",
+      "members": [
+        "C13901.Draft.ISchemaAssessmentOrigin get_OriginalAssessment()",
+        "C13901.Draft.ISchemaAssessmentOrigin OriginalAssessment",
+        "C13901.Draft.ISchemaComponentHandle ActualType",
+        "C13901.Draft.ISchemaComponentHandle DeclaredType",
+        "C13901.Draft.ISchemaComponentHandle get_ActualType()",
+        "C13901.Draft.ISchemaComponentHandle get_DeclaredType()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaAuthority",
+      "members": [
+        "Boolean Owns(C13901.Draft.ISchemaComponentHandle)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveAttributeDeclaration(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveElementDeclaration(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaComponentHandle] ResolveType(C13901.Draft.SchemaExpandedName, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsAffiliatedWith(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsDerivedFrom(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsSameComponent(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.ISchemaComponentHandle]] GetComponentClosure(C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityAuthority",
+      "members": [
+        "C13901.Draft.ISchemaCompatibilityResult Establish(C13901.Draft.ISchemaAssessmentAdvisor, C13901.Draft.ISchemaAssessmentAdvisor, C13901.Draft.IQuerySemanticEnvironment, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityResult",
+      "members": [
+        "C13901.Draft.ISchemaCompatibilityView get_View()",
+        "C13901.Draft.ISchemaCompatibilityView View",
+        "C13901.Draft.SchemaCompatibilityDecision Decision",
+        "C13901.Draft.SchemaCompatibilityDecision get_Decision()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] Diagnostics",
+        "System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.SchemaAssessmentDiagnostic] get_Diagnostics()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaCompatibilityView",
+      "members": [
+        "C13901.Draft.IQuerySemanticEnvironment ExecutionEnvironment",
+        "C13901.Draft.IQuerySemanticEnvironment get_ExecutionEnvironment()",
+        "C13901.Draft.ISchemaAssessmentAdvisor get_Source()",
+        "C13901.Draft.ISchemaAssessmentAdvisor get_Target()",
+        "C13901.Draft.ISchemaAssessmentAdvisor Source",
+        "C13901.Draft.ISchemaAssessmentAdvisor Target",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsDerivedFrom(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] MatchesDeclaration(C13901.Draft.ISchemaNodeFacts, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaComponentHandle",
+      "members": [
+        "C13901.Draft.ISchemaAuthority Authority",
+        "C13901.Draft.ISchemaAuthority get_Authority()"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaNodeFacts",
+      "members": [
+        "Boolean get_HasNoTypedValue()",
+        "Boolean get_IsNilled()",
+        "Boolean HasNoTypedValue",
+        "Boolean IsNilled",
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.ISchemaComponentHandle Declaration",
+        "C13901.Draft.ISchemaComponentHandle get_Declaration()",
+        "C13901.Draft.ISchemaComponentHandle get_Type()",
+        "C13901.Draft.ISchemaComponentHandle Type",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaTypedValue] ReadTypedValue(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.ISchemaSnapshotBinding",
+      "members": []
+    },
+    {
+      "name": "C13901.Draft.ISchemaSourceBinding",
+      "members": []
+    },
+    {
+      "name": "C13901.Draft.ISchemaTypedValue",
+      "members": [
+        "Boolean get_IsList()",
+        "Boolean IsList",
+        "Bosak.XPath.Core.Xdm.XdmSequence Atomics",
+        "Bosak.XPath.Core.Xdm.XdmSequence get_Atomics()",
+        "C13901.Draft.ISchemaComponentHandle get_GoverningType()",
+        "C13901.Draft.ISchemaComponentHandle GoverningType"
+      ]
+    },
+    {
+      "name": "C13901.Draft.QueryHostLanguage",
+      "members": [
+        "C13901.Draft.QueryHostLanguage XPath",
+        "C13901.Draft.QueryHostLanguage XQuery",
+        "C13901.Draft.QueryHostLanguage Xslt",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentDiagnostic",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentDiagnostic)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentDiagnostic, C13901.Draft.SchemaAssessmentDiagnostic)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentDiagnostic, C13901.Draft.SchemaAssessmentDiagnostic)",
+        "C13901.Draft.SchemaAssessmentDiagnostic \u003CClone\u003E$()",
+        "C13901.Draft.SchemaDiagnosticLocation get_Location()",
+        "C13901.Draft.SchemaDiagnosticLocation Location",
+        "Int32 GetHashCode()",
+        "System.String Code",
+        "System.String get_Code()",
+        "System.String get_Message()",
+        "System.String Message",
+        "System.String ToString()",
+        "Void .ctor(System.String, System.String, C13901.Draft.SchemaDiagnosticLocation)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef, C13901.Draft.SchemaDiagnosticLocation ByRef)",
+        "Void set_Code(System.String)",
+        "Void set_Location(C13901.Draft.SchemaDiagnosticLocation)",
+        "Void set_Message(System.String)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentLimits",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentLimits)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentLimits, C13901.Draft.SchemaAssessmentLimits)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentLimits, C13901.Draft.SchemaAssessmentLimits)",
+        "C13901.Draft.SchemaAssessmentLimits \u003CClone\u003E$()",
+        "Int32 get_MaxDiagnostics()",
+        "Int32 GetHashCode()",
+        "Int32 MaxDiagnostics",
+        "Int64 get_MaxDiagnosticCharacters()",
+        "Int64 MaxDiagnosticCharacters",
+        "System.String ToString()",
+        "Void .ctor(Int32, Int64)",
+        "Void Deconstruct(Int32 ByRef, Int64 ByRef)",
+        "Void set_MaxDiagnosticCharacters(Int64)",
+        "Void set_MaxDiagnostics(Int32)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentMode",
+      "members": [
+        "C13901.Draft.SchemaAssessmentMode Lax",
+        "C13901.Draft.SchemaAssessmentMode Strict",
+        "C13901.Draft.SchemaAssessmentMode Type",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentRequest",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaAssessmentRequest)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaAssessmentRequest, C13901.Draft.SchemaAssessmentRequest)",
+        "Boolean op_Inequality(C13901.Draft.SchemaAssessmentRequest, C13901.Draft.SchemaAssessmentRequest)",
+        "C13901.Draft.ISchemaAssessmentEpisode Episode",
+        "C13901.Draft.ISchemaAssessmentEpisode get_Episode()",
+        "C13901.Draft.ISchemaAssessmentInput get_Input()",
+        "C13901.Draft.ISchemaAssessmentInput Input",
+        "C13901.Draft.ISchemaComponentHandle get_GoverningDeclaration()",
+        "C13901.Draft.ISchemaComponentHandle get_RequestedType()",
+        "C13901.Draft.ISchemaComponentHandle GoverningDeclaration",
+        "C13901.Draft.ISchemaComponentHandle RequestedType",
+        "C13901.Draft.SchemaAssessmentLimits get_Limits()",
+        "C13901.Draft.SchemaAssessmentLimits Limits",
+        "C13901.Draft.SchemaAssessmentMode get_Mode()",
+        "C13901.Draft.SchemaAssessmentMode Mode",
+        "C13901.Draft.SchemaAssessmentRequest \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.String ToString()",
+        "Void .ctor(C13901.Draft.ISchemaAssessmentInput, C13901.Draft.SchemaAssessmentMode, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaAssessmentEpisode, C13901.Draft.SchemaAssessmentLimits)",
+        "Void Deconstruct(C13901.Draft.ISchemaAssessmentInput ByRef, C13901.Draft.SchemaAssessmentMode ByRef, C13901.Draft.ISchemaComponentHandle ByRef, C13901.Draft.ISchemaComponentHandle ByRef, C13901.Draft.ISchemaAssessmentEpisode ByRef, C13901.Draft.SchemaAssessmentLimits ByRef)",
+        "Void set_Episode(C13901.Draft.ISchemaAssessmentEpisode)",
+        "Void set_GoverningDeclaration(C13901.Draft.ISchemaComponentHandle)",
+        "Void set_Input(C13901.Draft.ISchemaAssessmentInput)",
+        "Void set_Limits(C13901.Draft.SchemaAssessmentLimits)",
+        "Void set_Mode(C13901.Draft.SchemaAssessmentMode)",
+        "Void set_RequestedType(C13901.Draft.ISchemaComponentHandle)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAssessmentStatus",
+      "members": [
+        "C13901.Draft.SchemaAssessmentStatus Invalid",
+        "C13901.Draft.SchemaAssessmentStatus Unsupported",
+        "C13901.Draft.SchemaAssessmentStatus Valid",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaAtomics",
+      "members": [
+        "Boolean TryGetProvenance(Bosak.XPath.Core.Xdm.XdmValue ByRef, C13901.Draft.ISchemaAtomicProvenance ByRef)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaCompatibilityDecision",
+      "members": [
+        "C13901.Draft.SchemaCompatibilityDecision Compatible",
+        "C13901.Draft.SchemaCompatibilityDecision Incompatible",
+        "C13901.Draft.SchemaCompatibilityDecision Unsupported",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaDiagnosticLocation",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaDiagnosticLocation)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaDiagnosticLocation, C13901.Draft.SchemaDiagnosticLocation)",
+        "Boolean op_Inequality(C13901.Draft.SchemaDiagnosticLocation, C13901.Draft.SchemaDiagnosticLocation)",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Node()",
+        "Bosak.XPath.Core.Xdm.IXdmNode Node",
+        "C13901.Draft.ISchemaSnapshotBinding get_Snapshot()",
+        "C13901.Draft.ISchemaSnapshotBinding Snapshot",
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source",
+        "C13901.Draft.SchemaDiagnosticLocation \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.Nullable\u00601[System.Int32] get_LineNumber()",
+        "System.Nullable\u00601[System.Int32] get_LinePosition()",
+        "System.Nullable\u00601[System.Int32] LineNumber",
+        "System.Nullable\u00601[System.Int32] LinePosition",
+        "System.Nullable\u00601[System.Int64] ByteLength",
+        "System.Nullable\u00601[System.Int64] ByteStart",
+        "System.Nullable\u00601[System.Int64] get_ByteLength()",
+        "System.Nullable\u00601[System.Int64] get_ByteStart()",
+        "System.String ToString()",
+        "System.Uri get_SourceUri()",
+        "System.Uri SourceUri",
+        "Void .ctor(C13901.Draft.ISchemaSourceBinding, C13901.Draft.ISchemaSnapshotBinding, Bosak.XPath.Core.Xdm.IXdmNode, System.Uri, System.Nullable\u00601[System.Int32], System.Nullable\u00601[System.Int32], System.Nullable\u00601[System.Int64], System.Nullable\u00601[System.Int64])",
+        "Void Deconstruct(C13901.Draft.ISchemaSourceBinding ByRef, C13901.Draft.ISchemaSnapshotBinding ByRef, Bosak.XPath.Core.Xdm.IXdmNode ByRef, System.Uri ByRef, System.Nullable\u00601[System.Int32] ByRef, System.Nullable\u00601[System.Int32] ByRef, System.Nullable\u00601[System.Int64] ByRef, System.Nullable\u00601[System.Int64] ByRef)",
+        "Void set_ByteLength(System.Nullable\u00601[System.Int64])",
+        "Void set_ByteStart(System.Nullable\u00601[System.Int64])",
+        "Void set_LineNumber(System.Nullable\u00601[System.Int32])",
+        "Void set_LinePosition(System.Nullable\u00601[System.Int32])",
+        "Void set_Node(Bosak.XPath.Core.Xdm.IXdmNode)",
+        "Void set_Snapshot(C13901.Draft.ISchemaSnapshotBinding)",
+        "Void set_Source(C13901.Draft.ISchemaSourceBinding)",
+        "Void set_SourceUri(System.Uri)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaExpandedName",
+      "members": [
+        "Boolean Equals(C13901.Draft.SchemaExpandedName)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C13901.Draft.SchemaExpandedName, C13901.Draft.SchemaExpandedName)",
+        "Boolean op_Inequality(C13901.Draft.SchemaExpandedName, C13901.Draft.SchemaExpandedName)",
+        "Int32 GetHashCode()",
+        "System.String get_LocalName()",
+        "System.String get_NamespaceUri()",
+        "System.String LocalName",
+        "System.String NamespaceUri",
+        "System.String ToString()",
+        "Void .ctor(System.String, System.String)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef)",
+        "Void set_LocalName(System.String)",
+        "Void set_NamespaceUri(System.String)"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaLanguageVersion",
+      "members": [
+        "C13901.Draft.SchemaLanguageVersion Xsd10",
+        "C13901.Draft.SchemaLanguageVersion Xsd11",
+        "Int32 value__"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaResult\u00601",
+      "members": [
+        "C13901.Draft.SchemaResultKind get_Kind()",
+        "C13901.Draft.SchemaResultKind Kind",
+        "System.String DiagnosticCode",
+        "System.String get_DiagnosticCode()",
+        "T get_Value()",
+        "T Value"
+      ]
+    },
+    {
+      "name": "C13901.Draft.SchemaResultKind",
+      "members": [
+        "C13901.Draft.SchemaResultKind Invalid",
+        "C13901.Draft.SchemaResultKind NotFound",
+        "C13901.Draft.SchemaResultKind Supported",
+        "C13901.Draft.SchemaResultKind Unsupported",
+        "Int32 value__"
+      ]
+    }
+  ],
+  "checkCount": 38,
+  "checks": [
+    {
+      "id": "G01-full-equivalence-chain",
+      "passed": true
+    },
+    {
+      "id": "G02-complete-no-duplicates-chain",
+      "passed": true
+    },
+    {
+      "id": "G01-full-equivalence-cycle",
+      "passed": true
+    },
+    {
+      "id": "G02-complete-no-duplicates-cycle",
+      "passed": true
+    },
+    {
+      "id": "G01-full-equivalence-diamond",
+      "passed": true
+    },
+    {
+      "id": "G02-complete-no-duplicates-diamond",
+      "passed": true
+    },
+    {
+      "id": "G03-equal-digest-not-identity",
+      "passed": true
+    },
+    {
+      "id": "G04-foreign-root",
+      "passed": true
+    },
+    {
+      "id": "G05-forged-root",
+      "passed": true
+    },
+    {
+      "id": "G06-forged-proof-fields",
+      "passed": true
+    },
+    {
+      "id": "G07-proof-wrong-root",
+      "passed": true
+    },
+    {
+      "id": "G08-proof-wrong-universe",
+      "passed": true
+    },
+    {
+      "id": "G09-prefix-not-enumeration-complete",
+      "passed": true
+    },
+    {
+      "id": "G10-frame-dispose-not-authority-close",
+      "passed": true
+    },
+    {
+      "id": "G11-disposed-cursor",
+      "passed": true
+    },
+    {
+      "id": "G12-empty-buffer-refused",
+      "passed": true
+    },
+    {
+      "id": "G13-pre-cancel-before-read",
+      "passed": true
+    },
+    {
+      "id": "G14-pre-cancel-no-dispatch",
+      "passed": true
+    },
+    {
+      "id": "G15-unsupported-bulk-no-value",
+      "passed": true
+    },
+    {
+      "id": "G16-unsupported-scalar-no-value",
+      "passed": true
+    },
+    {
+      "id": "G17-unsupported-certificate-no-value",
+      "passed": true
+    },
+    {
+      "id": "G18-naive-prefix-before-proof",
+      "passed": true
+    },
+    {
+      "id": "G19-naive-later-unsupported",
+      "passed": true
+    },
+    {
+      "id": "G20-stale-proof-refused",
+      "passed": true
+    },
+    {
+      "id": "G21-stale-cursor-refused",
+      "passed": true
+    },
+    {
+      "id": "G22-cancel-during-full-closure",
+      "passed": true
+    },
+    {
+      "id": "G23-cancel-stops-traversal",
+      "passed": true
+    },
+    {
+      "id": "G24-cache-entry-bound",
+      "passed": true
+    },
+    {
+      "id": "G25-cache-reference-bound",
+      "passed": true
+    },
+    {
+      "id": "G26-cache-reuses-immutable-result",
+      "passed": true
+    },
+    {
+      "id": "G27-lookup-status-order-identity",
+      "passed": true
+    },
+    {
+      "id": "G28-lookup-actual-owner",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-64-diverse",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-64-repeated",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-4096-diverse",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-4096-repeated",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-65536-diverse",
+      "passed": true
+    },
+    {
+      "id": "G29-all-lookup-entries-65536-repeated",
+      "passed": true
+    }
+  ],
+  "preparations": [
+    {
+      "size": 64,
+      "id": "cache-one-root",
+      "nanoseconds": 105000,
+      "allocatedBytes": 4880,
+      "calls": 1,
+      "nodeReads": 64,
+      "retainedReferenceBytesLowerBound": 512
+    },
+    {
+      "size": 64,
+      "id": "certify-one-root",
+      "nanoseconds": 146400,
+      "allocatedBytes": 3056,
+      "calls": 1,
+      "nodeReads": 64,
+      "retainedReferenceBytesLowerBound": 0
+    },
+    {
+      "size": 4096,
+      "id": "cache-one-root",
+      "nanoseconds": 226200,
+      "allocatedBytes": 357696,
+      "calls": 1,
+      "nodeReads": 4096,
+      "retainedReferenceBytesLowerBound": 32768
+    },
+    {
+      "size": 4096,
+      "id": "certify-one-root",
+      "nanoseconds": 177700,
+      "allocatedBytes": 258960,
+      "calls": 1,
+      "nodeReads": 4096,
+      "retainedReferenceBytesLowerBound": 0
+    },
+    {
+      "size": 65536,
+      "id": "cache-one-root",
+      "nanoseconds": 3092000,
+      "allocatedBytes": 3901368,
+      "calls": 1,
+      "nodeReads": 65536,
+      "retainedReferenceBytesLowerBound": 524288
+    },
+    {
+      "size": 65536,
+      "id": "certify-one-root",
+      "nanoseconds": 2696500,
+      "allocatedBytes": 2327976,
+      "calls": 1,
+      "nodeReads": 65536,
+      "retainedReferenceBytesLowerBound": 0
+    }
+  ],
+  "groups": [
+    {
+      "size": 64,
+      "mode": "scalar-full",
+      "samples": [
+        {
+          "nanoseconds": 6100,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 5400,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1900,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 2000,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 5400,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1800,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 4300,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "bulk-cold-full",
+      "samples": [
+        {
+          "nanoseconds": 1700,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 4400,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1800,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 4200,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1800,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1800,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 9200,
+          "allocatedBytes": 4688,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "bulk-cached-full",
+      "samples": [
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 0,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 0,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 0,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-preflight-full",
+      "samples": [
+        {
+          "nanoseconds": 5700,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 5500,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 5400,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 2900,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 5300,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 4700,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 8300,
+          "allocatedBytes": 6568,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 128,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-full",
+      "samples": [
+        {
+          "nanoseconds": 4000,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1600,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 4100,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1500,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1500,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 3800,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        },
+        {
+          "nanoseconds": 1500,
+          "allocatedBytes": 3544,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 64,
+          "result": {
+            "Sum": 2080,
+            "Count": 64,
+            "Complete": true,
+            "Found": 64
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-prefix-1",
+      "samples": [
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-prefix-8",
+      "samples": [
+        {
+          "nanoseconds": 400,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 2700,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 400,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 400,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-scalar-diverse",
+      "samples": [
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 4800,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1400,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-batch-diverse",
+      "samples": [
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 4300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1848,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-scalar-repeated",
+      "samples": [
+        {
+          "nanoseconds": 3700,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 64,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        }
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-batch-repeated",
+      "samples": [
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1300,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 3600,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        },
+        {
+          "nanoseconds": 1200,
+          "allocatedBytes": 1048,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 504,
+            "Count": 64,
+            "Complete": true,
+            "Found": 56
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "scalar-full",
+      "samples": [
+        {
+          "nanoseconds": 270000,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 204800,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 172900,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 180200,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 234000,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 219500,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 185100,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "bulk-cold-full",
+      "samples": [
+        {
+          "nanoseconds": 168200,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 166000,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 167700,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 167300,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 358600,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 189600,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 153000,
+          "allocatedBytes": 357504,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "bulk-cached-full",
+      "samples": [
+        {
+          "nanoseconds": 2400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 2400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-preflight-full",
+      "samples": [
+        {
+          "nanoseconds": 3648800,
+          "allocatedBytes": 518232,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 423800,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 303500,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 324700,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 273400,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 261700,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 263400,
+          "allocatedBytes": 518232,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 8192,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-full",
+      "samples": [
+        {
+          "nanoseconds": 139100,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 138600,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 147000,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 136500,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 140400,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 139000,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        },
+        {
+          "nanoseconds": 175800,
+          "allocatedBytes": 259304,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65,
+          "nodeReads": 4096,
+          "result": {
+            "Sum": 8390656,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 4096
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-prefix-1",
+      "samples": [
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-prefix-8",
+      "samples": [
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 500,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-scalar-diverse",
+      "samples": [
+        {
+          "nanoseconds": 154400,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 158500,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 144900,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 164800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 179200,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 134800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 133200,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-batch-diverse",
+      "samples": [
+        {
+          "nanoseconds": 139700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 178000,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 143200,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 134700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 136800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 164200,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 177000,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 7343616,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-scalar-repeated",
+      "samples": [
+        {
+          "nanoseconds": 106800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 135700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 140800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 255700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 369500,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 84400,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 83600,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 4096,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        }
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-batch-repeated",
+      "samples": [
+        {
+          "nanoseconds": 81700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 81700,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 81800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 81800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 80800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 80500,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        },
+        {
+          "nanoseconds": 85800,
+          "allocatedBytes": 65560,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 32256,
+            "Count": 4096,
+            "Complete": true,
+            "Found": 3584
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "scalar-full",
+      "samples": [
+        {
+          "nanoseconds": 4395400,
+          "allocatedBytes": 3908064,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2651200,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2073200,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3060500,
+          "allocatedBytes": 3901176,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3558600,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3250300,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3470200,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "bulk-cold-full",
+      "samples": [
+        {
+          "nanoseconds": 3858900,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4379100,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3168900,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2566600,
+          "allocatedBytes": 3901176,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4104400,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 1877000,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2294200,
+          "allocatedBytes": 3901176,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "bulk-cached-full",
+      "samples": [
+        {
+          "nanoseconds": 82300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 54700,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 52400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 55700,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 60600,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 63000,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 69200,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-preflight-full",
+      "samples": [
+        {
+          "nanoseconds": 5069900,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4755300,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4882100,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3969700,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4170700,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4292300,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 4826100,
+          "allocatedBytes": 4656264,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 131072,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-full",
+      "samples": [
+        {
+          "nanoseconds": 3505200,
+          "allocatedBytes": 2328320,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2460800,
+          "allocatedBytes": 2328320,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3113300,
+          "allocatedBytes": 2328320,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2261800,
+          "allocatedBytes": 2328320,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2939900,
+          "allocatedBytes": 2331344,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 2227000,
+          "allocatedBytes": 2328320,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        },
+        {
+          "nanoseconds": 3522200,
+          "allocatedBytes": 2328320,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1025,
+          "nodeReads": 65536,
+          "result": {
+            "Sum": 2147516416,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 65536
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-prefix-1",
+      "samples": [
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        },
+        {
+          "nanoseconds": 100,
+          "allocatedBytes": 416,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 1,
+          "result": {
+            "Sum": 1,
+            "Count": 1,
+            "Complete": false,
+            "Found": 1
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-prefix-8",
+      "samples": [
+        {
+          "nanoseconds": 1100,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 300,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        },
+        {
+          "nanoseconds": 200,
+          "allocatedBytes": 968,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 2,
+          "nodeReads": 8,
+          "result": {
+            "Sum": 102,
+            "Count": 8,
+            "Complete": false,
+            "Found": 8
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-scalar-diverse",
+      "samples": [
+        {
+          "nanoseconds": 4887700,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 6569100,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4917300,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4836200,
+          "allocatedBytes": 1048600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4934000,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4066900,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 5249600,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-batch-diverse",
+      "samples": [
+        {
+          "nanoseconds": 4864200,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4811800,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4319600,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4587600,
+          "allocatedBytes": 1048600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 5506500,
+          "allocatedBytes": 1056712,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4090700,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 4068800,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 1879105536,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-scalar-repeated",
+      "samples": [
+        {
+          "nanoseconds": 1811000,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1852800,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1693500,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1560800,
+          "allocatedBytes": 1048600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1729800,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 2065300,
+          "allocatedBytes": 1056536,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 2356900,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 65536,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        }
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-batch-repeated",
+      "samples": [
+        {
+          "nanoseconds": 1612500,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1782000,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1702200,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1703100,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1797000,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1622000,
+          "allocatedBytes": 1048600,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        },
+        {
+          "nanoseconds": 1505900,
+          "allocatedBytes": 1048600,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1,
+          "calls": 1,
+          "nodeReads": 0,
+          "result": {
+            "Sum": 516096,
+            "Count": 65536,
+            "Complete": true,
+            "Found": 57344
+          }
+        }
+      ]
+    }
+  ],
+  "allRootsReferenceProjectionBytes": 34359738368
+}

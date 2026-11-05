@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed finite lifecycle contract and deterministic schedule proof checkpoint",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 345,
+      "sha256": "e9789eb35dd54a778dd99804ff77dda508e7ce99b2690c140b0fa17395c71cb8"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4975,
+      "sha256": "79a8cd08fda31580f2426d53e9947287535572f099809685d9eddf94d0012a9f"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 3413,
+      "sha256": "842a7aa7a5ae3829e6d88171e5f136e3dd01040e9fb7ed82c649c5ae0619c768"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2545,
+      "sha256": "57ffad1802726043a2d8079b0e60c5974e725cf61a6c4e0ae9fcdf98dbbf4bbf"
+    }
+  ]
+}

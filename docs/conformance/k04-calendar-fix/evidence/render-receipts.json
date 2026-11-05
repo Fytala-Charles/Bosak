@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/README.md.html",
+      "sha256": "e67491e3b28dac777226bfdb7b1621de3856e69f5a42736bfabea0e77b36fcd7"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "71a8edf7cfcd69f08e5bb8c76973a946c714f0ee8ea634186dd980069e073ec3"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "642637cfe25dfca56e607d0bd5cf80077e52354bb004e4510efe9cd9322a3980"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "108b7dc83d6dd7d5c7b6b1ba507af584a6e257c1d8c4a54c5bcf2942ad0c573e"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "d30cb844696bbffcf50adbc9d205592f62e6dcd795f06b63758f0b3c07b1ceaa"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "6a90f78da565548d092e55c8a8b83cca3f25b0081d5cf89bac5f04cf763119ab"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "a205250a59769b8c02b70597014b35a260ce51623c6d3bacb6050a198c2b4719"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "f86b5282763c9b3a7624b84f840c9d28e09c60b0ef2d2565f2560af753ca280b"
+    },
+    {
+      "source": "docs/conformance/k04-calendar-fix/README.md",
+      "html": ".guard-tmp/k04-calendar-fix-render/docs_conformance_k04-calendar-fix_README.md.html",
+      "sha256": "0877cdc45eea78c6297cbed26d79935f0d96f33b8c1c5ee169771c75794294f8"
+    }
+  ]
+}

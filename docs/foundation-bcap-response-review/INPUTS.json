@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "preparedPacketManifestSha256": "0fadd3c23546a90180ac924000ea4138c29ffc2269e0099470cd8d8f7d05deeb",
+  "responses": {
+    "BCAP-O3-Braid": {
+      "sha256": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+      "decision": "AcceptWithScope",
+      "sourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "incoming": "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O3-Braid.response.json",
+      "ownerCopy": "D:\\Development\\Bosak.Braid\\docs\\reviews\\BCAP-O3-Braid.response.json",
+      "nativeQualified": false
+    },
+    "BCAP-O1-XmlDb": {
+      "sha256": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+      "decision": "AcceptWithScope",
+      "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+      "incoming": "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O1-XmlDb.response.json",
+      "ownerCopy": "D:\\Development\\Bosal.XmlDb\\docs\\foundation-requirements\\bcap-owner-review\\BCAP-O1-XmlDb.response.json",
+      "nativeQualified": false
+    },
+    "BCAP-O4-XmlDb": {
+      "sha256": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+      "decision": "Revise",
+      "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+      "incoming": "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O4-XmlDb.response.json",
+      "ownerCopy": "D:\\Development\\Bosal.XmlDb\\docs\\foundation-requirements\\bcap-owner-review\\BCAP-O4-XmlDb.response.json",
+      "nativeQualified": false
+    }
+  },
+  "xmlDbReceiptSha256": "95afbb7244713f2dfae457dea1e4611e5ecd683fd0290cf887e9b73615efed2d",
+  "xmlDbWorkingHashesVerified": {
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": "6ec0491a69eab73312268bfd428faaa425fb95b35ec131797ddcaf1484f08d11",
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b",
+    "src/Bosak.XmlDb.Storage/GenerationLease.cs": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d",
+    "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": "1c93aa403039da17c83fc8e123e69a638592b2ddb926ffda86429db552a559ab",
+    "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": "c9049aa69c061905f6599d2218703931fa97c7f7639eebb3373804f8a569d063",
+    "tests/Bosak.XmlDb.Xdm.Tests/PersistentMembershipTests.cs": "a1cee796f0b85f8d5217c62bed9613e6b21ae737d740139e03efe53ae2d82d3c",
+    "docs/foundation-requirements/membership/results.json": "1809e3e3ac690f48dbc7fc27d0d2812755e679990c3b132354238d57e05faafe"
+  },
+  "xmlDbNativePathsStillMatchCommit": [
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs",
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+    "src/Bosak.XmlDb.Storage/GenerationLease.cs"
+  ],
+  "xmlDbMembershipIsSeparateUncommittedWork": true,
+  "braidSourceMappingsVerified": {
+    "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2",
+    "src/Bosak.Braid.Infrastructure/WorkerProcessPreviewExecutor.cs": "85e8e241609625c11c982be7a8c13d502c865ea4adb7f6bae9ab0ad84d9df0a9",
+    "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs": "dac931c02191ee1d58972ff8775311e85eec6c49526aa3d5a2fddada91581c2b"
+  },
+  "schemaCommentId": 6570464706,
+  "sourceCodeTestsRun": false,
+  "productionChanged": false
+}

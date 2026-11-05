@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-02",
+  "files": [
+    {
+      "file": "D:\\Development\\Bosak.Schema.Public\\docs\\FEATURE_REQUESTS.md",
+      "beforeSha256": "bcfed63560c32b2acdb2c792259a3baf1e30433aa32680356617a8b1fc7987b0",
+      "afterSha256": "e38c0aa79b0326da035b1e569ca38ba67bec21418127f56b6cc563d47a07b685",
+      "committed": false
+    },
+    {
+      "file": "D:\\Development\\Bosak.Schema.Public\\docs\\INTEGRATION.md",
+      "beforeSha256": "e8ed3041f55a151a5ae49bddfdeb20f9e3d7c571743e094d7890e61fad771221",
+      "afterSha256": "d7a2359c1e2e3216a9c313dc2bd9bd90f3ea636959404935e389e1b5af3ec3df",
+      "committed": false
+    }
+  ],
+  "scope": "Local exact source/policy reconciliation pointer; Schema Revise unchanged",
+  "messagesSent": false
+}

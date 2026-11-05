@@ -1,0 +1,11 @@
+# TA-04: public-contract advisor adapter
+
+4 November 2026. Source **1.56.0**, based on `50d4feda`, qualifies an internal adapter consuming the actual public assessor/advisor interfaces. A real engine-created session supplies its exact semantic environment/private runtime pair. Engine-owned admission tables establish the original public input/current private projection before any advisor membership call. The adapter feeds the qualified container reader, transactional registry and private markers.
+
+All **24,960 tests** pass, including **35 new adapter controls**, 25 evidence, 35 registry, 94 container and 33 association controls. Runtime passes 640 cases. QT3 remains **31,397/0/424**; gated qt4 remains **8,941/0/1,918**, including 11 experimental passes, with identical skip maps. Eleven assemblies retain **310 public types / 6,369 declaration rows** and original friend grants. Public API source changes are limited to the new internal binding class and internal candidate methods in SchemaQuerySession.cs; exported declarations and public activation guards remain unchanged.
+
+[Design](DESIGN.md), [acceptance](ACCEPTANCE.md), [case results](ACCEPTANCE.json), [adoption](SPEC-BASIS.md), [input pin](PLAN-INPUT.json) and [status](STATUS.json) define the scope. Exact source/binaries, original runner logs/TRX, loaded hashes, allocation observations and documentation checks are retained under `evidence/`. Verify without rebuilding with `python docs/foundation-advisor-adapter/tools/verify.py`.
+
+Tests use public session compilation, actual input/lifetime admission and public raw callbacks, with internal candidate binding/read methods. Public CompileXPath still refuses an assessor without calling it; Advisor remains null and public ReadTypedValue still returns Unsupported. The existing ordinary semantic environment is used only to qualify exact binding mechanics, not advertised as a schema-enabled profile. This is Core adapter qualification, not execution of a native Schema/XmlDb/Braid adapter.
+
+Next: implement and qualify an explicitly identified typed identity VM profile before public activation. Authorized typed numeric projection, facts/nil/no-value, construction, compatibility, all-host/native/migration qualification, owner budgets, C45/freeze and publication remain pending. R3 stays InProgress.

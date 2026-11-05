@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O3-Braid",
+  "packet": "BCAP-O3",
+  "owner": "Braid",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "signer": "Codex - Braid consumer design reviewer acting on repository owner's explicit review/notification request; not an independent human signature",
+  "date": "2026-11-02",
+  "profile": "Scoped R2 design acceptance: bounded sequential document-root capture, explicit match/global roles and source-free templates on the exact 47-type BCAP draft. Product remains Bosak 1.26.2/6a3372fc3b91e733b71a426cf40f26feaaeb3bcb. No public SDK implementation, native/worker/runtime qualification or accepted budgets.",
+  "answers": [
+    {
+      "id": "O3-Q1",
+      "answer": "Carry forward pinned prior O3-Q1 XPath/XQuery Evaluate mapping for future diagnostics; current product previews XSLT. The prior required signature gap is resolved at design level by operation-borrowing CaptureTransform and owning RunCaptureTransform on the exact executable/session. CaptureResult retains principal/secondary serialized bytes, URI/order/properties, messages/classified failures, actual per-run receipts and local execution diagnostics. Match/global document roles are separately explicit, with one lease per unique admission; source-free named templates use empty membership unless dynamic node inputs require admissions. Invocation alone selects template/mode/base-output; duplicate option context/selectors and RawResult refuse. Current product has no required arbitrary initial sequence or streaming profile. No further required signature gap found for this bounded design; public implementation and limit plumbing remain R3 obligations."
+    },
+    {
+      "id": "O3-Q2",
+      "answer": "Carry forward pinned prior O3-Q2: typed/persistent worker routing stays explicitly open. Authorized worker-local reopen is a candidate, not a selected route; no broker/in-process fallback approved. Current worker-v1 transports retained bytes, not live leases/authority. Future routing must bind authorized immutable store/snapshot/schema/environment versions and engine/source/fixture/configuration/profile identities, refuse stale/unavailable versions and recheck entitlement/currentness at publication. Never transport authority or raw exceptions as JSON. No added Core IPC signature is required by the capture delta; acquisition policy and actual worker qualification remain owner work."
+    },
+    {
+      "id": "O3-Q3",
+      "answer": "Carry forward pinned prior O3-Q3 acquisition rollback, membership-before-getters, distinct/shared/source-free inputs, raw deferred consumption, cancellation/close/drain, reverse release and process kill/recovery cases. Prefer RunCaptureTransform for final outcome publication: borrowed CaptureTransform alone cannot prove cleanup success. Retain completed capture as diagnostic evidence after cleanup failure, never overall success. AdmissionError includes rollback; WorkError, ExecutionErrors and reverse-order CleanupErrors remain distinct, preserving original identity and aggregate boundaries without flattening or automatic release retry. Cancellation of a wait does not drain or release admitted raw work. Sequential gate composition only, with concurrent/reentrant reuse refused. Current deadline/cancel kills and waits for worker tree; native reader/generation retention and recovery are unqualified. Close revokes new work while actual resources remain retained for admitted raw work. Copy/project before IPC and withhold stale/unauthorized/late evidence. Existing lifetime/outcome signatures suffice for this bounded need."
+    },
+    {
+      "id": "O3-Q4",
+      "answer": "Carry forward pinned prior O3-Q4 representative fixtures: ordinary baseline; original assessed decimal/list/union/nil/no-typed-value, preserve/strip/foreign controls; persistent reader across two versions; distinct/shared roots and source-free invocation; lazy serialization cancel/close; timeout/kill/reopen. Prior proposed ceilings (2 snapshots,1024 cache entries,10000 atoms,1024 digits,scale128) remain experiments, not defaults/budgets. Retain current 8 MiB document,64 MiB frame,30-second post-launch deadline and configured output/step/message controls. Current adapter refuses optional call-depth/message-character requests; no new such signature is required for this scope. Message count/output bounds do not bound message construction, trees, compilation, native memory or time between checkpoints. Core's 83 controls/full qualification/cost observations support bounded feasibility only. Actual native candidate pins, worker runs, peak memory and PF-01-09 budgets remain separate R4 work. Product pin stays 1.26.2/6a3372fc; Braid source 0f1d949e. No D01 extension or product/native acceptance."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "Braid 0f1d949e: src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs, WorkerProcessPreviewExecutor.cs, PreviewWorkerProtocol.cs; src/Bosak.Braid.Application/Testing/PreviewExecutionSession.cs, PreviewRunConfiguration.cs"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Exact manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688: inputs/proposal/Xslt.cs.txt, QueryFacade.cs.txt, XQuery.cs.txt; REVIEW.md R01-R08"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "inputs/prior-returns/O3-Braid.json SHA-256 b9de8b1f79f399cd9e618ca724dfe08d785279653ae7f6ab20f2243ec30bae78: Q1 gap superseded for this design; Q2-Q4 explicitly carried forward. docs/CONTROLLED_PREVIEW.md and docs/RUN_PROVENANCE.md."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Manifest-bound foundation-bcap-outcomes/profile/cost dossiers reviewed as producer feasibility evidence, not Braid runtime qualification. Packet tools/verify.py passes exact binding and 63 format controls."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O3-Braid",
+  "reviewMode": "CaptureDeltaReview",
+  "deltaApplicability": "R01: both capture entries close the prior BCAP-01 signature need at design level. R02: capture fields/receipts suffice provided Braid copies backing Bytes arrays and snapshots mutable OutputProperties to SerializationJson before publication/IPC, as current Project does; deep API immutability is not assumed. R03: accept separate original local errors, preserved aggregate boundaries and retained capture after cleanup failure, with final IsSuccess false for errors/Partial/Cancelled. R04: accept sole invocation selectors, copied finite controls and positive time/operation limits, RawResult refusal, sequential gates and explicit unsupported authority refusal. No extra message-size/call-depth/hard-memory guarantee is required for this scope; explicit optional requests remain refused. R05: accept membership before getters, exact-session operation and raw retention through serialization/cleanup attempts. R06: local exception identities suffice under the projection policy below. R07: observations do not accept budgets, native resources, worker routing/currentness or kill/recovery. R08: AcceptWithScope is this exact R2 design disposition; Core must record closure separately. No other owner acceptance, public SDK support, R4/C45/freeze/publication inferred.",
+  "originalExceptionGraphDisposition": "Accept original Exception/Data/InnerException references only as local diagnostics, not immutable or sanitized transport objects. Do not recursively traverse arbitrary Data/InnerException/provider graphs, invoke revoked node getters, or serialize raw exceptions. Preserve local identity/deduplication and provider aggregate boundaries. Before IPC create an allowlisted bounded DTO with phase/channel, stable classification/code and controlled generic explanation; redact credentials in separately supported URI fields. Omit arbitrary exception Message/stack/Data/InnerException text by default. Bound diagnostic count/text to the frame and release local raw references after handling. Projection failure cannot turn an unsuccessful run into success. No new Core diagnostic transport signature is needed; actual implementation/qualification remains pending.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "b9de8b1f79f399cd9e618ca724dfe08d785279653ae7f6ab20f2243ec30bae78"
+}

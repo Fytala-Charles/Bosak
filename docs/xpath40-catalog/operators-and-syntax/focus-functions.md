@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified representative49-constructor boundary**. C03 does not certify all facets or every generic cast/extended-year operation; fn focus syntax is a separate entry. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Focus-based constructors** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -61,6 +63,14 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: Use the current item as the argument to a zero-arity constructor inside a simple map. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. There must be a suitable focus, and invalid lexical data still fails; this is conversion, not validation.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers REQ123-constructors. C03 supplies all 49 zero-arity constructor names and 1,127 representative observations. C05 spot checks keep direct/reference/missing/empty and lower-profile boundaries distinct from focus-function syntax. No arbitrary-precision, complete facet/schema or universal focus/host conversion support is inferred. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S4-focus. Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus. Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies All 49 registered zero-arity names with representative lexical conversion, type/error and context checks; Direct/reference/lookup/node paths, explicit one-argument comparison, empty iteration and missing focus; QName static namespace and captured-focus boundaries. **Boundary:** A zero-arity constructor requires suitable focus; empty simple-map input invokes nothing. xs:error has no nonempty successful value, and its empty/type fixture is not proof of a constructed value. Representative inputs do not certify all facets, namespaces, schema types or arbitrary casts. Ownership: T03, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

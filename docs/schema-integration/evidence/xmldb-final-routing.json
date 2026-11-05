@@ -1,0 +1,134 @@
+{
+  "libraries": {
+    "Bosak.XPath.Api/1.33.1": "project",
+    "Bosak.XPath.Compiler/1.33.1": "project",
+    "Bosak.XPath.Core/1.33.1": "project",
+    "Bosak.XPath.Parser/1.33.1": "project",
+    "Bosak.XPath.Providers/1.33.1": "project",
+    "Bosak.XPath.Runtime/1.33.1": "project",
+    "Bosak.XPath.Standard/1.33.1": "project"
+  },
+  "outputHashes": [
+    {
+      "assembly": "Bosak.XPath.Api",
+      "sha256": "09a3967d2b694ce2507ca023b1f5ab6a07a0948a515b9f5b824d240139418d5e",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Compiler",
+      "sha256": "0752dcf7e39c45493d6020e2e780eceeaecf6774fabe05c37d2e66a773fa4ba2",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "sha256": "ea4758d7db438a3dcb6a9a1221e4dc1daeac1fec6740ce1ef30bc7a9f1aaa84a",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Parser",
+      "sha256": "e5519215a516a6378a25c15dbb52cc879e6e28dc770dbb44c37c1c141ca0ce6c",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "sha256": "59caf3c14da9b20dbb504d10262b13af413a04e85c61ed53231e8a7214526557",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "sha256": "8f02912402ed8c32b84c2434fa4956e956f4336f4403f8b970a7ab052c4e5fd0",
+      "matchesCurrentCoreRelease": true
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "sha256": "e365be04cf9a988da673067eadee87bc3d0f3177b83589f08b18db73c10a3379",
+      "matchesCurrentCoreRelease": true
+    }
+  ],
+  "resolvedReferences": {
+    "ProjectReference": [
+      {
+        "Identity": "../Bosak.XmlDb.Core/Bosak.XmlDb.Core.csproj",
+        "Targets": "",
+        "OutputItemType": "",
+        "ReferenceSourceTarget": "ProjectReference",
+        "FullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Core\\Bosak.XmlDb.Core.csproj",
+        "RootDir": "D:\\",
+        "Filename": "Bosak.XmlDb.Core",
+        "Extension": ".csproj",
+        "RelativeDir": "..\\Bosak.XmlDb.Core\\",
+        "Directory": "Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Core\\",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\Bosak.XmlDb.Xdm.csproj",
+        "DefiningProjectDirectory": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\",
+        "DefiningProjectName": "Bosak.XmlDb.Xdm",
+        "DefiningProjectExtension": ".csproj"
+      },
+      {
+        "Identity": "../Bosak.XmlDb.Storage/Bosak.XmlDb.Storage.csproj",
+        "Targets": "",
+        "OutputItemType": "",
+        "ReferenceSourceTarget": "ProjectReference",
+        "FullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Storage\\Bosak.XmlDb.Storage.csproj",
+        "RootDir": "D:\\",
+        "Filename": "Bosak.XmlDb.Storage",
+        "Extension": ".csproj",
+        "RelativeDir": "..\\Bosak.XmlDb.Storage\\",
+        "Directory": "Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Storage\\",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\Bosak.XmlDb.Xdm.csproj",
+        "DefiningProjectDirectory": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\",
+        "DefiningProjectName": "Bosak.XmlDb.Xdm",
+        "DefiningProjectExtension": ".csproj"
+      },
+      {
+        "Identity": "D:/Development/Bosak/src/Bosak.XPath.Core/Bosak.XPath.Core.csproj",
+        "Targets": "",
+        "OutputItemType": "",
+        "ReferenceSourceTarget": "ProjectReference",
+        "FullPath": "D:\\Development\\Bosak\\src\\Bosak.XPath.Core\\Bosak.XPath.Core.csproj",
+        "RootDir": "D:\\",
+        "Filename": "Bosak.XPath.Core",
+        "Extension": ".csproj",
+        "RelativeDir": "D:\\Development\\Bosak\\src\\Bosak.XPath.Core\\",
+        "Directory": "Development\\Bosak\\src\\Bosak.XPath.Core\\",
+        "RecursiveDir": "",
+        "ModifiedTime": "2026-09-22 11:53:35.7806092",
+        "CreatedTime": "2026-06-09 19:16:12.5050861",
+        "AccessedTime": "2026-10-29 12:18:57.0181818",
+        "DefiningProjectFullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\Directory.Build.targets",
+        "DefiningProjectDirectory": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\",
+        "DefiningProjectName": "Directory.Build",
+        "DefiningProjectExtension": ".targets"
+      }
+    ],
+    "PackageReference": [
+      {
+        "Identity": "MinVer",
+        "Version": "6.0.0",
+        "PrivateAssets": "all",
+        "IncludeAssets": "runtime; build; native; contentfiles; analyzers; buildtransitive",
+        "FullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\MinVer",
+        "RootDir": "D:\\",
+        "Filename": "MinVer",
+        "Extension": "",
+        "RelativeDir": "",
+        "Directory": "Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\src\\Bosak.XmlDb.Xdm\\",
+        "RecursiveDir": "",
+        "ModifiedTime": "",
+        "CreatedTime": "",
+        "AccessedTime": "",
+        "DefiningProjectFullPath": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\Directory.Build.props",
+        "DefiningProjectDirectory": "D:\\Development\\Bosak\\.guard-tmp\\schema-consumers\\XmlDb\\",
+        "DefiningProjectName": "Directory.Build",
+        "DefiningProjectExtension": ".props"
+      }
+    ]
+  }
+}

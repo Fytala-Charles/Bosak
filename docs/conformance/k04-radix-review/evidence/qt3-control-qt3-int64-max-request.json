@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml", "Name": "control-qt3-int64-max", "case": "int64-max", "expression": "format-integer(9223372036854775807,'16^x')", "boundary": true, "expected": "FODF1310"}

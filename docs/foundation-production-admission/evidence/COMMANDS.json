@@ -1,0 +1,64 @@
+{
+  "build": [
+    "dotnet",
+    "build",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-restore"
+  ],
+  "fullUnit": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore"
+  ],
+  "fullUnitExit": 1,
+  "fullUnitRemainingFailureScope": "Two local HttpListener port-reservation conflicts in unchanged database fixtures; complete serial rerun below passes.",
+  "databaseRerun": [
+    "dotnet",
+    "test",
+    "tests/Bosak.XPath.Providers.Database.Tests/Bosak.XPath.Providers.Database.Tests.csproj",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "--",
+    "xUnit.ParallelizeTestCollections=false",
+    "xUnit.MaxParallelThreads=1"
+  ],
+  "databaseRerunExit": 0,
+  "unitPermission": "Localhost HttpListener access enabled via sandbox escalation; no assertion or source change.",
+  "qt3": [
+    "dotnet",
+    "run",
+    "--project",
+    "tests/Bosak.XPath.Conformance",
+    "-c",
+    "Release",
+    "--no-build",
+    "--",
+    "tests/qt3tests"
+  ],
+  "qt4": [
+    "dotnet",
+    "run",
+    "--project",
+    "tests/Bosak.XPath.Conformance40",
+    "-c",
+    "Release",
+    "--no-build",
+    "--",
+    "tests/qt4tests"
+  ],
+  "qt4Environment": {
+    "BOSAK_QT4_GATE_ONLY": "1"
+  },
+  "legacyCallerArguments": [
+    "LegacyCaller.dll",
+    "<absolute evidence/legacy-caller.json>"
+  ]
+}

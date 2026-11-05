@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29",
+  "priorSealedDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16
+  },
+  "allPriorFileHashesMatch": true
+}

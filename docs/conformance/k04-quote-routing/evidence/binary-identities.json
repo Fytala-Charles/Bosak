@@ -1,0 +1,8 @@
+{
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll": "ec2890393197e48167d028ca134657e852bf007ff0bd0afc6906143c66d54a86",
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XQuery.dll": "5d18c327703abe7d1e5322220d948fa78dba102a402a9e9ae1bfc18609f8a76d",
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Core.dll": "273c1cc9254e39d0496f9079a319b77d211a211dc81e7f85c27e1c4cf3725cb4",
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Runtime.dll": "e95648c6387a9f1a1f33865c82f2b6adc7251b463b74bea1387debbf8db69516",
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Standard.dll": "4b9ea004a95de1bf7a0c8d59cc39eec0a4d4255b0b27dc71de6c8a63f7c924ee",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll": "24058f4bd7b05f987096bded736febe25dc25f20ea6e8843158c20a9e2693519"
+}

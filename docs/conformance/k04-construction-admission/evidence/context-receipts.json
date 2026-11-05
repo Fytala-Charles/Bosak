@@ -1,0 +1,1980 @@
+[
+  {
+    "name": "context-contextDecl-014-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-014-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3026759999920614,
+    "log": "context-contextDecl-014-normal-actual.log",
+    "case": "contextDecl-014",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-014-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-014-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31736950000049546,
+    "log": "context-contextDecl-014-prototype-actual.log",
+    "case": "contextDecl-014",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-015-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-015-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2912122000125237,
+    "log": "context-contextDecl-015-normal-actual.log",
+    "case": "contextDecl-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-015-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-015-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28772329998901114,
+    "log": "context-contextDecl-015-prototype-actual.log",
+    "case": "contextDecl-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-016-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-016-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30813910003053024,
+    "log": "context-contextDecl-016-normal-actual.log",
+    "case": "contextDecl-016",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-016-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-016-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31399120000423864,
+    "log": "context-contextDecl-016-prototype-actual.log",
+    "case": "contextDecl-016",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-017-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-017-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3304744000197388,
+    "log": "context-contextDecl-017-normal-actual.log",
+    "case": "contextDecl-017",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-017-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-017-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3228149000206031,
+    "log": "context-contextDecl-017-prototype-actual.log",
+    "case": "contextDecl-017",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-018-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-018-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2910540999728255,
+    "log": "context-contextDecl-018-normal-actual.log",
+    "case": "contextDecl-018",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-018-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-018-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2930005000089295,
+    "log": "context-contextDecl-018-prototype-actual.log",
+    "case": "contextDecl-018",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-019-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-019-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2990208999835886,
+    "log": "context-contextDecl-019-normal-actual.log",
+    "case": "contextDecl-019",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-019-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-019-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2871638999786228,
+    "log": "context-contextDecl-019-prototype-actual.log",
+    "case": "contextDecl-019",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-020-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-020-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3020014999783598,
+    "log": "context-contextDecl-020-normal-actual.log",
+    "case": "contextDecl-020",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-020-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-020-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28663599997526035,
+    "log": "context-contextDecl-020-prototype-actual.log",
+    "case": "contextDecl-020",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-021-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-021-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2804478000034578,
+    "log": "context-contextDecl-021-normal-actual.log",
+    "case": "contextDecl-021",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-021-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-021-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29378500004531816,
+    "log": "context-contextDecl-021-prototype-actual.log",
+    "case": "contextDecl-021",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-022-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-022-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29138479998800904,
+    "log": "context-contextDecl-022-normal-actual.log",
+    "case": "contextDecl-022",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-022-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-022-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2875696999835782,
+    "log": "context-contextDecl-022-prototype-actual.log",
+    "case": "contextDecl-022",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-023-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-023-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1974173000198789,
+    "log": "context-contextDecl-023-normal-actual.log",
+    "case": "contextDecl-023",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-023-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-023-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1952401000307873,
+    "log": "context-contextDecl-023-prototype-actual.log",
+    "case": "contextDecl-023",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-028-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-028-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28948639996815473,
+    "log": "context-contextDecl-028-normal-actual.log",
+    "case": "contextDecl-028",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-028-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-028-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30960510001750663,
+    "log": "context-contextDecl-028-prototype-actual.log",
+    "case": "contextDecl-028",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-029-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-029-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3177138000028208,
+    "log": "context-contextDecl-029-normal-actual.log",
+    "case": "contextDecl-029",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-029-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-029-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30284350004512817,
+    "log": "context-contextDecl-029-prototype-actual.log",
+    "case": "contextDecl-029",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-030-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-030-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3314622999751009,
+    "log": "context-contextDecl-030-normal-actual.log",
+    "case": "contextDecl-030",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-030-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-030-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3218899999628775,
+    "log": "context-contextDecl-030-prototype-actual.log",
+    "case": "contextDecl-030",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-031-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-031-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3140867999754846,
+    "log": "context-contextDecl-031-normal-actual.log",
+    "case": "contextDecl-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-031-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-031-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28918540000449866,
+    "log": "context-contextDecl-031-prototype-actual.log",
+    "case": "contextDecl-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-032-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-032-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27457319997483864,
+    "log": "context-contextDecl-032-normal-actual.log",
+    "case": "contextDecl-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-032-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-032-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.283088400028646,
+    "log": "context-contextDecl-032-prototype-actual.log",
+    "case": "contextDecl-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-033-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-033-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29256099998019636,
+    "log": "context-contextDecl-033-normal-actual.log",
+    "case": "contextDecl-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-033-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-033-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29989510000450537,
+    "log": "context-contextDecl-033-prototype-actual.log",
+    "case": "contextDecl-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-034-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-034-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3091240999638103,
+    "log": "context-contextDecl-034-normal-actual.log",
+    "case": "contextDecl-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-034-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-034-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31070490001002327,
+    "log": "context-contextDecl-034-prototype-actual.log",
+    "case": "contextDecl-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-035-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-035-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31337480002548546,
+    "log": "context-contextDecl-035-normal-actual.log",
+    "case": "contextDecl-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-035-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-035-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3105431000003591,
+    "log": "context-contextDecl-035-prototype-actual.log",
+    "case": "contextDecl-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-036-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-036-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29681490000803024,
+    "log": "context-contextDecl-036-normal-actual.log",
+    "case": "contextDecl-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-036-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-036-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3068533000187017,
+    "log": "context-contextDecl-036-prototype-actual.log",
+    "case": "contextDecl-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-037-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-037-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.297078900039196,
+    "log": "context-contextDecl-037-normal-actual.log",
+    "case": "contextDecl-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-037-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-037-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30494400003226474,
+    "log": "context-contextDecl-037-prototype-actual.log",
+    "case": "contextDecl-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-038-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-038-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30066519998945296,
+    "log": "context-contextDecl-038-normal-actual.log",
+    "case": "contextDecl-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-038-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-038-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2969180999789387,
+    "log": "context-contextDecl-038-prototype-actual.log",
+    "case": "contextDecl-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-039-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-039-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2997114000027068,
+    "log": "context-contextDecl-039-normal-actual.log",
+    "case": "contextDecl-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-039-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-039-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2949168999912217,
+    "log": "context-contextDecl-039-prototype-actual.log",
+    "case": "contextDecl-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-040-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-040-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29616269998950884,
+    "log": "context-contextDecl-040-normal-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-040-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-040-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.299654999980703,
+    "log": "context-contextDecl-040-prototype-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-041-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-041-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31387290003476664,
+    "log": "context-contextDecl-041-normal-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-041-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-041-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3237453000037931,
+    "log": "context-contextDecl-041-prototype-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-042-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-042-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29465540003729984,
+    "log": "context-contextDecl-042-normal-actual.log",
+    "case": "contextDecl-042",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-042-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-042-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29149109998252243,
+    "log": "context-contextDecl-042-prototype-actual.log",
+    "case": "contextDecl-042",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-043-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-043-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29179190000286326,
+    "log": "context-contextDecl-043-normal-actual.log",
+    "case": "contextDecl-043",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-043-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-043-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29326160001801327,
+    "log": "context-contextDecl-043-prototype-actual.log",
+    "case": "contextDecl-043",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-044-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-044-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.302285399986431,
+    "log": "context-contextDecl-044-normal-actual.log",
+    "case": "contextDecl-044",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-044-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-044-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2842006999999285,
+    "log": "context-contextDecl-044-prototype-actual.log",
+    "case": "contextDecl-044",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-045-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-045-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2864889999618754,
+    "log": "context-contextDecl-045-normal-actual.log",
+    "case": "contextDecl-045",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-045-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-045-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2776339999982156,
+    "log": "context-contextDecl-045-prototype-actual.log",
+    "case": "contextDecl-045",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-046-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-046-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21035199996549636,
+    "log": "context-contextDecl-046-normal-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-046-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-046-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22205049998592585,
+    "log": "context-contextDecl-046-prototype-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-049-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-049-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3274103999719955,
+    "log": "context-contextDecl-049-normal-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-049-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-049-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31826540001202375,
+    "log": "context-contextDecl-049-prototype-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-050-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-050-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31795270001748577,
+    "log": "context-contextDecl-050-normal-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-050-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-050-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3068626999738626,
+    "log": "context-contextDecl-050-prototype-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-051-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-051-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.275130599969998,
+    "log": "context-contextDecl-051-normal-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-051-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-051-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.24837089999346063,
+    "log": "context-contextDecl-051-prototype-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-053-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-053-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2944928999640979,
+    "log": "context-contextDecl-053-normal-actual.log",
+    "case": "contextDecl-053",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-053-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-053-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31410769996000454,
+    "log": "context-contextDecl-053-prototype-actual.log",
+    "case": "contextDecl-053",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-055-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-055-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32308399997418746,
+    "log": "context-contextDecl-055-normal-actual.log",
+    "case": "contextDecl-055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-055-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-055-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3246116999653168,
+    "log": "context-contextDecl-055-prototype-actual.log",
+    "case": "contextDecl-055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-056-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-056-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3250185999786481,
+    "log": "context-contextDecl-056-normal-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-056-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-056-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32585299998754635,
+    "log": "context-contextDecl-056-prototype-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-057-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-057-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34204189997399226,
+    "log": "context-contextDecl-057-normal-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-057-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-057-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3540254000108689,
+    "log": "context-contextDecl-057-prototype-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-058-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-058-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3444149999995716,
+    "log": "context-contextDecl-058-normal-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-058-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-058-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35993329994380474,
+    "log": "context-contextDecl-058-prototype-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-059-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-059-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3219849999877624,
+    "log": "context-contextDecl-059-normal-actual.log",
+    "case": "contextDecl-059",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-059-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-059-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3016880000359379,
+    "log": "context-contextDecl-059-prototype-actual.log",
+    "case": "contextDecl-059",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-060-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-060-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28203450003638864,
+    "log": "context-contextDecl-060-normal-actual.log",
+    "case": "contextDecl-060",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-060-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-060-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27339390001725405,
+    "log": "context-contextDecl-060-prototype-actual.log",
+    "case": "contextDecl-060",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-061-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-061-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3153955999878235,
+    "log": "context-contextDecl-061-normal-actual.log",
+    "case": "contextDecl-061",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-contextDecl-061-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-contextDecl-061-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31743830000050366,
+    "log": "context-contextDecl-061-prototype-actual.log",
+    "case": "contextDecl-061",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-015-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-015-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29771399998571724,
+    "log": "context-extvardef-015-normal-actual.log",
+    "case": "extvardef-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-015-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-015-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3106815000064671,
+    "log": "context-extvardef-015-prototype-actual.log",
+    "case": "extvardef-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-016a-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-016a-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32121389999520034,
+    "log": "context-extvardef-016a-normal-actual.log",
+    "case": "extvardef-016a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-016a-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-016a-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3380056000314653,
+    "log": "context-extvardef-016a-prototype-actual.log",
+    "case": "extvardef-016a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-016b-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-016b-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33544669998809695,
+    "log": "context-extvardef-016b-normal-actual.log",
+    "case": "extvardef-016b",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016b",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "context-extvardef-016b-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\context-extvardef-016b-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31758410000475124,
+    "log": "context-extvardef-016b-prototype-actual.log",
+    "case": "extvardef-016b",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016b",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

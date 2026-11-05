@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C34",
+  "kind": "Pre-implementation construction-mode adoption",
+  "sourceBase": "11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.6 Construction Declaration",
+      "3.9.1 Direct Element Constructors: copied-node type/name/nilled/typed-value properties",
+      "Construction-preserve namespace-sensitive values: XQTY0086"
+    ]
+  },
+  "defaultPolicy": "Preserve for compiled constructors: retains the established fresh-element xs:anyType behavior and repairs the observed partial deep-copy annotation loss. Explicit strip produces untyped elements and untypedAtomic attributes. Provider hooks invoked outside compiled constructors retain their existing null/legacy policy unless a construction mode is supplied.",
+  "contract": [
+    "Immutable declaring-module modes on constructor IR, including inline functions and imported declarations",
+    "Malformed/order XPST0003 and duplicate XQST0067",
+    "Preserve complete copied node schema types/declarations, nilled, ID/IDREFS and typed list/QName values; strip resets metadata per REC, retaining is-id only for xml:id",
+    "Preserve/no-preserve namespace-sensitive element values raise XQTY0086; copied namespace-sensitive free attributes raise XQTY0086 under preserve",
+    "Destination-private metadata copying never mutates source nodes",
+    "No construction routing, dependency, baseline, schema backend, REQ-139/ADR-006 or release change"
+  ],
+  "intentionalScope": [
+    "Existing core XDocument/IXmlSchemaInfo seam; no XSD 1.1 backend or callback adoption",
+    "Nullable additive provider inputs preserve legacy direct-hook calls outside compiled constructors; compiled default is explicitly preserve"
+  ]
+}

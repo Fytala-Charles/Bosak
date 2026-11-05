@@ -1,0 +1,365 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Tests deterministic single-lane lifecycle schedules over the actual consumer adapter.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated runtime admission experiment                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Reflection.PortableExecutable;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Bosak.Braid.Application;
+using Bosak.Braid.Core;
+
+internal static class Program
+{
+    internal static readonly JsonSerializerOptions Json=new(){PropertyNameCaseInsensitive=true,WriteIndented=true};
+    internal static ISourceInspector Make(Assembly assembly,IResourceReader? reader,int limit)=>(ISourceInspector)assembly.GetType("Factory")!.GetMethod("Create",BindingFlags.Public|BindingFlags.Static)!.Invoke(null,[reader,limit])!;
+    internal const string Plain="<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'><xsl:template match='/'><out><child/></out></xsl:template></xsl:stylesheet>";
+    internal static async Task<int> Main(string[] args)
+    {
+        var manifest=JsonSerializer.Deserialize<Manifest>(File.ReadAllText(args[0]),Json)!;
+        var source=new SourceDocument(new Uri("file:///lifecycle/main.xsl"),Encoding.UTF8.GetBytes(Plain));
+        var included=new SourceDocument(source.Uri,Encoding.UTF8.GetBytes(Plain.Replace("<xsl:template","<xsl:include href='module.xsl'/><xsl:template",StringComparison.Ordinal)));
+        var work=Path.Combine(Path.GetDirectoryName(Path.GetFullPath(args[1]))!,"work-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(work);
+        var cases=new List<Case>();var checks=new List<object>();
+        void Check(string name,bool pass){checks.Add(new{name,passed=pass});if(!pass)throw new InvalidOperationException(name);}
+        Case New(string label,BarrierReader? reader=null)
+        {
+            var root=Path.Combine(work,label);Directory.CreateDirectory(root);foreach(var member in manifest.Members)File.Copy(member.Path,Path.Combine(root,member.Name+".dll"));
+            var session=new Session(manifest,root,args[2]);var gate=new Gate(session);var raw=session.Create(reader,64);var facade=new InspectorFacade(gate,raw);var c=new Case(label,session,gate,raw,facade);cases.Add(c);return c;
+        }
+        static bool NoPorts(SourceInspectionResult result)=>typeof(SourceInspectionResult).GetProperties().Where(p=>p.PropertyType.IsInterface&&p.PropertyType.Assembly==typeof(ISourceInspector).Assembly).All(p=>p.GetValue(result) is null);
+        static string? Refusal(SourceInspectionResult result)=>result.Issues.FirstOrDefault()?.Code;
+        async Task<bool> Cancelled(Task<SourceInspectionResult> task){try{await task.WaitAsync(TimeSpan.FromSeconds(10));return false;}catch(OperationCanceledException){return true;}}
+        var happy=New("publish-then-close");var initial=await happy.Facade.InspectAsync(source);Check("real-inspection-admitted",initial.Success);
+        var node=initial.Modules.Single().Entries.Single(n=>n.Name=="child");var port=initial.LiteralElementEditor!;var target=(await port.GetTargetAsync(source.Uri,node.NodeId,LiteralElementOperation.Rename)).Target!;
+        var unchanged=await port.ProposeAsync(target,"child");Check("real-nochange-returns-wrapper",unchanged.Candidate is null&&ReferenceEquals(unchanged.NoChangeTarget,target));
+        Check("engine-capability-facts-retained",happy.Facade.EngineFacts!.SupportsLiteralElementRename&&happy.Facade.Capabilities!.SupportsLiteralElementRename);
+        Check("admitted-profile-separate-from-engine-facts",JsonSerializer.Serialize(happy.Facade.AdmissionProfile).Contains("SameNameNoChange",StringComparison.Ordinal));
+        Check("changed-candidate-still-refused",(await port.ProposeAsync(target,"different")).Failure?.Code=="UnsupportedProfile");
+        var fail=initial with{Success=false,Issues=[new("InjectedPartial",source.Uri,"Fault injection: underlying failed/partial response retained raw ports.")]};
+        var failedFacade=new InspectorFacade(happy.Gate,new FixedInspector(fail));var failed=await failedFacade.InspectAsync(source);Check("partial-failed-result-publishes-no-authority",!failed.Success&&NoPorts(failed)&&failed.Modules.Count==1);
+        happy.Gate.Close();var closed=await happy.Facade.InspectAsync(source);Check("close-before-new-admission-refuses",Refusal(closed)=="SessionClosed"&&NoPorts(closed));
+        Check("publication-before-close-leaves-only-revoked-port",(await port.ProposeAsync(target,"child")).Failure?.Code=="SessionClosed");
+        foreach(var property in typeof(ILiteralElementTarget).GetProperties())
+        {var refused=false;try{_ = property.GetValue(target);}catch(TargetInvocationException error)when(error.InnerException is Admission){refused=true;}Check("previous-target-getter-refused-after-close-"+property.Name,refused);}
+        Check("historical-bytes-remain-readable",initial.Modules.Single().Source.CopyOriginalBytes().SequenceEqual(source.CopyOriginalBytes()));
+        Check("idle-close-drains",await happy.Gate.DrainAsync(TimeSpan.FromSeconds(2)));
+        happy.Gate.Close();happy.Gate.Close("ArtifactRefused");Check("first-terminal-cause-preserved",happy.Gate.Reason=="UserClose"&&happy.Gate.ReleaseRequests==1);
+
+        var busyReader=new BarrierReader();var busy=New("busy",busyReader);var running=busy.Facade.InspectAsync(included);await busyReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        var beforeBusy=busy.Gate.ForwardedCalls;var overlapping=busy.Facade.InspectAsync(source);Check("overlap-refusal-task-completes-without-queue",overlapping.IsCompleted);
+        Check("overlap-is-busy",Refusal(await overlapping)=="Busy");Check("overlap-never-forwards",busy.Gate.ForwardedCalls==beforeBusy&&busy.Gate.Active);
+        Check("profile-shows-not-dispatchable-while-busy",JsonSerializer.Serialize(busy.Facade.AdmissionProfile).Contains("\"canDispatch\":false",StringComparison.Ordinal));
+        busyReader.Release.TrySetResult();Check("original-busy-operation-completes",(await running.WaitAsync(TimeSpan.FromSeconds(10))).Success);
+        Check("lane-reusable-after-completion",(await busy.Facade.InspectAsync(source)).Success&&!busy.Gate.Active);
+
+        var reenterReader=new BarrierReader();var reenter=New("callback-reentry",reenterReader);var warm=await reenter.Facade.InspectAsync(source);var warmPort=warm.LiteralElementEditor!;var warmNode=warm.Modules.Single().Entries.Single(n=>n.Name=="child");var warmTarget=(await warmPort.GetTargetAsync(source.Uri,warmNode.NodeId,LiteralElementOperation.Rename)).Target!;
+        string? nestedInspect=null;string? nestedPort=null;reenterReader.Callback=async()=>{nestedInspect=Refusal(await reenter.Facade.InspectAsync(source));nestedPort=(await warmPort.GetTargetAsync(source.Uri,warmNode.NodeId,LiteralElementOperation.Rename)).Failure?.Code;};
+        var callbackRun=reenter.Facade.InspectAsync(included);await reenterReader.CallbackDone.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        Check("actual-callback-reentrant-inspection-refused",nestedInspect=="Busy");Check("actual-callback-reentrant-port-refused",nestedPort=="Busy");
+        var beforeMetadata=reenter.Gate.ForwardedCalls;Check("cached-target-metadata-readable-during-active-call",warmTarget.LocalName=="child"&&reenter.Gate.Active);Check("cached-target-metadata-does-not-dispatch",beforeMetadata==reenter.Gate.ForwardedCalls);
+        reenterReader.Release.TrySetResult();Check("callback-can-return-without-deadlock",(await callbackRun.WaitAsync(TimeSpan.FromSeconds(10))).Success);
+
+        var selfReader=new BarrierReader();var self=New("callback-close-self-drain",selfReader);var selfDrain="";
+        selfReader.Callback=async()=>{self.Gate.Close();try{await self.Gate.DrainAsync(TimeSpan.FromSeconds(1));selfDrain="unexpected";}catch(Admission error){selfDrain=error.Code;}};
+        var selfRun=self.Facade.InspectAsync(included);await selfReader.CallbackDone.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        Check("callback-close-is-nonblocking",self.Gate.State=="Quiescing"&&self.Gate.Active&&self.Gate.ReleaseRequests==0);
+        Check("logical-operation-context-refuses-self-drain",selfDrain=="SelfDrain");
+        var drain=self.Gate.DrainAsync(TimeSpan.FromSeconds(10));Check("external-drain-waits-for-real-completion",!drain.IsCompleted);
+        var whileClosing=await self.Facade.InspectAsync(source);Check("terminal-refusal-precedes-busy",Refusal(whileClosing)=="SessionClosed");
+        selfReader.Release.TrySetResult();var selfResult=await selfRun.WaitAsync(TimeSpan.FromSeconds(10));Check("close-during-callback-suppresses-late-authority",!selfResult.Success&&NoPorts(selfResult)&&Refusal(selfResult)=="SessionClosed");
+        Check("external-drain-finishes-after-callback",await drain&&self.Gate.State=="Closed"&&self.Gate.ReleaseRequests==1);
+
+        var pre=New("pre-cancel");using(var cancelled=new CancellationTokenSource()){cancelled.Cancel();Check("pre-cancellation-propagates",await Cancelled(pre.Facade.InspectAsync(source,cancelled.Token)));Check("pre-cancellation-owns-no-lease",pre.Gate.LeasesCreated==0&&pre.Gate.ForwardedCalls==0);}
+        var cancelReader=new BarrierReader();var cancel=New("post-admission-cancel",cancelReader);
+        using(var token=new CancellationTokenSource())
+        {
+            var operation=cancel.Facade.InspectAsync(included,token.Token);await cancelReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));token.Cancel();await cancelReader.CancellationSeen.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            Check("actual-callback-sees-admitted-token-cancel",cancelReader.SawCancellation);
+            Check("cancellation-does-not-release-active-lease",cancel.Gate.Active&&cancel.Gate.LeasesReleased==0&&cancel.Gate.ReleaseRequests==0&&!operation.IsCompleted);
+            Check("cancellation-pending-lane-stays-busy",Refusal(await cancel.Facade.InspectAsync(source))=="Busy");
+            cancelReader.Release.TrySetResult();Check("post-admission-cancellation-propagates-after-raw-completion",await Cancelled(operation));
+            Check("cancelled-lease-released-once",cancel.Gate.LeasesCreated==cancel.Gate.LeasesReleased&&!cancel.Gate.Active&&cancel.Gate.ReleaseRequests==0);
+            Check("session-remains-usable-after-nonterminal-cancel",(await cancel.Facade.InspectAsync(source)).Success);
+        }
+        var bothReader=new BarrierReader();var both=New("cancel-and-close",bothReader);
+        using(var token=new CancellationTokenSource())
+        {
+            var operation=both.Facade.InspectAsync(included,token.Token);await bothReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));token.Cancel();both.Gate.Close();
+            Check("close-and-cancel-retains-blocked-operation",both.Gate.Active&&both.Gate.State=="Quiescing"&&both.Gate.ReleaseRequests==0);
+            bothReader.Release.TrySetResult();Check("cancel-close-does-not-publish-authority",await Cancelled(operation));
+            Check("cancel-close-drains-once",await both.Gate.DrainAsync(TimeSpan.FromSeconds(2))&&both.Gate.ReleaseRequests==1&&both.Gate.LeasesCreated==both.Gate.LeasesReleased);
+            Check("cancel-and-close-events-both-retained",both.Gate.Reason=="UserClose"&&JsonSerializer.Serialize(both.Gate.Events).Contains("cancelled-token-at-lease-end",StringComparison.Ordinal));
+        }
+
+        var abandonReader=new BarrierReader();var abandon=New("caller-stops-awaiting",abandonReader);var unawaited=abandon.Facade.InspectAsync(included);await abandonReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        using(var waiter=new CancellationTokenSource())
+        {
+            var waiting=unawaited.WaitAsync(waiter.Token);waiter.Cancel();Check("caller-wait-cancellation-observed",await Cancelled(waiting));
+            Check("caller-abandonment-does-not-release-operation",abandon.Gate.Active&&!unawaited.IsCompleted&&abandon.Gate.LeasesReleased==0&&abandon.Gate.ReleaseRequests==0);
+            Check("abandoned-operation-still-excludes-new-work",Refusal(await abandon.Facade.InspectAsync(source))=="Busy");
+            abandonReader.Release.TrySetResult();Check("owned-operation-completes-even-without-original-waiter",(await unawaited.WaitAsync(TimeSpan.FromSeconds(10))).Success);
+        }
+        var timedReader=new BarrierReader();var timed=New("bounded-drain",timedReader);var timedRun=timed.Facade.InspectAsync(included);await timedReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));timed.Gate.Close();
+        Check("bounded-drain-reports-incomplete",!await timed.Gate.DrainAsync(TimeSpan.FromMilliseconds(40)));
+        Check("drain-timeout-keeps-active-context-owned",timed.Gate.Active&&timed.Gate.State=="Quiescing"&&timed.Gate.ReleaseRequests==0);
+        timed.Gate.Close();var drainOne=timed.Gate.DrainAsync(TimeSpan.FromSeconds(10));var drainTwo=timed.Gate.DrainAsync(TimeSpan.FromSeconds(10));timedReader.Release.TrySetResult();
+        Check("timed-out-drain-eventually-suppresses-authority",NoPorts(await timedRun.WaitAsync(TimeSpan.FromSeconds(10))));
+        Check("multiple-drain-waiters-complete-once",await drainOne&&await drainTwo&&timed.Gate.ReleaseRequests==1);
+
+        var driftReader=new BarrierReader();var drift=New("drift-during-callback",driftReader);var driftRun=drift.Facade.InspectAsync(included);await driftReader.Entered.Task.WaitAsync(TimeSpan.FromSeconds(10));
+        File.Copy(manifest.CandidateMembers.Single(m=>m.Name=="Bosak.Xslt").Path,Path.Combine(drift.Session.Root,"Bosak.Xslt.dll"),true);driftReader.Release.TrySetResult();var driftResult=await driftRun.WaitAsync(TimeSpan.FromSeconds(10));
+        Check("actual-drift-before-publication-refuses",!driftResult.Success&&Refusal(driftResult)=="ArtifactRefused"&&NoPorts(driftResult));
+        Check("artifact-refusal-quiesces-and-releases",await drift.Gate.DrainAsync(TimeSpan.FromSeconds(2))&&drift.Gate.Reason=="ArtifactRefused"&&drift.Gate.ReleaseRequests==1);
+        File.Copy(manifest.Members.Single(m=>m.Name=="Bosak.Xslt").Path,Path.Combine(drift.Session.Root,"Bosak.Xslt.dll"),true);Check("restored-artifact-does-not-reopen",Refusal(await drift.Facade.InspectAsync(source))=="ArtifactRefused");
+
+        var readerA=new BarrierReader();var readerB=new BarrierReader();var independentA=New("independent-a",readerA);var independentB=New("independent-b",readerB);var runA=independentA.Facade.InspectAsync(included);var runB=independentB.Facade.InspectAsync(included);
+        await Task.WhenAll(readerA.Entered.Task,readerB.Entered.Task).WaitAsync(TimeSpan.FromSeconds(10));Check("independent-sessions-can-own-separate-active-calls",independentA.Gate.Active&&independentB.Gate.Active);
+        readerA.Release.TrySetResult();Check("one-session-completes-while-other-blocked",(await runA.WaitAsync(TimeSpan.FromSeconds(10))).Success&&independentB.Gate.Active);
+        readerB.Release.TrySetResult();Check("other-independent-session-completes",(await runB.WaitAsync(TimeSpan.FromSeconds(10))).Success);
+
+        var accounting=New("lease-idempotence");var lease=accounting.Gate.Enter();lease.Dispose();lease.Dispose();Check("duplicate-lease-disposal-counted-once",accounting.Gate.LeasesCreated==1&&accounting.Gate.LeasesReleased==1);
+        accounting.Gate.Close();accounting.Gate.Close();Check("repeated-idle-close-releases-once",accounting.Gate.ReleaseRequests==1&&await accounting.Gate.DrainAsync(TimeSpan.FromSeconds(2)));
+        foreach(var c in cases){c.Gate.Close();if(!await c.Gate.DrainAsync(TimeSpan.FromSeconds(2)))throw new InvalidOperationException("Cleanup drain incomplete");}
+        Check("all-cases-finish-with-balanced-leases",cases.All(c=>c.Gate.State=="Closed"&&!c.Gate.Active&&c.Gate.LeasesCreated==c.Gate.LeasesReleased&&c.Gate.ReleaseRequests==1));
+        Check("no-engine-or-adapter-default-context-fallback",!AssemblyLoadContext.Default.Assemblies.Any(a=>Session.Required.Contains(a.GetName().Name!)));
+        File.WriteAllText(args[1],JsonSerializer.Serialize(new{checks,cases=cases.Select(c=>new{c.Label,c.Gate.State,c.Gate.Reason,c.Gate.LeasesCreated,c.Gate.LeasesReleased,c.Gate.ReleaseRequests,c.Gate.ForwardedCalls,events=c.Gate.Events,loaded=c.Session.Loaded}),actualAdapterCallbackSchedules=true,partialResponseFaultInjected=true,gateAccountingControlIsDirect=true,arbitraryConcurrencyQualified=false,actualBraidProductChanged=false},Json));
+        Console.WriteLine($"{checks.Count} lifecycle controls passed across {cases.Count} isolated cases; all leases balanced and underlying release requested once per case.");return 0;
+    }
+}
+internal sealed record Case(string Label,Session Session,Gate Gate,ISourceInspector Raw,InspectorFacade Facade);
+internal sealed class BarrierReader:IResourceReader
+{
+    internal TaskCompletionSource Entered{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);internal TaskCompletionSource CallbackDone{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);internal TaskCompletionSource Release{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);internal TaskCompletionSource CancellationSeen{get;}=new(TaskCreationOptions.RunContinuationsAsynchronously);
+    internal Func<Task>? Callback{get;set;}internal bool SawCancellation{get;private set;}
+    /// <inheritdoc />
+    public async Task<SourceDocument> ReadAsync(Uri resolvedUri,CancellationToken cancellationToken=default)
+    {
+        using var registration=cancellationToken.Register(()=>{SawCancellation=true;CancellationSeen.TrySetResult();});Entered.TrySetResult();if(Callback is not null)await Callback();CallbackDone.TrySetResult();
+        // Deliberately retain the callback despite cancellation until the controlling barrier releases it.
+        await Release.Task;cancellationToken.ThrowIfCancellationRequested();return new SourceDocument(resolvedUri,Encoding.UTF8.GetBytes("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'/>"));
+    }
+}
+internal sealed class FixedInspector(SourceInspectionResult result):ISourceInspector
+{
+    /// <inheritdoc />
+    public SourceAuthoringCapabilities? Capabilities=>result.Capabilities;
+    /// <inheritdoc />
+    public Task<SourceInspectionResult> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default)=>Task.FromResult(result);
+}
+internal sealed class Admission(string code):InvalidOperationException(code){internal string Code{get;}=code;}
+internal sealed class Gate(Session session):IDisposable
+{
+    private static readonly AsyncLocal<Scope?> Current=new();
+    private readonly object sync=new();private string state="Ready";private string reason="";private long sequence;private long activeId;private long nextId;
+    private readonly TaskCompletionSource drained=new(TaskCreationOptions.RunContinuationsAsynchronously);
+    internal List<object> Events{get;}=[];internal int ForwardedCalls{get;private set;}internal int LeasesCreated{get;private set;}internal int LeasesReleased{get;private set;}internal int ReleaseRequests{get;private set;}
+    internal string State{get{lock(sync)return state;}}internal string Reason{get{lock(sync)return reason;}}internal bool Active{get{lock(sync)return activeId!=0;}}
+    internal object Profile{get{lock(sync)return new{profile="lifecycle-readonly-experiment-v1",state,reason,canDispatch=state=="Ready"&&activeId==0,operations=new[]{"Inspect","RenameTarget","SameNameNoChange"}};}}
+    private void Event(string name){Events.Add(new{sequence=++sequence,name,state,reason,activeId});}
+    private void Ready(){if(state!="Ready")throw new Admission(reason=="ArtifactRefused"?"ArtifactRefused":"SessionClosed");}
+    internal IDisposable Enter(CancellationToken token=default)
+    {
+        token.ThrowIfCancellationRequested();long id;
+        lock(sync){Ready();if(activeId!=0){Event("busy-refused");throw new Admission("Busy");}activeId=id=++nextId;LeasesCreated++;Event("lease-reserved");}
+        var lease=new Lease(this,id,Current.Value);Current.Value=new(this,id,token);
+        try{Validate();return lease;}catch{lease.Dispose();throw;}
+    }
+    private void Validate()
+    {
+        var scope=Current.Value;if(scope is null||!ReferenceEquals(scope.Owner,this))throw new Admission("InvalidLease");scope.Token.ThrowIfCancellationRequested();
+        lock(sync){Ready();if(activeId!=scope.Id)throw new Admission("InvalidLease");}
+        // Verification I/O and all adapter/callback work occur outside the lifecycle ordering lock.
+        try{session.Demand();}catch(InvalidOperationException){Close("ArtifactRefused");throw new Admission("ArtifactRefused");}
+        lock(sync){Ready();if(activeId!=scope.Id)throw new Admission("InvalidLease");}
+        scope.Token.ThrowIfCancellationRequested();
+    }
+    internal void Forward(){Validate();lock(sync){Ready();ForwardedCalls++;Event("raw-dispatch");}}
+    internal void Publish(){Validate();lock(sync){Ready();Event("publication-admitted");}}
+    internal T Read<T>(Func<T> read){lock(sync){Ready();return read();}}
+    internal void Close(string cause="UserClose")
+    {
+        var release=false;lock(sync){if(state=="Ready"){state="Quiescing";reason=cause;Event("quiesce");}else Event("repeat-close:"+cause);if(state=="Quiescing"&&activeId==0){state="Closed";ReleaseRequests++;Event("release-requested");release=true;}}
+        if(release)Release();
+    }
+    private void End(long id)
+    {
+        var release=false;lock(sync){if(activeId!=id)throw new InvalidOperationException("Lease accounting invariant");if(Current.Value?.Token.IsCancellationRequested==true)Event("cancelled-token-at-lease-end");activeId=0;LeasesReleased++;Event("lease-ended");if(state=="Quiescing"){state="Closed";ReleaseRequests++;Event("release-requested");release=true;}}
+        if(release)Release();
+    }
+    private void Release(){try{session.Dispose();drained.TrySetResult();}catch(Exception error){drained.TrySetException(error);}}
+    internal async Task<bool> DrainAsync(TimeSpan bound,CancellationToken token=default)
+    {
+        var scope=Current.Value;lock(sync){if(scope is not null&&ReferenceEquals(scope.Owner,this)&&scope.Id==activeId)throw new Admission("SelfDrain");if(state=="Ready")throw new Admission("NotClosing");}
+        try{await drained.Task.WaitAsync(bound,token);return true;}catch(TimeoutException){return false;}
+    }
+    /// <summary>Stops new admission without waiting for an active callback or engine call.</summary>
+    public void Dispose()=>Close();
+    private sealed record Scope(Gate Owner,long Id,CancellationToken Token);
+    private sealed class Lease(Gate owner,long id,Scope? prior):IDisposable
+    {
+        private int ended;
+        /// <inheritdoc />
+        public void Dispose(){if(Interlocked.Exchange(ref ended,1)==0){try{owner.End(id);}finally{Current.Value=prior;}}}
+    }
+}
+internal sealed class InspectorFacade:ISourceInspector
+{
+    private readonly Gate gate;private readonly ISourceInspector raw;private readonly SourceAuthoringCapabilities? facts;
+    internal InspectorFacade(Gate gate,ISourceInspector raw){this.gate=gate;this.raw=raw;facts=raw.Capabilities;}
+    /// <inheritdoc />
+    public SourceAuthoringCapabilities? Capabilities=>gate.Read(()=>facts);
+    internal SourceAuthoringCapabilities? EngineFacts => facts;
+    internal object AdmissionProfile => gate.Profile;
+    /// <inheritdoc />
+    public async Task<SourceInspectionResult> InspectAsync(SourceDocument source,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);gate.Forward();var result=await raw.InspectAsync(source,cancellationToken);gate.Publish();
+            return result with{Capabilities=result.Capabilities,ExpressionEditor=null,ValueOfInserter=null,ValueOfDeleter=null,TextDeleter=null,TextInserter=null,LiteralElementInserter=null,TextBodyReplacer=null,LiteralAttributeEditor=null,
+                LiteralElementEditor=!result.Success||result.Issues.Count!=0||result.LiteralElementEditor is null?null:new ElementFacade(gate,result.LiteralElementEditor)};
+        }
+        catch(Admission refusal){return new(false,[],[new InspectionIssue(refusal.Code,source.Uri,"Diagnostic session admission refused.")]);}
+    }
+}
+internal sealed class ElementFacade(Gate gate,ILiteralElementEditor raw):ILiteralElementEditor
+{
+    /// <inheritdoc />
+    public async Task<LiteralElementTargetResult> GetTargetAsync(Uri moduleUri,int nodeId,LiteralElementOperation operation,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);if(operation!=LiteralElementOperation.Rename)return new(null,new("UnsupportedProfile","Only read-only rename target discovery is admitted."));
+            gate.Forward();var result=await raw.GetTargetAsync(moduleUri,nodeId,operation,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,result.Failure);
+            if(result.Target is null||result.Target.Operation!=operation||result.Target.ModuleUri!=moduleUri||result.Target.NodeId!=nodeId)return new(null,new("InvalidResponse","Raw target did not match requested authority."));
+            return new(new Target(this,gate,result.Target),null);
+        }
+        catch(Admission refusal){return new(null,new(refusal.Code,"Diagnostic session admission refused."));}
+    }
+    /// <inheritdoc />
+    public async Task<LiteralElementResult> ProposeAsync(ILiteralElementTarget target,string? name,CancellationToken cancellationToken=default)
+    {
+        try
+        {
+            using var lease=gate.Enter(cancellationToken);
+            if(target is not Target owned||!ReferenceEquals(owned.Owner,this))return Failure("ForeignTarget");
+            if(name!=owned.Raw.LocalName)return Failure("UnsupportedProfile");
+            gate.Forward();var result=await raw.ProposeAsync(owned.Raw,name,cancellationToken);gate.Publish();
+            if(result.Failure is not null)return new(null,null,result.Failure);
+            if(result.Candidate is not null||!ReferenceEquals(result.NoChangeTarget,owned.Raw)||result.Review is not null)return Failure("InvalidResponse");
+            return new(null,owned,null);
+        }
+        catch(Admission refusal){return Failure(refusal.Code);}
+    }
+    private static LiteralElementResult Failure(string code)=>new(null,null,new(code,"Diagnostic NoChange-only port refused this operation."));
+    private sealed class Target:ILiteralElementTarget
+    {
+        internal ElementFacade Owner{get;}internal ILiteralElementTarget Raw{get;}private readonly Gate gate;private readonly LiteralElementOperation operation;private readonly LiteralElementMoveContext? move;private readonly int? parent;private readonly Uri uri;private readonly int id;private readonly InspectionRange range;private readonly string name;
+        internal Target(ElementFacade owner,Gate admission,ILiteralElementTarget raw){Owner=owner;Raw=raw;gate=admission;operation=raw.Operation;move=raw.MoveContext;parent=raw.ConditionalParentId;uri=raw.ModuleUri;id=raw.NodeId;range=raw.Range with{};name=raw.LocalName;}
+        /// <inheritdoc />
+        public LiteralElementOperation Operation=>gate.Read(()=>operation);
+        /// <inheritdoc />
+        public LiteralElementMoveContext? MoveContext=>gate.Read(()=>move);
+        /// <inheritdoc />
+        public int? ConditionalParentId=>gate.Read(()=>parent);
+        /// <inheritdoc />
+        public Uri ModuleUri=>gate.Read(()=>uri);
+        /// <inheritdoc />
+        public int NodeId=>gate.Read(()=>id);
+        /// <inheritdoc />
+        public InspectionRange Range=>gate.Read(()=>range);
+        /// <inheritdoc />
+        public string LocalName=>gate.Read(()=>name);
+    }
+}
+internal sealed record Member(string Name,string Identity,string Sha256,string Path,bool Readable);
+internal sealed record Contract(string Name,string Path,string Sha256);
+internal sealed record Manifest(string Revision,Member[] Members,Contract[] Contracts,Member[] CandidateMembers);
+internal sealed record Loaded(string Name,string Identity,string SnapshotSha256,string Mvid,string SourcePath,string Location);
+internal sealed record Request(int Version,string RequestId,string Identity,string Profile,string Fault);
+internal sealed record Response(int Version,string RequestId,string Identity,string Profile,bool Accepted,string Result,Loaded[] Loaded,int ProcessId,string Error);
+internal sealed record WorkerRun(int ExitCode,int TimeoutSeconds,Response Response,string StandardError);
+internal sealed class Session:IDisposable
+{
+    internal static readonly string[] Required=["Bosak.XPath.Core","Bosak.XPath.Parser","Bosak.XPath.Compiler","Bosak.XPath.Runtime","Bosak.XPath.Standard","Bosak.XPath.Providers","Bosak.XPath.Api","Bosak.XQuery","Bosak.Xslt","Bosak.Braid.Infrastructure"];
+    private readonly Manifest manifest;private readonly Dictionary<string,byte[]> snapshots=new(StringComparer.Ordinal);private readonly GuardedContext context;private readonly byte[] plugin;private bool revoked;private bool closed;
+    internal IReadOnlyList<Assembly> Shared{get;}=[typeof(ISourceInspector).Assembly,typeof(SourceDocument).Assembly];
+    internal string Root{get;}internal string Identity{get;}internal List<Loaded> Loaded{get;}=[];
+    internal Session(Manifest approved,string root,string operationPlugin)
+    {
+        manifest=approved;Root=Path.GetFullPath(root);Identity=Digest(approved);plugin=File.ReadAllBytes(operationPlugin);
+        if(manifest.Contracts.Length!=2 || !manifest.Contracts.Select(c=>c.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Shared.Select(a=>a.GetName().Name!)))throw new InvalidOperationException("Invalid shared contract approval");
+        foreach(var shared in Shared)
+        {
+            var expected=manifest.Contracts.Single(c=>c.Name==shared.GetName().Name);
+            if(Hash(File.ReadAllBytes(shared.Location))!=expected.Sha256 || File.Exists(Path.Combine(Root,expected.Name+".dll")))throw new InvalidOperationException("Shared contract mismatch/duplicate");
+        }
+        foreach(var member in manifest.Members)
+        {
+            var file=Path.Combine(Root,member.Name+".dll");if((File.GetAttributes(file)&FileAttributes.ReparsePoint)!=0)throw new InvalidOperationException("Unsupported artifact link");
+            var bytes=File.ReadAllBytes(file);if(Hash(bytes)!=member.Sha256||Metadata(bytes).Identity!=member.Identity)throw new InvalidOperationException("Artifact mismatch: "+member.Name);snapshots.Add(member.Name,bytes);
+        }
+        context=new GuardedContext(this);
+    }
+    internal ISourceInspector Create(IResourceReader? reader,int limit)
+    {
+        Demand();var assembly=context.Assemblies.SingleOrDefault(x=>x.GetName().Name=="InspectorFactory")??context.LoadFromStream(new MemoryStream(plugin,false));
+        return Program.Make(assembly,reader,limit);
+    }
+    internal void Demand()
+    {
+        if(closed)throw new InvalidOperationException("Session closed");
+        if(revoked)throw new InvalidOperationException("Session revoked");
+        try{foreach(var member in manifest.Members)if(Hash(File.ReadAllBytes(Path.Combine(Root,member.Name+".dll")))!=member.Sha256)throw new InvalidOperationException("Runtime artifact drift: "+member.Name);}
+        catch(Exception error){revoked=true;throw new InvalidOperationException("Runtime admission refused",error);}
+    }
+    internal static string Digest(Manifest manifest)
+    {
+        if(manifest.Members.Length!=10||!manifest.Members.Select(m=>m.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Required)||manifest.Revision.Length!=40||!manifest.Revision.All(Uri.IsHexDigit))throw new InvalidOperationException("Invalid approval manifest");
+        return "experiment-runtime-v1:"+manifest.Revision+":"+Hash(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(manifest.Members.OrderBy(m=>m.Name,StringComparer.Ordinal).Select(m=>new{m.Name,m.Identity,m.Sha256}))));
+    }
+    internal static string Hash(byte[] bytes)=>Convert.ToHexString(SHA256.HashData(bytes)).ToLowerInvariant();
+    private static (string Identity,string Mvid) Metadata(byte[] bytes)
+    {
+        using var pe=new PEReader(new MemoryStream(bytes,false));var reader=pe.GetMetadataReader();var definition=reader.GetAssemblyDefinition();
+        var name=new AssemblyName{ Name=reader.GetString(definition.Name),Version=definition.Version,CultureName=definition.Culture.IsNil?"":reader.GetString(definition.Culture)};
+        if(!definition.PublicKey.IsNil)name.SetPublicKey(reader.GetBlobBytes(definition.PublicKey));else name.SetPublicKeyToken([]);
+        return(name.FullName,reader.GetGuid(reader.GetModuleDefinition().Mvid).ToString());
+    }
+    /// <summary>Requests unload of this isolated context; actual garbage collection is not certified.</summary>
+    public void Dispose(){if(!closed){closed=true;context.Unload();}}
+    private sealed class GuardedContext(Session owner):AssemblyLoadContext(isCollectible:true)
+    {
+        /// <inheritdoc />
+        protected override Assembly? Load(AssemblyName requested)
+        {
+            var shared=owner.Shared.SingleOrDefault(a=>a.GetName().Name==requested.Name);
+            if(shared is not null){if(shared.FullName!=requested.FullName)throw new InvalidOperationException("Shared reference identity mismatch");return shared;}
+            if(!owner.snapshots.TryGetValue(requested.Name!,out var bytes))
+            {if(requested.Name!.StartsWith("Bosak.",StringComparison.Ordinal))throw new InvalidOperationException("Unapproved engine assembly");return null;}
+            var member=owner.manifest.Members.Single(x=>x.Name==requested.Name);var expected=new AssemblyName(member.Identity);
+            if(requested.Version>expected.Version||!requested.GetPublicKeyToken().AsSpan().SequenceEqual(expected.GetPublicKeyToken()))throw new InvalidOperationException("Unapproved assembly reference");
+            var assembly=LoadFromStream(new MemoryStream(bytes,false));var metadata=Metadata(bytes);
+            if(assembly.FullName!=metadata.Identity||assembly.ManifestModule.ModuleVersionId.ToString()!=metadata.Mvid)throw new InvalidOperationException("Loaded snapshot identity mismatch");
+            owner.Loaded.Add(new(requested.Name!,assembly.FullName!,Hash(bytes),metadata.Mvid,Path.Combine(owner.Root,requested.Name+".dll"),assembly.Location));return assembly;
+        }
+    }
+}

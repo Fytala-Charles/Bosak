@@ -1,0 +1,607 @@
+VSTest version 18.6.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.22]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignNodes [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.NoAdmissionHookStillRefuses [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.InputsRequireExactOperation [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "alias-comparer") [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.OwnershipChangesBeforeDispatch [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "collection") [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignNodes [523 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignNodes() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 93
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass5_0.<RefusesForeignNodes>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 93
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass5_0.<RefusesForeignNodes>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 93
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.NoAdmissionHookStillRefuses [713 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.NoAdmissionHookStillRefuses() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 74
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<NoAdmissionHookStillRefuses>b__9_1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 74
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<NoAdmissionHookStillRefuses>b__9_1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 74
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass9_0.<NoAdmissionHookStillRefuses>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 74
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.InputsRequireExactOperation [2 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c.<InputsRequireExactOperation>b__9_0(Operation op)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c.<InputsRequireExactOperation>b__9_0(Operation op)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.InputsRequireExactOperation() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 92
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "alias-comparer") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.OwnershipChangesBeforeDispatch [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.OwnershipChangesBeforeDispatch() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 62
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass5_0.<OwnershipChangesBeforeDispatch>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 62
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass5_0.<OwnershipChangesBeforeDispatch>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 62
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass5_0.<OwnershipChangesBeforeDispatch>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 62
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "collection") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "flag") [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "loader") [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsNonmemberEvidenceInInputs [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.SharedSourceRoles [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: False) [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: True) [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "cache") [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "flag") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "loader") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsNonmemberEvidenceInInputs [1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass12_0.<RejectsNonmemberEvidenceInInputs>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 103
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsNonmemberEvidenceInInputs() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 103
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass12_1.<RejectsNonmemberEvidenceInInputs>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 103
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass12_1.<RejectsNonmemberEvidenceInInputs>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 103
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.SharedSourceRoles [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass11_0.<SharedSourceRoles>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 80
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass11_0.<SharedSourceRoles>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 80
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.SharedSourceRoles() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 80
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: False) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_0.<RejectsUnownedAndAmbiguousNodes>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(Boolean ambiguous) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_1.<RejectsUnownedAndAmbiguousNodes>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_1.<RejectsUnownedAndAmbiguousNodes>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(ambiguous: True) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_0.<RejectsUnownedAndAmbiguousNodes>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(Boolean ambiguous) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at InvokeStub_SchemaMultiSnapshotTests.RejectsUnownedAndAmbiguousNodes(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_1.<RejectsUnownedAndAmbiguousNodes>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass11_1.<RejectsUnownedAndAmbiguousNodes>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 100
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "cache") [1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.EmptyMembershipWithNullRoles [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "decimal") [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.MissingRoleRefusesBeforeEvaluation [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "date") [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.KeepsOriginalAssessments [FAIL]
+[xUnit.net 00:00:01.23]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.AmbiguousRoleRefuses [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.EmptyMembershipWithNullRoles [1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass10_0.<EmptyMembershipWithNullRoles>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 77
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass10_0.<EmptyMembershipWithNullRoles>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 77
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.EmptyMembershipWithNullRoles() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 77
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "decimal") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.MissingRoleRefusesBeforeEvaluation [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.MissingRoleRefusesBeforeEvaluation() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 56
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass3_0.<MissingRoleRefusesBeforeEvaluation>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 56
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass3_0.<MissingRoleRefusesBeforeEvaluation>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 56
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass3_0.<MissingRoleRefusesBeforeEvaluation>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 56
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "date") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.KeepsOriginalAssessments [1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass4_0.<KeepsOriginalAssessments>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 69
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.KeepsOriginalAssessments() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 66
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.AmbiguousRoleRefuses [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.AmbiguousRoleRefuses() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 59
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<AmbiguousRoleRefuses>b__4_2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 59
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<AmbiguousRoleRefuses>b__4_2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 59
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass4_0.<AmbiguousRoleRefuses>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 59
+[xUnit.net 00:00:01.24]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RevocationIsGroupWide [FAIL]
+[xUnit.net 00:00:01.24]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ForeignTokenPrecedesAdmissionCallback [FAIL]
+[xUnit.net 00:00:01.24]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.RoleAccessEndsWithOperation [FAIL]
+[xUnit.net 00:00:01.24]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.DistinctRolesAdmit [FAIL]
+[xUnit.net 00:00:01.24]     Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ClosureDuringAdmissionBlocksDispatch [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RevocationIsGroupWide [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ObjectDisposedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass13_0.<RevocationIsGroupWide>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 106
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.RevocationIsGroupWide() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 106
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass13_1.<RevocationIsGroupWide>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 106
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ForeignTokenPrecedesAdmissionCallback [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<ForeignTokenPrecedesAdmissionCallback>b__6_1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 65
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c.<ForeignTokenPrecedesAdmissionCallback>b__6_1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 65
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ForeignTokenPrecedesAdmissionCallback() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 65
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.RoleAccessEndsWithOperation [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass7_0.<RoleAccessEndsWithOperation>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 68
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass7_0.<RoleAccessEndsWithOperation>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 68
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.RoleAccessEndsWithOperation() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 68
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.DistinctRolesAdmit [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass2_0.<DistinctRolesAdmit>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 53
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass2_0.<DistinctRolesAdmit>b__1(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 53
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.DistinctRolesAdmit() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 53
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ClosureDuringAdmissionBlocksDispatch [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ObjectDisposedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.ClosureDuringAdmissionBlocksDispatch() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 71
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass8_0.<ClosureDuringAdmissionBlocksDispatch>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 71
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass8_0.<ClosureDuringAdmissionBlocksDispatch>b__2(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 71
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaCompositeAdmissionTests.<>c__DisplayClass8_0.<ClosureDuringAdmissionBlocksDispatch>b__1() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaCompositeAdmissionTests.cs:line 71
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "functions") [FAIL]
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "lazy") [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "functions") [50 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(state: "lazy") [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesAdvancedState(String state) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at InvokeStub_SchemaOperationInputTests.RefusesAdvancedState(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass4_0.<RefusesAdvancedState>b__2() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 84
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: 0, namespaces: 16) [FAIL]
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: 16, namespaces: 0) [FAIL]
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: -1, namespaces: 16) [FAIL]
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(bindings: False) [FAIL]
+[xUnit.net 00:00:01.28]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(bindings: True) [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: 0, namespaces: 16) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentOutOfRangeException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(Int32 bindings, Int32 namespaces) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: 16, namespaces: 0) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentOutOfRangeException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(Int32 bindings, Int32 namespaces) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at InvokeStub_SchemaOperationInputTests.RefusesInvalidLimits(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(bindings: -1, namespaces: 16) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentOutOfRangeException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidLimits(Int32 bindings, Int32 namespaces) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at InvokeStub_SchemaOperationInputTests.RefusesInvalidLimits(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass7_0.<RefusesInvalidLimits>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 108
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(bindings: False) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(Boolean bindings) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass8_0.<EnforcesInputCapacity>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass8_0.<EnforcesInputCapacity>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(bindings: True) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.EnforcesInputCapacity(Boolean bindings) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+   at InvokeStub_SchemaOperationInputTests.EnforcesInputCapacity(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass8_0.<EnforcesInputCapacity>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass8_0.<EnforcesInputCapacity>b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 116
+[xUnit.net 00:00:01.29]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignOrUnboundCapturedInputs [FAIL]
+[xUnit.net 00:00:01.29]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidFocus [FAIL]
+[xUnit.net 00:00:01.29]     Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.CapturesIndependentSupportedBindings [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignOrUnboundCapturedInputs [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.ArgumentException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass13_0.<RefusesForeignOrUnboundCapturedInputs>b__3(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 190
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, Snapshot snapshot, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesForeignOrUnboundCapturedInputs() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 187
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass13_1.<RefusesForeignOrUnboundCapturedInputs>b__6() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 190
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c__DisplayClass13_1.<RefusesForeignOrUnboundCapturedInputs>b__6() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 190
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidFocus [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure: Exception type was not an exact match
+Expected: typeof(System.NotSupportedException)
+Actual:   typeof(System.MissingMethodException)
+---- System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.RefusesInvalidFocus() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 101
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+----- Inner Stack Trace -----
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c.<RefusesInvalidFocus>b__6_0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 101
+   at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.<>c.<RefusesInvalidFocus>b__6_0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaOperationInputTests.cs:line 101
+  Failed Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.CapturesIndependentSupportedBindings [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(System.Func`2<Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32, Snapshot)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaOperationInputTests.CapturesIndependentSupportedBindings()
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:11.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.CanceledWaitAndCloseRetainRawSources [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.CanceledWaitAndCloseRetainRawSources [10 s]
+  Error Message:
+   System.TimeoutException : The operation has timed out.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.CanceledWaitAndCloseRetainRawSources() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 123
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:11.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.NestedOperations [FAIL]
+[xUnit.net 00:00:11.23]     Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.EmptyOperation [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.NestedOperations [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.Evaluate(Operation op, Int64 value)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c.<NestedOperations>b__15_1(Operation inner) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 116
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass15_0.<NestedOperations>b__0(Operation outer) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 116
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.NestedOperations() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 116
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.EmptyOperation [< 1 ms]
+  Error Message:
+   System.MissingMethodException : Method not found: 'Bosak.XPath.Runtime.Vm.SchemaOperationInputs Operation.CaptureInputs(Bosak.XPath.Runtime.Vm.EvaluationContext, System.Func`3<Snapshot,Bosak.XPath.Core.Xdm.IXdmNode,Boolean>, Int32, Int32)'.
+  Stack Trace:
+     at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass8_0.<EmptyOperation>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 89
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.<>c__DisplayClass8_0.<EmptyOperation>b__0(Operation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 89
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary)
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)
+   at Bosak.XPath.Runtime.Tests.SchemaMultiSnapshotTests.EmptyOperation() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\SchemaMultiSnapshotTests.cs:line 89
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+Results File: C:\Users\charl\AppData\Local\Temp\BosakBcapFeasibility-or4k24gk\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\results\results.trx
+
+Failed!  - Failed:    37, Passed:   329, Skipped:     0, Total:   366, Duration: 10 s - Bosak.XPath.Runtime.Tests.dll (net10.0)

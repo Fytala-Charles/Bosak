@@ -1,0 +1,12 @@
+[
+  {
+    "name": "fn-normalize-unicode2args-5a",
+    "expression": "normalize-unicode('',())",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+  },
+  {
+    "name": "fn-normalize-unicode-empty",
+    "expression": "normalize-unicode('A\u030a', ())",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>\u00c5</ns0:assert-string-value>\n      </ns0:result>\n   "
+  }
+]

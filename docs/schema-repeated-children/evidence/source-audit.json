@@ -1,0 +1,65 @@
+[
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+    "sourcePattern": "record struct AssessmentParticle",
+    "lines": [
+      63
+    ],
+    "sha256": "effc0e63b0f470bba1ce022ab05b3aeb84f08d90e97acb329301ab401321d3d7"
+  },
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "foreach (var particle in _particles)",
+    "lines": [
+      90
+    ],
+    "sha256": "15cb7122c82ec40309198c3f78a173225eb3b3d0e864739bba61a89bc911abb4"
+  },
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "childIndex++",
+    "lines": [
+      96
+    ],
+    "sha256": "15cb7122c82ec40309198c3f78a173225eb3b3d0e864739bba61a89bc911abb4"
+  },
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "catch (Exception error)",
+    "lines": [
+      132
+    ],
+    "sha256": "15cb7122c82ec40309198c3f78a173225eb3b3d0e864739bba61a89bc911abb4"
+  },
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+    "sourcePattern": "CreateTypedElementCopy",
+    "lines": [
+      75
+    ],
+    "sha256": "459a026e81dbc79789a8202d6339bff8a436a0a48a8fb735a0a42b2515e158b7"
+  },
+  {
+    "repository": "schema",
+    "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+    "sourcePattern": "Elements[i].Declaration.Name == name",
+    "lines": [
+      80
+    ],
+    "sha256": "459a026e81dbc79789a8202d6339bff8a436a0a48a8fb735a0a42b2515e158b7"
+  },
+  {
+    "repository": "core",
+    "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+    "sourcePattern": "XPTY0004: Value comparison requires singleton operands",
+    "lines": [
+      7917
+    ],
+    "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee"
+  }
+]

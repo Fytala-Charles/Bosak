@@ -1,0 +1,12 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\bcap-candidate\Proposed\src\Bosak.Xslt.C45Proposal\Bosak.Xslt.C45Proposal.csproj (in 56 ms).
+  2 of 3 projects are up-to-date for restore.
+  Bosak.XPath.Core.C45Proposal -> D:\Development\Bosak\.guard-tmp\bcap-candidate\Proposed\src\Bosak.XPath.Core.C45Proposal\bin\Release\net10.0\Bosak.XPath.Core.C45Proposal.dll
+  Bosak.XPath.Api.C45Proposal -> D:\Development\Bosak\.guard-tmp\bcap-candidate\Proposed\src\Bosak.XPath.Api.C45Proposal\bin\Release\net10.0\Bosak.XPath.Api.C45Proposal.dll
+  Bosak.Xslt.C45Proposal -> D:\Development\Bosak\.guard-tmp\bcap-candidate\Proposed\src\Bosak.Xslt.C45Proposal\bin\Release\net10.0\Bosak.Xslt.C45Proposal.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.48

@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "cad1c05b",
+  "specification": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+  "revision": "W3C Recommendation 21 March 2017",
+  "sections": ["4.11 Schema Import", "2.1 Static and Dynamic Context"],
+  "implementation": "Diagnostic-only QT3 schema initialization mode, default off. Read compiled main-module imports through a conformance-only internal metadata accessor; retain explicit environment schema-version metadata. Defer compilation only when all structural and profile guards pass.",
+  "invariants": [
+    "Default TestExecutor and normal runner behavior are unchanged.",
+    "No private-field reflection in the implemented schema ownership decision.",
+    "Preserve eager source validation, declared XSD-version policy, modules, environment expressions, missing files and uncertain or incomplete namespace mappings.",
+    "No unconditional bypass option is included in the actual harness; unsafe controls stay in the isolated prototype only.",
+    "No production gate, fixture, assertion, routing, retry, skip or baseline change."
+  ],
+  "prototypeEvidence": "DESIGN-REVISION-2.json",
+  "qt3Baseline": [31144, 0, 677],
+  "qt4Baseline": [8436, 0, 1894]
+}

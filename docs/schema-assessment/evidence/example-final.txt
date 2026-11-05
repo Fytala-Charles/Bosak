@@ -1,0 +1,4 @@
+Assessment: Valid
+Typed decimal: True
+Total: 15.0000
+<?xml version="1.0" encoding="UTF-8"?><result total="15" preserved="true" stripped="true"/>

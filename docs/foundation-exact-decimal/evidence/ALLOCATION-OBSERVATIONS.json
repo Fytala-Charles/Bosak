@@ -1,0 +1,28 @@
+{
+  "scope": "Six warmed caught capacity refusals; input BigInteger/text already owned. No workload/latency/retained-memory budget accepted. Exception allocation included.",
+  "rows": [
+    {
+      "test": "Bosak.XPath.Core.Tests.XdmExactDecimalTests.FormattingRefusalPrecedesLargeAllocation",
+      "allocatedBytesPerCaughtRefusal": [
+        464,
+        464
+      ]
+    },
+    {
+      "test": "Bosak.XPath.Core.Tests.XdmExactDecimalTests.ConstructorRefusalDoesNotFormatLargeCoefficient",
+      "allocatedBytesPerCaughtRefusal": [
+        464,
+        464
+      ]
+    },
+    {
+      "test": "Bosak.XPath.Core.Tests.XdmExactDecimalTests.LexicalRefusalPrecedesCoefficientAllocation",
+      "allocatedBytesPerCaughtRefusal": [
+        464,
+        464
+      ]
+    }
+  ],
+  "testAllocationCeilingBytes": 16384,
+  "budgetsAccepted": false
+}

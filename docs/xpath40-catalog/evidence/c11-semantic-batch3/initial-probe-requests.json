@@ -1,0 +1,663 @@
+[
+  {
+    "id": "verbatim-destructure-0",
+    "expression": "let $($x, $y) := (1, 2, 3) return ($x, $y)\n  (: → (1,2,3) — $x=1, $y=(2,3); XDM flattens the returned sequence :)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "1,2,3",
+    "error": null,
+    "projection": "string-join($value,',')",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-destructure-1",
+    "expression": "let $[$a, $b] := [3, 4, 5] return `a={$a} b={$b}`\n  (: → \"a=3 b=4\" — surplus member 5 discarded :)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "a=3 b=4",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-destructure-2",
+    "expression": "let $[$a, $b] := [1] return $b\n  (: → FOAY0001 :)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": null,
+    "error": "FOAY0001",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-destructure-3",
+    "expression": "let ${$name} := map {\"name\": \"Braid\"} return $name\n  (: → \"Braid\" — key = variable local name :)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "Braid",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-destructure-4",
+    "expression": "let $($x as xs:short, $y) := (42, \"ok\") return ($x, $y)\n  (: → (42 xs:short, \"ok\") — PR 254 relabeling; annotation changes, datum untouched :)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "true|ok",
+    "error": null,
+    "projection": "string-join(($value[1] instance of xs:short,$value[2]),'|')",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-arrow-0",
+    "expression": "string-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')\n  (: → \"FILTER-A,BOLT-M8\" — one call per product code :)",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "expected": "FILTER-A,BOLT-M8",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "verbatim-arrow-1",
+    "expression": "(' FILTER-A ') =>> normalize-space()\n  (: → XPST0003 at every level — old spelling, never implemented :)",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "expected": null,
+    "error": "XPST0003",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "unix-default",
+    "expression": "string(unix-dateTime())",
+    "entry": "functions/timestamp-deadlines.md",
+    "expected": "1970-01-01T00:00:00Z",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "unix-negative-frozen",
+    "expression": "string(unix-dateTime(-1))",
+    "entry": "functions/timestamp-deadlines.md",
+    "expected": null,
+    "error": "FOCA0002",
+    "projection": null,
+    "profiles": [
+      "XPath40"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "unix-negative-experimental",
+    "expression": "string(unix-dateTime(-1))",
+    "entry": "functions/timestamp-deadlines.md",
+    "expected": "1969-12-31T23:59:59.999Z",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "unix-wide-range",
+    "expression": "unix-dateTime(9223372036854775808)",
+    "entry": "functions/timestamp-deadlines.md",
+    "expected": null,
+    "error": "FODT0001",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "duration-fraction",
+    "expression": "duration-to-seconds(seconds(-1.25))",
+    "entry": "functions/timestamp-deadlines.md",
+    "expected": "-1.25",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "uri-empty-query-required",
+    "expression": "build-uri(map{'scheme':'https','host':'example.test','query':'old=1','query-parameters':map{}})",
+    "entry": "functions/uri-option-policy.md",
+    "expected": "https://example.test",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F04"
+  },
+  {
+    "id": "uri-string-false-observation",
+    "expression": "exists(parse-uri('https://example.test:443/',map{'omit-default-ports':'false'})?port)",
+    "entry": "functions/uri-option-policy.md",
+    "expected": null,
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "context-observation",
+    "ticket": "C02-F04"
+  },
+  {
+    "id": "sort-empty-key",
+    "expression": "string-join(sort((3,1,2),(),()),',')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": "1,2,3",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F05"
+  },
+  {
+    "id": "array-sort-empty-key",
+    "expression": "string-join(array:sort([3,1,2],(),())?*,',')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": "1,2,3",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F05"
+  },
+  {
+    "id": "sort-unknown-collation",
+    "expression": "sort(('B','A'),'urn:bosak:no-such-collation')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": null,
+    "error": "FOCH0002",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F05"
+  },
+  {
+    "id": "sort-nan-right",
+    "expression": "string-join(sort((1,xs:double('NaN'))) ! string(.),',')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": "NaN,1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F06"
+  },
+  {
+    "id": "sort-exact",
+    "expression": "string-join(sort((3.1e0,3.1)) ! (if (. instance of xs:decimal) then 'decimal' else 'double'),',')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": "decimal,double",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C02-F06"
+  },
+  {
+    "id": "sort-explicit-data",
+    "expression": "string-join(sort((3,1,2),(),data#1),',')",
+    "entry": "functions/warehouse-pick-sorting.md",
+    "expected": "1,2,3",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "member-whole-sequences",
+    "expression": "string-join((for member $m in [(1,2),()] return count($m)),',')",
+    "entry": "operators-and-syntax/array-member-iteration.md",
+    "expected": "2,0",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "member-container-sequences",
+    "expression": "string-join((for member $m in ([(1,2)],[3]) return count($m)),',')",
+    "entry": "operators-and-syntax/sequence-collection-iteration.md",
+    "expected": "2,1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "map-entry-values",
+    "expression": "string-join((for key $k value $v in map{'A':(1,2)} return concat($k,':',count($v))),',')",
+    "entry": "operators-and-syntax/map-entry-iteration.md",
+    "expected": "A:2",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "destructure-tail",
+    "expression": "let $($a,$b):=(1,2,3) return concat($a,':',string-join($b,','))",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "1:2,3",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "destructure-ordinary-missing",
+    "expression": "let ${$missing}:=map{'a':1} return empty($missing)",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": "true",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "destructure-record-required",
+    "expression": "let ${$missing}:=(map{'a':1} cast as record(a)) return $missing",
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "expected": null,
+    "error": "XPTY0004",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C05-K03"
+  },
+  {
+    "id": "focus-whole-sequence",
+    "expression": "(fn{count(.)})((1,2,3))",
+    "entry": "operators-and-syntax/focus-function-syntax.md",
+    "expected": "3",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "focus-empty-fixed",
+    "expression": "(fn{concat(count(.),':',position(),'/',last())})(())",
+    "entry": "operators-and-syntax/focus-function-syntax.md",
+    "expected": "0:1/1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "constructor-focus",
+    "expression": "'12' ! xs:integer()",
+    "entry": "operators-and-syntax/focus-functions.md",
+    "expected": "12",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "constructor-no-focus",
+    "expression": "xs:integer()",
+    "entry": "operators-and-syntax/focus-functions.md",
+    "expected": null,
+    "error": "XPDY0002",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "keyword-valid",
+    "expression": "substring(value:='ABCD',start:=2,length:=2)",
+    "entry": "operators-and-syntax/keyword-arguments.md",
+    "expected": "BC",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "keyword-placeholder-required",
+    "expression": "let $f:=substring(value:=?,start:=2,length:=2) return $f('ABCD')",
+    "entry": "operators-and-syntax/keyword-arguments.md",
+    "expected": "BC",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C04-G03"
+  },
+  {
+    "id": "keyword-positional-alternative",
+    "expression": "let $f:=substring(?,2,2) return $f('ABCD')",
+    "entry": "operators-and-syntax/keyword-arguments.md",
+    "expected": "BC",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "mapping-containing-required",
+    "expression": "string-join((100 ! string-join((1,2) =!> concat(':',string(.)),'|')),'|')",
+    "entry": "operators-and-syntax/mapping-arrow.md",
+    "expected": "1:100|2:100",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C04-G02"
+  },
+  {
+    "id": "mapping-for-alternative",
+    "expression": "string-join((100 ! string-join((for $u in (1,2) return concat($u,':',string(.))),'|')),'|')",
+    "entry": "operators-and-syntax/mapping-arrow.md",
+    "expected": "1:100|2:100",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "method-refusal",
+    "expression": "1 =?> string()",
+    "entry": "operators-and-syntax/method-call-operator.md",
+    "expected": null,
+    "error": "XPST0003",
+    "projection": null,
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "literal-separators",
+    "expression": "0xFF__FF + 0b1_0",
+    "entry": "operators-and-syntax/numeric-literals.md",
+    "expected": "65537",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "literal-bad-separator",
+    "expression": "1._2",
+    "entry": "operators-and-syntax/numeric-literals.md",
+    "expected": null,
+    "error": "XPST0003",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "literal-string-cast",
+    "expression": "xs:integer('1_000')",
+    "entry": "operators-and-syntax/numeric-literals.md",
+    "expected": null,
+    "error": "FORG0001",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "otherwise-present",
+    "expression": "string-join((0 ?? 9,false() ?? true(),string-length('' ?? 'x')),'|')",
+    "entry": "operators-and-syntax/otherwise-operator.md",
+    "expected": "0|false|0",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "otherwise-word-required",
+    "expression": "() otherwise 4",
+    "entry": "operators-and-syntax/otherwise-operator.md",
+    "expected": "4",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "C04-G01"
+  },
+  {
+    "id": "pipeline-whole-focus",
+    "expression": "(1,2,3) -> concat(count(.),':',position(),'/',last())",
+    "entry": "operators-and-syntax/pipeline-operator.md",
+    "expected": "3:1/1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "template-empty",
+    "expression": "`A{()}B`",
+    "entry": "operators-and-syntax/string-templates.md",
+    "expected": "AB",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "scan-left-refusal",
+    "expression": "scan-left((1,2),0,function($a,$b){$a+$b})",
+    "entry": "rejected/directional-scan.md",
+    "expected": null,
+    "error": "XPST0017",
+    "projection": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "scan-right-refusal",
+    "expression": "scan-right((1,2),0,function($a,$b){$a+$b})",
+    "entry": "rejected/directional-scan.md",
+    "expected": null,
+    "error": "XPST0017",
+    "projection": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "record-cast-surplus",
+    "expression": "map:size(map{'id':'R1','extra':1} cast as record(id as xs:string))",
+    "entry": "rejected/extensible-map-types.md",
+    "expected": "1",
+    "error": null,
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  },
+  {
+    "id": "record-coercion-surplus",
+    "expression": "function($x as record(id as xs:string)){$x}(map{'id':'R1','extra':1})",
+    "entry": "rejected/extensible-map-types.md",
+    "expected": null,
+    "error": "XPTY0004",
+    "projection": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null
+  }
+]

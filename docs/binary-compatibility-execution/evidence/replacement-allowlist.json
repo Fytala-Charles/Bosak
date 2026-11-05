@@ -1,0 +1,22 @@
+{
+  "xmldb": [
+    "Bosak.XPath.Core.dll",
+    "Bosak.XPath.Parser.dll",
+    "Bosak.XPath.Compiler.dll",
+    "Bosak.XPath.Runtime.dll",
+    "Bosak.XPath.Standard.dll",
+    "Bosak.XPath.Providers.dll",
+    "Bosak.XPath.Api.dll"
+  ],
+  "braid": [
+    "Bosak.XPath.Core.dll",
+    "Bosak.XPath.Parser.dll",
+    "Bosak.XPath.Compiler.dll",
+    "Bosak.XPath.Runtime.dll",
+    "Bosak.XPath.Standard.dll",
+    "Bosak.XPath.Providers.dll",
+    "Bosak.XPath.Api.dll",
+    "Bosak.XQuery.dll",
+    "Bosak.Xslt.dll"
+  ]
+}

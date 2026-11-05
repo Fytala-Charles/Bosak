@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-26",
+  "records": [
+    {
+      "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "commitReceipt": "1bb73147-commit.txt",
+      "sourceSearch": "1bb73147-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "1bb73147-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "commitReceipt": "27bc663b-commit.txt",
+      "sourceSearch": "27bc663b-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "27bc663b-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+      "commitReceipt": "2871c0d6-commit.txt",
+      "sourceSearch": "2871c0d6-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "2871c0d6-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "commitReceipt": "2a62ad4d-commit.txt",
+      "sourceSearch": "2a62ad4d-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "2a62ad4d-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+      "commitReceipt": "345ae58e-commit.txt",
+      "sourceSearch": "345ae58e-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "345ae58e-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "commitReceipt": "498ae8d7-commit.txt",
+      "sourceSearch": "498ae8d7-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "498ae8d7-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+      "commitReceipt": "5ca72268-commit.txt",
+      "sourceSearch": "5ca72268-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "5ca72268-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "commitReceipt": "83d152ff-commit.txt",
+      "sourceSearch": "83d152ff-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "83d152ff-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+      "commitReceipt": "89c90b4d-commit.txt",
+      "sourceSearch": "89c90b4d-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "89c90b4d-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "commitReceipt": "b8e4b9f5-commit.txt",
+      "sourceSearch": "b8e4b9f5-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "b8e4b9f5-fixture-tree.txt",
+      "entryCount": 2
+    },
+    {
+      "bosakRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+      "commitReceipt": "bd18e42f-commit.txt",
+      "sourceSearch": "bd18e42f-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "bd18e42f-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "commitReceipt": "c0427907-commit.txt",
+      "sourceSearch": "c0427907-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "c0427907-fixture-tree.txt",
+      "entryCount": 4
+    },
+    {
+      "bosakRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+      "commitReceipt": "ca6e9c27-commit.txt",
+      "sourceSearch": "ca6e9c27-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "ca6e9c27-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+      "commitReceipt": "cbf7f88c-commit.txt",
+      "sourceSearch": "cbf7f88c-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "cbf7f88c-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+      "commitReceipt": "e0024f5d-commit.txt",
+      "sourceSearch": "e0024f5d-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "e0024f5d-fixture-tree.txt",
+      "entryCount": 1
+    },
+    {
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "commitReceipt": "ec793559-commit.txt",
+      "sourceSearch": "ec793559-source-search.txt",
+      "sourceSearchExitCode": 0,
+      "fixtureTreeReceipt": "ec793559-fixture-tree.txt",
+      "entryCount": 4
+    }
+  ],
+  "search": "git grep exact delivery trees across docs/src/tests; retain all matching text. Test fixture gitlinks are separate evidence and never assigned as normative spec revisions."
+}

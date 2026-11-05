@@ -1,5 +1,7 @@
 # REQ-118 — XPath / XSLT 4.0 Adoption Plan
 
+**REQ-126 C07 complete — 26 October 2026:** [Lifecycle/disposition review](xpath40-catalog/LIFECYCLE-RECONCILIATION.md) reconciles all 76 classifications and 19 original/wider decision groups. All 3,519 fresh existing tests and 113 profile controls pass. Current compound-pattern wording, method-call boundaries and a malformed delivery link are corrected with original receipts retained. Six closure workpackages remain; C08 historical adoption evidence is next. All 28 missing adoption pins, earlier defects and semantic acceptance remain open. No feature/profile/gate promotion or release; skips, Braid and extension work stay deferred. Earlier checkpoints are historical.
+
 **Status:** Accepted — planning activated 2026-10-07 (implementation remains gated on core 1.0)
 **Owner:** Charles Korthout
 **Anchor REQ:** [`FEATURE_REQUESTS.md`](./FEATURE_REQUESTS.md) REQ-118

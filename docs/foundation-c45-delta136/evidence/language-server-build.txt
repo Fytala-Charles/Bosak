@@ -1,0 +1,18 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 96 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj (in 104 ms).
+  Restored D:\Development\Bosak\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.XQuery\Bosak.XQuery.csproj (in 103 ms).
+  Restored D:\Development\Bosak\src\Bosak.LanguageServer\Bosak.LanguageServer.csproj (in 149 ms).
+  Bosak.LanguageServer -> D:\Development\Bosak\src\Bosak.LanguageServer\bin\Release\net10.0\Bosak.LanguageServer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.83

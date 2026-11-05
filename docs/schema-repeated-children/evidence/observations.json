@@ -1,0 +1,117 @@
+[
+  {
+    "id": "current-repetition-refusal",
+    "maximum": "2",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-repetition-refusal",
+    "maximum": "02",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-repetition-refusal",
+    "maximum": "16",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "current-repetition-refusal",
+    "maximum": "unbounded",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 0,
+    "expression": "n eq 2",
+    "outcome": "Undefined",
+    "effectiveBoolean": false
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 0,
+    "expression": "n ne 2",
+    "outcome": "Undefined",
+    "effectiveBoolean": false
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 0,
+    "expression": "n le 3",
+    "outcome": "Undefined",
+    "effectiveBoolean": false
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 0,
+    "expression": "1 eq 1",
+    "outcome": "Boolean",
+    "effectiveBoolean": true
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 1,
+    "expression": "n eq 2",
+    "outcome": "Boolean",
+    "effectiveBoolean": true
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 1,
+    "expression": "n ne 2",
+    "outcome": "Boolean",
+    "effectiveBoolean": false
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 1,
+    "expression": "n le 3",
+    "outcome": "Boolean",
+    "effectiveBoolean": true
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 1,
+    "expression": "1 eq 1",
+    "outcome": "Boolean",
+    "effectiveBoolean": true
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 2,
+    "expression": "n eq 2",
+    "outcome": "XPTY0004",
+    "exceptionType": "System.InvalidOperationException",
+    "message": "XPTY0004: Value comparison requires singleton operands"
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 2,
+    "expression": "n ne 2",
+    "outcome": "XPTY0004",
+    "exceptionType": "System.InvalidOperationException",
+    "message": "XPTY0004: Value comparison requires singleton operands"
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 2,
+    "expression": "n le 3",
+    "outcome": "XPTY0004",
+    "exceptionType": "System.InvalidOperationException",
+    "message": "XPTY0004: Value comparison requires singleton operands"
+  },
+  {
+    "id": "comparison-cardinality",
+    "count": 2,
+    "expression": "1 eq 1",
+    "outcome": "Boolean",
+    "effectiveBoolean": true
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+    "tests/qt4tests",
+    "fn-parse-integer"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 60,
+  "wallSeconds": 0.26754869997967035,
+  "totals": [
+    47,
+    0,
+    47,
+    0
+  ],
+  "log": "format-integer-parse-review.log",
+  "mode": "Normal exploratory set;exit0does not imply zero exploratory failures"
+}

@@ -1,0 +1,13 @@
+# Bounded exact integer division and remainder
+
+Use the existing `SchemaQuerySession.CompileXPath` overload with explicit `SchemaQueryLimits`. Queries containing `idiv` or `mod` select `bosak-exact-quotient-v3` and descriptor `bosak-exact-quotient-static-v3`. Examples are `-3.5 idiv 3`, `4.5 mod 1.2`, `9 idiv 2 eq 4` and `string(4.5 mod 1.2)`. Earlier expressions retain their previous profile identities.
+
+Integer quotient truncates toward zero and always returns an Integer. Remainder has the dividend sign; it returns Integer only when both operands are Integer, otherwise Decimal. Thus `-10 mod 3` is `-1`, `10 mod -3` is `1`, and `4.5 mod 1.2` is `0.9`. These rules follow the [dated F&O Recommendation](https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/), sections 4.2.5 and 4.2.6. Multiplication, `idiv` and `mod` have equal precedence and associate left; unary signs bind first. Comparisons and the existing top-level string wrapper compose with their results.
+
+All supplied values and required intermediate/aligned coefficients must fit the captured digit/scale limits. Magnitude comparison returns zero quotient or the dividend remainder without aligning a smaller dividend. Equal magnitudes return a signed unit quotient or zero remainder. Other cases use bounded common-scale integer arithmetic. The implementation conservatively refuses an alignment that exceeds the quota even when the mathematical final result could fit: `99 idiv .1` with two coefficient digits refuses, and extreme scale gaps never trigger unbounded powers or padding. No result is rounded or narrowed through CLR decimal.
+
+Zero divisors raise `DivideByZeroException` with `FOAR0001` in its message. This scoped host exception mapping does not establish standardized error-graph integration. The session can be reused after an arithmetic failure. Availability checks bracket numeric work; close/cancellation and owner lease cleanup retain existing obligations. A single BigInteger operation has no hard time guarantee.
+
+Primitive integer/decimal inputs only are admitted. Decimal `div`, floating query arithmetic, Boolean operands/composition, sequences, arbitrary functions, schema operations and wider serializers remain outside this profile. General XPath/XQuery/XSLT routes retain their existing behavior. The [earlier scalar/key guide](../foundation-exact-scalars/GUIDE.md) covers map keys and string bounds; the typed-default source migration remains unresolved for final release acceptance. Public metadata is unchanged; no freeze is inferred.
+
+See the [qualification packet](README.md) and [adoption/deviation record](SPEC-BASIS.md).

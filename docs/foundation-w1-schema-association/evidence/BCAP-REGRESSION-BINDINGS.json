@@ -1,0 +1,17 @@
+{
+  "scope": "Separate private-extension cohort with nonshipping prototype Runtime/XSLT methods; actual neutral/association code and shared lifetime included, not production public capture implementation",
+  "controls": 83,
+  "repetitions": 2,
+  "engines": {
+    "Bosak.XPath.Api": "4fe1d9adee54a024061084b4304d3b9a5e02599ffd245da52183135f1c117ba3",
+    "Bosak.XPath.Compiler": "a27b6c0b0e5bb9a513dba4f83fa781dbdc4879a435ccd5d975d2bf0495500e5d",
+    "Bosak.XPath.Core": "6473042429f259e1bb5bc981c62e68cdef0d09fd1673e12bfc78a5c78f7fb813",
+    "Bosak.XPath.Parser": "4bfb53d46476b222d1efc2bb2637cb3dc2f792eb6c65d03306ae0e316c56521b",
+    "Bosak.XPath.Providers": "6bbd6eadf0c346507ada3ac7042f1dd4f28c066e924e5c41937022abfd3a8c92",
+    "Bosak.XPath.Runtime": "55dc4b57c07ff99cf9c12dfef445146c06a394fcc058097441b4d7b7db1c88b7",
+    "Bosak.XPath.Standard": "3c3ada00e43b3f4dc46d455e15e2589d6db18f7e3672cfffede25cbd79d18ee3",
+    "Bosak.XQuery": "fd840aabe0e94ececb084b4f64f7c5a5d6314e98b11b584734a53987ec921c30",
+    "Bosak.Xslt": "a6b1cac45b29d41eb48dcfa639c942c5220b5b7c44f5c9d506fc6cd8de1eaa93",
+    "Bosak.XPath.Runtime.Tests": "585201850f7779d2280c1eafa5c46d6e8cb0cbbf204f04174e6294b5e9905eaa"
+  }
+}

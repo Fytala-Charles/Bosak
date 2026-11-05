@@ -1,0 +1,38 @@
+// Generated isolated feasibility candidate; not a production source file.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Runtime.Resources;
+using Bosak.Xslt.Capture;
+namespace Bosak.Xslt.Api;
+/// <summary>Exact compiled executable/session producer for isolated capture feasibility.</summary>
+internal sealed class SchemaCaptureCandidate(SchemaQuerySession session, XsltExecutable executable)
+{
+    internal (XsltCaptureResult Capture, IReadOnlyList<ControlledResourceReceipt> Receipts) Run(
+        SchemaQuerySession.Operation operation, SchemaOperationInputs inputs, IXdmNode? match, IXdmNode? global,
+        string? template, string? mode, string? outputBase, XsltCaptureOptions options)
+    {
+        var cancellation = operation.RequireOwner(session);
+        operation.RequireNodeInput(inputs, match);
+        operation.RequireNodeInput(inputs, global);
+        ArgumentNullException.ThrowIfNull(options);
+        if (options.Context is not null || options.InitialTemplate is not null || options.InitialMode is not null || options.BaseOutputUri is not null)
+            throw new ArgumentException("Invocation and captured inputs are the sole context and selection sources.");
+        if (!options.MaxSecondaryOutputCount.HasValue || !options.MaxBytesPerOutput.HasValue || !options.MaxTotalBytes.HasValue || !options.MaxMessages.HasValue
+            || !options.TimeLimit.HasValue || !options.MaxEngineOperations.HasValue)
+            throw new ArgumentException("Explicit finite capture controls are required.");
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellation, options.CancellationToken ?? default);
+        var context = inputs.CreateContext();
+        var policy = SchemaProviderSessionBinding.ClosedResources();
+        context.ResourcePolicy = policy;
+        var copied = new XsltCaptureOptions {
+            Context = context, InitialTemplate = template, InitialMode = mode, BaseOutputUri = outputBase,
+            MaxSecondaryOutputCount = options.MaxSecondaryOutputCount, MaxBytesPerOutput = options.MaxBytesPerOutput,
+            MaxTotalBytes = options.MaxTotalBytes, MaxMessages = options.MaxMessages,
+            TimeLimit = options.TimeLimit, MaxEngineOperations = options.MaxEngineOperations, CancellationToken = linked.Token
+        };
+        var result = executable.CaptureExplicitCandidate(match, global, copied);
+        return (result, Array.AsReadOnly(policy.Receipts.ToArray()));
+    }
+}

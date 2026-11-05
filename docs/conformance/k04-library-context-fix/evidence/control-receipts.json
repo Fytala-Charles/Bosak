@@ -1,0 +1,242 @@
+[
+  {
+    "name": "C27-original-056-importer-u-bound",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-original-056-importer-u-bound-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 1.4690922999870963,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-original-056-importer-u-bound",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-original-056-importer-u-bound.log"
+  },
+  {
+    "name": "C27-original-057-importer-u-bound",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-original-057-importer-u-bound-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 1.4687872999929823,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-original-057-importer-u-bound",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-original-057-importer-u-bound.log"
+  },
+  {
+    "name": "C27-builtin-prefix-baseline",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-builtin-prefix-baseline-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 1.4799465999822132,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-builtin-prefix-baseline",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-builtin-prefix-baseline.log"
+  },
+  {
+    "name": "C27-library-alias-only",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-library-alias-only-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36078779998933896,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-library-alias-only",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-library-alias-only.log"
+  },
+  {
+    "name": "C27-matching-importer-alias",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-matching-importer-alias-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3607611999614164,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-matching-importer-alias",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-matching-importer-alias.log"
+  },
+  {
+    "name": "C27-conflicting-importer-alias",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-conflicting-importer-alias-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.38111039996147156,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-conflicting-importer-alias",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-conflicting-importer-alias.log"
+  },
+  {
+    "name": "C27-library-alias-wrong-value",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-library-alias-wrong-value-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3541088000056334,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-library-alias-wrong-value",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-library-alias-wrong-value.log"
+  },
+  {
+    "name": "C27-colliding-lexical-types",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-colliding-lexical-types-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34961109998403117,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-colliding-lexical-types",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-colliding-lexical-types.log"
+  },
+  {
+    "name": "C27-distinct-lexical-types",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-distinct-lexical-types-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35138459998415783,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-distinct-lexical-types",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-distinct-lexical-types.log"
+  },
+  {
+    "name": "C27-colliding-union-type-contexts",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-colliding-union-type-contexts-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3600692999898456,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-colliding-union-type-contexts",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-colliding-union-type-contexts.log"
+  },
+  {
+    "name": "C27-distinct-union-type-contexts",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-distinct-union-type-contexts-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3459937000297941,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-distinct-union-type-contexts",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-distinct-union-type-contexts.log"
+  },
+  {
+    "name": "C27-union-left-positive",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-library-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-library-context-fix\\evidence\\C27-union-left-positive-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3667456000111997,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-union-left-positive",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-union-left-positive.log"
+  }
+]

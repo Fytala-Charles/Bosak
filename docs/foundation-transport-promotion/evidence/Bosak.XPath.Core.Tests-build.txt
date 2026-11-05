@@ -1,0 +1,23 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 67 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 69 ms).
+  Restored D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\tests\Bosak.XPath.Core.Tests\Bosak.XPath.Core.Tests.csproj (in 121 ms).
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XPath.Core.Tests -> D:\Development\Bosak\.guard-tmp\transport-promotion-preflight\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:06.11

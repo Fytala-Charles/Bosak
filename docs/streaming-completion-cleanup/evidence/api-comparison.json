@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-30",
+  "sourceCandidate": "1.34.2",
+  "baselineSourceRevision": "f758a29f368201abdb98af003274451c84a9b7c4",
+  "scope": "Exact compiled API declarations/defaults/attributes/value field shape unchanged; new patch assembly identities expected; no real consumer/package ABI acceptance",
+  "assemblies": [
+    {
+      "assembly": "Bosak.LanguageServer",
+      "declarationEntries": 400,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.LanguageServer, Version=1.26.3.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.LanguageServer, Version=1.26.3.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "1BFF897D83EAF1243AD139333E9376FE835370D0C2C14DB955261FAF2B0E1471"
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "declarationEntries": 189,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Api, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Api, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "5C2B083A64D5F5D26F9AA36A0610C10AFD7EEC50C9D54ABE92499BFFBB30CBC7"
+    },
+    {
+      "assembly": "Bosak.XPath.Compiler",
+      "declarationEntries": 0,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Compiler, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Compiler, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "3A63AD1F88F68CABD2AFB621568F500DA1145F8DC3C4269FF176C05F46E64142"
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "declarationEntries": 807,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Core, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Core, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "5FCB5472C3CD45556D62DDD0B079D1E3C4F15147D9D2703DCFCF59B72353BE02"
+    },
+    {
+      "assembly": "Bosak.XPath.Parser",
+      "declarationEntries": 9,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Parser, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Parser, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "2010DACD387CE2E95030839EC4CC3521187D1B496656765D002D340AB119F622"
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "declarationEntries": 63,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Providers.Database, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Providers.Database, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "D7857FB7F4EA61A158263C53E6CF8C135E96200ACDA281AE0A54B9AEAB0DFDCA"
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "declarationEntries": 370,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Providers, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Providers, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "765EA343A6C5EEB2746FF8608E37B03D7762ABC1712866554F6E9CA04AD30035"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "declarationEntries": 747,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Runtime, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Runtime, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "6ED149C2E4BF074CA877C0C4395B3C48AD78C0FA166ABE799C74F16AC1386B54"
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "declarationEntries": 83,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XPath.Standard, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XPath.Standard, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "5C999760665D7BFB767B400B2E4597E9D16071ED25ADDA935CE46CBCEB767C1E"
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "declarationEntries": 137,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.XQuery, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.XQuery, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "E5E2145C408B33D94861B72CF0A6936B8FA16D1CB2B1C4CBA65728A4908270E0"
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "declarationEntries": 2961,
+      "metadataUnchanged": true,
+      "beforeIdentity": "Bosak.Xslt, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+      "candidateIdentity": "Bosak.Xslt, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "candidateSha256": "7D18C30D36CBFBBCF897C49DAB83980A871158E6565F801A3BF23B3051EFEA04"
+    }
+  ]
+}

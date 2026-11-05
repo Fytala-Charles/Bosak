@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-02",
+  "schemaCommentIds": [
+    6532577021,
+    6532702411,
+    6562337494,
+    6563123351
+  ],
+  "newFormalSchemaReturns": false,
+  "xmlDbCurrentCheckout": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+  "xmlDbReturnedSource": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+  "historicalFilesVerified": [
+    {
+      "file": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+      "historicalSha256": "fba3bfcba4303505784cd433d527001c173f2350013beeb2be8e5f2871ba60de"
+    },
+    {
+      "file": "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+      "historicalSha256": "cef1dd1a0bcbdfcdcb3c3841337a8a310d327851ef9cbfca86a803bd6e4a83fa"
+    },
+    {
+      "file": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs",
+      "historicalSha256": "a4bbc9cbf6af7061e442a06b6f39a47446de99912af65f36f32278f2ffee4357"
+    },
+    {
+      "file": "src/Bosak.XmlDb.Storage/GenerationLease.cs",
+      "historicalSha256": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d"
+    },
+    {
+      "file": "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj",
+      "historicalSha256": "6911a4d22202b319e01103b91214222fc3ac268a8c6b56d4a5ae4c28b46a663f"
+    },
+    {
+      "file": "tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs",
+      "historicalSha256": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687"
+    },
+    {
+      "file": "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs",
+      "historicalSha256": "50add1d355ccee9102f7cc4512ee01002c7476025b16297d5bcdb0e4e0b81d1a"
+    }
+  ],
+  "xmlDbO1ResponseSha256": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+  "xmlDbO4ResponseSha256": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+  "scope": "Newer checkout includes submission/follow-up publication; no native fix or replacement disposition inferred"
+}

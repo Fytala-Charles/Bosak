@@ -23,6 +23,7 @@
 //                      |                  |       |                | default attributes (clone-only nodes) onto the live tree; ValidateSubtree strips      |
 //                      |                  |       |                | element-only whitespace on success (strip-space-007); GetSchemaContentModel helper     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -77,6 +78,8 @@ public static partial class XdmSchemaAnnotator
         ArgumentNullException.ThrowIfNull(element);
         ArgumentNullException.ThrowIfNull(schemas);
 
+        if (element.DescendantsAndSelf().Any(XdmElementAssessment.IsAttached))
+            throw new NotSupportedException("BSK-XSD-016: Legacy structural reassessment cannot reinterpret owned native assessment components.");
         var errors = new List<ValidationEventArgs>();
         // XDocument.Validate requires a document root. When the subtree is already part of
         // a tree (an element child, or the root of an XDocument — note XElement.Parent is
@@ -148,6 +151,7 @@ public static partial class XdmSchemaAnnotator
     /// </summary>
     private static void CopySchemaAnnotations(XElement annotated, XElement live)
     {
+        XdmElementAssessment.Copy(annotated, live);
         var info = annotated.GetSchemaInfo();
         if (info != null)
             live.AddAnnotation(info);
@@ -208,6 +212,7 @@ public static partial class XdmSchemaAnnotator
     public static XmlSchemaContentType? GetSchemaContentModel(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
+        if (XdmElementAssessment.Get(element) is { HasNoTypedValue: true }) return XmlSchemaContentType.ElementOnly;
         var info = element.GetSchemaInfo();
         if ((info?.SchemaElement?.ElementSchemaType ?? info?.SchemaType) is not XmlSchemaComplexType complexType)
             return null;

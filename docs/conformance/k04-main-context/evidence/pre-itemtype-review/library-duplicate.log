@@ -1,0 +1,1 @@
+{"Name":"library-duplicate","kind":"Passed","expectedCode":"XQST0099","errorType":"XPathParseException","error":"Parse error at position 93: XQST0099: More than one context item declaration in a module."}

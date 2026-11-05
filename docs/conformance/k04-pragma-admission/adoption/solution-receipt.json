@@ -1,0 +1,18 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build"
+  ],
+  "execution": "Approved unsandboxed execution for the database tests loopback HttpListener",
+  "exitCode": 0,
+  "projects": 10,
+  "passed": 24164,
+  "failed": 0,
+  "skipped": 0,
+  "applicationControlWorkaroundUsed": false,
+  "log": "solution-tests.log"
+}

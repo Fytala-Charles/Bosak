@@ -1,0 +1,74 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "C39-xib-date",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-xib-dateTime",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-xib-time",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-en-date",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-en-dateTime",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-en-time",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-de-date",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-de-dateTime",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-de-time",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-XIB-date",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-XIB-dateTime",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C39-XIB-time",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\controls.xml"
+  }
+]

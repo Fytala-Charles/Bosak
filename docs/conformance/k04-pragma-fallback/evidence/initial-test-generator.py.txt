@@ -1,0 +1,71 @@
+from pathlib import Path
+import xml.etree.ElementTree as X,json,subprocess,shutil,hashlib
+R=Path.cwd();E=R/'docs/conformance/k04-pragma-fallback/evidence';P=R/'tests/Bosak.XQuery.Tests/PragmaExpressionTests.cs'
+header=(R/'tests/Bosak.XQuery.Tests/ConstructionModeTests.cs').read_text(encoding='utf-8').split('using Bosak.')[0].replace('Verify construction typing, namespace-sensitive copying, source isolation and module scope.','Verify ignored-pragma fallback, raw content, namespace scope and grammar compatibility.')
+rows=[];ns={'f':'http://www.w3.org/2010/09/qt-fots-catalog'}
+for c in X.parse(E/'controls.xml').getroot():
+ q=c.find('f:test',ns).text;result=c.find('f:result',ns);error=result.find('f:error',ns)
+ rows.append((q,error.get('code') if error is not None else None,0 if error is not None else int(result.find('f:assert-eq',ns).text)))
+for q in ["(#x raw { } ; &#bad; #){42}","(#x raw \\u0000 #){42}","(#if#){42}","(#xml:x#){42}","declare default function namespace 'urn:unknown'; (#x#){42}","declare default element namespace 'urn:unknown'; (#x#){42}","1+(#x#){41}","-(#x#){-42}","(#x#){(#y#){42}}", "let $f := function(){(#x#){42}} return $f()", "declare function local:f(){(#x \" ; } (: #){42}}; local:f()", "declare variable $v := (#x \" ; } (: #){42}; $v", "declare context item := (#x \" ; } (: #){42}; ."]:rows.append((q,None,42))
+for q,n in [("count(<e>{(#x \" } (: #){<c/>}}</e>/*)",1),("string-length(string(<e a='{(#x \" } (: #){42}}'/>/@a))",2),("string-length(string(``[before`{(#x \" } (: #){42}}`after]``))",13),("count(<e xmlns:p='urn:local'>{(#p:x#){<c/>}}</e>/*)",1),("count(<e xmlns:p='urn:local'><f>{(#p:x#){<c/>}}</f></e>/*/*)",1)]:rows.append((q,None,n))
+for q,code in [("(#x#) {()}",None),("(#Q{}x#) {()}",None),("(#x#){1} ! .","XPST0003"),("(#x#){1}()","XPST0003"),("(#x#){1} => string()","XPST0003"),("(#x#){1}, (#p:x#){1}","XPST0081"),("(<e xmlns:p='urn:local'>{(#p:x#){1}}</e>, (#p:x#){1})","XPST0081"),("if(false()) then (#p:x#){1} else 42","XPST0081"),("declare namespace p=''; (#p:x#){1}","XQST0085"),("(#Q{urn:x}#){1}","XPST0003"),("(#p:*#){1}","XPST0003"),("(#Q{urn:x}p:y#){1}","XPST0003"),("(#x\u00a0content#){1}","XPST0003"),("(#\u00a0x#){1}","XPST0003"),("(#x\x00#){1}","XPST0003"),("(#x#)(##){1}","XPST0003")]:
+ if code is None:q='count('+q+')';rows.append((q,None,0))
+ else:rows.append((q,code,0))
+lines='\n'.join('        yield return new object?[]{'+json.dumps(q,ensure_ascii=True)+','+(json.dumps(code) if code else 'null')+','+str(n)+'L};' for q,code,n in rows)
+text=header+'''using Bosak.XQuery.Api;
+using Bosak.XPath.Api;
+using Xunit;
+
+namespace Bosak.XQuery.Tests;
+
+/// <summary>Verify ignored pragmas without weakening namespace, syntax or profile rules.</summary>
+public sealed class PragmaExpressionTests
+{
+    /// <summary>Provides fallback values, static/dynamic failures and raw lexical edge cases.</summary>
+    /// <returns>Queries, expected error codes and integer results.</returns>
+    public static IEnumerable<object?[]> Cases()
+    {
+'''+lines+'''
+    }
+
+    /// <summary>Applies the empty recognized-namespace policy with required fallback and errors.</summary>
+    /// <param name="query">The original query.</param>
+    /// <param name="code">The expected error code, or null for a value.</param>
+    /// <param name="expected">The expected integer value.</param>
+    [Theory,MemberData(nameof(Cases))]
+    public void FallbackAndErrors(string query,string? code,long expected)
+    {
+        if(code is not null) Assert.Contains(code,Assert.ThrowsAny<Exception>(()=>new XQueryCompiler().Compile(query).Evaluate(new XQueryContext())).Message);
+        else Assert.Equal(expected,new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).IntegerValue);
+    }
+
+    /// <summary>Resolves pragma prefixes in library functions, variables, closures and loaded modules.</summary>
+    /// <param name="path">The library export used.</param>
+    /// <param name="declared">Whether the library declares its pragma prefix.</param>
+    [Theory]
+    [InlineData(0,true)][InlineData(1,true)][InlineData(2,true)][InlineData(3,true)]
+    [InlineData(0,false)][InlineData(1,false)][InlineData(2,false)][InlineData(3,false)]
+    public void DeclaringModuleScope(int path,bool declared)
+    {
+        string lib="module namespace m='urn:c37:m'; "+(declared?"declare namespace p='urn:c37:p'; ":"")+"declare variable $m:v := (#p:x raw } ; \\\" (: #){42}; declare function m:f(){(#p:x raw } ; \\\" (: #){42}}; declare function m:closure(){function(){(#p:x#){42}}};";
+        var compiler=new XQueryCompiler().WithModule("urn:c37:m",lib);
+        string body=path switch{0=>"m:f()",1=>"$m:v",2=>"m:closure()()",_=>"load-xquery-module('urn:c37:m')('functions')(QName('urn:c37:m','f'))(0)()"};
+        string query="import module namespace m='urn:c37:m'; declare namespace p='urn:c37:caller'; "+body;
+        if(declared)Assert.Equal(42,compiler.Compile(query).Evaluate(new XQueryContext()).IntegerValue);
+        else Assert.Contains("XPST0081",Assert.ThrowsAny<Exception>(()=>compiler.Compile(query).Evaluate(new XQueryContext())).Message);
+    }
+
+    /// <summary>Preserves XPath rejection of XQuery-only extension grammar.</summary>
+    /// <param name="query">The extension expression.</param>
+    [Theory]
+    [InlineData("(#x#){42}")][InlineData("(#Q{urn:x}x raw (: #){42}")]
+    public void XPath31RejectsExtension(string query)=>Assert.ThrowsAny<Exception>(()=>XPath31Expression.Compile(query));
+}
+'''
+# JSON string escaping is valid C# here except NUL, which is emitted as a Unicode escape.
+P.write_text(text,encoding='utf-8')
+T=R/'.guard-tmp/k04-pragma-fallback-baseline';shutil.copyfile(P,T/P.name)
+template=(R/'docs/conformance/k04-construction-modes/evidence/baseline.csproj.txt').read_text(encoding='utf-8').replace('k04-construction-modes-baseline','k04-pragma-fallback-baseline')
+(T/'Baseline.csproj').write_text(template,encoding='utf-8');(E/'baseline.csproj.txt').write_text(template,encoding='utf-8')
+(E/'baseline-binary-identities.json').write_text(json.dumps({p.relative_to(R).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in (T/'lib').glob('*.dll')},indent=2)+'\n',encoding='utf-8')
+print('Created',len(rows)+10,'public regression cases.')

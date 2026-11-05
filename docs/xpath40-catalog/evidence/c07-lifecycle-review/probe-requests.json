@@ -1,0 +1,583 @@
+[
+  {
+    "id": "obsolete-all",
+    "expression": "all((1,2),function($x){true()})",
+    "entry": "rejected/obsolete-quantifier-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "obsolete-some-of",
+    "expression": "some-of((1,2),function($x){true()})",
+    "entry": "rejected/obsolete-quantifier-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-left",
+    "expression": "scan-left((1,2),0,function($a,$b){$a+$b})",
+    "entry": "rejected/directional-scan.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-right",
+    "expression": "scan-right((1,2),0,function($a,$b){$a+$b})",
+    "entry": "rejected/directional-scan.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "old-arrow",
+    "expression": "(' A ') =>> normalize-space()",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "method-refusal",
+    "expression": "[1,2] =?> array:size()",
+    "entry": "operators-and-syntax/method-call-operator.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "switch-refusal",
+    "expression": "switch (2) case 2 return 'yes' default return 'no'",
+    "entry": "rejected/xpath-switch-expression.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-element",
+    "expression": "element {'a'} {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-attribute",
+    "expression": "attribute {'a'} {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-text",
+    "expression": "text {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-comment",
+    "expression": "comment {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-document",
+    "expression": "document {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-pi",
+    "expression": "processing-instruction {'p'} {'x'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "computed-namespace",
+    "expression": "namespace {'p'} {'urn:p'}",
+    "entry": "deferred/computed-node-constructors.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "external-parse-html",
+    "expression": "parse-html('x')",
+    "entry": "deferred/external-input-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "external-html-doc",
+    "expression": "html-doc('x')",
+    "entry": "deferred/external-input-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "external-invisible-xml",
+    "expression": "invisible-xml('x')",
+    "entry": "deferred/external-input-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "external-unparsed-binary",
+    "expression": "unparsed-binary('x')",
+    "entry": "deferred/external-input-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "external-xsd-validator",
+    "expression": "xsd-validator('x')",
+    "entry": "deferred/external-input-functions.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "apply-templates-1",
+    "expression": "apply-templates(())",
+    "entry": "deferred/fn-apply-templates.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "apply-templates-2",
+    "expression": "apply-templates((),map{})",
+    "entry": "deferred/fn-apply-templates.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-XPath30",
+    "expression": "(: Synthetic Running stock balance case; compatibility experimental; no external context required. :)\nlet $states := fn:scan((20, -35, 10), 100, function($balance, $movement) { $balance + $movement })\nreturn string-join($states ! string(array:get(., 1)), ',')\n",
+    "entry": "experimental/fn-scan.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-XPath40",
+    "expression": "(: Synthetic Running stock balance case; compatibility experimental; no external context required. :)\nlet $states := fn:scan((20, -35, 10), 100, function($balance, $movement) { $balance + $movement })\nreturn string-join($states ! string(array:get(., 1)), ',')\n",
+    "entry": "experimental/fn-scan.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0017",
+    "profiles": [
+      "XPath40"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-XPath40Experimental",
+    "expression": "(: Synthetic Running stock balance case; compatibility experimental; no external context required. :)\nlet $states := fn:scan((20, -35, 10), 100, function($balance, $movement) { $balance + $movement })\nreturn string-join($states ! string(array:get(., 1)), ',')\n",
+    "entry": "experimental/fn-scan.md",
+    "row": "C07-lifecycle",
+    "expected": "100,120,85,95",
+    "error": null,
+    "profiles": [
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "mapping-alternative-old",
+    "expression": "string-join((' A ',' B ') =!> normalize-space(), ',')",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "mapping-alternative",
+    "expression": "string-join((' A ',' B ') =!> normalize-space(), ',')",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "row": "C07-lifecycle",
+    "expected": "A,B",
+    "error": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "sequence-array-iteration-old",
+    "expression": "string-join((for member $m in ([1,2],[3]) return $m), ',')",
+    "entry": "operators-and-syntax/sequence-collection-iteration.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "sequence-array-iteration",
+    "expression": "string-join((for member $m in ([1,2],[3]) return $m), ',')",
+    "entry": "operators-and-syntax/sequence-collection-iteration.md",
+    "row": "C07-lifecycle",
+    "expected": "1,2,3",
+    "error": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "record-cast-old",
+    "expression": "(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)\nmap:size(map {'id':'R1','extra':'ignored'} cast as record(id as xs:string))\n",
+    "entry": "rejected/extensible-map-types.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "record-cast",
+    "expression": "(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)\nmap:size(map {'id':'R1','extra':'ignored'} cast as record(id as xs:string))\n",
+    "entry": "rejected/extensible-map-types.md",
+    "row": "C07-lifecycle",
+    "expected": "1",
+    "error": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "record-coercion-old",
+    "expression": "(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)\nfunction($order as record(id as xs:string)) { $order?id }(map {'id':'R1','extra':'refused'})\n",
+    "entry": "rejected/extensible-map-types.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPST0003",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "record-coercion",
+    "expression": "(: Extensible map type proposal; synthetic fulfillment data; mode 40; no external context. :)\nfunction($order as record(id as xs:string)) { $order?id }(map {'id':'R1','extra':'refused'})\n",
+    "entry": "rejected/extensible-map-types.md",
+    "row": "C07-lifecycle",
+    "expected": null,
+    "error": "XPTY0004",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "portable-mapping",
+    "expression": "string-join((for $x in (' A ',' B ') return normalize-space($x)), ',')",
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "row": "C07-lifecycle",
+    "expected": "A,B",
+    "error": null,
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "portable-switch",
+    "expression": "if (2 = 2) then 'yes' else 'no'",
+    "entry": "rejected/xpath-switch-expression.md",
+    "row": "C07-lifecycle",
+    "expected": "yes",
+    "error": null,
+    "profiles": [
+      "XPath30",
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "portable-method",
+    "expression": "array:size(['A','B'])",
+    "entry": "operators-and-syntax/method-call-operator.md",
+    "row": "C07-lifecycle",
+    "expected": "2",
+    "error": null,
+    "profiles": [
+      "XPath31",
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "quantifier-accepted",
+    "expression": "every((1,2),function($x){$x gt 0})",
+    "entry": "rejected/obsolete-quantifier-functions.md",
+    "row": "C07-lifecycle",
+    "expected": "true",
+    "error": null,
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  }
+]

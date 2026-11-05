@@ -1,0 +1,7 @@
+# Original-node facts guard cost adoption — 5 November 2026
+
+Recorded before source edits. Base 23b83b74 / source 1.61.0. Retain the immutable TA-10 adoption of XDM REC-xpath-datamodel-31-20170321 sections 3.3.1.2, 5.8, 5.14, 6.2.2 and 6.3.2, and the deferred public F&O REC-xpath-functions-31-20170321 sections 2.2/2.4 mappings. No normative or public profile semantics change.
+
+Optimize only redundant original-metadata guard composition: retain a complete facts/binding/source proof before each original type/declaration ownership callback and after it; share the adjacent successful post-proof with the next precondition rather than repeating it. Keep cancellation/resource checks before/after every authority ownership callback, including false answers. Replace capturing delegate allocation for these ownership calls with direct calls under the same live checks. Preserve uncached views, no getter replay, raw completion, exact ownership, container guards and refusal/error semantics. No guard memoization across observations or external callbacks.
+
+Patch source 1.61.1. Qualify authority-callback revocation, cancellation and tuple changes for both governing type and optional declaration, plus zero warm allocation/callback reduction under the existing fixture. Run the full unchanged-control suite, frozen gates and API audit; record exact binary observations. No native workload or accepted owner budget, public node-query activation, freeze or publication is inferred.

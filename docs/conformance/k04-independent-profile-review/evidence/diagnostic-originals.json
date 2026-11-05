@@ -1,0 +1,56 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "format-date-en151",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\format-date.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "format-dateTime-en151",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\format-dateTime.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-fn-normalize-unicode-001a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\normalize-unicode.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-fn-normalize-unicode-006a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\normalize-unicode.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "default-language-006",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\default-language.xml"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "format-date-en151",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\fn\\format-date.xml"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "format-dateTime-en151",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\fn\\format-dateTime.xml"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "cbcl-fn-normalize-unicode-001a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\fn\\normalize-unicode.xml"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "cbcl-fn-normalize-unicode-006a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\fn\\normalize-unicode.xml"
+  }
+]

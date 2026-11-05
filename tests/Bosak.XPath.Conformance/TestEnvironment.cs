@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 1.4   | 21-08-2026     | Resolve role='import' for built-in JSON namespace schema (fn:json-to-xml validate tests) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
+//                      | Charles Korthout | 1.6   | 27-10-2026     | Preserve XSD profile metadata and support guarded diagnostic schema deferral.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -113,7 +114,7 @@ internal sealed class TestEnvironment
                 {
                     path = Path.Combine(suitePath, resolvedFile);
                 }
-                env.Schemas.Add(new SourceSchema(uri, path));
+                env.Schemas.Add(new SourceSchema(uri, path, (string?)schema.Attribute("xsd-version")));
             }
         }
 
@@ -292,7 +293,11 @@ internal sealed class TestEnvironment
         return env;
     }
 
-    public EvaluationContext ApplyTo(EvaluationContext ctx)
+    /// <summary>Applies environment resources and optionally defers query-owned schema compilation.</summary>
+    /// <param name="ctx">The context to initialize.</param>
+    /// <param name="deferSchemaCompilation">Whether a guarded diagnostic delegates imports to XQuery.</param>
+    /// <returns>The initialized context.</returns>
+    public EvaluationContext ApplyTo(EvaluationContext ctx, bool deferSchemaCompilation = false)
     {
         foreach (var ns in Namespaces)
         {
@@ -351,7 +356,8 @@ internal sealed class TestEnvironment
         // Make environment schemas available for schema-aware XQuery/XPath operations.
         if (Schemas.Count > 0)
         {
-            ctx.SchemaSet = BuildSchemaSet();
+            if (!deferSchemaCompilation)
+                ctx.SchemaSet = BuildSchemaSet();
             ctx.SchemaResolver = (ns, hints) =>
             {
                 var schema = Schemas.FirstOrDefault(s => s.Uri == ns);
@@ -455,7 +461,7 @@ internal sealed class TestEnvironment
 }
 
 internal sealed record SourceDocument(string Role, string FilePath, string? Uri, string? Validation);
-internal sealed record SourceSchema(string? Uri, string FilePath);
+internal sealed record SourceSchema(string? Uri, string FilePath, string? XsdVersion = null);
 internal sealed record NamespaceBinding(string Prefix, string Uri);
 internal sealed record ExternalParameter(string Name, string SelectExpression, string? NamespaceUri = null);
 internal sealed record DecimalFormatEntry(string Name, string NamespaceUri, DecimalFormat Format);

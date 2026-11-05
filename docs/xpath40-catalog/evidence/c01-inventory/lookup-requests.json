@@ -1,0 +1,2637 @@
+[
+  {
+    "name": "fn:index-where",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'index-where'), 2))"
+  },
+  {
+    "name": "array:slice",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'slice'), 1))"
+  },
+  {
+    "name": "map:entries",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'entries'), 1))"
+  },
+  {
+    "name": "fn:ends-with",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'ends-with'), 2))"
+  },
+  {
+    "name": "fn:unordered",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unordered'), 1))"
+  },
+  {
+    "name": "xs:dayTimeDuration",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dayTimeDuration'), 0))"
+  },
+  {
+    "name": "xs:ENTITY",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ENTITY'), 0))"
+  },
+  {
+    "name": "fn:do-until",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'do-until'), 3))"
+  },
+  {
+    "name": "fn:hours-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hours-from-dateTime'), 1))"
+  },
+  {
+    "name": "fn:trace",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trace'), 2))"
+  },
+  {
+    "name": "fn:jkey",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'jkey'), 1))"
+  },
+  {
+    "name": "fn:root",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'root'), 0))"
+  },
+  {
+    "name": "fn:all-different",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'all-different'), 2))"
+  },
+  {
+    "name": "xs:yearMonthDuration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'yearMonthDuration'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 13,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 13))"
+  },
+  {
+    "name": "xs:double",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'double'), 1))"
+  },
+  {
+    "name": "fn:abs",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'abs'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 31,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 31))"
+  },
+  {
+    "name": "xs:unsignedInt",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedInt'), 0))"
+  },
+  {
+    "name": "array:fold-right",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'fold-right'), 3))"
+  },
+  {
+    "name": "fn:error",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'error'), 3))"
+  },
+  {
+    "name": "fn:max",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'max'), 2))"
+  },
+  {
+    "name": "xs:unsignedByte",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedByte'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 5,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 5))"
+  },
+  {
+    "name": "fn:minutes-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'minutes-from-dateTime'), 1))"
+  },
+  {
+    "name": "fn:current-date",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'current-date'), 0))"
+  },
+  {
+    "name": "fn:nilled",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'nilled'), 1))"
+  },
+  {
+    "name": "fn:contains-subsequence",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains-subsequence'), 2))"
+  },
+  {
+    "name": "fn:avg",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'avg'), 1))"
+  },
+  {
+    "name": "fn:trim-space",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trim-space'), 2))"
+  },
+  {
+    "name": "xs:error",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'error'), 1))"
+  },
+  {
+    "name": "fn:normalize-unicode",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'normalize-unicode'), 1))"
+  },
+  {
+    "name": "fn:doc-available",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'doc-available'), 1))"
+  },
+  {
+    "name": "fn:dateTime",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'dateTime'), 2))"
+  },
+  {
+    "name": "fn:xml-to-json",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'xml-to-json'), 2))"
+  },
+  {
+    "name": "fn:build-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'build-uri'), 1))"
+  },
+  {
+    "name": "array:for-each-pair",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'for-each-pair'), 3))"
+  },
+  {
+    "name": "fn:element-with-id",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'element-with-id'), 2))"
+  },
+  {
+    "name": "fn:json-to-xml",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'json-to-xml'), 1))"
+  },
+  {
+    "name": "fn:hours-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hours-from-duration'), 1))"
+  },
+  {
+    "name": "fn:encode-for-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'encode-for-uri'), 1))"
+  },
+  {
+    "name": "fn:insert-before",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'insert-before'), 3))"
+  },
+  {
+    "name": "array:append",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'append'), 2))"
+  },
+  {
+    "name": "fn:round-half-to-even",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'round-half-to-even'), 2))"
+  },
+  {
+    "name": "fn:index-of",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'index-of'), 2))"
+  },
+  {
+    "name": "fn:uri-collection",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'uri-collection'), 0))"
+  },
+  {
+    "name": "fn:normalize-space",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'normalize-space'), 0))"
+  },
+  {
+    "name": "fn:fold-right",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'fold-right'), 3))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 25,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 25))"
+  },
+  {
+    "name": "fn:nilled",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'nilled'), 0))"
+  },
+  {
+    "name": "fn:format-integer",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-integer'), 2))"
+  },
+  {
+    "name": "fn:id",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'id'), 2))"
+  },
+  {
+    "name": "xs:NCName",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NCName'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 12,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 12))"
+  },
+  {
+    "name": "fn:sort-by",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sort-by'), 2))"
+  },
+  {
+    "name": "fn:contains",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains'), 3))"
+  },
+  {
+    "name": "fn:substring-after",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-after'), 2))"
+  },
+  {
+    "name": "fn:adjust-dateTime-to-timezone",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-dateTime-to-timezone'), 1))"
+  },
+  {
+    "name": "map:build",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'build'), 4))"
+  },
+  {
+    "name": "xs:numeric",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'numeric'), 0))"
+  },
+  {
+    "name": "fn:base-uri",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'base-uri'), 0))"
+  },
+  {
+    "name": "fn:generate-id",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'generate-id'), 0))"
+  },
+  {
+    "name": "fn:lang",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lang'), 2))"
+  },
+  {
+    "name": "fn:unparsed-text-available",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text-available'), 1))"
+  },
+  {
+    "name": "fn:starts-with-subsequence",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'starts-with-subsequence'), 3))"
+  },
+  {
+    "name": "fn:codepoints-to-string",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'codepoints-to-string'), 1))"
+  },
+  {
+    "name": "array:sort-with",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'sort-with'), 2))"
+  },
+  {
+    "name": "math:atan",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'atan'), 1))"
+  },
+  {
+    "name": "fn:compare",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'compare'), 2))"
+  },
+  {
+    "name": "fn:name",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'name'), 0))"
+  },
+  {
+    "name": "fn:insert-separator",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'insert-separator'), 2))"
+  },
+  {
+    "name": "fn:items-at",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'items-at'), 2))"
+  },
+  {
+    "name": "fn:year-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'year-from-dateTime'), 1))"
+  },
+  {
+    "name": "fn:unix-dateTime",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unix-dateTime'), 0))"
+  },
+  {
+    "name": "array:members",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'members'), 1))"
+  },
+  {
+    "name": "fn:distinct-values",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'distinct-values'), 1))"
+  },
+  {
+    "name": "array:fold-left",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'fold-left'), 3))"
+  },
+  {
+    "name": "fn:format-date",
+    "arity": 5,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 5))"
+  },
+  {
+    "name": "xs:unsignedLong",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedLong'), 1))"
+  },
+  {
+    "name": "xs:boolean",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'boolean'), 0))"
+  },
+  {
+    "name": "array:slice",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'slice'), 2))"
+  },
+  {
+    "name": "map:entry",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'entry'), 2))"
+  },
+  {
+    "name": "array:slice",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'slice'), 3))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 27,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 27))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 4))"
+  },
+  {
+    "name": "fn:format-time",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 2))"
+  },
+  {
+    "name": "array:subarray",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'subarray'), 3))"
+  },
+  {
+    "name": "fn:number",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'number'), 0))"
+  },
+  {
+    "name": "fn:days-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'days-from-duration'), 1))"
+  },
+  {
+    "name": "array:build",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'build'), 1))"
+  },
+  {
+    "name": "xs:gYearMonth",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gYearMonth'), 1))"
+  },
+  {
+    "name": "xs:string",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'string'), 1))"
+  },
+  {
+    "name": "fn:matches",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'matches'), 2))"
+  },
+  {
+    "name": "xs:duration",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'duration'), 0))"
+  },
+  {
+    "name": "fn:string",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string'), 1))"
+  },
+  {
+    "name": "xs:language",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'language'), 1))"
+  },
+  {
+    "name": "fn:format-number",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-number'), 3))"
+  },
+  {
+    "name": "fn:foot",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'foot'), 1))"
+  },
+  {
+    "name": "fn:element-to-map",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'element-to-map'), 2))"
+  },
+  {
+    "name": "fn:namespace-uri",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'namespace-uri'), 0))"
+  },
+  {
+    "name": "xs:NCName",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NCName'), 1))"
+  },
+  {
+    "name": "fn:adjust-time-to-timezone",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-time-to-timezone'), 2))"
+  },
+  {
+    "name": "fn:parse-json",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-json'), 1))"
+  },
+  {
+    "name": "fn:highest",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'highest'), 1))"
+  },
+  {
+    "name": "fn:slice",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'slice'), 2))"
+  },
+  {
+    "name": "array:of-members",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'of-members'), 1))"
+  },
+  {
+    "name": "fn:hash",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hash'), 1))"
+  },
+  {
+    "name": "fn:csv-doc",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'csv-doc'), 1))"
+  },
+  {
+    "name": "fn:lowest",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lowest'), 3))"
+  },
+  {
+    "name": "fn:sort-with",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sort-with'), 2))"
+  },
+  {
+    "name": "fn:upper-case",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'upper-case'), 1))"
+  },
+  {
+    "name": "math:exp",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'exp'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 17,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 17))"
+  },
+  {
+    "name": "fn:boolean",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'boolean'), 1))"
+  },
+  {
+    "name": "fn:string-to-codepoints",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string-to-codepoints'), 1))"
+  },
+  {
+    "name": "fn:sort",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sort'), 1))"
+  },
+  {
+    "name": "fn:duration-to-seconds",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'duration-to-seconds'), 1))"
+  },
+  {
+    "name": "fn:node-name",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'node-name'), 0))"
+  },
+  {
+    "name": "fn:namespace-uri-for-prefix",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'namespace-uri-for-prefix'), 2))"
+  },
+  {
+    "name": "fn:substring-before-last",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-before-last'), 2))"
+  },
+  {
+    "name": "map:size",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'size'), 1))"
+  },
+  {
+    "name": "map:for-each",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'for-each'), 2))"
+  },
+  {
+    "name": "fn:element-to-map-plan",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'element-to-map-plan'), 1))"
+  },
+  {
+    "name": "fn:error",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'error'), 1))"
+  },
+  {
+    "name": "fn:for-each-pair",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'for-each-pair'), 3))"
+  },
+  {
+    "name": "fn:fold-left",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'fold-left'), 3))"
+  },
+  {
+    "name": "xs:token",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'token'), 0))"
+  },
+  {
+    "name": "fn:substring",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring'), 3))"
+  },
+  {
+    "name": "fn:json-doc",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'json-doc'), 1))"
+  },
+  {
+    "name": "xs:gMonth",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gMonth'), 1))"
+  },
+  {
+    "name": "xs:ENTITIES",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ENTITIES'), 1))"
+  },
+  {
+    "name": "fn:substring-before-last",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-before-last'), 3))"
+  },
+  {
+    "name": "xs:float",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'float'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 28,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 28))"
+  },
+  {
+    "name": "fn:string-join",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string-join'), 2))"
+  },
+  {
+    "name": "array:size",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'size'), 1))"
+  },
+  {
+    "name": "array:flatten",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'flatten'), 1))"
+  },
+  {
+    "name": "xs:gMonthDay",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gMonthDay'), 1))"
+  },
+  {
+    "name": "fn:subsequence",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'subsequence'), 2))"
+  },
+  {
+    "name": "fn:error",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'error'), 2))"
+  },
+  {
+    "name": "fn:string-join",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string-join'), 1))"
+  },
+  {
+    "name": "map:merge",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'merge'), 2))"
+  },
+  {
+    "name": "xs:hexBinary",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'hexBinary'), 0))"
+  },
+  {
+    "name": "fn:function-arity",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'function-arity'), 1))"
+  },
+  {
+    "name": "xs:dateTimeStamp",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dateTimeStamp'), 1))"
+  },
+  {
+    "name": "fn:format-integer",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-integer'), 3))"
+  },
+  {
+    "name": "fn:pad-string",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'pad-string'), 2))"
+  },
+  {
+    "name": "fn:number",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'number'), 1))"
+  },
+  {
+    "name": "xs:ID",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ID'), 0))"
+  },
+  {
+    "name": "fn:months-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'months-from-duration'), 1))"
+  },
+  {
+    "name": "fn:for-each",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'for-each'), 2))"
+  },
+  {
+    "name": "array:build",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'build'), 2))"
+  },
+  {
+    "name": "xs:Name",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'Name'), 0))"
+  },
+  {
+    "name": "fn:empty",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'empty'), 1))"
+  },
+  {
+    "name": "fn:namespace-uri-from-QName",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'namespace-uri-from-QName'), 1))"
+  },
+  {
+    "name": "array:empty",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'empty'), 1))"
+  },
+  {
+    "name": "array:sort",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'sort'), 1))"
+  },
+  {
+    "name": "fn:one-or-more",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'one-or-more'), 1))"
+  },
+  {
+    "name": "fn:ceiling",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'ceiling'), 1))"
+  },
+  {
+    "name": "xs:time",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'time'), 1))"
+  },
+  {
+    "name": "fn:starts-with",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'starts-with'), 2))"
+  },
+  {
+    "name": "array:subarray",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'subarray'), 2))"
+  },
+  {
+    "name": "fn:is-NaN",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'is-NaN'), 1))"
+  },
+  {
+    "name": "map:filter",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'filter'), 2))"
+  },
+  {
+    "name": "map:keys",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'keys'), 1))"
+  },
+  {
+    "name": "fn:compare",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'compare'), 3))"
+  },
+  {
+    "name": "fn:slice",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'slice'), 1))"
+  },
+  {
+    "name": "xs:gYear",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gYear'), 0))"
+  },
+  {
+    "name": "fn:deep-equal",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'deep-equal'), 3))"
+  },
+  {
+    "name": "xs:duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'duration'), 1))"
+  },
+  {
+    "name": "xs:numeric",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'numeric'), 1))"
+  },
+  {
+    "name": "xs:untypedAtomic",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'untypedAtomic'), 1))"
+  },
+  {
+    "name": "fn:parse-json",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-json'), 2))"
+  },
+  {
+    "name": "math:sqrt",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'sqrt'), 1))"
+  },
+  {
+    "name": "fn:index-of-substring",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'index-of-substring'), 2))"
+  },
+  {
+    "name": "xs:boolean",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'boolean'), 1))"
+  },
+  {
+    "name": "fn:slice",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'slice'), 4))"
+  },
+  {
+    "name": "fn:generate-id",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'generate-id'), 1))"
+  },
+  {
+    "name": "fn:scan",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'scan'), 3))"
+  },
+  {
+    "name": "xs:unsignedLong",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedLong'), 0))"
+  },
+  {
+    "name": "fn:local-name-from-QName",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'local-name-from-QName'), 1))"
+  },
+  {
+    "name": "fn:all-different",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'all-different'), 1))"
+  },
+  {
+    "name": "fn:path",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'path'), 0))"
+  },
+  {
+    "name": "fn:characters",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'characters'), 1))"
+  },
+  {
+    "name": "xs:int",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'int'), 0))"
+  },
+  {
+    "name": "fn:true",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'true'), 0))"
+  },
+  {
+    "name": "xs:unsignedShort",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedShort'), 1))"
+  },
+  {
+    "name": "fn:trim-space",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trim-space'), 1))"
+  },
+  {
+    "name": "fn:collation-key",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'collation-key'), 2))"
+  },
+  {
+    "name": "xs:positiveInteger",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'positiveInteger'), 0))"
+  },
+  {
+    "name": "fn:unix-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unix-dateTime'), 1))"
+  },
+  {
+    "name": "fn:highest",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'highest'), 3))"
+  },
+  {
+    "name": "fn:element-with-id",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'element-with-id'), 1))"
+  },
+  {
+    "name": "xs:nonPositiveInteger",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'nonPositiveInteger'), 1))"
+  },
+  {
+    "name": "fn:hours-from-time",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hours-from-time'), 1))"
+  },
+  {
+    "name": "fn:matches",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'matches'), 3))"
+  },
+  {
+    "name": "math:asin",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'asin'), 1))"
+  },
+  {
+    "name": "fn:lang",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lang'), 1))"
+  },
+  {
+    "name": "fn:idref",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'idref'), 1))"
+  },
+  {
+    "name": "xs:nonNegativeInteger",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'nonNegativeInteger'), 0))"
+  },
+  {
+    "name": "xs:long",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'long'), 1))"
+  },
+  {
+    "name": "fn:document-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'document-uri'), 1))"
+  },
+  {
+    "name": "fn:error",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'error'), 0))"
+  },
+  {
+    "name": "xs:string",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'string'), 0))"
+  },
+  {
+    "name": "xs:byte",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'byte'), 0))"
+  },
+  {
+    "name": "fn:serialize",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'serialize'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 7,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 7))"
+  },
+  {
+    "name": "fn:parse-uri",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-uri'), 2))"
+  },
+  {
+    "name": "xs:yearMonthDuration",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'yearMonthDuration'), 0))"
+  },
+  {
+    "name": "fn:day-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'day-from-dateTime'), 1))"
+  },
+  {
+    "name": "fn:collection",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'collection'), 1))"
+  },
+  {
+    "name": "fn:function-name",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'function-name'), 1))"
+  },
+  {
+    "name": "xs:QName",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'QName'), 0))"
+  },
+  {
+    "name": "fn:timezone-from-date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'timezone-from-date'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 30,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 30))"
+  },
+  {
+    "name": "fn:while-do",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'while-do'), 3))"
+  },
+  {
+    "name": "xs:byte",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'byte'), 1))"
+  },
+  {
+    "name": "fn:replicate",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'replicate'), 2))"
+  },
+  {
+    "name": "fn:seconds-from-time",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'seconds-from-time'), 1))"
+  },
+  {
+    "name": "fn:seconds-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'seconds-from-duration'), 1))"
+  },
+  {
+    "name": "fn:all-equal",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'all-equal'), 2))"
+  },
+  {
+    "name": "fn:exists",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'exists'), 1))"
+  },
+  {
+    "name": "fn:default-language",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'default-language'), 0))"
+  },
+  {
+    "name": "fn:lowest",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lowest'), 1))"
+  },
+  {
+    "name": "fn:decode-from-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'decode-from-uri'), 1))"
+  },
+  {
+    "name": "fn:analyze-string",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'analyze-string'), 2))"
+  },
+  {
+    "name": "fn:unparsed-text",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text'), 2))"
+  },
+  {
+    "name": "fn:csv-doc",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'csv-doc'), 2))"
+  },
+  {
+    "name": "xs:dateTime",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dateTime'), 0))"
+  },
+  {
+    "name": "xs:short",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'short'), 0))"
+  },
+  {
+    "name": "xs:short",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'short'), 1))"
+  },
+  {
+    "name": "fn:root",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'root'), 1))"
+  },
+  {
+    "name": "fn:csv-to-xml",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'csv-to-xml'), 1))"
+  },
+  {
+    "name": "fn:has-children",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'has-children'), 0))"
+  },
+  {
+    "name": "fn:namespace-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'namespace-uri'), 1))"
+  },
+  {
+    "name": "math:atan2",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'atan2'), 2))"
+  },
+  {
+    "name": "fn:op",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'op'), 1))"
+  },
+  {
+    "name": "math:tan",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'tan'), 1))"
+  },
+  {
+    "name": "map:get",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'get'), 2))"
+  },
+  {
+    "name": "array:filter",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'filter'), 2))"
+  },
+  {
+    "name": "fn:id",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'id'), 1))"
+  },
+  {
+    "name": "xs:integer",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'integer'), 1))"
+  },
+  {
+    "name": "fn:trace",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trace'), 1))"
+  },
+  {
+    "name": "fn:every",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'every'), 1))"
+  },
+  {
+    "name": "fn:codepoint-equal",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'codepoint-equal'), 2))"
+  },
+  {
+    "name": "xs:QName",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'QName'), 1))"
+  },
+  {
+    "name": "fn:random-number-generator",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'random-number-generator'), 0))"
+  },
+  {
+    "name": "fn:position",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'position'), 0))"
+  },
+  {
+    "name": "fn:unparsed-text-lines",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text-lines'), 2))"
+  },
+  {
+    "name": "fn:implicit-timezone",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'implicit-timezone'), 0))"
+  },
+  {
+    "name": "xs:gMonth",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gMonth'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 20,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 20))"
+  },
+  {
+    "name": "fn:max",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'max'), 1))"
+  },
+  {
+    "name": "fn:local-name",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'local-name'), 1))"
+  },
+  {
+    "name": "fn:drop-while",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'drop-while'), 2))"
+  },
+  {
+    "name": "xs:nonPositiveInteger",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'nonPositiveInteger'), 0))"
+  },
+  {
+    "name": "fn:sum",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sum'), 1))"
+  },
+  {
+    "name": "fn:data",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'data'), 1))"
+  },
+  {
+    "name": "xs:decimal",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'decimal'), 0))"
+  },
+  {
+    "name": "xs:untypedAtomic",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'untypedAtomic'), 0))"
+  },
+  {
+    "name": "fn:iri-to-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'iri-to-uri'), 1))"
+  },
+  {
+    "name": "xs:IDREFS",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'IDREFS'), 0))"
+  },
+  {
+    "name": "math:exp10",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'exp10'), 1))"
+  },
+  {
+    "name": "fn:format-time",
+    "arity": 5,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 5))"
+  },
+  {
+    "name": "fn:build-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'build-dateTime'), 1))"
+  },
+  {
+    "name": "fn:min",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'min'), 2))"
+  },
+  {
+    "name": "xs:ENTITIES",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ENTITIES'), 0))"
+  },
+  {
+    "name": "fn:years-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'years-from-duration'), 1))"
+  },
+  {
+    "name": "fn:lower-case",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lower-case'), 1))"
+  },
+  {
+    "name": "fn:normalize-unicode",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'normalize-unicode'), 2))"
+  },
+  {
+    "name": "xs:date",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'date'), 0))"
+  },
+  {
+    "name": "fn:map-to-element",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'map-to-element'), 2))"
+  },
+  {
+    "name": "fn:index-of",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'index-of'), 3))"
+  },
+  {
+    "name": "array:get",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'get'), 2))"
+  },
+  {
+    "name": "map:build",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'build'), 2))"
+  },
+  {
+    "name": "fn:environment-variable",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'environment-variable'), 1))"
+  },
+  {
+    "name": "fn:local-name",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'local-name'), 0))"
+  },
+  {
+    "name": "xs:normalizedString",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'normalizedString'), 0))"
+  },
+  {
+    "name": "fn:zero-or-one",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'zero-or-one'), 1))"
+  },
+  {
+    "name": "fn:resolve-uri",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'resolve-uri'), 2))"
+  },
+  {
+    "name": "fn:month-from-date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'month-from-date'), 1))"
+  },
+  {
+    "name": "xs:dateTimeStamp",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dateTimeStamp'), 0))"
+  },
+  {
+    "name": "fn:build-uri",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'build-uri'), 2))"
+  },
+  {
+    "name": "fn:parse-csv",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-csv'), 1))"
+  },
+  {
+    "name": "fn:string",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 23,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 23))"
+  },
+  {
+    "name": "fn:load-xquery-module",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'load-xquery-module'), 2))"
+  },
+  {
+    "name": "fn:reverse",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'reverse'), 1))"
+  },
+  {
+    "name": "xs:NMTOKEN",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NMTOKEN'), 0))"
+  },
+  {
+    "name": "math:pow",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'pow'), 2))"
+  },
+  {
+    "name": "xs:nonNegativeInteger",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'nonNegativeInteger'), 1))"
+  },
+  {
+    "name": "fn:serialize",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'serialize'), 2))"
+  },
+  {
+    "name": "fn:round",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'round'), 2))"
+  },
+  {
+    "name": "fn:json-doc",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'json-doc'), 2))"
+  },
+  {
+    "name": "math:acos",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'acos'), 1))"
+  },
+  {
+    "name": "fn:substring-after-last",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-after-last'), 2))"
+  },
+  {
+    "name": "fn:parse-csv",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-csv'), 2))"
+  },
+  {
+    "name": "fn:prefix-from-QName",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'prefix-from-QName'), 1))"
+  },
+  {
+    "name": "xs:gYearMonth",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gYearMonth'), 0))"
+  },
+  {
+    "name": "xs:unsignedShort",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedShort'), 0))"
+  },
+  {
+    "name": "fn:name",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'name'), 1))"
+  },
+  {
+    "name": "xs:decimal",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'decimal'), 1))"
+  },
+  {
+    "name": "fn:day-from-date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'day-from-date'), 1))"
+  },
+  {
+    "name": "fn:min",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'min'), 1))"
+  },
+  {
+    "name": "fn:collation-available",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'collation-available'), 1))"
+  },
+  {
+    "name": "fn:node-name",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'node-name'), 1))"
+  },
+  {
+    "name": "fn:highest",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'highest'), 2))"
+  },
+  {
+    "name": "fn:count",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'count'), 1))"
+  },
+  {
+    "name": "fn:escape-html-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'escape-html-uri'), 1))"
+  },
+  {
+    "name": "map:merge",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'merge'), 1))"
+  },
+  {
+    "name": "xs:IDREF",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'IDREF'), 0))"
+  },
+  {
+    "name": "fn:identity",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'identity'), 1))"
+  },
+  {
+    "name": "fn:translate",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'translate'), 3))"
+  },
+  {
+    "name": "fn:contains-subsequence",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains-subsequence'), 3))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 11,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 11))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 26,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 26))"
+  },
+  {
+    "name": "fn:available-environment-variables",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'available-environment-variables'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 2))"
+  },
+  {
+    "name": "fn:resolve-QName",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'resolve-QName'), 2))"
+  },
+  {
+    "name": "fn:pad-string",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'pad-string'), 3))"
+  },
+  {
+    "name": "xs:int",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'int'), 1))"
+  },
+  {
+    "name": "fn:substring-before",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-before'), 2))"
+  },
+  {
+    "name": "fn:contains-token",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains-token'), 3))"
+  },
+  {
+    "name": "fn:tail",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'tail'), 1))"
+  },
+  {
+    "name": "xs:NMTOKENS",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NMTOKENS'), 0))"
+  },
+  {
+    "name": "fn:parse-xml-fragment",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-xml-fragment'), 1))"
+  },
+  {
+    "name": "fn:json-to-xml",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'json-to-xml'), 2))"
+  },
+  {
+    "name": "fn:floor",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'floor'), 1))"
+  },
+  {
+    "name": "fn:string-length",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string-length'), 1))"
+  },
+  {
+    "name": "xs:double",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'double'), 0))"
+  },
+  {
+    "name": "fn:month-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'month-from-dateTime'), 1))"
+  },
+  {
+    "name": "array:put",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'put'), 3))"
+  },
+  {
+    "name": "fn:parse-ietf-date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-ietf-date'), 1))"
+  },
+  {
+    "name": "xs:IDREFS",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'IDREFS'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 29,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 29))"
+  },
+  {
+    "name": "fn:every",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'every'), 2))"
+  },
+  {
+    "name": "fn:csv-to-xml",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'csv-to-xml'), 2))"
+  },
+  {
+    "name": "fn:seconds-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'seconds-from-dateTime'), 1))"
+  },
+  {
+    "name": "math:log10",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'log10'), 1))"
+  },
+  {
+    "name": "xs:NMTOKEN",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NMTOKEN'), 1))"
+  },
+  {
+    "name": "xs:float",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'float'), 0))"
+  },
+  {
+    "name": "fn:sort",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sort'), 2))"
+  },
+  {
+    "name": "fn:QName",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'QName'), 2))"
+  },
+  {
+    "name": "xs:long",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'long'), 0))"
+  },
+  {
+    "name": "fn:transitive-closure",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'transitive-closure'), 2))"
+  },
+  {
+    "name": "fn:all-equal",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'all-equal'), 1))"
+  },
+  {
+    "name": "fn:jkey",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'jkey'), 0))"
+  },
+  {
+    "name": "fn:ends-with",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'ends-with'), 3))"
+  },
+  {
+    "name": "fn:function-lookup",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'function-lookup'), 2))"
+  },
+  {
+    "name": "fn:minutes-from-time",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'minutes-from-time'), 1))"
+  },
+  {
+    "name": "fn:innermost",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'innermost'), 1))"
+  },
+  {
+    "name": "fn:round-half-to-even",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'round-half-to-even'), 1))"
+  },
+  {
+    "name": "fn:sort",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sort'), 3))"
+  },
+  {
+    "name": "fn:format-number",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-number'), 2))"
+  },
+  {
+    "name": "fn:remove",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'remove'), 2))"
+  },
+  {
+    "name": "fn:random-number-generator",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'random-number-generator'), 1))"
+  },
+  {
+    "name": "xs:ENTITY",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ENTITY'), 1))"
+  },
+  {
+    "name": "fn:normalize-space",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'normalize-space'), 1))"
+  },
+  {
+    "name": "fn:analyze-string",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'analyze-string'), 3))"
+  },
+  {
+    "name": "fn:resolve-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'resolve-uri'), 1))"
+  },
+  {
+    "name": "fn:substring-before",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-before'), 3))"
+  },
+  {
+    "name": "fn:jvalue",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'jvalue'), 1))"
+  },
+  {
+    "name": "xs:base64Binary",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'base64Binary'), 1))"
+  },
+  {
+    "name": "fn:duplicate-values",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'duplicate-values'), 2))"
+  },
+  {
+    "name": "array:insert-before",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'insert-before'), 3))"
+  },
+  {
+    "name": "math:sin",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'sin'), 1))"
+  },
+  {
+    "name": "fn:parse-xml",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-xml'), 1))"
+  },
+  {
+    "name": "fn:format-date",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 2))"
+  },
+  {
+    "name": "map:contains",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'contains'), 2))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 6,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 6))"
+  },
+  {
+    "name": "fn:timezone-from-dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'timezone-from-dateTime'), 1))"
+  },
+  {
+    "name": "fn:current-time",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'current-time'), 0))"
+  },
+  {
+    "name": "map:items",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'items'), 1))"
+  },
+  {
+    "name": "fn:collection",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'collection'), 0))"
+  },
+  {
+    "name": "fn:uri-collection",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'uri-collection'), 1))"
+  },
+  {
+    "name": "fn:document-uri",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'document-uri'), 0))"
+  },
+  {
+    "name": "fn:tokenize",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'tokenize'), 1))"
+  },
+  {
+    "name": "fn:atomic-equal",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'atomic-equal'), 2))"
+  },
+  {
+    "name": "fn:year-from-date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'year-from-date'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 8,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 8))"
+  },
+  {
+    "name": "fn:char",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'char'), 1))"
+  },
+  {
+    "name": "array:reverse",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'reverse'), 1))"
+  },
+  {
+    "name": "xs:dateTime",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dateTime'), 1))"
+  },
+  {
+    "name": "fn:seconds",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'seconds'), 1))"
+  },
+  {
+    "name": "fn:base-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'base-uri'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 14,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 14))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 24,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 24))"
+  },
+  {
+    "name": "fn:false",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'false'), 0))"
+  },
+  {
+    "name": "xs:anyURI",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'anyURI'), 1))"
+  },
+  {
+    "name": "xs:error",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'error'), 0))"
+  },
+  {
+    "name": "fn:lowest",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'lowest'), 2))"
+  },
+  {
+    "name": "fn:substring",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring'), 2))"
+  },
+  {
+    "name": "fn:head",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'head'), 1))"
+  },
+  {
+    "name": "array:for-each",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'for-each'), 2))"
+  },
+  {
+    "name": "xs:unsignedInt",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedInt'), 1))"
+  },
+  {
+    "name": "math:log",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'log'), 1))"
+  },
+  {
+    "name": "xs:positiveInteger",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'positiveInteger'), 1))"
+  },
+  {
+    "name": "fn:current-dateTime",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'current-dateTime'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 19,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 19))"
+  },
+  {
+    "name": "xs:base64Binary",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'base64Binary'), 0))"
+  },
+  {
+    "name": "fn:ends-with-subsequence",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'ends-with-subsequence'), 2))"
+  },
+  {
+    "name": "map:build",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'build'), 1))"
+  },
+  {
+    "name": "fn:days-in-month",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'days-in-month'), 1))"
+  },
+  {
+    "name": "fn:unparsed-text",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text'), 1))"
+  },
+  {
+    "name": "array:items",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'items'), 1))"
+  },
+  {
+    "name": "fn:jvalue",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'jvalue'), 0))"
+  },
+  {
+    "name": "fn:outermost",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'outermost'), 1))"
+  },
+  {
+    "name": "fn:subsequence",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'subsequence'), 3))"
+  },
+  {
+    "name": "xs:unsignedByte",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'unsignedByte'), 1))"
+  },
+  {
+    "name": "fn:parse-uri",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-uri'), 1))"
+  },
+  {
+    "name": "map:remove",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'remove'), 2))"
+  },
+  {
+    "name": "fn:substring-after",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-after'), 3))"
+  },
+  {
+    "name": "xs:date",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'date'), 1))"
+  },
+  {
+    "name": "fn:in-scope-prefixes",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'in-scope-prefixes'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 10,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 10))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 16,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 16))"
+  },
+  {
+    "name": "fn:tokenize",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'tokenize'), 2))"
+  },
+  {
+    "name": "fn:hash",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hash'), 2))"
+  },
+  {
+    "name": "xs:gDay",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gDay'), 1))"
+  },
+  {
+    "name": "map:find",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'find'), 2))"
+  },
+  {
+    "name": "fn:unparsed-text-available",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text-available'), 2))"
+  },
+  {
+    "name": "map:put",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'put'), 3))"
+  },
+  {
+    "name": "xs:dayTimeDuration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'dayTimeDuration'), 1))"
+  },
+  {
+    "name": "array:slice",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'slice'), 4))"
+  },
+  {
+    "name": "array:sort",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'sort'), 3))"
+  },
+  {
+    "name": "fn:duplicate-values",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'duplicate-values'), 1))"
+  },
+  {
+    "name": "fn:path",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'path'), 1))"
+  },
+  {
+    "name": "fn:default-collation",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'default-collation'), 0))"
+  },
+  {
+    "name": "fn:timezone-from-time",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'timezone-from-time'), 1))"
+  },
+  {
+    "name": "math:cos",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'cos'), 1))"
+  },
+  {
+    "name": "xs:language",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'language'), 0))"
+  },
+  {
+    "name": "fn:has-children",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'has-children'), 1))"
+  },
+  {
+    "name": "fn:map-to-element",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'map-to-element'), 1))"
+  },
+  {
+    "name": "xs:normalizedString",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'normalizedString'), 1))"
+  },
+  {
+    "name": "fn:collation-key",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'collation-key'), 1))"
+  },
+  {
+    "name": "map:build",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'build'), 3))"
+  },
+  {
+    "name": "fn:adjust-date-to-timezone",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-date-to-timezone'), 1))"
+  },
+  {
+    "name": "fn:not",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'not'), 1))"
+  },
+  {
+    "name": "fn:some",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'some'), 2))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 32,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 32))"
+  },
+  {
+    "name": "array:remove",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'remove'), 2))"
+  },
+  {
+    "name": "array:tail",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'tail'), 1))"
+  },
+  {
+    "name": "fn:starts-with",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'starts-with'), 3))"
+  },
+  {
+    "name": "xs:IDREF",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'IDREF'), 1))"
+  },
+  {
+    "name": "math:pi",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/math', 'pi'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 21,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 21))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 22,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 22))"
+  },
+  {
+    "name": "fn:some",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'some'), 1))"
+  },
+  {
+    "name": "fn:format-dateTime",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 2))"
+  },
+  {
+    "name": "fn:slice",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'slice'), 3))"
+  },
+  {
+    "name": "fn:minutes-from-duration",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'minutes-from-duration'), 1))"
+  },
+  {
+    "name": "fn:tokenize",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'tokenize'), 3))"
+  },
+  {
+    "name": "fn:atomic-type-annotation",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'atomic-type-annotation'), 1))"
+  },
+  {
+    "name": "fn:contains",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains'), 2))"
+  },
+  {
+    "name": "fn:load-xquery-module",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'load-xquery-module'), 1))"
+  },
+  {
+    "name": "xs:gDay",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gDay'), 0))"
+  },
+  {
+    "name": "fn:substring-after-last",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'substring-after-last'), 3))"
+  },
+  {
+    "name": "fn:graphemes",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'graphemes'), 1))"
+  },
+  {
+    "name": "fn:element-to-map",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'element-to-map'), 1))"
+  },
+  {
+    "name": "array:head",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'head'), 1))"
+  },
+  {
+    "name": "fn:round",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'round'), 1))"
+  },
+  {
+    "name": "xs:time",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'time'), 0))"
+  },
+  {
+    "name": "fn:filter",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'filter'), 2))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 9,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 9))"
+  },
+  {
+    "name": "fn:deep-equal",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'deep-equal'), 2))"
+  },
+  {
+    "name": "fn:data",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'data'), 0))"
+  },
+  {
+    "name": "xs:negativeInteger",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'negativeInteger'), 0))"
+  },
+  {
+    "name": "xs:gMonthDay",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gMonthDay'), 0))"
+  },
+  {
+    "name": "fn:adjust-date-to-timezone",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-date-to-timezone'), 2))"
+  },
+  {
+    "name": "fn:take-while",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'take-while'), 2))"
+  },
+  {
+    "name": "xs:integer",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'integer'), 0))"
+  },
+  {
+    "name": "fn:adjust-time-to-timezone",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-time-to-timezone'), 1))"
+  },
+  {
+    "name": "xs:NMTOKENS",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'NMTOKENS'), 1))"
+  },
+  {
+    "name": "fn:distinct-values",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'distinct-values'), 2))"
+  },
+  {
+    "name": "fn:replace",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'replace'), 3))"
+  },
+  {
+    "name": "xs:token",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'token'), 1))"
+  },
+  {
+    "name": "xs:negativeInteger",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'negativeInteger'), 1))"
+  },
+  {
+    "name": "xs:anyURI",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'anyURI'), 0))"
+  },
+  {
+    "name": "fn:xml-to-json",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'xml-to-json'), 1))"
+  },
+  {
+    "name": "fn:doc",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'doc'), 1))"
+  },
+  {
+    "name": "fn:adjust-dateTime-to-timezone",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'adjust-dateTime-to-timezone'), 2))"
+  },
+  {
+    "name": "fn:static-base-uri",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'static-base-uri'), 0))"
+  },
+  {
+    "name": "fn:starts-with-subsequence",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'starts-with-subsequence'), 2))"
+  },
+  {
+    "name": "fn:hash",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'hash'), 3))"
+  },
+  {
+    "name": "xs:hexBinary",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'hexBinary'), 1))"
+  },
+  {
+    "name": "array:sort",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'sort'), 2))"
+  },
+  {
+    "name": "xs:gYear",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'gYear'), 1))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 15,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 15))"
+  },
+  {
+    "name": "fn:idref",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'idref'), 2))"
+  },
+  {
+    "name": "fn:string-length",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'string-length'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 18,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 18))"
+  },
+  {
+    "name": "fn:partial-apply",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'partial-apply'), 2))"
+  },
+  {
+    "name": "fn:replace",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'replace'), 4))"
+  },
+  {
+    "name": "fn:exactly-one",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'exactly-one'), 1))"
+  },
+  {
+    "name": "fn:sum",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'sum'), 2))"
+  },
+  {
+    "name": "fn:ends-with-subsequence",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'ends-with-subsequence'), 3))"
+  },
+  {
+    "name": "xs:ID",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'ID'), 1))"
+  },
+  {
+    "name": "fn:apply",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'apply'), 2))"
+  },
+  {
+    "name": "fn:unparsed-text-lines",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'unparsed-text-lines'), 1))"
+  },
+  {
+    "name": "fn:contains-token",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'contains-token'), 2))"
+  },
+  {
+    "name": "fn:last",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'last'), 0))"
+  },
+  {
+    "name": "fn:jtree",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'jtree'), 1))"
+  },
+  {
+    "name": "fn:format-dateTime",
+    "arity": 5,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 5))"
+  },
+  {
+    "name": "array:join",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'join'), 1))"
+  },
+  {
+    "name": "fn:partition",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'partition'), 2))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 3))"
+  },
+  {
+    "name": "xs:Name",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2001/XMLSchema', 'Name'), 1))"
+  },
+  {
+    "name": "fn:trunk",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trunk'), 1))"
+  },
+  {
+    "name": "fn:round",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'round'), 3))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 0))"
+  },
+  {
+    "name": "fn:concat",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'concat'), 1))"
+  },
+  {
+    "name": "fn:trim-space",
+    "arity": 0,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'trim-space'), 0))"
+  },
+  {
+    "name": "fn:replace",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'replace'), 2))"
+  },
+  {
+    "name": "fn:format-dateTime",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 3))"
+  },
+  {
+    "name": "fn:format-dateTime",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-dateTime'), 4))"
+  },
+  {
+    "name": "fn:format-date",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 3))"
+  },
+  {
+    "name": "fn:format-date",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-date'), 4))"
+  },
+  {
+    "name": "fn:format-time",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 3))"
+  },
+  {
+    "name": "fn:format-time",
+    "arity": 4,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'format-time'), 4))"
+  },
+  {
+    "name": "fn:path",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'path'), 2))"
+  },
+  {
+    "name": "fn:doc",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'doc'), 2))"
+  },
+  {
+    "name": "fn:doc-available",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'doc-available'), 2))"
+  },
+  {
+    "name": "fn:parse-xml",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-xml'), 2))"
+  },
+  {
+    "name": "fn:parse-xml-fragment",
+    "arity": 2,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'parse-xml-fragment'), 2))"
+  },
+  {
+    "name": "map:get",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/map', 'get'), 3))"
+  },
+  {
+    "name": "array:get",
+    "arity": 3,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions/array', 'get'), 3))"
+  },
+  {
+    "name": "fn:transform",
+    "arity": 1,
+    "expression": "count(function-lookup(QName('http://www.w3.org/2005/xpath-functions', 'transform'), 1))"
+  }
+]

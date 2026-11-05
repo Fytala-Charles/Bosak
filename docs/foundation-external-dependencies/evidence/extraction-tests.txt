@@ -1,0 +1,1 @@
+{"passed":6,"failed":0,"checks":["nested-generic-array-arguments","byref-array-element","pointer-element","named-delegate-invoke-shape","generic-parameter-constraint","constraint-revisit-termination"]}

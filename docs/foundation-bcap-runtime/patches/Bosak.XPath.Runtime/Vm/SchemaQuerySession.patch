@@ -1,0 +1,23 @@
+--- a/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
++++ b/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
+@@ -24,6 +24,7 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.7 | 01-11-2026     | Reuse the captured composite ownership delegate for role validation. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.8 | 01-11-2026 | Isolated BCAP-01 capture feasibility; not adopted. |
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+ using System.Security.Cryptography;
+@@ -220,6 +221,12 @@
+             _owner._kernel.CheckSnapshot(_snapshot);
+         }
+         internal void ValidateAccess() => Check();
++        internal CancellationToken RequireOwner(SchemaQuerySession owner)
++        {
++            Check();
++            if (!ReferenceEquals(_owner, owner)) throw new ArgumentException("Foreign executable operation.");
++            return _cancellationToken;
++        }
+         internal XdmValue ReadValue(ISchemaIssuedScalar value)
+         { Check(); RequireSingle(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
+         internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)

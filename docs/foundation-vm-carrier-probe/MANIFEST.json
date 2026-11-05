@@ -1,0 +1,125 @@
+{
+  "date": "2026-10-31",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "evidence/baseline-runner-build.txt",
+      "sha256": "2355eb3ec16752692c54d1b410ac12199f228293c85a0ba28ebd0f911e616e7e"
+    },
+    {
+      "path": "evidence/holder-core-build.txt",
+      "sha256": "bccbffe4c6dbac18787744209f75eab1e4c905fe968f022acd75f7d9d1e61554"
+    },
+    {
+      "path": "evidence/holder-runner-build.txt",
+      "sha256": "9524d27abb803c8694d4c900c542fe02d631292cf1b23b671bd5c10ca51dd09a"
+    },
+    {
+      "path": "evidence/holder-XdmValue.cs.txt",
+      "sha256": "b7f898cdf07af9c501f565247a51a10feadeb773cf9e5fd06dfe98f71482174b"
+    },
+    {
+      "path": "evidence/initial-adapter-build-failure.txt",
+      "sha256": "e2275677498963eecdbacbcbdfa732d23cdd30cde5a307d00f078a90b52dd75d"
+    },
+    {
+      "path": "evidence/initial-node-fixture-without-type-annotation.zip",
+      "sha256": "7df360e0cd5abc7b1500fd55a6d5113305fa8855593987ae2612c1f03a7a28a4"
+    },
+    {
+      "path": "evidence/INPUTS.json",
+      "sha256": "abb1c8c9fc04cac06441150922dc4fde15e69b9ddb43fe0313f6a6be4e3309e9"
+    },
+    {
+      "path": "evidence/round-0-baseline.json",
+      "sha256": "8afaa742beab067e1461417f1d80cfee38fe88b88fd356438b40bd2cb9d83c0f"
+    },
+    {
+      "path": "evidence/round-0-baseline.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/round-0-holder.json",
+      "sha256": "f6d905293f900c38f0a9c3a1301ef381f4ad6875672ae510f8ea9cad1ee5e8b4"
+    },
+    {
+      "path": "evidence/round-0-holder.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/round-0-selective.json",
+      "sha256": "801d816569dad7c04d50d47c2b14957b2bd0b92846071e53c697a03893858a08"
+    },
+    {
+      "path": "evidence/round-0-selective.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/round-1-baseline.json",
+      "sha256": "56d2657bd02bb6f3dceefa3bb70b0afd8c6884e2084f266cb1949e66212d08b4"
+    },
+    {
+      "path": "evidence/round-1-baseline.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/round-1-holder.json",
+      "sha256": "5f102d99877e486a57db66fea2c636e4abb9bbbac6e89c9765ccec05a955a587"
+    },
+    {
+      "path": "evidence/round-1-holder.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/round-1-selective.json",
+      "sha256": "a345ae080e3881bd45e5c625e2293da83627770d40b35241184b7ea89f6bfe78"
+    },
+    {
+      "path": "evidence/round-1-selective.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/selective-core-build.txt",
+      "sha256": "f6966731cfca30fc276e9a030b9c8dbcba0311bc13d9b20ef60f8527dcb4de65"
+    },
+    {
+      "path": "evidence/selective-runner-build.txt",
+      "sha256": "ef1f55168152a873363142621f7c865e4c7a8fa491819e7d10d7c5b0cf75fda0"
+    },
+    {
+      "path": "evidence/selective-XdmValue.cs.txt",
+      "sha256": "df4130b69a9ce37b69de2fda0582d395460b6f13e8b7229c23399db0be840430"
+    },
+    {
+      "path": "evidence/SOURCE-INPUTS.json",
+      "sha256": "dbe169534d0e34bb79d3d3092f12675ced0e5b7afe49e019288be4a6968feae4"
+    },
+    {
+      "path": "README.md",
+      "sha256": "999dd9147bcfd3008deb5c2d4e983960178d9ea0a747e70da8e2f18512f3dfdf"
+    },
+    {
+      "path": "RESULTS.json",
+      "sha256": "c8693e2c149c5b0be3cbbd47e32996fb6d2c305892df4a880fa0aea4205c0170"
+    },
+    {
+      "path": "tools/Probe.cs.txt",
+      "sha256": "1a50dce6bffbd49fc7214163db97b0149751d38d1909e961e7c509aa7050f886"
+    },
+    {
+      "path": "tools/run.py",
+      "sha256": "384867ce3d044191b5c77b2216b78aa53890f2c97239e8147f9fff6562bd9184"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "95ddb50813a2f22d3a8835bcfed7b67bab91fda9f1cdc10ad09db3107c8e43d0"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "ad3f6caa0fba7d358f60c831cfd24a3268198686e15d6f423b458df55c9a323a"
+    }
+  ]
+}

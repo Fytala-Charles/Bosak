@@ -1,0 +1,1010 @@
+{
+  "checks": 151,
+  "rows": [
+    {
+      "id": "XPath:actual-host-and-captured-inputs",
+      "passed": true
+    },
+    {
+      "id": "XPath:caller-preserved-success",
+      "passed": true
+    },
+    {
+      "id": "XPath:factory-raw-context-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:host-error",
+      "passed": true
+    },
+    {
+      "id": "XPath:caller-preserved-error",
+      "passed": true
+    },
+    {
+      "id": "XPath:deferred-after-callback-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:foreign-snapshot",
+      "passed": true
+    },
+    {
+      "id": "XPath:foreign-session-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XPath:foreign-environment",
+      "passed": true
+    },
+    {
+      "id": "XPath:foreign-snapshot-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XPath:structured-result-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancel-before-entry",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancel-wait",
+      "passed": true
+    },
+    {
+      "id": "XPath:wait-cancel-retains-raw-ownership",
+      "passed": true
+    },
+    {
+      "id": "XPath:deferred-consumed-inside-raw-task",
+      "passed": true
+    },
+    {
+      "id": "XPath:caller-preserved-async",
+      "passed": true
+    },
+    {
+      "id": "XPath:close-defers-owner-release",
+      "passed": true
+    },
+    {
+      "id": "XPath:close-rejects-new-work",
+      "passed": true
+    },
+    {
+      "id": "XPath:close-rejects-existing-operation-access",
+      "passed": true
+    },
+    {
+      "id": "XPath:raw-completion-releases-once",
+      "passed": true
+    },
+    {
+      "id": "XPath:repeat-close-no-double-release",
+      "passed": true
+    },
+    {
+      "id": "XPath:callback-and-cleanup-retained",
+      "passed": true
+    },
+    {
+      "id": "XPath:advanced-caller-state-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:unsupported-caller-preserved",
+      "passed": true
+    },
+    {
+      "id": "XPath:mutable-decimal-format-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:decimal-format-refusal-preserves-caller",
+      "passed": true
+    },
+    {
+      "id": "XPath:sequence-input-refused",
+      "passed": true
+    },
+    {
+      "id": "XPath:foreign-node-input-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:actual-host-and-captured-inputs",
+      "passed": true
+    },
+    {
+      "id": "XQuery:caller-preserved-success",
+      "passed": true
+    },
+    {
+      "id": "XQuery:factory-raw-context-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:host-error",
+      "passed": true
+    },
+    {
+      "id": "XQuery:caller-preserved-error",
+      "passed": true
+    },
+    {
+      "id": "XQuery:deferred-after-callback-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:foreign-snapshot",
+      "passed": true
+    },
+    {
+      "id": "XQuery:foreign-session-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XQuery:foreign-environment",
+      "passed": true
+    },
+    {
+      "id": "XQuery:foreign-snapshot-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XQuery:structured-result-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancel-before-entry",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancel-wait",
+      "passed": true
+    },
+    {
+      "id": "XQuery:wait-cancel-retains-raw-ownership",
+      "passed": true
+    },
+    {
+      "id": "XQuery:deferred-consumed-inside-raw-task",
+      "passed": true
+    },
+    {
+      "id": "XQuery:caller-preserved-async",
+      "passed": true
+    },
+    {
+      "id": "XQuery:close-defers-owner-release",
+      "passed": true
+    },
+    {
+      "id": "XQuery:close-rejects-new-work",
+      "passed": true
+    },
+    {
+      "id": "XQuery:close-rejects-existing-operation-access",
+      "passed": true
+    },
+    {
+      "id": "XQuery:raw-completion-releases-once",
+      "passed": true
+    },
+    {
+      "id": "XQuery:repeat-close-no-double-release",
+      "passed": true
+    },
+    {
+      "id": "XQuery:callback-and-cleanup-retained",
+      "passed": true
+    },
+    {
+      "id": "XQuery:advanced-caller-state-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:unsupported-caller-preserved",
+      "passed": true
+    },
+    {
+      "id": "XQuery:mutable-decimal-format-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:decimal-format-refusal-preserves-caller",
+      "passed": true
+    },
+    {
+      "id": "XQuery:sequence-input-refused",
+      "passed": true
+    },
+    {
+      "id": "XQuery:foreign-node-input-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:actual-host-and-captured-inputs",
+      "passed": true
+    },
+    {
+      "id": "XSLT:caller-preserved-success",
+      "passed": true
+    },
+    {
+      "id": "XSLT:factory-raw-context-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:host-error",
+      "passed": true
+    },
+    {
+      "id": "XSLT:caller-preserved-error",
+      "passed": true
+    },
+    {
+      "id": "XSLT:deferred-after-callback-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-snapshot",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-session-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-environment",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-snapshot-input-capture",
+      "passed": true
+    },
+    {
+      "id": "XSLT:structured-result-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancel-before-entry",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancel-wait",
+      "passed": true
+    },
+    {
+      "id": "XSLT:wait-cancel-retains-raw-ownership",
+      "passed": true
+    },
+    {
+      "id": "XSLT:deferred-consumed-inside-raw-task",
+      "passed": true
+    },
+    {
+      "id": "XSLT:caller-preserved-async",
+      "passed": true
+    },
+    {
+      "id": "XSLT:close-defers-owner-release",
+      "passed": true
+    },
+    {
+      "id": "XSLT:close-rejects-new-work",
+      "passed": true
+    },
+    {
+      "id": "XSLT:close-rejects-existing-operation-access",
+      "passed": true
+    },
+    {
+      "id": "XSLT:raw-completion-releases-once",
+      "passed": true
+    },
+    {
+      "id": "XSLT:repeat-close-no-double-release",
+      "passed": true
+    },
+    {
+      "id": "XSLT:callback-and-cleanup-retained",
+      "passed": true
+    },
+    {
+      "id": "XSLT:advanced-caller-state-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:unsupported-caller-preserved",
+      "passed": true
+    },
+    {
+      "id": "XSLT:mutable-decimal-format-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:decimal-format-refusal-preserves-caller",
+      "passed": true
+    },
+    {
+      "id": "XSLT:sequence-input-refused",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-node-input-refused",
+      "passed": true
+    },
+    {
+      "id": "capture:XPath-namespace-freeze",
+      "passed": true
+    },
+    {
+      "id": "capture:XQuery-module-prolog-freeze",
+      "passed": true
+    },
+    {
+      "id": "capture:equal-descriptors-distinct-identities",
+      "passed": true
+    },
+    {
+      "id": "capture:equal-fingerprint-cannot-admit",
+      "passed": true
+    },
+    {
+      "id": "capture:XSLT-static-freeze",
+      "passed": true
+    },
+    {
+      "id": "capture:static-double-sign-descriptor",
+      "passed": true
+    },
+    {
+      "id": "refusal:XPath-schema-before-bind",
+      "passed": true
+    },
+    {
+      "id": "refusal:XQuery-schema-before-bind",
+      "passed": true
+    },
+    {
+      "id": "refusal:XSLT-static-profile-before-bind",
+      "passed": true
+    },
+    {
+      "id": "refusal:compile-error-before-bind",
+      "passed": true
+    },
+    {
+      "id": "owner:XPath:raw-ownership-held",
+      "passed": true
+    },
+    {
+      "id": "owner:XPath:revoked-result",
+      "passed": true
+    },
+    {
+      "id": "owner:XPath:cleanup-with-revoked-provider",
+      "passed": true
+    },
+    {
+      "id": "owner:XQuery:raw-ownership-held",
+      "passed": true
+    },
+    {
+      "id": "owner:XQuery:revoked-result",
+      "passed": true
+    },
+    {
+      "id": "owner:XQuery:cleanup-with-revoked-provider",
+      "passed": true
+    },
+    {
+      "id": "owner:XSLT:raw-ownership-held",
+      "passed": true
+    },
+    {
+      "id": "owner:XSLT:revoked-result",
+      "passed": true
+    },
+    {
+      "id": "owner:XSLT:cleanup-with-revoked-provider",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:identity-is-session-local",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:independent-success",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:foreign-assessment",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:canceled-acquisition",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:rejected-acquisitions-retain-caller-cleanup",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:cross-owner-snapshot",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:cross-owner-inputs",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:foreign-node-capture",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:revoked-owner-retains-raw-lease",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:other-owner-survives-revocation",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:revoked-raw-result",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:revoked-owner-released-once",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:other-snapshot-survives-cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XPath:second-owner-released-once",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:identity-is-session-local",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:independent-success",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:foreign-assessment",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:canceled-acquisition",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:rejected-acquisitions-retain-caller-cleanup",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:cross-owner-snapshot",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:cross-owner-inputs",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:foreign-node-capture",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:revoked-owner-retains-raw-lease",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:other-owner-survives-revocation",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:revoked-raw-result",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:revoked-owner-released-once",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:other-snapshot-survives-cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XQuery:second-owner-released-once",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:identity-is-session-local",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:independent-success",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:foreign-assessment",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:canceled-acquisition",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:rejected-acquisitions-retain-caller-cleanup",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:cross-owner-snapshot",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:cross-owner-inputs",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:foreign-node-capture",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:revoked-owner-retains-raw-lease",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:other-owner-survives-revocation",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:revoked-raw-result",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:revoked-owner-released-once",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:other-snapshot-survives-cleanup-failure",
+      "passed": true
+    },
+    {
+      "id": "independent:XSLT:second-owner-released-once",
+      "passed": true
+    }
+  ],
+  "fieldPolicy": [
+    {
+      "name": "\u003CAccumulatorValueCopier\u003Ek__BackingField",
+      "type": "System.Action\u00602[[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CAttributeConstructorHook\u003Ek__BackingField",
+      "type": "System.Func\u00602[[Bosak.XPath.Core.Xdm.XdmAttributeValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CBackwardsCompatible\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CBaseUri\u003Ek__BackingField",
+      "type": "System.String",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "\u003CBindingItemTypes\u003Ek__BackingField",
+      "type": "System.Collections.Generic.IReadOnlyDictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CCollationComparer\u003Ek__BackingField",
+      "type": "System.Func\u00604[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CCollectionLoader\u003Ek__BackingField",
+      "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IReadOnlyList\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CCollectionValues\u003Ek__BackingField",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CCollections\u003Ek__BackingField",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IReadOnlyList\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CConstructedDocumentProcessor\u003Ek__BackingField",
+      "type": "System.Action\u00601[[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CConstructedElementProcessor\u003Ek__BackingField",
+      "type": "System.Action\u00601[[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CContentNodeConstructorHook\u003Ek__BackingField",
+      "type": "System.Func\u00602[[Bosak.XPath.Core.Xdm.XdmContentItem, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CCurrentOutputUri\u003Ek__BackingField",
+      "type": "System.String",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CDefaultCollation\u003Ek__BackingField",
+      "type": "System.String",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "\u003CDefaultElementNamespace\u003Ek__BackingField",
+      "type": "System.String",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "\u003CDefiningElementDefaultNamespace\u003Ek__BackingField",
+      "type": "System.String",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "\u003CDocumentConstructorHook\u003Ek__BackingField",
+      "type": "System.Func\u00602[[System.Collections.Generic.IReadOnlyList\u00601[[Bosak.XPath.Core.Xdm.XdmContentItem, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CDocumentLoadPolicy\u003Ek__BackingField",
+      "type": "System.Object",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CDocumentLoaded\u003Ek__BackingField",
+      "type": "System.Action\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CDocumentLoader\u003Ek__BackingField",
+      "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CDocumentPostProcessor\u003Ek__BackingField",
+      "type": "System.Func\u00602[[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CElementConstructorHook\u003Ek__BackingField",
+      "type": "System.Func\u00602[[Bosak.XPath.Core.Xdm.XdmElementSpec, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CExecutionGate\u003Ek__BackingField",
+      "type": "Bosak.XPath.Runtime.ExecutionGate",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CFunctionLookupInterceptor\u003Ek__BackingField",
+      "type": "System.Func\u00605[[Bosak.XPath.Runtime.Vm.EvaluationContext, Bosak.XPath.Runtime, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Nullable\u00601[[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CInStreamedPipeline\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CInStreamingMapContext\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CInitialFocusResolver\u003Ek__BackingField",
+      "type": "System.Action",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CInitialTemplateCallParameters\u003Ek__BackingField",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CInitialTemplateTunnelParameters\u003Ek__BackingField",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CIsSchemaAware\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CIsStaticEvaluation\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CIsXPath40\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CIsXPath40Experimental\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CIsXsltMode\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CLazyVariableResolver\u003Ek__BackingField",
+      "type": "System.Func\u00603[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Nullable\u00601[[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CNamedRecordCoercion\u003Ek__BackingField",
+      "type": "System.Func\u00604[[Bosak.XPath.Core.Xdm.XdmRecordType, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[Bosak.XPath.Core.Xdm.XdmMap, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null],[System.Boolean, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmMap, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CNamedRecordTypes\u003Ek__BackingField",
+      "type": "System.Collections.Generic.IReadOnlyDictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmRecordType, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CRegexGroups\u003Ek__BackingField",
+      "type": "System.String[]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CResourcePolicy\u003Ek__BackingField",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CResourceUriMapper\u003Ek__BackingField",
+      "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CSchemaResolver\u003Ek__BackingField",
+      "type": "System.Func\u00603[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.IReadOnlyList\u00601[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.IO.Stream, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CSkipLazyGlobalCacheOnce\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CSkipStandardFunctionPopulation\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CStaticOutputParameters\u003Ek__BackingField",
+      "type": "System.Collections.Generic.IReadOnlyDictionary\u00602[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CStreamingDocumentLoader\u003Ek__BackingField",
+      "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CSuppressLazyGlobalCaching\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CSuppressLazySequenceConstructorGlobals\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CUnsuppliedExternalVariables\u003Ek__BackingField",
+      "type": "System.Collections.Generic.HashSet\u00601[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CXQueryModuleLoader\u003Ek__BackingField",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CXQueryModuleSources\u003Ek__BackingField",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.List\u00601[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CXml11Mode\u003Ek__BackingField",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "\u003CXsltVersion\u003Ek__BackingField",
+      "type": "System.Nullable\u00601[[System.Double, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_constructorLocalNamespaces",
+      "type": "System.Collections.Generic.List\u00601[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_contextItem",
+      "type": "Bosak.XPath.Core.Xdm.XdmValue",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "_contextPosition",
+      "type": "System.Int32",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "_contextSize",
+      "type": "System.Int32",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "_currentDateTimeSnapshot",
+      "type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_currentItem",
+      "type": "Bosak.XPath.Core.Xdm.XdmValue",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_defaultDecimalFormat",
+      "type": "Bosak.XPath.Runtime.Vm.DecimalFormat",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_documentCache",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00604[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Runtime.Resources.ControlledResourceRoute, Bosak.XPath.Runtime, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Runtime.Vm.EvaluationContext\u002BDocumentCacheEntry, Bosak.XPath.Runtime, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_evaluatedLazyGlobals",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_functions",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00603[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Runtime.Functions.FunctionSignature, Bosak.XPath.Runtime, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_implicitTimezoneOffsetMinutes",
+      "type": "System.Int32",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_implicitTimezoneOffsetSet",
+      "type": "System.Boolean",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_namedDecimalFormats",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Runtime.Vm.DecimalFormat, Bosak.XPath.Runtime, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_namespaces",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "_schemaSet",
+      "type": "System.Xml.Schema.XmlSchemaSet",
+      "policy": "Must match fresh-context default"
+    },
+    {
+      "name": "_variables",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.42.0.0, Culture=neutral, PublicKeyToken=null]]",
+      "policy": "Copied bounded input"
+    },
+    {
+      "name": "_variadicMinArity",
+      "type": "System.Collections.Generic.Dictionary\u00602[[System.ValueTuple\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Int32, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+      "policy": "Must match fresh-context default"
+    }
+  ],
+  "bytesPerOperation": {
+    "fixture-reflective-input-capture": 33461,
+    "typed-production-input-capture": 464,
+    "fresh-evaluation-context": 2920,
+    "old-xquery-context-wrapper-copy": 3744,
+    "typed-production-operation-capture": 464,
+    "guarded-single-atomic-visitation": 0,
+    "closed-resource-policy-per-evaluation": 800
+  },
+  "allocationIterations": 1000,
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "e7701df8b8de5bdfbdb7057481c929a555da66920dfd46ac77863bd101f176de"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "df8db3a69581228ed6b9c74f38e56703066d5c9fe42f4165d873238c532a5816"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "37273d0c0405cafe4a5001fdd30849e4da1f1195bbca231bb4ed24b28e1e3827"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "acbf883a105eef90d36aa3578eb1010439490a728bf0c9866b7248b2ee3ed95e"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "906cf8585df31e352b4c8cbd1eeb85e988fb334fb78a7268f220c8a042a6dc68"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "2855b35cf2237c626600b13e079d6b1e46b4b148102fc48a566fda57e980d0a3"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "8bcf972f962474d3f0cdb5c5c871fbc781c2d5979c35ef965568973689ba2fd3"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "b15025afa3ea0ca690728bde48ae27343ef766f4bb5dfacefbba54ecacfd5ae9"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "sha256": "fca6cd57d7ae13e893f5763158d41fe226100b7e71833b0d3ebd7fa534552170"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "8957ef1b1eb452efedb922297323e9a3b3a3d01e80a5b931a7ff2d79f07f5343"
+    }
+  ],
+  "bridge": "Boolean TryCompileXslt(System.String, Bosak.Xslt.Api.XsltCompiler, System.String, Bosak.XPath.Core.Xdm.IXdmNode, Bosak.XPath.Core.Xdm.IXdmNode, System.String, System.Func\u00602[Bosak.XPath.Core.Xdm.IXdmNode,System.Boolean], Bosak.XPath.Runtime.Vm.ISchemaSessionProvider, Int32, Int32, Bosak.XPath.Runtime.Vm.SchemaQuerySession ByRef, System.String ByRef, System.Threading.CancellationToken)",
+  "scope": "Actual factories with independent provider/session/node/snapshot ownership; test issuers, no joint multi-source operation or native assessment."
+}

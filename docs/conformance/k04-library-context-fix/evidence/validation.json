@@ -1,0 +1,5 @@
+{
+  "status": "passed",
+  "checksBeforeManifest": 320,
+  "validator": "validate-evidence.py"
+}

@@ -1,0 +1,20 @@
+{
+  "ACCEPTANCE-CASES.json": "2d21f0ec9d1bc4f7e0417b666bd84f1501a1b04626f4e6fa3585d26e11e90a79",
+  "AUDIT.md": "8d1dc53d54bffe78e49dfa34d9f46ce6cf3201d52f50e9dc55ed00ab54620c3f",
+  "evidence/bindings/api/56676.json": "fadc57fb97488b081df4a100d86367057d6cd62366bfb70c867414dfe19868a6",
+  "evidence/bindings/api/62112.json": "4d2cb5d89f153317b173e4e65d1860f0fe2284500d412d73655d6b064f046d62",
+  "evidence/bindings/api/67984.json": "2e16df41401e136d07342562e1ab5bb4ad0f923dac2edc08dae7b5687c877d3d",
+  "evidence/bindings/runtime/36624.json": "b3bea1f7495db6f93acc2b44d411dc3bf29be22a429cdfa69dfc3d6b6598ec87",
+  "evidence/bindings/runtime/59604.json": "4f6dac8ea96140c52202bfdcdadcedca77996895eec3fdd0f397d1db630810bb",
+  "evidence/bindings/runtime/60856.json": "9c23797b44f5e008f1555005efd3ceb939a02d681f92d9e087f5ac81ee3e39a4",
+  "evidence/CONTROLS.json": "f99cf46801dc1969c57bcd12d993c0d09a4e2b1bf2572470e533a83447d5b96a",
+  "evidence/DOCUMENTATION-CHECKS.json": "0ed01983b1cc7275cc79fb76d334f568192c6268e1fd9bf281f9d273d0c55387",
+  "evidence/EXECUTION-RECEIPTS.zip": "707d0800a232fb036c03f922259fafed20b9edd49a454ada302d0e8aa28b022a",
+  "IMPLEMENTATION.md": "ae80c6f62a3cd17cb0725285d11976599ac7f56fb560c0baf892d707ab8b925d",
+  "INPUTS.json": "eb2fab39ccf79cc6c2cfe086aa56bda9be8d989e04a07a8e219bd74ea5947425",
+  "MATRIX.json": "0f67b031fb0ac56d6b67bd9592c7fd11705d451b4afd3b6579c70956749d97ab",
+  "README.md": "24f94f7f1e66c7918ec57ab69e5d3767312ef14345176d9148552ce68c7132cd",
+  "SPEC-BASIS.md": "adc8f83f35de8276c7f6a0667954312d674cb8bfcc06d6cd11f6555cf92cd6f0",
+  "STATUS.json": "5f6e4dabd32ca12b52ce7904151625f62b9921bd7d2c97cda555f96a078e2ded",
+  "tools/verify.py": "2c00f378615799fac27539b8b47779dc948ef1f1a241861211cfe67156f82904"
+}

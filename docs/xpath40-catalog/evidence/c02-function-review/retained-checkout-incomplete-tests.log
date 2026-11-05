@@ -1,0 +1,781 @@
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+Test run for D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.16]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_WrongElementDoesNotMatch [FAIL]
+
+Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 63 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_WrongElementDoesNotMatch [4 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\fn\nilled\validate.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.LoadValidatedNilledDocument() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 352
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_WrongElementDoesNotMatch() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 342
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 64 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+[xUnit.net 00:00:00.25]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorMatchesTypedFunctionItem [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorMatchesTypedFunctionItem [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorMatchesTypedFunctionItem() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 474
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.25]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_QNameMemberFromString [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_QNameMemberFromString [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+[xUnit.net 00:00:00.26]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SensitiveUnionConstructorDynamicCall_UsesDefiningNamespaceContext [FAIL]
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_QNameMemberFromString() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 156
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.26]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.IsSequenceTypeSubtype_ElementSchemaTypeSubtyping [FAIL]
+[xUnit.net 00:00:00.26]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsPatternRestrictedStringMember [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SensitiveUnionConstructorDynamicCall_UsesDefiningNamespaceContext [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SensitiveUnionConstructorDynamicCall_UsesDefiningNamespaceContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 573
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.IsSequenceTypeSubtype_ElementSchemaTypeSubtyping [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.IsSequenceTypeSubtype_ElementSchemaTypeSubtyping() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 752
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsPatternRestrictedStringMember [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsPatternRestrictedStringMember() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 81
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_DerivedDateTimeTypes_PreserveLexicalForm [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_DerivedDateTimeTypes_PreserveLexicalForm [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\CastExpr\derived.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadDerivedContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 329
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_DerivedDateTimeTypes_PreserveLexicalForm() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 422
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_EmptyStringSelectsInlineMember [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingListInstanceOf_ThrowsXpst0051 [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NamespaceSensitiveUnionRejectsUntypedAtomic [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.FunctionConversion_UntypedAtomicToQNameDerivedRestriction_RaisesXpty0117 [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_SelectsNamedMember [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DoubleToCanonicalDouble_IsTrue [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_BareLiteral_DoesNotMatch [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_EmptyStringSelectsInlineMember [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\userdefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUserDefinedTypesContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 606
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_EmptyStringSelectsInlineMember() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 634
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingListInstanceOf_ThrowsXpst0051 [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingListInstanceOf_ThrowsXpst0051() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 188
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NamespaceSensitiveUnionRejectsUntypedAtomic [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NamespaceSensitiveUnionRejectsUntypedAtomic() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 725
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.FunctionConversion_UntypedAtomicToQNameDerivedRestriction_RaisesXpty0117 [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\userdefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUserDefinedTypesContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 606
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.FunctionConversion_UntypedAtomicToQNameDerivedRestriction_RaisesXpty0117() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 799
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_SelectsNamedMember [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\userdefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUserDefinedTypesContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 606
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_NamedMemberType_SelectsNamedMember() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 624
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DoubleToCanonicalDouble_IsTrue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\CastExpr\derived.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadDerivedContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 329
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DoubleToCanonicalDouble_IsTrue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 393
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_BareLiteral_DoesNotMatch [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_BareLiteral_DoesNotMatch() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 147
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SchemaValidatedUnionElement_TypedValueUsesSelectedMemberType [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfItself_ThrowsXpst0051 [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListCast_TokenizesStringToIntegerSequence [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_UntypedAtomicAcceptedByNonNamespaceSensitiveUnion [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DecimalToImpureUnionType_IsFalse [FAIL]
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorViaLookupMatchesTypedFunctionItem [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SchemaValidatedUnionElement_TypedValueUsesSelectedMemberType [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.SchemaValidatedUnionElement_TypedValueUsesSelectedMemberType() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 223
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfItself_ThrowsXpst0051 [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfItself_ThrowsXpst0051() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 560
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListCast_TokenizesStringToIntegerSequence [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListCast_TokenizesStringToIntegerSequence() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 101
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_UntypedAtomicAcceptedByNonNamespaceSensitiveUnion [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_UntypedAtomicAcceptedByNonNamespaceSensitiveUnion() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 700
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DecimalToImpureUnionType_IsFalse [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_DecimalToImpureUnionType_IsFalse() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 412
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorViaLookupMatchesTypedFunctionItem [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_UserDefinedListConstructorViaLookupMatchesTypedFunctionItem() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 486
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.27]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsIntegerMemberAndTruncatesDecimal [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercionViaLookup_MatchesAnyAtomicTypeStarReturn [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatAvgComparison [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfSensitiveUnion [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_NilledSubstitutionGroupMemberMatchesHead [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListOfUnionsCast_TokenizesAndSelectsMemberType [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercion_MatchesAnyAtomicTypeStarReturn [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsIntegerMemberAndTruncatesDecimal [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsIntegerMemberAndTruncatesDecimal() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 61
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercionViaLookup_MatchesAnyAtomicTypeStarReturn [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercionViaLookup_MatchesAnyAtomicTypeStarReturn() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 547
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatAvgComparison [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\atomic.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatAvgComparison() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 88
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfSensitiveUnion [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LowercaseNameInstanceOfSensitiveUnion() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 254
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_NilledSubstitutionGroupMemberMatchesHead [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\fn\nilled\validate.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.LoadValidatedNilledDocument() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 352
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_NilledSubstitutionGroupMemberMatchesHead() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 316
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListOfUnionsCast_TokenizesAndSelectsMemberType [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListOfUnionsCast_TokenizesAndSelectsMemberType() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 118
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercion_MatchesAnyAtomicTypeStarReturn [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsFunctionCoercion_MatchesAnyAtomicTypeStarReturn() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 535
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsDateMember [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_ZeroDoubleToCanonicalDouble_IsTrue [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemTypeByBracedUriLiteral [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingBuiltInListInstanceOf_ThrowsXpst0051 [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsDateMember [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_SelectsDateMember() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 71
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_ZeroDoubleToCanonicalDouble_IsTrue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\CastExpr\derived.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadDerivedContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 329
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_ZeroDoubleToCanonicalDouble_IsTrue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 402
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemTypeByBracedUriLiteral [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemTypeByBracedUriLiteral() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 523
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingBuiltInListInstanceOf_ThrowsXpst0051 [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionContainingBuiltInListInstanceOf_ThrowsXpst0051() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 199
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElementInForExpression_ReturnsDecimalSequence [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NonMatchingDecimalIsRejected [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_FailsForNonMatchingValue [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemType [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElementInForExpression_ReturnsDecimalSequence [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\OrderByClause\orderData.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadOrderDataContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 298
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElementInForExpression_ReturnsDecimalSequence() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 283
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfAtomicInstanceOf_BracedUriLiteralAcceptsMatchingValue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 212
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NonMatchingDecimalIsRejected [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionConversion_NonMatchingDecimalIsRejected() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 712
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_FailsForNonMatchingValue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionCast_FailsForNonMatchingValue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 91
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemType [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionCoercion_ConstructorMatchesTypedFunctionItem [FAIL]
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionOfListsCast_InstanceOfSensitiveListItemType() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 511
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedValue_Matches [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastToUnion_PreservesQNameKind [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionCoercion_ConstructorMatchesTypedFunctionItem [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionFunctionCoercion_ConstructorMatchesTypedFunctionItem() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 462
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedValue_Matches [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedValue_Matches() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 136
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastToUnion_PreservesQNameKind [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastToUnion_PreservesQNameKind() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 437
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_IntegerToCanonicalDecimal_IsTrue [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_BuiltInListConstructorMatchesTypedFunctionItem [FAIL]
+[xUnit.net 00:00:00.28]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListInstanceOf_RejectsListTypeAsSequenceTypeItemType [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_IntegerToCanonicalDecimal_IsTrue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\CastExpr\derived.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadDerivedContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 329
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Castable_IntegerToCanonicalDecimal_IsTrue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 383
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_BuiltInListConstructorMatchesTypedFunctionItem [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListFunctionCoercion_BuiltInListConstructorMatchesTypedFunctionItem() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 499
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListInstanceOf_RejectsListTypeAsSequenceTypeItemType [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.ListInstanceOf_RejectsListTypeAsSequenceTypeItemType() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 177
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalTypedValueIsDecimal [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastableToUnion_WithNamespace [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElement_ReturnsDecimalAtomicValue [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.InstanceOf_UnprefixedUserDefinedTypeUsesDefaultElementNamespace() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 739
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalTypedValueIsDecimal [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\atomic.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalTypedValueIsDecimal() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 127
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastableToUnion_WithNamespace [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.QNameCastableToUnion_WithNamespace() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 448
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElement_ReturnsDecimalAtomicValue [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\OrderByClause\orderData.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadOrderDataContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 298
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.Cast_TypedDecimalElement_ReturnsDecimalAtomicValue() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 267
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedStringValue_Matches [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatTypedValueIsFloat [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedStringValue_Matches [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\prod\SchemaImport\unionListDefined.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListSchema() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 595
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.LoadUnionListContext() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 317
+   at Bosak.XPath.Runtime.Tests.SchemaListUnionTests.UnionInstanceOf_MemberTypedStringValue_Matches() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaListUnionTests.cs:line 167
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatTypedValueIsFloat [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\atomic.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicFloatTypedValueIsFloat() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 53
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaAttributeKindTest_MatchesAttributeDeclaration [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_MatchesElementDeclaration [FAIL]
+[xUnit.net 00:00:00.29]     Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalAvgComparison [FAIL]
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaAttributeKindTest_MatchesAttributeDeclaration [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\fn\nilled\validate.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.LoadValidatedNilledDocument() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 352
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaAttributeKindTest_MatchesAttributeDeclaration() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 324
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_MatchesElementDeclaration [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\fn\nilled\validate.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.LoadValidatedNilledDocument() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 352
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.SchemaElementKindTest_MatchesElementDeclaration() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 308
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalAvgComparison [< 1 ms]
+  Error Message:
+   System.IO.DirectoryNotFoundException : Could not find a part of the path 'D:\Development\Bosak\.guard-tmp\release1263-source\tests\qt3tests\docs\atomic.xsd'.
+  Stack Trace:
+     at Microsoft.Win32.SafeHandles.SafeFileHandle.CreateFile(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.Strategies.FileStreamHelpers.ChooseStrategyCore(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.File.OpenRead(String path)
+   at Bosak.XPath.Runtime.Tests.SchemaTypedValueTests.AtomicDecimalAvgComparison() in D:\Development\Bosak\.guard-tmp\release1263-source\tests\Bosak.XPath.Runtime.Tests\SchemaTypedValueTests.cs:line 161
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:    51, Passed:   218, Skipped:     0, Total:   269, Duration: 175 ms - Bosak.XPath.Runtime.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 284 ms - Bosak.XPath.Api.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 328 ms - Bosak.XPath.Core.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   303, Skipped:     0, Total:   303, Duration: 531 ms - Bosak.XQuery.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed: 11941, Skipped:     0, Total: 11941, Duration: 1 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 4 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   153, Skipped:     0, Total:   153, Duration: 7 s - Bosak.XPath.Providers.Tests.dll (net10.0)

@@ -1,0 +1,277 @@
+{
+  "checks": 57,
+  "rows": [
+    {
+      "id": "XPath:success",
+      "passed": true
+    },
+    {
+      "id": "XPath:second-acquire-failure",
+      "passed": true
+    },
+    {
+      "id": "XPath:forged-assessment",
+      "passed": true
+    },
+    {
+      "id": "XPath:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "XPath:capacity",
+      "passed": true
+    },
+    {
+      "id": "XPath:revoked-before-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XPath:pre-cancel",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancel-after-first-admission",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancel-after-second-acquire",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancel-after-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XPath:work-error",
+      "passed": true
+    },
+    {
+      "id": "XPath:work-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XPath:admission-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XPath:successful-work-single-cleanup-error",
+      "passed": true
+    },
+    {
+      "id": "XPath:successful-work-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XPath:acquirer-internal-error-and-cleanup",
+      "passed": true
+    },
+    {
+      "id": "XPath:canceled-wait-retains-raw",
+      "passed": true
+    },
+    {
+      "id": "XPath:close-during-raw",
+      "passed": true
+    },
+    {
+      "id": "XPath:cancellation-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XQuery:success",
+      "passed": true
+    },
+    {
+      "id": "XQuery:second-acquire-failure",
+      "passed": true
+    },
+    {
+      "id": "XQuery:forged-assessment",
+      "passed": true
+    },
+    {
+      "id": "XQuery:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "XQuery:capacity",
+      "passed": true
+    },
+    {
+      "id": "XQuery:revoked-before-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XQuery:pre-cancel",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancel-after-first-admission",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancel-after-second-acquire",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancel-after-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XQuery:work-error",
+      "passed": true
+    },
+    {
+      "id": "XQuery:work-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XQuery:admission-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XQuery:successful-work-single-cleanup-error",
+      "passed": true
+    },
+    {
+      "id": "XQuery:successful-work-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XQuery:acquirer-internal-error-and-cleanup",
+      "passed": true
+    },
+    {
+      "id": "XQuery:canceled-wait-retains-raw",
+      "passed": true
+    },
+    {
+      "id": "XQuery:close-during-raw",
+      "passed": true
+    },
+    {
+      "id": "XQuery:cancellation-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XSLT:success",
+      "passed": true
+    },
+    {
+      "id": "XSLT:second-acquire-failure",
+      "passed": true
+    },
+    {
+      "id": "XSLT:forged-assessment",
+      "passed": true
+    },
+    {
+      "id": "XSLT:duplicate-identity",
+      "passed": true
+    },
+    {
+      "id": "XSLT:capacity",
+      "passed": true
+    },
+    {
+      "id": "XSLT:revoked-before-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XSLT:pre-cancel",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancel-after-first-admission",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancel-after-second-acquire",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancel-after-second-admission",
+      "passed": true
+    },
+    {
+      "id": "XSLT:work-error",
+      "passed": true
+    },
+    {
+      "id": "XSLT:work-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XSLT:admission-and-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XSLT:successful-work-single-cleanup-error",
+      "passed": true
+    },
+    {
+      "id": "XSLT:successful-work-two-cleanup-errors",
+      "passed": true
+    },
+    {
+      "id": "XSLT:acquirer-internal-error-and-cleanup",
+      "passed": true
+    },
+    {
+      "id": "XSLT:canceled-wait-retains-raw",
+      "passed": true
+    },
+    {
+      "id": "XSLT:close-during-raw",
+      "passed": true
+    },
+    {
+      "id": "XSLT:cancellation-and-two-cleanup-errors",
+      "passed": true
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "e7701df8b8de5bdfbdb7057481c929a555da66920dfd46ac77863bd101f176de"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "df8db3a69581228ed6b9c74f38e56703066d5c9fe42f4165d873238c532a5816"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "37273d0c0405cafe4a5001fdd30849e4da1f1195bbca231bb4ed24b28e1e3827"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "acbf883a105eef90d36aa3578eb1010439490a728bf0c9866b7248b2ee3ed95e"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "906cf8585df31e352b4c8cbd1eeb85e988fb334fb78a7268f220c8a042a6dc68"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "2855b35cf2237c626600b13e079d6b1e46b4b148102fc48a566fda57e980d0a3"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "1248774007759fcf4c1754f2e166bc65aaabdb81229afc26192d737beba4768c"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "b15025afa3ea0ca690728bde48ae27343ef766f4bb5dfacefbba54ecacfd5ae9"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "sha256": "fca6cd57d7ae13e893f5763158d41fe226100b7e71833b0d3ebd7fa534552170"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "8957ef1b1eb452efedb922297323e9a3b3a3d01e80a5b931a7ff2d79f07f5343"
+    }
+  ],
+  "setupReflectionOnly": true,
+  "scope": "Test-host acquisition and rollback with synthetic resources/issuer; actual unchanged production factories, admissions, operations and host evaluation. No native owner integration or production acquisition helper."
+}

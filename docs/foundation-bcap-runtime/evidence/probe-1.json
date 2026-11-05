@@ -1,0 +1,154 @@
+{
+  "passed": true,
+  "checks": 26,
+  "rows": [
+    {
+      "id": "C02:distinct",
+      "passed": true
+    },
+    {
+      "id": "C03:bytes-order-properties:False",
+      "passed": true
+    },
+    {
+      "id": "C08:leases-through-serialization:False",
+      "passed": true
+    },
+    {
+      "id": "C08:released-after-raw:False",
+      "passed": true
+    },
+    {
+      "id": "C02:shared",
+      "passed": true
+    },
+    {
+      "id": "C03:bytes-order-properties:True",
+      "passed": true
+    },
+    {
+      "id": "C08:leases-through-serialization:True",
+      "passed": true
+    },
+    {
+      "id": "C08:released-after-raw:True",
+      "passed": true
+    },
+    {
+      "id": "C02:source-free",
+      "passed": true
+    },
+    {
+      "id": "C01:foreign-executable-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C01:foreign-roles-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C01:closed-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C09:foreign-input-and-conflicting-options",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:0",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:1",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:2",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:3",
+      "passed": true
+    },
+    {
+      "id": "C05:completed-secondary-retained",
+      "passed": true
+    },
+    {
+      "id": "C05:failure-before-output",
+      "passed": true
+    },
+    {
+      "id": "C06:pre-cancelled-capture",
+      "passed": true
+    },
+    {
+      "id": "C06:operation-limit",
+      "passed": true
+    },
+    {
+      "id": "C07:actual-unsupported-receipt",
+      "passed": true
+    },
+    {
+      "id": "C07:per-run-isolation",
+      "passed": true
+    },
+    {
+      "id": "C08:cancelled-wait-retains-lease",
+      "passed": true
+    },
+    {
+      "id": "C08:raw-completion-releases",
+      "passed": true
+    },
+    {
+      "id": "C10:source-free-measurement",
+      "passed": true
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "4a361ffd952b93234036703e37af367706cd5ac8edab9d849708337b0249eb80"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "7af523fccba8a26b9d89b984df3a153b18ddcd7556675335717a047ba31656a2"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "ebb3dd14ffdd32759ebdef9019facd7bc0566022de5b556434f536fa95285a17"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "7157596f14f0148fddc9fa92bc7fe18dfa6c79f101d3a9daf7a21103ff9ee087"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "48ad4ac04d59c3667eb91b77742fe142b217e2e608ad6b5383ef62d1dc5eb0dc"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "7be16702fffa13872a03bbcc442bce00d8325a41be7a21b4cd92ecb7b150c593"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "6a3ac308b5d529482d112d042fea6115513d923337fa66e3274b81aca810781f"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "905de1f6b0a3403f1f68ed2e0ce327d4b97c2b1cb2e8d4c76c21dd96f7a5ffce"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "fb4446e4fad78a1f3dedd21f75f21c3879d175d1685ec71b7abeefb64f774a76"
+    }
+  ],
+  "measurements": {
+    "scope": "100 warmed source-free real captures; includes dedicated worker/thread startup, operation/input/context/policy and serialization; process-wide allocation, not an accepted workload budget",
+    "iterations": 100,
+    "totalAllocatedBytes": 8083456,
+    "totalMilliseconds": 29.0695
+  }
+}

@@ -1,0 +1,10 @@
+from pathlib import Path
+import json,shutil
+E=Path('docs/conformance/k02-schema-loader/evidence');P=Path('.guard-tmp/k02-implemented');P.mkdir(exist_ok=True)
+rows=json.loads((E/'requests.json').read_text(encoding='utf-8'))
+rows=[dict(q,modes=[m for m in q['modes'] if m!='unsafe-control'],reuse=q['id']=='valid-import') for q in rows]
+uri=(Path('.guard-tmp/k02-loader/fixtures')/'not-read.xq').resolve().as_uri();assert not Path('.guard-tmp/k02-loader/fixtures/not-read.xq').exists()
+for id,expr in [('prolog-module-guard',f'import module namespace m="urn:m" at "{uri}"; import schema namespace t="urn:loader"; 7'),('module-keyword-string',"import schema namespace t='urn:loader'; let $s := 'import module namespace m=\"urn:m\";' return 7")]:
+ rows.append(dict(id=id,kind='synthetic',expression=expr,environment='<schema uri="urn:loader" file="invalid.xsd"/>',result='<error code="XQST0012"/>',modes=['current','guarded'],dependency='XQ31',reuse=False))
+(E/'implementation-requests.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+(P/'Probe.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>K02LoaderDiagnostic</AssemblyName></PropertyGroup></Project>',encoding='utf-8')

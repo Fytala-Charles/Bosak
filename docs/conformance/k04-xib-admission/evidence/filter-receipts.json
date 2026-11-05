@@ -1,0 +1,34 @@
+[
+  {
+    "name": "normal-filters",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-xib-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "filters",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\filter-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\normal-filters.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5474506000173278,
+    "log": "normal-filters.log"
+  },
+  {
+    "name": "prototype-filters",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-xib-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "filters",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\filter-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\prototype-filters.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11693540000123903,
+    "log": "prototype-filters.log"
+  }
+]

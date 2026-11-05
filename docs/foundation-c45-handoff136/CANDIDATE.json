@@ -1,0 +1,35 @@
+{
+  "sourceRevision": "0126d492a8930001e0b947a0e27ae732af5a0653",
+  "version": "1.36.0",
+  "sourceArchivePath": "docs/foundation-transport136/evidence/source.zip",
+  "sourceArchiveSha256": "d05ed0af570c0ac8e33a5e78fda15175fd9dd486f80a2775a15472f098cda047",
+  "testedSourceBasis": "a87ec4ac plus the sealed six-file promotion; committed targets match after LF normalization.",
+  "publicReflectionSnapshot": {
+    "path": "docs/foundation-transport136/evidence/candidate-metadata.json",
+    "sha256": "8ce669ec809b1add696b307534e990f0878bc877c0be98056cb8149ba5c35a22",
+    "scope": "Seven foundation assemblies; not the complete eleven-assembly named stable manifest.",
+    "exportedTypes": 78,
+    "declaredMembers": 1201,
+    "priorDeclaredMembers": 1199
+  },
+  "sevenAssemblies": {
+    "Bosak.XPath.Api.dll": "0d6888ded2bfb7b20b72bcd7ddcfe1a71668745893b782af075f827d1d463d00",
+    "Bosak.XPath.Compiler.dll": "4f36d9d8d56610ab44c573beb67fb0f90d65e394d72f05af3f17ae67b7d887d0",
+    "Bosak.XPath.Core.dll": "1e24fea9f386f83dfb956e80cd07c520a498eefb5041a3012ec59568ccf60f4a",
+    "Bosak.XPath.Parser.dll": "cf6a4a1449cb861573a4c1b9839e5a0e9a3c26b04607b9c18843255f1637873e",
+    "Bosak.XPath.Providers.dll": "f9512bf786de7bd8365679f73efaced8cf633f39de3ef658c7c975f3c2accdaf",
+    "Bosak.XPath.Runtime.dll": "fa68438baa5790a9ed52f85d543fc14eec2a95fc35e54d7d1c257677eda7ab66",
+    "Bosak.XPath.Standard.dll": "959ecb4175111a12e6df4630b37ddb91920c7eddffd9b22ff262f9e1d16f377c"
+  },
+  "engineAssemblyCount": 10,
+  "qualifiedResultsPath": "docs/foundation-transport136/RESULTS.json",
+  "qualifiedResultsSha256": "e97abb9602f563dc8fe4a311eb4dd0edf3b84027bd84a73be85ddc2691716176",
+  "published": false,
+  "candidateFeed": null,
+  "packageQualification": "NotRun for 1.36.0",
+  "realConsumerQualification": "NotRun for 1.36.0",
+  "c45Accepted": false,
+  "apiFreezeAccepted": false,
+  "publicProviderSdkAvailable": false,
+  "broaderNamedStableManifestAccepted": false
+}

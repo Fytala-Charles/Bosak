@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited typed binding; choice blocker retained**. C05-K02 remains for choice-typed let/argument/return; passing scalar examples do not certify all declared types or error precedence. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **Typed let coercion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 destructuring/typed-let cluster; local coercion tests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -59,6 +61,11 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: State the type requirement at the binding; integral in-range values can be relabeled. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Coercion is not truncation. A fractional number cannot be silently relabeled as an integer.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-record-conversion, REQ123-destructuring. C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records. Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported. Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured. K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Typed binding/coercion differs from instance-of and cast; Record and numeric promotion with surplus/invalid value refusal; Inline function parameter/result conversion and modern versus paired static/runtime BC controls. **Boundary:** The probe runner explicitly sets both compile-time and runtime BC flags. These controls do not certify all XSLT 1.0/3.0 host propagation, schema-aware constructors or arbitrary function subtyping. C02 atomic-type-annotation empty-input defect remains open. Ownership: T03, T05, F08-atomic-annotation-empty. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

@@ -1,0 +1,60 @@
+{
+  "observationCount": 62,
+  "expressions": 31,
+  "profiles": [
+    "XPath31",
+    "XPath40"
+  ],
+  "initialCount": 50,
+  "expandedCount": 56,
+  "productBinaryMatches": [
+    {
+      "assembly": "Bosak.XPath.Api.dll",
+      "sha256": "7eb6b7c37f0ab970414172bf1e032eb070954bf19e153449d9c486140ade6068",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Api.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Compiler.dll",
+      "sha256": "8816d7ee6daef99ff94ad4af3549ce0f5b46bedf7e8ec9ec690ddde338befdee",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Compiler.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Core.dll",
+      "sha256": "e5329cc3f7cafb462c29eff9b500b9ed1a8564d40dd22b1b2ceb4676da39b6d8",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Core.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Parser.dll",
+      "sha256": "29296a8014cf6c2118dc48812adebedfd55af9c92baec366c70b9d89b10cf692",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Parser.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.dll",
+      "sha256": "c957609860e87ef6049a91bbbc44ae52cb46ab1c3e225a01da32b0191734877a",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Providers.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime.dll",
+      "sha256": "c89e63e5f1603edf7690ad6b949813ecafc35ffa51f088fc62131ea1d6232e2e",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Runtime.dll",
+      "matchesC42": true
+    },
+    {
+      "assembly": "Bosak.XPath.Standard.dll",
+      "sha256": "df0c40c6d7fd61a1b8166cf48f79ed0f27b4fc5cc3f49f2ae62f1a2806d56d68",
+      "c42ReceiptKey": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Standard.dll",
+      "matchesC42": true
+    }
+  ],
+  "siblingsClean": true,
+  "productionDiff": "",
+  "inheritedSolutionPasses": 24203,
+  "inheritedQT3": "31397/0/424",
+  "inheritedQT4": "8941/0/1918",
+  "consumerRuntimeAcceptance": false
+}

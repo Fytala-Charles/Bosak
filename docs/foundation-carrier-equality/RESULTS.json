@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-31",
+  "cohorts": {
+    "product": {
+      "runs": 2,
+      "equalityControlsPerRun": 828,
+      "sizeX64": 48,
+      "attachAllocatedBytesPerItemIncludingArray": {
+        "integer": 48.00024,
+        "string": 48.00024,
+        "decimal": 48.00024
+      },
+      "clrEqualsAllocatedBytesPerCall": {
+        "False": 344.0,
+        "True": 344.0
+      },
+      "clrHashAllocatedBytesPerCall": {
+        "False": 64.0,
+        "True": 64.0
+      },
+      "retainedLegacyCases": 20,
+      "plainPairOracleMatchesProduct": true
+    },
+    "source": {
+      "runs": 2,
+      "equalityControlsPerRun": 828,
+      "sizeX64": 48,
+      "attachAllocatedBytesPerItemIncludingArray": {
+        "integer": 48.00024,
+        "string": 48.00024,
+        "decimal": 48.00024
+      },
+      "clrEqualsAllocatedBytesPerCall": {
+        "False": 344.0,
+        "True": 344.0
+      },
+      "clrHashAllocatedBytesPerCall": {
+        "False": 64.0,
+        "True": 64.0
+      },
+      "retainedLegacyCases": 20,
+      "plainPairOracleMatchesProduct": true
+    },
+    "holder": {
+      "runs": 2,
+      "equalityControlsPerRun": 253,
+      "sizeX64": 48,
+      "attachAllocatedBytesPerItemIncludingArray": {
+        "integer": 80.00024,
+        "string": 80.00024,
+        "decimal": 80.00024
+      },
+      "clrEqualsAllocatedBytesPerCall": {
+        "False": 344.0,
+        "True": 344.0
+      },
+      "clrHashAllocatedBytesPerCall": {
+        "False": 64.0,
+        "True": 64.0
+      },
+      "retainedLegacyCases": 20,
+      "plainPairOracleMatchesProduct": true
+    },
+    "equal-holder": {
+      "runs": 2,
+      "equalityControlsPerRun": 828,
+      "sizeX64": 48,
+      "attachAllocatedBytesPerItemIncludingArray": {
+        "integer": 80.00024,
+        "string": 80.00024,
+        "decimal": 80.00024
+      },
+      "clrEqualsAllocatedBytesPerCall": {
+        "False": 344.0,
+        "True": 408.0
+      },
+      "clrHashAllocatedBytesPerCall": {
+        "False": 64.0,
+        "True": 64.0
+      },
+      "retainedLegacyCases": 20,
+      "plainPairOracleMatchesProduct": true
+    },
+    "equal-selective": {
+      "runs": 2,
+      "equalityControlsPerRun": 828,
+      "sizeX64": 48,
+      "attachAllocatedBytesPerItemIncludingArray": {
+        "integer": 48.00024,
+        "string": 80.00024,
+        "decimal": 80.00024
+      },
+      "clrEqualsAllocatedBytesPerCall": {
+        "False": 344.0,
+        "True": 408.0
+      },
+      "clrHashAllocatedBytesPerCall": {
+        "False": 64.0,
+        "True": 64.0
+      },
+      "retainedLegacyCases": 20,
+      "plainPairOracleMatchesProduct": true
+    }
+  },
+  "preferredDirection": "48-byte selective storage with legacy CLR equality/hash normalization; not selected for production",
+  "remainingBlockers": [
+    "64 extra allocated bytes per annotated Equals in this normalization implementation",
+    "32-byte holder per reference-backed attachment",
+    "two inherited-method overrides change declared reflection metadata",
+    "actual trusted production kernel/provider/VM integration and consumer budgets not qualified"
+  ],
+  "productionModified": false,
+  "apiFreezeAccepted": false
+}

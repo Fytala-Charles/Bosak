@@ -1,0 +1,6 @@
+* -text whitespace=cr-at-eol
+# Blank unified-diff context lines must retain their leading space.
+*.patch whitespace=-blank-at-eol,cr-at-eol
+evidence/*/PRODUCTION.patch whitespace=-blank-at-eol,cr-at-eol
+# Preserve raw PowerShell policy-error wrapping in the original receipt.
+evidence/before-explicit-xml/version-policy-attempt.txt whitespace=-blank-at-eol,cr-at-eol

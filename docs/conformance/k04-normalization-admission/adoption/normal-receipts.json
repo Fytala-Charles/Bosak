@@ -1,0 +1,104 @@
+[
+  {
+    "suite": "qt3",
+    "scope": "gate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 73.85503320000134,
+    "log": "qt3-gate.log",
+    "skipDump": "qt3-gate-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  },
+  {
+    "suite": "qt4",
+    "scope": "gate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 18.702965399977984,
+    "log": "qt4-gate.log",
+    "skipDump": "qt4-gate-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  },
+  {
+    "suite": "qt3",
+    "scope": "normalization",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-normalize-unicode"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.39317329999175854,
+    "log": "qt3-normalization.log",
+    "skipDump": "qt3-normalization-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  },
+  {
+    "suite": "qt4",
+    "scope": "normalization",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-normalize-unicode"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.34477229998447,
+    "log": "qt4-normalization.log",
+    "skipDump": "qt4-normalization-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  },
+  {
+    "suite": "qt3",
+    "scope": "original",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-normalize-unicode",
+      "cbcl-fn-normalize-unicode-006"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.2957598000066355,
+    "log": "qt3-original.log",
+    "skipDump": "qt3-original-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  },
+  {
+    "suite": "qt4",
+    "scope": "original",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-normalize-unicode",
+      "cbcl-fn-normalize-unicode-006"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.30142309999791905,
+    "log": "qt4-original.log",
+    "skipDump": "qt4-original-skips.txt",
+    "mode": "Fresh actual normal owner-approved harness"
+  }
+]

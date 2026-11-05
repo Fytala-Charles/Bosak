@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified reference contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. array:members/of-members are JNode functions owned by C05, not replacements for member/item concatenation. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Import batches with arrays — Frozen 4.0.** Shipped in [Bosak PR #84](https://github.com/Fytala-Charles/Bosak/pull/84) at immutable revision [`f7f55b4e`](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19).
@@ -58,6 +60,8 @@ The map family indexes products while this array family preserves order boundari
 Each callback result is one array member. `array:items` loses those boundaries, so call it only when flattening one level is intended. `[]`, `[()]` and `[[]]` have different member counts. Empty bounds or zero select defaults; a negative step defaults the omitted start/end to opposite sequence ends. An omitted/zero step chooses direction from the resolved bounds. An explicit incompatible direction returns an empty array, and out-of-range bounds do not raise the `array:subarray` bounds error.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles One callback result per member and one-level item concatenation; Zero members versus empty/nested members; Inclusive/negative slice bounds, default/zero step and empty direction result. **Boundaries:** array:members/of-members are JNode functions owned by C05, not replacements for member/item concatenation. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Implementation: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs); [named unit tests](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs); [manifest](../examples/cases.json). Names refuse XPST0017 in default XPath31; the comparisons remain valid at XPath31. Source/package version stays 1.1.1. This reference work changes no engine code.
 

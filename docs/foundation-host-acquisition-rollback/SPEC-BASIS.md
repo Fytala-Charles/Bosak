@@ -1,0 +1,5 @@
+# Qualification basis
+
+1 November 2026. This fixture-only step qualifies unchanged production 1.42.0, delivered in `b2ca55fc`. It implements a test-host orchestration pattern for the ownership transfer and failure rules in [the composite contract](../foundation-composite-ownership/CONTRACT.md), delivered in `a57fd646`, particularly Entry and rollback and Failure preservation. Language semantics and immutable adoption sources remain those recorded in [the XSLT source-membership basis](../foundation-xslt-source-membership/SPEC-BASIS.md).
+
+The host owns acquired resources before admission; successful OpenSnapshot transfers its release obligation to the admission, while a rejected call transfers nothing. Test resources and issuers are synthetic; actual compiled XPath/XQuery/XSLT factories, kernel admissions, raw operation leases and guarded result consumption are used. No general production acquisition API, native provider authority, worker protocol or new public signature is adopted here.

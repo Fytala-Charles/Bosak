@@ -1,0 +1,12 @@
+{
+  "reason": "Rebuild embeds the current source revision in AssemblyInformationalVersion; raw DLL equality is not expected across proposal commits.",
+  "reviewEngineSourceStamp": "93c564dae9a7d5ef343cd48f34f95dfc7320c85c",
+  "adoptedBuildSourceStamp": "1daa687cbb7cd789f4b939ed16f0332fb3d400d9",
+  "engineSourceChanges": false,
+  "comparedEngineAssemblies": 9,
+  "methodBodiesAndTypeFieldMethodSignaturesEqual": true,
+  "assemblyVersionsEqual": true,
+  "comparison": "binary-comparison.json",
+  "comparisonCommand": "dotnet .guard-tmp/c29-binary-comparison/bin/Release/net10.0/Probe.dll",
+  "comparisonExitCode": 0
+}

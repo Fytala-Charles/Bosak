@@ -1,0 +1,288 @@
+[
+  {
+    "name": "compare-010",
+    "gated": true,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-compare",
+      "compare-010"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28007729997625574,
+    "totals": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "log": "normal-compare-010.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-56",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-56"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.266073700011475,
+    "totals": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-56.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-57",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-57"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.25492489998578094,
+    "totals": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-57.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-58",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-58"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09089619998121634,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-58.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-59",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-59"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09085420001065359,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-59.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-60",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-60"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08786979998694733,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-60.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-61",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-61"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0934279999928549,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-61.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-62",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-62"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0875293999852147,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-62.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-63",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-63"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08211269997991621,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-63.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-70",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-deep-equal",
+      "K-SeqDeepEqualFunc-70"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09096560001489706,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-K-SeqDeepEqualFunc-70.log"
+  },
+  {
+    "name": "fn-substring-after-24",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-substring-after",
+      "fn-substring-after-24"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2537988999974914,
+    "totals": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "log": "normal-fn-substring-after-24.log"
+  },
+  {
+    "name": "fn-substring-before-24",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-substring-before",
+      "fn-substring-before-24"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23111950000748038,
+    "totals": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "log": "normal-fn-substring-before-24.log"
+  },
+  {
+    "name": "group-017",
+    "gated": false,
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "prod-GroupByClause",
+      "group-017"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08095579998916946,
+    "totals": [
+      1,
+      0,
+      0,
+      1
+    ],
+    "log": "normal-group-017.log"
+  }
+]

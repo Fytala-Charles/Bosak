@@ -1,0 +1,10 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/DOCUMENTATION-CHECKS.json": "d5df78dd5863b4a315bd34ed172161117e1b732b376e7d7e95f42cbbb2bea389",
+  "evidence/VALIDATION.json": "ab54da4a60b2f55d11670dc52e3365c9e1763731ffa392e94adc07d0d817ff24",
+  "INDEX.json": "1272d8a25fdecde6cf7b531bb53fa668d3f9033eac51b65ba7eb20f046b24108",
+  "README.md": "e80c7924b471ecc205cd563b2302b8077de43afbebad4aac10c79ecf6dd4bdf7",
+  "returns/O2-Core.json": "460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f",
+  "returns/O4-Core.json": "48ec1cb1f07470c8bf7f7a7366e7350b52fd80954cf88eb9b27f246c757bac26",
+  "tools/verify.py": "5ef5ba14a3ff4c5bc2aa2e937aa91c0aba809800a24267189abd07793a97d692"
+}

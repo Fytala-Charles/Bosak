@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-28",
+  "decisionId": "K04-normalization-adoption-v1",
+  "proposalCommit": "ee19ebbf",
+  "proposal": "docs/conformance/k04-normalization-admission/BASELINE-UPDATE-PROPOSAL.md",
+  "answer": "Approve exact normalization adoption (Recommended)",
+  "scope": "Exact three-file patch; fresh normal gates and normalization sets; no release",
+  "sourceBase": "ee19ebbf9c48d3eba2477f4bb02198bdd0d99ae1"
+}

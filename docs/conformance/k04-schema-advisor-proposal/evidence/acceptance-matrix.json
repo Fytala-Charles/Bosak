@@ -1,0 +1,86 @@
+[
+  {
+    "id": "AC01",
+    "area": "No-provider compatibility",
+    "status": "Current baseline captured; future seam parity required",
+    "requiredEvidence": "Same build/test/gate outputs and exact skip maps without registration; C42 membership/copy/context regressions preserved."
+  },
+  {
+    "id": "AC02",
+    "area": "Authority and verdicts",
+    "status": "Planned prototype",
+    "requiredEvidence": "Unowned fallback only; owned Unsupported/Invalid/Cancelled/provider exceptions never downgrade or silently succeed; conflicting owners refuse."
+  },
+  {
+    "id": "AC03",
+    "area": "Closure and static visibility",
+    "status": "Planned prototype",
+    "requiredEvidence": "Resolve schema imports/includes under host resource policy, retain scoped local/global component identities, cancellation and complete closure key."
+  },
+  {
+    "id": "AC04",
+    "area": "Node and atomic identity",
+    "status": "Planned prototype / ABI review",
+    "requiredEvidence": "Provenance survives data(), bindings, conversion, copies and escaped values; strip removes it; cross-session equal-QName mismatch refuses."
+  },
+  {
+    "id": "AC05",
+    "area": "Actual membership and subtype",
+    "status": "Provider model missing / unqualified",
+    "requiredEvidence": "Affiliation list, abstract/nillability/derivation blocking and actual member-set containment; original substitution-020..025 assertions pass unchanged."
+  },
+  {
+    "id": "AC06",
+    "area": "Assessment and assertions",
+    "status": "Staged add-side only / unqualified",
+    "requiredEvidence": "Full claimed structural validity, invalid-instance error mapping, applicable/inherited assertions, typed list/union/ID values and private-node ownership."
+  },
+  {
+    "id": "AC07",
+    "area": "Conditional types",
+    "status": "Staged selection only / unqualified",
+    "requiredEvidence": "Alternative order/default/static context and xsi:type derivation; current validation-1301 original becomes a separate integration witness."
+  },
+  {
+    "id": "AC08",
+    "area": "Documented XSLT cohort",
+    "status": "30 fresh retained guards",
+    "requiredEvidence": "All 30 original results remain intact; independently qualify source-document/merge/accumulator/streaming and catalog scenarios before any skip removal."
+  },
+  {
+    "id": "AC09",
+    "area": "Independent applicability",
+    "status": "Fresh retained earlier skip",
+    "requiredEvidence": "catalog-005b retains its negative XML_1.1 requirement; do not fold it into XSD 1.1 closure counts."
+  },
+  {
+    "id": "AC10",
+    "area": "Lifetime and concurrency",
+    "status": "Planned prototype",
+    "requiredEvidence": "Immutable sessions, concurrent evaluations, disposal/escaped-node lifetime, complete cache key and cancellation; no caller-tree mutation."
+  },
+  {
+    "id": "AC11",
+    "area": "Host error mapping",
+    "status": "Planned prototype",
+    "requiredEvidence": "Stable structured provider diagnostics mapped per XPath/XQuery/XSLT operation; ordinary false membership remains distinct from unsupported assessment."
+  },
+  {
+    "id": "AC12",
+    "area": "Layering and licensing",
+    "status": "Current source boundary captured",
+    "requiredEvidence": "No core product or default gate dependency on Bosak.Schema, no auto-loading/activation; separate explicit licensed integration receipts."
+  },
+  {
+    "id": "AC13",
+    "area": "Public compatibility/performance",
+    "status": "Required before API freeze",
+    "requiredEvidence": "Exact additive signatures, XdmValue identity/layout review, reference consumers and measured no-provider overhead; preserve concrete legacy members."
+  },
+  {
+    "id": "AC14",
+    "area": "Admission and release",
+    "status": "Separate owner actions required",
+    "requiredEvidence": "Owner acceptance before S4c/API freeze, future semantic adoption pins, provider qualification, separate exact admission proposal and explicit release approval."
+  }
+]

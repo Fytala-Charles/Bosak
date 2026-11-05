@@ -1,0 +1,22 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  ".gitignore": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+  "evidence/DOCUMENTATION-CHECKS.json": "6731b3e794b15b585f824d6eaa00d01c2eca81827028ab4102ba87e5d2b605eb",
+  "inputs/BCAP-O1-Schema.json": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+  "inputs/BCAP-O1-XmlDb.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+  "inputs/BCAP-O2-Core.json": "68833ceb38c024045197169d049ac03cc3d9caad23106140eac19852e1606017",
+  "inputs/BCAP-O2-Schema.json": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+  "inputs/BCAP-O3-Braid.json": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+  "inputs/BCAP-O4-Core.json": "b6ea838ca81537b2c586089d4ddc7abbc4acdd7f853d06b81cee045d935a0f42",
+  "inputs/BCAP-O4-XmlDb.json": "f4e9b9cc9d2771b2853bd0412e205c37abab24fdfa8cfa86cdc12ee629c21b04",
+  "inputs/BCAP-O4-XmlDb.native-lifetime-0d18e91.response.json": "f4e9b9cc9d2771b2853bd0412e205c37abab24fdfa8cfa86cdc12ee629c21b04",
+  "inputs/BCAP-O4-XmlDb.previous-Revise.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "inputs/issue-468-comments.json": "9d14263463f89bd6ff03f10ca72c2442acba9a30819e4938394376776a6ba3da",
+  "inputs/XmlDb-fix-review-INPUTS.json": "212d8069d3befb960d71f200873d5ff8aba0903600fa796d191c956ac3ac9737",
+  "inputs/XmlDb-native-results.json": "64270ae41e1aef71bcfb9895051f8dafb483679727003b378be401847bd5d0f8",
+  "INPUTS.json": "44320ac5ca169bc4646c4f29b2e94c15ae2a922244796ad5b4e6d6a0508d5203",
+  "README.md": "543f411837fb572ca2b574dbc7dcc04e753a5f231ca8b1827ae364609ffae334",
+  "STATUS.json": "b6d715063c02cef0b2093a685a1cc36f12596c135dfacde8c684cba97e7a06e8",
+  "tools/capture.py": "89f020ead628751794606776c7bf031f27d39d66ce9978729f1195f34f8bd8db",
+  "tools/verify.py": "2441437e0b57c7ca2aa8d1ff65131d72f15a12dfb669c91187d3b8cb8913bd80"
+}

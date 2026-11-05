@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-30",
+  "coreBaseRevision": "6ab944d9ae957e69367718d9607e7af24d864738",
+  "status": "Proposed implementation ordering; no contract acceptance",
+  "inputs": [
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "ecd3ad5db439462533537b81a5d3673249c47a6cf0c6edae8c260ff20088c8fb"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "5c7b06d6898c9a626bcc9474d9c8fb4cc9c7961f3a1190ca164f4a3b019f2791"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "d213cdd9be7434a8e86d70504a59b5673d520c70d4cab0a1c88418373e65fd22"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "293e5202d6caa6620e2a573ef1776b0663d7e6c294c91a963ea145f3014c6b13"
+    },
+    {
+      "path": "docs/REQ-139-OWNER-WORK-PACKAGES.md",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "8da8e1ebf9654160d0c18bf84f4ad6004247b6447bf31d951739ceb1acfe14c6"
+    },
+    {
+      "path": "docs/foundation-contract-decision/DECISION-MATRIX.json",
+      "revision": "6ab944d9ae957e69367718d9607e7af24d864738",
+      "sha256": "72b88ef7586026b2a915b90d134580a5d7746a79b0be0412fc34f5f24f6d8fd9"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "SR-01",
+      "sourceWorkPackage": "FX009-01",
+      "need": "Existing XML nodes, axes and numeric kinds",
+      "classification": "Preserve existing surface",
+      "boundary": "IXdmNode; XdmNodeKind",
+      "remainingEvidence": "No new member demonstrated; actual persistent-provider qualification outstanding",
+      "proposedScope": "None"
+    },
+    {
+      "id": "SR-02",
+      "sourceWorkPackage": "FX009-01/02",
+      "need": "Snapshot identity and document order",
+      "classification": "Preserve existing surface",
+      "boundary": "IXdmNode.IsSameNode; provider order and identity behavior",
+      "remainingEvidence": "Cross-provider differential cases and snapshot boundaries required",
+      "proposedScope": "None"
+    },
+    {
+      "id": "SR-03",
+      "sourceWorkPackage": "FX009-02",
+      "need": "Deferred and nested result lifetimes",
+      "classification": "Qualification required",
+      "boundary": "IXdmSequence; XdmValue containers",
+      "remainingEvidence": "Outer enumeration guard does not prove nested access or cancellation isolation",
+      "proposedScope": "None established"
+    },
+    {
+      "id": "SR-04",
+      "sourceWorkPackage": "S009-02/04",
+      "need": "Original component and assessment authority",
+      "classification": "Proposed addition",
+      "boundary": "CD-03; CD-05",
+      "remainingEvidence": "Owner/State bounded attachment does not supply general universe/component authority",
+      "proposedScope": "Optional neutral annotation contract"
+    },
+    {
+      "id": "SR-05",
+      "sourceWorkPackage": "S009-04",
+      "need": "Atomic/list/union transport",
+      "classification": "Proposed addition",
+      "boundary": "CD-05; XdmValue",
+      "remainingEvidence": "Type-name strings do not prove original member type, list provenance or carrier preservation",
+      "proposedScope": "Carrier design and end-to-end audit required"
+    },
+    {
+      "id": "SR-06",
+      "sourceWorkPackage": "S009-02/04",
+      "need": "Derivation, affiliation and component lookup",
+      "classification": "Proposed addition",
+      "boundary": "CD-02; CD-04",
+      "remainingEvidence": "Require exact provider facts and actual query operations; avoid exporting entire schema model",
+      "proposedScope": "Minimal session query operations"
+    },
+    {
+      "id": "SR-07",
+      "sourceWorkPackage": "S009-02",
+      "need": "Compatible independent assessments",
+      "classification": "Proposed addition",
+      "boundary": "CD-06",
+      "remainingEvidence": "Endpoint/profile authority and original PSVI preservation require actual provider evidence",
+      "proposedScope": "Directional compatibility view"
+    },
+    {
+      "id": "SR-08",
+      "sourceWorkPackage": "C139-02",
+      "need": "Compile-time semantic environment",
+      "classification": "Proposed addition",
+      "boundary": "CD-01; CD-02",
+      "remainingEvidence": "Identify immutable captured options, cache identity and nested evaluation propagation",
+      "proposedScope": "Explicit opt-in route; preserve legacy defaults"
+    },
+    {
+      "id": "SR-09",
+      "sourceWorkPackage": "S009-01/04",
+      "need": "Assertions and type alternatives",
+      "classification": "Provider requirement mapping",
+      "boundary": "CD-02; CD-04; CD-05",
+      "remainingEvidence": "Descriptor recognition is not enforcement; identify only facts consumed by Core",
+      "proposedScope": "No assertion engine in Core"
+    },
+    {
+      "id": "SR-10",
+      "sourceWorkPackage": "S009-02; FX009-02",
+      "need": "Ownership, cancellation, copy and strip",
+      "classification": "Cross-cutting requirement",
+      "boundary": "CD-02; CD-05; IXdmSequence",
+      "remainingEvidence": "Reference retention alone is not lease ownership or disposal safety",
+      "proposedScope": "No required IDisposable member or implicit lease transfer"
+    },
+    {
+      "id": "SR-11",
+      "sourceWorkPackage": "C139-01",
+      "need": "Prototype issuance and record conveniences",
+      "classification": "Exclude from first proposed scope",
+      "boundary": "CD-03 factories; generated record members",
+      "remainingEvidence": "No independent consumer need demonstrated for permanent public convenience helpers",
+      "proposedScope": "Keep prototype-only pending justification"
+    },
+    {
+      "id": "SR-12",
+      "sourceWorkPackage": "FX009-01/03; S009-04",
+      "need": "Persistence and full validator implementation",
+      "classification": "Separate owner implementation",
+      "boundary": "XmlDb Storage/Core; Bosak.Schema",
+      "remainingEvidence": "Freeze must cover known foundation needs; backend conformance remains separately evidenced",
+      "proposedScope": "No disk format, JSON storage or validator implementation in Core"
+    }
+  ],
+  "acceptedSignatures": [],
+  "implementationAuthorized": false,
+  "freezeAccepted": false
+}

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — Gregorian components and explicit timezone offsets</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited Gregorian construction; fractional precision gap**. Millisecond precision loss, permissive malformed/multi-item input and interop calendar bounds remain explicit; arbitrary extended-year operations are not certified. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Month-end cutoffs — Frozen 4.0.** [fn:build-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-dateTime) and [fn:days-in-month](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-days-in-month).
@@ -94,6 +96,8 @@ not silently repair invalid input, derive a timezone from geography, or decide
 whether the configured cutoff is a working day.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Local Gregorian month/leap rules and supported partial Gregorian values; Timezone presence, field-set, calendar and offset errors; Fractional components and declared singleton/type boundaries. **Boundaries:** Millisecond precision loss, permissive malformed/multi-item input and interop calendar bounds remain explicit; arbitrary extended-year operations are not certified. Follow-up groups: F01, F10. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Use `CompileOptions.Compatibility40` for the new functions; default XPath 3.1
 rejects them. The earlier-version comparison uses `Compatibility31`.

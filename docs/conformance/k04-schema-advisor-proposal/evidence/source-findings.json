@@ -1,0 +1,78 @@
+[
+  {
+    "id": "F01",
+    "sources": [
+      "src/Bosak.Schema/Model/CompiledSchema.cs",
+      "src/Bosak.Schema/Model/ElementDeclaration.cs",
+      "src/Bosak.Schema/Compilation/SchemaCompiler.cs"
+    ],
+    "observation": "Public model records explicit named element/type pairs. RecordElementDeclaration returns for declarations without name/type; public ElementDeclaration has no abstract, nillability, block or affiliation-list fields. The reviewed product source contains no substitutionGroup/SubstitutionGroup implementation tokens.",
+    "consequence": "No source evidence of complete multi-affiliation actual membership or substitution subtype support; parsing a schema document is insufficient."
+  },
+  {
+    "id": "F02",
+    "sources": [
+      "src/Bosak.Schema/Validation/XsdValidationService.cs",
+      "docs/XSD11_S4_DESIGN_PREP.md"
+    ],
+    "observation": "Governing-type selection, alternative test evaluation and named/anonymous-owner assertion filtering exist. Explicit xsi:type is returned before the alternatives; a source comment defers derivation constraints to S5, and AppliesTo compares exact owning type rather than traversing a full base chain.",
+    "consequence": "Do not certify CTA/xsi:type derivation or inherited assertion coverage from staged applicability tests."
+  },
+  {
+    "id": "F03",
+    "sources": [
+      "src/Bosak.Schema/Model/CompiledSchema.cs",
+      "docs/XSD11_S4_DESIGN_PREP.md"
+    ],
+    "observation": "Open-content/default-attribute components are recorded; structural enforcement and complete complex-type facade/derivation remain deferred in the inspected documents/model.",
+    "consequence": "Provider coverage must be explicit per schema closure and operation; no blanket XSD 1.1 declaration."
+  },
+  {
+    "id": "F04",
+    "sources": [
+      "src/Bosak.Schema/SchemaServices.cs",
+      "src/Bosak.Schema/Bosak.Schema.csproj"
+    ],
+    "observation": "Factory methods check LicenseGate.EnsureUsable; product package references core 1.26.3.",
+    "consequence": "Current source review is not a licensed runtime or 1.33.1 add-on compatibility qualification. No activation/build/install performed."
+  },
+  {
+    "id": "F05",
+    "sources": [
+      "docs/ADR-006-xsd11-engine-seam-compatibility.md",
+      "src/Bosak.XPath.Api/Xsd/IXsdValidator.cs",
+      "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+      "src/Bosak.XPath.Core/Xdm/XdmValue.cs"
+    ],
+    "observation": "ADR006 states every schema-bearing seam is XmlSchemaSet typed. IXsdValidator actually accepts schema streams; IXdmNode uses QName annotation tuples and XdmValue retains lexical user schema type identity.",
+    "consequence": "Contract must inventory component, validation and node/atomic identity channels separately; one callback or synthetic XmlSchemaType facade is insufficient."
+  },
+  {
+    "id": "F06",
+    "sources": [
+      "docs/SEAM_DESIGN.md",
+      "src/Bosak.Xslt/Api/XsltCompiler.cs",
+      "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.Validation.cs"
+    ],
+    "observation": "Old hard-boundary prose says XSLT schema hooks are absent, while the same document later records H1-H4 as landed; current core exposes compilation/schema/constructor-validation surfaces.",
+    "consequence": "Historical prose is not current missing-capability evidence; preserve existing hooks and review actual routing."
+  },
+  {
+    "id": "F07",
+    "sources": [
+      "docs/XSD11_GAP_MATRIX.md",
+      "docs/XSD11_S4_DESIGN_PREP.md",
+      "tests/Bosak.Xslt.Conformance/Program.cs"
+    ],
+    "observation": "Current bounded harness replay confirms 30 documented skips and additionally validation-1301 reaching the explicit inline alternative guard. catalog-005b is selected and skipped without a per-case reason; source and original negative XML_1.1 dependency explain the earlier independent feature exclusion.",
+    "consequence": "Keep documented cohort 30, additional CTA witness one and independent applicability control one distinct; no full XSLT skip census or closure claim."
+  },
+  {
+    "id": "F08",
+    "sources": [
+      "src/Bosak.Schema/Compilation/SchemaCompiler.cs"
+    ],
+    "observation": "ComputeDigest(document) hashes the parsed root document before import/include closure processing; the compiled schema identifier derives from that digest.",
+    "consequence": "A future session/component-universe key must additionally bind complete resolved closure identities, policy and static context; do not reuse root identity alone."
+  }
+]

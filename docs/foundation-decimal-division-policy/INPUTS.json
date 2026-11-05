@@ -1,0 +1,14 @@
+{
+  "baseCommit": "f9e7c61523d3dc017b4997c905afef06bc4876d9",
+  "sourceVersion": "1.50.0",
+  "files": {
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-c45-revised-shape/ACCEPTANCE.json": "be4105085ab96a794efa9de8767c46ff2f24ba78326c60901b01ca797049bbc8",
+    "docs/foundation-exact-quotient/STATUS.json": "0a810e38c2e62b3e36c45985a48138af68a43f492d524cebacad82371711ac4e",
+    "docs/foundation-exact-quotient/MANIFEST.json": "2319441ffa3613c9290923cf902950a0f7c07ba4f026dd9c83adc1db1f496fe3",
+    "src/Bosak.XPath.Core/Xdm/ExactArithmeticLimits.cs": "a2712bc8a858c3ff5db12fbc10a08890a31e25390e6aa3528088be31ea2befe8",
+    "src/Bosak.XPath.Api/Schema/ExactArithmeticPlan.cs": "cd13e803aab2872f266ae0585b6bb990499f52150076d51eaf7eec3724f73ac5",
+    "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "1ec13e76cff7a81f8d1abd3d7a166a085cdd78d19aa9ec05802f59e53d609925",
+    "src/Directory.Build.props": "a52b765da19bc45c16ec2e2b329687a2d2ea83a30134ede4256643331a717449"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/README.md.html",
+      "sha256": "bd32e6493ebbc75fdedbcdbdd0d396047597ca2d59a6c6315aa74ed94cdbd617"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_ARCHITECTURE.md.html",
+      "sha256": "444211314383259b487bf7fa32eec0b3239cb902e6c79a072ad218f3c0d6b76a"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b47cdb49bbf84fe66e75bb8b182e6b6bb596a462c3f22cd57fab620105056c62"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_INTEGRATION.md.html",
+      "sha256": "81d2dc5edf359c581a187c9c052189bb9d775ef68666c2bc02bd6ff2d1199881"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "5d497a331dad4a067cf04e790107a6fc3ffdb7058c4b75bcefcf14fc20cce931"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "d0ab276a0e77921e5344d4286f6dd56214e66688389b86a4f9d14a2f3131bb04"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "fd506cb5d0d08a0539508b05c9f4a44cb4ad7b33b1a994ecd0283516bcafd382"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "6d487efbb5e1eb2941fef8de24986b4fa52492bdd0c67dd1b72373a7e21e0a3d"
+    },
+    {
+      "source": "docs/conformance/k04-schema-profile-review/README.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_conformance_k04-schema-profile-review_README.md.html",
+      "sha256": "93fe8fbccf33ce389a5fa1bcf42b6ae9b09683eb33fe9214c444c3139bc88994"
+    },
+    {
+      "source": "docs/conformance/k04-schema-profile-review/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-schema-profile-review-render/docs_conformance_k04-schema-profile-review_NEXT-SLICE.md.html",
+      "sha256": "284f4c76e7b7e649656adfbe8790aad52ec24720cf0de391704a29a136672eac"
+    }
+  ]
+}

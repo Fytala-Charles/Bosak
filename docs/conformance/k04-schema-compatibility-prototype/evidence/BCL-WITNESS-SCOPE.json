@@ -1,0 +1,10 @@
+{
+  "recordedUtc": "2026-10-29T08:50:20.619760+00:00",
+  "kind": "Pre-source additional BCL-only XSD 1.0 observation; not a new product adoption or XSD 1.1 provider",
+  "revision": "3e9f3bddd38f39f8953750306f0c574a2fbd0387",
+  "sections": [
+    "XDM 4.1.1",
+    "XDM 4.1.4"
+  ],
+  "scope": "Use System.Xml.Schema on entirely local hand-authored schemas: shared Base/M declaration, source-only derived Extra type; validate original in superset and a clone in subset; retain original PSVI. No new validator implemented, resolver/network disabled."
+}

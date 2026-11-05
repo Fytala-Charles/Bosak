@@ -1,0 +1,57 @@
+2183cdf1ade00cd8eea13536e4e97e5952120192 2026-10-10T23:56:46+02:00 fix(xslt): REQ-125 B-F3 — digest-validated controlled cache hits (truthful consumed-input provenance)
+6c7d250ebe2a80d595d888839c34968795d43ff2 2026-10-10T23:44:33+02:00 fix(xslt): REQ-125 Slice B consumer-review corrections — B-F1/B-F2 resource-policy findings (#144)
+64f72869c7949e47326c47ea79fafeb9f2131dd5 2026-10-10T23:39:10+02:00 test(xslt): serialize package-registry tests + warm-approval regression; docs update for CI flake and B-F3
+facbf373de0cd8c54b2a0ddbc9d730c21e83c78f 2026-10-10T23:22:18+02:00 fix(xslt): REQ-125 Slice B consumer-review corrections — B-F1/B-F2 resource-policy findings
+012efa57d4cbcee3c2b44c95e1e68dcc783f32d6 2026-10-10T22:49:56+02:00 feat(xslt): REQ-125 Slice C — captured output contract (Bosak.Xslt.Capture) (#142)
+81e240638e27f8f1ed497fe6466315f8a38f9900 2026-10-10T22:44:23+02:00 feat(xslt): REQ-125 Slice C — captured output contract (Bosak.Xslt.Capture)
+5b0cf05839cd70abece3cf99fff243d1c77852a8 2026-10-10T22:01:17+02:00 fix(xslt): REQ-125 Slice A consumer-review corrections — F1–F4 validation findings (#139)
+af37f3981b476f55fa1ac58360485f6010674f9c 2026-10-10T21:57:10+02:00 fix(xslt): REQ-125 Slice A consumer-review corrections — F1–F4 validation findings
+e72e4a1bec88f0b202951d744cacc732b2572648 2026-10-10T21:02:08+02:00 feat(xslt): REQ-125 Slice B — controlled resource policy (Bosak.XPath.Runtime.Resources) (#136)
+779cb8e3fa4b387e5c1885dacc350177638abb1a 2026-10-10T20:56:23+02:00 feat(xslt): REQ-125 Slice B — controlled resource policy (Bosak.XPath.Runtime.Resources)
+a871fadabfac9672ae24df7a41d44ef13dacd888 2026-10-10T20:00:17+02:00 feat(xslt): REQ-125 Slice A — controlled static validation (Bosak.Xslt.Validation) (#134)
+5d5b6bd648b8f1aca4dcdccebad5f2c92ee8644e 2026-10-10T19:57:22+02:00 feat(xslt): REQ-125 Slice A — controlled static validation (Bosak.Xslt.Validation)
+461f74b9188083e5d494d05b2b6bba3a4d44482e 2026-10-10T19:08:51+02:00 docs(catalog): REQ-126 — XPATH40-FEATURE-CATALOG scaffold (GoF-style 4.x syntax-decision catalog) (#131)
+6ed0bb42669b7a79abbb6bf5da871b73c8f2c83c 2026-10-10T18:57:55+02:00 docs(catalog): REQ-126 — XPATH40-FEATURE-CATALOG scaffold (GoF-style 4.x syntax-decision catalog)
+b8e4b9f510543c04d88a7c10ee2af28808a0fd5c 2026-10-10T18:36:23+02:00 feat(xpath): REQ-123 destructuring-let cluster — XPath 4.0 destructuring let bindings (qt4 gate 221 → 223) (#129)
+37f3ac7bad503446fc8f4e157e1cd7bd8212ef71 2026-10-10T18:30:49+02:00 feat(xpath): REQ-123 destructuring-let cluster — XPath 4.0 destructuring let bindings (qt4 gate 221 → 223)
+3d27f918d7bedd248f354c7e295369f62433d094 2026-10-10T16:45:01+02:00 docs(req124): record final consumer acceptance — REQ-124 Implemented (owner acceptance verified 2026-10-10) (#128)
+ddd1c912d44be8f396453c29e1a9a5349f9da1fe 2026-10-10T16:42:12+02:00 docs(req124): record final consumer acceptance — REQ-124 Implemented (owner acceptance verified 2026-10-10)
+b5eb1b17249fe458095af2dc53445d459f30db11 2026-10-10T16:35:11+02:00 fix(xslt): REQ-124 consumer-acceptance findings — F1 candidate-compile resolver bridge + F2 capability-list immutability (#126)
+cb98af1ff05a37a59e7b1fe051b024d3436e1cf2 2026-10-10T16:29:34+02:00 fix(xslt): REQ-124 consumer-acceptance findings — F1 candidate-compile resolver bridge + F2 capability-list immutability
+cdf379dcdbff2c3da1ebd6a46cffdabc54498b6b 2026-10-10T15:40:19+02:00 feat(xslt): REQ-124 Slice C — supported adoption (AuthoringCapabilities + AC-11 sample) (#124)
+935f29aeb5cd55f1df8cf7ea7af6720dfdea4e53 2026-10-10T15:34:53+02:00 feat(xslt): REQ-124 Slice C — supported adoption (AuthoringCapabilities + AC-11 sample)
+16f0ee90ea913605597ce1e5714b196526edffa3 2026-10-10T14:05:04+02:00 fix(xslt): REQ-124 consumer-review findings — envelope defensive copy + derived-compile resolver bridge (#122)
+46bd93008e9e461daeae2d7029cc270a9becee9e 2026-10-10T14:01:04+02:00 fix(xslt): REQ-124 consumer-review findings — envelope defensive copy + derived-compile resolver bridge
+ed8609faecfd516c679e0b8424368f00cabca968 2026-10-10T13:34:13+02:00 feat(xslt): REQ-124 Slice B — first candidate edit: contextual expression replacement (#120)
+188a819e85a78bc0b253b71a8255612bac954c27 2026-10-10T13:29:31+02:00 feat(xslt): REQ-124 Slice B — first candidate edit: contextual expression replacement
+7f2338f481c8d9cc8dd836d971cb710ee50cb8e0 2026-10-10T12:31:51+02:00 feat(xslt): REQ-124 Slice A — source-preserving authoring API (Bosak.Xslt.Authoring) (#118)
+b501fcde049613b78680f7b1831cca1d13bca0a8 2026-10-10T12:28:30+02:00 feat(xslt): REQ-124 Slice A — source-preserving authoring API (Bosak.Xslt.Authoring)
+74739605232a3c8fe7aa7f92e4a5f1c4d7d32274 2026-10-10T10:51:04+02:00 Detail REQ-124 authoring requirements and staged acceptance gates
+2a62ad4d9f72d2614887c260e8856de0a6617350 2026-10-08T22:21:37+02:00 feat(xslt40): REQ-118 4.0-S8 — xsl:array/xsl:array-member, xsl:switch, pattern analysis (#92)
+4d03ab2972e8280345ba8b8bf0144033f56cf233 2026-10-08T21:50:36+02:00 docs: REQ-118 4.0-S8 registry, integration and handover records
+c26de142e7d098f5b24b7506ac6fa531aed6ef15 2026-10-08T21:41:51+02:00 test(XSLT): REQ-118 4.0-S8 xsl:array/xsl:array-member and xsl:switch tests
+c0427907002a355f6662ddcdc7412ad8f4a18846 2026-10-08T21:14:47+02:00 feat(xslt40): REQ-118 4.0-S7 — XSLT 4.0 easy surfaces (#91)
+cebf89b18ef7da940e6ea630a577d4206e5d43e9 2026-10-08T19:59:04+02:00 test(xslt40): REQ-118 4.0-S7 — XSLT 4.0 surface tests (38 methods)
+ca6e9c27cf4c62953763f800bdef2610ff64789a 2026-10-08T18:39:39+02:00 feat(xpath40): REQ-118 4.0-S6b — structural record types + but-with (#90)
+0425d5e3b9432954ddaa774b860b92ebd5265644 2026-10-08T17:49:57+02:00 docs: REQ-118 4.0-S6b — record types + 'but with' registry, integration, handover
+8f50762ec26172510ee549565c672c0c0828bb87 2026-10-08T17:49:32+02:00 feat(xpath40): REQ-118 4.0-S6b — structural record types + 'but with'
+83d152ffdba55fe160f33366fa14ed2922fa2f9d 2026-10-08T16:54:00+02:00 feat(xpath40): REQ-118 4.0-S6a — enum + choice item types (#89)
+4c02432f4a62724436dedc618090613e283cf3d5 2026-10-08T16:16:17+02:00 docs: REQ-118 4.0-S6a — registry, integration, dossier, handover
+c73e1fdbfd2932c685e5127824b53fe5aaec2750 2026-10-03T17:02:26+02:00 feat(providers-db): scheme registry basex/exist/marklogic + streaming teardown (REQ-120 Slice 2)
+4487e5b6dd65788104524bb8624fd58790912b65 2026-10-01T23:31:41+02:00 fix(xslt): target-fix wave for the REQ-114 schema-aware tail (REQ-115)
+57d07d6148c809c78cee69df3112127f75b7ac7d 2026-09-30T06:36:34+02:00 docs: REQ-110 handover — registry/INTEGRATION/ARCHITECTURE/HANDOVER (PA-3 residuals; match set 286/0; schema-aware sweep 10,907/175/3,518)
+adeecb66430f7aad1322056e259deac3da360f25 2026-09-30T06:36:28+02:00 fix(xslt): xsl:mode/@typed semantics, element-with-id patterns, .. step rejection, deep-copy attribute PSVI (REQ-110, PA-3 residuals)
+2d4a8c6992d3da80c0c58f81975a3552a0e1d578 2026-09-18T10:41:41+02:00 docs: fork residual fix (9d81042) — sweep 10,156/119/4,325
+c00ea72cf01a6166518723e151f59171f861190b 2026-09-18T06:25:58+02:00 docs: Phase D completion — session-9 handover, REQ-087, sweep 10,152/123/4,325
+6a334568b5a426a09e91201fac767298e9ba3e8a 2026-09-17T16:19:43+02:00 feat(streaming): Phase C — streamable source-document + §19 XTSE3430 analyzer
+b1267f5b8a0c7c711b384c5a68d9e12691ca2db8 2026-09-16T19:29:20+02:00 docs: streaming Phase B — accumulators over streamed sources (cc98a2b)
+a787040bc8c3aaeb304d6bd6c8bac88e2f4b812f 2026-09-09T22:31:49+02:00 chore(release): REQ-084 Beta readiness — API review, XML-doc coverage, 0.10.0-beta
+d99ca1a4657bc30844f5827e08da744d233dbeb7 2026-09-03T14:21:00+02:00 feat(xslt): accumulator cluster cleared + 22 singles (REQ-082 continuation)
+f40072fac6a0c70adcaa61157b8d1d29311bb7b4 2026-08-20T18:30:47+02:00 docs(handover): record xml prefix namespace URI fix
+04ab0f9f8498a3b546e7eedf9f986221ce1337eb 2026-08-20T18:26:22+02:00 docs(handover): record XPath syntax-error code actions
+5601cbcedda33169674cf60cbac42e996a09dbd9 2026-07-25T17:09:45+02:00 feat(conformance): wire QT3 harness to XQuery pipeline + conformance sweep
+d0ab22c6bcba7103fe7f823b55704e1a5958da53 2026-07-25T12:57:36+02:00 feat(xquery): Phase 2 group by clause - GroupBy opcode with tuple merging
+44120016201a8f31ac50814aecdd529ecabf3c85 2026-07-13T21:26:48+02:00 HOF unskip + snapshot cluster: 5,737/7 conformance (only fn:transform remains)
+b112f5400f51387d41586ab171f1c8a212070e6a 2026-06-02T11:36:01+02:00 fix(parser,xslt): attribute() axis default + initial template selection + pattern fixes
+7689fdc16356646e2dd3e096b90af3f2c1143452 2026-06-02T05:01:30+02:00 fix(match): keyword disambiguation, pattern static errors, XPST0017 codes
+bea3dba46985f8305214c11f3b7da38a0b09cd28 2026-05-30T12:58:17+02:00 fix(std): Unicode code-point correctness for string functions

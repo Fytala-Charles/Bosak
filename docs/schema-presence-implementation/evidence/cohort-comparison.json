@@ -1,0 +1,17 @@
+{
+  "before49": {
+    "passed": 25,
+    "failed": 24
+  },
+  "originalCohortFinal": 49,
+  "newBoundaryCases": 5,
+  "finalNewCases": 54,
+  "completeFinal": 451,
+  "unchangedLegacyExpectations": 395,
+  "migratedRefusal": [
+    "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"exists(a)\")"
+  ],
+  "changedWithinExistingFact": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.BroaderGroupAndAssertionCoverage_RemainsUnsupported",
+  "preservedWithinFact": "optional enclosing sequence remains refused",
+  "replacementCase": "Bosak.Schema.Tests.CountAssertionAssessmentTests.PresenceCapability_IsExplicitlyAdopted"
+}

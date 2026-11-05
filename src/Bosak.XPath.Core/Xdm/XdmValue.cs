@@ -1,8 +1,8 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
-// PURPOSE              : Represents any value in the XQuery Data Model. This is a discriminated-union struct optimized for...
-// SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
+// PURPOSE              : Represents any value in the XQuery Data Model.
+// SPECIAL NOTES        : Foundation types for the XQuery Data Model; used by all higher layers.
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
@@ -59,9 +59,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 10-10-2026     | REQ-123 JNode cluster: FromJNode/IsJNode/JNodeValue accessors; EBV true and (jnode)
 //                      | Charles Korthout |       |                | ToString arms for JNode
+//                      | Charles Korthout | 2.11  | 31-10-2026     | Private scalar transport and evidence-neutral CLR equality (1.36.0)                      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.12  | 04-11-2026     | Store exact numeric payloads without marker collision; checked legacy access (1.47.0).    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.13  | 04-11-2026     | Retain supplied CLR decimal scale/coefficient for numeric limit admission (1.48.0).      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -119,6 +125,21 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromInteger(long value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Integer, integer: value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
+    /// <summary>Creates an exact integer; Int64 values retain inline storage.</summary>
+    /// <param name="value">An already-owned arbitrary precision integer; no query admission is implied.</param>
+    /// <returns>The integer carrier.</returns>
+    public static XdmValue FromInteger(BigInteger value) => FromInteger(value, null!, null);
+
+    /// <summary>Creates an exact integer with descriptive schema annotations, not schema authority.</summary>
+    /// <param name="value">An already-owned arbitrary precision integer.</param>
+    /// <param name="schemaTypeName">Descriptive built-in schema type name.</param>
+    /// <param name="userSchemaTypeName">Optional descriptive user-defined type name.</param>
+    /// <returns>The exact annotated integer carrier.</returns>
+    public static XdmValue FromInteger(BigInteger value, string schemaTypeName, string? userSchemaTypeName = null)
+        => value.CompareTo(long.MinValue) >= 0 && value.CompareTo(long.MaxValue) <= 0
+            ? new(XdmValueKind.Integer, integer: (long)value, schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName)
+            : new(XdmValueKind.Integer, reference: new ExactIntegerPayload(value), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
     /// <summary>Creates an xs:double value.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDouble(double value) => new(XdmValueKind.Double, @double: value);
@@ -142,6 +163,19 @@ public readonly struct XdmValue
     /// <summary>Creates a decimal-family value with a derived-type annotation (e.g. xs:unsignedLong overflow).</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromDecimal(decimal value, string schemaTypeName, string? userSchemaTypeName = null) => new(XdmValueKind.Decimal, reference: NormalizeZero(value), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
+
+    /// <summary>Creates an exact decimal carrier; no query admission or rounding is performed.</summary>
+    /// <param name="value">The validated exact decimal representation.</param>
+    /// <returns>The exact decimal carrier.</returns>
+    public static XdmValue FromDecimal(XdmExactDecimal value) => new(XdmValueKind.Decimal, reference: new ExactDecimalPayload(value));
+
+    /// <summary>Creates an exact decimal with descriptive schema annotations, not schema authority.</summary>
+    /// <param name="value">The validated exact decimal representation.</param>
+    /// <param name="schemaTypeName">Descriptive built-in schema type name.</param>
+    /// <param name="userSchemaTypeName">Optional descriptive user-defined type name.</param>
+    /// <returns>The exact annotated decimal carrier.</returns>
+    public static XdmValue FromDecimal(XdmExactDecimal value, string schemaTypeName, string? userSchemaTypeName = null)
+        => new(XdmValueKind.Decimal, reference: new ExactDecimalPayload(value), schemaTypeName: schemaTypeName, userSchemaTypeName: userSchemaTypeName);
 
     // XPath decimals have no negative zero; the .NET decimal type preserves a -0.0 sign
     // that would leak into casts and string conversions. Clear it, preserving scale.
@@ -324,14 +358,26 @@ public readonly struct XdmValue
         }
     }
 
-    /// <summary>Gets the integer payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Integer"/>.</summary>
+    /// <summary>Gets the integer as Int64; valid only for Integer values within the legacy range.</summary>
+    /// <exception cref="OverflowException">The exact integer does not fit Int64.</exception>
     public long IntegerValue
     {
         get
         {
             if (_kind != XdmValueKind.Integer)
                 ThrowInvalidAccess(nameof(IntegerValue));
-            return _integer;
+            return SchemaTransportPayload is ExactIntegerPayload payload ? checked((long)payload.Value) : _integer;
+        }
+    }
+
+    /// <summary>Gets the complete integer payload without legacy Int64 narrowing.</summary>
+    /// <exception cref="InvalidOperationException">The value is not an integer.</exception>
+    public BigInteger BigIntegerValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Integer) ThrowInvalidAccess(nameof(BigIntegerValue));
+            return SchemaTransportPayload is ExactIntegerPayload payload ? payload.Value : new BigInteger(_integer);
         }
     }
 
@@ -346,14 +392,32 @@ public readonly struct XdmValue
         }
     }
 
-    /// <summary>Gets the decimal payload; valid only when <see cref="Kind"/> is <see cref="XdmValueKind.Decimal"/>.</summary>
+    /// <summary>Gets the decimal as a CLR decimal only when it is exactly representable.</summary>
+    /// <exception cref="OverflowException">The exact scale or coefficient exceeds CLR decimal capacity.</exception>
     public decimal DecimalValue
     {
         get
         {
             if (_kind != XdmValueKind.Decimal)
                 ThrowInvalidAccess(nameof(DecimalValue));
-            return (decimal)_reference!;
+            return SchemaTransportPayload is ExactDecimalPayload payload
+                ? ExactNumericTransport.ToLegacyDecimal(payload.Value) : (decimal)SchemaTransportPayload!;
+        }
+    }
+
+    internal (BigInteger Coefficient, int Scale) DecimalRepresentation
+        => SchemaTransportPayload is ExactDecimalPayload payload
+            ? (payload.Value.Coefficient, payload.Value.Scale) : ExactNumericTransport.LegacyParts((decimal)SchemaTransportPayload!);
+
+    /// <summary>Gets the complete decimal payload, including an exact view of a legacy CLR decimal.</summary>
+    /// <exception cref="InvalidOperationException">The value is not a decimal.</exception>
+    public XdmExactDecimal ExactDecimalValue
+    {
+        get
+        {
+            if (_kind != XdmValueKind.Decimal) ThrowInvalidAccess(nameof(ExactDecimalValue));
+            return SchemaTransportPayload is ExactDecimalPayload payload
+                ? payload.Value : ExactNumericTransport.FromLegacyDecimal((decimal)SchemaTransportPayload!);
         }
     }
 
@@ -364,7 +428,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.String)
                 ThrowInvalidAccess(nameof(StringValue));
-            return (string)_reference!;
+            return (string)SchemaTransportPayload!;
         }
     }
 
@@ -375,7 +439,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Duration)
                 ThrowInvalidAccess(nameof(DurationValue));
-            return (string)_reference!;
+            return (string)SchemaTransportPayload!;
         }
     }
 
@@ -386,7 +450,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Node)
                 ThrowInvalidAccess(nameof(NodeValue));
-            return (IXdmNode)_reference!;
+            return (IXdmNode)SchemaTransportPayload!;
         }
     }
 
@@ -397,7 +461,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Sequence)
                 ThrowInvalidAccess(nameof(SequenceValue));
-            return (IXdmSequence?)_reference;
+            return (IXdmSequence?)SchemaTransportPayload;
         }
     }
 
@@ -408,7 +472,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.External)
                 ThrowInvalidAccess(nameof(ExternalValue));
-            return _reference;
+            return SchemaTransportPayload;
         }
     }
 
@@ -419,7 +483,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Function)
                 ThrowInvalidAccess(nameof(FunctionValue));
-            return _reference!;
+            return SchemaTransportPayload!;
         }
     }
 
@@ -430,7 +494,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Map)
                 ThrowInvalidAccess(nameof(MapValue));
-            return (XdmMap)_reference!;
+            return (XdmMap)SchemaTransportPayload!;
         }
     }
 
@@ -441,7 +505,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Array)
                 ThrowInvalidAccess(nameof(ArrayValue));
-            return (XdmArray)_reference!;
+            return (XdmArray)SchemaTransportPayload!;
         }
     }
 
@@ -452,7 +516,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.JNode)
                 ThrowInvalidAccess(nameof(JNodeValue));
-            return (XdmJNode)_reference!;
+            return (XdmJNode)SchemaTransportPayload!;
         }
     }
 
@@ -463,7 +527,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeValue));
-            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
 
@@ -474,7 +538,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Date)
                 ThrowInvalidAccess(nameof(DateValue));
-            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
 
@@ -485,7 +549,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeValue));
-            return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
 
@@ -499,7 +563,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeXPathValue));
-            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
         }
     }
 
@@ -513,7 +577,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Date)
                 ThrowInvalidAccess(nameof(DateXPathValue));
-            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
         }
     }
 
@@ -527,7 +591,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeXPathValue));
-            return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);
+            return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
         }
     }
 
@@ -538,7 +602,7 @@ public readonly struct XdmValue
         {
             if (_kind is not (XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time))
                 return false;
-            return _reference is not DateTimeWrapper w || w.HasTimezone;
+            return SchemaTransportPayload is not DateTimeWrapper w || w.HasTimezone;
         }
     }
 
@@ -549,7 +613,7 @@ public readonly struct XdmValue
         {
             if (_kind != XdmValueKind.QName)
                 ThrowInvalidAccess(nameof(QNameValue));
-            return (XsQName)_reference!;
+            return (XsQName)SchemaTransportPayload!;
         }
     }
 
@@ -566,16 +630,16 @@ public readonly struct XdmValue
             // xs:anyURI) have a string-like EBV; values annotated hexBinary/base64Binary/
             // gYear etc. are not in the string group and raise FORG0006.
             XdmValueKind.String => IsEbvStringLike(_schemaTypeName)
-                ? !string.IsNullOrEmpty((string?)_reference)
+                ? !string.IsNullOrEmpty((string?)SchemaTransportPayload)
                 : throw new InvalidOperationException(
                     "FORG0006: The effective boolean value is not defined for values of this atomic type"),
-            XdmValueKind.Integer => _integer != 0,
-            XdmValueKind.Decimal => (decimal)_reference! != 0m,
+            XdmValueKind.Integer => SchemaTransportPayload is ExactIntegerPayload integer ? !integer.Value.IsZero : _integer != 0,
+            XdmValueKind.Decimal => SchemaTransportPayload is ExactDecimalPayload dec ? !dec.Value.Coefficient.IsZero : (decimal)SchemaTransportPayload! != 0m,
             XdmValueKind.Double or XdmValueKind.Float => _double != 0.0 && !double.IsNaN(_double),
             XdmValueKind.Sequence => SequenceEffectiveBooleanValue(),
             XdmValueKind.Node => true,
             // xs:anyURI is in the string-like group: EBV is true iff the value is non-empty.
-            XdmValueKind.Uri => !string.IsNullOrEmpty((string?)_reference),
+            XdmValueKind.Uri => !string.IsNullOrEmpty((string?)SchemaTransportPayload),
             XdmValueKind.Date or XdmValueKind.Time or XdmValueKind.DateTime or XdmValueKind.Duration
                 or XdmValueKind.QName or XdmValueKind.Binary =>
                 throw new InvalidOperationException(
@@ -607,7 +671,7 @@ public readonly struct XdmValue
     /// </summary>
     private bool SequenceEffectiveBooleanValue()
     {
-        if (_reference is not IXdmSequence seq)
+        if (SchemaTransportPayload is not IXdmSequence seq)
             return false;
 
         // Single-pass (streamed) sequences can be enumerated exactly once: decide
@@ -661,19 +725,21 @@ public readonly struct XdmValue
             "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
     }
 
-    /// <inheritdoc/>
+    /// <summary>Formats the value using the existing legacy representation profile.</summary>
+    /// <returns>The legacy numeric or ordinary value text.</returns>
+    /// <exception cref="OverflowException">An exact numeric value cannot be narrowed to the legacy formatting range. Use its exact accessor for explicit formatting.</exception>
     public override string ToString()
     {
         return _kind switch
         {
             XdmValueKind.Undefined => "()",
             XdmValueKind.Boolean => _integer != 0 ? "true" : "false",
-            XdmValueKind.Integer => _integer.ToString(),
-            XdmValueKind.Decimal => FormatCanonicalDecimal((decimal)_reference!),
+            XdmValueKind.Integer => IntegerValue.ToString(),
+            XdmValueKind.Decimal => FormatCanonicalDecimal(DecimalValue),
             XdmValueKind.Double => FormatXPathDouble(_double),
             XdmValueKind.Float => FormatXPathFloat((float)_double),
-            XdmValueKind.String => (string?)_reference ?? string.Empty,
-            XdmValueKind.Node => ((IXdmNode?)_reference)?.StringValue ?? string.Empty,
+            XdmValueKind.String => (string?)SchemaTransportPayload ?? string.Empty,
+            XdmValueKind.Node => ((IXdmNode?)SchemaTransportPayload)?.StringValue ?? string.Empty,
             XdmValueKind.Sequence => "(sequence)",
             XdmValueKind.Function => "(function)",
             XdmValueKind.Map => "(map)",
@@ -682,9 +748,9 @@ public readonly struct XdmValue
             XdmValueKind.DateTime => FormatDateTimeBySchemaType(DateTimeXPathValue, _schemaTypeName),
             XdmValueKind.Date => FormatXPathDateTime(DateXPathValue, false),
             XdmValueKind.Time => FormatXPathTime(TimeXPathValue),
-            XdmValueKind.QName => ((XsQName)_reference!).ToString(),
-            XdmValueKind.Duration => (string?)_reference ?? string.Empty,
-            XdmValueKind.External => $"(external: {_reference?.GetType().Name})",
+            XdmValueKind.QName => ((XsQName)SchemaTransportPayload!).ToString(),
+            XdmValueKind.Duration => (string?)SchemaTransportPayload ?? string.Empty,
+            XdmValueKind.External => $"(external: {SchemaTransportPayload?.GetType().Name})",
             _ => $"(kind: {_kind})"
         };
     }
@@ -909,6 +975,100 @@ public readonly struct XdmValue
     {
         string result = dto.ToString(format + "zzz", System.Globalization.CultureInfo.InvariantCulture);
         return result.Replace("+00:00", "Z");
+    }
+
+
+    // Exact representation binding, independent of map-key equality.
+    internal bool SchemaTransportMatches(XdmValue other)
+    {
+        if (_kind != other._kind || _integer != other._integer
+            || BitConverter.DoubleToInt64Bits(_double) != BitConverter.DoubleToInt64Bits(other._double)
+            || !string.Equals(_schemaTypeName, other._schemaTypeName, StringComparison.Ordinal)
+            || !string.Equals(_userSchemaTypeName, other._userSchemaTypeName, StringComparison.Ordinal)) return false;
+        var left = SchemaTransportPayload;
+        var right = other.SchemaTransportPayload;
+        if (ReferenceEquals(left, right)) return true;
+        switch (_kind)
+        {
+            case XdmValueKind.Integer:
+                return left is ExactIntegerPayload integer && right is ExactIntegerPayload otherInteger && integer.Value == otherInteger.Value;
+            case XdmValueKind.Decimal:
+                if (left is ExactDecimalPayload exact && right is ExactDecimalPayload otherExact) return exact.Value.Equals(otherExact.Value);
+                if (left is not decimal a || right is not decimal b) return false;
+                Span<int> aBits = stackalloc int[4]; Span<int> bBits = stackalloc int[4];
+                decimal.GetBits(a, aBits); decimal.GetBits(b, bBits);
+                return aBits.SequenceEqual(bBits);
+            case XdmValueKind.String: case XdmValueKind.Duration: case XdmValueKind.Uri: case XdmValueKind.Binary:
+                return left is string text && right is string otherText && string.Equals(text, otherText, StringComparison.Ordinal);
+            case XdmValueKind.QName:
+                return left is XsQName q && right is XsQName r
+                    && q.LocalName == r.LocalName && q.NamespaceUri == r.NamespaceUri && q.Prefix == r.Prefix;
+            case XdmValueKind.Date: case XdmValueKind.Time: case XdmValueKind.DateTime:
+                if (left is not DateTimeWrapper x || right is not DateTimeWrapper y) return false;
+                var d = x.Value; var e = y.Value;
+                return x.HasTimezone == y.HasTimezone && d.Year == e.Year && d.Month == e.Month && d.Day == e.Day
+                    && d.Hour == e.Hour && d.Minute == e.Minute && d.Second == e.Second && d.Millisecond == e.Millisecond
+                    && d.TimezoneOffsetMinutes == e.TimezoneOffsetMinutes && d.HasTimezone == e.HasTimezone;
+            default: return false;
+        }
+    }
+
+    internal static XdmValue WithoutSchemaEvidence(XdmValue value) => value.SchemaTransportPlain;
+    private bool SchemaTransportHasMarker => SchemaTransportMarker(this) is not null;
+    private XdmValue SchemaTransportPlain => new(_kind,_integer,_double,SchemaTransportPayload,_schemaTypeName,_userSchemaTypeName);
+    private bool SchemaTransportRawEquals(XdmValue other) =>
+        _kind == other._kind && _integer == other._integer && _double.Equals(other._double)
+        && object.Equals(_reference, other._reference)
+        && string.Equals(_schemaTypeName, other._schemaTypeName, StringComparison.Ordinal)
+        && string.Equals(_userSchemaTypeName, other._userSchemaTypeName, StringComparison.Ordinal);
+    private int SchemaTransportRawHash() => base.GetHashCode();
+    /// <summary>Compares ordinary value fields independently of private evidence.</summary>
+    /// <param name="other">The value to compare.</param>
+    /// <returns>Whether the ordinary value fields compare equal.</returns>
+    public override bool Equals(object? other)
+    {
+        if(other is not XdmValue value) return false;
+        if(!SchemaTransportHasMarker && !value.SchemaTransportHasMarker) return base.Equals(other);
+        return SchemaTransportPlain.SchemaTransportRawEquals(value.SchemaTransportPlain);
+    }
+    /// <summary>Hashes ordinary value fields independently of private evidence.</summary>
+    /// <returns>The ordinary value hash code.</returns>
+    public override int GetHashCode() => SchemaTransportHasMarker ? SchemaTransportPlain.SchemaTransportRawHash() : base.GetHashCode();
+
+    // Private transport storage; authority is validated by the evidence kernel.
+    private sealed record SchemaTransportBox(object? Payload, object Marker);
+    private sealed record ExactIntegerPayload(BigInteger Value);
+    private sealed record ExactDecimalPayload(XdmExactDecimal Value);
+    /// <summary>Internal atomic marker attachment; admission belongs to the evidence kernel.</summary>
+    /// <param name="value">The plain atomic value.</param>
+    /// <param name="marker">The private marker.</param>
+    /// <returns>The value carrying private transport state.</returns>
+    internal static XdmValue SchemaTransportAttach(XdmValue value, object marker)
+    {
+        ArgumentNullException.ThrowIfNull(marker);
+        if(value._kind is < XdmValueKind.String or > XdmValueKind.Binary) throw new ArgumentException("Atomic values only",nameof(value));
+        var plain = value.SchemaTransportPayload;
+        var payload = (value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float) && plain is null
+            ? marker : new SchemaTransportBox(plain, marker);
+        return new(value._kind,value._integer,value._double,payload,value._schemaTypeName,value._userSchemaTypeName);
+    }
+    /// <summary>Reads raw internal transport state without admitting it.</summary>
+    /// <param name="value">The private transported value.</param>
+    /// <returns>The marker, if present.</returns>
+    internal static object? SchemaTransportMarker(XdmValue value)
+    {
+        if (value._reference is SchemaTransportBox box) return box.Marker;
+        if (value._kind == XdmValueKind.Integer && value._reference is ExactIntegerPayload) return null;
+        return value._kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? value._reference : null;
+    }
+    private object? SchemaTransportPayload
+    {
+        get
+        {
+            if (_reference is SchemaTransportBox box) return box.Payload;
+            if (_kind == XdmValueKind.Integer && _reference is ExactIntegerPayload) return _reference;
+            return _kind is XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float ? null : _reference;
+        }
     }
 }
 

@@ -1,0 +1,26 @@
+{
+  "sourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "archiveSha256": "8f691a6e8c14316f519417828bfbf35d8fc34721c38736aa42a4f0db2b8f9d4a",
+  "files": [
+    {
+      "path": "license.md",
+      "sha256": "6e4834381d74077c8a17155837a84a3b9cc6fd5e33baabdb2d02954c76084170"
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "a5b8435d1981220f43c7a90839f37cd9f32169a6c88c02be337884aa7804bd26"
+    },
+    {
+      "path": "README.md",
+      "sha256": "c37393242bc1d57a5b5b74f4a5d6a5b66a1331c7e6ae20f64a26ee077a1fb085"
+    },
+    {
+      "path": "src/Directory.Build.props",
+      "sha256": "412e36f939a9d983d8b50a1c198644bbfbcd1e6bebe8769c12b8c8af31863a41"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt",
+      "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+    }
+  ]
+}

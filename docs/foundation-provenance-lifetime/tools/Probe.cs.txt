@@ -1,0 +1,66 @@
+// Generated standalone operation-lifetime diagnostic; not production implementation.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Security.Cryptography;
+using System.Text.Json;
+using C13901.Draft;
+using Bosak.XPath.Core.Xdm;
+try {
+ var root=Path.GetFullPath(args[0]);Directory.CreateDirectory(root);
+ var checks=new List<object>();var files=new List<BorrowedFile>();var owners=new List<Owner>();
+ void Check(string id,bool observed){checks.Add(new{id,passed=observed});if(!observed)throw new Exception("Diagnostic control: "+id);}
+ BorrowedFile FileCase(){var f=new BorrowedFile(Path.Combine(root,Guid.NewGuid().ToString("N")+".bin"));files.Add(f);return f;}
+ Owner NewOwner(){var o=new Owner();owners.Add(o);return o;}
+ async Task Expect<T>(string id,Func<Task> action) where T:Exception {bool caught=false;try{await action();}catch(T){caught=true;}Check(id,caught);}
+ TaskCompletionSource NewSignal()=>new(TaskCreationOptions.RunContinuationsAsynchronously);
+ try {
+  // L01: admission counts do not own caller resources.
+  var f1=FileCase();var o1=NewOwner();var l1=o1.Enter(default);Check("L01-enter-active",o1.Active==1&&!f1.CanOpenExclusive());l1.Dispose();Check("L01-release-does-not-close-file",o1.Active==0&&!f1.CanOpenExclusive());o1.BeginClose("host");await o1.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));Check("L01-drained-still-borrowed",!f1.CanOpenExclusive());f1.Dispose();Check("L01-explicit-caller-close",f1.CanOpenExclusive()&&f1.CloseCount==1);
+  // L02: lease release and close request idempotence.
+  var o2=NewOwner();var l2=o2.Enter(default);l2.Dispose();l2.Dispose();o2.BeginClose("first");o2.BeginClose("second");Check("L02-exactly-once-release",o2.Exits==1&&o2.Active==0&&o2.ReleaseRequests==1);Check("L02-first-reason",o2.Reason=="first");await Expect<ObjectDisposedException>("L02-closed-admission",()=>{o2.Enter(default);return Task.CompletedTask;});
+  // L03: raw work owns admission; cancellation of a wait does not own the lease.
+  var f3=FileCase();var o3=NewOwner();var started=NewSignal();var finish=NewSignal();bool published=false;
+  async Task<int> Raw(){using var lease=o3.Enter(default);started.SetResult();await finish.Task;int value=f3.Read();published=!o3.Closing;return value;}
+  var raw=Raw();await started.Task.WaitAsync(TimeSpan.FromSeconds(5));o3.BeginClose("owner-close");using(var cts=new CancellationTokenSource()){var waiting=raw.WaitAsync(cts.Token);cts.Cancel();await Expect<OperationCanceledException>("L03-cancel-only-wait",async()=>{await waiting;});}
+  Check("L03-raw-still-owned",!raw.IsCompleted&&o3.Active==1&&!f3.CanOpenExclusive());Check("L03-drain-incomplete",!o3.DrainAsync(default).IsCompleted);finish.SetResult();Check("L03-private-completion",await raw.WaitAsync(TimeSpan.FromSeconds(5))==42);await o3.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));Check("L03-no-stale-publication",!published&&o3.Active==0&&o3.Exits==1);Check("L03-file-still-caller-owned",!f3.CanOpenExclusive());f3.Dispose();Check("L03-caller-can-release",f3.CanOpenExclusive());
+  // L04: pre-canceled admission never takes an operation.
+  var o4=NewOwner();using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Expect<OperationCanceledException>("L04-pre-cancel",()=>{o4.Enter(cancel.Token);return Task.CompletedTask;});}Check("L04-no-admission",o4.Active==0&&o4.Exits==0);
+  // L05: nested/deferred values borrow an operation and resource, not a detached copy.
+  var f5=FileCase();var o5=NewOwner();var l5=o5.Enter(default);Func<int> nested=()=>{l5.ThrowIfUnavailable(default);return f5.Read();};var graph=new Dictionary<string,Func<int>>{{"node",nested}};int copied=graph["node"]();Check("L05-live-nested-read",copied==42);o5.BeginClose("close");await Expect<ObjectDisposedException>("L05-new-deferred-work-refused",()=>{_=graph["node"]();return Task.CompletedTask;});Check("L05-scalar-survives-resource-held",copied==42&&!f5.CanOpenExclusive()&&o5.Active==1);l5.Dispose();await Expect<ObjectDisposedException>("L05-disposed-lease-refused",()=>{_=nested();return Task.CompletedTask;});f5.Dispose();Check("L05-explicit-graph-owner-close",f5.CanOpenExclusive());
+  // L06: retaining an admission/object cannot revive a caller-disposed resource.
+  var f6=FileCase();var o6=NewOwner();var l6=o6.Enter(default);f6.Dispose();l6.ThrowIfUnavailable(default);await Expect<ObjectDisposedException>("L06-reference-not-live-lease",()=>{_=f6.Read();return Task.CompletedTask;});Check("L06-no-hidden-reopen",f6.CanOpenExclusive()&&o6.Active==1);l6.Dispose();
+  // L07: raw fault releases admission but leaves caller resource ownership intact.
+  var f7=FileCase();var o7=NewOwner();async Task Fault(){using var lease=o7.Enter(default);await Task.Yield();throw new IOException("Diagnostic raw fault");}await Expect<IOException>("L07-fault-observed",Fault);Check("L07-admission-finally-released",o7.Active==0&&o7.Exits==1);Check("L07-fault-does-not-close-caller-file",!f7.CanOpenExclusive());f7.Dispose();
+  // L08: callback reentry is refused by this deliberately single-lane model.
+  var o8=NewOwner();var l8=o8.Enter(default);await Expect<InvalidOperationException>("L08-reentry-busy",()=>{o8.Enter(default);return Task.CompletedTask;});o8.BeginClose("callback-close");await Expect<ObjectDisposedException>("L08-callback-close-refuses-new-work",()=>{l8.ThrowIfUnavailable(default);return Task.CompletedTask;});l8.Dispose();await o8.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));Check("L08-callback-drain-after-exit",o8.ReleaseRequests==1);
+  // L09: cancellation of a drain wait also leaves the admitted operation intact.
+  var f9=FileCase();var o9=NewOwner();var l9=o9.Enter(default);o9.BeginClose("close");using(var cts=new CancellationTokenSource()){var waiting=o9.DrainAsync(cts.Token);cts.Cancel();await Expect<OperationCanceledException>("L09-cancel-drain-wait",()=>waiting);}Check("L09-drain-wait-retains-ownership",o9.Active==1&&!f9.CanOpenExclusive());l9.Dispose();await o9.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));f9.Dispose();
+  // L10: negative witness: the waiting scope wrongly disposes raw work's lease.
+  var f10=FileCase();var o10=NewOwner();var badLease=o10.Enter(default);var badFinish=NewSignal();async Task BadRaw(){await badFinish.Task;_=f10.Read();}var badRaw=BadRaw();using(var cts=new CancellationTokenSource()){var waiting=badRaw.WaitAsync(cts.Token);cts.Cancel();try{await waiting;}catch(OperationCanceledException){}finally{badLease.Dispose();}}
+  o10.BeginClose("close");await o10.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));Check("L10-unsafe-count-zero-while-raw-blocked",o10.Active==0&&!badRaw.IsCompleted);f10.Dispose();Check("L10-unsafe-premature-physical-close",f10.CanOpenExclusive());badFinish.SetResult();await Expect<ObjectDisposedException>("L10-unsafe-raw-use-fails",async()=>await badRaw.WaitAsync(TimeSpan.FromSeconds(5)));
+  // L11: abandoned graph requires explicit host release, not GC or outer iteration.
+  var f11=FileCase();var o11=NewOwner();var l11=o11.Enter(default);o11.BeginClose("abandoned-graph");Check("L11-abandonment-does-not-drain",!o11.DrainAsync(default).IsCompleted&&o11.Active==1&&!f11.CanOpenExclusive());l11.Dispose();await o11.DrainAsync(default).WaitAsync(TimeSpan.FromSeconds(5));Check("L11-explicit-release-only",o11.Exits==1&&!f11.CanOpenExclusive());f11.Dispose();
+  // L12: Drain before close is not a close/ownership shortcut.
+  var o12=NewOwner();await Expect<InvalidOperationException>("L12-drain-before-close-refused",()=>o12.DrainAsync(default));Check("L12-owner-stays-active",!o12.Closing&&o12.Active==0);
+  var hashes=new List<object>();foreach(var f in files){f.Dispose();var actual=Convert.ToHexString(SHA256.HashData(System.IO.File.ReadAllBytes(f.Path))).ToLowerInvariant();var expected=Convert.ToHexString(SHA256.HashData(new byte[]{42})).ToLowerInvariant();Check("fixture-bytes-"+hashes.Count,actual==expected&&f.CloseCount==1);hashes.Add(new{expected,actual,closeCount=f.CloseCount});}
+  var core=typeof(XdmValue).Assembly;
+  Console.WriteLine(JsonSerializer.Serialize(new {scope="Standalone implementation of draft optional admission interfaces; controlled host/file model only",runtime=Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,coreSha256=Convert.ToHexString(SHA256.HashData(System.IO.File.ReadAllBytes(core.Location))).ToLowerInvariant(),atomicEvidenceProperties=typeof(ISchemaAtomicProvenance).GetProperties().Select(p=>new{name=p.Name,nullability=new System.Reflection.NullabilityInfoContext().Create(p).ReadState.ToString()}).ToArray(),nodeOriginNullability=new System.Reflection.NullabilityInfoContext().Create(typeof(ISchemaNodeFacts).GetProperty("Origin")!).ReadState.ToString(),scenarios=12,checkCount=checks.Count,checks,owners=owners.Select(o=>new{active=o.Active,exits=o.Exits,releaseRequests=o.ReleaseRequests,reason=o.Reason,events=o.Events.ToArray()}).ToArray(),ownedFileFixtures=hashes,negativeWaiterPatternDemonstrated=true},new JsonSerializerOptions{WriteIndented=true}));
+ } finally {foreach(var f in files){f.Dispose();System.IO.File.Delete(f.Path);}Directory.Delete(root);}
+} catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+sealed class BorrowedFile:IDisposable {
+ readonly FileStream stream;int closed,closeCalls;public string Path{get;}public int CloseCount=>closeCalls;
+ public BorrowedFile(string path){Path=path;stream=new FileStream(path,FileMode.CreateNew,FileAccess.ReadWrite,FileShare.None);stream.WriteByte(42);stream.Flush();stream.Position=0;}
+ public int Read(){stream.Position=0;return stream.ReadByte();}
+ public bool CanOpenExclusive(){try{using var probe=new FileStream(Path,FileMode.Open,FileAccess.ReadWrite,FileShare.None);return true;}catch(IOException){return false;}}
+ public void Dispose(){if(Interlocked.Exchange(ref closed,1)==0){Interlocked.Increment(ref closeCalls);stream.Dispose();}}
+}
+sealed class Owner:IQueryOperationLifetime {
+ readonly object sync=new();readonly TaskCompletionSource drained=new(TaskCreationOptions.RunContinuationsAsynchronously);int active;bool closing;int exits,releases;string? reason;
+ public List<string> Events{get;}=new();public int Active{get{lock(sync)return active;}}public bool Closing{get{lock(sync)return closing;}}public int Exits=>exits;public int ReleaseRequests=>releases;public string? Reason=>reason;
+ public IQueryOperationLease Enter(CancellationToken token){token.ThrowIfCancellationRequested();lock(sync){token.ThrowIfCancellationRequested();if(closing)throw new ObjectDisposedException("operation-owner");if(active!=0)throw new InvalidOperationException("Busy: single-lane diagnostic");active++;Events.Add("enter");return new Lease(this);}}
+ public void BeginClose(string value){lock(sync){if(closing)return;closing=true;reason=value;Events.Add("begin-close");CompleteIfDrained();}}
+ public Task DrainAsync(CancellationToken token){lock(sync){if(!closing)throw new InvalidOperationException("NotClosing");return drained.Task.WaitAsync(token);}}
+ void CompleteIfDrained(){if(closing&&active==0&&releases==0){releases++;Events.Add("operation-release-requested");drained.TrySetResult();}}
+ void Exit(){lock(sync){if(active!=1)throw new InvalidOperationException("Unbalanced operation");active--;exits++;Events.Add("exit");CompleteIfDrained();}}
+ sealed class Lease(Owner owner):IQueryOperationLease {int disposed;public void ThrowIfUnavailable(CancellationToken token){token.ThrowIfCancellationRequested();if(Volatile.Read(ref disposed)!=0||owner.Closing)throw new ObjectDisposedException("operation-lease");}public void Dispose(){if(Interlocked.Exchange(ref disposed,1)==0)owner.Exit();}}
+}

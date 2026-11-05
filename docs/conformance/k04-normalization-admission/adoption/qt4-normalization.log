@@ -1,0 +1,25 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-normalize-unicode
+
+Discovered 738 test sets.
+  Starting: fn-normalize-unicode ...
+  Done: fn-normalize-unicode (50 tests total) [P+=44 F+=0 S+=6]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   50
+Passed:  44
+Failed:  0
+Skipped: 6
+
+Pass rate: 88.00%
+
+Skip reasons (grouped):
+      6  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.27s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-normalization-admission\adoption\qt4-normalization-skips.txt

@@ -1,0 +1,262 @@
+{
+  "status": "Core-owned retained caller only; no consumer or freeze acceptance",
+  "passed": 20,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "LC-01",
+      "passed": true,
+      "value": {
+        "compatibility": "XPath31",
+        "StrictStaticTyping": false,
+        "schemaAbsent": true,
+        "TreatWarningsAsErrors": false,
+        "MaxErrorCount": 0,
+        "BaseUri": null
+      },
+      "error": null
+    },
+    {
+      "id": "LC-02",
+      "passed": true,
+      "value": {
+        "schemaAbsent": true,
+        "elementAbsent": true,
+        "attributeAbsent": true,
+        "typeAbsent": true,
+        "IsSchemaAware": false
+      },
+      "error": null
+    },
+    {
+      "id": "LC-03",
+      "passed": true,
+      "value": {
+        "retainedSet": true,
+        "element": "urn:legacy-harness:amount",
+        "attribute": "urn:legacy-harness:code",
+        "type": "urn:legacy-harness:Amount",
+        "IsSchemaAware": false
+      },
+      "error": null
+    },
+    {
+      "id": "LC-04",
+      "passed": true,
+      "value": {
+        "elementAbsent": true,
+        "attributeAbsent": true,
+        "typeAbsent": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-05",
+      "passed": true,
+      "value": {
+        "schemaCleared": true,
+        "lookupsAbsent": true,
+        "IsSchemaAware": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-06",
+      "passed": true,
+      "value": {
+        "retainedSet": true,
+        "compiled": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-07",
+      "passed": true,
+      "value": {
+        "type": "System.InvalidOperationException",
+        "code": "XPST0008"
+      },
+      "error": null
+    },
+    {
+      "id": "LC-08",
+      "passed": true,
+      "value": {
+        "type": "System.InvalidOperationException",
+        "code": "XPST0008"
+      },
+      "error": null
+    },
+    {
+      "id": "LC-09",
+      "passed": true,
+      "value": {
+        "type": "System.InvalidOperationException",
+        "code": "XPST0081"
+      },
+      "error": null
+    },
+    {
+      "id": "LC-10",
+      "passed": true,
+      "value": {
+        "compiled": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-11",
+      "passed": true,
+      "value": {
+        "text": "12.50",
+        "count": 1
+      },
+      "error": null
+    },
+    {
+      "id": "LC-12",
+      "passed": true,
+      "value": {
+        "IsValid": true,
+        "errors": 0,
+        "inputOpen": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-13",
+      "passed": true,
+      "value": {
+        "IsValid": false,
+        "errors": 1,
+        "warnings": 0
+      },
+      "error": null
+    },
+    {
+      "id": "LC-14",
+      "passed": true,
+      "value": {
+        "IsValid": false,
+        "errors": 1
+      },
+      "error": null
+    },
+    {
+      "id": "LC-15",
+      "passed": true,
+      "value": {
+        "type": "System.Xml.Schema.XmlSchemaValidationException",
+        "code": null
+      },
+      "error": null
+    },
+    {
+      "id": "LC-16",
+      "passed": true,
+      "value": {
+        "safe": true,
+        "strict": true
+      },
+      "error": null
+    },
+    {
+      "id": "LC-17",
+      "passed": true,
+      "value": {
+        "IsValid": true,
+        "schemaNamespace": "urn:legacy-harness",
+        "schemaName": "Amount",
+        "kind": "Decimal",
+        "value": 12.50,
+        "HasNoTypedValue": false
+      },
+      "error": null
+    },
+    {
+      "id": "LC-18",
+      "passed": true,
+      "value": {
+        "IsValid": false,
+        "errors": 1,
+        "error": {
+          "type": "System.Xml.Schema.XmlSchemaValidationException",
+          "code": null
+        }
+      },
+      "error": null
+    },
+    {
+      "id": "LC-19",
+      "passed": true,
+      "value": {
+        "preserveSameInfo": true,
+        "annotationStripped": true,
+        "kind": "String",
+        "text": "12.50"
+      },
+      "error": null
+    },
+    {
+      "id": "LC-20",
+      "passed": true,
+      "value": {
+        "IsValid": true,
+        "kind": "Decimal",
+        "value": 12.50
+      },
+      "error": null
+    }
+  ],
+  "callerSha256": "3393b28af914dadc84984842d4a9f6106619c3ef77cc719bb92347eb8def54e1",
+  "requestedBosakReferences": [
+    "Bosak.XPath.Api, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+    "Bosak.XPath.Core, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+    "Bosak.XPath.Providers, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null",
+    "Bosak.XPath.Runtime, Version=1.34.1.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "loadedAssemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "19f14870df4a75a95be87a61c338e9a4061d2ea259c1f866beff278e6c2ca1c1"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "588835b244b9f0fc3d287e09f05d151958c4b72711b17b3b2929bc645f8a982d"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "64944c9bbb2734c72d7c85b061371ff557ff07f570143063035721e3556da66c"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "aa02b53e17c2b61c9f67f220e372df38632f50cd752629d08905292143bc4ffc"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "70836fd6c1863bcdc49be4f1f9efff71b72587f70b81a09a6d5e97be03137a13"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "167784aafddfe137dc9381adb5c24c3a13b2cfb04ad2fb901b28bf4585e4e98a"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.36.0.0, Culture=neutral, PublicKeyToken=null",
+      "informationalVersion": "1.36.0\u002Bf2831379819d4f97c4dfd0ab058449b72ae06526",
+      "sha256": "0ae6fdd5ffcca31656b089ba9b71ad3f3cd76c98397ba85c32571d25424b9897"
+    }
+  ]
+}

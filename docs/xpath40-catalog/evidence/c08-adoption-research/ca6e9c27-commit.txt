@@ -1,0 +1,58 @@
+ca6e9c27cf4c62953763f800bdef2610ff64789a
+2026-10-08T18:39:39+02:00
+2026-10-08T18:39:39+02:00
+feat(xpath40): REQ-118 4.0-S6b — structural record types + but-with (#90)
+
+* feat(xpath40): REQ-118 4.0-S6b — structural record types + 'but with'
+
+XPath 4.0 §3.2.10 structural record types behind the xpath40 gate
+(XPST0003 in 3.1 mode): record(*), record(), record(field as
+SequenceType?, ...) with NCName or string-literal field names, omitted
+field type = item()*, duplicate field names XPST0021. A record is a map
+with a record-type annotation (Issue 1979/PR 2566) — first XDM change
+of the REQ-118 wave: XdmMap.RecordType + WithRecordType, new
+XdmRecordType/XdmRecordField in Core/Xdm. Instance-of is structural with
+exact entry count (plain maps never match; per-field recursive matching
+gives covariant field subtyping). Coercion (§3.4.2 rule 10): missing
+fields become () entries (XPTY0004 when the field type requires a
+value), surplus keys XPTY0004, values coerced recursively, entries in
+declaration order. Cast (§4.19.2.7) differs: keep-or-cast values
+(FORG0001), surplus keys discarded, record(*) is an assertion.
+Lookup (§4.15.3): ? keys and record-as-function calls field-check
+(XPTY0004); map:* stays field-blind. 'but with' (§4.15.4) = use-last
+merge + re-coercion to the LHS annotation (plain-map LHS XPTY0004);
+BinaryOperator.ButWith reuses BinaryExpressionNode + new IrOpCode.ButWith
+— no new AST node.
+
+* test(xpath40): REQ-118 4.0-S6b — record type + 'but with' tests
+
+New RecordTypeTests.cs (30 methods): record type syntax (XPST0021
+duplicates, quoted field names, trailing comma), instance-of structural
+matching (plain maps never match, record(*)/record(), field count and
+type mismatches, covariant field subtyping, optional-field empty
+entries), cast (surplus discarded, missing -> () entries, keep-or-cast
+values FORG0001, record(*) assertion, castable), coercion §3.4.2 rule
+10 (annotation creation, missing/surplus XPTY0004, recursive numeric
+promotion, declaration-order entries, non-map XPTY0004), lookup field
+checks (unknown key XPTY0004 incl. multi-key per-key and
+record-as-function, wildcard unaffected, map:* field-blind), 'but with'
+(use-last merge, annotation retention + chaining, plain-map LHS /
+unknown field / non-map RHS / bad value type XPTY0004, declaration
+order). VersionGateTests 0.10: 3.1-mode XPST0003 Theory (record types
+in instance-of/cast/castable, 'but with') + 4.0 smoke.
+
+* docs: REQ-118 4.0-S6b — record types + 'but with' registry, integration, handover
+
+FEATURE_REQUESTS.md: banner + registry status + Continued line +
+4.0-S6b sub-REQ row + acceptance checkbox (records are annotated maps;
+coercion rule 10 vs cast §4.19.2.7 divergence; lookup §4.15.3 field
+checks; qt4tests prod/RecordType.xml stale — pre-annotation draft).
+INTEGRATION.md §0 2026-10-08(i). AGENT_HANDOVER.md sixty-second session
+block (hashes TBD). REQ-118 dossier §4 slice-table S6 row: S6a + S6b
+both landed.
+
+* docs: record 4.0-S6b commit hashes in handover
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

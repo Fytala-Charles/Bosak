@@ -1,0 +1,18 @@
+{
+  "runtimeSourceUnchanged": true,
+  "current": {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+    "sha256": "e87754044b08084eb1c9c065e75ffab46b839dfd21a9d24374d067224483eae4",
+    "informationalVersions": [
+      "1.26.4+3f0aed6b4444424e2acc8ce69ade16eedeeaa71a"
+    ]
+  },
+  "priorTested": {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+    "sha256": "d6f2d034c5d8ed170e130d62c229309a7309888dcb010768b1c0e9ec373edb6a",
+    "informationalVersions": [
+      "1.26.4+7d70078dc169b5ccc1a4e474a4b38414da3fc40a"
+    ]
+  },
+  "boundary": "Rebuild changes embedded source-revision metadata from7d70078d to3f0aed6b. Engine source identity, not byte-identical assemblies, justifies inherited unit/qt4 evidence."
+}

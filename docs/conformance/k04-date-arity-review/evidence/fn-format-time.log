@@ -1,0 +1,29 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-format-time
+
+Discovered 738 test sets.
+  Starting: fn-format-time ...
+  Done: fn-format-time (98 tests total) [P+=92 F+=2 S+=4]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   98
+Passed:  92
+Failed:  2
+Skipped: 4
+
+Pass rate: 93.88%
+
+First 20 failures:
+  FAIL format-time-inpt-er4a: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-time#3 not found.
+  FAIL format-time-031: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-time#4 not found.
+
+Skip reasons (grouped):
+      4  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 2
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.26s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-date-arity-review\evidence\fn-format-time-skips.txt

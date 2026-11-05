@@ -1,0 +1,164 @@
+[
+  {
+    "Name": "format-date-0",
+    "calendar": "AD",
+    "kind": "normal",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'AD', ())"
+  },
+  {
+    "Name": "format-date-1",
+    "calendar": "ISO",
+    "kind": "normal",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'ISO', ())"
+  },
+  {
+    "Name": "format-date-2",
+    "calendar": "CB",
+    "kind": "fallback",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'CB', ())"
+  },
+  {
+    "Name": "format-date-3",
+    "calendar": "AH",
+    "kind": "fallback",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'AH', ())"
+  },
+  {
+    "Name": "format-date-4",
+    "calendar": "ZZ",
+    "kind": "error",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'ZZ', ())"
+  },
+  {
+    "Name": "format-date-5",
+    "calendar": "1bad",
+    "kind": "error",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', '1bad', ())"
+  },
+  {
+    "Name": "format-date-6",
+    "calendar": "Q{}CB",
+    "kind": "fallback",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'Q{}CB', ())"
+  },
+  {
+    "Name": "format-date-7",
+    "calendar": "Q{}ZZ",
+    "kind": "error",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'Q{}ZZ', ())"
+  },
+  {
+    "Name": "format-date-8",
+    "calendar": "Q{urn:calendar}custom",
+    "kind": "namespaced",
+    "expression": "format-date(xs:date(\"2002-03-07\"), '[M01]', 'en', 'Q{urn:calendar}custom', ())"
+  },
+  {
+    "Name": "format-dateTime-9",
+    "calendar": "AD",
+    "kind": "normal",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'AD', ())"
+  },
+  {
+    "Name": "format-dateTime-10",
+    "calendar": "ISO",
+    "kind": "normal",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'ISO', ())"
+  },
+  {
+    "Name": "format-dateTime-11",
+    "calendar": "CB",
+    "kind": "fallback",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'CB', ())"
+  },
+  {
+    "Name": "format-dateTime-12",
+    "calendar": "AH",
+    "kind": "fallback",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'AH', ())"
+  },
+  {
+    "Name": "format-dateTime-13",
+    "calendar": "ZZ",
+    "kind": "error",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'ZZ', ())"
+  },
+  {
+    "Name": "format-dateTime-14",
+    "calendar": "1bad",
+    "kind": "error",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', '1bad', ())"
+  },
+  {
+    "Name": "format-dateTime-15",
+    "calendar": "Q{}CB",
+    "kind": "fallback",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'Q{}CB', ())"
+  },
+  {
+    "Name": "format-dateTime-16",
+    "calendar": "Q{}ZZ",
+    "kind": "error",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'Q{}ZZ', ())"
+  },
+  {
+    "Name": "format-dateTime-17",
+    "calendar": "Q{urn:calendar}custom",
+    "kind": "namespaced",
+    "expression": "format-dateTime(xs:dateTime(\"2002-03-07T12:30:00\"), '[M01]', 'en', 'Q{urn:calendar}custom', ())"
+  },
+  {
+    "Name": "format-time-18",
+    "calendar": "AD",
+    "kind": "normal",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'AD', ())"
+  },
+  {
+    "Name": "format-time-19",
+    "calendar": "ISO",
+    "kind": "normal",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'ISO', ())"
+  },
+  {
+    "Name": "format-time-20",
+    "calendar": "CB",
+    "kind": "fallback",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'CB', ())"
+  },
+  {
+    "Name": "format-time-21",
+    "calendar": "AH",
+    "kind": "fallback",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'AH', ())"
+  },
+  {
+    "Name": "format-time-22",
+    "calendar": "ZZ",
+    "kind": "error",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'ZZ', ())"
+  },
+  {
+    "Name": "format-time-23",
+    "calendar": "1bad",
+    "kind": "error",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', '1bad', ())"
+  },
+  {
+    "Name": "format-time-24",
+    "calendar": "Q{}CB",
+    "kind": "fallback",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'Q{}CB', ())"
+  },
+  {
+    "Name": "format-time-25",
+    "calendar": "Q{}ZZ",
+    "kind": "error",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'Q{}ZZ', ())"
+  },
+  {
+    "Name": "format-time-26",
+    "calendar": "Q{urn:calendar}custom",
+    "kind": "namespaced",
+    "expression": "format-time(xs:time(\"12:30:00\"), '[H01]', 'en', 'Q{urn:calendar}custom', ())"
+  }
+]

@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"K2-CopyNamespacesProlog-1","kind":"Failed","message":"assert-xml failed. Expected: \u003Cdoc\u003E\u003Ca\u003E\u003Cb/\u003E\u003C/a\u003E\u003Ca\u003E\u003Cb {http:p=\u0022http://example.com/\u0022/\u003E\u003C/a\u003E\u003C/doc\u003E, Got: \u003Cdoc\u003E\u003Ca\u003E\u003Cb/\u003E\u003C/a\u003E\u003Ca\u003E\u003Cb/\u003E\u003C/a\u003E\u003C/doc\u003E"}

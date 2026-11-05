@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-03",
+  "beforeSourceEdits": true,
+  "baseCommit": "1d83a5f581ad3cbde357910c806d1c013743d4ba",
+  "files": {
+    "docs/foundation-w1-neutral-admission/SPEC-BASIS.md": "3acc40340f0ca69872c14cd00e167335730f9377985ee335b7521e503b485e5f",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-r2-closure/returns/BCAP-O1-Schema.v2.response.json": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+    "docs/foundation-r2-closure/returns/BCAP-O2-Schema.v2.response.json": "e2737d309279ab23e192cc6c0de94ea75391d809bec60546067e867a9d9e4593",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "308a8a1f0382c551f417a122e29e37f7c41eab543dd956eaf8edbe8337c66bce",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c"
+  }
+}

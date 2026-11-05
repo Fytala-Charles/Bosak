@@ -1,0 +1,19 @@
+{
+  "changed": {
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": {
+      "beforeSha256": "92bf7bc7663375728c570c35fe34e1f2ceba1b8cfb75184829f69eefa5207a6c",
+      "afterSha256": "3ded9e00a5571e38cad434728472c451e7bbd3c6b81fc9f3d98d318cfed04633"
+    },
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": {
+      "beforeSha256": "b9d44828bd8cfbf8e2e1d0962794009971907d1c793c4b793d7e95d56e4a03c3",
+      "afterSha256": "043779747dbc8c05e96750448cf117ac4657caf6daaf1858faeca4384af42380"
+    },
+    "src/Bosak.XPath.Api/Schema/TypedIdentityPlan.cs": {
+      "beforeSha256": "68c19827a4b67826e14c2be95f7b4961332db148dbf9a02e6bb6112a8b43f33e",
+      "afterSha256": "43eb19646f4e171c94714afc2c600bf26baa0e7b46b5d661b284d1690c1c3719"
+    }
+  },
+  "exportedDeclarationsAndNullableAnnotationsUnchanged": true,
+  "friendGrantsUnchanged": true,
+  "scope": "Intentional bounded public behavior activation through existing signatures; new public profile/descriptor and typed Unsupported diagnostic. Broader schema/numeric/native/freeze acceptance remains pending."
+}

@@ -1,0 +1,614 @@
+{
+  "kind": "Isolated executable fake graph; not production or XSD/provider qualification",
+  "mutation": "strip",
+  "passed": 109,
+  "failed": 2,
+  "tests": [
+    {
+      "name": "fresh same-closure sessions have distinct tokens",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "source and target universes differ",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "same-closure different-token bridge succeeds",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "same-session bridge remains supported",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "compatible superset-to-subset source-only type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "compatible subset-to-superset",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "compatible superset-to-other-superset",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "supported false is an ordinary derivation result",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "semantic compatibility tolerates different opaque component keys",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "anonymous source type derives from named target",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "anonymous identity has no invented QName",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "same QName changed definition refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "transitively changed anonymous definition refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "same declaration QName changed nillability refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "individually valid fake graphs with invalid union refuse",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "equal full fingerprints never admit unregistered provider",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "foreign target provider refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "equal names cannot replace source type endpoint",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "equal names cannot replace target type endpoint",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "directional view cannot be reversed",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "original annotation matches both multi-heads",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "original source-only type matches target declared element",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "handoff performs no reassessment",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "fake source assessment succeeds without caller mutation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "fake target reassessment explicitly differs",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "original PSVI remains usable despite target reassessment failure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "source declaration and session are retained",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "nilled nillable member accepted",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "nilled non-nillable member does not match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "abstract source declaration does not match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "blocked restriction does not match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "local declaration is not a global member",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "missing governing declaration does not match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "wrong actual type does not satisfy declaration",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "equal source descriptors remain distinct host tokens",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "storage/source ID cannot authenticate a schema annotation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "foreign declaration in owned annotation refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "foreign target declaration refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "atomic handoff retains actual source type/session",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "atomic handoff retains original source token",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "atomic handoff preserves value and public type text",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "wrong atomic expected type refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "same-valued foreign atom cannot enter another view",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "built-in conversion explicitly removes schema provenance",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "stripped atom cannot regain named authority",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "query language changes execution key without changing XSD universe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "cross-host schema handoff is supported with target profile",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "wrong consuming profile refuses at view admission",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "profile change cannot reuse captured atomic binding",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "query static context changes executable key only",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "XSD version changes universe identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unsupported mixed schema versions are coverage refusal",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "immutable XDM review pin and behavior profile are explicit",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unknown semantic profile refuses rather than defaults",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unknown host version refuses rather than infers",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "missing explicit profile refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host language versions are not interchangeable",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "root-only digest is insufficient for closure identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "resource input order does not change universe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "resource policy contributes to universe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "schema static context contributes to universe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "namespace bindings contribute to universe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "binding order is canonical",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "canonical URI spellings do not create different universes",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "duplicate canonical origins refuse",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "duplicate namespace prefixes refuse",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "default resource array refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "default resource bytes refuse",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "undeclared transitive import refuses without fetch",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unconsumed supplied resource refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "incomplete component coverage refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "no implicit schema version default",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "URI credentials are not accepted as resource identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "URI fragments are not accepted as resource identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "success cannot carry null reference payload",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unsupported cannot omit structured findings",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "invalid cannot carry malformed findings",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unmodeled attribute assessment refuses explicitly",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unmodeled lax assessment refuses explicitly",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unmodeled requested-type assessment refuses explicitly",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "malformed resource-policy digest refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "malformed schema-context digest refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned Unsupported does not fall back",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned NotApplicable is ownership loss",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider faults retain original cause",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "null provider outcome is a retained provider fault",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "OpenSession preserves cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "compatibility admission preserves cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "relation checks preserve cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "node checks preserve cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unsupported attribute operation still preserves cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider cancellation verdict stays cancellation",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "assessment tree retains independent caller snapshot",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "preserve copy retains root descendant and attribute annotations",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "strip copy removes every descendant and attribute annotation",
+      "passed": false,
+      "error": null
+    },
+    {
+      "name": "atomization retains exact actual-type provenance",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "copied atom binds in compatible target without owner rewrite",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "stripped tree atomization cannot regain authority",
+      "passed": false,
+      "error": null
+    },
+    {
+      "name": "element-only no-typed-value remains FOTY0012",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "mixed assessment authority in one tree refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "annotation constructor refuses a foreign actual type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host source token is not an edit or storage capability",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host disposal blocks new captures",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "captured view remains usable after registration disposal",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "schema annotations do not revive disposed input snapshots",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "escaped atomic value remains independent of snapshot reads",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "escaped atom strongly retains its original session",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "parallel immutable handoff does not change original provenance",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "record labels remain outside the schema component API",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "legacy core XdmValue has no prototype annotation channel",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "legacy IXdmNode does not require compatibility methods",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "exportedTypes": null,
+  "references": [
+    "Bosak.XPath.Core",
+    "System.Collections",
+    "System.Collections.Immutable",
+    "System.Linq",
+    "System.Runtime"
+  ],
+  "binaries": [
+    {
+      "identity": "Bosak.XPath.Core, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "E5329CC3F7CAFB462C29EFF9B500B9ED1A8564D40DD22B1B2CEB4676DA39B6D8"
+    },
+    {
+      "identity": "C44R2.Prototype, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "sha256": "1D8EC4AE5D8F98DD7945D5DA1165E98F570F92DDC215A60D7C41BC9535027E96"
+    },
+    {
+      "identity": "C44R2.SchemaContracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.SchemaContracts.dll",
+      "sha256": "FF899F0781AB9873F8FC3A9FE354821A3B2921995659572BF41F3A9CF1D88CED"
+    }
+  ],
+  "handoffWitness": {
+    "sourceUniverse": {
+      "ProviderModelVersion": "finite-fake-components/2",
+      "SchemaLanguage": 1,
+      "Fingerprint": "067EC883EB5F921FE031E18F3C0DB38E3D3126D62ED74F280CAFDFD51D4B3B5E"
+    },
+    "targetUniverse": {
+      "ProviderModelVersion": "finite-fake-components/2",
+      "SchemaLanguage": 1,
+      "Fingerprint": "2D59CB50B5F52C72AD6082BA091B50CB68CF667131A047514B1B6AC2602B1234"
+    },
+    "sourceAndTargetAreDifferentSessions": true,
+    "sourceOnlyActualType": {
+      "NamespaceUri": "urn:c44r2",
+      "LocalName": "Extra"
+    },
+    "targetResolutionOfExtra": "Invalid",
+    "retainedOriginalOwner": true,
+    "retainedOriginalActualType": true,
+    "retainedOriginalSourceToken": true
+  },
+  "limitations": [
+    "Finite descriptors and synthetic union coherence only; no XSD parser/structural validator, CTA evaluation or licensed provider.",
+    "Attribute assessment/list-union/full PSVI is unsupported; neutral API shape does not certify that coverage.",
+    "AtomicValue and TreeSnapshot are alternate experiment carriers, not production VM integration or consumer ABI tests."
+  ]
+}

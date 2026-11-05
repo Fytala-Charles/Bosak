@@ -1,0 +1,16 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/75-checks-before-cost-observer.json": "1212d510399310f3561f1162618233b6fa18629391ea6a2d9f845e62bfb414b9",
+  "evidence/build.txt": "a14767278097a8d69fcde4ffe4fbf2167b59431e6c94aefd7e0e2d55bb7e5a68",
+  "evidence/documentation-checks.json": "4517ade7a554f62ef63da73ed11cbacc44a17bace7ecd00081f1337454e97133",
+  "evidence/initial-60-checks.json": "8ff7bdbe7d59d03c34031f872ebed26c126fa85d56a3df0ab6faa477d4b51237",
+  "evidence/INPUTS.json": "652d14e3769b1824e0c09f95d981a7c5bb1f9ee9eb79928681fa79dcc291738b",
+  "evidence/run-0.json": "71f523ecfdaf4f1e4f2207b0922e220a9f7a0c33abbd0d845fcbc6f1ad4be12f",
+  "evidence/run-1.json": "71f523ecfdaf4f1e4f2207b0922e220a9f7a0c33abbd0d845fcbc6f1ad4be12f",
+  "README.md": "8dfc17d048b5e3bd09f2773e695f34ad389e90a89f786a954463313ce1edc66c",
+  "SPEC-BASIS.md": "42d754aae6093e84cad0df55df209466f2a8c88af2fcf5ecf466d23e0619cf65",
+  "tools/Probe.cs.txt": "845ae1ce8260fd3567552556a256d20c07f942a1eb3c63894bc372b19baf9096",
+  "tools/run.py": "15de2ea18f5b8e0559478b97cbcb3f55a4fef0b46c7c3e97409f7c23b36e09f7",
+  "tools/TypedNode.cs.txt": "2476d907185517b794311eb6f7207e160eaddb6b8000a23e1e55fb12cf024741",
+  "tools/verify.py": "b87425657fe401a2880a843c3aff42d19c2b06c2331d38f75db53086bd0332a7"
+}

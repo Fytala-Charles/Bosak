@@ -1,0 +1,6 @@
+{
+  ".guard-tmp/k04-schema-session-abi/consumer/bin/Release/net10.0/CarrierAbi.dll": "b75841e0f4893b5d5a0e6246cf4446398bc985c10d1e001b855c3008eba6d65c",
+  ".guard-tmp/k04-schema-session-abi/consumer/bin/Release/net10.0/OldConsumer.dll": "a1bdd7204e473026badc74798f026fd237a3661d9c88fddc99bfc8b7df33c430",
+  ".guard-tmp/k04-schema-session-abi/upgraded/CarrierAbi.dll": "802ca51890fa97d710b03ee2f7db507e5fd5f58e40947091dc1098c5cc628609",
+  ".guard-tmp/k04-schema-session-abi/upgraded/OldConsumer.dll": "a1bdd7204e473026badc74798f026fd237a3661d9c88fddc99bfc8b7df33c430"
+}

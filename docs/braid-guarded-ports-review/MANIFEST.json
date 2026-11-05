@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed isolated finite-profile facade checkpoint; no production guard",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 293,
+      "sha256": "a776e74196b5673cdabfeef503cf75323b6c1c25ff26df566fd0f45445164761"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4611,
+      "sha256": "95c7a781aacb6b421ea753a77b91d33b3b226ac37025f2a156736c5569a3ade7"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1487,
+      "sha256": "54c1445ef9efabc4127da0b85d29fdf9070d2f90ca2ccfc1ba57511b80e7512a"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2446,
+      "sha256": "d37d25acf6d481dcb210c7ffd2c132e49347d1a787e7995a9aa009cc78813e61"
+    }
+  ]
+}

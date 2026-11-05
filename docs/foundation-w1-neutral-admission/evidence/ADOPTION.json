@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-03",
+  "beforeSourceEdits": true,
+  "baseCommit": "4262840060ed7299dd139a3d72fb9ace9a8c442a",
+  "files": {
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "docs/foundation-r2-closure/GATE.json": "cb952c040a890869c11e8850a8ef1e946f0f2c4b6c17d92ef382ada5188cd628",
+    "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json": "fe0c76522d7a59efc9cbd4b42e7689ce2a881bfb46e5cdf6d233e731c4c97fb4",
+    "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "539c82586a99c9e2e08a2319eb9dbe0e2f23fd824bed67ca221e1ba9fc0f316d",
+    "src/Bosak.XPath.Api/SchemaSessionCompilation.cs": "a6dc3b332f96c2fc56abf45f69bc9dbf9279a4a1ed076b4570e4d5f5e24acf29"
+  }
+}

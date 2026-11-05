@@ -1,0 +1,3 @@
+# Preserve probe source and receipt bytes.
+evidence/** -text whitespace=cr-at-eol
+tools/** -text whitespace=cr-at-eol

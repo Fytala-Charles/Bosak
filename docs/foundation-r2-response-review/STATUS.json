@@ -1,0 +1,20 @@
+{
+  "submittedRoleReturns": 3,
+  "scopedCoreDesignReturns": 2,
+  "missingRoleReturns": [
+    "O1-Schema",
+    "O1-XmlDb",
+    "O2-Schema",
+    "O4-XmlDb"
+  ],
+  "openRevisionRequests": [
+    "BCAP-01"
+  ],
+  "braidDecision": "Revise",
+  "braidAccepted": false,
+  "schemaIssueState": "Packets registered; no O1/O2 response in inspected comments",
+  "xmlDbState": "Awaiting user-reported owner returns",
+  "r2Complete": false,
+  "r3Started": false,
+  "productionChanged": false
+}

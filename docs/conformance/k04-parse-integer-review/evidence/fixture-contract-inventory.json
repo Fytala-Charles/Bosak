@@ -1,0 +1,22 @@
+{
+  "total": 47,
+  "assertionShapes": {
+    "assert-eq": 20,
+    "assert-true": 7,
+    "any-of": 7,
+    "assert-empty": 3,
+    "error": 8,
+    "assert-string-value": 2
+  },
+  "sizeBoundAlternatives": [
+    "parse-integer-020",
+    "parse-integer-021",
+    "parse-integer-915",
+    "parse-integer-916",
+    "parse-integer-917",
+    "parse-integer-918",
+    "parse-integer-919"
+  ],
+  "roundTrip": "format-integer-40-012",
+  "gated": false
+}

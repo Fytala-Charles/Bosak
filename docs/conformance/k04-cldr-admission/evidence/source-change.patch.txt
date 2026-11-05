@@ -1,0 +1,28 @@
+diff --git a/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs b/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
+index 2d1f78dc..a3c7b4be 100644
+--- a/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
++++ b/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
+@@ -18,6 +18,7 @@
+ //                      | Charles Korthout | 0.3   | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
+ //                      | Charles Korthout | 0.4   | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+ //                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
++//                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -47,7 +48,6 @@ internal sealed class DependencyFilter40
+         "fullText-units",
+         "fullText-defaults",
+         "binary",                            // EXPath-style binary data model not implemented
+-        "fn-format-integer-CLDR",            // CLDR numbering systems not implemented
+         "typedData",                         // harness does not build schema-validated (PSVI-typed) source nodes
+     };
+ 
+@@ -60,6 +60,7 @@ internal sealed class DependencyFilter40
+         "collection-stability",
+         "directory-as-collection-uri",
+         "expath-file",
++        "fn-format-integer-CLDR", // Reviewed bounded word schemes; not complete CLDR/RBNF.
+         "fn-load-xquery-module",
+         "fn-transform-XSLT",
+         "fn-transform-XSLT30",

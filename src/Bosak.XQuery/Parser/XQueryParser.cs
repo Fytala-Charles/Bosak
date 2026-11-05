@@ -59,8 +59,14 @@
 //                      |                  |       |                | default collation                                                                      |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 28-10-2026     | Report XQST0099 for duplicate library context declarations (1.29.3).                    |
+//                      | Charles Korthout | 1.18  | 28-10-2026     | Parse typed main-module context item values/defaults and retain library restrictions.    |
+//                      | Charles Korthout | 1.19  | 28-10-2026     | Parse copy-namespaces modes, ordering and duplicate XQST0055 (1.31.0). |
+//                      | Charles Korthout | 1.20  | 28-10-2026     | Parse strip/preserve, ordering and duplicate XQST0067 (1.32.0). |
+//                      | Charles Korthout | 1.21  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 // ===========================================================================================================================================================
 
+using Bosak.XPath.Core.Xdm;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -601,48 +607,85 @@ internal sealed class XQueryParser
             return true;
         }
 
-        // A library module may declare the context item (type constraint and/or external);
-        // an initial or default value in a library module is XQST0113. The declared type
-        // is recorded so fn:load-xquery-module can validate a supplied context item.
-        if (_isLibraryModule && TryMatchPhrase("context", "item"))
+        if (TryMatchLiteral("construction"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new XPathParseException("XPST0003: Construction must precede variable, function, option, and context item declarations.", _position);
+            if (context.ConstructionMode.HasValue)
+                throw new XPathParseException("XQST0067: More than one construction declaration.", _position);
+            XdmConstructionMode mode;
+            if (TryMatchLiteral("preserve")) mode = XdmConstructionMode.Preserve;
+            else if (TryMatchLiteral("strip")) mode = XdmConstructionMode.Strip;
+            else throw new XPathParseException("XPST0003: Expected strip or preserve.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            context = context.WithConstructionMode(mode);
+            return true;
+        }
+
+        if (TryMatchLiteral("copy-namespaces"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new XPathParseException("XPST0003: Copy-namespaces must precede variable, function, option, and context item declarations.", _position);
+            if (context.PreserveNamespaces.HasValue)
+                throw new XPathParseException("XQST0055: More than one copy-namespaces declaration.", _position);
+            bool preserve;
+            if (TryMatchLiteral("preserve")) preserve = true;
+            else if (TryMatchLiteral("no-preserve")) preserve = false;
+            else throw new XPathParseException("XPST0003: Expected preserve or no-preserve.", _position);
+            SkipWhitespace();
+            ExpectChar(',');
+            bool inherit;
+            if (TryMatchLiteral("inherit")) inherit = true;
+            else if (TryMatchLiteral("no-inherit")) inherit = false;
+            else throw new XPathParseException("XPST0003: Expected inherit or no-inherit.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            context = context.WithCopyNamespaces(preserve, inherit);
+            return true;
+        }
+
+        // ContextItemDecl uses ItemType, not SequenceType: top-level occurrence
+        // indicators and empty-sequence() are not permitted.
+        if (TryMatchPhrase("context", "item"))
         {
             SkipWhitespace();
             string? contextItemType = null;
             if (TryMatchLiteral("as"))
             {
                 SkipWhitespace();
-                contextItemType = ReadSequenceTypeText();
+                int typeStart = _position;
+                ReadItemTypeText(contextItem: true);
+                contextItemType = StripComments(_source[typeStart.._position]).Trim();
+                if (contextItemType.StartsWith("empty-sequence(", StringComparison.Ordinal))
+                    throw new XPathParseException("XPST0003: Context item declarations require ItemType.", typeStart);
             }
             SkipWhitespace();
-            bool hasValue = false;
-            if (TryMatchLiteral("external"))
+            bool isExternal = TryMatchLiteral("external");
+            SkipWhitespace();
+            XPathAstNode? initializer = null;
+            if (!isExternal || TryMatchLiteral(":="))
             {
+                if (!isExternal) ExpectLiteral(":=");
                 SkipWhitespace();
-                if (TryMatchLiteral(":="))
-                {
-                    hasValue = true;
-                    SkipWhitespace();
-                    ReadExpressionTo(';');
-                    SkipWhitespace();
-                }
-            }
-            else if (TryMatchLiteral(":="))
-            {
-                hasValue = true;
-                SkipWhitespace();
-                ReadExpressionTo(';');
+                initializer = ReadExpressionTo(';');
                 SkipWhitespace();
             }
             ExpectChar(';');
-            // XQST0113: more than one context item declaration in one module.
             if (_seenContextItemDecl)
-                throw new XPathParseException("XQST0113: More than one context item declaration in a module.", _position);
+                throw new XPathParseException("XQST0099: More than one context item declaration in a module.", _position);
             _seenContextItemDecl = true;
             _seenSecondPhaseDecl = true;
-            // XQST0113: an initial or default value is not allowed in a library module.
-            if (hasValue)
-                throw new XPathParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
-            context = context.WithContextItemType(contextItemType);
+            if (_isLibraryModule)
+            {
+                if (initializer is not null)
+                    throw new XPathParseException("XQST0113: A context item declaration in a library module must not specify an initial or default value.", _position);
+                context = context.WithContextItemType(contextItemType);
+            }
+            else
+            {
+                context = context.WithContextDeclaration(new ContextItemDeclaration(contextItemType ?? "item()", initializer, isExternal));
+            }
             return true;
         }
 
@@ -1413,16 +1456,20 @@ internal sealed class XQueryParser
         return text;
     }
 
-    private void ReadItemTypeText()
+    private void ReadItemTypeText(bool contextItem = false)
     {
         SkipWhitespace();
         // Parenthesized item type: '(' ItemType ('|' ItemType)* ')' — e.g. a function
         // test used as a declared return type: (function(xs:string) as xs:string*).
         if (TryMatchChar('('))
         {
-            ReadItemTypeText();
+            ReadItemTypeText(contextItem);
             while (TryMatchChar('|'))
+            {
+                if (contextItem)
+                    throw new XPathParseException("XPST0003: Context item declarations require one ItemType.", _position);
                 ReadItemTypeText();
+            }
             SkipWhitespace();
             ExpectChar(')');
             return;
@@ -1450,6 +1497,8 @@ internal sealed class XQueryParser
         SkipWhitespace();
         if (_position < _source.Length && _source[_position] == '(')
         {
+            if (contextItem && itemTypeName == "empty-sequence")
+                throw new XPathParseException("XPST0003: Context item declarations require ItemType.", nameStart);
             int contentStart = _position + 1;
             int depth = 0;
             do
@@ -1504,6 +1553,12 @@ internal sealed class XQueryParser
         while (_position < _source.Length && depth > 0)
         {
             char c = _source[_position];
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == '#')
+            {
+                _position += XPathLexer.ScanPragmaLength(_source.AsSpan(_position));
+                continue;
+            }
+
             if (c == '<')
             {
                 // Direct element constructor: skip the whole span (K2-Axes-1/2).
@@ -1548,6 +1603,12 @@ internal sealed class XQueryParser
         while (_position < _source.Length)
         {
             char c = _source[_position];
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == '#')
+            {
+                _position += XPathLexer.ScanPragmaLength(_source.AsSpan(_position));
+                continue;
+            }
+
             if (c == '<')
             {
                 // Direct element constructor: skip the whole span so apostrophes and

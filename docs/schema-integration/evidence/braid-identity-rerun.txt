@@ -1,0 +1,20 @@
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.Braid.Core -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Core\bin\Release\net10.0\Bosak.Braid.Core.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.Braid.Application -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Application\bin\Release\net10.0\Bosak.Braid.Application.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.Braid.Infrastructure -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Infrastructure\bin\Release\net10.0\Bosak.Braid.Infrastructure.dll
+  Bosak.Braid.Workbench -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Workbench\bin\Release\net10.0\Bosak.Braid.Workbench.dll
+  Bosak.Braid.Desktop -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\src\Bosak.Braid.Desktop\bin\Release\net10.0\Bosak.Braid.Desktop.dll
+  Bosak.Braid.Infrastructure.Tests -> D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\Braid\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-consumer-results\Braid-pin-adjusted\charl_CHARLES_2026-10-29_11_57_25_net10.0.trx
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 193 ms - Bosak.Braid.Infrastructure.Tests.dll (net10.0)

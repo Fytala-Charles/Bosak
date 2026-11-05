@@ -1,0 +1,292 @@
+[
+  {
+    "kind": "differential",
+    "expression": "count(//*)",
+    "persistent": "Integer:5",
+    "memory": "Integer:5",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(//@*)",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(//text())",
+    "persistent": "Integer:4",
+    "memory": "Integer:4",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(//comment())",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(//processing-instruction())",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "string-join(/root/n ! string(.), \u0027,\u0027)",
+    "persistent": "String:2,3",
+    "memory": "String:2,3",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "sum(/root/n)",
+    "persistent": "Double:5",
+    "memory": "Double:5",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n[1] \u002B 1",
+    "persistent": "Double:3",
+    "memory": "Double:3",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n[1] eq 2",
+    "persistent": "error:InvalidOperationException:XPTY0004: Comparison between xs:string and numeric operands is not defined",
+    "memory": "error:InvalidOperationException:XPTY0004: Comparison between xs:string and numeric operands is not defined",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n[1] = 2",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "data(/root/n[1]) instance of xs:untypedAtomic",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "data(/root/@flag) instance of xs:untypedAtomic",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "data(/root/n[1]/text()) instance of xs:string",
+    "persistent": "Boolean:false",
+    "memory": "Boolean:false",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "data(/root/n[1]) instance of xs:string",
+    "persistent": "Boolean:false",
+    "memory": "Boolean:false",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/bad \u002B 1",
+    "persistent": "error:InvalidOperationException:FORG0001: Cannot convert String to double",
+    "memory": "error:InvalidOperationException:FORG0001: Cannot convert String to double",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n eq 2",
+    "persistent": "error:InvalidOperationException:XPTY0004: Value comparison requires singleton operands",
+    "memory": "error:InvalidOperationException:XPTY0004: Value comparison requires singleton operands",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "exists(/root/zero)",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "empty(/root/missing)",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(/root/n[1]/following-sibling::*)",
+    "persistent": "Integer:3",
+    "memory": "Integer:3",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(/root/n[2]/preceding-sibling::*)",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(/root/n/ancestor::*)",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(/root/n | /root/n)",
+    "persistent": "Integer:2",
+    "memory": "Integer:2",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n[1] is /root/n[1]",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "/root/n[1] \u003C\u003C /root/n[2]",
+    "persistent": "Boolean:true",
+    "memory": "Boolean:true",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "string((/root/n | /root/zero)[last()])",
+    "persistent": "String:0",
+    "memory": "String:0",
+    "equal": true
+  },
+  {
+    "kind": "differential",
+    "expression": "count(/root/n[2]/preceding::*)",
+    "persistent": "Integer:1",
+    "memory": "Integer:1",
+    "equal": true
+  },
+  {
+    "kind": "identity",
+    "repeatedWrapper": true,
+    "distinctSnapshot": true
+  },
+  {
+    "kind": "enum",
+    "name": "None",
+    "number": 0
+  },
+  {
+    "kind": "enum",
+    "name": "Document",
+    "number": 1
+  },
+  {
+    "kind": "enum",
+    "name": "Element",
+    "number": 2
+  },
+  {
+    "kind": "enum",
+    "name": "Attribute",
+    "number": 4
+  },
+  {
+    "kind": "enum",
+    "name": "Text",
+    "number": 8
+  },
+  {
+    "kind": "enum",
+    "name": "Comment",
+    "number": 16
+  },
+  {
+    "kind": "enum",
+    "name": "ProcessingInstruction",
+    "number": 32
+  },
+  {
+    "kind": "enum",
+    "name": "Namespace",
+    "number": 64
+  },
+  {
+    "kind": "enum",
+    "name": "All",
+    "number": 127
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Document",
+    "storage": 1,
+    "engine": 1,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Element",
+    "storage": 2,
+    "engine": 2,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Attribute",
+    "storage": 4,
+    "engine": 4,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Text",
+    "storage": 8,
+    "engine": 8,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Comment",
+    "storage": 16,
+    "engine": 16,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "ProcessingInstruction",
+    "storage": 32,
+    "engine": 32,
+    "equal": true
+  },
+  {
+    "kind": "storage-enum",
+    "name": "Namespace",
+    "storage": 64,
+    "engine": 64,
+    "equal": true
+  },
+  {
+    "kind": "lifetime",
+    "node": "ObjectDisposedException",
+    "startEnumeration": "ObjectDisposedException",
+    "duringEnumeration": "ObjectDisposedException",
+    "independentSnapshot": "allowed",
+    "mapNode": "ObjectDisposedException",
+    "arrayNode": "ObjectDisposedException"
+  }
+]

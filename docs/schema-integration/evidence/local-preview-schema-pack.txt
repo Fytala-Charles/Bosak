@@ -1,0 +1,2 @@
+  Bosak.Schema -> D:\Development\Bosak\.guard-tmp\schema-preview-source\src\Bosak.Schema\bin\Release\net10.0\Bosak.Schema.dll
+  Successfully created package 'D:\Development\Bosak\.guard-tmp\schema-preview-packages\Bosak.Schema.0.4.0-alpha.1.nupkg'.

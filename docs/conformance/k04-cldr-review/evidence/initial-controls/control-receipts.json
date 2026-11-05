@@ -1,0 +1,442 @@
+[
+  {
+    "name": "qt3-control-cardinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-cardinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2692663000198081,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-cardinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-cardinal-basic.log"
+  },
+  {
+    "name": "qt4-control-cardinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-cardinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25676129999919794,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-cardinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-cardinal-basic.log"
+  },
+  {
+    "name": "qt3-control-cardinal-named",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-cardinal-named-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2685889999847859,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-cardinal-named",
+      "kind": "Failed",
+      "message": "Unexpected error: FODF1310"
+    },
+    "log": "qt3-control-cardinal-named.log"
+  },
+  {
+    "name": "qt4-control-cardinal-named",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-cardinal-named-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2487908999901265,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-cardinal-named",
+      "kind": "Failed",
+      "message": "Unexpected error: FODF1310"
+    },
+    "log": "qt4-control-cardinal-named.log"
+  },
+  {
+    "name": "qt3-control-ordinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24761819999548607,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-basic.log"
+  },
+  {
+    "name": "qt4-control-ordinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23909039999125525,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-basic.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.261452000006102,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-s",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erstes, Got: Erste"
+    },
+    "log": "qt3-control-ordinal-named-s.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25402049999684095,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-s",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erstes, Got: Erste"
+    },
+    "log": "qt4-control-ordinal-named-s.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-explicit-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2748753000050783,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-s",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erstes, Got: Ersts"
+    },
+    "log": "qt3-control-ordinal-explicit-s.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-explicit-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2515334000054281,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-s",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erstes, Got: Ersts"
+    },
+    "log": "qt4-control-ordinal-explicit-s.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24735379999037832,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-r",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erster, Got: Erste"
+    },
+    "log": "qt3-control-ordinal-named-r.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25214779999805614,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-r",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erster, Got: Erste"
+    },
+    "log": "qt4-control-ordinal-named-r.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-explicit-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2807341000007,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-r",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erster, Got: Erstr"
+    },
+    "log": "qt3-control-ordinal-explicit-r.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-explicit-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2677815000060946,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-r",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Erster, Got: Erstr"
+    },
+    "log": "qt4-control-ordinal-explicit-r.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27262670002528466,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-n",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Ersten, Got: Erste"
+    },
+    "log": "qt3-control-ordinal-named-n.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25342590000946075,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-n",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Ersten, Got: Erste"
+    },
+    "log": "qt4-control-ordinal-named-n.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-explicit-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2608473000000231,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-n",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Ersten, Got: Erstn"
+    },
+    "log": "qt3-control-ordinal-explicit-n.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-explicit-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2603178999852389,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-n",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: Ersten, Got: Erstn"
+    },
+    "log": "qt4-control-ordinal-explicit-n.log"
+  },
+  {
+    "name": "qt3-control-malformed-cardinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-malformed-cardinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2561819000111427,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-malformed-cardinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-malformed-cardinal.log"
+  },
+  {
+    "name": "qt4-control-malformed-cardinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-malformed-cardinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24236659999587573,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-malformed-cardinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-malformed-cardinal.log"
+  },
+  {
+    "name": "qt3-control-malformed-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-malformed-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2610899999854155,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-malformed-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-malformed-ordinal.log"
+  },
+  {
+    "name": "qt4-control-malformed-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-malformed-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23238460000720806,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-malformed-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-malformed-ordinal.log"
+  }
+]

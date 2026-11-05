@@ -544,5 +544,13 @@
     }
   ],
   "reviewedSpecRevision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
-  "addedChecks": 508
+  "addedChecks": 508,
+  "currentReview": {
+    "reviewDate": "2026-10-26",
+    "report": "CONSTRUCTOR-TYPE-RECONCILIATION.md",
+    "matrix": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "registeredNames": 49,
+    "focusObservations": 1127,
+    "policy": "Original dated rows remain historical. New representative controls do not certify exhaustive casting or a nonempty xs:error value."
+  }
 }

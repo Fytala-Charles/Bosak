@@ -1,0 +1,602 @@
+[
+  {
+    "name": "C36-prefix-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-prefix-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28735719999531284,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-prefix-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare namespace p=\"urn:unknown\"; (#p:x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-prefix-fallback.log"
+  },
+  {
+    "name": "C36-uri-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-uri-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2869082999532111,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-uri-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-uri-fallback.log"
+  },
+  {
+    "name": "C36-unprefixed-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-unprefixed-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2869594999938272,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-unprefixed-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-unprefixed-fallback.log"
+  },
+  {
+    "name": "C36-empty-uri-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-empty-uri-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2862049999530427,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-empty-uri-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{}x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-empty-uri-fallback.log"
+  },
+  {
+    "name": "C36-two-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-two-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28897009999491274,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-two-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#)(#Q{}y#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-two-fallback.log"
+  },
+  {
+    "name": "C36-missing-fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-missing-fallback-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20463849999941885,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-missing-fallback",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0079\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XQST0079: An ignored pragma requires an associated expression."
+    },
+    "log": "C36-missing-fallback.log"
+  },
+  {
+    "name": "C36-unprefixed-empty",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-unprefixed-empty-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22445780003909022,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-unprefixed-empty",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#x#){}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0079\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XQST0079: An ignored pragma requires an associated expression."
+    },
+    "log": "C36-unprefixed-empty.log"
+  },
+  {
+    "name": "C36-unbound-prefix",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-unbound-prefix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22054320003371686,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-unbound-prefix",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#p:x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0081\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPST0081: Undeclared pragma prefix 'p'."
+    },
+    "log": "C36-unbound-prefix.log"
+  },
+  {
+    "name": "C36-raw-quote",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-raw-quote-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2917728999746032,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-raw-quote",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x \"unterminated quote #){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-raw-quote.log"
+  },
+  {
+    "name": "C36-raw-comment",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-raw-comment-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29300700000021607,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-raw-comment",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x (:unterminated comment #){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-raw-comment.log"
+  },
+  {
+    "name": "C36-ordinary-comments",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-ordinary-comments-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2950587999657728,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-ordinary-comments",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(:outside:) (#Q{urn:unknown}x#) (:between:) {42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-ordinary-comments.log"
+  },
+  {
+    "name": "C36-raw-delimiter",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-raw-delimiter-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.303893500007689,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-raw-delimiter",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x \"#) {42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-raw-delimiter.log"
+  },
+  {
+    "name": "C36-no-content-space",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-no-content-space-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2121099000214599,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-no-content-space",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x(content)#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XPST0003: Whitespace must separate a pragma name from its content."
+    },
+    "log": "C36-no-content-space.log"
+  },
+  {
+    "name": "C36-comment-before-name",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-comment-before-name-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2148598000057973,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-comment-before-name",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#(:bad:)Q{urn:unknown}x#){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XPST0003: A pragma requires an EQName."
+    },
+    "log": "C36-comment-before-name.log"
+  },
+  {
+    "name": "C36-no-name",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-no-name-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22106860001804307,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-no-name",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(##){42}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XPST0003: A pragma requires an EQName."
+    },
+    "log": "C36-no-name.log"
+  },
+  {
+    "name": "C36-unterminated",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-unterminated-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21348500001477078,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-unterminated",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x content",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 0: XPST0003: Unterminated pragma."
+    },
+    "log": "C36-unterminated.log"
+  },
+  {
+    "name": "C36-bare-path",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-bare-path-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21848869998939335,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-bare-path",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){<e/>}/*",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 25: XPST0003: Unexpected token Slash"
+    },
+    "log": "C36-bare-path.log"
+  },
+  {
+    "name": "C36-parenthesized-path",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-parenthesized-path-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32579099998110905,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-parenthesized-path",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "count(((#Q{urn:unknown}x#){<e><c/></e>})/*)",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-parenthesized-path.log"
+  },
+  {
+    "name": "C36-bare-predicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-bare-predicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2285594000131823,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-bare-predicate",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){(1,2)}[1]",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 26: XPST0003: Unexpected token LBracket"
+    },
+    "log": "C36-bare-predicate.log"
+  },
+  {
+    "name": "C36-parenthesized-predicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-parenthesized-predicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2941702000098303,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-parenthesized-predicate",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "((#Q{urn:unknown}x#){(1,2)})[1]",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-parenthesized-predicate.log"
+  },
+  {
+    "name": "C36-fallback-static-error",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-fallback-static-error-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29583349998574704,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-fallback-static-error",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){Q{urn:no-function}missing()}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0017\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPST0017: Function {urn:no-function}missing#0 not found."
+    },
+    "log": "C36-fallback-static-error.log"
+  },
+  {
+    "name": "C36-fallback-dynamic-error",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-fallback-dynamic-error-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2924089999869466,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-fallback-dynamic-error",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "(#Q{urn:unknown}x#){error(QName(\"http://www.w3.org/2005/xqt-errors\",\"FOER0000\"))}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"FOER0000\" />\r\n</result>",
+      "exceptionType": "XPathErrorException",
+      "error": "fn:error(FOER0000) called"
+    },
+    "log": "C36-fallback-dynamic-error.log"
+  },
+  {
+    "name": "C36-control-no-pragma",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-control-no-pragma-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28855550003936514,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-control-no-pragma",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "40+2",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>42</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-control-no-pragma.log"
+  },
+  {
+    "name": "C36-control-literal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-fallback-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-fallback\\evidence\\C36-control-literal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2978088000090793,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C36-control-literal",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "string-length(\"(#p:x#)\")",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "C36-control-literal.log"
+  }
+]

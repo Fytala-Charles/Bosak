@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "4efb46a54579656b9a0f237fe7ac8cf2793cf46c",
+  "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+  "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+  "kind": "New bounded semantic adoption before implementation",
+  "section": "fn:parse-integer signatures/default-on-empty,rules,error conditions,equivalent expression",
+  "contract": {
+    "arities": [
+      1,
+      2
+    ],
+    "parameterNames": [
+      "value",
+      "radix"
+    ],
+    "parameterTypes": [
+      "xs:string?",
+      "xs:integer?"
+    ],
+    "returnType": "xs:integer?",
+    "defaultRadix": 10,
+    "emptyRadixDefaults": true,
+    "radixRange": [
+      2,
+      36
+    ],
+    "stripCodepoints": [
+      9,
+      10,
+      13,
+      32,
+      95
+    ],
+    "errorCodes": {
+      "radix": "FORG0011",
+      "lexical": "FORG0012",
+      "implementationSize": "FOCA0003"
+    }
+  },
+  "scope": "Frozen catalog contract review;publication/test-fixture/history/adoption revisions remain separate",
+  "candidateVersion": "1.28.0",
+  "implementationPolicies": [
+    "4.0-only arities1/2 with value/radix keywords;radix defaults10 when omitted/empty",
+    "Int64 result bound;FOCA0003 for valid lexical values outside it;no float/decimal parsing roundtrip",
+    "Remove only codepoints9/10/13/32/95 as in pinned equivalent;ASCII digit alphabet only",
+    "Normal function conversion/type checking precedes body;empty value returns empty before radix-domain validation",
+    "For nonempty values validate radix domain first;validate complete lexical text before reporting accumulated size overflow",
+    "Unsupported arities and3.1 calls/references/lookup stay unavailable;3.1 keywords retain XPST0003",
+    "No fixture/assertion/REQ-126 disposition or schema changes;set promotion requires separate fresh evidence"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/32-checks-before-public-internal-comparison.json": "a40da2f36cff278bf94ce94be86da9cd42810586965202e1d23d8b6e777acba4",
+  "evidence/build.txt": "0f3e38224e9e61708dd5749edc6d35f16be93ecba4676b97ea3a7d05ad1a0476",
+  "evidence/document-focus-assumption-attempt.txt": "9a0546c94d58908d2afbb439911d05ac53424a0d81e17912cc994bf1f53ade76",
+  "evidence/documentation-checks.json": "2fd1419057266219eb314e9f60a84a7c5c53284b88f93cf8e485e6cc10027284",
+  "evidence/initial-25-checks.json": "fe3ca217f1f26ebdd060bffdda715a8e2aca5cd4278c7bfe3e98b3c99ea65200",
+  "evidence/INPUTS.json": "e4055bfe3bb34a896bef24466cd8f540c8c484f6196a78cd4b16ed31fb8e3083",
+  "evidence/match-only-policy-attempt.txt": "78febea39f1904d0309bfa3c8ff1951a909eb956d4da5314983045f82048ee21",
+  "evidence/run-0.json": "d0596a4992dfa2ed8192f4dc7da896a1a21a55bc087a0aabc81eb10cc46cb035",
+  "evidence/run-1.json": "d0596a4992dfa2ed8192f4dc7da896a1a21a55bc087a0aabc81eb10cc46cb035",
+  "FOCUS-CORRECTION.md": "7106b1c61880f7350347c7c5fa4637252254c3b987997baa9f5f9f34cf57e523",
+  "README.md": "2dfc27921095af3ac9c725680bc4ee0bcab30ae7f145e4eb10a672ea9bd7605b",
+  "SPEC-BASIS.md": "b151a1c47563444f65c022323a18b0fdb2be64e37e221241a32d1787fe362e8d",
+  "tools/Adapter.cs.txt": "5405cbc758b93c6893607b403d812dd7181d83badaa3092b51fb4a30d9b6d9f9",
+  "tools/run.py": "ab8911d6806720a80871189d4b8a57b351e29fd8f8139a630e6aa32ec0d1cbe4",
+  "tools/TypedNode.cs.txt": "c73f87cc7b3da880694c110b49d906e47a00bfe2e0169ef21703ab66888d174f",
+  "tools/verify.py": "56f1f3c59542e41fda918eb3aec1fb3760c485f0c4879213478bfb27fe21d5d7"
+}

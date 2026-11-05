@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.3   | 02-09-2026     | XQST0059 (not FOQM0002) for an unresolvable relative module URI (xslt30 load-xquery-module-001) |
 //                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 28-10-2026     | Resolve target context types in module scope after preparing imported schemas (1.30.1).  |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -66,9 +67,12 @@ internal static class XQueryModuleLoader
             ?? throw new InvalidOperationException(UnresolvedModuleError(href));
 
         XQueryParseResult targetParse;
+        LibraryContextItemConstraint? targetConstraint;
         try
         {
             targetParse = XQueryParser.Parse(target.Source);
+            targetConstraint = targetParse.StaticContext.ContextItemTypeName is null ? null
+                : new LibraryContextItemConstraint(targetParse.StaticContext);
         }
         catch (Exception ex)
         {
@@ -77,13 +81,6 @@ internal static class XQueryModuleLoader
         // The resolved source must be a library module for the requested URI (FOQM0003).
         if (!targetParse.IsLibraryModule || targetParse.StaticContext.ModuleNamespaceUri != href)
             throw new InvalidOperationException($"FOQM0003: The module '{href}' is not a valid XQuery library module.");
-
-        // FOQM0005: a supplied context item that does not match the module's declared
-        // context item type (fn-load-xquery-module-060).
-        if (options.ContextItem is not null && targetParse.StaticContext.ContextItemTypeName is not null
-            && !XdmConversions.ValueMatchesType(options.ContextItem.Value, targetParse.StaticContext.ContextItemTypeName, ctx))
-            throw new InvalidOperationException(
-                $"FOQM0005: The supplied context item does not match the declared type '{targetParse.StaticContext.ContextItemTypeName}'.");
 
         // Resolve the transitive import closure through the same resolver chain.
         var resolved = new Dictionary<string, List<(string? Location, string Source)>>(StringComparer.Ordinal);
@@ -123,6 +120,12 @@ internal static class XQueryModuleLoader
         var loadedSchemas = CollectSchemaImports(targetParse, resolved);
         if (loadedSchemas.Count > 0 || ctx.SchemaSet is not null)
             evalCtx.SchemaSet = XQueryExecutable.BuildSchemaSet(loadedSchemas, evalCtx, ctx.SchemaSet);
+
+        // A target module's schema types must be available before matching its option.
+        if (options.ContextItem is not null && targetConstraint is not null
+            && !targetConstraint.Matches(options.ContextItem.Value, evalCtx))
+            throw new InvalidOperationException(
+                $"FOQM0005: The supplied context item does not match the declared type '{targetConstraint.TypeName}'.");
 
         if (options.ContextItem is not null)
             evalCtx.WithFocus(options.ContextItem.Value, 1, 1);

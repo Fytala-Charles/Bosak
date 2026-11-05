@@ -1,0 +1,73 @@
+{
+  "p03": "InProgress",
+  "cohortChecks": 70,
+  "includesPrevious48": true,
+  "repetitions": 2,
+  "existingRuntimeRegressions": 366,
+  "existingFocusedXsltRegressions": 265,
+  "proposedTypes": 47,
+  "bcap01Closed": false,
+  "publicCandidateImplemented": false,
+  "scope": "Private real-engine capture/drain outcome and original-exception feasibility; declarations only for the revised public shape",
+  "cases": [
+    {
+      "id": "C01",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C02",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C03",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C04",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C05",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C06",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C07",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C08",
+      "status": "ExercisedBoundedSequentialProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C09",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C10",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    }
+  ],
+  "remaining": [
+    "Exact revised outcome/exception contract disposition by Braid and impacted owners",
+    "Initial mode and broader option/authority profiles",
+    "Cold and native workload cost/latency, cancellation latency",
+    "Actual Schema/XmlDb consumer and worker handoff qualification",
+    "Concurrent/reentrant gate reuse remains unsupported",
+    "Full engine/conformance qualification before promotion",
+    "Public declarations remain throwing proposals, not a shipping SDK"
+  ]
+}

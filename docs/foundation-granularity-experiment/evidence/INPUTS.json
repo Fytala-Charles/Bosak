@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-31",
+  "draftPath": "docs/foundation-granularity-experiment/CORE-CANDIDATE-V4.cs.txt",
+  "draftSha256": "8dd1359f171e3902f3de136f9fee6f2d2dc1c34b6c233af8770a37dd732b4432",
+  "feedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "project": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><GenerateDocumentationFile>true</GenerateDocumentationFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include=\"Program.cs\"/><Compile Include=\"Contracts.cs\"/><Reference Include=\"Bosak.XPath.Core\"><HintPath>Bosak.XPath.Core.dll</HintPath><Private>true</Private></Reference></ItemGroup></Project>",
+  "sizes": [
+    64,
+    4096,
+    65536
+  ],
+  "cursorBatchSize": 64,
+  "cacheEntryLimit": 8,
+  "warmups": 3,
+  "samples": 7,
+  "rounds": 3,
+  "environmentOverrides": {
+    "DOTNET_TieredCompilation": "0",
+    "DOTNET_ReadyToRun": "0"
+  },
+  "parentDraftPath": "docs/foundation-advisor-contract/SIGNATURES-V3.cs.txt",
+  "parentDraftSha256": "fd698b82cf1dcc92fa1388f788e7b9f8cbbdf9313fb3b3eab4f2f2acf602f76e",
+  "scope": "Synthetic in-process component graph/lookup implementation; not Schema provider, VM, DB or remote RPC evidence",
+  "productionModified": false
+}

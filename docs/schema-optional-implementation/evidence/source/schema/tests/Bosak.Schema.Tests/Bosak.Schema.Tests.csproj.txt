@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Test project: no public API surface, so no XML documentation file is generated.
+         IDE0005 cannot run on build without doc generation (roslyn#41640), so it is suppressed here. -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);IDE0005</NoWarn>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Bosak.XPath.Providers" Version="1.34.1" Condition="'$(BosakSourceRoot)' == ''" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Bosak.Schema\Bosak.Schema.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\TestData\Schemas\sku.xsd" CopyToOutputDirectory="PreserveNewest" Link="TestData\Schemas\sku.xsd" />
+    <None Include="..\TestData\Schemas\orders.xsd" CopyToOutputDirectory="PreserveNewest" Link="TestData\Schemas\orders.xsd" />
+  </ItemGroup>
+
+</Project>

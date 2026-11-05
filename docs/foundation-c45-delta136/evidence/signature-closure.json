@@ -1,0 +1,2944 @@
+{
+  "formatVersion": 1,
+  "status": "Conservative observed Bosak public-type reachability; not accepted member-level freeze closure",
+  "limitations": [
+    "Includes all declarations of reached types, including deferred/draft members",
+    "Does not prove BCL/external package closure, IL/body dependencies, runtime offsets or behavior",
+    "Field-shape/attribute-only rows are retained in the manifest, not public-signature edges"
+  ],
+  "seeds": [
+    "Bosak.XPath.Api.CompileOptions",
+    "Bosak.XPath.Api.XPath31Expression",
+    "Bosak.XPath.Api.XPathCompatibility",
+    "Bosak.XPath.Api.XPathExpression",
+    "Bosak.XPath.Core.Xdm.FunctionItem",
+    "Bosak.XPath.Core.Xdm.ISinglePassSequence",
+    "Bosak.XPath.Core.Xdm.IXdmNode",
+    "Bosak.XPath.Core.Xdm.IXdmSequence",
+    "Bosak.XPath.Core.Xdm.IXdmSequenceEnumerator",
+    "Bosak.XPath.Core.Xdm.OccurrenceIndicator",
+    "Bosak.XPath.Core.Xdm.XPathDateTime",
+    "Bosak.XPath.Core.Xdm.XdmArray",
+    "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+    "Bosak.XPath.Core.Xdm.XdmAxis",
+    "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+    "Bosak.XPath.Core.Xdm.XdmContentItem",
+    "Bosak.XPath.Core.Xdm.XdmContentKind",
+    "Bosak.XPath.Core.Xdm.XdmElementSpec",
+    "Bosak.XPath.Core.Xdm.XdmJNode",
+    "Bosak.XPath.Core.Xdm.XdmMap",
+    "Bosak.XPath.Core.Xdm.XdmNodeKind",
+    "Bosak.XPath.Core.Xdm.XdmRecordField",
+    "Bosak.XPath.Core.Xdm.XdmRecordType",
+    "Bosak.XPath.Core.Xdm.XdmSequence",
+    "Bosak.XPath.Core.Xdm.XdmSequence+Enumerator",
+    "Bosak.XPath.Core.Xdm.XdmValue",
+    "Bosak.XPath.Core.Xdm.XdmValueEqualityComparer",
+    "Bosak.XPath.Core.Xdm.XdmValueKind",
+    "Bosak.XPath.Core.Xdm.XsQName"
+  ],
+  "reachableTypes": [
+    "Bosak.XPath.Api.CompileOptions",
+    "Bosak.XPath.Api.XPath31Expression",
+    "Bosak.XPath.Api.XPathCompatibility",
+    "Bosak.XPath.Api.XPathExpression",
+    "Bosak.XPath.Core.Xdm.FunctionItem",
+    "Bosak.XPath.Core.Xdm.ISinglePassSequence",
+    "Bosak.XPath.Core.Xdm.IXdmNode",
+    "Bosak.XPath.Core.Xdm.IXdmSequence",
+    "Bosak.XPath.Core.Xdm.IXdmSequenceEnumerator",
+    "Bosak.XPath.Core.Xdm.OccurrenceIndicator",
+    "Bosak.XPath.Core.Xdm.XPathDateTime",
+    "Bosak.XPath.Core.Xdm.XdmArray",
+    "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+    "Bosak.XPath.Core.Xdm.XdmAxis",
+    "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+    "Bosak.XPath.Core.Xdm.XdmContentItem",
+    "Bosak.XPath.Core.Xdm.XdmContentKind",
+    "Bosak.XPath.Core.Xdm.XdmElementSpec",
+    "Bosak.XPath.Core.Xdm.XdmJNode",
+    "Bosak.XPath.Core.Xdm.XdmMap",
+    "Bosak.XPath.Core.Xdm.XdmNodeKind",
+    "Bosak.XPath.Core.Xdm.XdmRecordField",
+    "Bosak.XPath.Core.Xdm.XdmRecordType",
+    "Bosak.XPath.Core.Xdm.XdmSequence",
+    "Bosak.XPath.Core.Xdm.XdmSequence+Enumerator",
+    "Bosak.XPath.Core.Xdm.XdmValue",
+    "Bosak.XPath.Core.Xdm.XdmValueEqualityComparer",
+    "Bosak.XPath.Core.Xdm.XdmValueKind",
+    "Bosak.XPath.Core.Xdm.XsQName",
+    "Bosak.XPath.Runtime.Functions.FunctionSignature",
+    "Bosak.XPath.Runtime.Functions.XPathFunction",
+    "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+    "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt",
+    "Bosak.XPath.Runtime.Resources.ControlledResourceReceiptOutcome",
+    "Bosak.XPath.Runtime.Resources.ControlledResourceRequest",
+    "Bosak.XPath.Runtime.Resources.ControlledResourceResponse",
+    "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+    "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority",
+    "Bosak.XPath.Runtime.Vm.DecimalFormat",
+    "Bosak.XPath.Runtime.Vm.EvaluationContext"
+  ],
+  "additionalReviewTypes": [
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.FunctionSignature"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceReceiptOutcome"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceRequest"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceResponse"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.DecimalFormat"
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.EvaluationContext"
+    }
+  ],
+  "edges": [
+    {
+      "from": "Bosak.LanguageServer.CodeActionHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "7fe28d79a70db4a049bae7cec6fbe557820934d23169d8a56bcc8c279107b021",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.CodeLensHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "1f1874191e1bec4224f83ff6f6834aa89f6a73a9e5716f76b59a01098fd042ec",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.DefinitionHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "10f9a6f8339c67687ec9024de2d66ae42cffdd59f55b1d0ef3fbae6372541544",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.DiagnosticsHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "63afa0ad0b8e086c9055ffa17b98acdd791aff6a8801edeb60c6cfd7a5c14aa9",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.DocumentSymbolHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "2825e4b8ef95fcdaaa986ed033b925b8242d793cd1d5724befaf1ba653ed4546",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXPathHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "049d62b6ab4a9286cae3c8e6e089bccfd7bd26c02a7af6f42269cd87b6f0da0b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXPathHandler",
+      "to": "Bosak.LanguageServer.EvaluateXPathParams",
+      "witnessEntryId": "0372408c907de1b89eb778dd1e32dcae76b7232e168b2163c571dc275b4d470c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXPathHandler",
+      "to": "Bosak.LanguageServer.EvaluateXPathResult",
+      "witnessEntryId": "0372408c907de1b89eb778dd1e32dcae76b7232e168b2163c571dc275b4d470c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXPathParams",
+      "to": "Bosak.LanguageServer.EvaluateXPathResult",
+      "witnessEntryId": "338b1357bb28a5e913f9cb9a947eb52af62c1a50256d7651c054e1b9716dec24",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXQueryHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "7f1dc5aefd5fa56e39b563b599b1fb3cc788bae498b1f9f93b3587e608167b87",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXQueryHandler",
+      "to": "Bosak.LanguageServer.EvaluateXQueryParams",
+      "witnessEntryId": "c964d64d9788943c409f39d2736559a0ae462feec8bb7a91efb52ab9eb70d506",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXQueryHandler",
+      "to": "Bosak.LanguageServer.EvaluateXQueryResult",
+      "witnessEntryId": "c964d64d9788943c409f39d2736559a0ae462feec8bb7a91efb52ab9eb70d506",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.EvaluateXQueryParams",
+      "to": "Bosak.LanguageServer.EvaluateXQueryResult",
+      "witnessEntryId": "de1e63447c2094d248334db918ce2f112d13981673e8f211863c6b905d05a3d1",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.ExecuteCommandHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "8f18032fdeeb279aca1967a12c75428f13154d80283e61953c948ff95ce56a93",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.HoverHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "8fc088861da587575d6ef16b85353a156a0fa69224277ab814e66b0fd1cc2401",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.RunInitialTemplateHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "e31d67b8485692f07609f2d5082467c91df71fbef4e4230621cc87b71fe540c0",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.RunInitialTemplateHandler",
+      "to": "Bosak.LanguageServer.RunInitialTemplateParams",
+      "witnessEntryId": "3bc8e2e75096604f0ed29d1eeb64ce30c41f17adb2e66f4550c25e2288ee7432",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.RunInitialTemplateHandler",
+      "to": "Bosak.LanguageServer.RunInitialTemplateResult",
+      "witnessEntryId": "3bc8e2e75096604f0ed29d1eeb64ce30c41f17adb2e66f4550c25e2288ee7432",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.RunInitialTemplateParams",
+      "to": "Bosak.LanguageServer.RunInitialTemplateResult",
+      "witnessEntryId": "a7405465cfdf98048942a478464c6abe068e964f4f6aa34b9478952b3493a179",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.SemanticTokensHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "cdeba19c86d0485b15e2d4ec28447639dbe830c46833ffbae8168a456032e173",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.TextDocumentSyncHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "e3c59554a6c87d1de44be148e87197ef84df2ad5fc5424bfed429464c3bffcf0",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.TransformXsltHandler",
+      "to": "Bosak.LanguageServer.DocumentManager",
+      "witnessEntryId": "44c55c9edeec885b4bb48c2eda4f658dcc91d9fed00320e10d57d58f00b86b44",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.LanguageServer.TransformXsltHandler",
+      "to": "Bosak.LanguageServer.TransformXsltParams",
+      "witnessEntryId": "b7cd5b8ce0f0dedc040eb311885833a8429f5b3c1427f42c5b55457bf5c7c766",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.TransformXsltHandler",
+      "to": "Bosak.LanguageServer.TransformXsltResult",
+      "witnessEntryId": "b7cd5b8ce0f0dedc040eb311885833a8429f5b3c1427f42c5b55457bf5c7c766",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.LanguageServer.TransformXsltParams",
+      "to": "Bosak.LanguageServer.TransformXsltResult",
+      "witnessEntryId": "ea4bb7c7c254f7a58521c24ef4ee6a98e737462d7b012aa546f623f4912726d1",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.CompileOptions",
+      "to": "Bosak.XPath.Api.XPathCompatibility",
+      "witnessEntryId": "7af927091568bcddaf61a52f4afe18fd51393f49f97a9d9308184db31ca44e5c",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Api.XPath31Expression",
+      "to": "Bosak.XPath.Api.CompileOptions",
+      "witnessEntryId": "fb0c5137edf9258d1c33e465adad7b816e432aba37aa453258aa68e69e6cb0ef",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.XPath31Expression",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "4c5250cb0e94e150f759d0ce69dea9e698e2a611f765f282bcec5508b522e2b3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Api.XPath31Expression",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "witnessEntryId": "8f318b0f2986e198f5a014541e9b52c3ecac9791fc47d76403c0fbae2862e56c",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.XPath31Expression",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "4c5250cb0e94e150f759d0ce69dea9e698e2a611f765f282bcec5508b522e2b3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Api.XPath31Expression",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "c8a9d85e0619efca43e75386b8d1cbb158533ed37d534e1d9c393f1a219bc22b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.XPathExpression",
+      "to": "Bosak.XPath.Api.CompileOptions",
+      "witnessEntryId": "6eb64e691f81acda31fdae777ae449708ec348500d04799a2c68159b24668fe5",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.XPathExpression",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "70026f50ed09399cae9227ce9b7ef818531c1611c01a5561affba777bf2a42b9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Api.XPathExpression",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "witnessEntryId": "98ba8c50e2ab04a8214cec4f8f88afe6b8eeeaa04af4c2fe44c33a638227da72",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.XPathExpression",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "70026f50ed09399cae9227ce9b7ef818531c1611c01a5561affba777bf2a42b9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Api.XPathExpression",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "9a287d74c36246be0275f66e0f09827cc916c86276caad57320262a725a96e77",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.IXsdValidator",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidationResult",
+      "witnessEntryId": "62402262031a534bb4a5b954a6baeb71431f8917c311769d5c6da3bf1fb995fe",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.IXsdValidator",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidatorOptions",
+      "witnessEntryId": "62402262031a534bb4a5b954a6baeb71431f8917c311769d5c6da3bf1fb995fe",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.XsdValidationError",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidationSeverity",
+      "witnessEntryId": "98cff2076ee3e495e6e3a0d1b24327c952c3932e4bdd653a2a448c605802de7e",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.XsdValidationResult",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidationError",
+      "witnessEntryId": "887355d809b3750b06b83658154f1a2790c29f987ec0934410c8cf155acb99b7",
+      "declarationCount": 7
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.XsdValidator",
+      "to": "Bosak.XPath.Api.Xsd.IXsdValidator",
+      "witnessEntryId": "8679102385fcb680bb47df8ee05b7fdb950ce2905e5a0f737e36ef4a4a839e71",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.XsdValidator",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidationResult",
+      "witnessEntryId": "4fe867ced39741200f7f8a87739d295db1590b779cb28a8c49e27d76f048dfc4",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Api.Xsd.XsdValidator",
+      "to": "Bosak.XPath.Api.Xsd.XsdValidatorOptions",
+      "witnessEntryId": "4fe867ced39741200f7f8a87739d295db1590b779cb28a8c49e27d76f048dfc4",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.ISinglePassSequence",
+      "to": "Bosak.XPath.Core.Xdm.IXdmSequence",
+      "witnessEntryId": "0f5f0c0ee329cd4c98ead7e04ff60e1e192354736f0453e7760e396edb53fc34",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmAxis",
+      "witnessEntryId": "7150f67b3889061fd1cd2b4fc0eec70ef89851d26902170d8fdb26c56f0f7280",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmNodeKind",
+      "witnessEntryId": "ee099080711640ba5438664e76d720b89effc0388398de121198e9593592ac34",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "witnessEntryId": "8c2d296ed9dd21d00bb88ad9e60dc2b909124d3e3f7daf596eac254cd3a2ec6d",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "d63a59b36b851611febe1eb7947a23fe50c98d05ba2965371d3bb03939676350",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmSequence",
+      "to": "Bosak.XPath.Core.Xdm.IXdmSequenceEnumerator",
+      "witnessEntryId": "3a7f9d48bd4b2f9f45278d1cc5457a392e3e0b3b4fae5f6f19c235da8a1d8edb",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.IXdmSequenceEnumerator",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "68e5c0c33174a2e71a8b1d2a40247e1aac1832503d4dc1fe3c2bbc274e2d4a67",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmArray",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "e0d66ca9d6719d8d2572892af8a8a3d382724cd5e7eaadc88ad81080dd3a62b8",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "bbc8a397f4bbccefb9ca216c4b25ba27cf3e8e4669be88e99328abc003943f2f",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+      "witnessEntryId": "bafd045057edb0e52eeff5c72759306a5d35ea03efda7c0520f68a6b5f1d78ec",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "to": "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+      "witnessEntryId": "320353d754a9ef5a2d29de56c551f742c7a4fb2202f3de8440a3e81476af9344",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "to": "Bosak.XPath.Core.Xdm.XdmContentKind",
+      "witnessEntryId": "ab3eff3af270b3189291a9222430027fcca453071dc45480d7107e4676782c27",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "ab3eff3af270b3189291a9222430027fcca453071dc45480d7107e4676782c27",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "to": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "witnessEntryId": "691fc1257c21f88300b9a972a5331ffce0bc2c6cdefa5faed9f0329bcecdf4af",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "to": "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+      "witnessEntryId": "5e4d4dee8353f2672820176d24e3cf4673ad62ba71d4fa0151a04fa67cd2d791",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "to": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "witnessEntryId": "691fc1257c21f88300b9a972a5331ffce0bc2c6cdefa5faed9f0329bcecdf4af",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmJNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "f1478a8e2fbedfcc11cfeffc6e328ed51277a229919e5a6fe517954fe4b40d28",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmMap",
+      "to": "Bosak.XPath.Core.Xdm.XdmRecordType",
+      "witnessEntryId": "31bcf4eb494cedaee35ce34caaf595ca9f04d9e4bd959c66f5704d6e1eb8c548",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmMap",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "2a7717f5a6f2ea1b78d1c572f1006ebeaed0ccb6c33b35555ef310b95f08ebfa",
+      "declarationCount": 14
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmRecordType",
+      "to": "Bosak.XPath.Core.Xdm.XdmRecordField",
+      "witnessEntryId": "5505caf69a843dd6c19dc977c9246a144f50de56bff6e29b22b058f64b01daa5",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "to": "Bosak.XPath.Core.Xdm.IXdmSequence",
+      "witnessEntryId": "3111033e3793451f49749b403d69538186d59b9c1405a75e189dbe98e1d0e114",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence+Enumerator",
+      "witnessEntryId": "b6d9ecf894def3d16127ad0b00baf518d312426014cd3e695cfd49f84610ff6c",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "51eef5ed7cf28e7027897cb8a12d4e6801a05997a748f850cc823fcd2d8cac27",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmSequence+Enumerator",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "78e9eae411b3a5ecfd675fba37bb54d466c8e4a10aadc5f1ff1a02a1b1598107",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "6393ac65189691a4a1c8073cd820644bef034799bbdb004708895ce537961215",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.IXdmSequence",
+      "witnessEntryId": "4cc6ecdcc6a1d2a3b8792ffbc6c2172f6b6f4e586358494e1f778ca4ede74746",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XPathDateTime",
+      "witnessEntryId": "2d00b39964030e498c762b0bc8d55531010c89e239072973ae763f6835fefa0e",
+      "declarationCount": 12
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmArray",
+      "witnessEntryId": "366e4b4f1ac9d6953d44dc75f2c054287cb60a5b213809d04a9ab7063ce81039",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmJNode",
+      "witnessEntryId": "cc002a8bfa20dc733c11e02b2350ed3ebf9a7d2f2661257a0e5f1cf1fa7ed2d8",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmMap",
+      "witnessEntryId": "497cb941837c89d21ab2e7ad6f9fa122f7505b11f93014229b735c39dc88ef17",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "witnessEntryId": "2877697ce4075ec1ffb4273fb0fdeb5c3cd6a02c5c933d6e68b968193a1141da",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XdmValueKind",
+      "witnessEntryId": "f8673a64b323706292c4955a66c1983743b4331ae2a247d8df202a01bbc6d397",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValue",
+      "to": "Bosak.XPath.Core.Xdm.XsQName",
+      "witnessEntryId": "5e4180f072e0b59e9df9400ef655b1faa4bb2ff8559554d7f1cb87bf33a2d867",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValueComparer",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "9bd622985cec7c862f3af910dd24242ca269a2ba2f7491a5ae65b0a6fc2c3102",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Core.Xdm.XdmValueEqualityComparer",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "55c89c83aa45504ead7559134b8e51abdb1beff84b647f394c2692c7e8152523",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.BaseXConnectionOptions",
+      "to": "Bosak.XPath.Providers.Database.DatabaseConnectionOptions",
+      "witnessEntryId": "768bdda67378b7a9836954673f4af58611044db534bbc93a94586262094d03cc",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.DatabaseDocumentLoader",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "277d36a97859e4992963227badef4db46215ecc945c03ff162a400d2e7e9d64a",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.DatabaseDocumentLoader",
+      "to": "Bosak.XPath.Providers.Database.DatabaseLoaderOptions",
+      "witnessEntryId": "277d36a97859e4992963227badef4db46215ecc945c03ff162a400d2e7e9d64a",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.DatabaseLoaderOptions",
+      "to": "Bosak.XPath.Providers.Database.BaseXConnectionOptions",
+      "witnessEntryId": "3e34661ff11e7e484cfcf7d1c28e97aa2d6240ad774c65b3336954f513899e20",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.DatabaseLoaderOptions",
+      "to": "Bosak.XPath.Providers.Database.ExistConnectionOptions",
+      "witnessEntryId": "273c2208ab1ee7ef372eeb6aa20ddc6569460f442ac8bb9c075c5ee427291c17",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.DatabaseLoaderOptions",
+      "to": "Bosak.XPath.Providers.Database.MarkLogicConnectionOptions",
+      "witnessEntryId": "167965aa540e9dc0f763e12d8b3c561a6e7f47d8e6b293531f54d4d52f5a469b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.ExistConnectionOptions",
+      "to": "Bosak.XPath.Providers.Database.DatabaseConnectionOptions",
+      "witnessEntryId": "d4b775b46a0d3b119784f5e9716ffef94bab7a59ad0cff9588f4e6ce2824bcfc",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Database.MarkLogicConnectionOptions",
+      "to": "Bosak.XPath.Providers.Database.DatabaseConnectionOptions",
+      "witnessEntryId": "57c9f02fa0d5f015d6087fa0c24b1ebe45525b9129e7b4a6236d67dcff732f22",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Streaming.IStreamingNode",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "d6a93cc3ad0b2bf35065e37ed6b1074dd4bc67fc090787f8fc1fc855ffcf57ab",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Streaming.StreamingLoadOptions",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "771f14022fb984e9cd2203abfbce9dc0ce3382fa7837d7e475a0433bf5e6890a",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Providers.Streaming.XmlStreamingProvider",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "8302cb405e85b5d610ef1ca4ad4182733cb9fb20b2b5c3634f96f1b8cd66a24d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Streaming.XmlStreamingProvider",
+      "to": "Bosak.XPath.Providers.Streaming.StreamingLoadOptions",
+      "witnessEntryId": "8302cb405e85b5d610ef1ca4ad4182733cb9fb20b2b5c3634f96f1b8cd66a24d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "c53e79b5eae111972bdb516b3814690703b8091431e20bc5622e46310bf10cdd",
+      "declarationCount": 7
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmAxis",
+      "witnessEntryId": "44ada18361bb174750a398d2f9bf3acdf793de3c0eab48bdb7722a3a2a379c77",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmNodeKind",
+      "witnessEntryId": "0dfbfa57a538dd9c71b97a6b51fa430f72085ddce377a6e32d6764c35298c8c2",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "witnessEntryId": "25269b5a4f344aec0babcd9a53d366c201255ba42f23e42d07a5d014564bdbe5",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "b2da98922ecf33ff50d30e75ae6fa89d7523a64fed4126343e887500b6cf5ba1",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "to": "Bosak.XPath.Providers.Xml.XdmElementAssessment",
+      "witnessEntryId": "c5ede7a640da4c56cb5f229ccbe35f2fb8b91a6807a454de898aacf042d18c2c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentProvider",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "4c8194b884e8dfd4babc40426dc1eee38e8db2954e8a6202ace2791fb96e22ea",
+      "declarationCount": 12
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentProvider",
+      "to": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "witnessEntryId": "4c8194b884e8dfd4babc40426dc1eee38e8db2954e8a6202ace2791fb96e22ea",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentProvider",
+      "to": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "witnessEntryId": "b94373588aa6a88a10ec85b018d5a52c4ed1e440488661b717e568ccec31b3c9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XDocumentProvider",
+      "to": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "witnessEntryId": "f418edec426bc904583688aca4ac7f90dc9dc47ee189fba87ff042b8549d243f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XdmElementAssessment",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "c1b8757d08ae06a566af2d30e38b21980b6b78fa77e6fb2f5f1487c31c2e9cef",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XdmSchemaAnnotator",
+      "to": "Bosak.XPath.Providers.Xml.XdmSubtreeValidationResult",
+      "witnessEntryId": "7d330e6294bdd57faa427f00e81e7fe726a201597f0e8be4cc453510186549ae",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XdmSchemaAnnotator",
+      "to": "Bosak.XPath.Providers.Xml.XdmValidationOptions",
+      "witnessEntryId": "eb3979c70b529be835452e174e62d41eb5ea168dee80b720762f6017ad3896a4",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Providers.Xml.XdmValidationOptions",
+      "to": "Bosak.XPath.Providers.Xml.XdmValidationMode",
+      "witnessEntryId": "6ee2ab519b4b88acf7ecaf6a274e293ca1d9d9fc33e63641806c972ea4289d1b",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.CoercedFunctionItem",
+      "to": "Bosak.XPath.Core.Xdm.FunctionItem",
+      "witnessEntryId": "95d6afa8080a1465f02e852e0dd4ca3ac24e43184dace7e1821f67eeec49c665",
+      "declarationCount": 7
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.DelegateFunctionItem",
+      "to": "Bosak.XPath.Core.Xdm.FunctionItem",
+      "witnessEntryId": "9c23e8cd8fac2a4da104ce95c2b9cdc8d3a7507ace5a62657828095e19b4ee07",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.DelegateFunctionItem",
+      "to": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "witnessEntryId": "2bdff467895664932144164798b766272c32ed790be13bef782f619c7fdd2b9e",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.FunctionSignature",
+      "to": "Bosak.XPath.Core.Xdm.XdmValueKind",
+      "witnessEntryId": "cb2197377de168295851212a29103579b419fbd23faafffa89a558c9dee0362b",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.FunctionSignature",
+      "to": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "witnessEntryId": "37e6f0e27dc099ac4931b109161eee97a4a60612f2aa393659c5ab28001f7a92",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.InlineFunctionItem",
+      "to": "Bosak.XPath.Core.Xdm.FunctionItem",
+      "witnessEntryId": "c7fc204d5aa431dde296ee6112e02e788542f0f509e17ccdb8274a0fabb4c87a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.InlineFunctionItem",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "9468a27d7f7b2f03fbf0b1540d9fe9c6cbf57b477227345acabfa4f56e71bf9e",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "3584caa108994f20df8116ad7be03c343b45afb5147328e3fdd52e360508d665",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "3584caa108994f20df8116ad7be03c343b45afb5147328e3fdd52e360508d665",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction0",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "26e7750c0abaed6f74c6ba78c801bff19de38e6056a4f704f461dc585080df19",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction0",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "6d30e7a03c115e701ce298d84f059d053b4f7c3f6fd2153cf3dc98c787f1997e",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction1",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "442ea0e730c4e8808ebd3ae07810dbae0b66c9a4fff379afcb7ce8dc8ee0da0b",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction1",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "442ea0e730c4e8808ebd3ae07810dbae0b66c9a4fff379afcb7ce8dc8ee0da0b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction2",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "a0f3fbb13bb6ab84ba575090d0b4c9922241e5090dd91b95938055f2321db7b4",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Functions.XPathFunction2",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "a0f3fbb13bb6ab84ba575090d0b4c9922241e5090dd91b95938055f2321db7b4",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt",
+      "witnessEntryId": "0dfe31642a05f6d3ef8d43279805bb60921da9cb90ed0f09dac7933f1f098a43",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+      "witnessEntryId": "cb1c42554bbb3fc6737172972ed595dc2e2e11897b6334162ff03002e8f5ff5c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "to": "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority",
+      "witnessEntryId": "cb1c42554bbb3fc6737172972ed595dc2e2e11897b6334162ff03002e8f5ff5c",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceReceiptOutcome",
+      "witnessEntryId": "1c14971cd53116e0b36b250b72df1e191814e2a6fca8aeab793219b927d7b050",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+      "witnessEntryId": "1c14971cd53116e0b36b250b72df1e191814e2a6fca8aeab793219b927d7b050",
+      "declarationCount": 7
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledResourceRequest",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+      "witnessEntryId": "de2b4322e2b6ef72f0d850164a42954feb41360a879ba139b4768be3fe64693e",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.ControlledSchemaResolver",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "witnessEntryId": "b47cb5f507e48b5c7e3ec30a5f3cca6a88b9966b5d8251b7de13bc7d168a0329",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceRequest",
+      "witnessEntryId": "aa0afd0074e0c20026ab3bd7a482e83ed278b24c4112a45dbfc44c3990404c4b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceResponse",
+      "witnessEntryId": "aa0afd0074e0c20026ab3bd7a482e83ed278b24c4112a45dbfc44c3990404c4b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.ErrorDetails",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "16441f895618557aea131e751f0ff8b439cafdd4c602448c59b3f9f0b73b5fa6",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "5b6ae0371d8bf965d62cfd7d4c9567c0384ee15ee7cb3d27e07680e9957d059f",
+      "declarationCount": 30
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "witnessEntryId": "69a0a58f9d59998dd60598a4d1f4aea53a61abad51aee03b7e86d93b5fcc25a9",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "witnessEntryId": "728e9b85af0d93b5e7771e26c2ce52b4ff06483a9eca18008641036fec895895",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "witnessEntryId": "16efce7fe435818bda4158de119ee5d281aaf84e093f89b966e94939d08aba42",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "676d603e4cbfd0f071569a9af7371b1f0800c0ef58dc6b01548afb38afc4cd1e",
+      "declarationCount": 15
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Runtime.Functions.FunctionSignature",
+      "witnessEntryId": "14a9110ab29f649ce025c26cb86a98c54e4e055aed5d9fd8b34286cd756ffc14",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "witnessEntryId": "49187bb5151a8a18115a439708c327bdef58fd93ee493751d7e10956b3628e5f",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+      "witnessEntryId": "92a302f4538bee6304a80070c03c528f2a01114cf6d9d61e250b975f1ecb8b73",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "to": "Bosak.XPath.Runtime.Vm.DecimalFormat",
+      "witnessEntryId": "4ca9d9c9d251591c3117b47a8e6a0c2d03a85bc1fd6308eea28baafcb6de65b9",
+      "declarationCount": 7
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.XPathErrorException",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "d6634af77271537169ab8013891667eecfe57739941a844754a3fa634a7c6ec0",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.XdmConversions",
+      "to": "Bosak.XPath.Core.Xdm.FunctionItem",
+      "witnessEntryId": "7fd6617881f670bc38c8fb0349b995c469ba8c6cc694040a82e8c0d4bed4bd4d",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.XdmConversions",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "98d30ce052e1db42a24f3c2e38de3dbc39729ad16bbe905d11094ec74d9144f3",
+      "declarationCount": 9
+    },
+    {
+      "from": "Bosak.XPath.Runtime.Vm.XdmConversions",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "98d30ce052e1db42a24f3c2e38de3dbc39729ad16bbe905d11094ec74d9144f3",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.XPath.Standard.Functions.FunctionLibrary",
+      "to": "Bosak.XPath.Runtime.Functions.FunctionSignature",
+      "witnessEntryId": "e643087c464a79f6f31b2a19f3f87b580c13605709fa3c19d8f06ceb047c8317",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Standard.Functions.FunctionLibrary",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "6ac5dd8211d01b4338c7c15c5edad97c9914f80d106efb3b12c783bc8cb75fae",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XPath.Standard.Functions.FunctionLibrary",
+      "to": "Bosak.XPath.Standard.Functions.FunctionLibrary+KeywordSignatureInfo",
+      "witnessEntryId": "c8f44cdf085e225622c255248ff81b655c4443c25e7a5332aed33e28cc534fa3",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Standard.Json.XdmJsonOptions",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "12ab55d166b712ab4632ac2ae9c282d61fba9460b2afea60531f92edd2461702",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.XPath.Standard.Json.XdmJsonSerializer",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "886d1075fbdb3d7edec4b861502dd5f5c2bd6488afd14316e3cd0e7e096721e6",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XPath.Standard.Json.XdmJsonSerializer",
+      "to": "Bosak.XPath.Standard.Json.XdmJsonOptions",
+      "witnessEntryId": "886d1075fbdb3d7edec4b861502dd5f5c2bd6488afd14316e3cd0e7e096721e6",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XQuery.Api.XQueryCompiler",
+      "to": "Bosak.XQuery.Api.XQueryExecutable",
+      "witnessEntryId": "fb368d25693afb77ca82bc01a4338606748df5b3d9b0311ae87a51d3030c5ab9",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XQuery.Api.XQueryContext",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "3f7a4e6f2a0024067e9c6e94a040ec1422aaa67fbf194aebddd2a7cbb1d610f7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XQuery.Api.XQueryContext",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "cd986f17c81c95ef7d3b96f168139b0e37a68a32175073c3c4852bcf56182320",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.XQuery.Api.XQueryExecutable",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "833ee1340ac8efe8c25ee70348c36d57f670da29113347502521e9d71bf6ae3e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.XQuery.Api.XQueryExecutable",
+      "to": "Bosak.XQuery.Api.XQueryContext",
+      "witnessEntryId": "833ee1340ac8efe8c25ee70348c36d57f670da29113347502521e9d71bf6ae3e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Api.FileSystemUriResolver",
+      "to": "Bosak.Xslt.Api.IXsltUriResolver",
+      "witnessEntryId": "0272159ebaf67cbb3153f0b67eef9720054bf81bf81def4c48cf7ae154f4e0ef",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Api.PackageVersion",
+      "to": "Bosak.Xslt.Api.PackageVersion+Component",
+      "witnessEntryId": "3e95147464d183293750579cc56ad56c5a9097e9af09d4d0871d31b7022edd5c",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "061befb49ee26f49461d7ada47d9af331d369d8e3462edc579bdc41d12100a6f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "3cc22770496b7f3e923baed3ad5598d3a177073d31143529b155e3407ad23682",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "witnessEntryId": "bebf19d34e07601092e96571bc39b266b8505bc28b77dec3992108862a8b5d6b",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.Xslt.Api.IXsltMessageListener",
+      "witnessEntryId": "2b2134d76cb56a051932b55eff4c0cdfa829ffb7ae476cd8009e042f418aa425",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.Xslt.Api.IXsltUriResolver",
+      "witnessEntryId": "ae1e00afeca0f66fdd61f8bfdc848f35abd4098ac0d2292b3834fbbaf75923f3",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.Xslt.Api.PackageVersionResolutionStrategy",
+      "witnessEntryId": "339854f87c939f559a6cd5d17252c7d9e198795b18b6a5928c1459fd24ff97e0",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.Xslt.Api.XsltExecutable",
+      "witnessEntryId": "061befb49ee26f49461d7ada47d9af331d369d8e3462edc579bdc41d12100a6f",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltCompiler",
+      "to": "Bosak.Xslt.Api.XsltProcessorProfile",
+      "witnessEntryId": "81442bbf98d976f0ddfb7d685a519559b1b806aad3f99c6d9e4d399126e56524",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "witnessEntryId": "809daefba6494e1e42d647600e2f60bbeee2c47caefe94a48d63010828be9904",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "42fc563361f2b16b13b1799fdfe199b75a3108234c82cbe3560812dbe3308070",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "42fc563361f2b16b13b1799fdfe199b75a3108234c82cbe3560812dbe3308070",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.Xslt.Api.StreamingTransformOptions",
+      "witnessEntryId": "5a75393b20bee115ec99967061b74e6220b7161ffade4e5ad9def23b934d021b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.Xslt.Capture.XsltCaptureOptions",
+      "witnessEntryId": "809daefba6494e1e42d647600e2f60bbeee2c47caefe94a48d63010828be9904",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.Xslt.Capture.XsltCaptureResult",
+      "witnessEntryId": "809daefba6494e1e42d647600e2f60bbeee2c47caefe94a48d63010828be9904",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltExecutable",
+      "to": "Bosak.Xslt.Stylesheet.OutputProperties",
+      "witnessEntryId": "f66759bc4f6239a512e2ab0c2d160c6b99752b72b5f2c516c4c27e7306fcd934",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.Xslt.Api.XsltFunctionLibrary",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "ec9546429df572b53b96bdcc99ad4314f4649f0f3552433f0de59ab17a3e29bd",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeSlotKind",
+      "witnessEntryId": "c9a647cb92ac5386856d131452380bf32922c3816ddf65efb3559475f5084786",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "to": "Bosak.Xslt.Authoring.ExpressionSlotContext",
+      "witnessEntryId": "808da96073c810b88ebd320f2c07c8e6ee3bcdcaa8a24fbeab3a72909336f851",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "034b9765d0d871fe2d8efd99332992b58bb0ab050e187014396855202c3875c6",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringCapabilities",
+      "to": "Bosak.Xslt.Authoring.AuthoringFidelityMode",
+      "witnessEntryId": "1d0d8a9a9cf57929a5d1baa4c3bc407422deeaf0b5181c703797d93318330afb",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringChangedSlot",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "619c51cd898d5a216b3e05b75202b34116e429cc6db5a1a0a10764dec977b8f8",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "ccf9d75be06b49bea6b2c23518a2dcba19f367ae683d95c928ccb211ebf11ec1",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalOperation",
+      "witnessEntryId": "daab52923adcedbdc6fbb2f5edfcf84248c543a16a14527898e808f5cbf31d4c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalReparenting",
+      "witnessEntryId": "e6a71fc6503cd859dc6cddcbb673c37b7b8445ea659cbcd60a3260f71afdc236",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "bc96116e426e9bc032b107ca52e4751abdb87c2117eb94464815175ad1568cd7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "witnessEntryId": "929bcf7313b8a1299beeae23550a1dc10818a9e2ff868e2ddfffd6ff1f20793a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "55bed000436d8c9a7a6c83e85bbe8c32195e6d66bbf407724c3a0abfd9d7f74b",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "cd7f6d7b59b43d4c4d72e0e73116c4f058a63e058935149d0cea2f9bc5a80f68",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "witnessEntryId": "c4468a8f4425e7486dec7f7b08357744daf5c89fb2934be7e9f1edc081598824",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "c9a50934ea2b457619884db09dbd90db3a68b3559bb1b69ad96d2139fdfb23ae",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalFailureKind",
+      "witnessEntryId": "1852b035b785cbddda51016960445a49e20717e628b0039061664e9c6be08cf9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalReparenting",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "ca217ac435a38ae070b7d1b6eb15c1c103a88afac397f0640604606b8c03a7d1",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "witnessEntryId": "811a5ece946eced10be4848b0d98d7a5122e30c3a30c69bd7f3f1b5ed1e7c57b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalFailure",
+      "witnessEntryId": "5ef6e34e791f19d413f0c761867e03f1368fb5400d3cc1daa046d67cef8a7dab",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTarget",
+      "witnessEntryId": "eeb399994760a519524cc53e8503b03149ff20cb62491e265b9d2fbe205880a7",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "857c75f37324171cae3e53f5824d40bf735d416df996f93d73e461c264792b07",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalFailure",
+      "witnessEntryId": "a3006e4bb8b09bcd95bf6780da09d71c129b2c6fc01ddb3e3e7a77576caecdae",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTarget",
+      "witnessEntryId": "4de0612dc7a459d962d58f30e3efc45b73e17e7dce885447c683dcb7cb63820c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalWrapProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTarget",
+      "witnessEntryId": "ff2ed2b355d2abf0e37a83ac1a0ce851a13f89292141952e5361f3d38e0fd9c6",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "0c990bc0e4fa5bee83f4ec3c9e85a1737afd5741081858b22b826a98e07a0844",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalFailure",
+      "witnessEntryId": "94746a94b554b0a1277568c066f75633caa2c5c134c54b6488e440a31512c1c1",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTarget",
+      "witnessEntryId": "6a6f08b348fc0c68f3f66b6b936abf49bc4a6de7866484a174a5263b8d7443da",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringDeletionFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringDeletionFailureKind",
+      "witnessEntryId": "4cb9b986abe6e48df4e53eaed385b8d0f032f85124507afbcf70f7209033ef96",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringDeletionFailure",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "870948dcd2b4ea34efb2bcae2718eec6a2af25ac7144b0d0ce3ec76b54c37c3b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "to": "Bosak.Xslt.Api.XsltExecutable",
+      "witnessEntryId": "c8aa398d92b6203a1037e9abd7bfdd9e2133f7f24f53bee28fefabdc56c703ac",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringChangedSlot",
+      "witnessEntryId": "b906724b7ebbcf766e9579ddd9217cc9337b65b23db93312e70a6965cdbda97e",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "6a22520f634a87eccdc85fc7644800c59c56cacb659657979e56b50bf8bde23f",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "cc28abfaa0c7c7c20b9584eb2b3bc47d2c11d158fffc92e7f01fcd5810e8088b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringEditFailureKind",
+      "witnessEntryId": "fff4f2c2374ec6cf70974d248efb5c4b7e656cb3ebe549a4a870bb39755d0271",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditFailure",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "de0ab2091fcc5ad1abbe5f1c67c81a01b25334ebbc9f5b054c9277ad0229db6f",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "witnessEntryId": "43edf6aab21c9cd4781e0c1b1fa40e4efb08980458e0da8134634bab9e0adbee",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringEditResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringEditFailure",
+      "witnessEntryId": "c2c26c3c3490ae1636c27c39778a539de6d88b1059a3824d79ef5515248248df",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringFailureKind",
+      "witnessEntryId": "29d6602d7b7288b74fb17f48718a630d53e28b44293e0a50dbef59c651cb1a7f",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "29d6602d7b7288b74fb17f48718a630d53e28b44293e0a50dbef59c651cb1a7f",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailureKind",
+      "witnessEntryId": "2ac48baf0ddc66f3e7f650c7b69e1137fad29b2423495e6cc16723b966e7e71e",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "3287e6f4dd1f2ad8609adbca68a6e7f47b94a6dc73e25a072d5bbacff723f44c",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspectionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "witnessEntryId": "0e92f2691dcbf8eacbeca03deb54b8390a2c8ff2df7237fda12ece8fe4877763",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspectionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "3ab232c5ad0011e45ff8e9487e7e6efab63a147b518824d70dfa57bcf4ce9df0",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspector",
+      "to": "Bosak.Xslt.Authoring.AuthoringInspectionOptions",
+      "witnessEntryId": "8a6aef46a53c91fc12aa5b9e34650dae5ba2199e96baf823105d65fc18b58629",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspector",
+      "to": "Bosak.Xslt.Authoring.AuthoringInspectionResult",
+      "witnessEntryId": "8a6aef46a53c91fc12aa5b9e34650dae5ba2199e96baf823105d65fc18b58629",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspector",
+      "to": "Bosak.Xslt.Authoring.AuthoringSource",
+      "witnessEntryId": "8a6aef46a53c91fc12aa5b9e34650dae5ba2199e96baf823105d65fc18b58629",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringInspector",
+      "to": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "witnessEntryId": "8a6aef46a53c91fc12aa5b9e34650dae5ba2199e96baf823105d65fc18b58629",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "5d661c48b343ba33c5264049eca9a54ab4f770487345b9c1f262b9dd5214b0c6",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "abc6a6180676180673806fe83bbac3c71d1fb485fbd085a9ef7349b6bed35511",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "witnessEntryId": "fab1e3c1d552848708797aebd39264a762602ac42155b0da98a4fc0648e950a9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeOperation",
+      "witnessEntryId": "4d4b8ea2d9ad125e303e2e25c15999179e62befe0d457ddd823f2c197e463094",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "39828cd6c54478f2f84abb711ad98df5d5407bbe6486aa0f545d28ff44d2d286",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringQName",
+      "witnessEntryId": "1d8b179aa7e8e71cc1f6cfcfdbb58b1d9049a7e30583484f00f5ac27d4180aac",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "241d346e8dbbb1e9ca21c23be32fab296741f872948a1e5b71930f6c349936ac",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "487119efc9664b2a9fb8229f2a7ffe31ac670816552b59678b0aa5388a0b24af",
+      "declarationCount": 12
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "f0114c2613c08cfc13f87f85e3df1bf5ce76aec0d266036639484ee2c538c6e3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "dc9e89213f0bd9634e1b18fb92e04fdaa667e99a7991d6f33139cf314270c4e4",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTarget",
+      "witnessEntryId": "88799027977424aafa5a6ad6dc290acf7dd8a38cf1c2af5df5134e683c388d2e",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "witnessEntryId": "924873d6a5dbb3fbf73a6ff3171b81d3515bad167ec7991405e353d4f020841b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "d7380909d3ef707be468d9e19a3ee3ad8cf61d697f89ba44a7ed46dab759e580",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "efa3e27db24fb3150c80587668b5165e542e95d49902365bb081f093f824c4a1",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTarget",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "231dbe2a42a0c84ea8b8699c7ffa69ff55ed9999a5acf99840c4b7442c43f9f4",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTarget",
+      "witnessEntryId": "3361c07c022ee1d4b6a79dd907148d651b4a38865c153db67701e1662c9ea7c9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "37777ff9aeceb7b7da988fac210b4d05b5f5c7b10a21d624742d6c888c410c4a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "witnessEntryId": "965f1b0508df4c47fb9ac42a7845c15d7f611338af5ad0770431217c6d4f955a",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "witnessEntryId": "e9aeee8035c7b76cfc27a3b80a7bad3386b3f7495a57358942fd00e21e0130e2",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "54588fabb5c07ce82b9e9d686de4031280b0f7ec14019149c018fdb79ba9cde6",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "a60fdc1f3edc49106a9f493b7b30cc4a54f463f389da4f4f0f65b3ee46382492",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "b840e51aa05da70171285ba3f00ecf058c32c27a2d9f511a1a0cbfff230cdcdd",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "82be6356df13c69e1e67053978847a82eef171d3af865f5db42e7afbfa9807f7",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "witnessEntryId": "95ac0980bc48699ad2414630cee4953ef95fee99fbc2b96364121989cd6ea468",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "4e2c382b9c6742ef7cac9acd4717b0f5b645970e669585702886918f9fe64396",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailureKind",
+      "witnessEntryId": "c6677a5fad8cf61a2b1fca0a12fcd90fb34f542131c61e1645c3dbe919549452",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "f26568d1ea4e9097f801678e577f3a99010dd6112f93187ee132133e4ae0cd0b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "witnessEntryId": "5f7306fdaf337106aa2697f4d7227154ee66497e044cce612792cd58c69fbf87",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "0aecbe15ac8cd84edb8334f142409828b4dba015550d5eed661a8e67f4a6167e",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "witnessEntryId": "74bb77fbd96f256d4343624d0b07e483592b7a04a8797eda8ced77cd568bcdcd",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "witnessEntryId": "65435d8ec135d27033f58b9c487d6f90a21ddb861b4c29e91b5c92d55cb8fbbe",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "ba8517952f3f3f112fda8b6f4145dbd378c1eaee9a43e2e26ecade87329242ac",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateNoChange",
+      "witnessEntryId": "07c6ae52affb7c90e77d53e133190a54ee586ec245994e0639684ce5e2b8b508",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateOutcome",
+      "witnessEntryId": "7dc6d0ca3f8bac5c383124f9339154a825409fe53f79a37e9e8e1d8ab756ffbd",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "c63784599c266116bb342d024dd29beb6f3cbdfb4d05630e5c76c0d22816b81a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "eb3d0fcfbabeb8e9cf1fdcb85dcb06c933ae58ba3657923f6a249efe0cfdd437",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "4815c842ef11e892f29c21cbabbb69674385851f5f61510b95e1d4daa99baca0",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "witnessEntryId": "1b19eece8ebd6f8b2ae40ad605c2674faba42ca91058abca77e53923d16f89c5",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "witnessEntryId": "6387352a7b469b37f08d7dccf48ee38df4021b702bc0336ff4bb1d2e91799211",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "62807e4476222fb9740f44ff77f11b47759b267baeaa24b8a5522518bfbe8735",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "cb9ef66abbf90f34dfe315a720c200b543a6fe2827d0cdab86d131f216b27fb3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "witnessEntryId": "731463229a2f0075e670f23cdfc6d17e201816f9eec19087f1ba1759b32478b8",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementOperation",
+      "witnessEntryId": "2ef85f2af11788bf0961aeb188072ada9ad7e17892919222bb71e87d572db718",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "f54c2686fbb9b315a83af3612b16d69de06c78cebef7a9cfe9605293843d257c",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "ea490051dfab4df2d145cc000198182ac64e0e5f29c218ac17250b536c34a132",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "witnessEntryId": "8a59994acf93193e223d645e738ceea4558e44ce07b492b293b1a69e20a9780b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "a88e21d41e8b1f2f5f47551b071908e96297ee780e790095f9ae7733ccefd007",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTarget",
+      "witnessEntryId": "abea5d5bb727a544a404cb15c555d87e82b67d032affa3ff4690a652b1b252a3",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "witnessEntryId": "8db0c6750f5509f13b698f4ccc93c53d2dc4e0aa8fa403bfd73dbb98753b9867",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "witnessEntryId": "d317c0753ea23dbadc772fab8e513aa2feb48bdc414c8786454cb08b57a67591",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "b96c29a916a12909f8fe5da82ed7c90a33fb343ccb80ac9e860dd5c392947c9a",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTarget",
+      "witnessEntryId": "830a4d5bfee53d0aec3033bf7f134149b347b6b1842060a3a09bdd47c49a9576",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "witnessEntryId": "828cefcb7fb6255fa7ee12680a09e53c4bcb29dbf7b81b433363a70a7e5bfa48",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementExchange",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "92976f2ceef7aeadbca341a3fccdeb22d3213ef1974825dc5d0e4e3d8e45a68c",
+      "declarationCount": 16
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailureKind",
+      "witnessEntryId": "0c7db07e22853dc5269bec462e8d4bfe6f97b2c14c42594f7a8bf420e007e7b0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "802f6b322854177189978ed6730d731841e8c713df03bea3b866640e459eb895",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "2ef18f121e6e8b6fb50de3ffc216b693aecb07bdbbe24f65729a745dfe22844c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "61b19ad256bbea9b3d095f7361119e8fdf6cf0fce98b63395de48874e7590a6d",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringQName",
+      "witnessEntryId": "8157fdce58717c26a637426c4572b2fe0adbf5102386413f16f624e54e8c0281",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "2bb05d98624b0ef6a4b2f391217f48f332d185365782553a1ed37aa194408348",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "f73160328d54e5ec5294c3a035e926a2347df42cc9be28459e24e7ea86c08d1b",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "55edb2974b9b1b380cad0e58d1385013e9492f17a1500bcb07d27f31664c305d",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTarget",
+      "witnessEntryId": "ecc27d7a56845786a27207d271300e992c30a46f324e222cdb7ae7c2bb5c39fa",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "d8d1d30e40cb79ffdbe205c6005904c4d2d56a37acbb1a775b075bb5ae870469",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "witnessEntryId": "4cec2ead1bf283145c7f82c7e089952a2f07a6bd809c9834864a4eddb94037a2",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "92d26f2b939322e1f53af3f1f8b5b2293ea24b31aa9dbc78fa21136801a48393",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "5c60e5b8683cb7efe8140a9f5535ae0785dbb6ce89e44fb403ce5649139bbcf3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTarget",
+      "witnessEntryId": "01c21b78d978b7af9ae5e25f0dc479ff1e227a72dca773d519e28ddf0bc3cf78",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTarget",
+      "witnessEntryId": "6a9be9c8dc34bb50685e5d9d180753804ef69b7282e26b7e319d48d6b2326dc0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTarget",
+      "witnessEntryId": "5389abec0b21f2b9b53fc968b059b02cd548bad5b0e743fc0ed489c20cb33783",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "witnessEntryId": "6b9e8b0d87ab6118d653bace5e391dddb080f56ad1a22a98d62186b84b6de4a9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "witnessEntryId": "0194d0989fe3685913ddacfbbb5e7c0216871a0288d4047aed39cc7c997f34a7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementNoChange",
+      "witnessEntryId": "161873af27b64c4cb02c6a63fef1b367ae4a32cfb9a102ec852437319310d2eb",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameOutcome",
+      "witnessEntryId": "da06963f09e7db7483acb66dd4fab333ad8aa0ecd884a9235543d3d8daab6a4c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "575ed91cab4689f2c88dd54534dc47ca5eb3f9a875d432cda15321cf4a09124a",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "witnessEntryId": "5494edbe1021b8388983aac149e0917370fb4583748fd9b8bb3b59347d64d2da",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTarget",
+      "witnessEntryId": "9ab2780da9607a3533cf90e5fed805bf43c75ff78e685e700450bd416e829889",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "adb1bd82a91a7a86de1b5113d1d56ff887befb324496f17d901afdbf47a2ffd1",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "witnessEntryId": "1ec668c265a3a34f655e9102b8d72540b17937c8ce15605f4e51535574d75056",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementExchange",
+      "witnessEntryId": "c96183d9ddc5252b2f2e1309410367f99201241c8225aa6715d793ce74f5da89",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementMoveDirection",
+      "witnessEntryId": "a5197ee79340edc80f573b5817ca1e02d6beb13279853b75c888feaf82def4e5",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "9485463bea534e6597b1d0d278f1f2313e20751b60288b329be5826af9a8b38d",
+      "declarationCount": 10
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "2e9f87d624f047c2c345d4e9038f80f469fe2b839dfe9c2534a51e4399c95bf1",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "5ad90edb5c9b9e958180244b23439ec9f96a6f2a1bf43f52fe13dcc5744b5b79",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailureKind",
+      "witnessEntryId": "8ba79c70648645786732aeecb1add324e8aea006a577b1b4e9161908dc8f6537",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "witnessEntryId": "b448b370b01394ba17b9504d262999b41e38744cf0eed8648cf2d351eb4068ed",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "witnessEntryId": "0005362affdf8a3a6a7afa395918b5f6e5030a6eed03f76b1d4ba8510feb556b",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "witnessEntryId": "aab0eb7c18412ed4c21f16a28b1aa94f2b0a21ee456a264a4a2da956a4e70e48",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailure",
+      "witnessEntryId": "a38221e7da2b96f6b039a0c187a0ebd2520b7e9c4f6c352f65ffcb3f05a86e44",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderNoChange",
+      "witnessEntryId": "a9cdb0a68303cefebfbf5dd25eca2d9cf6815b9e8be8393a36c2e931ec589c5c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderOutcome",
+      "witnessEntryId": "cbf38ab8bd80e57d738910a153421dda6f896acec837f7c74ea12e83fe5e54bf",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementMoveDirection",
+      "witnessEntryId": "0ffaf98f17bc5e75bb07b15d0337c3d9ccc23a2a4bf9e3d0cf4774a26308b8b2",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "dd2325d8e4533b7b78e4d7d3c0ce06439535679bee6ff28058e01ad1eacd26e1",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailure",
+      "witnessEntryId": "2e3b9762799e726944c8fa7d1028ad96150144ef8b8f55b9d1e1ac12fef3def0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "witnessEntryId": "1e8ea32aa68212154d31a93b1b0262c82737077414531787534853cd88cf2757",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringModuleDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringModuleEdge",
+      "witnessEntryId": "63474605950aad0f53a19c3537472d6ebc02582dfdae227611fe552eac69e33a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringModuleDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "c964e123c2d41db1f6ed0e2aa0996baffc5ee88e45d68a609a4db9a5b10f07fa",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringModuleEdge",
+      "to": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "witnessEntryId": "0ff54bb2101e8e8462694049076e7701619a6ee96c6cb4349c1d6a4f89a4049c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringModuleEdge",
+      "to": "Bosak.Xslt.Authoring.AuthoringModuleEdgeKind",
+      "witnessEntryId": "38a8182b26307edf6e7a1b1ccd89bdb13572901ef6e88c98e0d8558989b6e801",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringModuleEdge",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "51ad0ac675472e24d761de75fa5c7d8e7978ef435c7519f04ed1172d011db477",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "8e102e5384853d624c165783342748dc70567cd155265bcb806233ea9b56f25b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeKind",
+      "witnessEntryId": "25fcdb10c6184279aedbd477b0177439f070e9a1d74a0fcc264ca298af90d201",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "to": "Bosak.Xslt.Authoring.AuthoringQName",
+      "witnessEntryId": "056bd1cd18087b1e094b308921b24677f5ea8e961c7719249b828d9653bb04b6",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "515a2009a868256542f023e0da0932994a88a711059cb68765eff68468621fa5",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "d71075618072b9dbadbbc9c51d283ed0b4e57ceb390cf1dd9426bbb48dfc06a9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalResult",
+      "witnessEntryId": "e33e947555fbac49059a61d8a2aac56157bf8488230defc118657aacd53ba56f",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapProposal",
+      "witnessEntryId": "e33e947555fbac49059a61d8a2aac56157bf8488230defc118657aacd53ba56f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTargetResult",
+      "witnessEntryId": "5d3560540f8a2deba83bc232e881a57c0a70e1aaa53038305ed173fb762188c7",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalWrapProposal",
+      "witnessEntryId": "efb92a25ffb99e0efd9e27b6e0577463b3bd3c446cd49b5ec27924449256488a",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTargetResult",
+      "witnessEntryId": "aa9a11d53e239f40ce51ebd6702222809b7cd96910eece134c72ed8bcc39f464",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringEditProposal",
+      "witnessEntryId": "925cf9b45a05f0fac1e20f8249921e1f3043b69e5d2c23d94a7b4089f13e924c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringEditResult",
+      "witnessEntryId": "925cf9b45a05f0fac1e20f8249921e1f3043b69e5d2c23d94a7b4089f13e924c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationProposal",
+      "witnessEntryId": "d6b179c13d5604e6778b6accaa2f95a608a90ac5b08d94e9e83be617c3d346b2",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationResult",
+      "witnessEntryId": "d6b179c13d5604e6778b6accaa2f95a608a90ac5b08d94e9e83be617c3d346b2",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTargetResult",
+      "witnessEntryId": "0515b8c0f1bd8105b4bbd0f25d31797cd13554a4110bdfb248d8ff842c7ee208",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionProposal",
+      "witnessEntryId": "1f0750992b2d2313bffaf3ff8fad681d1bd9d9869a47f51f21ad5d852f981177",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionResult",
+      "witnessEntryId": "1f0750992b2d2313bffaf3ff8fad681d1bd9d9869a47f51f21ad5d852f981177",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTargetResult",
+      "witnessEntryId": "d71075618072b9dbadbbc9c51d283ed0b4e57ceb390cf1dd9426bbb48dfc06a9",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateProposal",
+      "witnessEntryId": "39e828ca410cac4b28fa18917678e5c9bd58b69e75d31f8b45c3e273555aa990",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "witnessEntryId": "39e828ca410cac4b28fa18917678e5c9bd58b69e75d31f8b45c3e273555aa990",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTargetResult",
+      "witnessEntryId": "3cda57eebd4f8dd12bbadb8410881a05e7d74bdc42fdbb7c190a71264057ae19",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionProposal",
+      "witnessEntryId": "b659e8d58f204d984e6269e54b47d2db3d54c143eec7a5289745a4d240ec6c5b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionResult",
+      "witnessEntryId": "b659e8d58f204d984e6269e54b47d2db3d54c143eec7a5289745a4d240ec6c5b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTargetResult",
+      "witnessEntryId": "bbd3854dcbefd4e5e18054c94cc1332c0e74bddc161f9e6ac5ea76a0b2a5cf93",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionProposal",
+      "witnessEntryId": "d1c9d62cda894c200bf9b3eb266358f59e776869d0a6cb118e4223f52b561dbd",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionResult",
+      "witnessEntryId": "d1c9d62cda894c200bf9b3eb266358f59e776869d0a6cb118e4223f52b561dbd",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTargetResult",
+      "witnessEntryId": "1fa31ef41617ff359f12bf5657de627e99bd2ef46ed951ef635d1df75067c5ae",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementMoveDirection",
+      "witnessEntryId": "e31aa051961a687a78c0ef39c04da08017e6ee6257846f601c70491414e61f46",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameProposal",
+      "witnessEntryId": "4d4b03d78277535edd2818fabd8fb706e108da694c3cb7eb0dc9c82e27bf7183",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "witnessEntryId": "4d4b03d78277535edd2818fabd8fb706e108da694c3cb7eb0dc9c82e27bf7183",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTargetResult",
+      "witnessEntryId": "17815e33b6583a23a6e3ba147f7a609963b909a66c00f9c54de381d104d9b95f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderProposal",
+      "witnessEntryId": "1720e13c863cc369c88a20ef62230ec85d54b25345044c94125ac43e4ec0af3f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "witnessEntryId": "1720e13c863cc369c88a20ef62230ec85d54b25345044c94125ac43e4ec0af3f",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTargetResult",
+      "witnessEntryId": "e31aa051961a687a78c0ef39c04da08017e6ee6257846f601c70491414e61f46",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringModuleDescriptor",
+      "witnessEntryId": "08ad1a4382af5830bd641472400b0be11325f783f9c989933e5731203482078e",
+      "declarationCount": 5
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "5d3560540f8a2deba83bc232e881a57c0a70e1aaa53038305ed173fb762188c7",
+      "declarationCount": 14
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementProposal",
+      "witnessEntryId": "9fd4470c3c68c0f5f22eec3110afe23bf247cdc25c93d26edd291298e9627efe",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "witnessEntryId": "9fd4470c3c68c0f5f22eec3110afe23bf247cdc25c93d26edd291298e9627efe",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTargetResult",
+      "witnessEntryId": "17d80e95cd3bd2c7e41d6d0c6c38842aaf375a35e1a64c0e3750fe9847f00283",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionProposal",
+      "witnessEntryId": "a46d574fd78b0cc929808a8b335f54f09787afc3f1daa3407edef24f9c2ccb18",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionResult",
+      "witnessEntryId": "a46d574fd78b0cc929808a8b335f54f09787afc3f1daa3407edef24f9c2ccb18",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionTargetResult",
+      "witnessEntryId": "05f30df5604d05989f9defd98a7d3b89588578c28aadf07722443dbd82312a6c",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionProposal",
+      "witnessEntryId": "0ec3dfe2d0cfd38ddb768057c176b64a3ea72cf5ef04a182cab73025f6736e3d",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionResult",
+      "witnessEntryId": "0ec3dfe2d0cfd38ddb768057c176b64a3ea72cf5ef04a182cab73025f6736e3d",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionTargetResult",
+      "witnessEntryId": "a9a89b59c6690dd63d1b34af7bac8ca4f05aa02c29436a6bf1bc56565150704d",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionProposal",
+      "witnessEntryId": "e14685618ac06741cb74191b12568dc65239b5c83bf847a28ccb4e033166eaf3",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionResult",
+      "witnessEntryId": "e14685618ac06741cb74191b12568dc65239b5c83bf847a28ccb4e033166eaf3",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTargetResult",
+      "witnessEntryId": "eacb7a24cccb1718d737f06c81dd7a0dd6e57cf606dac82e478f8aeb46a10cff",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionProposal",
+      "witnessEntryId": "053e62037ad2ba53467293b7ac3074a19e3a4dfa5b3fd484ba0cf728f7f081eb",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionResult",
+      "witnessEntryId": "053e62037ad2ba53467293b7ac3074a19e3a4dfa5b3fd484ba0cf728f7f081eb",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTargetResult",
+      "witnessEntryId": "4ca18cd72adbad0ef614afdb5f9422d028d32b56cc11c1a13dc3162a903ad6f8",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringSource",
+      "to": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "witnessEntryId": "ebf95552c3169e9b58abe08055c322d207573f1bce9e9e3a55c61c115a39b89c",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "ac8fe0ed951323ad84063b885d1ae77cd607c087f9321a0df9b0ce8e860bdb53",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "d740ca490b24bcfcee46ca3807db54541c54f1b944c040328691e3f4a826ac5b",
+      "declarationCount": 12
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "0f00fa8e9b46407474ae86e3a41a8ae8965f83b1ab2add5b70eef862fd4ebc09",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "44ee455c8e07c57011a5fc2ceb4e20cc1a5f5540613cddfea14e33855afda33c",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailureKind",
+      "witnessEntryId": "5c31aebeb30f8fe3d4e87ed10d6a78653405abde9c623f2959d6f6dd3907b870",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "e150e27c994cc1538fe11e39f5b5f2c00316d036f7f30e3e01931db18352a8d7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementNoChange",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "witnessEntryId": "aab31a9ebf5963ced9d484ac52c930a359a4df617b5d3d3573b0835b59113932",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "witnessEntryId": "40f978b9b3c0edfa571622559ce0a4ae70103152b8a00eb1bf0c62ddc375b025",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "witnessEntryId": "4ec70c8a2e304230649580ce78a93cc71ae20dddee189f86e154dc5a1139f122",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailure",
+      "witnessEntryId": "3e9d71213a2414b7160c120d33b4944ae3d8404c1b7a28ae4c228cef31abee4c",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementNoChange",
+      "witnessEntryId": "28376b1959d709043a381e0818e1f0427577b0ca12e0f12993f0da611da66313",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementOutcome",
+      "witnessEntryId": "72ead594f557bd5e88af216f4cfbb714f7df05b588aabb412faf1a9bbe0a77c9",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "9903a9c3056cdaa1556824d55305d64320228445fdae65e7a0abd1b4528a3f2a",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "3eb6239b7cf9fdbb14fd4fa4371154c4e641c05b6ef17e83bc8a502767a95a6b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailure",
+      "witnessEntryId": "a5beb7472367f6eeee0b9c5333b1d2bc08295e586e0c6b610232bf2fa8a47edd",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "witnessEntryId": "014ef43cfa783a752f2091eeaa8937a1c9888ae722cfb8ca608077e36ed85e71",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "3c4486d2928f58ecae0f86ced94ea3f7c5d74b49fa19f2ba3948309ddd2a3f6d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "f5a16996f948955d066df9f3adeb8b38d75bd02fa9b209e67847343f1097931b",
+      "declarationCount": 10
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "2e9e3ca6ae532394a13188cb602293c3b9c6fe2fd7117e4f5082f83b455bf38e",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "witnessEntryId": "49a4d37a45ed1a6ff59537ddb84b7a7788c0b6e01a2bc40d9667f1ddcc7724b0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "9b0b6dff1f61a351f05c5035e8bc51662c74b0530ae07decb294bd788580fe6a",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailure",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailureKind",
+      "witnessEntryId": "f5c98cf5a3d425428c889349c338ad3b36dbe2e26d3cfe9befa0e247cf1b5012",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailure",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "1a77185ea6cc2f469922c03a1d0ef6b01fa42a04e6940792eaf6b40e5ec12803",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionTarget",
+      "witnessEntryId": "cfd029e3c90ef748fbe8166a7a9c904088a14590a6b05d7116b4c1fff8c2dbbe",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "witnessEntryId": "90a7baf5d69c3f40e71cd8413b26e998c0805dfe3aaf12f6965b8d3a858f0c8f",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailure",
+      "witnessEntryId": "fb270f71b219b3d4fbfa890d65cc0ea61932f2c75cdb73c5b1dfb979077c9e0d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "3c26802976c4bf368ede06b07d0709a9b6f78bdb7fb3388ce394793f84e80aca",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "47a7d29922041e6a52577ac5632af46f8bd631d4e0bf4ae9e30e593c07c774c1",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailure",
+      "witnessEntryId": "1ccd181debf575f36884351e024f85b04ac93d565c0868e8b64d2d9962f6da5d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextDeletionTarget",
+      "witnessEntryId": "8c2281335385e731a93a0ea3bcedc4959276e755f4b700c54c49febe4ddef0d8",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "9f3a035439076fdb74b13ad52bbc9f85d37ea3b83f9b60a82ffa7f497a0c7495",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "55c10154cf2d751f95fcee19e98fc0187c1dd28cc85deb21a31e31d23a2ff000",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "7e022f508eb9c719d5c194a72a9997c5d9b38e8763dd69f837369a6f236f6524",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "6dd97a9ccef8f928f81bcbf28397dc65e4a1c473275d6ba595e7f47f7585eaf3",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "53808b838a5282e398fa5673ae8e8ed97a83ff09ffce94d470d92387f80a8b74",
+      "declarationCount": 6
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "faf902d2f3871e52d43c50404a86ab203309dc901d55f7fc72c9cc8d7c7b8768",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionTarget",
+      "witnessEntryId": "f444c3df0e9fa586a34c8c2a267a396e641b344e27be0cbad155c696d463d1ee",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "54c7646792ac8f4593cb87b45100483b47bfff57cee2037f9cb64d2aa6b5a7a3",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "witnessEntryId": "5ec1bc0a7c581307fb48dee8b944282b91aee9fc99273254668f58b1ed519924",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "a348deaeb47e2e983d3cd871079e2d8957c87d4887a8d87077b7e63c2d57aab2",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "26d85312923460b5cc95411924cfdb7ec135cf56e787f508e61625fdff9e5ef0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextInsertionTarget",
+      "witnessEntryId": "e53000336d93bb114b22899a26cca00865e4e337b423088be8d4eddff7daf161",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextMergeFragment",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "0d40b33cddb45ca29fc8f7ea3a19f6285d0542de99074b0a3ac8d759352b1b4e",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextMergeFragment",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "bffcdc9aa9db397607408222e71e29e55b148c7e8ba8f85fbf8a9537e03048ec",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "4389fbc9be63780acbf84d06c0871ba4deb73db93066e7cd958b6f33ba6c9373",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextMergeFragment",
+      "witnessEntryId": "2277bf9c34f2a191f67f187ba37efc7e78b9a415743f4f0bf07471150a8b441f",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "d2ef862fc5befc084e40054d7bd1788fcad94524f1d3cfe2b1eec937e3da78b7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "b10c359e6e3f6c5376c73ec89b89623e93dccd4250eb35c1b4c42998a9512aa3",
+      "declarationCount": 8
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "8f1a9b932aca899553e1499775b46dd0fe53893cb5e07258742c4b8493d9ca00",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "witnessEntryId": "a17f3ae77019eb32ce545cf443136def534f90d655b82c28bd64bda698741cd4",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "4b4ae36967024eab37ec1c6247773db1d0330361533069a47b53588451420754",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTarget",
+      "witnessEntryId": "a2b94d3ac1bbafd2f030c01a4c3f835ed60b6fc23570b74c9cb751a16e5d1fb3",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringDeletionFailure",
+      "witnessEntryId": "66b3615e0c5f41b2a787bf87d32d77aa2fed708c641ecd3f72d92614b657ef73",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "witnessEntryId": "67cb91d55545d1561f6dca220417a40c1db0da1d5d1e7fad4532448357d1d33d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "83e88f1caedcff1b8a25432cb12c57ad3b82af84d28c4170b03d871a8dde4336",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringDeletionFailure",
+      "witnessEntryId": "2802f9d4fa4eae92a0a03092f57d5c110cb373878e0e511e0953197a2aca4c91",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTarget",
+      "witnessEntryId": "8b2facff1b393e7f3d0f7f1c27f82a84b66d91c472ed3567c35dbbb4438e6975",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "witnessEntryId": "64efd62bc962e4863c5eed4bc55fb080f02f86037f7815df32847880c1accee7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "cd667ac3bcf36795f25b5fb86afee18fa376022d77c4eb706563c7ceffbfbffb",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "witnessEntryId": "7d12c20a643e4ff56ef972b0fd0eb7724a7fb038c49db30c3b727544f6239b53",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "66ca39638bd260697cfad0cd809430a1c00667c9ba57acd267ed14bf11b19031",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "ddc087d28286a6efc62a27d7c14c0081c3791343ebfb532f5ad2210468917f8d",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "ec439ec3bc6010149225eeb6f74416fedeba2cd0bff16c22b6abe46d218c100a",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "witnessEntryId": "e30bc610e62b419f7cbb0151ac89efdf5ef8b5005bb2badc5b690688642a36f6",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionProposal",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTarget",
+      "witnessEntryId": "8fc0cd95b55686e0133b475dc21d0a4a9d9529fa3df8d26c052272416cb5e91d",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "9e9fd511c009b7236a79dbeaee52b1aa3c4bd70779da830cd80efa1302830f3b",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "witnessEntryId": "bdea7f3d7a38e55834a368d035a7b56c3a113c2254d243090f2e44e1d4f27777",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTarget",
+      "to": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "witnessEntryId": "816e6f0977d2f0504f39b4acfd6665060c0c79a297944ee82fbffb2b0a2aa4a1",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "witnessEntryId": "e15316b88b0c199fcbc13b1335ef05ee8b629860b4014a275d5b9ccccf41fdf7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTargetResult",
+      "to": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTarget",
+      "witnessEntryId": "94f21d757d225c1670ab591f139a9ebadeae79e870b7476c1285b0bac34c04c0",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.ExpressionSlotContext",
+      "to": "Bosak.Xslt.Authoring.AuthoringNamespaceBinding",
+      "witnessEntryId": "27ee359baf34cee0a7036e896a0d2fcba20f2d36a47a1f7238fda56c75789057",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.ExpressionSlotContext",
+      "to": "Bosak.Xslt.Authoring.AuthoringQName",
+      "witnessEntryId": "d82ba60d59341cd23a7e2ea6bff4e715070e64b94e3d968c3e7c9514c7481a6d",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.FileSystemAuthoringModuleResolver",
+      "to": "Bosak.Xslt.Authoring.AuthoringSource",
+      "witnessEntryId": "2b5b8a89551d9718328c25cca0ed297767f26dc98fdafc3a925bcf583ce77d0b",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.FileSystemAuthoringModuleResolver",
+      "to": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "witnessEntryId": "4da3f5917315def26ad239719d798b4f1d208e957730d72734c0298bd13511f8",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "to": "Bosak.Xslt.Authoring.AuthoringSource",
+      "witnessEntryId": "10527693dad175396dc7b83cd9c2caa99e07a60b788e14a93febcfb64f6afe64",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.SourceCoordinateMap",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "f3114590318d497283004a0e8abfd5b75d8c9274f59b24d9ff1a1520a000d298",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.XsltAuthoring",
+      "to": "Bosak.Xslt.Authoring.AuthoringInspectionOptions",
+      "witnessEntryId": "ccc47b582986943e75d3f70b59850b52f5c6ae1efb3bb689dd2496906cb7214e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.XsltAuthoring",
+      "to": "Bosak.Xslt.Authoring.AuthoringInspectionResult",
+      "witnessEntryId": "ccc47b582986943e75d3f70b59850b52f5c6ae1efb3bb689dd2496906cb7214e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.XsltAuthoring",
+      "to": "Bosak.Xslt.Authoring.AuthoringSource",
+      "witnessEntryId": "ccc47b582986943e75d3f70b59850b52f5c6ae1efb3bb689dd2496906cb7214e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Authoring.XsltAuthoring",
+      "to": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "witnessEntryId": "ccc47b582986943e75d3f70b59850b52f5c6ae1efb3bb689dd2496906cb7214e",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCaptureFailure",
+      "to": "Bosak.Xslt.Capture.XsltCaptureFailureKind",
+      "witnessEntryId": "686e8b9dbd8120ec6a7bb7efdb78c1f887f05c29a446691cbe1291d44a93884a",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCaptureOptions",
+      "to": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "witnessEntryId": "095d5b9955516d938df223604ea99525b5ee8807de51bfd034c9e74be0e75df5",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCaptureResult",
+      "to": "Bosak.Xslt.Capture.XsltCaptureFailure",
+      "witnessEntryId": "c4fe9ed4dca7e025029d406aa4033dc58707223d99f05fd4d7788c9dddeb58e4",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCaptureResult",
+      "to": "Bosak.Xslt.Capture.XsltCaptureOutcome",
+      "witnessEntryId": "09add96ee1f1793acdd01ba65827b413a99e1f601e56cc5a24df6c658fe67d93",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCaptureResult",
+      "to": "Bosak.Xslt.Capture.XsltCapturedOutput",
+      "witnessEntryId": "bc723b6654cb6b2b865a29aa6bc0b70e18b8cbc0ce6b19935aea2ad01b7b0c7c",
+      "declarationCount": 4
+    },
+    {
+      "from": "Bosak.Xslt.Capture.XsltCapturedOutput",
+      "to": "Bosak.Xslt.Stylesheet.OutputProperties",
+      "witnessEntryId": "1a22f28d34961a0641478268dad188a2b03efc594ec060bbb92885419a471ee7",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Runtime.XsltRuntimeException",
+      "to": "Bosak.XPath.Core.Xdm.XdmValue",
+      "witnessEntryId": "a096893d723c93502249bc95d78f434e6ac19dfaaa2ba7a2999deb9b9ce8c10b",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Stylesheet.OutputProperties",
+      "to": "Bosak.XPath.Core.Xdm.XdmMap",
+      "witnessEntryId": "10094b242a9674082934dbeddec034b7c32521401c46a2c13f9f1e5cb70bacef",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Stylesheet.OutputProperties",
+      "to": "Bosak.XPath.Core.Xdm.XsQName",
+      "witnessEntryId": "093b65c3b2b7b20eb9201f71bf18a48718d31c2aa6a66aadef968cebab965eea",
+      "declarationCount": 9
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidation",
+      "to": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "witnessEntryId": "fe329272a018e7d2886d85503f3f5149de08ae9c3d88656493f16c9b5d067d30",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidation",
+      "to": "Bosak.Xslt.Authoring.AuthoringSource",
+      "witnessEntryId": "e62a39d252e774561c2f69ea79c62e758fee9cbcbaa6be53b921d1b3456debec",
+      "declarationCount": 1
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidation",
+      "to": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "witnessEntryId": "e62a39d252e774561c2f69ea79c62e758fee9cbcbaa6be53b921d1b3456debec",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidation",
+      "to": "Bosak.Xslt.Validation.XsltValidationOptions",
+      "witnessEntryId": "fe329272a018e7d2886d85503f3f5149de08ae9c3d88656493f16c9b5d067d30",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidation",
+      "to": "Bosak.Xslt.Validation.XsltValidationResult",
+      "witnessEntryId": "fe329272a018e7d2886d85503f3f5149de08ae9c3d88656493f16c9b5d067d30",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationDiagnostic",
+      "to": "Bosak.Xslt.Authoring.SourceRange",
+      "witnessEntryId": "d41e27b628aafc52ef285068b8188c3896bdd5826b984e03acd767e3f052a974",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationOptions",
+      "to": "Bosak.XPath.Api.XPathCompatibility",
+      "witnessEntryId": "4d247c74154233f737190fc54257b35218ce9ab9b82f072d2f5c6f15f67bbfed",
+      "declarationCount": 3
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationResult",
+      "to": "Bosak.Xslt.Validation.XsltValidationCoverage",
+      "witnessEntryId": "205529e9ec35684ca0c3f7c9aee8b624604e60217b5c7f23360747b453f5374a",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationResult",
+      "to": "Bosak.Xslt.Validation.XsltValidationCoverageGap",
+      "witnessEntryId": "2e995953af42c3acbf997a53da30c348dca8c0969b4f613b05fdc7f85f0f62f7",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationResult",
+      "to": "Bosak.Xslt.Validation.XsltValidationDiagnostic",
+      "witnessEntryId": "9c09824a3c7f43d0b9eb4e2a506c897dbad50685471f03da60c2dd5493164da8",
+      "declarationCount": 2
+    },
+    {
+      "from": "Bosak.Xslt.Validation.XsltValidationResult",
+      "to": "Bosak.Xslt.Validation.XsltValidationOutcome",
+      "witnessEntryId": "5f92ce8223ae2872ca1e628f60dc26f09bf3bec79033b797a62362c3c63a53ae",
+      "declarationCount": 2
+    }
+  ]
+}

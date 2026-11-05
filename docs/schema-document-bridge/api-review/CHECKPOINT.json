@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-29",
+  "authorization": "User requested continuation of API review and local checkpoint commit recommendations",
+  "core": {
+    "base": "a2ade8fd",
+    "branch": "main",
+    "candidate": "1.34.0",
+    "deliveryResolver": "git log -1 --format=%H -- docs/schema-document-bridge/api-review/README.md"
+  },
+  "schema": {
+    "base": "044d2cb2e67decd46e03e0f5ee7cb03029f34bd9",
+    "commit": "766eff7a77ee08e9c38cf479994e94eaf232d242",
+    "branch": "feature/bounded-document-assessment",
+    "workingTreeClean": true
+  },
+  "qualification": "RESULTS.json",
+  "push": false,
+  "merge": false,
+  "tag": false,
+  "packagePublication": false,
+  "next": "Separate immutable adoption/scope record for optional decimal children before implementation"
+}

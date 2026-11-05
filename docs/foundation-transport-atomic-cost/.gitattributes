@@ -1,0 +1,3 @@
+* -text whitespace=cr-at-eol
+# Preserve blank unified-diff context lines.
+evidence/SOURCE-DIFF.txt whitespace=-blank-at-eol,cr-at-eol

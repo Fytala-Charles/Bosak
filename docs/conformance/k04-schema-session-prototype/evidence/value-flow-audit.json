@@ -1,0 +1,818 @@
+{
+  "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+    "sha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c",
+    "gitObject": "aec258568901502508cc1d00008f9ebd2b55f4fb",
+    "observations": [
+      {
+        "line": 52,
+        "text": "//                      | Charles Korthout | 2.8   | 25-09-2026     | REQ-108: user-defined type identity annotation (UserSchemaTypeName, Q{uri}local)        |"
+      },
+      {
+        "line": 81,
+        "text": "private readonly object? _reference;"
+      },
+      {
+        "line": 94,
+        "text": "_reference = reference;"
+      },
+      {
+        "line": 297,
+        "text": "public string? UserSchemaTypeName => _userSchemaTypeName;"
+      },
+      {
+        "line": 356,
+        "text": "return (decimal)_reference!;"
+      },
+      {
+        "line": 367,
+        "text": "return (string)_reference!;"
+      },
+      {
+        "line": 378,
+        "text": "return (string)_reference!;"
+      },
+      {
+        "line": 389,
+        "text": "return (IXdmNode)_reference!;"
+      },
+      {
+        "line": 400,
+        "text": "return (IXdmSequence?)_reference;"
+      },
+      {
+        "line": 411,
+        "text": "return _reference;"
+      },
+      {
+        "line": 422,
+        "text": "return _reference!;"
+      },
+      {
+        "line": 433,
+        "text": "return (XdmMap)_reference!;"
+      },
+      {
+        "line": 444,
+        "text": "return (XdmArray)_reference!;"
+      },
+      {
+        "line": 455,
+        "text": "return (XdmJNode)_reference!;"
+      },
+      {
+        "line": 466,
+        "text": "return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();"
+      },
+      {
+        "line": 477,
+        "text": "return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();"
+      },
+      {
+        "line": 488,
+        "text": "return _reference is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();"
+      },
+      {
+        "line": 502,
+        "text": "return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);"
+      },
+      {
+        "line": 516,
+        "text": "return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);"
+      },
+      {
+        "line": 530,
+        "text": "return _reference is DateTimeWrapper w ? w.Value : ((DateTimeOffset)_reference!).ToXPathDateTime(hasTimezone: true);"
+      },
+      {
+        "line": 541,
+        "text": "return _reference is not DateTimeWrapper w || w.HasTimezone;"
+      },
+      {
+        "line": 552,
+        "text": "return (XsQName)_reference!;"
+      },
+      {
+        "line": 569,
+        "text": "? !string.IsNullOrEmpty((string?)_reference)"
+      },
+      {
+        "line": 573,
+        "text": "XdmValueKind.Decimal => (decimal)_reference! != 0m,"
+      },
+      {
+        "line": 578,
+        "text": "XdmValueKind.Uri => !string.IsNullOrEmpty((string?)_reference),"
+      },
+      {
+        "line": 610,
+        "text": "if (_reference is not IXdmSequence seq)"
+      },
+      {
+        "line": 672,
+        "text": "XdmValueKind.Decimal => FormatCanonicalDecimal((decimal)_reference!),"
+      },
+      {
+        "line": 675,
+        "text": "XdmValueKind.String => (string?)_reference ?? string.Empty,"
+      },
+      {
+        "line": 676,
+        "text": "XdmValueKind.Node => ((IXdmNode?)_reference)?.StringValue ?? string.Empty,"
+      },
+      {
+        "line": 685,
+        "text": "XdmValueKind.QName => ((XsQName)_reference!).ToString(),"
+      },
+      {
+        "line": 686,
+        "text": "XdmValueKind.Duration => (string?)_reference ?? string.Empty,"
+      },
+      {
+        "line": 687,
+        "text": "XdmValueKind.External => $\"(external: {_reference?.GetType().Name})\","
+      }
+    ]
+  },
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": {
+    "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee",
+    "gitObject": "199ce928b98ddc1ebc66956d11d3dc6b31188fed",
+    "observations": [
+      {
+        "line": 1466,
+        "text": "keys[k] = Atomize(rawKey);"
+      },
+      {
+        "line": 1582,
+        "text": "if (!InstanceOf(Atomize(keyValue), declaredType, groupInfo.DeclaredTypeOccurrences[k], null, context))"
+      },
+      {
+        "line": 1619,
+        "text": "mergedTuple[slot] = SingleGroupKeyItem(Atomize(keyValue));"
+      },
+      {
+        "line": 1902,
+        "text": "var nameAtom = Atomize(registers[instr.RegisterB]);"
+      },
+      {
+        "line": 1931,
+        "text": "var prefixAtom = Atomize(registers[instr.RegisterB]);"
+      },
+      {
+        "line": 1995,
+        "text": "string uri = nsValue.IsUndefined ? string.Empty : Atomize(nsValue).ToString();"
+      },
+      {
+        "line": 2747,
+        "text": "var keyValue = Atomize(registers[instr.RegisterC]);"
+      },
+      {
+        "line": 2856,
+        "text": "var filtered = FilterNodes(input, n => MatchesSchemaElement(n, nameArg, context));"
+      },
+      {
+        "line": 2984,
+        "text": "var atomizedItem = Atomize(singletonItem);"
+      },
+      {
+        "line": 3270,
+        "text": "double startD = ToDouble(Atomize(registers[instr.RegisterC]));"
+      },
+      {
+        "line": 3283,
+        "text": "double lenD = ToDouble(Atomize(registers[instr.Operand]));"
+      },
+      {
+        "line": 3628,
+        "text": "long pos = ToInteger(Atomize(registers[instr.RegisterC]));"
+      },
+      {
+        "line": 3641,
+        "text": "long pos = ToInteger(Atomize(registers[instr.RegisterC]));"
+      },
+      {
+        "line": 3661,
+        "text": "double startD = ToDouble(Atomize(registers[instr.RegisterC]));"
+      },
+      {
+        "line": 3676,
+        "text": "double lenD = ToDouble(Atomize(registers[instr.Operand]));"
+      },
+      {
+        "line": 4381,
+        "text": "var atomized = Atomize(item);"
+      },
+      {
+        "line": 5186,
+        "text": "private static XdmValue Atomize(XdmValue value)"
+      },
+      {
+        "line": 5221,
+        "text": "return Atomize(value.JNodeValue.Value);"
+      },
+      {
+        "line": 5228,
+        "text": "return Atomize(items[0]);"
+      },
+      {
+        "line": 5264,
+        "text": "AppendArrayAtomizedSingleton(Atomize(value), ref singleton);"
+      },
+      {
+        "line": 5295,
+        "text": "return Atomize(value);"
+      },
+      {
+        "line": 5364,
+        "text": "return Atomize(value);"
+      },
+      {
+        "line": 5381,
+        "text": "atomized.Add(item.IsNode ? Atomize(item) : item);"
+      },
+      {
+        "line": 5410,
+        "text": "var atomized = Atomize(value);"
+      },
+      {
+        "line": 5752,
+        "text": "var atomizedItem = Atomize(singletonItem);"
+      },
+      {
+        "line": 6084,
+        "text": "return MatchesSchemaElement(element, arg, context);"
+      },
+      {
+        "line": 6158,
+        "text": "private static bool MatchesSchemaElement(IXdmNode node, string nameArg, EvaluationContext? context)"
+      },
+      {
+        "line": 6526,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 6527,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 6690,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 6691,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 6837,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 6838,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 7551,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 7552,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 7599,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 7600,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 7633,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 7634,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 7763,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 7764,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 7813,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 7861,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 7919,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 7920,
+        "text": "right = Atomize(right);"
+      },
+      {
+        "line": 8608,
+        "text": "var atomizedL = Atomize(l);"
+      },
+      {
+        "line": 8609,
+        "text": "var atomizedR = Atomize(r);"
+      },
+      {
+        "line": 8804,
+        "text": "var atom = Atomize(single);"
+      },
+      {
+        "line": 8812,
+        "text": "var other = Atomize(multi);"
+      },
+      {
+        "line": 8846,
+        "text": "var atom = Atomize(item);"
+      },
+      {
+        "line": 8862,
+        "text": "var atomized = Atomize(item);"
+      },
+      {
+        "line": 8908,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 8959,
+        "text": "var atomized = Atomize(value);"
+      },
+      {
+        "line": 8994,
+        "text": "var atomized = Atomize(value);"
+      },
+      {
+        "line": 13207,
+        "text": "return MatchesSchemaElement(value.NodeValue, inner, context);"
+      },
+      {
+        "line": 13262,
+        "text": "if (!IsSequenceTypeSubtype(testParamTypes[i], actualParamTypes[i], context))"
+      },
+      {
+        "line": 13266,
+        "text": "if (!IsSequenceTypeSubtype(actualReturnType, testReturnType, context))"
+      },
+      {
+        "line": 13380,
+        "text": "string? userTypeName = value.UserSchemaTypeName;"
+      },
+      {
+        "line": 13985,
+        "text": "if (!IsSequenceTypeSubtype(testParamTypes[i], actualParam, context))"
+      },
+      {
+        "line": 13994,
+        "text": "return IsSequenceTypeSubtype(actualReturn, testReturnType, context);"
+      },
+      {
+        "line": 14006,
+        "text": "if (!IsSequenceTypeSubtype(testParamTypes[i], actualParam, context))"
+      },
+      {
+        "line": 14009,
+        "text": "return IsSequenceTypeSubtype(inline.ReturnType ?? \"item()*\", testReturnType, context);"
+      },
+      {
+        "line": 14071,
+        "text": "if (!IsSequenceTypeSubtype(testParamTypes[0], domain, context))"
+      },
+      {
+        "line": 14099,
+        "text": "if (!IsSequenceTypeSubtype(testParamTypes[0], domain, context))"
+      },
+      {
+        "line": 14580,
+        "text": "var atomic = Atomize(item);"
+      },
+      {
+        "line": 14929,
+        "text": "private static bool IsSequenceTypeSubtype(string actualType, string testType, EvaluationContext? context = null)"
+      },
+      {
+        "line": 15023,
+        "text": "!IsSequenceTypeSubtype(field.SequenceTypeText, target!.SequenceTypeText, context))"
+      },
+      {
+        "line": 15042,
+        "text": "!IsSequenceTypeSubtype(\"xs:string\", keyType, context))"
+      },
+      {
+        "line": 15044,
+        "text": "if (actual.IsAny) return IsSequenceTypeSubtype(\"item()*\", valueType, context);"
+      },
+      {
+        "line": 15046,
+        "text": "if (!IsSequenceTypeSubtype(field.SequenceTypeText, valueType, context)) return false;"
+      },
+      {
+        "line": 15110,
+        "text": "return IsSequenceTypeSubtype(FormatSchemaTypeName(itemType) + \"*\", testTypeName, context);"
+      },
+      {
+        "line": 15278,
+        "text": "return IsSequenceTypeSubtype(ak, tk, context) && IsSequenceTypeSubtype(av, tv, context);"
+      },
+      {
+        "line": 15285,
+        "text": "if (!IsSequenceTypeSubtype(tp[0], \"xs:anyAtomicType\", context)) return false;"
+      },
+      {
+        "line": 15287,
+        "text": "return IsSequenceTypeSubtype(Optionalize(v), tr, context);"
+      },
+      {
+        "line": 15297,
+        "text": "return IsSequenceTypeSubtype(ArrayTypeInner(actual), ArrayTypeInner(test), context);"
+      },
+      {
+        "line": 15304,
+        "text": "if (!IsSequenceTypeSubtype(tp[0], \"xs:integer\", context)) return false;"
+      },
+      {
+        "line": 15306,
+        "text": "return IsSequenceTypeSubtype(t, tr, context);"
+      },
+      {
+        "line": 15318,
+        "text": "if (!IsSequenceTypeSubtype(tp[i], ap[i], context)) return false;"
+      },
+      {
+        "line": 15319,
+        "text": "return IsSequenceTypeSubtype(ar, tr, context);"
+      },
+      {
+        "line": 15927,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 15940,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 15952,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 15964,
+        "text": "value = Atomize(value);"
+      },
+      {
+        "line": 16020,
+        "text": "return Atomize(value);"
+      },
+      {
+        "line": 16095,
+        "text": "var akey = Atomize(key);"
+      },
+      {
+        "line": 16178,
+        "text": "var a = Atomize(item);"
+      },
+      {
+        "line": 16189,
+        "text": "sum += ToDecimal(Atomize(item));"
+      },
+      {
+        "line": 16194,
+        "text": "sumD += ToDouble(Atomize(item));"
+      },
+      {
+        "line": 16203,
+        "text": "var a = Atomize(item);"
+      },
+      {
+        "line": 16212,
+        "text": "decimal result = ToDecimal(Atomize(items[0]));"
+      },
+      {
+        "line": 16215,
+        "text": "decimal v = ToDecimal(Atomize(items[i]));"
+      },
+      {
+        "line": 16221,
+        "text": "double resultD = ToDouble(Atomize(items[0]));"
+      },
+      {
+        "line": 16224,
+        "text": "double v = ToDouble(Atomize(items[i]));"
+      },
+      {
+        "line": 16390,
+        "text": "return Atomize(value).ToString();"
+      },
+      {
+        "line": 16400,
+        "text": "parts[i] = Atomize(items[i]).ToString();"
+      },
+      {
+        "line": 16597,
+        "text": "var atomized = Atomize(nameValue);"
+      },
+      {
+        "line": 16724,
+        "text": "left = SingleGroupKeyItem(Atomize(left));"
+      },
+      {
+        "line": 16725,
+        "text": "right = SingleGroupKeyItem(Atomize(right));"
+      },
+      {
+        "line": 16784,
+        "text": "left = Atomize(left);"
+      },
+      {
+        "line": 16785,
+        "text": "right = Atomize(right);"
+      }
+    ]
+  },
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+    "sha256": "4af2760bf9d69c8552ad4a808ed746120b28e3a95eb2f5ce091ba4107cf10ee0",
+    "gitObject": "5be9ef9ebfa3fd23d1f146774f72bb4b56b21920",
+    "observations": [
+      {
+        "line": 14541,
+        "text": "if (node.SchemaTypeAnnotation is null)"
+      },
+      {
+        "line": 16371,
+        "text": "if (node.SchemaTypeAnnotation is not null)"
+      },
+      {
+        "line": 17280,
+        "text": "bool aHasType = a.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && a.SchemaTypeAnnotation.HasValue;"
+      },
+      {
+        "line": 17281,
+        "text": "bool bHasType = b.NodeKind is XdmNodeKind.Element or XdmNodeKind.Attribute && b.SchemaTypeAnnotation.HasValue;"
+      },
+      {
+        "line": 17284,
+        "text": "&& a.SchemaTypeAnnotation is { } typeA"
+      },
+      {
+        "line": 17285,
+        "text": "&& b.SchemaTypeAnnotation is { } typeB)"
+      }
+    ]
+  },
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": {
+    "sha256": "771ab66399b0752a60cf3520c4127d5034b102745b8ea47631ec8444e4f7f233",
+    "gitObject": "f62de68b73dce28ce1bdf85254e1d3bdedc68fc4",
+    "observations": [
+      {
+        "line": 91,
+        "text": "public sealed class XQueryCompiler"
+      },
+      {
+        "line": 104,
+        "text": "public XQueryCompiler WithModule(string uri, string source, string? location = null)"
+      },
+      {
+        "line": 123,
+        "text": "public XQueryCompiler WithNamespace(string prefix, string uri)"
+      },
+      {
+        "line": 137,
+        "text": "public XQueryExecutable Compile(string query, bool xml11LineEndings = false)"
+      }
+    ]
+  },
+  "src/Bosak.XQuery/Api/XQueryExecutable.cs": {
+    "sha256": "310f89a868724b030676e6a690459a0ae6367705cd75b6ccb8a22d41d909670e",
+    "gitObject": "cd84a5689c66704934fcfb8fb8ab51ab7b5e5740",
+    "observations": [
+      {
+        "line": 23,
+        "text": "//                      | Charles Korthout | 1.4   | 26-07-2026     | Register user functions via FunctionSignature dispatch; lazy user variables with XQST0054 cycle detection |"
+      },
+      {
+        "line": 45,
+        "text": "//                      | Charles Korthout | 2.5   | 21-08-2026     | Detect XQST0034 conflicts between user-declared functions and schema simple-type constructor functions |"
+      },
+      {
+        "line": 52,
+        "text": "//                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |"
+      },
+      {
+        "line": 148,
+        "text": "public XdmValue Evaluate(XQueryContext context)"
+      },
+      {
+        "line": 339,
+        "text": "if (context.SchemaResolver is not null)"
+      },
+      {
+        "line": 341,
+        "text": "stream = context.SchemaResolver(targetNs, hints);"
+      },
+      {
+        "line": 375,
+        "text": "throw new InvalidOperationException($\"XQST0059: Unable to locate schema for namespace '{targetNs}'.\");"
+      },
+      {
+        "line": 392,
+        "text": "throw new InvalidOperationException($\"XQST0059: Unable to read schema for namespace '{targetNs}'.\");"
+      },
+      {
+        "line": 400,
+        "text": "throw new InvalidOperationException($\"XQST0012: Schema compilation failed:\\n{string.Join(\"\\n\", errors)}\");"
+      },
+      {
+        "line": 498,
+        "text": "// XQST0034: a user-declared function must not have the same expanded QName and"
+      },
+      {
+        "line": 506,
+        "text": "throw new InvalidOperationException($\"XQST0034: Function '{fn.LocalName}' with arity 1 conflicts with the constructor function for the schema type '{fn.LocalName}'.\");"
+      }
+    ]
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs": {
+    "sha256": "047132f57b5411ee510f62ad3f50a5e3b0fee5c2be33c6c24b1bd41a84cd98c4",
+    "gitObject": "46be40098e28bf31214fa0396308b897ced85bc1",
+    "observations": [
+      {
+        "line": 4,
+        "text": "// PURPOSE              : Equality comparer for XdmValue map keys supporting numeric promotion."
+      },
+      {
+        "line": 31,
+        "text": "/// Equality comparer for <see cref=\"XdmValue\"/> used as map keys."
+      },
+      {
+        "line": 34,
+        "text": "public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>"
+      },
+      {
+        "line": 37,
+        "text": "public static readonly XdmValueEqualityComparer Instance = new();"
+      },
+      {
+        "line": 40,
+        "text": "public bool Equals(XdmValue x, XdmValue y)"
+      },
+      {
+        "line": 43,
+        "text": "return NumericEquals(x, y);"
+      },
+      {
+        "line": 49,
+        "text": "XdmValueKind.Undefined => true,"
+      },
+      {
+        "line": 50,
+        "text": "XdmValueKind.Boolean => x.BooleanValue == y.BooleanValue,"
+      },
+      {
+        "line": 51,
+        "text": "XdmValueKind.String => x.StringValue == y.StringValue && StringFamily(x) == StringFamily(y),"
+      },
+      {
+        "line": 52,
+        "text": "XdmValueKind.Uri => x.StringValue == y.StringValue && StringFamily(x) == StringFamily(y),"
+      },
+      {
+        "line": 53,
+        "text": "XdmValueKind.DateTime => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),"
+      },
+      {
+        "line": 54,
+        "text": "XdmValueKind.Date => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),"
+      },
+      {
+        "line": 55,
+        "text": "XdmValueKind.Time => x.HasTimezone == y.HasTimezone && InstantKey(x) == InstantKey(y),"
+      },
+      {
+        "line": 56,
+        "text": "XdmValueKind.QName => x.QNameValue.Equals(y.QNameValue),"
+      },
+      {
+        "line": 57,
+        "text": "XdmValueKind.Duration => DurationsEqual(x.DurationValue, y.DurationValue),"
+      },
+      {
+        "line": 63,
+        "text": "if ((x.Kind == XdmValueKind.String && y.Kind == XdmValueKind.Uri)"
+      },
+      {
+        "line": 64,
+        "text": "|| (x.Kind == XdmValueKind.Uri && y.Kind == XdmValueKind.String))"
+      },
+      {
+        "line": 66,
+        "text": "return x.StringValue == y.StringValue;"
+      },
+      {
+        "line": 73,
+        "text": "public int GetHashCode(XdmValue obj)"
+      },
+      {
+        "line": 79,
+        "text": "return NumericKeyString(obj).GetHashCode();"
+      },
+      {
+        "line": 84,
+        "text": "XdmValueKind.Boolean => obj.BooleanValue.GetHashCode(),"
+      },
+      {
+        "line": 85,
+        "text": "XdmValueKind.String => HashCode.Combine(obj.StringValue, StringFamily(obj)),"
+      },
+      {
+        "line": 86,
+        "text": "XdmValueKind.Uri => HashCode.Combine(obj.StringValue, StringFamily(obj)),"
+      },
+      {
+        "line": 87,
+        "text": "XdmValueKind.DateTime => HashCode.Combine(InstantKey(obj), obj.HasTimezone),"
+      },
+      {
+        "line": 88,
+        "text": "XdmValueKind.Date => HashCode.Combine(InstantKey(obj), obj.HasTimezone),"
+      },
+      {
+        "line": 89,
+        "text": "XdmValueKind.Time => HashCode.Combine(InstantKey(obj), obj.HasTimezone),"
+      },
+      {
+        "line": 90,
+        "text": "XdmValueKind.QName => obj.QNameValue.GetHashCode(),"
+      },
+      {
+        "line": 91,
+        "text": "XdmValueKind.Duration => DurationHash(obj.DurationValue),"
+      },
+      {
+        "line": 100,
+        "text": "private static string StringFamily(XdmValue value)"
+      },
+      {
+        "line": 114,
+        "text": "private static bool IsNumeric(XdmValue value)"
+      },
+      {
+        "line": 115,
+        "text": "=> value.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double;"
+      },
+      {
+        "line": 120,
+        "text": "/// the .NET DateTimeOffset range. Values without a timezone are used as-is."
+      },
+      {
+        "line": 122,
+        "text": "private static long InstantKey(XdmValue value)"
+      },
+      {
+        "line": 126,
+        "text": "XdmValueKind.DateTime => value.DateTimeXPathValue,"
+      },
+      {
+        "line": 127,
+        "text": "XdmValueKind.Date => value.DateXPathValue,"
+      },
+      {
+        "line": 128,
+        "text": "XdmValueKind.Time => value.TimeXPathValue,"
+      },
+      {
+        "line": 143,
+        "text": "private static bool NumericEquals(XdmValue a, XdmValue b)"
+      },
+      {
+        "line": 150,
+        "text": "private static string NumericKeyString(XdmValue value)"
+      },
+      {
+        "line": 153,
+        "text": "XdmValueKind.Integer => value.IntegerValue.ToString(CultureInfo.InvariantCulture),"
+      },
+      {
+        "line": 154,
+        "text": "XdmValueKind.Decimal => CanonicalDecimalString(value.DecimalValue),"
+      },
+      {
+        "line": 155,
+        "text": "XdmValueKind.Float or XdmValueKind.Double => ExactDoubleKeyString(value.DoubleValue),"
+      },
+      {
+        "line": 243,
+        "text": "return (n.TotalMonths, n.TotalSeconds).GetHashCode();"
+      }
+    ]
+  }
+}

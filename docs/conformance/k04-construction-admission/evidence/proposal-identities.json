@@ -1,0 +1,10 @@
+{
+  "id": "K04-construction-adoption-v1",
+  "sourceBase": "994b4e33cb7ca020666f139b5f4c333306351d70",
+  "ownerApproval": "pending",
+  "sha256": {
+    "docs/conformance/k04-construction-admission/PROPOSED-ADOPTION.patch": "406b6dd464103d2241518e242ec62c87c1496a4db20d81fcb4d787abee59825d",
+    "docs/conformance/k04-construction-admission/evidence/proposed-executor.cs.txt": "89a371e835e702ff01542213c8ea4f7ff708900c361359b1a1014b80f17d5dcf",
+    "docs/conformance/k04-construction-admission/evidence/proposed-AGENTS.md.txt": "271de22a09ef26d5ee320ee579af0838fe941c80a9eae1360535cd1b21aedbe4"
+  }
+}

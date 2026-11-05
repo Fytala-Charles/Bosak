@@ -1,0 +1,73 @@
+{
+  "qt3": {
+    "source": "tests/Bosak.XPath.Conformance/DependencyFilter.cs",
+    "unsupported": [
+      "schema-location-hint",
+      "static-typing",
+      "staticTyping",
+      "xpath-1.0-compatibility",
+      "olson-timezone",
+      "arbitraryPrecisionDecimal"
+    ],
+    "frozenAdmitted": [
+      "advanced-uca-fallback",
+      "collection-stability",
+      "directory-as-collection-uri",
+      "fn-format-integer-CLDR",
+      "fn-load-xquery-module",
+      "fn-transform-XSLT",
+      "fn-transform-XSLT30",
+      "higherOrderFunctions",
+      "infoset-dtd",
+      "moduleImport",
+      "namespace-axis",
+      "non_empty_sequence_collection",
+      "non_unicode_codepoint_collation",
+      "remote_http",
+      "schemaImport",
+      "schemaValidation",
+      "serialization",
+      "simple-uca-fallback",
+      "typedData"
+    ]
+  },
+  "qt4": {
+    "source": "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs",
+    "unsupported": [
+      "schema-location-hint",
+      "static-typing",
+      "staticTyping",
+      "xpath-1.0-compatibility",
+      "olson-timezone",
+      "arbitraryPrecisionDecimal",
+      "XQUpdate",
+      "fullText",
+      "fullText-ignore",
+      "fullText-units",
+      "fullText-defaults",
+      "binary",
+      "fn-format-integer-CLDR",
+      "non_unicode_codepoint_collation",
+      "typedData"
+    ],
+    "frozenAdmitted": [
+      "advanced-uca-fallback",
+      "collection-stability",
+      "directory-as-collection-uri",
+      "expath-file",
+      "fn-load-xquery-module",
+      "fn-transform-XSLT",
+      "fn-transform-XSLT30",
+      "higherOrderFunctions",
+      "infoset-dtd",
+      "moduleImport",
+      "namespace-axis",
+      "non_empty_sequence_collection",
+      "remote_http",
+      "schemaImport",
+      "schemaValidation",
+      "serialization",
+      "simple-uca-fallback"
+    ]
+  }
+}

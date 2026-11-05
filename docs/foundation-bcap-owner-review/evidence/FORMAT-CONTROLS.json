@@ -1,0 +1,259 @@
+{
+  "checks": 63,
+  "formatTestsOnly": true,
+  "ownerDispositionsCreated": 0,
+  "checksPassed": [
+    {
+      "id": "BCAP-O1-Schema-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-Schema-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O1-XmlDb-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Schema-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O2-Core-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O3-Braid-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-XmlDb-refuses-priorResponseSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-complete-format",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-proposalManifestSha256",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-priorReturnId",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-deltaApplicability",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-originalExceptionGraphDisposition",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-unresolvedRequiredSignatureGaps",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-acceptedPerformanceBudgets",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-runtimeQualification",
+      "passed": true
+    },
+    {
+      "id": "BCAP-O4-Core-refuses-priorResponseSha256",
+      "passed": true
+    }
+  ]
+}

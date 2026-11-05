@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "68e18be9c8a24a9423c862af24bf1a73070a3fa1",
+  "sources": {
+    "fo31": {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "bytes": 2650378,
+      "revision": "REC-xpath-functions-31-20170321",
+      "affectedSections": [
+        "4.6.1 modifier grammar, variation conventions, dynamic errors"
+      ]
+    },
+    "cldr-de": {
+      "url": "https://raw.githubusercontent.com/unicode-org/cldr/e1d37acce5dae468c414172be53b666d58d45be8/common/rbnf/de.xml",
+      "sha256": "84caf76fd3328d49cefe499c8abb2f23ee85db224d792c115391b52612f381a5",
+      "bytes": 16695,
+      "revision": "e1d37acce5dae468c414172be53b666d58d45be8",
+      "affectedSections": [
+        "SpelloutRules: spellout-cardinal and spellout-ordinal[-feminine/-s/-r/-n]"
+      ]
+    }
+  },
+  "cldrTag": "release-46",
+  "cldrTagObject": "5cb9bb78b8beba93aaffbd8b84073ea3b21faf46",
+  "cldrCommit": "e1d37acce5dae468c414172be53b666d58d45be8",
+  "scope": "Correct existing format-integer cardinal variation parsing and German known ordinal ending aliases across current compatibility paths;no full RBNF/CLDR engine",
+  "intentionalLimits": [
+    "Only known German ordinal aliases dispatch to existing ending logic",
+    "Unknown cardinal variations fall back to existing cardinal formatting",
+    "Unknown ordinal variations retain existing ordinary-ordinal fallback",
+    "Retain existing numeric range/language/casing behavior;not full CLDR rule evaluation",
+    "No qt4 feature admission change in this implementation slice",
+    "German %spellout-ordinal-feminine is an explicit legacy alias for the existing e ending, not a rule name in pinned CLDR46 de.xml",
+    "Known named German ordinal overrides apply only to w/W/Ww word pictures",
+    "Retain prior title-case flag and balanced-parenthesis convention;this slice does not implement the complete modifier grammar or all RBNF ranges"
+  ]
+}

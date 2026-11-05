@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/README.md.html",
+      "sha256": "dbe00b5e6e7a56c35e791116eeae61ffd9c3ecffe5530a2934957af7554ef745"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_ARCHITECTURE.md.html",
+      "sha256": "cf150c768365d6e826318d3db5d655775f0be64f1cf5329aa4a038fee28ada47"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "2209a408d7c34591055330e11c237b5c6e1f60ae3c80557bc372695a74f1faf7"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_INTEGRATION.md.html",
+      "sha256": "2d74422019c0029f104c0099977f49e6304aa3e6ff682d4ed8fd13d1c8cb542d"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "2170cc906fd3a6217495eec844942c5cda7db69ef42a67ff4a232c1d7a05fdc1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "e32425df8066fdba3fcd659591f8f8f437973a657189052dcb1e0f8fbf0b7e27"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "104e4e385b10fdf4664a43b52e5c257d8e06d8f9ebc13795962917b84e4f3eac"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "7784292100457568d3bb31dd6f611810e8ca0da0088fadf1625db286f7efd313"
+    },
+    {
+      "source": "docs/conformance/k04-date-arity-review/README.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_conformance_k04-date-arity-review_README.md.html",
+      "sha256": "5ef15cd5e5f4058c90dd0484efb73dbef90207069ce16a38be37e8961d064caa"
+    },
+    {
+      "source": "docs/conformance/k04-date-arity-review/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-date-arity-review-render/docs_conformance_k04-date-arity-review_NEXT-SLICE.md.html",
+      "sha256": "8aeb39bc8cc0976245469fe3af1264f0fa2fb155ee02f522898019d42048a8c6"
+    }
+  ]
+}

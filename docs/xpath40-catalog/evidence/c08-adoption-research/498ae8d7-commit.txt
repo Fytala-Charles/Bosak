@@ -1,0 +1,61 @@
+498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9
+2026-10-08T12:20:51+02:00
+2026-10-08T12:20:51+02:00
+feat(xpath40): REQ-118 4.0-S3b — keyword arguments + string templates (#86)
+
+* feat(xpath40): REQ-118 4.0-S3b — keyword arguments + string templates
+
+XPath 4.0 grammar, second piece (3.1 default unchanged):
+
+* Keyword arguments (spec section 4.6.1): f(pos, name := expr, ...).
+  Positional arguments fill the leading parameters; keywords match
+  declared parameter names under the no-namespace rule (an unprefixed
+  keyword is in no namespace); every mismatch is XPST0017 (unknown,
+  duplicate, already-filled, unmatched required). Unfilled optional
+  parameters take their F&O 4.0 declared defaults from the new
+  FunctionLibrary.KeywordSignatures plain-data table; the call is
+  rewritten to a fully positional call of the fully-populated arity.
+  Arrow targets supported (the arrow source counts as the first
+  positional argument); keywords on dynamic calls are XPST0017.
+  Coverage: 21 functions (substring/subsequence/string-join/replace/
+  matches/contains/starts-with/ends-with/index-of/serialize/sort/
+  sort-by/slice/parse-uri/hash/lang, map:merge/build, array:sort/slice);
+  full population + variadic keywords recorded as follow-up.
+  fn:substring#3/fn:subsequence#3 accept an empty-sequence $length in
+  4.0 mode (= to end) per F&O 4.0.
+
+* String templates (spec section 4.10.2): `fixed {expr} text`.
+  Lexer scans the whole template as one raw StringTemplate token
+  (longest-token: {{, }} and `` are escapes, a lone backtick ends it);
+  the parser re-scans into StringLiteralNode fixed parts and parsed
+  interpolation expressions. Each interpolation contributes its
+  atomized items cast to strings joined with single spaces; empty,
+  whitespace-only or comment-only interpolations contribute nothing.
+  StringTemplateNode lowers through the same parts-join desugaring as
+  XQuery string constructors. Interpolations are full 4.0 XPath
+  (strings, comments, nested templates).
+
+3.1/3.0 mode: keyword arguments and backticks rejected with XPST0003.
+Gates: build 0 errors; dotnet test -c Release all green; QT3
+31,142/0/679; XSLT mode-filter smoke 162/0/26 (full sweeps pending).
+
+* test(xpath40): REQ-118 4.0-S3b gate tests — keyword args + string templates
+
+22 new VersionGateTests methods: 3.1 XPST0003 rejection for both
+features; fully-keyworded / mixed positional+keyworded calls; F&O
+declared defaults (substring/subsequence to-end, string-join separator,
+contains collation, hash MD5); sort/map:merge/slice/parse-uri incl.
+arrow form; XPST0017 for duplicate/unknown/already-filled/unmatched-
+required/no-signature/dynamic-call; template fixed parts, escapes,
+space-joined sequences, empty/whitespace/comment-only interpolations,
+nested templates, node atomization.
+
+* docs(xpath40): REQ-118 4.0-S3b — registry, integration, handover
+
+* docs(xpath40): REQ-118 4.0-S3b handover hash tail
+
+* docs(xpath40): REQ-118 4.0-S3b handover hash tail (final)
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

@@ -1,0 +1,31 @@
+from pathlib import Path
+import json,re,hashlib,subprocess,urllib.parse,xml.etree.ElementTree as ET
+C=Path('docs/xpath40-catalog');E=C/'evidence/c13-final-review'
+def load(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+def save(n,v):(E/n).write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def blob(p):return subprocess.check_output(['git','hash-object',str(p)]).decode().strip()
+batchNames=[f'SEMANTIC-REVIEW-BATCH-{i}.json' for i in range(1,5)];batches={n:load(C/n) for n in batchNames};entries=[v['entry'] for d in batches.values() for v in d['entries']];assert len(entries)==len(set(entries))==76
+sources={}
+for n in sorted(entries):
+ p=C/n;t=p.read_text(encoding='utf-8');sections={m.group(1):m.group(2).strip() for m in re.finditer(r'^## (\d+)\.[^\n]*\n(.*?)(?=^## \d+\.|\Z)',t,re.M|re.S)};assert set(sections)==set(map(str,range(1,17)))
+ sources[n]=dict(gitBlob=blob(p),sha256=sha(p.read_bytes()),text=t,sections=sections)
+save('entry-sources.json',sources)
+inputs=['CURRENT-FUNCTION-INVENTORY.json','GRAMMAR-COVERAGE-MATRIX.json','LIFECYCLE-RECONCILIATION.json','FUNCTION-OPTIONS-RECONCILIATION.json','CONSTRUCTOR-TYPE-RECONCILIATION.json','EXPRESSION-CALL-FOCUS-RECONCILIATION.json','TYPE-COLLECTION-PATTERN-RECONCILIATION.json','HOST-PROFILE-RECONCILIATION.json','ADOPTION-DISPOSITIONS.json','provenance.json','CLOSURE-PLAN.json',*batchNames]
+save('review-inputs.json',{n:dict(gitBlob=blob(C/n),sha256=sha((C/n).read_bytes())) for n in inputs})
+raw=[]
+for work,name,field in [('C02','FUNCTION-OPTIONS-RECONCILIATION','followups'),('C03','CONSTRUCTOR-TYPE-RECONCILIATION','boundaries'),('C04','EXPRESSION-CALL-FOCUS-RECONCILIATION','followups'),('C05','TYPE-COLLECTION-PATTERN-RECONCILIATION','followups'),('C06','HOST-PROFILE-RECONCILIATION','followups'),('C07','LIFECYCLE-RECONCILIATION','followups')]:
+ data=load(C/(name+'.json'))[field]
+ for id,v in (data.items() if isinstance(data,dict) else [(v['id'],v) for v in data]):raw.append(dict(id=work+'-'+id,workpackage=work,source=name+'.json',sourceField=field,sourceId=id,original=v))
+save('retained-findings.json',raw)
+cases=load(C/'examples/cases.json');byid={v['id']:v for v in cases};compiled=Path('tests/Bosak.Xslt.Tests/bin/Release/net10.0/Documentation/ReferenceExamples');assets={}
+for p in sorted((C/'examples').rglob('*')):
+ if not p.is_file() or p.suffix.lower() not in ['.xpath','.xsl','.xml','.xq','.json']:continue
+ copy=compiled/'Catalog'/p.relative_to(C/'examples');assert p.read_bytes()==copy.read_bytes(),str(p)
+ assets[p.as_posix()]=dict(sha256=sha(p.read_bytes()),compiled=copy.as_posix())
+for p in sorted((C/'worked-examples').rglob('*')):
+ if not p.is_file() or p.suffix.lower() not in ['.xsl','.xml','.json','.html','.xpath']:continue
+ copy=compiled/p.relative_to(C/'worked-examples');assert p.read_bytes()==copy.read_bytes(),str(p)
+ assets[p.as_posix()]=dict(sha256=sha(p.read_bytes()),compiled=copy.as_posix())
+save('compiled-assets.json',assets)
+print('Entries',len(sources),'retained finding records',len(raw),'assets',len(assets))

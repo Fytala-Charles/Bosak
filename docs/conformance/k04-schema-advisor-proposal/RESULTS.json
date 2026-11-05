@@ -1,0 +1,37 @@
+{
+  "slice": "K04-C43",
+  "date": "2026-10-29",
+  "base": "ebfb7c2f",
+  "reviewComplete": true,
+  "proposalStatus": "Proposed; C44 prototype required before permanent API freeze/owner acceptance",
+  "schemaOwner": "Bosak.Schema",
+  "sourceFindings": 8,
+  "acceptanceGroups": 14,
+  "xsltDocumentedCohort": 30,
+  "additionalCtaGuardWitness": 1,
+  "independentApplicabilityControl": 1,
+  "xsltRequests": 32,
+  "xsltSelectedObservations": 42,
+  "qt3PreparationErrorsReproduced": 6,
+  "freshBoundedProcesses": 40,
+  "qt3Normal": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Normal": [
+    8941,
+    0,
+    1918
+  ],
+  "solutionPassedInherited": 24203,
+  "regressionPassedInherited": 39,
+  "productSourceChanged": false,
+  "publicApiChanged": false,
+  "baselineChanged": false,
+  "ownerAcceptance": false,
+  "releaseApproved": false,
+  "candidate": "1.33.1",
+  "published": "1.26.3",
+  "next": "C44 isolated schema session/identity prototype"
+}

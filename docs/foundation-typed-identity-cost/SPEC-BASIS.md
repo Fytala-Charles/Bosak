@@ -1,0 +1,7 @@
+﻿# TA-06 typed identity allocation adoption — 4 November 2026
+
+Recorded before implementation. Base `fc44efc3` / source 1.57.0. Retain the exact TA-05 XPath REC-xpath-31-20170321 section 3.1.2 and XDM REC-xpath-datamodel-31-20170321 section 3.3.1.2 adoption, selected cache/identity policy at d2ba4d0b, and current profile/descriptor. This is an internal allocation optimization, not a semantic/profile change.
+
+Measure public mutable-context versus existing isolated immutable-function-table setup on the same compiled VM, distinguishing function population from current issuer/ownership checks. If confirmed, use the existing CreateIsolated context factory for typed identity only, preserving fresh per-call state, closed resources and all pre/post ownership/lifetime/representation checks. No shared mutable execution context, skipped function population, marker stripping, changed limits, public context behavior, public declarations/friends or constructor signatures.
+
+Patch version 1.57.1 if implemented. Preserve original 1.57.0 allocation/source/binary and loaded-binding qualification as immutable input. Qualify a fixed measurement comparison, actual compiled output under both context modes, full typed-identity/adapter/poison/lifetime controls, all ten solution projects and exact frozen gates with current loaded hashes. Local allocation ceilings are regression controls, not accepted owner/native latency or retained-memory budgets. Public activation, numeric projection, native/owner/freeze/publication remain pending.

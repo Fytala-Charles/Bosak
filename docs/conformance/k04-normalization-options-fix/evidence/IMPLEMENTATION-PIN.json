@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C22",
+  "kind": "Pre-implementation semantic adoption: normalization options and keyword contract",
+  "sourceBase": "aa56978e7ae5d0cb3e90c1af6d351009b2449d44",
+  "xpath31": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+    "sections": [
+      "func-normalize-unicode"
+    ],
+    "scope": "fn:normalize-unicode conversion, composing-character definition and effective form-name rules"
+  },
+  "xpath40": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+    "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+    "section": "fn:normalize-unicode"
+  },
+  "scope": [
+    "Use fn:upper-case(fn:normalize-space(form)), collapsing only XML whitespace",
+    "Default absent second argument to NFC; explicit empty sequence defaults to NFC only in XPath40 and Experimental",
+    "Register 4.0 keyword signature value, form with NFC default",
+    "Retain 3.1 explicit empty-form sequence XPTY0004 and keyword syntax refusal",
+    "Empty string form still means no normalization"
+  ],
+  "intentionalLimits": [
+    "No normalization algorithm/data/serializer changes",
+    "No fixtures, KnownSkips, dependency filters, GatedSets or AGENTS baseline changes",
+    "No release, publication or upstream contribution"
+  ],
+  "fragmentSha256": "52b961cf3f4cb6c08444e2e756aa917ec2940c754a11099d828005e23d24df93"
+}

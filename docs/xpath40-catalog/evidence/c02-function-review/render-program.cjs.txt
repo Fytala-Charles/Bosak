@@ -1,0 +1,20 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const md=require('C:/Users/charl/AppData/Local/npm-cache/_npx/28f98e99224dac41/node_modules/markdown-it')({html:true});
+const root=process.cwd(),out=path.join(root,'.guard-tmp/c02-render');fs.mkdirSync(out,{recursive:true});
+const files=["README.md", "docs/ARCHITECTURE.md", "docs/FEATURE_REQUESTS.md", "docs/INTEGRATION.md", "docs/AGENT_HANDOVER.md", "docs/DOCUMENTATION_RENDERER_TEST.md", "docs/xpath40-catalog/README.md", "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md", "docs/xpath40-catalog/CLOSURE-PLAN.md", "docs/xpath40-catalog/SIGNATURE-CONTRACT-AUDIT.md", "docs/xpath40-catalog/FUNCTION-INVENTORY-REFRESH.md", "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md", "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.md", "docs/xpath40-catalog/functions/consecutive-partition.md", "docs/xpath40-catalog/experimental/fn-scan.md", "docs/xpath40-catalog/functions/atomic-equal.md", "docs/xpath40-catalog/functions/batch-extrema.md", "docs/xpath40-catalog/functions/bounded-retries.md", "docs/xpath40-catalog/functions/configured-label-callbacks.md", "docs/xpath40-catalog/functions/csv-parsing.md", "docs/xpath40-catalog/functions/customer-reference-matching.md", "docs/xpath40-catalog/functions/customer-text-cleanup.md", "docs/xpath40-catalog/functions/element-to-map.md", "docs/xpath40-catalog/functions/higher-order-selection.md", "docs/xpath40-catalog/functions/import-array-batches.md", "docs/xpath40-catalog/functions/import-file-names.md", "docs/xpath40-catalog/functions/invoice-api-uris.md", "docs/xpath40-catalog/functions/map-to-element.md", "docs/xpath40-catalog/functions/measurement-comparison.md", "docs/xpath40-catalog/functions/month-end-cutoffs.md", "docs/xpath40-catalog/functions/numeric-import-diagnostics.md", "docs/xpath40-catalog/functions/order-sequence-selection.md", "docs/xpath40-catalog/functions/ordered-queue-prefix.md", "docs/xpath40-catalog/functions/payload-fingerprints.md", "docs/xpath40-catalog/functions/product-dependency-closure.md", "docs/xpath40-catalog/functions/product-map-index.md", "docs/xpath40-catalog/functions/sequence-distinctness.md", "docs/xpath40-catalog/functions/shipment-event-sequences.md", "docs/xpath40-catalog/functions/sort-with.md", "docs/xpath40-catalog/functions/supplier-offer-ranking.md", "docs/xpath40-catalog/functions/timestamp-deadlines.md", "docs/xpath40-catalog/functions/uri-option-policy.md", "docs/xpath40-catalog/functions/warehouse-pick-sorting.md"];
+const css=path.join(root,'assets/css/fytala-markdown.css');
+const receipts=[];
+for(const f of files){
+ const text=fs.readFileSync(path.join(root,f),'utf8'),html=md.render(text);
+ if(!html.includes('<h'))throw Error('No heading '+f);
+ const target=path.join(out,f.replaceAll('/','_')+'.html');
+ fs.writeFileSync(target,`<!doctype html><meta charset="utf-8"><base href="file:///${path.dirname(path.join(root,f)).replaceAll('\\','/')}/"><link rel="stylesheet" href="file:///${css.replaceAll('\\','/')}"><main>${html}</main>`);
+ receipts.push({source:f,html:path.relative(root,target).replaceAll('\\','/'),sha256:crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex')});
+}
+fs.writeFileSync(path.join(out,'receipts.json'),JSON.stringify({kind:'HTML only; no screenshot/PDF acceptance',cssSha256:crypto.createHash('sha256').update(fs.readFileSync(css)).digest('hex'),pages:receipts},null,2));
+console.log(`Rendered ${files.length} pages using unchanged Fytala CSS.`);
+
+
+
+
+

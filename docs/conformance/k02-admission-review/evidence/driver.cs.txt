@@ -1,0 +1,28 @@
+// Generated read-only full-runner rehearsal of the existing guarded initialization flag.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+Environment.SetEnvironmentVariable("QTTEST","42");
+Environment.SetEnvironmentVariable("QTTEST2","other");
+Environment.SetEnvironmentVariable("QTTESTEMPTY","");
+var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance;
+var directory=Path.GetFullPath(".guard-tmp/c02-artifacts/bin/Bosak.XPath.Conformance/release");
+AssemblyLoadContext.Default.Resolving+=(context,name)=>{var file=Path.Combine(directory,name.Name+".dll");return File.Exists(file)?Assembly.LoadFrom(file):null;};
+var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Conformance.dll"));
+var runnerType=assembly.GetType("Bosak.XPath.Conformance.ConformanceRunner",true)!;
+var runner=Activator.CreateInstance(runnerType,new object?[]{Path.GetFullPath("tests/qt3tests"),null,null})!;
+var executor=runnerType.GetField("_executor",flags)!.GetValue(runner)!;
+var property=executor.GetType().GetProperty("UseQueryOwnedSchemasForDiagnostics",flags)!;
+bool defaultGuarded=(bool)property.GetValue(executor)!;
+if(defaultGuarded)throw new InvalidOperationException("Expected unchanged default-off runner.");
+if(args[0]=="guarded")property.SetValue(executor,true);
+else if(args[0]!="current")throw new ArgumentException("Unknown mode.");
+object? report=null;Exception? failure=null;
+var worker=new Thread(()=>{try{report=runnerType.GetMethod("Run",flags)!.Invoke(runner,null);}catch(Exception ex){failure=ex;}},512*1024*1024){IsBackground=true,Name="conformance-runner"};
+worker.Start();worker.Join();if(failure is not null)throw failure;
+var rt=report!.GetType();rt.GetMethod("PrintSummary",flags)!.Invoke(report,null);rt.GetMethod("DumpSkips",flags)!.Invoke(report,new object[]{args[1]});
+int Number(string name)=>(int)rt.GetProperty(name,flags)!.GetValue(report)!;
+var result=new{mode=args[0],defaultGuarded,selectedGuarded=(bool)property.GetValue(executor)!,total=Number("Total"),passed=Number("Passed"),failed=Number("Failed"),skipped=Number("Skipped"),skipDump=args[1],binary=Path.Combine(directory,"Bosak.XPath.Conformance.dll")};
+File.WriteAllText(args[2],JsonSerializer.Serialize(result,new JsonSerializerOptions{WriteIndented=true}));
+Console.WriteLine(JsonSerializer.Serialize(result));
+return Number("Failed")==0?0:2;

@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Bosak.Xslt" />
+    <InternalsVisibleTo Include="Bosak.XPath.Conformance" />
   </ItemGroup>
 
 </Project>

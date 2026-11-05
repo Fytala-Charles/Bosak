@@ -1,0 +1,3 @@
+* -text whitespace=cr-at-eol
+# Preserve generated terminating blank lines in immutable skip dumps.
+evidence/*-skips.txt whitespace=cr-at-eol,-blank-at-eof

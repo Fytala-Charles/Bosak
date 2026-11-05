@@ -1,0 +1,15 @@
+{
+  "tests/qt3tests/xs/float.xml": "1e570f7d6ce93f081fecb7b0f2e05c73ded126d8098d916990d6a639c50d54d7",
+  "tests/qt3tests/fn/matches/perl-tests.xml": "68e466875aa22229f9a07684647ca7711d63cc9fedb870d6da2004806fddf4d8",
+  "tests/qt3tests/prod/SchemaImport/substitution11.xsd": "cdcaf21b589fd62855ebff6df733f0304c9cf1706141188b45fa323cfd4d442c",
+  "tests/qt3tests/fn/matches.re.xml": "651af0a7a4d1718de74716ed178376969e318ae2dc5bd7672cd52d14d5bea457",
+  "tests/qt3tests/prod/CastExpr.derived.xml": "a0f68c1e3ed3fcbf18fbbbb7a230d702b3b32a2608042f95be37120d48f84d77",
+  "tests/qt3tests/prod/CastExpr.xml": "f78d4b0ce97b267614141d9f2812d8fadd1f5eda89c2c1b4e70a0a77ee6cfdf3",
+  "tests/qt3tests/fn/codepoints-to-string.xml": "8abe7f518cf19501eaf7e45ba149bb8ecd4420c394d9ecc435ae44aeaf864aee",
+  "tests/qt3tests/prod/SchemaImport.xml": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+  "tests/qt3tests/prod/CastableExpr.xml": "10f5c86cf55b132c883d7929598a295ab0ec443bd11e41a5b711fafcbf6e7f08",
+  "tests/qt3tests/xs/double.xml": "016b73d4e93194b485b229922b0ec3083a510d417d7e897417a30c6ae18f3e86",
+  "tests/qt3tests/fn/matches.xml": "ae09216ebce5a3e968d22f416c83b0ecca685fa579edded00965625d4cd63ea2",
+  "tests/qt3tests/catalog.xml": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+  "tests/qt3tests/prod/SchemaImport/substitution.xsd": "c4696d105575d82a16f9b74793529a019d83e94354a3ffb21a89b4f87944634f"
+}

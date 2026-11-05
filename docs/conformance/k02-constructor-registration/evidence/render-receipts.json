@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k02-c01-render/README.md.html",
+      "sha256": "f5c7b65df101400f09b8a98a6ff245da6a2e966689c5ef22a7dac00fb1f651c0"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k02-c01-render/docs_ARCHITECTURE.md.html",
+      "sha256": "4de227a4bb121209d53c36ae94b1a1a4e9bfabdcc8d2a0af8508444893fbf40f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k02-c01-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "3fd2ca8cbc0e467628294f7f50e5bd0aa64c99e6a710fdd230cb0b2710cc1791"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k02-c01-render/docs_INTEGRATION.md.html",
+      "sha256": "f9e164c4652363f152cebfa79e34bdf7ee428898d8e8941adbfb7328a375b908"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k02-c01-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "ab1c66b6cb324a7da7efcba368521b7849ff9d6e906712c2f67f9bc717342cfa"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k02-c01-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "3c49285995aba05caafb81f734fc52bbcca5390684c6a28c801da7e4088755b5"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k02-c01-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "cd737457730b2768ec0f8777b22cb461105fd685bdf975ad7f73134d96e02933"
+    },
+    {
+      "source": "docs/conformance/k02-schema-inventory/README.md",
+      "html": ".guard-tmp/k02-c01-render/docs_conformance_k02-schema-inventory_README.md.html",
+      "sha256": "9acc2c5f3b78d9774c8d2289958e5cf64372212fad3dcf671a7acc084d00ced8"
+    },
+    {
+      "source": "docs/conformance/k02-constructor-registration/README.md",
+      "html": ".guard-tmp/k02-c01-render/docs_conformance_k02-constructor-registration_README.md.html",
+      "sha256": "54cf88d4c9e98e1b5edc790da176a26ee8432ae616f29951772560da62fc27b7"
+    }
+  ]
+}

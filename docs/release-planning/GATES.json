@@ -1,0 +1,202 @@
+{
+  "schemaVersion": 1,
+  "sourceVersion": "1.61.1",
+  "targetReleaseVersion": null,
+  "releaseDate": null,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "gates": [
+    {
+      "id": "R0",
+      "title": "Private engine foundation",
+      "status": "Qualified",
+      "owner": "Core",
+      "dependsOn": [],
+      "exitEvidence": "Retain 1.42.0 source qualification and bounded profile; not public SDK acceptance."
+    },
+    {
+      "id": "R1",
+      "title": "Owner capability mapping",
+      "status": "Audited",
+      "owner": "Core",
+      "dependsOn": [
+        "R0"
+      ],
+      "exitEvidence": "Read-only pinned source/requirements mapping; runtime owner qualification remains in R4."
+    },
+    {
+      "id": "R2",
+      "title": "Final public contract disposition",
+      "status": "ClosedWithScope",
+      "owner": "Core with Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R1"
+      ],
+      "exitEvidence": "Resolve every required API need and proposed declaration with finite implementation/refusal scope; record owner decisions.",
+      "coreLedger": "docs/foundation-r2-ledger/LEDGER.json",
+      "coreDecisionStatus": "ScopedDesignAcceptedOnExactRevisedDraft",
+      "ownerReviewPacket": "docs/foundation-bcap-owner-review/PACKETS.json",
+      "ownerReviewPacketPrepared": true,
+      "ownerDeliveryConfirmed": false,
+      "requiredRoleReturns": 7,
+      "recordedAcceptedReturns": 7,
+      "recordedReturnScope": "Seven exact scoped agent-authored design returns; Core recorded design-stage closure only, no independently authenticated human or runtime acceptance",
+      "externalRoleReturnsPending": 0,
+      "recordedSubmittedRoleReturns": 7,
+      "externalRoleReturnsPendingIds": [],
+      "braidDecision": "AcceptWithScope",
+      "openRevisionRequests": [],
+      "schemaRegistrationConfirmed": true,
+      "schemaRegistrationEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6562337494",
+      "latestResponseReview": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json",
+      "externalRoleReturnsPendingScope": "No missing or Revise role returns for the exact revised packet",
+      "xmlDbO1Decision": "AcceptWithScope",
+      "xmlDbO4Decision": "AcceptWithScope",
+      "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
+      "schemaAlignmentIsFormalReturn": false,
+      "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
+      "nextCoreTask": "R2 is ClosedWithScope; continue the qualified R3 implementation queue recorded by the current R3 gate.",
+      "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
+      "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
+      "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
+      "captureOutcomeCandidate": "docs/foundation-bcap-outcomes/evidence/STATUS.json",
+      "captureProfileQualification": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+      "captureCostEvidence": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "coreCaptureFeasibility": "CompleteBoundedCoreFeasibility",
+      "revisedCaptureReview": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+      "revisedCaptureReviewSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+      "revisedRoleReturnsSubmitted": 7,
+      "resolvedBoundedDesignRequests": [
+        "BCAP-01"
+      ],
+      "legacyReviewCountsHistorical": true,
+      "revisedRoleReturnsScopedAccepts": 7,
+      "revisedRoleReturnsRevise": 0,
+      "revisedRoleReturnsPending": [],
+      "legacy45TypeReview": {
+        "recordedAcceptedReturns": 3,
+        "recordedSubmittedRoleReturns": 5,
+        "recordedReturnScope": "Three scoped agent-authored design accepts, two Revise returns; no runtime/C45 acceptance",
+        "externalRoleReturnsPending": 2,
+        "externalRoleReturnsPendingIds": [
+          "O1-Schema",
+          "O2-Schema"
+        ],
+        "externalRoleReturnsPendingScope": "Missing submissions only; received Revise returns are separate open work",
+        "coreDesignReturnPacket": "docs/foundation-r2-core-returns/INDEX.json",
+        "scope": "Historical original-draft snapshot only; not revised 47-type counts or carry-forward acceptance."
+      },
+      "schemaO1Decision": "AcceptWithScope",
+      "schemaO2Decision": "AcceptWithScope",
+      "schemaSubmissionEvidence": "docs/foundation-r2-closure/returns",
+      "coreDesignReturnPacket": "docs/foundation-bcap-core-review/STATUS.json",
+      "schemaFocusedFollowup": "docs/foundation-bcap-core-review/SCHEMA-FOLLOWUP.md",
+      "schemaSourceReconciliation": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
+      "schemaNativeSourceFactChecks": 14,
+      "schemaFactObservedCoreVersion": "1.34.2.0",
+      "schemaGuideCoreVersion": "1.34.1",
+      "schemaNativeBcapAdapterQualified": false,
+      "xmlDbNativeFix": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+      "xmlDbFixScope": "Qualified current-pin provider only; new-Core/BCAP/XSLT R4 remains pending",
+      "resolvedScopedProviderRequests": [
+        "XDB-LIFE-01"
+      ],
+      "schemaPreciseDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
+      "schemaDecisionRequestDelivery": "Schema supplied versioned v2 submitted returns; exact bytes preserved locally and validated",
+      "schemaLatestDesignDisposition": "Submitted v2 AcceptWithScope forms validated 2026-11-03",
+      "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md",
+      "w1ImplementationStatus": "Internal W1-A and bounded W1-B qualified; wider/public slices pending",
+      "w1GateEvidence": "docs/foundation-r2-closure/GATE.json",
+      "scopedClosure": "docs/foundation-r2-closure/CLOSURE.json"
+    },
+    {
+      "id": "R3",
+      "title": "Accepted public contract implementation",
+      "status": "InProgress",
+      "owner": "Core",
+      "dependsOn": [
+        "R2"
+      ],
+      "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
+      "w1ReadinessPlan": "docs/foundation-node-query-profile/README.md",
+      "w1PlanPrepared": true,
+      "w1ImplementationStarted": true,
+      "w1AcceptanceCasesNotRun": 3,
+      "w1EntryGate": "Ready for implementation",
+      "w1InternalAcceptancePassed": 18,
+      "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
+      "nextCoreTask": "Implement internal metadata-only original-facts mode with NotRequested state, then selected public nilled profile under NP01-NP24. Data/provenance atomization separately; R3 InProgress, R4-R7 pending.",
+      "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
+      "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
+      "associationControlsPassed": 33,
+      "privateAllocationFix": "docs/foundation-function-table-sharing/STATUS.json",
+      "openSessionDrain": "docs/foundation-open-session-drain/STATUS.json",
+      "publicOrdinaryFacade": "docs/foundation-public-ordinary/STATUS.json",
+      "exactDecimalPrimitive": "docs/foundation-exact-decimal/STATUS.json",
+      "exactValueTransport": "docs/foundation-exact-value-transport/STATUS.json",
+      "knownSourceMigration": "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json",
+      "boundedNumericProfile": "docs/foundation-bounded-numeric/STATUS.json",
+      "exactScalarProfile": "docs/foundation-exact-scalars/STATUS.json",
+      "exactQuotientProfile": "docs/foundation-exact-quotient/STATUS.json",
+      "decimalDivisionPolicy": "docs/foundation-decimal-division-policy/STATUS.json",
+      "exactDivisionProfile": "docs/foundation-exact-division/STATUS.json",
+      "decimalDivisionPolicyScope": "Historical Core preparation; current finite runtime qualification is exactDivisionProfile",
+      "numericConstructorProfile": "docs/foundation-exact-constructors/STATUS.json",
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/STATUS.json",
+      "typedContainerQualification": "docs/foundation-typed-container/STATUS.json",
+      "typedCachePolicy": "docs/foundation-typed-cache-policy/STATUS.json",
+      "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
+      "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
+      "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
+      "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
+      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
+      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
+      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
+      "nodeFactsPreparation": "docs/foundation-node-facts-plan/STATUS.json",
+      "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
+      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json",
+      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/STATUS.json"
+    },
+    {
+      "id": "R4",
+      "title": "Real consumer and performance qualification",
+      "status": "Pending",
+      "owner": "Core/Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R3"
+      ],
+      "exitEvidence": "Same immutable candidate; source and unchanged-binary consumers; representative PF-01\u201309 budgets and complete regression gates."
+    },
+    {
+      "id": "R5",
+      "title": "Four-owner C45 acceptance and API freeze",
+      "status": "Pending",
+      "owner": "Core/Schema/XmlDb/Braid",
+      "dependsOn": [
+        "R4"
+      ],
+      "exitEvidence": "Dated explicit dispositions over exact manifest/profile/candidate; no unresolved required signature gap. Include explicit disposition of the recorded typed-default source migration."
+    },
+    {
+      "id": "R6",
+      "title": "Release candidate packages and documentation",
+      "status": "Pending",
+      "owner": "Core",
+      "dependsOn": [
+        "R5"
+      ],
+      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel. Final release SemVer and migration notes must account for the source-default overload ambiguity."
+    },
+    {
+      "id": "R7",
+      "title": "Publish and verify availability",
+      "status": "Pending",
+      "owner": "Core with release authorization",
+      "dependsOn": [
+        "R6"
+      ],
+      "exitEvidence": "Concrete reviewed artifacts, release approval, publication receipts and public-package verification; consumer pin upgrades remain separate."
+    }
+  ]
+}

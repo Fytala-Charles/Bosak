@@ -1,0 +1,25 @@
+// Generated read-only public API probe of typed-node copy behavior; no production source or fixture changes.
+using Bosak.XQuery.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Schema;
+using System.Text.Json;
+string xs="http://www.w3.org/2001/XMLSchema";
+string schema="<xs:schema xmlns:xs='"+xs+"' targetNamespace='urn:c33' xmlns:t='urn:c33' elementFormDefault='qualified'><xs:complexType name='Root'><xs:sequence><xs:element name='count' type='xs:int'/><xs:element name='refs' type='xs:IDREFS'/><xs:element name='nil' type='xs:string' nillable='true'/></xs:sequence><xs:attribute name='id' type='xs:ID'/><xs:attribute name='qname' type='xs:QName'/></xs:complexType><xs:element name='root' type='t:Root'/></xs:schema>";
+string xml="<t:root xmlns:t='urn:c33' xmlns:p='urn:c33:q' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' id='A' qname='p:entry'><t:count>7</t:count><t:refs>A A</t:refs><t:nil xsi:nil='true'/></t:root>";
+var schemas=new XmlSchemaSet();using(var reader=XmlReader.Create(new StringReader(schema)))schemas.Add("urn:c33",reader);schemas.Compile();
+var doc=XDocument.Parse(xml);var errors=new List<string>();doc.Validate(schemas,(_,e)=>errors.Add(e.Message),true);if(errors.Count!=0)throw new Exception(string.Join(";",errors));
+IXdmNode sourceNode=XDocumentNode.Wrap(doc.Root!);
+IXdmNode Single(XdmValue v){if(v.IsNode)return v.NodeValue;foreach(var x in XdmSequence.FromSource(v.SequenceValue!))return x.NodeValue;throw new Exception("Missing copied root");}
+object[] Values(IXdmNode n){if(n.HasNoTypedValue)return Array.Empty<object>();var v=n.TypedValue;var result=new List<object>();void Add(XdmValue x){if(!x.IsUndefined)result.Add(new{kind=x.Kind.ToString(),type=x.SchemaTypeName,value=x.ToString()});}if(v.IsSequence){foreach(var x in XdmSequence.FromSource(v.SequenceValue!))Add(x);}else Add(v);return result.ToArray();}
+object Describe(IXdmNode n)=>new{name=n.LocalName,kind=n.NodeKind.ToString(),type=n.SchemaTypeAnnotation is {} t?"Q{"+t.NamespaceUri+"}"+t.LocalName:null,nilled=n.IsNilled,isId=n.IsId,isIdref=n.IsIdref,hasNoTypedValue=n.HasNoTypedValue,typedValues=Values(n)};
+object[] Snapshot(IXdmNode n){var rows=new List<object>();foreach(var x in n.Axis(XdmAxis.DescendantOrSelf)){if(x.NodeValue.NodeKind!=XdmNodeKind.Element)continue;rows.Add(Describe(x.NodeValue));foreach(var a in x.NodeValue.Axis(XdmAxis.Attribute))rows.Add(Describe(a.NodeValue));}return rows.ToArray();}
+string before=JsonSerializer.Serialize(Snapshot(sourceNode));var outcomes=new List<object>();
+foreach(var pair in new[]{("direct","<copy>{$input}</copy>/*"),("computed","(element copy {$input})/*"),("document","(document {$input})/*")}){
+ var context=new XQueryContext().WithVariable("input",XdmValue.FromNode(sourceNode));var value=new XQueryCompiler().Compile("declare variable $input external; "+pair.Item2).Evaluate(context);var copy=Single(value);
+ outcomes.Add(new{constructor=pair.Item1,source=Snapshot(sourceNode),copied=Snapshot(copy),sameNode=sourceNode.IsSameNode(copy)});
+}
+string after=JsonSerializer.Serialize(Snapshot(sourceNode));if(before!=after)throw new Exception("Source metadata was changed");
+Console.WriteLine(JsonSerializer.Serialize(new{schema,xml,schemaValidated=true,sourceUnchanged=before==after,outcomes},new JsonSerializerOptions{WriteIndented=true}));

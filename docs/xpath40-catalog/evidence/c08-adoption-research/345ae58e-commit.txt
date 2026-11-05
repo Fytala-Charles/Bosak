@@ -1,0 +1,27 @@
+345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0
+2026-10-10T10:42:53+02:00
+2026-10-10T10:42:53+02:00
+feat(xpath40): REQ-123 JNode cluster — F&O 4.0 §17.7 JNode model (#116)
+
+* Register REQ-124 source-preserving authoring API for Braid
+
+* feat(xpath40): REQ-123 JNode cluster — F&O 4.0 §17.7 JNode model (fn:jtree/fn:jkey/fn:jvalue, jnode() types, navigation rework) (#116)
+
+- New XdmValueKind.JNode + sealed XdmJNode (Value/Key/Parent wrapper over any item)
+- fn:jtree#1, fn:jkey/fn:jvalue #0+#1 with keyword rows (4.0-only, XPST0017 at 3.1)
+- jnode()/jnode(())/jnode(K)/jnode(K,T) type matching incl. #QName/integer key specs
+- Navigation rework: implicit jtree wrap, keyed child JNodes (map entries / array
+  members / sequence items), NameTest-as-key, integer-literal step /2, PR2667
+  child::{expr} braced selector (LookupIndex/LookupComputed opcodes; fixes the
+  XPTY0019 predicate-on-lookup quirk)
+- Atomization/coercion recursion into the jvalue (Atomize/AtomizeForCast/
+  AtomizeValue, fn:string/fn:data, function-call fast path, as-coercion); EBV true
+- Serializer + deep-equal recurse on jvalues
+- BREAKING at frozen XPath40: minimal fn:jvalue#1 (element-to-map) superseded by
+  the §17.7 accessor (XPTY0004 on non-JNode); collateral element-to-map family green
+- qt4tests fn-jtree 30/0/0, fn-jkey 14/0/0, fn-jvalue 14/0/0 -> gate now 221 sets
+- Gates: unit 3,638/0, QT3 31,142/0/679, XSLT smoke 162/0/26, gate-only 0 failures
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

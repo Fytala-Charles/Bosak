@@ -1,0 +1,3 @@
+{
+  "reason": "Corrected an extra closing parenthesis in distinct-nan and added lexical separation around subtraction in sort-descending. Original diagnostic inputs/results retained; expected results and engine code unchanged."
+}

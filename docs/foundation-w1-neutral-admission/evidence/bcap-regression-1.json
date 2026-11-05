@@ -1,0 +1,382 @@
+{
+  "passed": true,
+  "checks": 83,
+  "rows": [
+    {
+      "id": "C02:distinct",
+      "passed": true
+    },
+    {
+      "id": "C03:bytes-order-properties:False",
+      "passed": true
+    },
+    {
+      "id": "C08:leases-through-serialization:False",
+      "passed": true
+    },
+    {
+      "id": "C08:released-after-raw:False",
+      "passed": true
+    },
+    {
+      "id": "C02:shared",
+      "passed": true
+    },
+    {
+      "id": "C03:bytes-order-properties:True",
+      "passed": true
+    },
+    {
+      "id": "C08:leases-through-serialization:True",
+      "passed": true
+    },
+    {
+      "id": "C08:released-after-raw:True",
+      "passed": true
+    },
+    {
+      "id": "C02:source-free",
+      "passed": true
+    },
+    {
+      "id": "C01:foreign-executable-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C01:foreign-roles-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C01:closed-before-getter",
+      "passed": true
+    },
+    {
+      "id": "C09:foreign-input-and-conflicting-options",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:0",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:1",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:2",
+      "passed": true
+    },
+    {
+      "id": "C04:production-bound:3",
+      "passed": true
+    },
+    {
+      "id": "C05:completed-secondary-retained",
+      "passed": true
+    },
+    {
+      "id": "C05:failure-before-output",
+      "passed": true
+    },
+    {
+      "id": "C06:pre-cancelled-capture",
+      "passed": true
+    },
+    {
+      "id": "C06:operation-limit",
+      "passed": true
+    },
+    {
+      "id": "C07:actual-unsupported-receipt",
+      "passed": true
+    },
+    {
+      "id": "C07:per-run-isolation",
+      "passed": true
+    },
+    {
+      "id": "C08:cancelled-wait-retains-lease",
+      "passed": true
+    },
+    {
+      "id": "C08:raw-completion-releases",
+      "passed": true
+    },
+    {
+      "id": "C10:source-free-measurement",
+      "passed": true
+    },
+    {
+      "id": "C06:both-gate-budgets:False",
+      "passed": true
+    },
+    {
+      "id": "C06:gate-identity-retained:False",
+      "passed": true
+    },
+    {
+      "id": "C06:both-gate-budgets:True",
+      "passed": true
+    },
+    {
+      "id": "C06:gate-identity-retained:True",
+      "passed": true
+    },
+    {
+      "id": "C06:spent-parent-budget-not-reset",
+      "passed": true
+    },
+    {
+      "id": "C06:expired-parent-deadline-not-reset",
+      "passed": true
+    },
+    {
+      "id": "C05:injected-serializer-fault-retains-output",
+      "passed": true
+    },
+    {
+      "id": "C08:lease-retained-inside-serializer:False",
+      "passed": true
+    },
+    {
+      "id": "C08:cancelled-wait-inside-serializer:False",
+      "passed": true
+    },
+    {
+      "id": "C06:mid-serialization-cancel:False",
+      "passed": true
+    },
+    {
+      "id": "C08:release-after-cancelled-serialization:False",
+      "passed": true
+    },
+    {
+      "id": "C08:lease-retained-inside-serializer:True",
+      "passed": true
+    },
+    {
+      "id": "C08:cancelled-wait-inside-serializer:True",
+      "passed": true
+    },
+    {
+      "id": "C06:mid-serialization-cancel:True",
+      "passed": true
+    },
+    {
+      "id": "C08:release-after-cancelled-serialization:True",
+      "passed": true
+    },
+    {
+      "id": "C09:options-mutation-after-copy",
+      "passed": true
+    },
+    {
+      "id": "C06:inherited-token-cancel-inside-serializer",
+      "passed": true
+    },
+    {
+      "id": "C06:local-deadline-during-serialization",
+      "passed": true
+    },
+    {
+      "id": "C10:actual-raw-cleanup-objects-order:False",
+      "passed": true
+    },
+    {
+      "id": "C10:capture-retained-separately-on-cleanup-failure:False",
+      "passed": true
+    },
+    {
+      "id": "C10:actual-raw-cleanup-objects-order:True",
+      "passed": true
+    },
+    {
+      "id": "C10:capture-retained-separately-on-cleanup-failure:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:successful-completed-operation",
+      "passed": true
+    },
+    {
+      "id": "OUT:original-principal-error-retained",
+      "passed": true
+    },
+    {
+      "id": "OUT:original-exceptions-deduplicated-by-identity",
+      "passed": true
+    },
+    {
+      "id": "OUT:capture-survives-cleanup:False:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:cleanup-identities-order-once:False:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:execution-and-cleanup-separated:False:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:capture-survives-cleanup:False:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:cleanup-identities-order-once:False:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:execution-and-cleanup-separated:False:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:provider-aggregate-not-flattened:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:capture-survives-cleanup:True:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:cleanup-identities-order-once:True:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:execution-and-cleanup-separated:True:False",
+      "passed": true
+    },
+    {
+      "id": "OUT:capture-survives-cleanup:True:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:cleanup-identities-order-once:True:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:execution-and-cleanup-separated:True:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:provider-aggregate-not-flattened:True",
+      "passed": true
+    },
+    {
+      "id": "OUT:admission-error-no-capture",
+      "passed": true
+    },
+    {
+      "id": "OUT:work-error-original-before-getter",
+      "passed": true
+    },
+    {
+      "id": "OUT:raw-work-and-single-provider-group",
+      "passed": true
+    },
+    {
+      "id": "OUT:owned-outcome-not-early-on-wait-cancel",
+      "passed": true
+    },
+    {
+      "id": "OUT:owned-outcome-after-drain",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:initial-mode:implicit",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:initial-mode:#default",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:initial-mode:chosen",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:named-template-focus-and-mode",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:expanded-initial-mode",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:match-does-not-supply-required-global",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:absent-global-clears-named-focus",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:element-match-not-silently-admitted",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:caller-authority-replacement-refused",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:missing-execution-limit-refused",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:unsupported-compile:\u003Cxsl:include",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:unsupported-compile:\u003Cxsl:import-schema",
+      "passed": true
+    },
+    {
+      "id": "PROFILE:unsupported-compile:\u003Cxsl:variable",
+      "passed": true
+    }
+  ],
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "c059a836885832d3419a9e4a1f440475d33eba8746e95f4661abb4021260f31d"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "290774ef30f335edb4839c4f49ed6731785f5337e169afbc66f1554d72573ea7"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "b71eafe9770b072d05a319f7244f55ba1e5fae793fd3365fdf5df54286a05d6f"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "92af5ccc486839dbd5d76d065abb6988567532e3b41bd76ae5ec42c336955e2b"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "f2f0bbe5cdbc6677873d8c717e61ddc41ef3f7688c085f591d9642d4bddcb678"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "07c11fb7193d8af1a344ca2a4ab085cca5f131990b323971b7d8e1eb0d245cd6"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "5f088f72701b0da3fc7f1744a4322a242c6bdcbdd73bafc5cab2034745c05b7b"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "c2b456078822048675ad6a0385edbe09748a7f3d23883b0febb9c3ffc3e24b39"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "2bf6070e71f1e99e2c4b2745d13714af7b085f0404f1608f78e51b5954a4f0f2"
+    }
+  ],
+  "measurements": {
+    "scope": "100 warmed source-free real captures; includes dedicated worker/thread startup, operation/input/context/policy and serialization; process-wide allocation, not an accepted workload budget",
+    "iterations": 100,
+    "totalAllocatedBytes": 8087456,
+    "totalMilliseconds": 28.8285
+  }
+}

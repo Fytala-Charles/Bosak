@@ -1,0 +1,18 @@
+{
+  "command": [
+    "dotnet",
+    "run",
+    "--project",
+    "tests/Bosak.XPath.Conformance",
+    "-c",
+    "Release",
+    "--no-build"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 300,
+  "wallSeconds": 64.13640600000508,
+  "log": "qt3-normal-gate.log",
+  "skipDump": "qt3-skips.txt",
+  "mode": "Actual normal Program entry point; no reflection or diagnostic flag injection"
+}

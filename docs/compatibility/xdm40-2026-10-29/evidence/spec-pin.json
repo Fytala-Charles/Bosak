@@ -1,0 +1,39 @@
+{
+  "kind": "Review pin only; no semantic adoption",
+  "repository": "qt4cg/qtspecs",
+  "revision": "3e9f3bddd38f39f8953750306f0c574a2fbd0387",
+  "commitDate": "2026-10-28T14:09:16Z",
+  "mutableDisplayedEdition": "22 October 2026",
+  "files": [
+    {
+      "path": "specifications/xpath-datamodel-40/src/xpath-datamodel.xml",
+      "sha256": "0eea1a07c21e23c151020575f81fa55c92749e76ba59f4980f19950ae6e0d32f",
+      "gitBlob": "e4ce06699f4105f35053cceb60098134f66a0d38",
+      "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xpath-datamodel-40/src/xpath-datamodel.xml"
+    },
+    {
+      "path": "specifications/xquery-40/src/xpath.xml",
+      "sha256": "295f231cb1f0e5127e52858947d7464a2807b6c87a13e6e772bb27ae38f5627f",
+      "gitBlob": "7b69e313ef96f5dcbc147bad6e9e373e61551d90",
+      "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xquery-40/src/xpath.xml"
+    },
+    {
+      "path": "specifications/xquery-40/src/xquery.xml",
+      "sha256": "d353a1be936e311eacc9c2c5764874b6715b0b7dcf1ee76845b626ce37f3ab2a",
+      "gitBlob": "fbc3bca7c10e55a40ba25fa11ccc9fcf7a5f4d05",
+      "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xquery-40/src/xquery.xml"
+    },
+    {
+      "path": "specifications/xquery-40/src/expressions.xml",
+      "sha256": "f3526ab5b441ef0b9869757cb5533800d08623db88dae5f043e75369cbff4313",
+      "gitBlob": "c01a8fb94161c9f7ed1b8a25118e25f9199e62ff",
+      "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xquery-40/src/expressions.xml"
+    },
+    {
+      "path": "specifications/xpath-functions-40/src/function-catalog.xml",
+      "sha256": "a4814285cb2e55483e5741bb74fc7355131a3ab0448b3c3a87abab19c798f05a",
+      "gitBlob": "cf84ef13e54c9eaad6d25f5adf681adb55f1e790",
+      "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xpath-functions-40/src/function-catalog.xml"
+    }
+  ]
+}

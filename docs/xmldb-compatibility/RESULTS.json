@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-29",
+  "consumerHead": "3f722daf6ae38f0a5b67de1c678f3175768b28dd",
+  "coreHead": "2e33d3b7c02eb20a1bfe757a73bb78ebb034c980",
+  "baselineCore": "1.26.2",
+  "candidateCore": "1.34.1",
+  "baselineTests": 27,
+  "candidateTests": 27,
+  "identicalTestIdentities": true,
+  "queryPairsPerVersion": 26,
+  "storageEnumMappingsPerVersion": 7,
+  "diagnosticObservationsPerVersion": 44,
+  "baselineCandidateDifferences": 0,
+  "providerDifferences": 0,
+  "nestedDisposalChecks": "ObjectDisposedException in both versions",
+  "consumerProductionFix": false,
+  "binaryCompatibility": "not tested",
+  "fullConsumerStorageIntegrationSuite": "not run",
+  "cancellationAndParallelism": "not qualified",
+  "queryProfile": "default XPath 3.1",
+  "uncommitted": true
+}

@@ -112,8 +112,13 @@
 //                      |                  |       |                | untypedAtomic to xs:untypedAtomic (validation-0108)                                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 2.16  | 27-10-2026     | Decode serialized name tokens without changing literal node content (1.26.10).         |
+//                      | Charles Korthout | 2.17 | 27-10-2026     | Preserve literal values and namespace names across encoded tree boundaries. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.18  | 28-10-2026     | Respect copied-element no-inherit namespace boundaries on the XDM namespace axis (1.31.0). |
+//                      | Charles Korthout | 2.19  | 28-10-2026     | Expose strip typed values/types and XQuery-specific ID reset semantics (1.32.0). |
+//                      | Charles Korthout | 2.20  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -267,8 +272,12 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
-            if (_node is System.Xml.Linq.XDocument doc)
-                return doc.Annotation<Xml11Annotation>() != null;
+            if (_isNamespaceNode && _namespaceOwner is not null)
+                return Wrap(_namespaceOwner).UsesEncodedNames;
+            if (_node.Annotation<Xml11Annotation>() is not null)
+                return true;
+            if (_node is System.Xml.Linq.XDocument)
+                return false;
 
             XElement? element = _node switch
             {
@@ -288,6 +297,8 @@ public sealed class XDocumentNode : IXdmNode
             return _node.Document?.Annotation<Xml11Annotation>() != null;
         }
     }
+
+    internal bool UsesEncodedNames => IsXml11Document;
 
     private string Decode(string name) => IsXml11Document ? Xml11NameCodec.DecodeName(name) : name;
 
@@ -430,7 +441,7 @@ public sealed class XDocumentNode : IXdmNode
             return _node switch
             {
                 XElement e => e.Value,
-                XAttribute a => IsXml11Document ? Xml11NameCodec.DecodeValue(a.Value) : a.Value,
+                XAttribute a => a.Value,
                 XText t => t.Value,
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
@@ -448,6 +459,10 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     public XdmValue TypedValue => GetTypedValue();
 
+    /// <summary>The original optional finite-profile assessment, verified against current XML content.</summary>
+    public XdmElementAssessment? ElementAssessment => !_isNamespaceNode && _node is XElement element
+        ? XdmElementAssessment.Get(element) : null;
+
     /// <summary>
     /// Gets a value indicating whether this node has no typed value per XDM.
     /// For elements this is true when schema validation produced a complex type
@@ -464,6 +479,7 @@ public sealed class XDocumentNode : IXdmNode
             if (_node is not XElement element)
                 return false;
 
+            if (ElementAssessment is { } assessment) return assessment.HasNoTypedValue;
             if (element.GetSchemaInfo()?.IsNil ?? false)
                 return false;
 
@@ -490,6 +506,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             if (_node is not XElement element)
                 return false;
+            if (ElementAssessment is { } assessment) return assessment.HasNoTypedValue;
             return element.GetSchemaInfo()?.SchemaType is XmlSchemaComplexType;
         }
     }
@@ -500,8 +517,13 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     private XdmValue GetTypedValue()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return XdmValue.FromString(StringValue, "untypedAtomic");
         if (_isNamespaceNode)
             return XdmValue.FromString(StringValue);
+
+        if (ElementAssessment is { } assessment)
+            return assessment.TypedValue ?? throw new InvalidOperationException("FOTY0012: The assessed element-only type has no typed value.");
 
         IXmlSchemaInfo? info = _node switch
         {
@@ -1281,8 +1303,12 @@ public sealed class XDocumentNode : IXdmNode
 
     private (string NamespaceUri, string LocalName)? GetSchemaTypeAnnotation()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return (XmlSchema.Namespace, _node is XAttribute ? "untypedAtomic" : "untyped");
         if (_isNamespaceNode)
             return null;
+        if (ElementAssessment is { } assessment)
+            return assessment.HasNoTypedValue ? (string.Empty, string.Empty) : (XmlSchema.Namespace, "decimal");
 
         IXmlSchemaInfo? info = _node switch
         {
@@ -1315,6 +1341,8 @@ public sealed class XDocumentNode : IXdmNode
     {
         if (_isNamespaceNode || _node is not XElement element)
             return null;
+        if (ElementAssessment is not null)
+            throw new NotSupportedException("BSK-XSD-016: Declaration matching requires original component authority; QName matching is not an admission proof.");
         var info = element.GetSchemaInfo();
         var decl = info?.SchemaElement;
         if (decl is null)
@@ -2104,6 +2132,7 @@ public sealed class XDocumentNode : IXdmNode
 
         string elementNs = element.Name.NamespaceName;
         bool elementNsIsNonEmpty = !string.IsNullOrEmpty(elementNs);
+        if (!elementNsIsNonEmpty) seen.Add(string.Empty);
         bool hasExplicitDefaultForElementNs = false;
         bool hasPrefixDeclarationForElementNs = false;
 
@@ -2115,6 +2144,7 @@ public sealed class XDocumentNode : IXdmNode
         bool isTargetElement = true;
         while (current is not null)
         {
+            if (current.Annotation<XQueryDefaultNamespaceAbsence>() is not null) seen.Add(string.Empty);
             // XML 1.1 prefixed namespace undeclarations on this element hide the
             // same prefixes declared at or above it for this subtree.
             if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
@@ -2132,6 +2162,8 @@ public sealed class XDocumentNode : IXdmNode
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                if (Wrap(current).UsesEncodedNames)
+                    prefix = Xml11NameCodec.DecodeName(prefix);
                 if (undeclared.Contains(prefix))
                     continue;
                 AddNamespaceNode(collected, seen, prefix, attr.Value, element);
@@ -2145,6 +2177,8 @@ public sealed class XDocumentNode : IXdmNode
                 }
             }
 
+            if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null)
+                break;
             isTargetElement = false;
             current = current.Parent;
 
@@ -2159,7 +2193,7 @@ public sealed class XDocumentNode : IXdmNode
         // for every element (e.g. elements created by json-to-xml). Treat a
         // non-empty element namespace as an implied default-namespace binding only
         // when it is not already declared explicitly (either as default or prefixed).
-        if (elementNsIsNonEmpty && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
+        if (elementNsIsNonEmpty && elementNs != XNamespace.Xml.NamespaceName && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
         {
             AddNamespaceNode(collected, seen, string.Empty, elementNs, element);
         }
@@ -2194,7 +2228,7 @@ public sealed class XDocumentNode : IXdmNode
         if (!seen.Add(prefix))
             return;
 
-        bool xml11 = owner.Document?.Annotation<Xml11Annotation>() != null;
+        bool xml11 = Wrap(owner).UsesEncodedNames;
         XAttribute declaration = GetOrCreateNamespaceAttribute(owner, prefix, uri, xml11);
         items.Add(XdmValue.FromNode(new XDocumentNode(declaration, owner)));
     }
@@ -2467,7 +2501,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             var attr = ns.NodeValue;
             if (attr is null) continue;
-            string prefix = attr.LocalName;
+            string prefix = IsXml11ElementTree(element) ? attr.EncodedLocalName : attr.LocalName;
             if (prefix == "xml") continue; // always implicitly in scope
             if (existing.Contains(prefix)) continue;
             if (string.IsNullOrEmpty(attr.StringValue)) continue;
@@ -2496,25 +2530,118 @@ public sealed class XDocumentNode : IXdmNode
         }
         OmitRedundantDeclarations(clone, new Dictionary<string, string>(StringComparer.Ordinal));
 
-        string xml = clone.ToString(SaveOptions.DisableFormatting);
-
-        // XML 1.1 constructed trees store encoded names; decode them before serialization
-        // so the output reflects the original Unicode names (misc-XMLEdition name tests).
-        // This is a string-level replacement: if text/attribute values happen to contain the
-        // sentinel-encoded form literally, they will also be decoded. XML 1.1 text content
-        // containing the sentinel characters is an edge case not exercised by the suite.
-        if (IsXml11ElementTree(element))
-            xml = Xml11NameCodec.DecodeName(xml);
-
-        return xml;
+        return DecodeXml11Names(clone.ToString(SaveOptions.DisableFormatting), IsXml11ElementTree(element));
     }
 
-    /// <summary>
-    /// Decodes XML 1.1 sentinel-encoded names in a serialized XML string when the
-    /// source tree is known to be XML 1.1.
-    /// </summary>
+    /// <summary>Restores encoded element/attribute name tokens without rewriting serialized content.</summary>
     private static string DecodeXml11Names(string xml, bool isXml11)
-        => isXml11 ? Xml11NameCodec.DecodeName(xml) : xml;
+    {
+        if (!isXml11 || xml.IndexOf((char)0x01C0) < 0)
+            return xml;
+
+        StringBuilder? output = null;
+        int copiedThrough = 0;
+        int position = 0;
+
+        void SkipThrough(string terminator)
+        {
+            int end = xml.IndexOf(terminator, position, StringComparison.Ordinal);
+            position = end < 0 ? xml.Length : end + terminator.Length;
+        }
+
+        void DecodeNameToken()
+        {
+            int start = position;
+            while (position < xml.Length && !char.IsWhiteSpace(xml[position])
+                && xml[position] is not ('/' or '>' or '='))
+                position++;
+            var token = xml.AsSpan(start, position - start);
+            if (token.IndexOf((char)0x01C0) < 0)
+                return;
+            string decoded = Xml11NameCodec.DecodeName(token.ToString());
+            if (token.SequenceEqual(decoded.AsSpan()))
+                return;
+            output ??= new StringBuilder(xml.Length);
+            output.Append(xml, copiedThrough, start - copiedThrough).Append(decoded);
+            copiedThrough = position;
+        }
+
+        while (position < xml.Length)
+        {
+            int markup = xml.IndexOf('<', position);
+            if (markup < 0)
+                break;
+            position = markup;
+            if (xml.AsSpan(position).StartsWith("<!--", StringComparison.Ordinal))
+            {
+                SkipThrough("-->");
+                continue;
+            }
+            if (xml.AsSpan(position).StartsWith("<![CDATA[", StringComparison.Ordinal))
+            {
+                SkipThrough("]]>");
+                continue;
+            }
+            if (xml.AsSpan(position).StartsWith("<?", StringComparison.Ordinal))
+            {
+                // PI targets are not encoded by the loader or construction hook.
+                SkipThrough("?>");
+                continue;
+            }
+            position++;
+            if (position < xml.Length && xml[position] == '!')
+            {
+                // Preserve the complete declaration, including quoted DTD literals and
+                // internal subsets. Comments/PIs may contain brackets and '>' characters.
+                int depth = 0;
+                char quote = (char)0;
+                while (position < xml.Length)
+                {
+                    char c = xml[position];
+                    if (quote != 0)
+                    {
+                        if (c == quote) quote = (char)0;
+                    }
+                    else if (xml.AsSpan(position).StartsWith("<!--", StringComparison.Ordinal))
+                    {
+                        SkipThrough("-->");
+                        continue;
+                    }
+                    else if (xml.AsSpan(position).StartsWith("<?", StringComparison.Ordinal))
+                    {
+                        SkipThrough("?>");
+                        continue;
+                    }
+                    else if (c is '\'' or '"') quote = c;
+                    else if (c == '[') depth++;
+                    else if (c == ']') depth--;
+                    else if (c == '>' && depth == 0) { position++; break; }
+                    position++;
+                }
+                continue;
+            }
+            if (position < xml.Length && xml[position] == '/') position++;
+            DecodeNameToken();
+            while (position < xml.Length)
+            {
+                char c = xml[position];
+                if (c == '>') { position++; break; }
+                if (char.IsWhiteSpace(c) || c == '/') { position++; continue; }
+                if (c is '\'' or '"')
+                {
+                    position++;
+                    int end = xml.IndexOf(c, position);
+                    position = end < 0 ? xml.Length : end + 1;
+                    continue;
+                }
+                if (c == '=') { position++; continue; }
+                DecodeNameToken();
+            }
+        }
+        if (output is null)
+            return xml;
+        return output.Append(xml, copiedThrough, xml.Length - copiedThrough).ToString();
+    }
 
     /// <summary>
     /// Returns <c>true</c> when <paramref name="element"/> or any ancestor carries
@@ -2587,6 +2714,8 @@ public sealed class XDocumentNode : IXdmNode
 
     private static bool IsIdAttribute(XAttribute attr)
     {
+        if (attr.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return attr.Name == XNamespace.Xml + "id" && IsValidNCName(attr.Value.Trim());
         var info = attr.GetSchemaInfo();
         if (info is not null)
         {
@@ -2635,6 +2764,7 @@ public sealed class XDocumentNode : IXdmNode
 
     private static bool IsIdElement(XElement element)
     {
+        if (element.Annotation<XQueryStrippedTypeAnnotation>() is not null) return false;
         var info = element.GetSchemaInfo();
         if (info is not null)
         {
@@ -2733,6 +2863,7 @@ public sealed class XDocumentNode : IXdmNode
 
     private bool ComputeIsIdref()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null) return false;
         if (_isNamespaceNode)
             return false;
 

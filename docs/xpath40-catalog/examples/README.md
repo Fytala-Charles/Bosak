@@ -4,6 +4,12 @@
   <p>Real tasks, earlier-version baselines, edge cases, and explicit compatibility</p>
 </div>
 
+**REQ-126 complete for the accepted bounded catalog — 26 October 2026:** [Owner acceptance](../CATALOG-ACCEPTANCE.md) closes C13 and all 13 workpackages; zero remain open. AC-01 through AC-04 are explicitly accepted for 76 entries/235 bounded contract groups; AC-05 maintained. All 38 catalog dispositions are accepted while all 48 unmet batch observations and original technical exit criteria remain unchanged. No full current-draft compliance, engine fix, gate change or release follows. Earlier open-state notices are historical.
+
+
+**REQ-126 C13 review prepared — 26 October 2026:** [Final closure review](../FINAL-CLOSURE-REVIEW.md) consolidates 76 entries, 235 bounded contract groups and 38 proposed disposition records. All 3,172 fresh documentation tests pass. Six Known Uses sections now state their evidence/gate boundary directly. The [acceptance proposal](../C13-ACCEPTANCE-PROPOSAL.md) would close the documentation catalog with explicit limits and open technical follow-ups; it is not approved. All 48 unmet batch observations remain unmet. C13 remains open, AC-01 through AC-04 unchecked and REQ-126 In Progress; no engine, fixture, gate, version or release change. Earlier checkpoints are historical.
+
+
 **22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](../UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
 
 **REQ-126 compound-pattern review — 21 October 2026:** [Grammar mapping](../COMPOUND-PATTERN-GRAMMAR.md) adds30 manifest checks, including six complete3.0/4.0 manual reports. Two rows are explicit implementation observations: source1.23.2 uses maximum union alternative priority, while the pinned draft requires minimum; [separate finding](../UNION-PRIORITY-ENGINE-FINDING.md) records the normative outcome and correction scope. Catalog71 entries /2,767 checks. REQ-126 remains In Progress; D2/D3/D4 and AC-03 partial. No engine/API/harness/version/gate/release change; prior count snapshots are historical.

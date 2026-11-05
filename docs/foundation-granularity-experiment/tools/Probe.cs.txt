@@ -1,0 +1,99 @@
+// Generated isolated E-03 metadata/granularity probe; not a schema provider or RPC benchmark.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.Json;
+using C13901.Draft;
+using Bosak.XPath.Core.Xdm;
+try {
+ int round=int.Parse(args[0]);var checks=new List<object>();void Check(string id,bool yes){checks.Add(new{id,passed=yes});if(!yes)throw new Exception("Control: "+id);}
+ void Throws<T>(string id,Action f) where T:Exception {bool yes=false;try{f();}catch(T){yes=true;}Check(id,yes);}
+ foreach(var shape in new[]{"chain","cycle","diamond"}){
+  var g=new Graph(shape=="diamond"?4:64,shape);var cold=g.GetComponentClosure(g.Root,default).Value;var scalar=g.ScalarClosure(g.Root,default).Value;var proof=g.Certify(g.Root,default).Value;
+  using var cursor=g.OpenCertified(g.Root,proof,default);var ids=new List<int>();var batch=new ISchemaComponentHandle[7];while(!cursor.IsExhausted){int n=cursor.Read(batch,default);for(int x=0;x<n;x++)ids.Add(((Handle)batch[x]).Id);}
+  Check("G01-full-equivalence-"+shape,cold.Select(x=>((Handle)x).Id).SequenceEqual(scalar.Select(x=>((Handle)x).Id))&&ids.SequenceEqual(cold.Select(x=>((Handle)x).Id)));
+  Check("G02-complete-no-duplicates-"+shape,ids.Order().SequenceEqual(Enumerable.Range(0,g.Count))&&ids.Distinct().Count()==g.Count);
+ }
+ var host=new Graph(64,"cycle");var foreign=new Graph(64,"cycle");Check("G03-equal-digest-not-identity",host.Digest==foreign.Digest&&!host.Owns(foreign.Root));
+ Throws<ArgumentException>("G04-foreign-root",()=>host.GetComponentClosure(foreign.Root,default));var fake=new Handle(host,0);Throws<ArgumentException>("G05-forged-root",()=>host.GetComponentClosure(fake,default));
+ var good=host.Certify(host.Root,default).Value;var forged=new Proof(host,host.Root,host.Version,new object());Throws<ArgumentException>("G06-forged-proof-fields",()=>host.OpenCertified(host.Root,forged,default));
+ Throws<ArgumentException>("G07-proof-wrong-root",()=>host.OpenCertified(host.At(1),good,default));Throws<ArgumentException>("G08-proof-wrong-universe",()=>foreign.OpenCertified(foreign.Root,good,default));
+ using(var prefix=host.OpenCertified(host.Root,good,default)){var one=new ISchemaComponentHandle[1];Check("G09-prefix-not-enumeration-complete",prefix.Read(one,default)==1&&!prefix.IsExhausted);}
+ Check("G10-frame-dispose-not-authority-close",host.GetComponentClosure(host.Root,default).Kind==SchemaResultKind.Supported);
+ var open=host.OpenCertified(host.Root,good,default);open.Dispose();open.Dispose();Throws<ObjectDisposedException>("G11-disposed-cursor",()=>open.Read(new ISchemaComponentHandle[1],default));
+ using(var empty=host.OpenCertified(host.Root,good,default))Throws<ArgumentException>("G12-empty-buffer-refused",()=>empty.Read(Array.Empty<ISchemaComponentHandle>(),default));
+ using(var ct=new CancellationTokenSource()){using var cur=host.OpenCertified(host.Root,good,default);ct.Cancel();long before=host.ProviderCalls;Throws<OperationCanceledException>("G13-pre-cancel-before-read",()=>cur.Read(new ISchemaComponentHandle[2],ct.Token));Check("G14-pre-cancel-no-dispatch",host.ProviderCalls==before);}
+ var unknown=new Graph(64,"cycle",17);Check("G15-unsupported-bulk-no-value",unknown.GetComponentClosure(unknown.Root,default).Kind==SchemaResultKind.Unsupported);Check("G16-unsupported-scalar-no-value",unknown.ScalarClosure(unknown.Root,default).Kind==SchemaResultKind.Unsupported);Check("G17-unsupported-certificate-no-value",unknown.Certify(unknown.Root,default).Kind==SchemaResultKind.Unsupported);
+ using(var unsafeCursor=unknown.NaivePrefix(unknown.Root).GetEnumerator()){Check("G18-naive-prefix-before-proof",unsafeCursor.MoveNext()&&((Handle)unsafeCursor.Current).Id==0);Throws<CoverageException>("G19-naive-later-unsupported",()=>{while(unsafeCursor.MoveNext()){};});}
+ var stale=new Graph(64,"cycle");var prior=stale.Certify(stale.Root,default).Value;var staleCursor=stale.OpenCertified(stale.Root,prior,default);stale.Invalidate();Throws<ObjectDisposedException>("G20-stale-proof-refused",()=>stale.OpenCertified(stale.Root,prior,default));Throws<ObjectDisposedException>("G21-stale-cursor-refused",()=>staleCursor.Read(new ISchemaComponentHandle[4],default));staleCursor.Dispose();
+ var canceled=new Graph(64,"cycle");using(var ct=new CancellationTokenSource()){canceled.VisitHook=id=>{if(canceled.NodeReads>=10)ct.Cancel();};Throws<OperationCanceledException>("G22-cancel-during-full-closure",()=>canceled.GetComponentClosure(canceled.Root,ct.Token));Check("G23-cancel-stops-traversal",canceled.NodeReads<64);}
+ var cache=new Graph(256,"cycle");for(int n=0;n<16;n++)_=cache.CachedClosure(cache.At(n),default);Check("G24-cache-entry-bound",cache.CacheEntries==8&&cache.Evictions==8);Check("G25-cache-reference-bound",cache.CacheReferenceCount==8L*256);var cached=cache.CachedClosure(cache.At(15),default);Check("G26-cache-reuses-immutable-result",ReferenceEquals(cached,cache.CachedClosure(cache.At(15),default)));
+ var requests=host.Requests(false);var sl=host.ScalarLookup(requests,default);var bl=host.BatchLookup(requests,default);Check("G27-lookup-status-order-identity",sl.SequenceEqual(bl)&&sl.Where((x,n)=>n%8==0).All(x=>x.Kind==SchemaResultKind.NotFound));
+ Check("G28-lookup-actual-owner",bl.Where(x=>x.Kind==SchemaResultKind.Supported).All(x=>host.Owns(x.Value!)));
+ var groups=new List<object>();var preparations=new List<object>();
+ foreach(var size in new[]{64,4096,65536}){
+  var graph=new Graph(size,"cycle");
+  (long ns,long bytes) Prepare(Action action){long b=GC.GetAllocatedBytesForCurrentThread(),s=Stopwatch.GetTimestamp();action();return((long)((Stopwatch.GetTimestamp()-s)*1e9/Stopwatch.Frequency),GC.GetAllocatedBytesForCurrentThread()-b);}
+  graph.Reset();var cachePrep=Prepare(()=>_=graph.CachedClosure(graph.Root,default));preparations.Add(new{size,id="cache-one-root",nanoseconds=cachePrep.ns,allocatedBytes=cachePrep.bytes,calls=graph.ProviderCalls,nodeReads=graph.NodeReads,retainedReferenceBytesLowerBound=graph.CacheReferenceCount*IntPtr.Size});
+  Proof? certificate=null;graph.Reset();var proofPrep=Prepare(()=>certificate=graph.Certify(graph.Root,default).Value);preparations.Add(new{size,id="certify-one-root",nanoseconds=proofPrep.ns,allocatedBytes=proofPrep.bytes,calls=graph.ProviderCalls,nodeReads=graph.NodeReads,retainedReferenceBytesLowerBound=0L});
+  var diverse=graph.Requests(false);var repeated=graph.Requests(true);
+  foreach(var repeat in new[]{false,true}){var query=repeat?repeated:diverse;var scalarResults=graph.ScalarLookup(query,default);var batchResults=graph.BatchLookup(query,default);bool correct=scalarResults.SequenceEqual(batchResults);for(int x=0;x<size;x++){var entry=scalarResults[x];correct&=x%8==0?entry.Kind==SchemaResultKind.NotFound&&entry.Value is null:entry.Kind==SchemaResultKind.Supported&&ReferenceEquals(entry.Value,graph.At(repeat?x%16:x));}Check("G29-all-lookup-entries-"+size+"-"+(repeat?"repeated":"diverse"),correct);}
+
+  var modes=new[]{"scalar-full","bulk-cold-full","bulk-cached-full","cursor-preflight-full","cursor-certified-full","cursor-certified-prefix-1","cursor-certified-prefix-8","lookup-scalar-diverse","lookup-batch-diverse","lookup-scalar-repeated","lookup-batch-repeated"};
+  if(round%2==1)Array.Reverse(modes);
+  foreach(var mode in modes){
+   Observation Work(){
+    if(mode.StartsWith("lookup")){var q=mode.EndsWith("repeated")?repeated:diverse;var result=mode.Contains("batch")?graph.BatchLookup(q,default):graph.ScalarLookup(q,default);long sum=0;int found=0;for(int n=0;n<result.Length;n++){if(result[n].Kind==SchemaResultKind.Supported){found++;sum+=((Handle)result[n].Value!).Id+1;}}GC.KeepAlive(result);return new(sum,result.Length,true,found);}
+    if(mode.StartsWith("cursor")){using var cursor=mode.Contains("preflight")?graph.OpenPreflight(graph.Root,default):graph.OpenCertified(graph.Root,certificate!,default);int limit=mode.EndsWith("prefix-1")?1:mode.EndsWith("prefix-8")?8:int.MaxValue;var buffer=new ISchemaComponentHandle[Math.Min(64,limit)];long sum=0;int read=0;while(!cursor.IsExhausted&&read<limit){int n=cursor.Read(buffer.AsSpan(0,Math.Min(buffer.Length,limit-read)),default);for(int x=0;x<n;x++)sum+=((Handle)buffer[x]).Id+1;read+=n;}return new(sum,read,cursor.IsExhausted,read);}
+    var result2=mode=="scalar-full"?graph.ScalarClosure(graph.Root,default).Value:mode=="bulk-cached-full"?graph.CachedClosure(graph.Root,default).Value:graph.GetComponentClosure(graph.Root,default).Value;long checksum=0;foreach(var h in result2)checksum+=((Handle)h).Id+1;GC.KeepAlive(result2);return new(checksum,result2.Length,true,result2.Length);
+   }
+   for(int w=0;w<3;w++)_=Work();var samples=new List<object>();
+   for(int sample=0;sample<7;sample++){graph.Reset();int g0=GC.CollectionCount(0),g1=GC.CollectionCount(1),g2=GC.CollectionCount(2);long before=GC.GetAllocatedBytesForCurrentThread(),start=Stopwatch.GetTimestamp();var result=Work();long elapsed=Stopwatch.GetTimestamp()-start,allocated=GC.GetAllocatedBytesForCurrentThread()-before;samples.Add(new{nanoseconds=elapsed*1e9/Stopwatch.Frequency,allocatedBytes=allocated,gen0=GC.CollectionCount(0)-g0,gen1=GC.CollectionCount(1)-g1,gen2=GC.CollectionCount(2)-g2,calls=graph.ProviderCalls,nodeReads=graph.NodeReads,result});}
+   groups.Add(new{size,mode,samples});
+  }
+ }
+ var core=typeof(XdmValue).Assembly;
+ Console.WriteLine(JsonSerializer.Serialize(new{scope="Synthetic immutable component graph, not XSD relations/real providers or remote IPC",round,runtime=Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,architecture=System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString(),processorCount=Environment.ProcessorCount,serverGc=System.Runtime.GCSettings.IsServerGC,pointerSize=IntPtr.Size,coreSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(core.Location))).ToLowerInvariant(),coreCandidateSurface=typeof(ISchemaAuthority).Assembly.GetExportedTypes().OrderBy(t=>t.FullName).Select(t=>new{name=t.FullName,members=t.GetMembers(System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.DeclaredOnly).Select(m=>m.ToString()).Order().ToArray()}).ToArray(),checkCount=checks.Count,checks,preparations,groups,allRootsReferenceProjectionBytes=65536L*65536*IntPtr.Size},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+readonly record struct Observation(long Sum,int Count,bool Complete,int Found);
+readonly record struct LookupItem(SchemaResultKind Kind,ISchemaComponentHandle? Value);
+sealed class CoverageException:Exception{}
+sealed class Handle(Graph graph,int id):ISchemaComponentHandle {public int Id=>id;public ISchemaAuthority Authority=>graph;}
+sealed class Outcome<T>(SchemaResultKind kind,T? value=default):SchemaResult<T>{public override SchemaResultKind Kind=>kind;public override T Value=>kind==SchemaResultKind.Supported?value!:throw new InvalidOperationException("No complete supported value");public override string? DiagnosticCode=>kind==SchemaResultKind.Supported?null:"DIAGNOSTIC";}
+sealed class Proof(Graph owner,Handle root,int version,object seal){readonly object key=seal;public bool Matches(Graph g,Handle r,int v,object expected)=>ReferenceEquals(owner,g)&&ReferenceEquals(root,r)&&version==v&&ReferenceEquals(key,expected);}
+interface IClosureCursor:IDisposable {bool IsExhausted{get;}int Read(Span<ISchemaComponentHandle> destination,CancellationToken cancellationToken);}
+sealed class Graph:ISchemaAuthority {
+ readonly Handle[] handles;readonly ImmutableArray<ISchemaComponentHandle>[] edges;readonly Dictionary<SchemaExpandedName,Outcome<ISchemaComponentHandle>> named=new();readonly object seal=new();readonly int unsupported;
+ readonly Dictionary<Handle,Outcome<ImmutableArray<ISchemaComponentHandle>>> cache=new(ReferenceEqualityComparer.Instance);readonly Queue<Handle> fifo=new();bool active=true;
+ public long ProviderCalls,NodeReads;public Action<int>? VisitHook;public int Count=>handles.Length;public Handle Root=>handles[0];public int Version{get;private set;}=1;public int CacheEntries=>cache.Count;public long CacheReferenceCount=>cache.Values.Sum(r=>(long)r.Value.Length);public int Evictions{get;private set;}public string Digest{get;}
+ public Graph(int size,string shape,int unsupportedAt=-1){unsupported=unsupportedAt;handles=Enumerable.Range(0,size).Select(n=>new Handle(this,n)).ToArray();edges=new ImmutableArray<ISchemaComponentHandle>[size];for(int n=0;n<size;n++){int[] indices=shape=="diamond"?(n==0?new[]{1,2}:n is 1 or 2?new[]{3}:Array.Empty<int>()):shape=="chain"?(n<size-1?new[]{n+1}:Array.Empty<int>()):new[]{n,(n+1)%size,(n+17)%size};edges[n]=indices.Select(i=>(ISchemaComponentHandle)handles[i]).ToImmutableArray();named[new("urn:graph","c"+n)]=new(SchemaResultKind.Supported,handles[n]);}Digest=Convert.ToHexString(SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(size+":"+shape+":"+unsupportedAt))).ToLowerInvariant();}
+ public Handle At(int n)=>handles[n];public void Reset(){ProviderCalls=0;NodeReads=0;}public void Invalidate(){active=false;Version++;}
+ public bool Owns(ISchemaComponentHandle h)=>h is Handle x&&x.Id>=0&&x.Id<handles.Length&&ReferenceEquals(handles[x.Id],h);
+ void Ready(CancellationToken t){t.ThrowIfCancellationRequested();if(!active)throw new ObjectDisposedException("universe");}
+ Handle Guard(ISchemaComponentHandle h,CancellationToken t){Ready(t);if(!Owns(h))throw new ArgumentException("Foreign/forged component");return(Handle)h;}
+ ImmutableArray<ISchemaComponentHandle> Edges(Handle h,CancellationToken t){Guard(h,t);NodeReads++;VisitHook?.Invoke(h.Id);t.ThrowIfCancellationRequested();if(h.Id==unsupported)throw new CoverageException();return edges[h.Id];}
+ public ImmutableArray<ISchemaComponentHandle> DirectDependencies(Handle h,CancellationToken t){Guard(h,t);ProviderCalls++;return Edges(h,t);}
+ ImmutableArray<ISchemaComponentHandle> Walk(Handle root,CancellationToken t,bool scalar,bool keep){var q=new Queue<Handle>();var seen=new HashSet<int>();var output=keep?new List<ISchemaComponentHandle>():null;q.Enqueue(root);seen.Add(root.Id);while(q.Count>0){Ready(t);var h=q.Dequeue();var children=scalar?DirectDependencies(h,t):Edges(h,t);output?.Add(h);foreach(var child in children){var c=(Handle)child;if(seen.Add(c.Id))q.Enqueue(c);}}return output is null?ImmutableArray<ISchemaComponentHandle>.Empty:output.ToImmutableArray();}
+ public SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle h,CancellationToken t){var root=Guard(h,t);ProviderCalls++;try{return new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Supported,Walk(root,t,false,true));}catch(CoverageException){return new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Unsupported);}}
+ public SchemaResult<ImmutableArray<ISchemaComponentHandle>> ScalarClosure(Handle root,CancellationToken t){Guard(root,t);try{return new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Supported,Walk(root,t,true,true));}catch(CoverageException){return new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Unsupported);}}
+ public SchemaResult<ImmutableArray<ISchemaComponentHandle>> CachedClosure(Handle root,CancellationToken t){Guard(root,t);if(cache.TryGetValue(root,out var answer)){ProviderCalls++;return answer;}var raw=GetComponentClosure(root,t);if(raw.Kind!=SchemaResultKind.Supported)return raw;answer=(Outcome<ImmutableArray<ISchemaComponentHandle>>)raw;if(cache.Count==8){cache.Remove(fifo.Dequeue());Evictions++;}cache.Add(root,answer);fifo.Enqueue(root);return answer;}
+ Proof Issue(Handle root,CancellationToken t){Walk(root,t,false,false);return new Proof(this,root,Version,seal);}
+ public SchemaResult<Proof> Certify(Handle root,CancellationToken t){Guard(root,t);ProviderCalls++;try{return new Outcome<Proof>(SchemaResultKind.Supported,Issue(root,t));}catch(CoverageException){return new Outcome<Proof>(SchemaResultKind.Unsupported);}}
+ public IClosureCursor OpenCertified(Handle root,Proof proof,CancellationToken t){Guard(root,t);if(!proof.Matches(this,root,Version,seal))throw new ArgumentException("Unissued/foreign/root/version proof");ProviderCalls++;return new Cursor(this,root,Version);}
+ public IClosureCursor OpenPreflight(Handle root,CancellationToken t){Guard(root,t);ProviderCalls++;var proof=Issue(root,t);if(!proof.Matches(this,root,Version,seal))throw new Exception("Proof mismatch");return new Cursor(this,root,Version);}
+ public IEnumerable<ISchemaComponentHandle> NaivePrefix(Handle root){yield return root;Walk(root,default,false,false);}
+ sealed class Cursor(Graph graph,Handle root,int version):IClosureCursor {
+  readonly Queue<Handle> q=new(new[]{root});readonly HashSet<int> seen=new(){root.Id};bool disposed;public bool IsExhausted=>q.Count==0;
+  public int Read(Span<ISchemaComponentHandle> destination,CancellationToken t){t.ThrowIfCancellationRequested();if(disposed)throw new ObjectDisposedException("cursor");graph.Ready(t);if(graph.Version!=version)throw new ObjectDisposedException("snapshot");if(destination.Length==0)throw new ArgumentException("Empty buffer");graph.ProviderCalls++;int n=0;while(n<destination.Length&&q.Count>0){graph.Ready(t);var h=q.Dequeue();foreach(var edge in graph.Edges(h,t)){var c=(Handle)edge;if(seen.Add(c.Id))q.Enqueue(c);}destination[n++]=h;}return n;}
+  public void Dispose(){if(disposed)return;disposed=true;q.Clear();seen.Clear();}
+ }
+ readonly Outcome<ISchemaComponentHandle> absent=new(SchemaResultKind.NotFound);
+ SchemaResult<ISchemaComponentHandle> Resolve(SchemaExpandedName n,CancellationToken t){Ready(t);ProviderCalls++;return named.TryGetValue(n,out var answer)?answer:absent;}
+ public SchemaResult<ISchemaComponentHandle> ResolveType(SchemaExpandedName n,CancellationToken t)=>Resolve(n,t);public SchemaResult<ISchemaComponentHandle> ResolveElementDeclaration(SchemaExpandedName n,CancellationToken t){Ready(t);return new Outcome<ISchemaComponentHandle>(SchemaResultKind.Unsupported);}public SchemaResult<ISchemaComponentHandle> ResolveAttributeDeclaration(SchemaExpandedName n,CancellationToken t){Ready(t);return new Outcome<ISchemaComponentHandle>(SchemaResultKind.Unsupported);}
+ public SchemaResult<bool> IsSameComponent(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(a,t);Guard(b,t);return new Outcome<bool>(SchemaResultKind.Supported,ReferenceEquals(a,b));}public SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(a,t);Guard(b,t);return new Outcome<bool>(SchemaResultKind.Unsupported);}public SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(a,t);Guard(b,t);return new Outcome<bool>(SchemaResultKind.Unsupported);}
+ public SchemaExpandedName[] Requests(bool repeated)=>Enumerable.Range(0,Count).Select(n=>new SchemaExpandedName("urn:graph",n%8==0?"missing"+n:"c"+(repeated?n%16:n))).ToArray();
+ public LookupItem[] ScalarLookup(SchemaExpandedName[] queries,CancellationToken t){var output=new LookupItem[queries.Length];for(int n=0;n<queries.Length;n++){var result=ResolveType(queries[n],t);output[n]=new(result.Kind,result.Kind==SchemaResultKind.Supported?result.Value:null);}return output;}
+ public LookupItem[] BatchLookup(SchemaExpandedName[] queries,CancellationToken t){Ready(t);ProviderCalls++;var output=new LookupItem[queries.Length];for(int n=0;n<queries.Length;n++){t.ThrowIfCancellationRequested();output[n]=named.TryGetValue(queries[n],out var result)?new(SchemaResultKind.Supported,result.Value):new(SchemaResultKind.NotFound,null);}return output;}
+}

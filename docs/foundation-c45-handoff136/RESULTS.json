@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-31",
+  "scope": "Documentation-only source-pinned C45 owner-review handoff",
+  "coreVersion": "1.36.0",
+  "coreSourceRevision": "0126d492a8930001e0b947a0e27ae732af5a0653",
+  "localOwnerSnapshots": 7,
+  "onlineIssueReceipts": 2,
+  "reviewRows": 43,
+  "newOwnerAcceptances": 0,
+  "consumerRuns": "NotRun",
+  "runtimeTestsInThisStep": "NotRun",
+  "publicProviderSdkAvailable": false,
+  "completeNamedManifestRefreshed": false,
+  "coreSourceChanged": false,
+  "ownerCheckoutsChanged": false,
+  "messagesSent": false,
+  "published": false,
+  "c45Accepted": false,
+  "apiFreezeAccepted": false
+}

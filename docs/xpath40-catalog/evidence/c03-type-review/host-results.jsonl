@@ -1,0 +1,20 @@
+{"id":"nominal-own","host":"Legacy","result":"true","error":null}
+{"id":"nominal-own","host":"Xslt40Draft","result":"true","error":null}
+{"id":"nominal-plain-map","host":"Legacy","result":"false","error":null}
+{"id":"nominal-plain-map","host":"Xslt40Draft","result":"false","error":null}
+{"id":"nominal-coerced-map","host":"Legacy","result":"true","error":null}
+{"id":"nominal-coerced-map","host":"Xslt40Draft","result":"true","error":null}
+{"id":"nominal-default-constructor","host":"Legacy","result":"7","error":null}
+{"id":"nominal-default-constructor","host":"Xslt40Draft","result":"7","error":null}
+{"id":"nominal-default-coercion","host":"Legacy","result":"7","error":null}
+{"id":"nominal-default-coercion","host":"Xslt40Draft","result":"7","error":null}
+{"id":"nominal-trailing-default","host":"Legacy","result":"2","error":null}
+{"id":"nominal-trailing-default","host":"Xslt40Draft","result":"2","error":null}
+{"id":"nominal-body-default","host":"Legacy","result":"7","error":null}
+{"id":"nominal-body-default","host":"Xslt40Draft","result":"7","error":null}
+{"id":"nominal-static-constructor","host":"Legacy","result":"7","error":null}
+{"id":"nominal-static-constructor","host":"Xslt40Draft","result":"7","error":null}
+{"id":"nominal-static-coercion","host":"Legacy","result":"7","error":null}
+{"id":"nominal-static-coercion","host":"Xslt40Draft","result":"7","error":null}
+{"id":"nominal-static-external-override","host":"Legacy","result":null,"error":"XTTE0570: Value does not match declared item type Q{urn:c03:types}p."}
+{"id":"nominal-static-external-override","host":"Xslt40Draft","result":null,"error":"XTTE0570: Value does not match declared item type Q{urn:c03:types}p."}

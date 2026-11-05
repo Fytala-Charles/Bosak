@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-31",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "evidence/build.txt",
+      "sha256": "4a0497c2e38e643ea3b6bb6315a61da94f57be9315db70d3757021b3f8c44b66"
+    },
+    {
+      "path": "evidence/INPUTS.json",
+      "sha256": "034b6977b1c04593886c0de4b58f128dfbe26f115b025bf0b84772354e23bd37"
+    },
+    {
+      "path": "evidence/run-0.json",
+      "sha256": "7bc10da7734fac8a31e8ff4704959a62e4def02a8efd9bfcc45a41ac3c24dfcb"
+    },
+    {
+      "path": "evidence/run-0.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/run-1.json",
+      "sha256": "7bc10da7734fac8a31e8ff4704959a62e4def02a8efd9bfcc45a41ac3c24dfcb"
+    },
+    {
+      "path": "evidence/run-1.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/run-2.json",
+      "sha256": "7bc10da7734fac8a31e8ff4704959a62e4def02a8efd9bfcc45a41ac3c24dfcb"
+    },
+    {
+      "path": "evidence/run-2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "PROPOSED-LAWS.json",
+      "sha256": "c2f6bee61a2542a7f8bdbded89465ecf8fac9a305ca106919c72e262505fc810"
+    },
+    {
+      "path": "README.md",
+      "sha256": "aae9cb582e685c5447507f9488821ab2031e0bc8b9a82e38591dc9a8363ad9db"
+    },
+    {
+      "path": "RESULTS.json",
+      "sha256": "70d5771099fd21c5f510aa981ee5b3e8d7add77c12884d23d930849bb027ac2b"
+    },
+    {
+      "path": "SIGNATURES-V2.cs.txt",
+      "sha256": "ce7452058e52e704374c8dba1beae42c0605dd6b110715680ee109a01572ec9d"
+    },
+    {
+      "path": "SPEC-BASIS.json",
+      "sha256": "edcc9a02f27c510fee18182269cdd5984da884fa01171d58abcd7a3c91ad79eb"
+    },
+    {
+      "path": "tools/Probe.cs.txt",
+      "sha256": "c1894597ccdca15caf7fac7c8c08afcef070c8ac73f75d46425843da46215e61"
+    },
+    {
+      "path": "tools/run.py",
+      "sha256": "0b2754867ceca03ea3f3436e6818c141ffa13a2a09486b9af1098d0078b0d706"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "8b1f370f2cc29901d2cde4bb9146368b457240995e7f858eb5c5fa8fe2b6da1a"
+    },
+    {
+      "path": "VALIDATION.json",
+      "sha256": "f2e3527371936c3ba5db99a1f8f184ed68c116f233ced4a01e579bdbaa59c472"
+    }
+  ]
+}

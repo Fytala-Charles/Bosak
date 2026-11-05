@@ -1,0 +1,6 @@
+{
+  "Suite": "qt3",
+  "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+  "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\format-dateTime.xml",
+  "Name": "format-dateTime-en152"
+}

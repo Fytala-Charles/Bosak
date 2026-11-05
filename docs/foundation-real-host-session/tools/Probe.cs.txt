@@ -1,0 +1,128 @@
+// Generated bounded real-kernel integration fixture; no production authority or facade.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections;
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+
+try { await Fixture.Run(); }
+catch(Exception error) { Console.Error.WriteLine(error);Environment.ExitCode=1; }
+
+sealed class Issuer:ISchemaEvidenceIssuer {
+ internal readonly object Origin=new();
+ public bool OwnsValue(ISchemaIssuedScalar value)=>false;
+ public bool OwnsType(object type)=>false;
+ public bool OwnsAssessment(object origin)=>ReferenceEquals(origin,Origin);
+ public bool IsSameType(object a,object b)=>ReferenceEquals(a,b);
+}
+sealed class Bundle {
+ internal readonly IXdmNode Match=new XDocumentNode(XDocument.Parse("<n>A</n>"));
+ internal readonly IXdmNode Global=new XDocumentNode(XDocument.Parse("<n>B</n>"));
+ internal readonly IXdmNode Typed=new TypedNode(new XDocumentNode(XElement.Parse("<n>999</n>")));
+ internal bool Owns(IXdmNode node)=>ReferenceEquals(node,Match)||ReferenceEquals(node,Global)||ReferenceEquals(node,Typed);
+}
+sealed class Inputs {
+ internal static readonly FieldInfo[] Fields=typeof(EvaluationContext).GetFields(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).OrderBy(f=>f.Name,StringComparer.Ordinal).ToArray();
+ static readonly HashSet<string> Copied=new(){"_contextItem","_contextPosition","_contextSize","_variables","_namespaces","<BaseUri>k__BackingField","<DefaultElementNamespace>k__BackingField","<DefiningElementDefaultNamespace>k__BackingField","<DefaultCollation>k__BackingField"};
+ readonly XdmValue focus;readonly int position,size;
+ readonly ImmutableDictionary<(string LocalName,string NamespaceUri),XdmValue> variables;
+ readonly ImmutableDictionary<string,string> namespaces;
+ readonly string? baseUri,defaultNamespace,definingNamespace;readonly string collation;
+ internal Inputs(EvaluationContext caller,Bundle bundle) {
+  var baseline=new EvaluationContext();
+  foreach(var field in Fields)if(!Copied.Contains(field.Name)&&Shape(field.GetValue(caller))!=Shape(field.GetValue(baseline)))throw new NotSupportedException("Nondefault context field: "+field.Name);
+  focus=caller.ContextItem;position=caller.ContextPosition;size=caller.ContextSize;
+  if(focus.IsNode&&!bundle.Owns(focus.NodeValue!))throw new NotSupportedException("Unadmitted focus");
+  if(!focus.IsNode&&!focus.IsUndefined)throw new NotSupportedException("Node focus profile");
+  variables=caller.SnapshotVariables().ToImmutableDictionary();
+  foreach(var value in variables.Values) {
+   if(value.IsNode){if(!bundle.Owns(value.NodeValue!))throw new NotSupportedException("Unadmitted variable node");}
+   else if(value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))throw new NotSupportedException("Scalar binding profile");
+  }
+  namespaces=caller.SnapshotNamespaces().ToImmutableDictionary(StringComparer.Ordinal);
+  baseUri=caller.BaseUri;defaultNamespace=caller.DefaultElementNamespace;definingNamespace=caller.DefiningElementDefaultNamespace;collation=caller.DefaultCollation;
+ }
+ internal EvaluationContext Create() {var c=new EvaluationContext{BaseUri=baseUri,DefaultElementNamespace=defaultNamespace,DefiningElementDefaultNamespace=definingNamespace,DefaultCollation=collation};Fill(c);return c;}
+ internal static XQueryContext CreateQuery(EvaluationContext input) {var c=new XQueryContext();var target=c.EvaluationContext;target.BaseUri=input.BaseUri;target.DefaultElementNamespace=input.DefaultElementNamespace;target.DefiningElementDefaultNamespace=input.DefiningElementDefaultNamespace;target.DefaultCollation=input.DefaultCollation;target.WithFocus(input.ContextItem,input.ContextPosition,input.ContextSize);foreach(var v in input.SnapshotVariables())target.WithVariable(v.Key.LocalName,v.Value,v.Key.NamespaceUri);foreach(var n in input.SnapshotNamespaces())target.WithNamespace(n.Key,n.Value);return c;}
+ void Fill(EvaluationContext c) {c.WithFocus(focus,position,size);foreach(var v in variables)c.WithVariable(v.Key.LocalName,v.Value,v.Key.NamespaceUri);foreach(var n in namespaces)c.WithNamespace(n.Key,n.Value);}
+ internal static string Shape(object? value) {
+  if(value is null)return "null";
+  if(value is XdmValue x)return x.IsNode?"node:"+RuntimeHelpers.GetHashCode(x.NodeValue!):x.Kind+":"+x.ToString();
+  if(value is DecimalFormat f)return JsonSerializer.Serialize(f);
+  if(value is string s)return "string:"+s;
+  if(value is Delegate d)return "delegate:"+RuntimeHelpers.GetHashCode(d);
+  if(value is IEnumerable values){var items=new List<string>();foreach(var v in values)items.Add(v is DictionaryEntry pair?Shape(pair.Key)+"="+Shape(pair.Value):v?.ToString()??"null");return value.GetType().FullName+":"+string.Join(";",items.OrderBy(s=>s,StringComparer.Ordinal));}
+  if(value.GetType().IsValueType)return value.GetType().FullName+":"+value;
+  return value.GetType().FullName+":"+RuntimeHelpers.GetHashCode(value);
+ }
+ internal static string Observe(EvaluationContext c)=>string.Join("\n",Fields.Select(f=>f.Name+"="+Shape(f.GetValue(c))));
+ internal static object[] Policy=>Fields.Select(f=>(object)new{name=f.Name,type=f.FieldType.FullName,policy=Copied.Contains(f.Name)?"Copied bounded input":"Must match fresh-context default"}).ToArray();
+}
+sealed class Result(SchemaQuerySession.Operation operation,XdmValue raw) {
+ internal string Drain() {
+  operation.ValidateAccess();var values=new List<string>();
+  if(raw.IsSequence)foreach(var item in XdmSequence.FromSource(raw.SequenceValue!)){operation.ValidateAccess();Add(item);}else Add(raw);
+  return string.Join("|",values);
+  void Add(XdmValue item){operation.ValidateAccess();if(item.IsNode||item.IsMap||item.IsArray||item.IsFunction||item.IsSequence)throw new NotSupportedException("Flat atomic result profile");if(values.Count==16)throw new NotSupportedException("Output limit");values.Add(item.ToString());}
+ }
+}
+static class Fixture {
+ static readonly List<object> rows=new();
+ static Inputs? inputSink;
+ static EvaluationContext? contextSink;
+ static XQueryContext? querySink;
+ static long Cost(Action action){for(int n=0;n<100;n++)action();long before=GC.GetAllocatedBytesForCurrentThread();for(int n=0;n<1000;n++)action();return (GC.GetAllocatedBytesForCurrentThread()-before)/1000;}
+ static readonly MethodInfo Bridge=typeof(XsltExecutable).GetMethod("TransformWithExplicitContext",BindingFlags.Instance|BindingFlags.NonPublic)!;
+ static void Check(string id,bool passed){if(!passed)throw new Exception(id);rows.Add(new{id,passed});}
+ static async Task Refuse<T>(string id,Func<Task> action)where T:Exception{try{await action();}catch(T){Check(id,true);return;}throw new Exception("Expected "+typeof(T).Name+": "+id);}
+ static string Sheet(string expression)=>"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:param name='v'/><xsl:param name='n'/><xsl:variable name='g' select='string(/*)'/><xsl:template name='main'><xsl:sequence select=\""+expression+"\"/></xsl:template></xsl:stylesheet>";
+ static SchemaQuerySession Compile(string host,Issuer issuer,Inputs inputs,Bundle bundle,bool failure=false,bool structured=false) {
+  if(host=="XPath") {if(!SchemaSessionCompilation.TryCompile(failure?"error()":structured?"$n":"($v,data($n),string(/*))",new CompileOptions(),issuer,4,16,out var session,out var why))throw new Exception(why);return session!;}
+  var environment=new SchemaQueryEnvironment(ImmutableDictionary<string,string>.Empty,"fixture-bounded-"+host+(failure?"-error":"-normal"));
+  if(host=="XQuery") {var executable=new XQueryCompiler().Compile("declare variable $v external;declare variable $n external;"+(failure?"error()":structured?"$n":"($v,data($n),string(/*))"));return new(environment,ctx=>executable.Evaluate(Inputs.CreateQuery(ctx)),issuer,4,16);}
+  var xslt=new XsltCompiler().Compile(Sheet(failure?"error()":structured?"$n":"($v,data($n),string(/*),$g)"));
+  return new(environment,ctx=>{try{return (XdmValue)Bridge.Invoke(xslt,new object?[]{bundle.Match,bundle.Global,"main",ctx})!;}catch(TargetInvocationException error)when(error.InnerException!=null){throw error.InnerException;}},issuer,4,16);
+ }
+ internal static async Task Run() {
+  foreach(var host in new[]{"XPath","XQuery","XSLT"}) {
+   var prefix=host+":";var bundle=new Bundle();var caller=new EvaluationContext{BaseUri="urn:caller",DefaultElementNamespace="urn:caller-default"}.WithFocus(XdmValue.FromNode(bundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(bundle.Typed)).WithNamespace("p","urn:before");
+   var admitted=new Inputs(caller,bundle);caller.WithVariable("v",XdmValue.FromInteger(99));caller.WithNamespace("p","urn:after");var before=Inputs.Observe(caller);
+   var issuer=new Issuer();using var session=Compile(host,issuer,admitted,bundle);int releases=0;using var snapshot=session.OpenSnapshot(session.Environment,bundle,issuer.Origin,()=>Interlocked.Increment(ref releases));
+   string expected=host=="XSLT"?"42|10|B|B":"42|10|A";
+   var answer=session.Run(session.Environment,snapshot,op=>new Result(op,op.Evaluate(admitted.Create())).Drain());Check(prefix+"actual-host-and-captured-inputs",answer==expected);Check(prefix+"caller-preserved-success",Inputs.Observe(caller)==before);
+   using(var failed=Compile(host,issuer,admitted,bundle,true)){using var s=failed.OpenSnapshot(failed.Environment,new object(),issuer.Origin,()=>{});await Refuse<InvalidOperationException>(prefix+"host-error",()=>Task.FromResult(failed.Run(failed.Environment,s,op=>op.Evaluate(admitted.Create()))));}Check(prefix+"caller-preserved-error",Inputs.Observe(caller)==before);
+   Result? escaped=null;session.Run(session.Environment,snapshot,op=>{escaped=new Result(op,op.Evaluate(admitted.Create()));return 0;});await Refuse<ObjectDisposedException>(prefix+"deferred-after-callback-refused",()=>Task.FromResult(escaped!.Drain()));
+   using(var foreign=Compile(host,issuer,admitted,bundle)){using var other=foreign.OpenSnapshot(foreign.Environment,new object(),issuer.Origin,()=>{});await Refuse<ArgumentException>(prefix+"foreign-snapshot",()=>Task.FromResult(session.Run(session.Environment,other,_=>0)));}
+   await Refuse<ArgumentException>(prefix+"foreign-environment",()=>Task.FromResult(session.Run(new SchemaQueryEnvironment(ImmutableDictionary<string,string>.Empty,"foreign"),snapshot,_=>0)));
+   using(var structured=Compile(host,issuer,admitted,bundle,structured:true)){using var nodeSnapshot=structured.OpenSnapshot(structured.Environment,new object(),issuer.Origin,()=>{});await Refuse<NotSupportedException>(prefix+"structured-result-refused",()=>Task.FromResult(structured.Run(structured.Environment,nodeSnapshot,op=>new Result(op,op.Evaluate(admitted.Create())).Drain())));}
+   using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Refuse<OperationCanceledException>(prefix+"cancel-before-entry",()=>session.RunAsync(session.Environment,snapshot,_=>Task.FromResult(0),cancel.Token));}
+   var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var raw=session.RunAsync(session.Environment,snapshot,async op=>{var result=new Result(op,op.Evaluate(admitted.Create()));entered.SetResult();await resume.Task;return result.Drain();});
+   await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Refuse<OperationCanceledException>(prefix+"cancel-wait",()=>raw.WaitAsync(cancel.Token));}
+   Check(prefix+"wait-cancel-retains-raw-ownership",!raw.IsCompleted&&releases==0);resume.SetResult();Check(prefix+"deferred-consumed-inside-raw-task",await raw.WaitAsync(TimeSpan.FromSeconds(10))==expected);Check(prefix+"caller-preserved-async",Inputs.Observe(caller)==before);
+   var enterClose=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resumeClose=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var closing=session.RunAsync(session.Environment,snapshot,async op=>{var result=new Result(op,op.Evaluate(admitted.Create()));enterClose.SetResult();await resumeClose.Task;await Refuse<ObjectDisposedException>(prefix+"close-rejects-existing-operation-access",()=>Task.FromResult(result.Drain()));return 0;});
+   await enterClose.Task.WaitAsync(TimeSpan.FromSeconds(10));snapshot.Dispose();session.Dispose();Check(prefix+"close-defers-owner-release",releases==0);await Refuse<ObjectDisposedException>(prefix+"close-rejects-new-work",()=>session.RunAsync(session.Environment,snapshot,_=>Task.FromResult(0)));resumeClose.SetResult();await closing.WaitAsync(TimeSpan.FromSeconds(10));Check(prefix+"raw-completion-releases-once",releases==1);snapshot.Dispose();session.Dispose();Check(prefix+"repeat-close-no-double-release",releases==1);
+   using(var cleanupSession=Compile(host,issuer,admitted,bundle)){var cleanup=cleanupSession.OpenSnapshot(cleanupSession.Environment,new object(),issuer.Origin,()=>throw new ApplicationException("cleanup"));var primary=new InvalidOperationException("callback");bool both=false;try{cleanupSession.Run<int>(cleanupSession.Environment,cleanup,op=>{_ = new Result(op,op.Evaluate(admitted.Create())).Drain();cleanup.Dispose();throw primary;});}catch(AggregateException error){both=error.InnerExceptions.Count==2&&ReferenceEquals(error.InnerExceptions[0],primary)&&error.InnerExceptions[1].Message=="cleanup";}Check(prefix+"callback-and-cleanup-retained",both);}
+   caller.DocumentLoader=_=>throw new Exception("Must not invoke");var advancedBefore=Inputs.Observe(caller);await Refuse<NotSupportedException>(prefix+"advanced-caller-state-refused",()=>Task.FromResult(new Inputs(caller,bundle)));Check(prefix+"unsupported-caller-preserved",Inputs.Observe(caller)==advancedBefore);caller.DocumentLoader=null;
+   caller.WithDecimalFormat(null,new DecimalFormat{DecimalSeparator=","});var decimalBefore=Inputs.Observe(caller);await Refuse<NotSupportedException>(prefix+"mutable-decimal-format-refused",()=>Task.FromResult(new Inputs(caller,bundle)));Check(prefix+"decimal-format-refusal-preserves-caller",Inputs.Observe(caller)==decimalBefore);caller.WithDecimalFormat(null,new DecimalFormat());
+   caller.WithVariable("v",XdmValue.FromSequence(XdmSequence.Empty));await Refuse<NotSupportedException>(prefix+"sequence-input-refused",()=>Task.FromResult(new Inputs(caller,bundle)));caller.WithVariable("v",XdmValue.FromInteger(99));
+   caller.WithVariable("n",XdmValue.FromNode(new XDocumentNode(XElement.Parse("<foreign/>"))));await Refuse<NotSupportedException>(prefix+"foreign-node-input-refused",()=>Task.FromResult(new Inputs(caller,bundle)));
+  }
+  var costBundle=new Bundle();var costCaller=new EvaluationContext().WithFocus(XdmValue.FromNode(costBundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(costBundle.Typed));var captured=new Inputs(costCaller,costBundle);var child=captured.Create();
+  var bytesPerOperation=new Dictionary<string,long>{["fixture-reflective-input-capture"]=Cost(()=>inputSink=new Inputs(costCaller,costBundle)),["fresh-evaluation-context"]=Cost(()=>contextSink=captured.Create()),["xquery-context-wrapper-copy"]=Cost(()=>querySink=Inputs.CreateQuery(child))};
+  var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+  Console.WriteLine(JsonSerializer.Serialize(new{checks=rows.Count,rows,fieldPolicy=Inputs.Policy,bytesPerOperation,allocationIterations=1000,bindings,bridge=Bridge.ToString(),scope="Actual private session/kernel; fixture host producers, composite snapshot, bounded fresh-context input/result adapters and test issuer; no production facade."},new JsonSerializerOptions{WriteIndented=true}));
+  GC.KeepAlive(inputSink);GC.KeepAlive(contextSink);GC.KeepAlive(querySink);
+ }
+}

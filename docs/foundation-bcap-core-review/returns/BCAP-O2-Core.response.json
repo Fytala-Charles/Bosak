@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O2-Core",
+  "packet": "BCAP-O2",
+  "owner": "Core",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+  "signer": "Codex - Core engineering scoped design review requested by repository owner; not an independently authenticated human signature",
+  "date": "2026-11-02",
+  "profile": "Exact 47-type/651-row design disposition only. Unchanged shipping Core 1.42.0; private prototype evidence is not the public SDK. No other owner/native/budget/C45/freeze/publication acceptance.",
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": "Explicitly carry forward original O2-Q1, response hash 460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f, onto this manifest: retain all six exact numeric member intents and XdmExactDecimal. The additive XSLT declarations change none of those rows. Required positive finite digit/atom/cache/snapshot counts and nonnegative scale are caller supplied; default SchemaQueryLimits is invalid. No implicit workload default, unlimited fallback or invented budget is selected. Exact supplied coefficient/scale bounds precede normalization; already-allocated caller BigInteger memory is not retroactively bounded. Parsing, arithmetic, casts, map-key comparison/hashing and serialization must enforce coherent finite policy; output formatting has a separate capacity. Legacy signatures/wrong-kind rules remain and narrowing refuses overflow or inexact conversion. These intents are not implemented public XdmValue members in production 1.42.0; immutable semantic adoption and W3 implementation/qualification precede any support claim. Schema may request a precise policy change, but absent global defaults is intentional rather than an undocumented omission."
+    },
+    {
+      "id": "O2-Q2",
+      "answer": "Carry forward original O2-Q2 with its pinned hash: IsList remains independent of atom count, preserving empty/singleton lists, actual selected union member and per-atomic type/provenance. Nil, no typed value and an empty list remain distinct. Snapshot-specific admission and authentic container issuance precede getters/atomics. Constructed values do not mint original assessment. The new serialized capture/error envelopes do not issue Schema facts or widen backend coverage. No additional required Core member is demonstrated; Schema's Revise/source-profile work is not accepted by this Core return."
+    },
+    {
+      "id": "O2-Q3",
+      "answer": "Carry forward original O2-Q3: opaque authority, source/snapshot/assessment/component identity, complete closure versus Unsupported, effective environment and assessment episode remain distinct. QName/digest/labels do not authenticate anything. IQueryStaticContext's public namespace view does not imply that effective engine state is uncaptured, or that every future Schema consumer can operate with namespaces alone. Exact environment remains compiler-captured. Schema must identify any required observable context/policy gap; no such new member is declared in its submitted O2. Source-backed supported/refused profiles still need explicit owner disposition. Required caller finite limits and intentionally absent defaults are the selected Core design, separate from R3 enforcement and R4 owner budgets."
+    },
+    {
+      "id": "O2-Q4",
+      "answer": "Carry forward original O2-Q4: compatible views require directional provider proof for exact source/target advisors and environment, preserve original PSVI, and distinguish supported Incompatible from Unsupported. No QName/digest shortcut or fabricated compatibility view. A backend can explicitly refuse unimplemented compatibility while representing the needed contract; full XSD 1.1 runtime implementation is not required merely to disposition the shape. Positive native routes and accepted performance remain later owner qualification. No Core signature gap is identified in the unchanged numeric/typed scope; this scoped carry-forward does not close Schema's Revise or R2."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+      "sha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/evidence/DECLARATION-DELTA.json",
+      "sha256": "55e776c3be9a0a0b74f773013f7e8b0830b70e205052322736b784388e170a6c"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/QueryFacade.cs.txt",
+      "sha256": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/ExactNumeric.cs.txt",
+      "sha256": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt",
+      "sha256": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+      "sha256": "9ea447ed168687144284c7f628c145956f693f7a1cd6ce95f9d60736e352a922"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "sha256": "134470bafa2f13b4084c1885dee2718c1549d31452d66e3728969a4ba37184ff"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-schema-response-review/STATUS.json",
+      "sha256": "dc423f956fe07cd6989cebe4fe73b1ad835fdbec240381a7dd9ba95efaf550bf"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O2-Core",
+  "reviewMode": "ExplicitUnchangedScopeCarryForward",
+  "deltaApplicability": "R01/R02: capture/outcome entries and serialized data do not change numeric/typed authority; no public body is implemented. R03: separate original local errors and ordered cleanup preserve failed/partial/cancelled status. R04: caller-supplied finite limits, invalid default struct and no implicit budget are intentional; immutable invocation selectors, copied/refused options and qualified sequential gate composition apply. MaxMessages is count-only, not a message-byte or memory sandbox. R05: exact admission/raw lifetime remains through serialization and cleanup attempts. R06: local exception identity is not detachment or authority. R07: observed costs/checkpoint cancellation are not native workload budgets or worst-case expression interruption. R08: scoped Core design acceptance only; Schema/XmlDb revisions and R2/R3/R4/C45/freeze remain separate.",
+  "originalExceptionGraphDisposition": "Original Exception/Data/InnerException graphs remain local diagnostics. Preserve exact objects, reference-deduplicated observations and provider aggregate boundaries without traversing arbitrary provider payloads, revoked nodes or ToString for transport. Retaining an exception confers no renewed authority or physical release proof. Export requires a bounded allowlisted primitive projection with credential/path redaction; do not serialize raw graphs or assume mutable exception state is thread-safe/immutable. Unknown projection payloads refuse/are withheld, never convert failure to success. No generic recursive sanitizer or additional Core transport signature is selected.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f"
+}

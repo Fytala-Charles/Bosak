@@ -1,0 +1,1 @@
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:c44r2' xmlns:t='urn:c44r2' elementFormDefault='qualified'><xs:simpleType name='Base'><xs:restriction base='xs:integer'/></xs:simpleType><xs:element name='M' type='t:Base'/></xs:schema>

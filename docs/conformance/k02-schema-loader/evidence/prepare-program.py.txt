@@ -1,0 +1,66 @@
+from pathlib import Path
+import json,hashlib,subprocess,xml.etree.ElementTree as ET
+R=Path.cwd();E=Path('docs/conformance/k02-schema-loader/evidence');E.mkdir(parents=True,exist_ok=True);P=Path('.guard-tmp/k02-loader');P.mkdir(exist_ok=True)
+def save(p,v):p.write_text(json.dumps(v,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=subprocess.check_output(['git','rev-parse','cad1c05b']).decode().strip()
+save(E/'DESIGN-PIN.json',dict(date='2026-10-27',sourceBase=base,specification='https://www.w3.org/TR/2017/REC-xquery-31-20170321/',revision='W3C Recommendation 21 March 2017',sections=['4.11 Schema Import','2.1 Static and Dynamic Context'],fixtureRevision='201a6e466940cdfc727f4babfedcde5332b9f578',scope='Isolated design experiment over exact copied QT3 harness sources and unchanged engine binaries; no production or admission change',guards=['XQuery routing and compiled import metadata required','All environment schema namespaces must be imported with exactly one existing file each','No validated sources, modules, parameters, inline context-item expression or collection queries','Compilation/namespace association uncertainty falls back to current eager behavior'],boundary='Compiler metadata is inspected using reflection only in this diagnostic copy. A production implementation needs an explicit supported metadata interface and independent review. XSD1.1 declarations/support remain unresolved.'))
+sources={};files=[]
+for p in sorted(Path('tests/Bosak.XPath.Conformance').glob('*.cs')):
+ if p.name in ['Program.cs','ConformanceRunner.cs']:continue
+ t=p.read_text(encoding='utf-8');sources[p.as_posix()]=dict(sha256=sha(p.read_bytes()),gitBlob=subprocess.check_output(['git','hash-object',str(p)]).decode().strip())
+ if p.name=='TestEnvironment.cs':
+  t=t.replace('public EvaluationContext ApplyTo(EvaluationContext ctx)','public EvaluationContext ApplyTo(EvaluationContext ctx, bool deferSchemaCompilation = false)').replace('ctx.SchemaSet = BuildSchemaSet();','if (!deferSchemaCompilation) ctx.SchemaSet = BuildSchemaSet();')
+ if p.name=='TestExecutor.cs':
+  t=t.replace('internal sealed class TestExecutor\n{','internal sealed class TestExecutor\n{\n    internal string SchemaMode { get; init; } = "current";\n    internal bool Deferred { get; private set; }\n    internal string Decision { get; private set; } = "NoEnvironment";')
+  t=t.replace('ctx = environment.ApplyTo(ctx);','var decision = SchemaOwnership.Decide(SchemaMode, routeXQuery, testCase, environment, expr);\n            Deferred = decision.Defer; Decision = decision.Reason;\n            ctx = environment.ApplyTo(ctx, decision.Defer);')
+ t='// Generated isolated diagnostic copy; original notices and all fixture assertions retained.\n'+t
+ out=P/p.name;out.write_text(t,encoding='utf-8');(E/(p.name+'.txt')).write_text(t,encoding='utf-8');files.append(p.name)
+save(E/'source-identities.json',sources)
+project='<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><LangVersion>preview</LangVersion><AssemblyName>Bosak.XPath.Conformance</AssemblyName></PropertyGroup><ItemGroup>'
+for p in sorted(Path('tests/Bosak.XPath.Conformance/bin/Release/net10.0').glob('Bosak.*.dll')):
+ if p.name=='Bosak.XPath.Conformance.dll':continue
+ project+=f'<Reference Include="{p.stem}"><HintPath>{p.resolve().as_posix()}</HintPath></Reference>'
+project+='</ItemGroup></Project>';(P/'Probe.csproj').write_text(project,encoding='utf-8');(E/'Probe.csproj.txt').write_text(project,encoding='utf-8')
+ns='{http://www.w3.org/2010/09/qt-fots-catalog}';requests=[];fixtureFiles={}
+for file,names in [('tests/qt3tests/prod/ValidateExpr.xml',['validateexpr-28','validateexpr-1','validateexpr-2','validateexpr-3']),('tests/qt3tests/prod/SchemaImport.xml',['substitution-020','substitution-021','substitution-022','substitution-023','substitution-024','substitution-025'])]:
+ root=ET.parse(file).getroot();fixtureFiles[file]=sha(Path(file).read_bytes())
+ for name in names:
+  case=next((x for x in root.iter(ns+'test-case') if x.get('name')==name),None)
+  if case is None:continue
+  env=case.find(ns+'environment');ref=env.get('ref') if env is not None else None
+  definition=next((v for v in root.iter(ns+'environment') if v.get('name')==ref),None) if ref else env
+  requests.append(dict(id=name,kind='original',setFile=str(Path(file).resolve()),name=name,modes=['current','guarded'],caseXml=ET.tostring(case,encoding='unicode'),environmentXml=ET.tostring(definition,encoding='unicode') if definition is not None else None))
+  if definition is not None:
+   for v in definition:
+    if v.get('file'):
+     p=Path(file).parent/v.get('file');fixtureFiles[p.as_posix()]=sha(p.read_bytes())
+save(E/'fixture-identities.json',fixtureFiles)
+# Synthetic sources are separate from the upstream corpus.
+F=P/'fixtures';F.mkdir(exist_ok=True)
+def schema(ns,base='xs:integer'):
+ return f'<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="{ns}" targetNamespace="{ns}" elementFormDefault="qualified"><xs:element name="e" type="{base}"/></xs:schema>'
+for name,t in [('valid.xsd',schema('urn:loader')),('invalid.xsd',schema('urn:loader','xs:dayTimeDuration')),('other.xsd',schema('urn:other','xs:MissingType')),('part.xsd','<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:loader"><xs:element name="other" type="xs:string"/></xs:schema>'),('valid.xml','<e xmlns="urn:loader">7</e>'),('invalid.xml','<e xmlns="urn:loader">oops</e>')]:(F/name).write_text(t,encoding='utf-8')
+def add(id,expr,env,result='<assert-eq>7</assert-eq>',modes=['current','guarded'],dependency='XQ31'):
+ requests.append(dict(id=id,kind='synthetic',expression=expr,environment=env,result=result,modes=modes,dependency=dependency))
+valid='<schema uri="urn:loader" file="valid.xsd"/>';invalid='<schema uri="urn:loader" file="invalid.xsd"/>';query='import schema namespace t="urn:loader"; 7'
+add('valid-import',query,valid)
+add('invalid-import',query,invalid,'<error code="XQST0012"/>')
+add('wrong-assertion',query,valid,'<assert-eq>99</assert-eq>')
+add('wrong-error',query,invalid,'<error code="XQST0059"/>')
+add('no-import-unsafe', 'declare namespace t="urn:loader"; 7',invalid,modes=['current','guarded','unsafe-control'])
+add('partial-import-unsafe',query,valid+'<schema uri="urn:other" file="other.xsd"/>',modes=['current','guarded','unsafe-control'])
+add('strict-invalid-source',query,valid+'<source role="." file="invalid.xml" validation="strict"/>')
+add('strict-valid-source',query,valid+'<source role="." file="valid.xml" validation="strict"/>')
+add('inline-context-guard',query,invalid+'<context-item select="1"/>')
+add('parameter-guard',query,invalid+'<param name="v" select="1"/>')
+add('collection-query-guard',query,invalid+'<collection uri="urn:collection"><query>1</query></collection>')
+add('multiple-components-guard',query,valid+'<schema uri="urn:loader" file="part.xsd"/>')
+add('missing-file-guard',query,'<schema uri="urn:loader" file="missing.xsd"/>')
+add('unmapped-namespace-guard',query,'<schema file="invalid.xsd"/>')
+add('xpath-guard','7',invalid,dependency='XP31')
+add('declarations-before-import','xquery version "3.1"; declare namespace u="urn:u"; '+query,invalid,'<error code="XQST0012"/>')
+add('malformed-query-guard',query+' +',invalid,'<error code="XPST0003"/>')
+save(E/'requests.json',requests)
+save(E/'synthetic-files.json',{p.resolve().as_posix():dict(sha256=sha(p.read_bytes()),text=p.read_text(encoding='utf-8')) for p in sorted(F.iterdir())})
+print(len(requests),'requests;',sum(len(v['modes']) for v in requests),'bounded executions')

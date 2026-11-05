@@ -1,0 +1,15 @@
+{
+  "name": "actual-filters",
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+    "filters",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\filter-requests.json",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\filter-results.jsonl"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 1.040014099999098,
+  "log": "actual-filters.log"
+}

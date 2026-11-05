@@ -1,0 +1,1550 @@
+[
+  {
+    "id": "C02-F01",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F01",
+    "original": {
+      "id": "F01",
+      "title": "Keyword metadata and label compatibility",
+      "disposition": "Existing limitation; reconcile parser binding per family, retain positional alternatives and profile refusals. No blanket rename or metadata inference.",
+      "exitCriteria": "Add family-specific success/refusal/default/type tests before changing metadata.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/configured-label-callbacks.md",
+        "functions/customer-reference-matching.md",
+        "functions/customer-text-cleanup.md",
+        "functions/element-to-map.md",
+        "functions/import-array-batches.md",
+        "functions/import-file-names.md",
+        "functions/invoice-api-uris.md",
+        "functions/map-to-element.md",
+        "functions/measurement-comparison.md",
+        "functions/month-end-cutoffs.md",
+        "functions/numeric-import-diagnostics.md",
+        "functions/order-sequence-selection.md",
+        "functions/payload-fingerprints.md",
+        "functions/product-map-index.md",
+        "functions/sequence-distinctness.md",
+        "functions/shipment-event-sequences.md",
+        "functions/supplier-offer-ranking.md",
+        "functions/timestamp-deadlines.md",
+        "functions/uri-option-policy.md"
+      ],
+      "probeIds": [
+        "char-string-keyword",
+        "compare-current-keywords"
+      ],
+      "observations": [
+        {
+          "id": "char-string-keyword",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "char-string-keyword",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "compare-current-keywords",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPST0017: Unknown keyword argument 'value1' in call of compare.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "compare-current-keywords",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPST0017: Unknown keyword argument 'value1' in call of compare.",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F02",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F02",
+    "original": {
+      "id": "F02",
+      "title": "Current-draft declaration adoption boundaries",
+      "disposition": "Owner policy required for zero-arity trim, ignored nonpositive partial bindings and char integer/error boundary. Signed Unix epochs already delivered only in Experimental.",
+      "exitCriteria": "Choose frozen/Experimental policy explicitly, then test each contract separately without changing frozen fixtures.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/configured-label-callbacks.md",
+        "functions/customer-text-cleanup.md",
+        "functions/timestamp-deadlines.md"
+      ],
+      "probeIds": [
+        "char-zero",
+        "char-negative",
+        "partial-apply-zero-key",
+        "partial-apply-negative-key",
+        "trim-context-default"
+      ],
+      "observations": [
+        {
+          "id": "char-zero",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "char-zero",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "char-negative",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "char-negative",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "partial-apply-zero-key",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "partial-apply-zero-key",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "partial-apply-negative-key",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "partial-apply-negative-key",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "trim-context-default",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}trim-space#0 not found.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "trim-context-default",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}trim-space#0 not found.",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F03",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F03",
+    "original": {
+      "id": "F03",
+      "title": "Option-key and value validation",
+      "disposition": "Shared option conventions apply only where adopted explicitly. Unknown JSON options are ignored in 3.1 by design; current 4.0 rules reject unrecognized non-namespaced keys. CSV refuses unknown namespaced extension options; text/JSON tolerate unknown string keys. Coercion and optional error-eagerness require per-function review.",
+      "exitCriteria": "Separate functions, declared option types, QName-extension policy and permitted error latitude; no blanket eager-validation rule.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/csv-parsing.md",
+        "functions/customer-text-cleanup.md"
+      ],
+      "probeIds": [
+        "trim-unknown-option",
+        "pad-unknown-option",
+        "pad-unused-invalid-side",
+        "pad-numeric-padding",
+        "csv-qname-extension",
+        "json-unknown-option"
+      ],
+      "observations": [
+        {
+          "id": "trim-unknown-option",
+          "profile": "XPath40",
+          "result": "A",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "trim-unknown-option",
+          "profile": "XPath40Experimental",
+          "result": "A",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-unknown-option",
+          "profile": "XPath40",
+          "result": "A  ",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-unknown-option",
+          "profile": "XPath40Experimental",
+          "result": "A  ",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-unused-invalid-side",
+          "profile": "XPath40",
+          "result": "ABC",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-unused-invalid-side",
+          "profile": "XPath40Experimental",
+          "result": "ABC",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-numeric-padding",
+          "profile": "XPath40",
+          "result": "A77",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "pad-numeric-padding",
+          "profile": "XPath40Experimental",
+          "result": "A77",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "csv-qname-extension",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: fn:parse-csv: unknown option 'opt'.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "csv-qname-extension",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: fn:parse-csv: unknown option 'opt'.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "json-unknown-option",
+          "profile": "XPath31",
+          "result": "0",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "json-unknown-option",
+          "profile": "XPath40",
+          "result": "0",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "json-unknown-option",
+          "profile": "XPath40Experimental",
+          "result": "0",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F04",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F04",
+    "original": {
+      "id": "F04",
+      "title": "URI Boolean options and empty-query precedence",
+      "disposition": "Reproduced limits; use Boolean values and remove stale raw query when supplying an empty query map. Raw authority bypass is conforming behavior.",
+      "exitCriteria": "Add positional/reference/keyword and input-presence regressions; isolate Boolean typing from map presence.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/invoice-api-uris.md",
+        "functions/uri-option-policy.md"
+      ],
+      "probeIds": [
+        "uri-string-option",
+        "uri-empty-query-precedence"
+      ],
+      "observations": [
+        {
+          "id": "uri-string-option",
+          "profile": "XPath40",
+          "result": "false",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "uri-string-option",
+          "profile": "XPath40Experimental",
+          "result": "false",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "uri-empty-query-precedence",
+          "profile": "XPath40",
+          "result": "https://example.test?old=1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "uri-empty-query-precedence",
+          "profile": "XPath40Experimental",
+          "result": "https://example.test?old=1",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F05",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F05",
+    "original": {
+      "id": "F05",
+      "title": "Sort default-on-empty and collation/record validation",
+      "disposition": "Reproduced explicit-empty-key failures and tolerated unknown collation; sort-by is a distinct record surface.",
+      "exitCriteria": "Preserve 3.1 behavior, test empty/nonempty paths and verify sort-key record definitions before changing validation.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/supplier-offer-ranking.md",
+        "functions/warehouse-pick-sorting.md"
+      ],
+      "probeIds": [
+        "sort-explicit-empty-key",
+        "array-sort-explicit-empty-key",
+        "sort-unknown-collation",
+        "sort-by-unknown-field"
+      ],
+      "observations": [
+        {
+          "id": "sort-explicit-empty-key",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "sort-explicit-empty-key",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "array-sort-explicit-empty-key",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "array-sort-explicit-empty-key",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "sort-unknown-collation",
+          "profile": "XPath40",
+          "result": "A,B",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-unknown-collation",
+          "profile": "XPath40Experimental",
+          "result": "A,B",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-by-unknown-field",
+          "profile": "XPath40",
+          "result": "1,2,3",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-by-unknown-field",
+          "profile": "XPath40Experimental",
+          "result": "1,2,3",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F06",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F06",
+    "original": {
+      "id": "F06",
+      "title": "Exact numeric and NaN ordering across sort/extrema",
+      "disposition": "Reproduced input-direction-sensitive NaN and mixed double/decimal ordering; exact compare does not repair other comparers.",
+      "exitCriteria": "One shared-comparer investigation with independent fn:sort/array:sort/highest/lowest controls and exact-number expectations.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/batch-extrema.md",
+        "functions/sort-with.md",
+        "functions/supplier-offer-ranking.md",
+        "functions/warehouse-pick-sorting.md"
+      ],
+      "probeIds": [
+        "sort-nan-left",
+        "sort-nan-right",
+        "sort-exact-numeric",
+        "highest-nan",
+        "lowest-nan"
+      ],
+      "observations": [
+        {
+          "id": "sort-nan-left",
+          "profile": "XPath40",
+          "result": "1,NaN",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-nan-left",
+          "profile": "XPath40Experimental",
+          "result": "1,NaN",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-nan-right",
+          "profile": "XPath40",
+          "result": "NaN,1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-nan-right",
+          "profile": "XPath40Experimental",
+          "result": "NaN,1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-exact-numeric",
+          "profile": "XPath40",
+          "result": "double,decimal",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "sort-exact-numeric",
+          "profile": "XPath40Experimental",
+          "result": "double,decimal",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "highest-nan",
+          "profile": "XPath40",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "highest-nan",
+          "profile": "XPath40Experimental",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "lowest-nan",
+          "profile": "XPath40",
+          "result": "2",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "lowest-nan",
+          "profile": "XPath40Experimental",
+          "result": "2",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F07",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F07",
+    "original": {
+      "id": "F07",
+      "title": "Map merge/build options and input conversion",
+      "disposition": "map:merge explicit-empty options, non-map input and duplicate-policy cardinality remain limits; map:build has distinct combine default.",
+      "exitCriteria": "Separate input conversion, default-on-empty and duplicate-option cardinality; preserve valid merge/build policies.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/product-map-index.md"
+      ],
+      "probeIds": [
+        "merge-empty-options",
+        "merge-malformed-input",
+        "merge-duplicates-cardinality"
+      ],
+      "observations": [
+        {
+          "id": "merge-empty-options",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: map:merge options must be a single map",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "merge-empty-options",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: map:merge options must be a single map",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "merge-malformed-input",
+          "profile": "XPath40",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "merge-malformed-input",
+          "profile": "XPath40Experimental",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "merge-duplicates-cardinality",
+          "profile": "XPath40",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "merge-duplicates-cardinality",
+          "profile": "XPath40Experimental",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F08",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F08",
+    "original": {
+      "id": "F08",
+      "title": "Atomic/callback/cardinality conversion boundaries",
+      "disposition": "Typed atomic input, boolean callback results and invocation timing need independent family tests; map:filter string result is a reproduced gap.",
+      "exitCriteria": "Do not infer generic conversion support from fixed numeric functions; separate input, callback argument and result coercion.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "boundedCorrections": [
+        {
+          "id": "F08-atomic-annotation-empty",
+          "status": "Reproduced defect; not fixed",
+          "owner": "Bosak standard-library maintainer",
+          "expression": "atomic-type-annotation(())",
+          "profiles": [
+            "XPath40",
+            "XPath40Experimental"
+          ],
+          "required": "XPTY0004: required xs:anyAtomicType argument is empty",
+          "observed": "Returns a map/type record",
+          "source": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+          "spec": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+          "exitCriteria": "Preserve normal atomic records; reject empty cardinality through direct/reference/lookup/partial calls in both 4.0 profiles, retain XPath31 refusal, and run frozen gates before merging an engine fix."
+        }
+      ],
+      "entries": [
+        "functions/consecutive-partition.md",
+        "functions/atomic-equal.md",
+        "functions/batch-extrema.md",
+        "functions/configured-label-callbacks.md",
+        "functions/higher-order-selection.md",
+        "functions/import-array-batches.md",
+        "functions/import-file-names.md",
+        "functions/measurement-comparison.md",
+        "functions/numeric-import-diagnostics.md",
+        "functions/order-sequence-selection.md",
+        "functions/ordered-queue-prefix.md",
+        "functions/product-dependency-closure.md",
+        "functions/product-map-index.md",
+        "functions/sequence-distinctness.md",
+        "functions/shipment-event-sequences.md",
+        "functions/sort-with.md",
+        "functions/timestamp-deadlines.md"
+      ],
+      "probeIds": [
+        "map-filter-string-predicate",
+        "all-equal-map",
+        "duplicate-values-maps"
+      ],
+      "observations": [
+        {
+          "id": "map-filter-string-predicate",
+          "profile": "XPath40",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "map-filter-string-predicate",
+          "profile": "XPath40Experimental",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "all-equal-map",
+          "profile": "XPath40",
+          "result": "true",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "all-equal-map",
+          "profile": "XPath40Experimental",
+          "result": "true",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "duplicate-values-maps",
+          "profile": "XPath40",
+          "result": "0",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "duplicate-values-maps",
+          "profile": "XPath40Experimental",
+          "result": "0",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F09",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F09",
+    "original": {
+      "id": "F09",
+      "title": "Deep-equal 4.0 map options",
+      "disposition": "Reproduced FOTY0013 for supported-draft option map; legacy string collation remains usable.",
+      "exitCriteria": "Implement or explicitly disposition options grammar/validation per profile with sequence/map/node equality regressions.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/customer-reference-matching.md"
+      ],
+      "probeIds": [
+        "deep-equal-options"
+      ],
+      "observations": [
+        {
+          "id": "deep-equal-options",
+          "profile": "XPath40",
+          "result": null,
+          "error": "FOTY0013",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "deep-equal-options",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "FOTY0013",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F10",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F10",
+    "original": {
+      "id": "F10",
+      "title": "Gregorian construction precision and input validation",
+      "disposition": "Reproduced seconds truncation to milliseconds and malformed/multi-item days-in-month tolerance. Unix wide-range error correction is delivered.",
+      "exitCriteria": "Separate fractional component storage, field validation and cardinality; do not expand all extended-year operations.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/month-end-cutoffs.md",
+        "functions/timestamp-deadlines.md"
+      ],
+      "probeIds": [
+        "date-fraction-precision",
+        "days-malformed-text",
+        "days-multiple-values"
+      ],
+      "observations": [
+        {
+          "id": "date-fraction-precision",
+          "profile": "XPath40",
+          "result": "4.267",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "date-fraction-precision",
+          "profile": "XPath40Experimental",
+          "result": "4.267",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "days-malformed-text",
+          "profile": "XPath40",
+          "result": "29",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "days-malformed-text",
+          "profile": "XPath40Experimental",
+          "result": "29",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "days-multiple-values",
+          "profile": "XPath40",
+          "result": "29",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "days-multiple-values",
+          "profile": "XPath40Experimental",
+          "result": "29",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F11",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F11",
+    "original": {
+      "id": "F11",
+      "title": "Mandatory hash algorithms capability",
+      "disposition": "BLAKE3 and CRC-32 remain unsupported FOHA0001; SHA-256/default/empty controls pass.",
+      "exitCriteria": "Choose dependency/algorithm implementation with independent vectors and CRC byte-order checks; no claim that opaque options are missing standard options.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/payload-fingerprints.md"
+      ],
+      "probeIds": [
+        "hash-blake3",
+        "hash-crc32"
+      ],
+      "observations": [
+        {
+          "id": "hash-blake3",
+          "profile": "XPath40",
+          "result": null,
+          "error": "FOHA0001: Hash algorithm 'BLAKE3' is not supported by this implementation",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "hash-blake3",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "FOHA0001: Hash algorithm 'BLAKE3' is not supported by this implementation",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "hash-crc32",
+          "profile": "XPath40",
+          "result": null,
+          "error": "FOHA0001: Hash algorithm 'CRC-32' is not supported by this implementation",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "hash-crc32",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "FOHA0001: Hash algorithm 'CRC-32' is not supported by this implementation",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F12",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F12",
+    "original": {
+      "id": "F12",
+      "title": "CSV current-index contract adoption",
+      "disposition": "Frozen positive-index refusals remain intentional; upstream already corrected seven selection/get expectations.",
+      "exitCriteria": "Explicitly adopt the current contract in the chosen profile with existing pinned comparison evidence; no duplicate upstream issue or fixture edit.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/csv-parsing.md"
+      ],
+      "probeIds": [
+        "csv-nonpositive-selection"
+      ],
+      "observations": [
+        {
+          "id": "csv-nonpositive-selection",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "csv-nonpositive-selection",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F13",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F13",
+    "original": {
+      "id": "F13",
+      "title": "Full grapheme segmentation capability",
+      "disposition": "Approximate documented segmentation remains unsupported for complete Unicode grapheme-break conformance.",
+      "exitCriteria": "Choose supported Unicode version and test against the corresponding conformance data; retain codepoint/display-width distinction.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/customer-text-cleanup.md"
+      ],
+      "probeIds": [],
+      "observations": [],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C02-F14",
+    "workpackage": "C02",
+    "source": "FUNCTION-OPTIONS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "F14",
+    "original": {
+      "id": "F14",
+      "title": "XML/map conversion plans and options",
+      "disposition": "The new escape-names option is absent from the released conversion implementation and is explicitly unsupported in both profiles. Current map-to-element prose/error changes and plan/name/layout combinations require scoped review; a passing simple-content example does not certify them.",
+      "exitCriteria": "Review current element/map changes and named ElementMap tests per option; C03/C05 own record/JNode types and the skip queue remains deferred.",
+      "owner": "Bosak engine/catalog maintainer",
+      "status": "Open follow-up; not implemented by C02",
+      "entries": [
+        "functions/element-to-map.md",
+        "functions/map-to-element.md"
+      ],
+      "probeIds": [
+        "element-to-map-escape-names",
+        "map-to-element-escape-names"
+      ],
+      "observations": [
+        {
+          "id": "element-to-map-escape-names",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: unknown option 'escape-names'.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "element-to-map-escape-names",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: unknown option 'escape-names'.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "map-to-element-escape-names",
+          "profile": "XPath40",
+          "result": null,
+          "error": "XPTY0004: unknown option 'escape-names'.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "map-to-element-escape-names",
+          "profile": "XPath40Experimental",
+          "result": null,
+          "error": "XPTY0004: unknown option 'escape-names'.",
+          "exceptionType": "System.InvalidOperationException"
+        }
+      ],
+      "scopePolicy": "A bounded follow-up group, not a claim that every current draft feature must be implemented for catalog closure. Split unrelated engine corrections before implementation; accurately documented unsupported contracts remain limitations pending owner acceptance."
+    }
+  },
+  {
+    "id": "C03-T01",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "T01",
+    "original": {
+      "subject": "Generic integer representation and range/error policy",
+      "owner": "Bosak core/runtime maintainer; C13 owner disposition",
+      "status": "Explicit implementation limit, not a blanket malformed-input claim",
+      "boundary": "Valid decimal-backed wide literals can still fail xs:integer string/numeric constructor/cast narrowing with FORG0001; castable is false. Distinguish storage limits, invalid lexical input, numeric overflow and derived facets. Do not globally replace error codes."
+    }
+  },
+  {
+    "id": "C03-T02",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "T02",
+    "original": {
+      "subject": "Decimal precision and numeric consumers",
+      "owner": "Bosak numeric maintainer; C13 owner disposition",
+      "status": "Documented storage boundary",
+      "boundary": "Fixed .NET decimal precision can round away fractional/significant digits. Delivered rounding/arithmetic/unsigned fixes do not implement arbitrary-precision decimals or all extended-year consumers."
+    }
+  },
+  {
+    "id": "C03-T03",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "T03",
+    "original": {
+      "subject": "Schema list/union/namespace contexts",
+      "owner": "C03 retained schema evidence; C06 host/context review",
+      "status": "Supported named cases with explicit remaining scope",
+      "boundary": "List constructors return sequences of item types; list names are not valid ordinary item-test targets. Imported types require the supplied schema/type/namespace context. No global schema availability, full XSD loader, generic list typing or skip removal follows."
+    }
+  },
+  {
+    "id": "C03-T04",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "T04",
+    "original": {
+      "subject": "Nominal/structural/default/static record context",
+      "owner": "C05/C06 and final C09-C12 per-entry review",
+      "status": "Bounded supported forms and unclaimed remainder",
+      "boundary": "Defaults and static field initialization are verified in specific constructors/bindings. Package/visibility/recursive/global-initializer/override/update/cast combinations remain unaccepted, rather than labeled universally unsupported."
+    }
+  },
+  {
+    "id": "C03-T05",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "T05",
+    "original": {
+      "subject": "Function signatures, focus capture and BC propagation",
+      "owner": "C04/C06 and C09-C12",
+      "status": "Bounded controls, not generic conversion certification",
+      "boundary": "Direct/ref/lookup focus constructors, scalar cardinality and selected typed functions pass. Paired compile/runtime BC flags are explicit. Arbitrary schema callbacks, function variance, dynamic host propagation and all error-eagerness combinations require their own applicable evidence."
+    }
+  },
+  {
+    "id": "C03-F08-atomic-annotation-empty",
+    "workpackage": "C03",
+    "source": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+    "sourceField": "boundaries",
+    "sourceId": "F08-atomic-annotation-empty",
+    "original": {
+      "subject": "C02 independently reproduced required-argument defect",
+      "owner": "Existing C02 F08 bounded correction ticket",
+      "status": "Still open; not fixed or accepted by C03",
+      "boundary": "atomic-type-annotation(()) returns a record in both 4.0 profiles although the argument is required. C03 does not overwrite its independent XPTY0004 expectations or count it as supported coercion."
+    }
+  },
+  {
+    "id": "C04-G01-otherwise-spelling",
+    "workpackage": "C04",
+    "source": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "G01-otherwise-spelling",
+    "original": {
+      "id": "G01-otherwise-spelling",
+      "status": "Unsupported current-draft spelling; explicit adoption decision remains",
+      "owner": "Bosak parser/catalog maintainer and C13 owner disposition",
+      "required": "Current OtherwiseExpr/id-otherwise uses otherwise.",
+      "observed": "Bosak accepts ?? and rejects otherwise with XPST0003 in both 4.0 profiles.",
+      "exitCriteria": "Decide retained ?? compatibility/extension policy and contextual otherwise spelling; preserve element-name use, precedence, guarded errors and lower-profile refusals. Do not claim recovered historical adoption.",
+      "observations": [
+        {
+          "id": "otherwise-current-spelling",
+          "profile": "XPath40",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 3: XPST0003: Unexpected token Name",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        },
+        {
+          "id": "otherwise-current-spelling",
+          "profile": "XPath40Experimental",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 3: XPST0003: Unexpected token Name",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        },
+        {
+          "id": "otherwise-current-guard",
+          "profile": "XPath40",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 2: XPST0003: Unexpected token Name",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        },
+        {
+          "id": "otherwise-current-guard",
+          "profile": "XPath40Experimental",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 2: XPST0003: Unexpected token Name",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        }
+      ],
+      "unmetControls": [
+        {
+          "id": "otherwise-current-spelling",
+          "profile": "XPath40",
+          "passed": false,
+          "ticket": "G01-otherwise-spelling"
+        },
+        {
+          "id": "otherwise-current-spelling",
+          "profile": "XPath40Experimental",
+          "passed": false,
+          "ticket": "G01-otherwise-spelling"
+        },
+        {
+          "id": "otherwise-current-guard",
+          "profile": "XPath40",
+          "passed": false,
+          "ticket": "G01-otherwise-spelling"
+        },
+        {
+          "id": "otherwise-current-guard",
+          "profile": "XPath40Experimental",
+          "passed": false,
+          "ticket": "G01-otherwise-spelling"
+        }
+      ]
+    }
+  },
+  {
+    "id": "C04-G02-mapping-containing-focus",
+    "workpackage": "C04",
+    "source": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "G02-mapping-containing-focus",
+    "original": {
+      "id": "G02-mapping-containing-focus",
+      "status": "Reproduced contextual semantics defect; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "required": "U =!> F(A...) is defined by for $u in U return F($u,A...), preserving containing focus for extra arguments.",
+      "observed": "Parser lowers to simple-map U ! F(.,A...), changing dot/position/size in extra arguments.",
+      "exitCriteria": "Preserve containing focus while prepending each item, without losing order/multiplicity/empty guards. Add independent named/dynamic/inline target and argument controls plus both engine gates before merging an engine fix.",
+      "observations": [
+        {
+          "id": "mapping-containing-focus",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "1:1|2:2",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "mapping-containing-focus",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "1:1|2:2",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "mapping-containing-position",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "1:1/2|2:2/2",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "mapping-containing-position",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "1:1/2|2:2/2",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "unmetControls": [
+        {
+          "id": "mapping-containing-focus",
+          "profile": "XPath40",
+          "passed": false,
+          "ticket": "G02-mapping-containing-focus"
+        },
+        {
+          "id": "mapping-containing-focus",
+          "profile": "XPath40Experimental",
+          "passed": false,
+          "ticket": "G02-mapping-containing-focus"
+        },
+        {
+          "id": "mapping-containing-position",
+          "profile": "XPath40",
+          "passed": false,
+          "ticket": "G02-mapping-containing-focus"
+        },
+        {
+          "id": "mapping-containing-position",
+          "profile": "XPath40Experimental",
+          "passed": false,
+          "ticket": "G02-mapping-containing-focus"
+        }
+      ]
+    }
+  },
+  {
+    "id": "C04-G03-keyword-placeholders",
+    "workpackage": "C04",
+    "source": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "G03-keyword-placeholders",
+    "original": {
+      "id": "G03-keyword-placeholders",
+      "status": "Reproduced unsupported current-draft argument production; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "required": "KeywordArgument uses Argument, which includes ArgumentPlaceholder.",
+      "observed": "substring(value := ?,start := 2,length := 2) fails XPST0003; positional substring(?,2,2) works.",
+      "exitCriteria": "Recognize placeholders in keyword argument positions and verify resulting arity/default/collision/partial binding semantics in both 4.0 profiles; retain old-profile refusal and run engine gates for an engine correction.",
+      "observations": [
+        {
+          "id": "keyword-partial",
+          "profile": "XPath40",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 30: XPST0003: Expected lookup key",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        },
+        {
+          "id": "keyword-partial",
+          "profile": "XPath40Experimental",
+          "phase": "compile",
+          "result": null,
+          "error": "Parse error at position 30: XPST0003: Expected lookup key",
+          "exceptionType": "Bosak.XPath.Parser.XPathParseException"
+        }
+      ],
+      "unmetControls": [
+        {
+          "id": "keyword-partial",
+          "profile": "XPath40",
+          "passed": false,
+          "ticket": "G03-keyword-placeholders"
+        },
+        {
+          "id": "keyword-partial",
+          "profile": "XPath40Experimental",
+          "passed": false,
+          "ticket": "G03-keyword-placeholders"
+        }
+      ]
+    }
+  },
+  {
+    "id": "C04-G04-late-binding-boundary",
+    "workpackage": "C04",
+    "source": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "G04-late-binding-boundary",
+    "original": {
+      "id": "G04-late-binding-boundary",
+      "status": "Host/static-context review, not a proved closed-context defect",
+      "owner": "C06 host review and C13 owner disposition",
+      "required": "Guarding does not waive static errors in a closed static context.",
+      "observed": "Public API can compile before runtime variables/functions are supplied; standalone unresolved calls/variables error during evaluation, while guarded unselected branches are omitted.",
+      "exitCriteria": "Review closed XSLT/XQuery/strict-host binding separately. Do not misclassify open API runtime registration as an unknown-static-name failure or assume one error phase across all contexts.",
+      "observations": [
+        {
+          "id": "otherwise-static-unknown-var",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "otherwise-static-unknown-var",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "otherwise-static-unknown-function",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "otherwise-static-unknown-function",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "1",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "context-unbound-variable",
+          "profile": "XPath40",
+          "phase": "evaluate",
+          "result": null,
+          "error": "XPST0008: Variable $missing is not defined.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "context-unbound-variable",
+          "profile": "XPath40Experimental",
+          "phase": "evaluate",
+          "result": null,
+          "error": "XPST0008: Variable $missing is not defined.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "context-unresolved-function",
+          "profile": "XPath40",
+          "phase": "evaluate",
+          "result": null,
+          "error": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}no-such-function#0 not found.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "context-unresolved-function",
+          "profile": "XPath40Experimental",
+          "phase": "evaluate",
+          "result": null,
+          "error": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}no-such-function#0 not found.",
+          "exceptionType": "System.InvalidOperationException"
+        },
+        {
+          "id": "context-supplied-variable",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "7",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "context-supplied-variable",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "7",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "context-supplied-function",
+          "profile": "XPath40",
+          "phase": "success",
+          "result": "7",
+          "error": null,
+          "exceptionType": null
+        },
+        {
+          "id": "context-supplied-function",
+          "profile": "XPath40Experimental",
+          "phase": "success",
+          "result": "7",
+          "error": null,
+          "exceptionType": null
+        }
+      ],
+      "unmetControls": []
+    }
+  },
+  {
+    "id": "C04-G05-remaining-combinations",
+    "workpackage": "C04",
+    "source": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "G05-remaining-combinations",
+    "original": {
+      "id": "G05-remaining-combinations",
+      "status": "Explicit unaccepted remainder",
+      "owner": "C05/C06 and C09-C12 final applicable-evidence review",
+      "required": "Production/semantic/context evidence must match claimed support.",
+      "observed": "Bounded lexical/focus/callback examples do not establish all type, adjacency, Unicode, host or error-eagerness combinations.",
+      "exitCriteria": "Retain existing evidence and accurately bound claims; final entry review and owner acceptance remain required, rather than automatically implementing every draft addition.",
+      "observations": [],
+      "unmetControls": []
+    }
+  },
+  {
+    "id": "C05-K01-generic-jnode-model",
+    "workpackage": "C05",
+    "source": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "K01-generic-jnode-model",
+    "original": {
+      "status": "Known unsupported model boundary; no promotion",
+      "owner": "Bosak XDM/model maintainer and C13 owner disposition",
+      "required": "The current generic model includes JNodes in node(), supports xnode() for XML and node identity.",
+      "observed": "JNode node() is false; xnode() raises XPST0051; JNode is raises XPTY0004. Navigation/member wrappers remain supported. A current-draft jnode pattern refuses XTSE0340 at compilation in both tested hosts.",
+      "exitCriteria": "Choose any full-model adoption explicitly with XDM/identity/order/provider/host/template tests. Do not substitute wrapper navigation or roundtrip equality for identity."
+    }
+  },
+  {
+    "id": "C05-K02-choice-matching-alternative",
+    "workpackage": "C05",
+    "source": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "K02-choice-matching-alternative",
+    "original": {
+      "status": "Reproduced current-draft coercion mismatch; not fixed",
+      "owner": "Bosak runtime/type maintainer",
+      "required": "If an input already matches an alternative, coerce to the first alternative it matches before trying conversions to other alternatives.",
+      "observed": "Typed let/argument/return (xs:integer|xs:string) convert the string '12' to integer. An explicit cast has a different in-order conversion contract.",
+      "exitCriteria": "Separate coercion from explicit cast. Preserve already-matching alternatives, retain ordered fallback for untyped/unmatched items and test nested/schema/function/record alternatives before an engine fix; run both frozen gates."
+    }
+  },
+  {
+    "id": "C05-K03-record-destructuring-lookup",
+    "workpackage": "C05",
+    "source": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "K03-record-destructuring-lookup",
+    "original": {
+      "status": "Reproduced current-draft lookup mismatch; not fixed",
+      "owner": "Bosak parser/compiler/runtime maintainer",
+      "required": "Map/record destructuring uses lookup semantics; an undeclared field on an annotated record raises XPTY0004.",
+      "observed": "let ${$missing} := (map{'a':1} cast as record(a)) return $missing binds empty instead.",
+      "exitCriteria": "Use annotation-aware lookup for destructured fields while retaining empty binding for ordinary missing map keys, single RHS evaluation, typing and scope restoration. Add focused regressions and run both frozen gates for an engine fix."
+    }
+  },
+  {
+    "id": "C05-K04-host-context",
+    "workpackage": "C05",
+    "source": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "K04-host-context",
+    "original": {
+      "status": "Bounded supported forms and explicit remaining ownership",
+      "owner": "C06 and C09-C12 final evidence review",
+      "required": "Host, effective version, type context and declaration/package evidence must match the claimed contract.",
+      "observed": "Both named hosts pass the bounded version-4 pattern stylesheets. This does not accept every package, alias, recursive type, JNode template or earlier-version combination.",
+      "exitCriteria": "Retain named tests and accurate scope; C06 reviews host/declaration profiles and C13 records acceptance. No historical adoption pin is reconstructed."
+    }
+  },
+  {
+    "id": "C05-K05-remaining-combinations",
+    "workpackage": "C05",
+    "source": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "K05-remaining-combinations",
+    "original": {
+      "status": "Unaccepted combinations retained explicitly",
+      "owner": "C09-C12/C13 and relevant engine maintainer if corrected",
+      "required": "Per-production/current-contract evidence remains necessary; supported examples are not universal conversion or grammar proofs.",
+      "observed": "Cardinality, scope, empty/member boundaries and delivered corrections have bounded controls. Remaining facet, composite, callback, error-order and identity combinations remain unclaimed.",
+      "exitCriteria": "Review each entry contract under the applicable-evidence policy, fix or accurately disposition failures, and retain previous correction receipts; no automatic implementation commitment for every proposal."
+    }
+  },
+  {
+    "id": "C06-H01",
+    "workpackage": "C06",
+    "source": "HOST-PROFILE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "H01",
+    "original": {
+      "id": "H01",
+      "title": "Complete static-error detection mode evidence",
+      "owner": "C09-C13 host acceptance / separate compiler investigation",
+      "kind": "Evidence gap, not an automatic conformance defect",
+      "observed": "Closed stylesheet default Compile defers unresolved binding errors to execution and skips guarded unknown variable/function branches. Pinned XSLT errors section explicitly permits a lazy mode but also requires a complete-detection mode. The probes do not establish that mandatory mode.",
+      "exit": "Identify and demonstrate a public complete static-error detection mode or record its unsupported boundary and independently scope a correction. Keep C04 open API late binding distinct."
+    }
+  },
+  {
+    "id": "C06-H02",
+    "workpackage": "C06",
+    "source": "HOST-PROFILE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "H02",
+    "original": {
+      "id": "H02",
+      "title": "Switch incomparable atomic values lose general-comparison error",
+      "owner": "Separate bounded runtime correction; C09-C13 acceptance",
+      "kind": "Reproduced current-draft mismatch",
+      "observed": "Selector 2 with when test true() returns empty under both hosts. Direct 2 = true() raises XPTY0004 under both. Pinned xsl-switch explicitly uses XPath =, so original expected errors remain unmet.",
+      "exit": "Correct comparison semantics with independent type/error regressions and mandatory engine gates; do not convert the unmet control to a successful empty result."
+    }
+  },
+  {
+    "id": "C06-H03",
+    "workpackage": "C06",
+    "source": "HOST-PROFILE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "H03",
+    "original": {
+      "id": "H03",
+      "title": "Host loader and current F&O adoption boundaries",
+      "owner": "C09-C13 function/host acceptance",
+      "kind": "Explicit versioned policy/evidence boundary",
+      "observed": "Lookup of load-xquery-module succeeds even without a loader; invocation then raises FOQM0001. Populate installs the loader but not standalone module sources (FOQM0002). Registered static use-when modules execute; integer supplied to external xs:double is refused FOQM0005 by the XQuery3.1 loader. This does not adopt current F&O4 coercion automatically.",
+      "exit": "Review current function-lookup error timing, load-xquery-module external coercion, and implementation-defined unparsed-text fragments against selected host/version policy. Preserve older-profile refusals and do not infer XQuery4 support from XPath4 callers."
+    }
+  },
+  {
+    "id": "C06-H04",
+    "workpackage": "C06",
+    "source": "HOST-PROFILE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "H04",
+    "original": {
+      "id": "H04",
+      "title": "Unaccepted host/module/instruction combinations",
+      "owner": "C09-C13 exact entry batches/final review",
+      "kind": "Bounded review limit",
+      "observed": "Existing 66/114 profile examples and named package/authoring/static tests supply bounded controls; no exhaustive transitive graph, package version/override, resource/schema/streaming or full lexical default-mode review is claimed.",
+      "exit": "Apply per-contract named tests or explicit unsupported/limitation receipts. Preserve earlier default-mode/union/EQName fixes and all C02/C04/C05 defects; do not reopen delivered slices without new evidence."
+    }
+  },
+  {
+    "id": "C07-L01",
+    "workpackage": "C07",
+    "source": "LIFECYCLE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "L01",
+    "original": {
+      "id": "L01",
+      "title": "Per-contract semantic and applicable evidence acceptance",
+      "owner": "C09-C13",
+      "exit": "Do not treat lifecycle state, passing alternatives, repository ancestry or named gate membership as contract acceptance. Preserve C02/C04/C05/C06 defects."
+    }
+  },
+  {
+    "id": "C07-L02",
+    "workpackage": "C07",
+    "source": "LIFECYCLE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "L02",
+    "original": {
+      "id": "L02",
+      "title": "Historical adoption and external rename provenance",
+      "owner": "C08/C13",
+      "exit": "Resolve all28 original missing records or leave explicit policy blockers. Current source, delivery objects and disposition dossier do not recover missing spec revisions."
+    }
+  },
+  {
+    "id": "C07-L03",
+    "workpackage": "C07",
+    "source": "LIFECYCLE-RECONCILIATION.json",
+    "sourceField": "followups",
+    "sourceId": "L03",
+    "original": {
+      "id": "L03",
+      "title": "Deferred and partial feature boundaries",
+      "owner": "C09-C13",
+      "exit": "Maintain explicit non-equivalence and host/version limits for every alternative. No implementation commitment or Experimental/frozen promotion follows from this review."
+    }
+  }
+]

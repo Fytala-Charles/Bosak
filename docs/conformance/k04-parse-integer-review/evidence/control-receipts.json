@@ -1,0 +1,922 @@
+[
+  {
+    "name": "qt3-control-qt3-arity1",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-arity1-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29215889997431077,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-arity1",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-arity1.log"
+  },
+  {
+    "name": "qt4-control-qt4-arity1",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-arity1-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2882582999882288,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-arity1",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-arity1.log"
+  },
+  {
+    "name": "qt3-control-qt3-arity2",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-arity2-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28942089999327436,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-arity2",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-arity2.log"
+  },
+  {
+    "name": "qt4-control-qt4-arity2",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-arity2-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26405960001284257,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-arity2",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-arity2.log"
+  },
+  {
+    "name": "qt3-control-qt3-empty-value",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-empty-value-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2674243000219576,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-empty-value",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-empty-value.log"
+  },
+  {
+    "name": "qt4-control-qt4-empty-value",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-empty-value-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2652961000276264,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-empty-value",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-empty-value.log"
+  },
+  {
+    "name": "qt3-control-qt3-empty-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-empty-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25654210001812316,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-empty-radix",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-empty-radix.log"
+  },
+  {
+    "name": "qt4-control-qt4-empty-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-empty-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25486990000354126,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-empty-radix",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-empty-radix.log"
+  },
+  {
+    "name": "qt3-control-qt3-internal-space",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-internal-space-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26231879999977536,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-internal-space",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-internal-space.log"
+  },
+  {
+    "name": "qt4-control-qt4-internal-space",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-internal-space-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25041169999167323,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-internal-space",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-internal-space.log"
+  },
+  {
+    "name": "qt3-control-qt3-ascii-spaces",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-ascii-spaces-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25542410000343807,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-ascii-spaces",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-ascii-spaces.log"
+  },
+  {
+    "name": "qt4-control-qt4-ascii-spaces",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-ascii-spaces-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25147290001041256,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-ascii-spaces",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-ascii-spaces.log"
+  },
+  {
+    "name": "qt3-control-qt3-radix-invalid",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-radix-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2785550999979023,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-radix-invalid",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-radix-invalid.log"
+  },
+  {
+    "name": "qt4-control-qt4-radix-invalid",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-radix-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2609134999802336,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-radix-invalid",
+      "kind": "Failed",
+      "message": "Expected error FORG0011, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-radix-invalid.log"
+  },
+  {
+    "name": "qt3-control-qt3-lexical-invalid",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-lexical-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27020440000342205,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lexical-invalid",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lexical-invalid.log"
+  },
+  {
+    "name": "qt4-control-qt4-lexical-invalid",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-lexical-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2863861999940127,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lexical-invalid",
+      "kind": "Failed",
+      "message": "Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-lexical-invalid.log"
+  },
+  {
+    "name": "qt3-control-qt3-lexical-empty",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-lexical-empty-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30313380001462065,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lexical-empty",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lexical-empty.log"
+  },
+  {
+    "name": "qt4-control-qt4-lexical-empty",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-lexical-empty-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28060009999899194,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lexical-empty",
+      "kind": "Failed",
+      "message": "Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-lexical-empty.log"
+  },
+  {
+    "name": "qt3-control-qt3-non-xml-space",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-non-xml-space-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34574060002341866,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-non-xml-space",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-non-xml-space.log"
+  },
+  {
+    "name": "qt4-control-qt4-non-xml-space",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-non-xml-space-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3390456999768503,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-non-xml-space",
+      "kind": "Failed",
+      "message": "Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-non-xml-space.log"
+  },
+  {
+    "name": "qt3-control-qt3-range-max",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-range-max-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3412854000052903,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-range-max",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-range-max.log"
+  },
+  {
+    "name": "qt4-control-qt4-range-max",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-range-max-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.36690059999818914,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-range-max",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-range-max.log"
+  },
+  {
+    "name": "qt3-control-qt3-range-min",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-range-min-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3820158000162337,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-range-min",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-range-min.log"
+  },
+  {
+    "name": "qt4-control-qt4-range-min",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-range-min-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.38104790000943467,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-range-min",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-range-min.log"
+  },
+  {
+    "name": "qt3-control-qt3-range-overflow",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-range-overflow-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28763700000126846,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-range-overflow",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-range-overflow.log"
+  },
+  {
+    "name": "qt4-control-qt4-range-overflow",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-range-overflow-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28701830000500195,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-range-overflow",
+      "kind": "Failed",
+      "message": "Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-range-overflow.log"
+  },
+  {
+    "name": "qt3-control-qt3-numeric-input",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-numeric-input-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2904256999900099,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-numeric-input",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-numeric-input.log"
+  },
+  {
+    "name": "qt4-control-qt4-numeric-input",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-numeric-input-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27178680000361055,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-numeric-input",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-numeric-input.log"
+  },
+  {
+    "name": "qt3-control-qt3-fractional-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-fractional-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2797251000010874,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-fractional-radix",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-fractional-radix.log"
+  },
+  {
+    "name": "qt4-control-qt4-fractional-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-fractional-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26507850000052713,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-fractional-radix",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-fractional-radix.log"
+  },
+  {
+    "name": "qt3-control-qt3-lookup1",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-lookup1-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26447819999884814,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lookup1",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lookup1.log"
+  },
+  {
+    "name": "qt4-control-qt4-lookup1",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-lookup1-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2559130000008736,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lookup1",
+      "kind": "Failed",
+      "message": "assert-true failed. Got: false"
+    },
+    "log": "qt4-control-qt4-lookup1.log"
+  },
+  {
+    "name": "qt3-control-qt3-lookup2",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-lookup2-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26634349999949336,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lookup2",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lookup2.log"
+  },
+  {
+    "name": "qt4-control-qt4-lookup2",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-lookup2-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2780417000176385,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lookup2",
+      "kind": "Failed",
+      "message": "assert-true failed. Got: false"
+    },
+    "log": "qt4-control-qt4-lookup2.log"
+  },
+  {
+    "name": "qt3-control-qt3-lookup0",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-lookup0-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2755583999969531,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lookup0",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lookup0.log"
+  },
+  {
+    "name": "qt4-control-qt4-lookup0",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-lookup0-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2630541000107769,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lookup0",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-lookup0.log"
+  },
+  {
+    "name": "qt3-control-qt3-arity0",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-arity0-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2535335999855306,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-arity0",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-arity0.log"
+  },
+  {
+    "name": "qt4-control-qt4-arity0",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-arity0-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24358089998713695,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-arity0",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-arity0.log"
+  },
+  {
+    "name": "qt3-control-qt3-arity3",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-arity3-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2582469999906607,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-arity3",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-arity3.log"
+  },
+  {
+    "name": "qt4-control-qt4-arity3",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-arity3-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27868990000570193,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-arity3",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-arity3.log"
+  },
+  {
+    "name": "qt3-control-qt3-named-reference",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-named-reference-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2781028999888804,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-named-reference",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-named-reference.log"
+  },
+  {
+    "name": "qt4-control-qt4-named-reference",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-named-reference-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2705193000147119,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-named-reference",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-named-reference.log"
+  },
+  {
+    "name": "qt3-control-qt3-keyword-grammar",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-keyword-grammar-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1974460000055842,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-keyword-grammar",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-keyword-grammar.log"
+  },
+  {
+    "name": "qt4-control-qt4-keyword",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-keyword-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19223419998888858,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-keyword",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function parse-integer does not declare keyword parameters and cannot be called with keyword arguments."
+    },
+    "log": "qt4-control-qt4-keyword.log"
+  },
+  {
+    "name": "qt3-control-qt3-node-atomization",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-node-atomization-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2574134999886155,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-node-atomization",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-node-atomization.log"
+  },
+  {
+    "name": "qt4-control-qt4-node-atomization",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt4-control-qt4-node-atomization-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25518150001880713,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-node-atomization",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found."
+    },
+    "log": "qt4-control-qt4-node-atomization.log"
+  }
+]

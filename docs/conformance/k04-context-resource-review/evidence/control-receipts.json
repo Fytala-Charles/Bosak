@@ -1,0 +1,242 @@
+[
+  {
+    "name": "C27-original-056-importer-u-bound",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-original-056-importer-u-bound-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28691619998426177,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-original-056-importer-u-bound",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-original-056-importer-u-bound.log"
+  },
+  {
+    "name": "C27-original-057-importer-u-bound",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-original-057-importer-u-bound-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28612730000168085,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-original-057-importer-u-bound",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-original-057-importer-u-bound.log"
+  },
+  {
+    "name": "C27-builtin-prefix-baseline",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-builtin-prefix-baseline-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28523239999776706,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-builtin-prefix-baseline",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-builtin-prefix-baseline.log"
+  },
+  {
+    "name": "C27-library-alias-only",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-library-alias-only-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2762265999917872,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-library-alias-only",
+      "kind": "Failed",
+      "message": "Unexpected error: XPTY0004: The initial context item does not match the context item type 't:integer' declared in an imported library module."
+    },
+    "log": "C27-library-alias-only.log"
+  },
+  {
+    "name": "C27-matching-importer-alias",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-matching-importer-alias-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2752764000033494,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-matching-importer-alias",
+      "kind": "Failed",
+      "message": "Unexpected error: XPTY0004: The initial context item does not match the context item type 't:integer' declared in an imported library module."
+    },
+    "log": "C27-matching-importer-alias.log"
+  },
+  {
+    "name": "C27-conflicting-importer-alias",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-conflicting-importer-alias-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27831009999499656,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-conflicting-importer-alias",
+      "kind": "Failed",
+      "message": "Unexpected error: XPTY0004: The initial context item does not match the context item type 't:integer' declared in an imported library module."
+    },
+    "log": "C27-conflicting-importer-alias.log"
+  },
+  {
+    "name": "C27-library-alias-wrong-value",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-library-alias-wrong-value-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2859140000073239,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-library-alias-wrong-value",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-library-alias-wrong-value.log"
+  },
+  {
+    "name": "C27-colliding-lexical-types",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-colliding-lexical-types-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2876659999892581,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-colliding-lexical-types",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-colliding-lexical-types.log"
+  },
+  {
+    "name": "C27-distinct-lexical-types",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-distinct-lexical-types-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28266859997529536,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-distinct-lexical-types",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-distinct-lexical-types.log"
+  },
+  {
+    "name": "C27-colliding-union-type-contexts",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-colliding-union-type-contexts-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29121629998553544,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-colliding-union-type-contexts",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004 but succeeded"
+    },
+    "log": "C27-colliding-union-type-contexts.log"
+  },
+  {
+    "name": "C27-distinct-union-type-contexts",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-distinct-union-type-contexts-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2828181999793742,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-distinct-union-type-contexts",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-distinct-union-type-contexts.log"
+  },
+  {
+    "name": "C27-union-left-positive",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\C27-union-left-positive-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2907208999968134,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C27-union-left-positive",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "C27-union-left-positive.log"
+  }
+]

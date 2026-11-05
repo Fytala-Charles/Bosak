@@ -1,0 +1,116 @@
+[
+  {
+    "Name": "construction-0",
+    "Expression": "declare construction strip; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction-1",
+    "Expression": "declare(:outer(:nested:) :)construction strip; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction-2",
+    "Expression": "declare\nconstruction strip; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction-3",
+    "Expression": "declare construction preserve; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction-4",
+    "Expression": "declare(:outer(:nested:) :)construction preserve; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction-5",
+    "Expression": "declare\nconstruction preserve; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "literal-\"",
+    "Expression": "\"declare construction\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled-\"",
+    "Expression": "\"a\"\"declare construction\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "literal-'",
+    "Expression": "'declare construction'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled-'",
+    "Expression": "'a''declare construction'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "comment",
+    "Expression": "(: declare construction strip :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "nested-comment",
+    "Expression": "(: a (: declare construction :) a :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "prefix",
+    "Expression": "declareconstruction strip; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "suffix",
+    "Expression": "declare constructional strip; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "context-adopted",
+    "Expression": "declare context item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-adopted",
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "pragma",
+    "Expression": "(# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-pragma",
+    "Expression": "declare construction strip; (# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "mixed",
+    "Expression": "declare construction strip; declare copy-namespaces no-preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  }
+]

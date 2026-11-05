@@ -1,0 +1,209 @@
+{
+  "date": "2026-11-02",
+  "costs": [
+    {
+      "profile": "source-free",
+      "members": 0,
+      "bytesPerCapture": 16,
+      "freshProcesses": 3,
+      "firstCompileMilliseconds": {
+        "samples": 3,
+        "min": 140.584,
+        "median": 144.5261,
+        "p95NearestRank": 310.4322,
+        "max": 310.4322
+      },
+      "firstCaptureMilliseconds": {
+        "samples": 3,
+        "min": 130.1385,
+        "median": 172.3869,
+        "p95NearestRank": 331.0132,
+        "max": 331.0132
+      },
+      "firstCompileManagedBytes": {
+        "samples": 3,
+        "min": 287984,
+        "median": 290680,
+        "p95NearestRank": 290808,
+        "max": 290808
+      },
+      "firstCaptureManagedBytes": {
+        "samples": 3,
+        "min": 1035640,
+        "median": 1067712,
+        "p95NearestRank": 1070384,
+        "max": 1070384
+      },
+      "warmMilliseconds": {
+        "samples": 240,
+        "min": 0.2671,
+        "median": 0.40705,
+        "p95NearestRank": 0.7429,
+        "max": 0.9846
+      },
+      "warmManagedBytesPerCapture": {
+        "samples": 3,
+        "min": 78877.2,
+        "median": 78877.2,
+        "p95NearestRank": 78877.2,
+        "max": 78877.2
+      }
+    },
+    {
+      "profile": "shared",
+      "members": 1,
+      "bytesPerCapture": 49155,
+      "freshProcesses": 3,
+      "firstCompileMilliseconds": {
+        "samples": 3,
+        "min": 124.5716,
+        "median": 130.7159,
+        "p95NearestRank": 131.8402,
+        "max": 131.8402
+      },
+      "firstCaptureMilliseconds": {
+        "samples": 3,
+        "min": 244.2196,
+        "median": 248.3313,
+        "p95NearestRank": 340.5034,
+        "max": 340.5034
+      },
+      "firstCompileManagedBytes": {
+        "samples": 3,
+        "min": 2126824,
+        "median": 2129392,
+        "p95NearestRank": 2129648,
+        "max": 2129648
+      },
+      "firstCaptureManagedBytes": {
+        "samples": 3,
+        "min": 1359144,
+        "median": 1366792,
+        "p95NearestRank": 1369528,
+        "max": 1369528
+      },
+      "warmMilliseconds": {
+        "samples": 240,
+        "min": 0.431,
+        "median": 0.58725,
+        "p95NearestRank": 0.9744,
+        "max": 3.0855
+      },
+      "warmManagedBytesPerCapture": {
+        "samples": 3,
+        "min": 323102.6,
+        "median": 323102.6,
+        "p95NearestRank": 323102.6,
+        "max": 323102.6
+      }
+    },
+    {
+      "profile": "distinct",
+      "members": 2,
+      "bytesPerCapture": 196611,
+      "freshProcesses": 3,
+      "firstCompileMilliseconds": {
+        "samples": 3,
+        "min": 124.9849,
+        "median": 127.2291,
+        "p95NearestRank": 130.5894,
+        "max": 130.5894
+      },
+      "firstCaptureMilliseconds": {
+        "samples": 3,
+        "min": 233.4862,
+        "median": 252.983,
+        "p95NearestRank": 258.1411,
+        "max": 258.1411
+      },
+      "firstCompileManagedBytes": {
+        "samples": 3,
+        "min": 7501584,
+        "median": 7504152,
+        "p95NearestRank": 7504344,
+        "max": 7504344
+      },
+      "firstCaptureManagedBytes": {
+        "samples": 3,
+        "min": 1935272,
+        "median": 1944032,
+        "p95NearestRank": 1948896,
+        "max": 1948896
+      },
+      "warmMilliseconds": {
+        "samples": 240,
+        "min": 0.5162,
+        "median": 0.64705,
+        "p95NearestRank": 1.0076,
+        "max": 2.365
+      },
+      "warmManagedBytesPerCapture": {
+        "samples": 3,
+        "min": 913639.4,
+        "median": 913639.4,
+        "p95NearestRank": 913639.4,
+        "max": 913639.4
+      }
+    }
+  ],
+  "cancellation": [
+    {
+      "channel": "capture",
+      "requestToRawOutcomeMilliseconds": {
+        "samples": 36,
+        "min": 0.1519,
+        "median": 0.19765,
+        "p95NearestRank": 3.0768,
+        "max": 3.1659
+      },
+      "requestToLastReleaseMilliseconds": {
+        "samples": 36,
+        "min": 0.1513,
+        "median": 0.1953,
+        "p95NearestRank": 2.8979,
+        "max": 2.9844
+      }
+    },
+    {
+      "channel": "operation",
+      "requestToRawOutcomeMilliseconds": {
+        "samples": 36,
+        "min": 0.1572,
+        "median": 0.19679999999999997,
+        "p95NearestRank": 0.4178,
+        "max": 0.4384
+      },
+      "requestToLastReleaseMilliseconds": {
+        "samples": 36,
+        "min": 0.1567,
+        "median": 0.19505,
+        "p95NearestRank": 0.4149,
+        "max": 0.436
+      }
+    },
+    {
+      "channel": "inherited",
+      "requestToRawOutcomeMilliseconds": {
+        "samples": 36,
+        "min": 0.1676,
+        "median": 0.19145,
+        "p95NearestRank": 0.2988,
+        "max": 0.3858
+      },
+      "requestToLastReleaseMilliseconds": {
+        "samples": 36,
+        "min": 0.1655,
+        "median": 0.1896,
+        "p95NearestRank": 0.2959,
+        "max": 0.3805
+      }
+    }
+  ],
+  "coldMeaning": "First compile/first capture in each fresh host, excluding process launch and host workload construction; does not separate JIT from engine work",
+  "warmMeaning": "20 successful warmups then 80 captures in each of three independent processes per profile",
+  "allocationMeaning": "Precise process-wide managed allocation, includes transform workers and validation; not retained/native/stack/peak memory",
+  "cancellationMeaning": "Request while second serialization is paused; includes unpause, unwind, two synthetic release callbacks and caller scheduling",
+  "acceptanceBudgets": null,
+  "engineChanges": false,
+  "coreC10BoundedMeasurements": "Recorded; native workload and worst-case checkpoint latency acceptance remain separate"
+}

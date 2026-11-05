@@ -1,0 +1,58 @@
+// Generated isolated bridge qualification; all negative outcomes caught.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.Xslt.Api;
+try {
+ var rows=new List<object>();
+ var bridge=typeof(XsltExecutable).GetMethod("TransformWithExplicitContext",BindingFlags.Instance|BindingFlags.NonPublic);
+ IXdmNode Doc(string s)=>new XDocumentNode(XDocument.Parse("<n>"+s+"</n>"));
+ IXdmNode Element(string s)=>new XDocumentNode(XElement.Parse("<n>"+s+"</n>"));
+ var a=Doc("A");var b=Doc("B");var ea=Element("A");var eb=Element("B");
+ string Sheet(string body,string declarations="")=>"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>"+declarations+body+"</xsl:stylesheet>";
+ string Named(string select)=>"<xsl:template name='main'><xsl:sequence select=\""+select+"\"/></xsl:template>";
+ string Matched(string select)=>"<xsl:template match='node()'><xsl:sequence select=\""+select+"\"/></xsl:template>";
+ const string global="<xsl:variable name='g' select='string(.)'/>";
+ const string safeGlobal="<xsl:variable name='g'><xsl:try><xsl:sequence select='string(.)'/><xsl:catch><xsl:sequence select=\"'absent'\"/></xsl:catch></xsl:try></xsl:variable>";
+ void Case(string id,string stylesheet,IXdmNode? match,string? template,string expected,bool explicitMode=false,IXdmNode? globalInput=null,bool contaminated=false) {
+  if(explicitMode&&bridge is null)return;
+  string actual;try {
+   var executable=new XsltCompiler().Compile(stylesheet);var context=new EvaluationContext();if(contaminated)context.WithFocus(XdmValue.FromNode(Doc("C")),1,1);
+   var value=explicitMode?(XdmValue)bridge!.Invoke(executable,new object?[]{match,globalInput,template,context})!:executable.Transform(match,context,initialTemplate:template,rawResult:true);
+   actual=Text(value);
+  }catch(Exception error){while(error is TargetInvocationException&&error.InnerException!=null)error=error.InnerException;var code=Regex.Match(error.Message,@"\b[A-Z]{4}[0-9]{4}\b").Value;actual="error:"+(code.Length>0?code:error.GetType().Name);}
+  rows.Add(new{id,explicitMode,expected,actual,passed=expected==actual});
+ }
+ Case("legacy-document-named",Sheet(Named("string(.)")),a,"main","A");
+ Case("legacy-element-named",Sheet(Named("string(.)")),ea,"main","error:XPDY0002");
+ Case("legacy-document-global",Sheet(Named("$g"),global),a,"main","A");
+ Case("legacy-matched",Sheet(Matched("string(.)")),a,null,"A");
+ Case("legacy-source-free",Sheet(Named("42")),null,"main","42");
+ Case("legacy-required-absent",Sheet(Named("42"),"<xsl:global-context-item use='required'/>"),null,"main","error:XTDE3086");
+ Case("legacy-declared-absent",Sheet(Named("string($g)"),"<xsl:global-context-item use='absent'/>"+safeGlobal),a,"main","absent");
+ Case("explicit-distinct-documents",Sheet(Matched("concat(string(.),'|',$g)"),global),a,null,"A|B",true,b);
+ Case("explicit-element-match-refused",Sheet(Matched("concat(string(.),'|',$g)"),global),ea,null,"error:NotSupportedException",true,eb);
+ Case("explicit-named-defaults-global",Sheet(Named("concat(string(.),'|',$g)"),global),a,"main","B|B",true,b);
+ Case("explicit-named-element-global",Sheet(Named("string(.)")),null,"main","B",true,eb);
+ Case("explicit-match-only-absent-global",Sheet(Matched("concat(string(.),'|',string($g))"),safeGlobal),a,null,"A|absent",true);
+ Case("explicit-match-only-global-reference-error",Sheet(Matched("$g"),global),a,null,"error:XPDY0002",true);
+ Case("explicit-named-absent-focus",Sheet(Named("string(.)")),a,"main","error:XPDY0002",true);
+ Case("explicit-source-free",Sheet(Named("42")),null,"main","42",true);
+ Case("explicit-global-only",Sheet(Named("$g"),global),null,"main","B",true,b);
+ Case("explicit-required-global-only",Sheet(Named("$g"),"<xsl:global-context-item use='required'/>"+global),null,"main","B",true,b);
+ Case("explicit-required-match-not-enough",Sheet(Matched("string(.)"),"<xsl:global-context-item use='required'/>"),a,null,"error:XTDE3086",true);
+ Case("explicit-declared-absent-ignores-supplied",Sheet(Matched("concat(string(.),'|',string($g))"),"<xsl:global-context-item use='absent'/>"+safeGlobal),a,null,"A|absent",true,b);
+ Case("explicit-clears-dynamic-focus",Sheet(Matched("concat(string(.),'|',string($g))"),safeGlobal),a,null,"A|absent",true,null,true);
+ Case("explicit-template-context-absent",Sheet("<xsl:template name='main'><xsl:context-item use='absent'/><xsl:sequence select='string(.)'/></xsl:template>"),a,"main","error:XPDY0002",true,b);
+ Case("explicit-named-matched-declaration",Sheet("<xsl:template name='main' match='/'><xsl:sequence select='string(.)'/></xsl:template>"),a,"main","B",true,b);
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(x=>x.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(x=>x.GetName().Name).Select(x=>new{name=x.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(x.Location))).ToLowerInvariant()}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{bridgeAvailable=bridge!=null,cases=rows,bindings},new JsonSerializerOptions{WriteIndented=true}));
+}catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+static string Text(XdmValue v){if(!v.IsSequence)return v.ToString();var values=new List<string>();foreach(var x in XdmSequence.FromSource(v.SequenceValue!)){if(values.Count==16)throw new Exception("Output capacity");values.Add(x.ToString());}return string.Join("|",values);}

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O1-Schema",
+  "packet": "BCAP-O1",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "signer": "Codex - Schema design reviewer acting on explicit repository-owner direction in this session; no independently authenticated human signature claimed",
+  "date": "2026-11-03",
+  "profile": "Schema R2 contract/source-feasibility only. Public base 20090180755d0427d824b091cf838e9a03ca9adc, packages 1.26.3 unchanged. Read-only native source c3624998eca8c83018e121fa84af611f834a0501 supports bounded decimal-sequence/assertion v1-v5 and never-nil element-only root/no-typed-value plus exact representable decimal leaves; not full XSD 1.1. Accept the concrete adapter design, not its implementation. Historical probes use observed Core 1.34.2.0, not documentary 1.34.1 or BCAP 1.42. Select and hash-bind the explicit BCAP dependency candidate before native R3/R4 qualification. No runtime qualification, budgets, C45, freeze, adoption, release or joint/global R2 closure.",
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": "AcceptWithScope at R2. Use a provider-local sealed input and sealed IXdmNode projections retaining private exact owner references plus a reference-identity registry of projections/underlying nodes in a privately retained immutable graph. OwnsNode checks availability, sealed type, reference-equal owner and registered identity using private state before any purported node getter. Register projections as trusted provider routes produce them: document/parent/children/axes/attributes/namespaces must preserve association; unsupported routes refuse, never leak unregistered wrappers. No eager graph scan or copy merely for admission. XsdDocumentAssessor.Assess and AssessedDocument.CreateDocumentCopy perform assessment/export copying, not membership authentication; a dedicated export may be captured once privately and never exposed for caller mutation. This concrete source-feasible adapter uses existing OwnsNode, without changing legacy IXdmNode. No adapter exists yet: poison/foreign/unavailable/revoked route controls are R3/R4. Ordinary XML uses its own host-selected trusted input predicate without Schema issuer/origin; XmlDb ownership is not qualified here."
+    },
+    {
+      "id": "O1-Q2",
+      "answer": "AcceptWithScope. Privately issue facts and register the exact tuple: projected node, admitted input/snapshot, original origin, AssessedElement and assessor-owned components. Check input membership, then advisor OwnsAssessment/OwnsNodeFacts/OwnsNode(node,facts,input,origin), before purported fact getters. AssessedDocument.Copy preserves Schema/Elements/component references and assessment label, but creates a distinct snapshot. Trusted preserve-copy registration pairs exported root with Elements[0] and each present child with Elements[i+1] in instance order, including repeated declarations; retain original evidence while registering the new snapshot/node associations. CreateDocumentCopy(true) carriers point at the exporting owner, which can differ across copies. Labels, carrier Owner/State, names and digests are not authentication; caller-attached carriers cannot register facts. If correspondence cannot be proved, refuse preservation or explicitly strip and reassess. Admit only a private immutable retained export or trusted version-guarded graph; stale edits invalidate/refuse old associations. Independently compiled components remain distinct authority. Existing source permits this design; association implementation and stale/copy/foreign-fact controls are R3/R4."
+    },
+    {
+      "id": "O1-Q3",
+      "answer": "AcceptWithScope. Wrap each supported decimal leaf in a sealed immutable privately issued ISchemaTypedValue with issuer/advisor, exact input, original origin (null for explicit fresh construction), governing type and per-atomic evidence. Register by reference before exposure. OwnsTypedValue(value,input,originalAssessment) checks that private tuple before GoverningType/IsList/AtomicItems/TryGetScalar or enumeration. ReadTypedValue uses the exact admitted SchemaQuerySnapshot and validates each atomic actual type/provenance against its authority and operation. AssessedElement.TypedValue is XdmValue?, not a BCAP issued container; the wrapper is R3 work. The element-only root has no typed value, not an empty list; never-nil remains explicit. ConstructSimpleValue issues current constructed evidence without original PSVI, or Unsupported. Ordinary inputs receive no fabricated assessment. No additional public signature is needed for this plan; forged/wrong-input/wrong-origin/per-atomic/revoked controls remain R3/R4."
+    },
+    {
+      "id": "O1-Q4",
+      "answer": "AcceptWithScope for this concrete source-backed design. Retain the six cases: admitted decimal leaf succeeds; foreign-snapshot poison getter rejects before access; authenticated preserve-copy retains original facts while strip-copy has none; edited stale export rejects; independently compiled components reject despite equal name/digest; revocation prevents node and typed-value reads. Add projection-route completeness, forged carrier/facts/container, construction and per-atomic controls. The two hash-bound native-facts receipts report 14 historical-source controls passing twice; these support copy/state/stale/identity facts, not executed BCAP membership/issuance or Core 1.42 integration. The private projection/registry plan closes the identified R2 feasibility question without another Core member. No R2ApiPolicy or R2SourceFeasibility blocker remains identified in this scope. Adapter work is R3Implementation/R4Qualification. General unsupported XSD profiles remain represented; full XSD implementation is not required to accept this contract shape."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/SOURCE-PINS.json: all 22 copied files hash-verified in this review, including native source and original submitted BCAP returns."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/native/src/Bosak.Schema/Assessment/: AssessedDocument constructor/Copy/CreateDocumentCopy/CreateTypedElementCopy; XsdDocumentAssessor.Assess; SchemaDocumentAssessment original declaration/type/element state; no BCAP adapter exists."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/core/: Provider.cs.txt, QueryFacade.cs.txt, ExactNumeric.cs.txt, DECISIONS.md.txt D01-D14 and REQUIREMENTS.md.txt N1-N8; native S009-02/S009-04 fact/foundation maps."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/core/native-facts-0.json and native-facts-1.json: 14 historical-source controls reported twice, Core 1.34.2.0. Receipts reviewed, not freshly executed or BCAP qualification."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak docs/foundation-bcap-owner-review/REVIEW.md R01-R08 and manifest-bound Xslt.cs.txt/OperationLifetime.cs.txt reviewed read-only. Capture/output/error-graph applicability explicitly answered in this replacement."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O1-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": "R01: Accept operation-borrowing CaptureTransform and owning RunCaptureTransform design on the exact executable/session/environment; declarations still throw and public/native SDK support is not claimed. R02: Principal/secondary bytes, URI/order, effective properties, messages, existing classifications and per-run receipts suffice for this bounded Schema scope; serialized output is not PSVI/live authority. Bytes can expose backing arrays and OutputProperties is mutable: consumers must copy bytes and snapshot permitted property values before retention/thread handoff/export; no deep immutability guarantee. No extra signature is required for this copy policy. R03: Accept separate admission/work/ordered cleanup diagnostics, capture retained through cleanup failure, unsuccessful Partial/Cancelled/error outcomes, identity deduplication and preserved provider aggregate boundaries. Rollback stays AdmissionError; cleanup uncertainty is not release success and does not justify automatic retry. R04: Invocation is sole template/mode/base-output source; duplicate options fields must be absent and RawResult refuses. Four count/byte controls are finite/nonnegative, time/operation controls finite/positive. MaxMessages bounds count, not individual message bytes; output limits do not bound compiler/tree/native allocation, single-evaluation work or worker stacks. This bounded in-process Schema design does not require an extra Core message-byte limit. Arbitrary/untrusted IPC preview or hard total-memory/deadline guarantees are outside scope and require separately qualified host policy. No workload defaults/budgets are accepted. Borrowed engine gates compose only in an explicitly sequential profile; unsupported arbitrary caller policies refuse. R05: Foreign/closed operations and source roles reject before getters. Shared/distinct/source-free inputs stay within one raw operation through serialization and cleanup; host retains resources, close blocks new admission, cancelled wait does not drain, ordinary sources need no Schema issuer. R06: Accept local-only original exception identities under the explicit exception-graph disposition, not IPC or recursively sanitized payloads. R07: Core measurements are observations, not Schema budgets/defaults or worker/native/recovery qualification; R3/R4 must qualify the chosen execution profile. R08: AcceptWithScope for exact R2 design/source feasibility only; no public/native implementation, adoption, all-owner closure, C45, freeze or publication.",
+  "originalExceptionGraphDisposition": "Schema/provider exceptions and capture diagnostics may be retained only as local diagnostic references with original identity and aggregate boundaries preserved. They are not detached, immutable, sanitized or safe for IPC. Do not recursively inspect Exception.Data, InnerException, arbitrary provider payloads or node-bearing objects, especially after revocation; do not publish raw exception graphs. If export is needed, require an owner-controlled bounded allowlist/projection and redaction policy. Capture or exception retention confers no Schema authority and does not establish release success.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null,
+  "responseRevision": 2,
+  "nativeSourceRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+  "supersedesResponse": {
+    "path": "../../core-disposition-inbox/2026-11-02/inputs/prior-returns/BCAP-O1-Schema.json",
+    "sha256": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+    "decision": "Revise"
+  },
+  "r2BlockingItems": [],
+  "remainingBlockers": [
+    {
+      "questionId": "O1-Q1",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O1-Q2",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O1-Q3",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O1-Q4",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    }
+  ]
+}

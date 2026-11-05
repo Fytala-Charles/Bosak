@@ -1,0 +1,177 @@
+// Generated host acquisition/rollback qualification fixture; no production acquisition API.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+
+await Qualification.Run();
+var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new{checks=Qualification.Rows.Count,rows=Qualification.Rows,bindings,setupReflectionOnly=true,scope="Test-host acquisition and rollback with synthetic resources/issuer; actual unchanged production factories, admissions, operations and host evaluation. No native owner integration or production acquisition helper."},new JsonSerializerOptions{WriteIndented=true}));
+
+sealed class Provider : ISchemaSessionProvider,ISchemaEvidenceIssuer
+{
+    internal readonly object A=new(),B=new();internal bool Available=true;
+    private sealed class Binding(Provider owner,SchemaQueryEnvironment environment):ISchemaSessionBinding
+    {
+        SchemaQueryEnvironment ISchemaSessionBinding.Environment=>environment;
+        ISchemaEvidenceIssuer ISchemaSessionBinding.Issuer=>owner;
+        void ISchemaSessionBinding.ThrowIfUnavailable(){if(!owner.Available)throw new ObjectDisposedException("provider");}
+    }
+    ISchemaSessionBinding ISchemaSessionProvider.Bind(SchemaQueryEnvironment environment)=>new Binding(this,environment);
+    bool ISchemaEvidenceIssuer.OwnsAssessment(object value)=>ReferenceEquals(value,A)||ReferenceEquals(value,B);
+    bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar value)=>false;
+    bool ISchemaEvidenceIssuer.OwnsType(object value)=>false;
+    bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+}
+sealed class Resource(string name,IXdmNode node,object assessment,List<string> events)
+{
+    internal readonly object Identity=new();
+    internal readonly IXdmNode Node=node;
+    internal object Assessment=assessment;
+    internal int Acquisitions,Releases,ReleaseAttempts,RejectedCallbacks;
+    internal bool Admitted;
+    internal string? ReleasePath;
+    internal Exception? CleanupFailure;
+    private int _released;
+    internal void Release(string path)
+    {
+        Interlocked.Increment(ref ReleaseAttempts);
+        if(Interlocked.Exchange(ref _released,1)!=0)return;
+        Releases++;ReleasePath=path;events.Add("release:"+name+":"+path);
+        if(path=="admission"&&!Admitted)RejectedCallbacks++;
+        if(CleanupFailure is not null)ExceptionDispatchInfo.Capture(CleanupFailure).Throw();
+    }
+}
+sealed class Host : IDisposable
+{
+    internal readonly Provider Provider=new();
+    internal readonly List<string> Events=[];
+    internal readonly Resource[] Resources;
+    internal readonly SchemaQuerySession Session;
+    internal Action<int>? BeforeAcquire,AfterAcquire,AfterAdmission;
+    internal bool DuplicateIdentity;
+    internal int WorkCalls;
+    internal string? Answer;
+    internal Host(string host,int capacity=2)
+    {
+        var a=new XDocumentNode(XDocument.Parse("<n>A</n>"));var b=new XDocumentNode(XDocument.Parse("<n>B</n>"));
+        Resources=[new("A",a,Provider.A,Events),new("B",b,Provider.B,Events)];
+        const string expression="concat(string($a/*),'|',string($b/*))";
+        SchemaQuerySession? session;string? reason;bool supported;
+        if(host=="XPath")supported=Factories.XPath(expression,new CompileOptions(),Provider,capacity,16,out session,out reason);
+        else if(host=="XQuery")supported=Factories.Query("declare variable $a external;declare variable $b external;"+expression,new XQueryCompiler(),false,Provider,capacity,16,out session,out reason);
+        else supported=Factories.Xslt("<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:param name='a'/><xsl:param name='b'/><xsl:variable name='g' select='string(/*)'/><xsl:template match='/'><xsl:sequence select=\"concat(string(/*),'|',$g)\"/></xsl:template></xsl:stylesheet>",new XsltCompiler(),null,a,b,null,_=>true,Provider,capacity,16,out session,out reason);
+        if(!supported)throw new Exception(reason);Session=session!;
+    }
+
+    // Test-host policy: acquisition is synchronous; the returned raw task owns all cleanup.
+    internal async Task<string> Run(CancellationToken cancellation=default,Func<SchemaQuerySession.Operation,SchemaOperationInputs,Task>? afterEvaluation=null)
+    {
+        var resources=new Resource?[2];var admissions=new SchemaEvidenceKernel.Snapshot?[2];Exception? primary=null;
+        string? answer=null;
+        try
+        {
+            for(int n=0;n<2;n++)
+            {
+                cancellation.ThrowIfCancellationRequested();BeforeAcquire?.Invoke(n);
+                resources[n]=Resources[n];resources[n]!.Acquisitions++;Events.Add("acquire:"+(n==0?"A":"B"));
+                AfterAcquire?.Invoke(n);cancellation.ThrowIfCancellationRequested();
+                var resource=resources[n]!;
+                admissions[n]=Session.OpenSnapshot(Session.Environment,DuplicateIdentity&&n==1?Resources[0].Identity:resource.Identity,resource.Assessment,()=>resource.Release("admission"),cancellation);
+                resource.Admitted=true;Events.Add("admit:"+(n==0?"A":"B"));AfterAdmission?.Invoke(n);
+            }
+            cancellation.ThrowIfCancellationRequested();
+            answer=await Session.RunAsync(Session.Environment,[admissions[0]!,admissions[1]!],async operation=>
+            {
+                WorkCalls++;Events.Add("work");
+                var caller=new EvaluationContext().WithVariable("a",XdmValue.FromNode(Resources[0].Node)).WithVariable("b",XdmValue.FromNode(Resources[1].Node));
+                var inputs=operation.CaptureInputs(caller,(snapshot,node)=>Enumerable.Range(0,2).Any(n=>ReferenceEquals(snapshot,admissions[n])&&ReferenceEquals(node,Resources[n].Node)&&Resources[n].Releases==0),16,16);
+                var values=new List<string>();operation.EvaluateAtomic(inputs,16).ForEachAtomic(value=>values.Add(value.ToString()));Answer=string.Join("|",values);
+                if(afterEvaluation is not null)await afterEvaluation(operation,inputs);
+                return Answer;
+            },cancellation);
+        }
+        catch(Exception error){primary=error;}
+        List<Exception>? cleanup=null;
+        for(int n=1;n>=0;n--)
+        {
+            try{if(admissions[n] is not null)admissions[n]!.Dispose();else resources[n]?.Release("caller");}
+            catch(Exception error){(cleanup??=[]).Add(error);}
+        }
+        if(cleanup is not null)
+        {
+            if(primary is not null)cleanup.Insert(0,primary);
+            if(primary is null&&cleanup.Count==1)ExceptionDispatchInfo.Capture(cleanup[0]).Throw();
+            throw new AggregateException("Host acquisition/work and resource cleanup failures.",cleanup);
+        }
+        if(primary is not null)ExceptionDispatchInfo.Capture(primary).Throw();
+        return answer!;
+    }
+    public void Dispose()=>Session.Dispose();
+}
+static class Qualification
+{
+    internal static readonly List<object> Rows=[];
+    static void Check(string id,bool passed){if(!passed)throw new Exception(id);Rows.Add(new{id,passed});}
+    static async Task<Exception> Failure(Func<Task> work){try{await work();}catch(Exception error){return error;}throw new Exception("Expected failure");}
+    static bool Released(Host h,int a,int b)=>h.Resources[0].Releases==a&&h.Resources[1].Releases==b&&h.Resources.All(r=>r.RejectedCallbacks==0&&r.ReleaseAttempts==r.Releases);
+    static bool Reverse(Host h)=>h.Events.Where(e=>e.StartsWith("release:",StringComparison.Ordinal)).Select(e=>e.Split(':')[1]).SequenceEqual(new[]{"B","A"});
+    internal static async Task Run()
+    {
+        foreach(string host in new[]{"XPath","XQuery","XSLT"})
+        {
+            string prefix=host+":";
+            using(var h=new Host(host)){var value=await h.Run();Check(prefix+"success",value=="A|B"&&h.WorkCalls==1&&Released(h,1,1)&&Reverse(h)&&h.Resources.All(r=>r.ReleasePath=="admission"));}
+            using(var h=new Host(host)){var primary=new ApplicationException("acquire-B");h.BeforeAcquire=n=>{if(n==1)throw primary;};var error=await Failure(()=>h.Run());Check(prefix+"second-acquire-failure",ReferenceEquals(error,primary)&&Released(h,1,0)&&h.WorkCalls==0&&h.Resources[1].Acquisitions==0);}
+            using(var h=new Host(host)){h.Resources[1].Assessment=new object();var error=await Failure(()=>h.Run());Check(prefix+"forged-assessment",error is ArgumentException&&Released(h,1,1)&&Reverse(h)&&h.Resources[1].ReleasePath=="caller"&&h.WorkCalls==0);}
+            using(var h=new Host(host)){h.DuplicateIdentity=true;var error=await Failure(()=>h.Run());Check(prefix+"duplicate-identity",error is ArgumentException&&Released(h,1,1)&&Reverse(h)&&h.Resources[1].ReleasePath=="caller"&&h.WorkCalls==0);}
+            using(var h=new Host(host,1)){var error=await Failure(()=>h.Run());Check(prefix+"capacity",error is InvalidOperationException&&Released(h,1,1)&&Reverse(h)&&h.Resources[1].ReleasePath=="caller"&&h.WorkCalls==0);}
+            using(var h=new Host(host)){h.AfterAcquire=n=>{if(n==1)h.Provider.Available=false;};var error=await Failure(()=>h.Run());Check(prefix+"revoked-before-second-admission",error is ObjectDisposedException&&Released(h,1,1)&&Reverse(h)&&h.Resources[1].ReleasePath=="caller"&&h.WorkCalls==0);}
+            using(var h=new Host(host))using(var c=new CancellationTokenSource()){c.Cancel();var error=await Failure(()=>h.Run(c.Token));Check(prefix+"pre-cancel",error is OperationCanceledException&&Released(h,0,0)&&h.Resources.All(r=>r.Acquisitions==0)&&h.WorkCalls==0);}
+            using(var h=new Host(host))using(var c=new CancellationTokenSource()){h.AfterAdmission=n=>{if(n==0)c.Cancel();};var error=await Failure(()=>h.Run(c.Token));Check(prefix+"cancel-after-first-admission",error is OperationCanceledException&&Released(h,1,0)&&h.Resources[1].Acquisitions==0&&h.WorkCalls==0);}
+            using(var h=new Host(host))using(var c=new CancellationTokenSource()){h.AfterAcquire=n=>{if(n==1)c.Cancel();};var error=await Failure(()=>h.Run(c.Token));Check(prefix+"cancel-after-second-acquire",error is OperationCanceledException&&Released(h,1,1)&&Reverse(h)&&h.Resources[1].ReleasePath=="caller"&&h.WorkCalls==0);}
+            using(var h=new Host(host))using(var c=new CancellationTokenSource()){h.AfterAdmission=n=>{if(n==1)c.Cancel();};var error=await Failure(()=>h.Run(c.Token));Check(prefix+"cancel-after-second-admission",error is OperationCanceledException&&Released(h,1,1)&&Reverse(h)&&h.Resources.All(r=>r.ReleasePath=="admission")&&h.WorkCalls==0);}
+            using(var h=new Host(host)){var primary=new ApplicationException("work");var error=await Failure(()=>h.Run(afterEvaluation:(_,_)=>throw primary));Check(prefix+"work-error",ReferenceEquals(error,primary)&&h.Answer=="A|B"&&Released(h,1,1)&&Reverse(h));}
+            using(var h=new Host(host)){var primary=new ApplicationException("work");var a=new Exception("cleanup-A");var b=new Exception("cleanup-B");h.Resources[0].CleanupFailure=a;h.Resources[1].CleanupFailure=b;var error=await Failure(()=>h.Run(afterEvaluation:(_,_)=>throw primary));Check(prefix+"work-and-two-cleanup-errors",error is AggregateException aggregate&&aggregate.InnerExceptions.SequenceEqual(new Exception[]{primary,b,a})&&h.Answer=="A|B"&&Released(h,1,1)&&Reverse(h));}
+            using(var h=new Host(host)){var a=new ApplicationException("cleanup-A");var b=new AggregateException(new Exception("nested-B"));h.Resources[0].CleanupFailure=a;h.Resources[1].CleanupFailure=b;h.Resources[1].Assessment=new object();var error=await Failure(()=>h.Run());Check(prefix+"admission-and-two-cleanup-errors",error is AggregateException aggregate&&aggregate.InnerExceptions.Count==3&&aggregate.InnerExceptions[0] is ArgumentException&&ReferenceEquals(aggregate.InnerExceptions[1],b)&&ReferenceEquals(aggregate.InnerExceptions[2],a)&&Released(h,1,1)&&Reverse(h)&&h.WorkCalls==0);}
+            using(var h=new Host(host)){var b=new ApplicationException("cleanup-B");h.Resources[1].CleanupFailure=b;var error=await Failure(()=>h.Run());Check(prefix+"successful-work-single-cleanup-error",ReferenceEquals(error,b)&&h.Answer=="A|B"&&Released(h,1,1)&&Reverse(h));}
+            using(var h=new Host(host)){var a=new Exception("cleanup-A");var b=new Exception("cleanup-B");h.Resources[0].CleanupFailure=a;h.Resources[1].CleanupFailure=b;var error=await Failure(()=>h.Run());Check(prefix+"successful-work-two-cleanup-errors",error is AggregateException aggregate&&aggregate.InnerExceptions.SequenceEqual(new[]{b,a})&&h.Answer=="A|B"&&Released(h,1,1)&&Reverse(h));}
+            using(var h=new Host(host)){
+                var primary=new ApplicationException("acquirer");var local=new Exception("acquirer-cleanup");var a=new Exception("cleanup-A");AggregateException? wrapped=null;
+                var partial=new Resource("partial-B",new XDocumentNode(XDocument.Parse("<n/>")),h.Provider.B,h.Events){CleanupFailure=local};h.Resources[0].CleanupFailure=a;
+                h.BeforeAcquire=n=>{if(n!=1)return;partial.Acquisitions++;try{throw primary;}catch(Exception error){try{partial.Release("acquirer");}catch(Exception cleanup){wrapped=new AggregateException(error,cleanup);throw wrapped;}throw;}};
+                var error=await Failure(()=>h.Run());Check(prefix+"acquirer-internal-error-and-cleanup",error is AggregateException aggregate&&wrapped is not null&&aggregate.InnerExceptions.SequenceEqual(new Exception[]{wrapped,a})&&wrapped.InnerExceptions.SequenceEqual(new Exception[]{primary,local})&&partial.Acquisitions==1&&partial.Releases==1&&partial.ReleaseAttempts==1&&partial.ReleasePath=="acquirer"&&Released(h,1,0)&&h.WorkCalls==0);
+            }
+            using(var h=new Host(host)){
+                var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                var raw=h.Run(afterEvaluation:async(_,_)=>{entered.SetResult();await resume.Task;});await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));using var cancel=new CancellationTokenSource();cancel.Cancel();var error=await Failure(()=>raw.WaitAsync(cancel.Token));bool held=error is OperationCanceledException&&!raw.IsCompleted&&Released(h,0,0);resume.SetResult();var value=await raw.WaitAsync(TimeSpan.FromSeconds(10));Check(prefix+"canceled-wait-retains-raw",held&&value=="A|B"&&Released(h,1,1)&&Reverse(h));
+            }
+            using(var h=new Host(host)){
+                var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                var raw=h.Run(afterEvaluation:async(op,inputs)=>{entered.SetResult();await resume.Task;op.EvaluateAtomic(inputs,16).ForEachAtomic(_=>{});});await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));h.Session.Dispose();bool held=Released(h,0,0);resume.SetResult();var error=await Failure(()=>raw.WaitAsync(TimeSpan.FromSeconds(10)));Check(prefix+"close-during-raw",held&&error is ObjectDisposedException&&h.Answer=="A|B"&&Released(h,1,1)&&Reverse(h));
+            }
+            using(var h=new Host(host))using(var c=new CancellationTokenSource()){var a=new Exception("cleanup-A");var b=new Exception("cleanup-B");h.Resources[0].CleanupFailure=a;h.Resources[1].CleanupFailure=b;h.AfterAcquire=n=>{if(n==1)c.Cancel();};var error=await Failure(()=>h.Run(c.Token));Check(prefix+"cancellation-and-two-cleanup-errors",error is AggregateException aggregate&&aggregate.InnerExceptions.Count==3&&aggregate.InnerExceptions[0] is OperationCanceledException&&ReferenceEquals(aggregate.InnerExceptions[1],b)&&ReferenceEquals(aggregate.InnerExceptions[2],a)&&Released(h,1,1)&&Reverse(h)&&h.WorkCalls==0);}
+        }
+    }
+}
+static class Factories
+{
+    internal delegate bool XPathFactory(string source,CompileOptions options,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+    internal delegate bool QueryFactory(string source,XQueryCompiler compiler,bool xml11,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+    internal delegate bool XsltFactory(string source,XsltCompiler compiler,string? baseUri,IXdmNode? match,IXdmNode? global,string? template,Func<IXdmNode,bool> owns,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+    private static readonly Type Host=typeof(XsltExecutable).Assembly.GetType("Bosak.Xslt.Api.SchemaHostSessionCompilation")!;
+    private const BindingFlags Flags=BindingFlags.Static|BindingFlags.NonPublic;
+    internal static readonly XPathFactory XPath=Host.GetMethod("TryCompileXPath",Flags)!.CreateDelegate<XPathFactory>();
+    internal static readonly QueryFactory Query=Host.GetMethod("TryCompileXQuery",Flags)!.CreateDelegate<QueryFactory>();
+    internal static readonly XsltFactory Xslt=Host.GetMethod("TryCompileXslt",Flags)!.CreateDelegate<XsltFactory>();
+}

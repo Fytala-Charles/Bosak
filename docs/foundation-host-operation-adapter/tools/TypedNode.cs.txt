@@ -1,0 +1,6 @@
+// Generated reused test double; COPYRIGHT: Fytala; SPDX-License-Identifier: Apache-2.0
+using Bosak.XPath.Core.Xdm;
+sealed class TypedNode(IXdmNode inner):IXdmNode {
+ public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;public string StringValue=>inner.StringValue;public XdmValue TypedValue=>XdmValue.FromDecimal(10m);public bool HasNoTypedValue=>false;public bool IsComplexType=>false;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>("http://www.w3.org/2001/XMLSchema","decimal");
+ public IXdmNode? Parent=>inner.Parent;public IXdmNode? Document=>inner.Document;public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>inner.Children(kind);public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>inner.Attributes(localName,namespaceUri);public XdmSequence Axis(XdmAxis axis)=>inner.Axis(axis);public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>inner.ToXmlString();
+}

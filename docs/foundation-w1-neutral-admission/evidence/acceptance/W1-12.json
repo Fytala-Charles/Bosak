@@ -1,0 +1,20 @@
+{
+  "id": "W1-12",
+  "status": "Passed",
+  "trxSha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e",
+  "results": [
+    {
+      "executionId": "fc78c30e-7fdf-4343-87ac-2b22de2e63cf",
+      "testId": "a0bb1591-5466-f1cd-2bd5-072addb4332d",
+      "testName": "Bosak.XPath.Runtime.Tests.OrdinarySourceAdmissionTests.W1_12_DuplicateMembership",
+      "computerName": "CHARLES",
+      "duration": "00:00:00.0002965",
+      "startTime": "2026-11-03T18:06:50.1239873+01:00",
+      "endTime": "2026-11-03T18:06:50.1239874+01:00",
+      "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+      "outcome": "Passed",
+      "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+      "relativeResultsDirectory": "fc78c30e-7fdf-4343-87ac-2b22de2e63cf"
+    }
+  ]
+}

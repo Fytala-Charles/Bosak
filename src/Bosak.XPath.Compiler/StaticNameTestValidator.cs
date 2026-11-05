@@ -25,6 +25,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 08-10-2026     | REQ-118 4.0-S4: PipelineExprNode validation
+//                      | Charles Korthout | 0.6  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
@@ -88,16 +89,23 @@ internal static class StaticNameTestValidator
         ValidateNode(node, new Scope(resolvePrefix, null, schemaSet, defaultElementNamespace));
     }
 
+    /// <summary>Validates pragma prefixes in declaration bodies without broadening existing name-test checks.</summary>
+    /// <param name="node">The declaration body.</param>
+    /// <param name="resolvePrefix">The declaring module's namespace resolver.</param>
+    public static void ValidatePragmas(XPathAstNode node, Func<string, string?> resolvePrefix)
+        => ValidateNode(node, new Scope(resolvePrefix, null, pragmasOnly: true));
+
     private sealed class Scope
     {
         private readonly Scope? _parent;
         private readonly Dictionary<string, string>? _bindings;
         private readonly Func<string, string?> _resolve;
 
-        public Scope(Func<string, string?> resolve, Scope? parent, XmlSchemaSet? schemaSet = null, string? defaultElementNamespace = null, Dictionary<string, string>? bindings = null)
+        public Scope(Func<string, string?> resolve, Scope? parent, XmlSchemaSet? schemaSet = null, string? defaultElementNamespace = null, Dictionary<string, string>? bindings = null, bool pragmasOnly = false)
         {
             _resolve = resolve;
             _parent = parent;
+            PragmasOnly = pragmasOnly || parent?.PragmasOnly == true;
             _bindings = bindings;
             SchemaSet = schemaSet ?? parent?.SchemaSet;
             DefaultElementNamespace = defaultElementNamespace ?? parent?.DefaultElementNamespace;
@@ -105,6 +113,9 @@ internal static class StaticNameTestValidator
 
         /// <summary>The compiled schema set in scope, when schema-aware; otherwise null.</summary>
         public XmlSchemaSet? SchemaSet { get; }
+
+        /// <summary>Whether this traversal validates only pragma namespace references.</summary>
+        public bool PragmasOnly { get; }
 
         /// <summary>The default element namespace for unprefixed kind-test name arguments.</summary>
         public string? DefaultElementNamespace { get; }
@@ -135,7 +146,7 @@ internal static class StaticNameTestValidator
         switch (node)
         {
             case StepNode step:
-                ValidateStepTest(step.NodeTest, scope);
+                if (!scope.PragmasOnly) ValidateStepTest(step.NodeTest, scope);
                 foreach (var pred in step.Predicates)
                     ValidateNode(pred, scope);
                 break;
@@ -271,6 +282,12 @@ internal static class StaticNameTestValidator
             case ValidateExpressionNode v:
                 ValidateNode(v.Expression, scope);
                 break;
+            case ExtensionExpressionNode extension:
+                foreach (var name in extension.Pragmas)
+                    if (name.Prefix is { Length: > 0 } prefix && string.IsNullOrEmpty(scope.Resolve(prefix)))
+                        throw new InvalidOperationException($"XPST0081: Undeclared pragma prefix '{prefix}'.");
+                ValidateNode(extension.Expression, scope);
+                break;
             case DirectElementConstructorNode elem:
                 ValidateDirectElementConstructor(elem, scope);
                 break;
@@ -364,7 +381,7 @@ internal static class StaticNameTestValidator
 
         // The element name's own prefix is resolved against the element's declarations too
         // (XML namespace scoping; Constr-namespace-1/14).
-        if (!string.IsNullOrEmpty(node.Prefix) && !inner.IsDeclared(node.Prefix))
+        if (!scope.PragmasOnly && !string.IsNullOrEmpty(node.Prefix) && !inner.IsDeclared(node.Prefix))
             throw new InvalidOperationException($"XPST0081: Prefix '{node.Prefix}' is not declared.");
 
         // XQST0040: two attributes in one direct element constructor must not have the same
@@ -377,7 +394,7 @@ internal static class StaticNameTestValidator
             if (attr.Prefix == "xmlns" || (attr.Prefix is null && attr.Name == "xmlns"))
                 continue;
             string attrNs = attr.Prefix is null ? "" : inner.Resolve(attr.Prefix) ?? ("undeclared:" + attr.Prefix);
-            if (!seenAttributes.Add((attrNs, attr.Name)))
+            if (!scope.PragmasOnly && !seenAttributes.Add((attrNs, attr.Name)))
             {
                 string lexical = attr.Prefix is null ? attr.Name : attr.Prefix + ":" + attr.Name;
                 throw new InvalidOperationException($"XQST0040: Duplicate attribute '{lexical}' in a direct element constructor.");

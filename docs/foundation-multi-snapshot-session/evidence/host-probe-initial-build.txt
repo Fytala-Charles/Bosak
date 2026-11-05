@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj (in 54 ms).
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(51,23): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(51,209): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(63,21): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(51,23): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(51,209): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\Program.cs(63,21): error CS0122: 'SchemaHostSessionCompilation' is inaccessible due to its protection level [D:\Development\Bosak\.guard-tmp\multi-snapshot-session\HostProbe\HostProbe.csproj]
+    0 Warning(s)
+    3 Error(s)
+
+Time Elapsed 00:00:00.85

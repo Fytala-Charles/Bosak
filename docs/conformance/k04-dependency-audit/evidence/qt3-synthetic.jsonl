@@ -1,0 +1,31 @@
+{"id":"qt3-spec-XP31\u002B-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-spec-XP31\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-spec-XQ31\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":true}
+{"id":"qt3-spec-XQ31\u002B-False","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-spec-XP31\u002B XQ31\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":true}
+{"id":"qt3-spec-XP31\u002B XQ31\u002B-False","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-spec-XQ40\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-spec-XQ40\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-spec-XX99\u002B-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-spec-XX99\u002B-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-feature-static-typing-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-feature-static-typing-False","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-feature-schemaImport-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-feature-schemaImport-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-feature-fn-load-xquery-module-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-feature-fn-load-xquery-module-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-feature-urn:k04-unknown-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-feature-urn:k04-unknown-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xml-version-1.0-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xml-version-1.0-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xml-version-1.1-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-xml-version-1.1-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xsd-version-1.0-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xsd-version-1.0-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-xsd-version-1.1-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-xsd-version-1.1-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-default-language-en-True","suite":"qt3","xpathSupported":true,"xquerySupported":true}
+{"id":"qt3-default-language-en-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-default-language-fr-CA-True","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-default-language-fr-CA-False","suite":"qt3","xpathSupported":false,"xquerySupported":false}
+{"id":"qt3-contradictory-spec","suite":"qt3","xpathSupported":false,"xquerySupported":true}

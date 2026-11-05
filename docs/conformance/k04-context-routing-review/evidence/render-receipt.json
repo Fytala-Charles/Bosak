@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/README.md.html",
+      "sha256": "8db94ffb4940b952be188d3193bfba0cfdb29ae475c80616f90c24ca73fd6125"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_ARCHITECTURE.md.html",
+      "sha256": "2314ab7dae38a95d5e72fc733ede02d482e324532e6a2f6e8b8d5b499223ced1"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "0d0e86a35aff1777356adb386b1ea2eaf38dc30dad3e8785de97b41b6c57e476"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_INTEGRATION.md.html",
+      "sha256": "01659f56cdb1ffce4aee46b4029ab29b741bda0e95f79c7070bb91a945b50792"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "779bb98a91b85e6c381e1ceb7951b674ce3719bfbafda997687cb5f7f8634dea"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "9ae354eed105837669c1bdf74b0a84bcbc5590d44f2df5690a1d4b279a3b6ed9"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "92728382caaa9ea76ff3fc34b45fadc9ff321392f01f82572da7e968c8a1173a"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "e6318c861b7b5906597afcb07fa6eeb837267be401ab3539b8b75c680db67040"
+    },
+    {
+      "source": "docs/conformance/k04-context-routing-review/README.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_conformance_k04-context-routing-review_README.md.html",
+      "sha256": "004207b8e637090e9b763ac9a683d6f9fe6f8ff6bff233e0acd2a657ca397379"
+    },
+    {
+      "source": "docs/conformance/k04-context-routing-review/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-context-routing-review-render/docs_conformance_k04-context-routing-review_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "a3061c13cc751f3de6dea14c571b97058863f51c578d40303ea3912c0c550514"
+    }
+  ]
+}

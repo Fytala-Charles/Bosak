@@ -1,0 +1,55 @@
+from pathlib import Path
+import json,hashlib,re,collections,subprocess
+import xml.etree.ElementTree as ET
+r=Path('D:/Development/Bosak');c=r/'docs/xpath40-catalog';e=c/'evidence/closure-triage';ns={'f':'http://www.w3.org/2010/09/qt-fots-catalog'}
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(name,x):(e/name).write_text(json.dumps(x,indent=2,ensure_ascii=True)+'\n',encoding='utf-8')
+def git(*args,cwd=r):return subprocess.check_output(['git',*args],cwd=cwd).decode().strip()
+inputs={};allmeta={};skiprows=[];requests=[]
+runner=(r/'tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs').read_text(encoding='utf-8-sig');gates=set(re.findall(r'"([A-Za-z0-9_.-]+)"',runner.split('GatedSets =',1)[1].split('};',1)[0]))
+for suite,folder,expected in [('qt3','qt3tests',679),('qt4','qt4tests',1894)]:
+ root=r/'tests'/folder;catalog=ET.parse(root/'catalog.xml');sets=[];byname=collections.defaultdict(list);total=0;gated=0;sethashes={}
+ for ref in catalog.findall('.//f:test-set',ns):
+  path=root/ref.get('file');tree=ET.parse(path);name=tree.getroot().get('name',ref.get('name'));tests=tree.findall('.//f:test-case',ns);isgate=suite=='qt3' or name in gates;total+=len(tests);gated+=len(tests) if isgate else 0
+  inherited=[dict(Type=d.get('type',''),Value=d.get('value',''),Satisfied=d.get('satisfied','true')=='true') for d in tree.getroot().findall('f:dependency',ns)]
+  sets.append(dict(name=name,file=path.relative_to(root).as_posix(),tests=len(tests),gated=isgate))
+  for test in tests:
+   expr=test.find('f:test',ns);expression=''.join(expr.itertext()) if expr is not None else ''
+   if expr is not None and expr.get('file'):
+    source=path.parent/expr.get('file');expression=source.read_text(encoding='utf-8-sig') if source.exists() else ''
+   deps=inherited+[dict(Type=d.get('type',''),Value=d.get('value',''),Satisfied=d.get('satisfied','true')=='true') for d in test.findall('f:dependency',ns)]
+   byname[test.get('name')].append(dict(Suite=suite,Name=test.get('name'),Set=name,SetFile=path.relative_to(r).as_posix(),SetSha256='',SuiteRoot=root.as_posix(),Expression=expression,Dependencies=deps,EnvironmentRef=(test.find('f:environment',ns).get('ref') if test.find('f:environment',ns) is not None else None),Gated=isgate))
+ reason=None;parsed=[]
+ for line in (e/(suite+'-skips.txt')).read_text(encoding='utf-8-sig').splitlines():
+  m=re.fullmatch(r'=== (\d+) skipped: (.*) ===',line)
+  if m:reason=m[2];continue
+  if not line.strip():continue
+  matches=[x for x in byname[line] if x['Gated']];assert len(matches)==1,(suite,line,len(matches))
+  row=matches[0].copy();p=r/row['SetFile'];row['SetSha256']=sethashes.setdefault(row['SetFile'],sha(p));row['SkipReason']=reason;parsed.append(row)
+ assert len(parsed)==expected
+ for row in parsed:
+  if row['SkipReason']=='Unsupported dependency':requests.append({k:row[k] for k in ['Suite','Name','Expression','Dependencies']})
+ skiprows+=parsed
+ allmeta[suite]=dict(fixtureRevision=git('rev-parse','HEAD',cwd=root),fixtureTrackedStatus=git('status','--porcelain','--untracked-files=no',cwd=root),catalogSha256=sha(root/'catalog.xml'),allCatalogSets=len(sets),allCatalogCases=total,frozenScopeSets=sum(s['gated'] for s in sets),frozenScopeCases=gated,skipped=len(parsed),reasons=dict(collections.Counter(x['SkipReason'] for x in parsed)),sets=sets,inputSetHashes=sethashes)
+dump('skip-cases.json',skiprows);dump('filter-requests.json',requests);dump('suite-inventory.json',allmeta)
+# Build a fresh catalog snapshot without overwriting the retained, historically labelled reconciliation JSON.
+manifest=json.loads((c/'examples/cases.json').read_text());ids=sorted((x['id'] for x in manifest),key=len,reverse=True);pattern=re.compile(r'(?<![A-Za-z0-9_-])(?:'+'|'.join(re.escape(x) for x in ids)+r')(?![A-Za-z0-9_-])')
+entries=[]
+def section(text,n):
+ m=re.search(r'^## '+str(n)+r'\.[^\n]*\n(.*?)(?=^## \d+\.|\Z)',text,re.M|re.S);return m[1].strip() if m else ''
+index=(c/'README.md').read_text(encoding='utf-8-sig')
+for p in sorted(c.glob('*/*.md')):
+ text=p.read_text(encoding='utf-8-sig')
+ if not re.search(r'^## 1\. Name and Classification',text,re.M):continue
+ fields=[int(x) for x in re.findall(r'^## (\d+)\.',text,re.M)];assert fields==list(range(1,17))
+ path=p.relative_to(c).as_posix();assert ']('+path in index
+ uses=section(text,15);links=[]
+ for target in re.findall(r'\]\(([^)]+)\)',uses):
+  if not target.startswith(('http:','https:','#')):
+   q=(p.parent/target.split('#')[0]).resolve();links.append(dict(path=q.relative_to(r).as_posix() if q.is_relative_to(r) else str(q),exists=q.exists()))
+ entries.append(dict(entry=path,sha256=sha(p),classification=section(text,1),sampleCode=section(text,13),knownUses=uses,localEvidenceLinks=links,manifestIds=sorted(set(pattern.findall(uses))),mentionedGateSets=sorted(g for g in gates if re.search(r'(?<![A-Za-z0-9_-])'+re.escape(g)+r'(?![A-Za-z0-9_-])',uses)),acceptance='Pending semantic, applicable-evidence and drift review; literal links are inventory only.'))
+assert len(entries)==76 and len(manifest)==3148
+pins=json.loads((c/'provenance.json').read_text())['entries'];missing=[x for x in pins if not x.get('adoptedSpecRevision')];assert len(missing)==28
+matrix=json.loads((c/'GRAMMAR-COVERAGE-MATRIX.json').read_text());assert len(matrix['rows'])==18
+dump('catalog-inventory.json',dict(base=git('rev-parse','HEAD'),publishedVersion='1.26.3',entries=entries,summary=dict(entries=76,featureChecks=3148,chapterChecks=24,gates=len(gates),entriesMentioningGate=sum(bool(x['mentionedGateSets']) for x in entries),entriesWithoutLiteralGate=sum(not x['mentionedGateSets'] for x in entries),entriesWithManifestIds=sum(bool(x['manifestIds']) for x in entries),missingAdoptedSpecPins=28),missingAdoptedSpecPins=missing,grammarRows=matrix['rows']))
+print(json.dumps(dict(suites={k:{x:v[x] for x in ['allCatalogSets','allCatalogCases','frozenScopeSets','frozenScopeCases','skipped']} for k,v in allmeta.items()},catalogEntries=len(entries),grammarKeys=[x['key'] for x in matrix['rows']])))

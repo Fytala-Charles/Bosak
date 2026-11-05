@@ -1,0 +1,77 @@
+{
+  "kind": "Review evidence integrity; not semantic adoption",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "840bcdca5354058a4545446189daea1059b384ed59da480d8fbbef6383fbe6b7"
+    },
+    {
+      "path": "documentation-checks.json",
+      "sha256": "b083f524ad058d72d48fac189e9b0b53d8468cc1cedfe708de4b8482267ce421"
+    },
+    {
+      "path": "expanded-observations.json",
+      "sha256": "b2cd0789af11856f6c43be44fcae8fa2c6fe90245a0083a43850cf8e0e02979a"
+    },
+    {
+      "path": "expanded-raw.log",
+      "sha256": "6d54c940ea5b8b8ddeab4887ad467ad72a60972a504e09af8d31f72c199f6e0e"
+    },
+    {
+      "path": "initial-observations.json",
+      "sha256": "456b0ed2dc85bf04260a3f05ec3a320fbbc292667994475a8f3bc7a531e6fc11"
+    },
+    {
+      "path": "initial-raw.log",
+      "sha256": "5487aa2707bc4ae8c3fa63d10784eef55938aece06e09cb8271bd166753dfc09"
+    },
+    {
+      "path": "observations-raw.log",
+      "sha256": "a3d12b95553377f69f9ead3e0a4ae2ed3c3106aa9e65bd2eef038a437d360d3f"
+    },
+    {
+      "path": "observations.json",
+      "sha256": "d12cd05bc5a4466f029b49329905f84677e73e334197e38583de21a5cdbe0c8f"
+    },
+    {
+      "path": "probe-Probe.csproj.txt",
+      "sha256": "84d1446983188c6f3e857e015f9265cfe0dab4d0c98007b15072a03c0692d6c1"
+    },
+    {
+      "path": "probe-Program.cs.txt",
+      "sha256": "65a256ab4dd33fa2130609e5d218d39714361ddcf05b89ec27fde714b284f954"
+    },
+    {
+      "path": "repositories.json",
+      "sha256": "880773c2522d552b586656e3f1c7d416c369a26a38666fc5a5d6c3f6ba7469a7"
+    },
+    {
+      "path": "review-audit.py.txt",
+      "sha256": "f41dce03e0e7745dfb06d2679cfedbb9e99efed26c69b2edf826170a9da7371f"
+    },
+    {
+      "path": "review-validation.cjs.txt",
+      "sha256": "009eed96b6915b814f1d4f0315cb1ffb310b66782472da237b11102cf5018025"
+    },
+    {
+      "path": "spec-commit.json",
+      "sha256": "d3a315b95e10660f946c00b43f6215b6e3466f8dbc77cc88e4e1cf1fbe5ed417"
+    },
+    {
+      "path": "SPEC-LICENSE.md",
+      "sha256": "7a3ad7d36b8855bc301276279769da4aff648ea5d7b92f3f023c0823ee948764"
+    },
+    {
+      "path": "spec-pin.json",
+      "sha256": "3b76d880a446878e686f334c6b1e10628aec77e1407bdd5afd1d0231c512c6a2"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "9ed04e95d86cc4f9c33211da47669003d4a9a940ccaf396d481d53825ae15ed1"
+    },
+    {
+      "path": "xpath-datamodel.xml",
+      "sha256": "0eea1a07c21e23c151020575f81fa55c92749e76ba59f4980f19950ae6e0d32f"
+    }
+  ]
+}

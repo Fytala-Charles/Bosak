@@ -1,0 +1,5 @@
+* -text whitespace=cr-at-eol
+evidence/qt3-skips.txt -text whitespace=-blank-at-eof,cr-at-eol
+evidence/qt4-skips.txt -text whitespace=-blank-at-eof,cr-at-eol
+evidence/pre-snapshot-draft/qt3-skips.txt -text whitespace=-blank-at-eof,cr-at-eol
+evidence/pre-snapshot-draft/qt4-skips.txt -text whitespace=-blank-at-eof,cr-at-eol

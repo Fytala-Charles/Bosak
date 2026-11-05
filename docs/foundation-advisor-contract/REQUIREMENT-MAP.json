@@ -1,0 +1,206 @@
+{
+  "date": "2026-10-31",
+  "schemaNeeds": [
+    {
+      "id": "N1",
+      "proposedBoundary": "Authority-owned lookup and Owns/OwnsAssessment/OwnsNodeFacts",
+      "remaining": "Real provider issuance, closure and value/type consistency still need qualification.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N2",
+      "proposedBoundary": "ResolveType/Element/Attribute, IsDerivedFrom/IsAffiliatedWith, complete closure",
+      "remaining": "Descriptor/blocking/substitution semantics and actual non-bounded backend facts remain.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N3",
+      "proposedBoundary": "V2 typed-value/atomic evidence plus ConstructSimpleValue",
+      "remaining": "Carrier, list/union construction, precision, CLR equality and allocation decisions remain.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N4",
+      "proposedBoundary": "ISchemaAssessor.Bind plus advisor.Assess and episode capture",
+      "remaining": "Actual assertion/CTA backend and host-language validation mappings are not implemented.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N5",
+      "proposedBoundary": "Original evidence, original node facts and no-rewrite view",
+      "remaining": "Real preserve/strip/copy, incomplete/invalid PSVI and query-root routing need integration.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N6",
+      "proposedBoundary": "Directional Establish and endpoint/profile-bound view",
+      "remaining": "Actual compatibility proof/algorithm/provider capability and cross-universe fixtures remain.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N7",
+      "proposedBoundary": "Borrowed input/advisor guards; no required Dispose on old types",
+      "remaining": "Actual session/snapshot/worker cancellation, publication races and final API placement remain.",
+      "status": "Proposed; not accepted"
+    },
+    {
+      "id": "N8",
+      "proposedBoundary": "Separate query, schema, authority, source and snapshot interfaces",
+      "remaining": "Actual compiler-issued producer, descriptor encoding and execution capture remain.",
+      "status": "Proposed; not accepted"
+    }
+  ],
+  "xmlDbNeeds": "FXR-01?15/FXG-01?06 remain preserved: no required schema channel or node/sequence/layout/storage change; provider guard and snapshot source are explicit.",
+  "braidNeeds": {
+    "BF140-01": "Required integration/qualification remains pending against this proposed environment/input/advisor/view boundary.",
+    "BF140-02": "Required integration/qualification remains pending against this proposed environment/input/advisor/view boundary.",
+    "BF140-03": "Required integration/qualification remains pending against this proposed environment/input/advisor/view boundary.",
+    "BF140-04": "Required integration/qualification remains pending against this proposed environment/input/advisor/view boundary.",
+    "BF140-05": "Required integration/qualification remains pending against this proposed environment/input/advisor/view boundary."
+  },
+  "surface": [
+    {
+      "type": "C13901.Draft.IQueryOperationLease",
+      "disposition": "Host/provider placement pending; not selected as stable Core API"
+    },
+    {
+      "type": "C13901.Draft.IQueryOperationLifetime",
+      "disposition": "Host/provider placement pending; not selected as stable Core API"
+    },
+    {
+      "type": "C13901.Draft.IQuerySemanticEnvironment",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.IQueryStaticContext",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAnnotatedNode",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentAdvisor",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentEpisode",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentEvidence",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentInput",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentOrigin",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentResult",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessor",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAtomicProvenance",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaAuthority",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaCompatibilityAuthority",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaCompatibilityResult",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaCompatibilityView",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaComponentHandle",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaNodeFacts",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaSnapshotBinding",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaSourceBinding",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.ISchemaTypedValue",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.QueryHostLanguage",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAssessmentDiagnostic",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAssessmentLimits",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAssessmentMode",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAssessmentRequest",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAssessmentStatus",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaAtomics",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaCompatibilityDecision",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaDiagnosticLocation",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaExpandedName",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaLanguageVersion",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaResult`1",
+      "disposition": "Review proposal only; not accepted"
+    },
+    {
+      "type": "C13901.Draft.SchemaResultKind",
+      "disposition": "Review proposal only; not accepted"
+    }
+  ],
+  "acceptedSignatures": [],
+  "productionImplementationAuthorized": false,
+  "apiFrozen": false
+}

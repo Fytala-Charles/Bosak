@@ -1,0 +1,145 @@
+{
+  "scope": "Declaration compilation and current-carrier metadata only; not runtime contract/performance acceptance",
+  "pointerSize": 8,
+  "currentXdmValueSize": 48,
+  "currentXdmValueFields": [
+    {
+      "name": "_kind",
+      "type": "Bosak.XPath.Core.Xdm.XdmValueKind"
+    },
+    {
+      "name": "_integer",
+      "type": "System.Int64"
+    },
+    {
+      "name": "_double",
+      "type": "System.Double"
+    },
+    {
+      "name": "_reference",
+      "type": "System.Object"
+    },
+    {
+      "name": "_schemaTypeName",
+      "type": "System.String"
+    },
+    {
+      "name": "_userSchemaTypeName",
+      "type": "System.String"
+    }
+  ],
+  "loadedCoreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "types": [
+    {
+      "type": "C13901.Draft.IQueryOperationLease",
+      "members": [
+        "Void ThrowIfUnavailable(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "type": "C13901.Draft.IQueryOperationLifetime",
+      "members": [
+        "C13901.Draft.IQueryOperationLease Enter(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaAnnotatedNode",
+      "members": [
+        "C13901.Draft.ISchemaNodeFacts get_OriginalSchemaFacts()",
+        "C13901.Draft.ISchemaNodeFacts OriginalSchemaFacts"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaAssessmentOrigin",
+      "members": [
+        "C13901.Draft.ISchemaSourceBinding get_Source()",
+        "C13901.Draft.ISchemaSourceBinding Source"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaAtomicProvenance",
+      "members": [
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.ISchemaComponentHandle ActualType",
+        "C13901.Draft.ISchemaComponentHandle DeclaredType",
+        "C13901.Draft.ISchemaComponentHandle get_ActualType()",
+        "C13901.Draft.ISchemaComponentHandle get_DeclaredType()"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaAuthority",
+      "members": [
+        "Boolean Owns(C13901.Draft.ISchemaComponentHandle)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsAffiliatedWith(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsDerivedFrom(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Boolean] IsSameComponent(C13901.Draft.ISchemaComponentHandle, C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)",
+        "C13901.Draft.SchemaResult\u00601[System.Collections.Immutable.ImmutableArray\u00601[C13901.Draft.ISchemaComponentHandle]] GetComponentClosure(C13901.Draft.ISchemaComponentHandle, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaComponentHandle",
+      "members": [
+        "C13901.Draft.ISchemaAuthority Authority",
+        "C13901.Draft.ISchemaAuthority get_Authority()"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaNodeFacts",
+      "members": [
+        "Boolean get_HasNoTypedValue()",
+        "Boolean get_IsNilled()",
+        "Boolean HasNoTypedValue",
+        "Boolean IsNilled",
+        "C13901.Draft.ISchemaAssessmentOrigin get_Origin()",
+        "C13901.Draft.ISchemaAssessmentOrigin Origin",
+        "C13901.Draft.ISchemaComponentHandle Declaration",
+        "C13901.Draft.ISchemaComponentHandle get_Declaration()",
+        "C13901.Draft.ISchemaComponentHandle get_Type()",
+        "C13901.Draft.ISchemaComponentHandle Type",
+        "C13901.Draft.SchemaResult\u00601[C13901.Draft.ISchemaTypedValue] ReadTypedValue(System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "type": "C13901.Draft.ISchemaSourceBinding",
+      "members": []
+    },
+    {
+      "type": "C13901.Draft.ISchemaTypedValue",
+      "members": [
+        "Boolean get_IsList()",
+        "Boolean IsList",
+        "Bosak.XPath.Core.Xdm.XdmSequence Atomics",
+        "Bosak.XPath.Core.Xdm.XdmSequence get_Atomics()",
+        "C13901.Draft.ISchemaComponentHandle get_GoverningType()",
+        "C13901.Draft.ISchemaComponentHandle GoverningType"
+      ]
+    },
+    {
+      "type": "C13901.Draft.SchemaAtomics",
+      "members": [
+        "Boolean TryGetProvenance(Bosak.XPath.Core.Xdm.XdmValue ByRef, C13901.Draft.ISchemaAtomicProvenance ByRef)"
+      ]
+    },
+    {
+      "type": "C13901.Draft.SchemaResult\u00601",
+      "members": [
+        "C13901.Draft.SchemaResultKind get_Kind()",
+        "C13901.Draft.SchemaResultKind Kind",
+        "System.String DiagnosticCode",
+        "System.String get_DiagnosticCode()",
+        "T get_Value()",
+        "T Value"
+      ]
+    },
+    {
+      "type": "C13901.Draft.SchemaResultKind",
+      "members": [
+        "C13901.Draft.SchemaResultKind NotFound",
+        "C13901.Draft.SchemaResultKind Supported",
+        "C13901.Draft.SchemaResultKind Unsupported",
+        "Int32 value__"
+      ]
+    }
+  ]
+}

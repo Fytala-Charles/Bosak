@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-29",
+  "scope": "Uncommitted Schema 0.8 bounded count assertion implementation qualification",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "ADOPTION.md",
+      "bytes": 2564,
+      "sha256": "857159b331481fe5b756ddb16f92cd24e22b39cd111b4ddecf41b9ac50fa8b6b"
+    },
+    {
+      "path": "ASSESSMENT-GUIDE.md",
+      "bytes": 18550,
+      "sha256": "14c30c5042a29f3a96b9433d2b2966221131e40393cb5ac780d8831deb98cc90"
+    },
+    {
+      "path": "evidence/before57.trx",
+      "bytes": 155492,
+      "sha256": "6abd6db39a27a2dbf2df855015eaf1830bd016f108c08d0bb587b8509f63ef95"
+    },
+    {
+      "path": "evidence/before57.txt",
+      "bytes": 73046,
+      "sha256": "e4bb841ea1c575f260df97ec2982eeb6bc2c72c0d05352ac0640bb7f55f1bd9c"
+    },
+    {
+      "path": "evidence/build.txt",
+      "bytes": 3018,
+      "sha256": "a3c460bb69c6ed90cd6f53effa3d45c6790808469c9e605e54abe96bf7fa85b3"
+    },
+    {
+      "path": "evidence/cohort-comparison.json",
+      "bytes": 11474,
+      "sha256": "484b04250976bad0ffcd534c3bd70d3528ab1891d8b4bf1d419888381976e2ff"
+    },
+    {
+      "path": "evidence/core-inheritance-proof.json",
+      "bytes": 1042,
+      "sha256": "68557e1adf177e681f0965a285a8c888e4560c017bf11d9e79c16eb5372b063a"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 3907,
+      "sha256": "de73bba02662bcd6896b51b2912a1bf3bd46cd6c57fc960bd8d4ca25ae338a83"
+    },
+    {
+      "path": "evidence/example.txt",
+      "bytes": 804,
+      "sha256": "a06b183150bac3f664561cabe0dc63147ef6c20c16dd097a4821dc746ae3b2ff"
+    },
+    {
+      "path": "evidence/expectation-delta.json",
+      "bytes": 572,
+      "sha256": "69d4da8213ce130ad13d8f78117a4a73c09ffd862b4b85bb010df65d5deb2afd"
+    },
+    {
+      "path": "evidence/final.trx",
+      "bytes": 590794,
+      "sha256": "b64b0caab3f6f09d83f295dac75041c6db27d6cbc7c99ed09608c4122a707ff4"
+    },
+    {
+      "path": "evidence/final397.txt",
+      "bytes": 3428,
+      "sha256": "93a643a3758b7344a962f1a110506bc73051663e885b6c851ec212987e6005d5"
+    },
+    {
+      "path": "evidence/initial.trx",
+      "bytes": 581642,
+      "sha256": "443c4bdedecf0b1ceb1f46f54570c7f0d35537bfbc0ee288ad1b7450d85fba60"
+    },
+    {
+      "path": "evidence/initial391.txt",
+      "bytes": 3590,
+      "sha256": "9928723273807ba82960b34c2d4dbab0cbba1b30ed5874164ce157d77617e1c7"
+    },
+    {
+      "path": "evidence/legacy-cohort-comparison.json",
+      "bytes": 359,
+      "sha256": "e1635369e87dd7a6898f640ac3f900d5782fb65056576e31b8946e2d239f1273"
+    },
+    {
+      "path": "evidence/original-repeated-tests.cs.txt",
+      "bytes": 23245,
+      "sha256": "4ab05c059b756180c74ffe4465e14b7961d1a8efb8e44cff1d2acab637795f6b"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 489,
+      "sha256": "d37f6b000c2e8015f9a86f381a6e47dd636b8ab1095ac9259c203e58c2267896"
+    },
+    {
+      "path": "evidence/README.md",
+      "bytes": 2230,
+      "sha256": "89ce020149a31d1d8455373c9f17b854174d2d03030fdfcde2de8f5786a33d6f"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/source/examples/Bosak.Schema.Assessment.Example/Program.cs.txt",
+      "bytes": 6209,
+      "sha256": "77f0cb992ebdd109cb2232cd210030ad98f8116af591a1b6eff1757c40da9b8d"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs.txt",
+      "bytes": 15112,
+      "sha256": "f2ad4cda98a54769df68d40f654711e4e0b9a4e2ebd4df975e88cdb725b4ccff"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs.txt",
+      "bytes": 12063,
+      "sha256": "050a3166c10e4a16ec9455fdf389261b84d9ca0d9113c89e28c1431ad4099d2f"
+    },
+    {
+      "path": "evidence/source/src/Bosak.Schema/Bosak.Schema.csproj.txt",
+      "bytes": 1212,
+      "sha256": "32de3c60b273f1c462426ffae68589ec7ebf098cd10ee2ea424b71e806cc13ef"
+    },
+    {
+      "path": "evidence/source/tests/Bosak.Schema.Tests/Xsd11/CountAssertionAssessmentTests.cs.txt",
+      "bytes": 19574,
+      "sha256": "726c9e399dfcf828e04b5bce9c6652da1081d8be0f9ae2018abba9fe43a4de47"
+    },
+    {
+      "path": "evidence/source/tests/Bosak.Schema.Tests/Xsd11/RepeatedDecimalAssessmentTests.cs.txt",
+      "bytes": 23792,
+      "sha256": "2aaaf672884236b60755e837dee4b5a4b9f28a09a61b49162c6d57253ddd7b27"
+    },
+    {
+      "path": "evidence/source-identities.json",
+      "bytes": 765,
+      "sha256": "51e1935d14ed99662470646ed6936dae145be60606929b01580c150b42f6ce18"
+    },
+    {
+      "path": "GUIDE.md",
+      "bytes": 5782,
+      "sha256": "1e93c88e92179600ebaab5884d535f3f86b81147794fc1467dd97504d60a0ad5"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3010,
+      "sha256": "fea1da0e35bcce891c5a3563652126ad860ad5c98cfdfcafd0dbfcc998a99d83"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 2429,
+      "sha256": "2aaad2d86ef9f19fad60e716329356cf847abf8a6bc19c2eb07a0c0854a4fcce"
+    }
+  ]
+}

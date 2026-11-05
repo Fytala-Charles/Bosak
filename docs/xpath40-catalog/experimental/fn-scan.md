@@ -5,6 +5,10 @@
   <p>Catalog entry — Functions · Experimental</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified bounded Experimental contract**. Experimental gate retry does not promote frozen API availability; no bounded-memory or general callback-conversion promise. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
+**C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
+
 <!-- Catalog entry: fn:scan. Template: see ../README.md §1.1. -->
 
 ## 1. Name and Classification
@@ -82,6 +86,11 @@ Liabilities: **experimental-tier semantics may change as the draft moves** — t
 
 ## 12. Implementation
 
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers REQ123-scan. scan is Experimental-only in calls and lookup, with N+1 single-member-array states and empty input retaining the seed. Its existing gate retry is not frozen API promotion. No new function syntax or frozen promotion. C02 callback semantics and C06 host/profile ownership remain distinct from membership in GatedSets. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles N+1 accumulator states retain single-member array boundaries; Empty input retains the initial state; Position-aware callback; Experimental-only availability. **Boundaries:** No frozen-profile adoption or constant-memory guarantee; generic function coercion beyond verified callbacks is not certified. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Files: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (experimental signature + implementation), `src/Bosak.XPath.Api/XPath31Expression.cs` (experimental-aware static gate), `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (`IsXPath40Experimental`). Version gate: XPST0017 at `XPath31` **and** `XPath40`; legal only at `XPath40Experimental`. Unit evidence: experimental-level tests in `Bosak.XPath.Standard.Tests` (see REQ-123 S1).
 
 ## 13. Sample Code
@@ -91,10 +100,14 @@ Practical case: [stock ledger](../examples/fn-scan/main.xpath). The
 balance, displayed as `100`. Both cases require `XPath40Experimental`; the
 [earlier baseline](../examples/fn-scan/before.xpath) runs at `XPath31`.
 
+Run each query independently at `XPath40Experimental`:
+
 ~~~xquery
 fn:scan((1, 2, 3), 0, fn($acc, $it) { $acc + $it })
   (: → [0], [1], [3], [6] — every running total, init first :)
+~~~
 
+~~~xquery
 fn:scan((), "start", fn($acc, $it) { $acc || $it })
   (: → ["start"] — empty input yields just the init :)
 ~~~

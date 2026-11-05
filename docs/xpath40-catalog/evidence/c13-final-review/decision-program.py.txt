@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,re
+C=Path('docs/xpath40-catalog');E=C/'evidence/c13-final-review'
+def load(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+raw=load(E/'retained-findings.json');decisions={}
+for v in raw:
+ id=v['id'];work=v['workpackage'];r=v['original']
+ category='Open technical follow-up'
+ proposal='Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.'
+ if work=='C03' and v['sourceId'].startswith('T') or id=='C05-K01-generic-jnode-model':
+  category='Documented implementation or context boundary';proposal='Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.'
+ if id in ['C04-G05-remaining-combinations','C05-K04-host-context','C05-K05-remaining-combinations','C06-H04','C07-L01','C07-L03']:
+  category='Bounded review and final acceptance obligation';proposal='C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.'
+ if id=='C04-G04-late-binding-boundary':
+  category='Reviewed host distinction; remaining complete-mode boundary';proposal='Use C06-H01: open API late binding and a permitted lazy XSLT mode are distinct from the mandatory complete static-detection mode, which remains unproved. Preserve that boundary without classifying every lazy result as an engine defect.'
+ if id=='C07-L02':
+  category='Previously approved historical policy';proposal='Already disposed by the exact C08 owner approval:26 legacy exceptions and two non-adoptions. Retain all28 original nulls; no new exception or recovered adoption revision is proposed.'
+ decisions[id]=dict(category=category,proposedCatalogDisposition=proposal,technicalStatus=r.get('status',r.get('kind','Retain original receipt')),owner=r.get('owner'),approvalStatus='Pending C13 owner acceptance' if id!='C07-L02' else 'C08 historical policy already approved; no semantic acceptance implied')
+decisions['C10-highest-source-consistency']=dict(category='Unresolved specification-source inconsistency',proposedCatalogDisposition='Retain both pinned algorithm/contextual-comparison text and the conflicting highest example with independent expectations. Accept the documented uncertainty as a catalog boundary, request source clarification before a semantic correction, and do not label the result an unqualified engine defect.',technicalStatus='Open source-consistency review; no upstream submission',owner='Bosak function maintainer and specification reviewer',approvalStatus='Pending C13 owner acceptance')
+criteria={
+'AC-01':dict(proposal='Accept landed-slice/name/grammar traceability for the exact bounded catalog and the already-approved C08 historical policy; retain every unsupported/current-draft mismatch as an explicit technical follow-up.',evidence=['CURRENT-FUNCTION-INVENTORY.json','GRAMMAR-COVERAGE-MATRIX.json','ADOPTION-DISPOSITIONS.json']),
+'AC-02':dict(proposal='Accept the76 current lifecycle classifications and19 original/wider disposition groups, preserving historical URLs, refusals, alternatives, non-equivalence and exact legacy history limits.',evidence=['LIFECYCLE-RECONCILIATION.json','ADOPTION-HISTORY-RESEARCH.md']),
+'AC-03':dict(proposal='Accept applicable evidence for235 bounded contract groups across76 entries and the four worked chapters. Gates apply only where assigned; XSLT/deferred/refused forms use their named tests, exact examples or alternatives. The48 retained batch unmet observations remain unmet, including two disputed-source observations.',evidence=[f'SEMANTIC-REVIEW-BATCH-{i}.json' for i in range(1,5)]),
+'AC-04':dict(proposal='Accept the16-field structure, retained paths, synchronized index and feature-specific language-alignment warnings for the reviewed scope. No universal current-draft parity follows.',evidence=['README.md','evidence/c13-final-review/entry-sources.json']),
+'AC-05':dict(proposal='Maintain the previously met discoverability criterion and synchronized registry/canonical links.',evidence=['../../README.md','../INTEGRATION.md','../REQ-118-xpath-xslt-40.md'])}
+out=dict(date='2026-10-26',status='Prepared for owner decision; not approved',documentationBase='1ec2c210',engineSource='08fbdc31ac79baac04cf00f4773ec6d0b2dd247f',reviewSpec='b4723ff52fd9d4fabf2b4cd33bd44f21939c512c',proposalId='REQ-126-C13-bounded-catalog-acceptance-v1',criteria=criteria,findings=decisions,acceptanceReceipt=None,policy='Proposed disposition only. C13 remains Open and REQ-126 In Progress until explicit owner acceptance. No engine defect is fixed, waived, suppressed, reclassified as a passing control or automatically committed for implementation. The owner may require corrections before acceptance.')
+(C/'C13-ACCEPTANCE-PROPOSAL.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+# Correct the remaining Known Uses evidence placement, retaining original text and paths.
+names=['data-model/jnode-template-boundary.md','deferred/external-input-functions.md','deferred/fn-apply-templates.md','deferred/language-streaming-scope.md','deferred/serialization-parameters.md','functions/numeric-import-diagnostics.md'];batches={v['entry']:(i,v) for i in range(1,5) for v in load(C/f'SEMANTIC-REVIEW-BATCH-{i}.json')['entries']};sources=load(E/'entry-sources.json');corrections=[]
+for n in names:
+ i,v=batches[n];p=C/n;t=p.read_text(encoding='utf-8');section=re.search(r'^## 15\.[^\n]*\n(.*?)(?=^## \d+\.|\Z)',t,re.M|re.S);before=section.group(1).strip();methods=[x for x in v['namedTests'] if x['methods']]
+ named='; '.join('['+x['methods'][0]+']('+ '../../../'+x['file']+')' for x in methods[:2])
+ if n=='functions/numeric-import-diagnostics.md':gate='The current XPath gate assignment is `fn-op`; is-NaN and atomic-type-annotation are explicitly unassigned and use the named engine tests and examples. The empty atomic-type-annotation argument remains a known XPTY0004 mismatch (C02-F08).'
+ else:gate='A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape.'
+ addition='**C13 applicable-evidence placement:** '+gate+f' [{v["caseCount"]} exact case receipts](../SEMANTIC-REVIEW-BATCH-{i}.json) retain input, mode/host, expected output/error and alternatives. Named evidence: '+named+'. The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.'
+ after=before+'\n\n'+addition;t=t[:section.start(1)]+ '\n'+after+'\n\n'+t[section.end(1):];p.write_text(t,encoding='utf-8');corrections.append(dict(entry=n,section='15',before=before,after=after,reason='Place applicable evidence and explicit gate applicability in Known Uses itself; preserve all existing claims and sample expressions.'))
+(E/'documentation-corrections.json').write_text(json.dumps(corrections,indent=2,ensure_ascii=False)+'\n',encoding='utf-8');print(len(decisions),'proposed disposition records;',len(corrections),'Known Uses corrections')

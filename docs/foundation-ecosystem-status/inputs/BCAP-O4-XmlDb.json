@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O4-XmlDb",
+  "packet": "BCAP-O4",
+  "owner": "XmlDb",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+  "signer": "Codex - XmlDb fix-pin source/design review authorized by repository owner; not a human acceptance signature",
+  "date": "2026-11-02",
+  "profile": "Scoped R2/BCAP design acceptance for sequential ordinary untyped XML on product Core 1.26.2, with current-pin native snapshot cleanup/lifetime evidence at XmlDb 0d18e91dc42db4831e50bf9e902f95fae7077d6d. Actual native resources and the internal trusted-host guard are qualified by 190 added cases and 4482 full cases on each Windows/Linux host. This is not execution of the throwing BCAP public declarations, a public adapter or an XSLT candidate worker. No Schema authority, accepted budget, R4/C45, API freeze, package adoption, source replacement or reclamation is accepted. The native release-fault model is before/after/no-op injection around real handles, not actual kernel-close errors or physical durability.",
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": "Fix pin 0d18e91dc42db4831e50bf9e902f95fae7077d6d: EmbeddedXmlDatabase.BeginRead/OpenPinnedSnapshot captures its actual GenerationLease FileStream into SnapshotResources; the snapshot owns it independently of the coordinator. EpochScalarCoordinator/EpochEmptyCoordinator.BeginRead acquires child admission before the coordinator gate and transfers ownership before calling OpenAdmittedEpoch, preventing caller double cleanup after failed callee admission. ImmutableXmlSnapshot attaches one group owning admission then generation, with reverse release order. EpochAdmissionLease and base/generation reader validation preserve partially acquired native ownership. ReadOnlyEpochDatabase children retain independent admission ownership. SnapshotWorkOwner privately adopts one actual snapshot and retains it through one complete raw callback/task and its deferred reads/serialization; it does not adopt the store/coordinator or issue per-node/Schema authority. Rejected pre-admission overlap/reentry/close/pre-cancellation invokes no callback, while post-acquisition rejection attempts all locally owned releases once. Before-native fault latching and retained-source refusal are qualified. BCAP same/distinct match/global role admission remains represented by the declared design, not implemented by this current-pin host guard."
+    },
+    {
+      "id": "O4-Q2",
+      "answer": "XDB-LIFE-01 source defects are fixed and qualified within the recorded native profile. OpenPinnedSnapshot faults its owner before cleanup; OpenAdmittedEpoch replaces the masking EpochSnapshotLifetime try/finally path with ordered SnapshotResources ownership. Snapshot.Dispose revokes data access before cleanup and retains the group on failure instead of losing the lease reference. Exact original primary and every original cleanup object survive in order without flattening provider AggregateException boundaries. Partial native validation/acquisition, corrupt metadata, stale commit and successful commit followed by cleanup error are covered. Each owned resource has one native attempt; repeated disposal rethrows cached diagnostics. Before/no-op faults retain actual handles; after-mode closes the actual handle but still records Unknown. Snapshot/owner-ledger/local-diagnostic references retain unknown groups. OS probes and fixture-only forced close cannot upgrade Unknown or authorize retry. All 139 added Storage cases and 51 added integration/process cases pass on both full runs; 32 simultaneous close/cancel/raw-ending schedules and 24 child-holder attempts per platform observe actual OS exclusion, process exit and unchanged retained history. Existing normal coordinator writer-retention/disposal outside failed-open cleanup is not newly qualified as a universal release-failure contract. This finite evidence is not real kernel-close failure, physical power-loss or ENOSPC proof."
+    },
+    {
+      "id": "O4-Q3",
+      "answer": "Accept only one trusted raw callback/task per SnapshotWorkOwner, sequential per-snapshot access and joined dedicated-thread handoff. Duplicate adoption, overlap/reentry, pre-cancellation and work after close reject before callback. Close revokes new work and defers snapshot disposal until actual raw work plus deferred consumption/serialization ends; canceled or timed-out awaits do not drain it. Raw work/cancellation object identity is preserved with all cleanup objects. Work failure may coexist with confirmed physical drain; native cleanup Unknown faults WhenDrained, remains retained and never retries. Work and cleanup run outside the owner gate. Dedicated-thread tests use real persistent XPath on Core 1.26.2 and XML serialization, not BCAP CaptureTransform or the new XSLT worker. Public direct concurrent snapshot access/disposal, arbitrary unregistered background work and escaped nested graphs remain unsupported. Cached Current/identity helpers are not universal availability checks; no recursive map/array/exception detachment is claimed. Copied scalar strings can be independent; borrowed nodes and original error graphs confer no renewed authority. The trusted host must supply a task covering all raw use; no new node/enumerator Dispose is required."
+    },
+    {
+      "id": "O4-Q4",
+      "answer": "No additional required Core signature is demonstrated by these actual resource semantics; unresolvedRequiredSignatureGaps is explicitly empty. Product Core stays 1.26.2 and the 95 exported Storage signatures match the baseline. The ordinary membership bridge and cleanup/lifetime implementation are committed at 0d18e91dc42db4831e50bf9e902f95fae7077d6d; every persisted format, stable lease identity, frozen fixture and retained history remains unchanged, CanReclaim=false. AcceptWithScope concerns this exact 47-type design and the finite current-pin provider disposition only. Before actual candidate/R4 acceptance, Core must supply an implemented ordinary-source/operation/capture route without fabricated Schema authority; then qualify same/distinct/duplicate/context/global inputs, rejection before getters, close through actual XSLT serialization, cancellation/timeouts/kill, process/currentness/recovery, outcome/export policy and dedicated XSLT worker handoff against exact source/binary pins. Select representative workloads and budgets separately. None of those unrun integrations or human/Core joint acceptance is inferred from local tests. Original BCAP O4 Revise bytes remain historical; this versioned follow-up is a fresh scoped disposition, not an overwrite."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "Exact BCAP manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688; original O4-Q1..Q4 and REVIEW.md R01..R08. Declaration source inputs/proposal/Xslt.cs.txt lines 59/67 still throw Proposal only. No proposed public body executed."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Committed/pushed XmlDb 0d18e91dc42db4831e50bf9e902f95fae7077d6d: ADR-040, docs/foundation-requirements/native-lifetime/README.md and native result SHA256 64270ae41e1aef71bcfb9895051f8dafb483679727003b378be401847bd5d0f8; this follow-up INPUTS.json binds 21 native/membership runtime/test inputs to exact Git blobs and original qualified working hashes."
+    },
+    {
+      "kind": "RuntimeQualification",
+      "reference": "Current-pin provider-only evidence: 3572 Storage + 863 Integration + 47 Xdm = 4482 passes/platform, zero failures/skips, equal exact IDs; prior4292 retained +190 new. Native result selectedWindows/selectedLinux/focused arrays pin TRX files/times; all295 other prior inputs and retained artifacts verify unchanged. Windows Debug, isolated Linux Release; matching inherited guarded IDs do not equate bodies. This evidence does not set public BCAP runtimeQualification=true."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "PersistentXdmNode.OwnsNode current-pin membership and 20 added cases: docs/foundation-requirements/membership/results.json, SHA256 1809e3e3ac690f48dbc7fc27d0d2812755e679990c3b132354238d57e05faafe; 23 Xdm exported signatures unchanged. Internal membership is not Schema issuance or the new public adapter."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Previous BCAP-O4-XmlDb.response.json SHA256 92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376 and original O4-XmlDb hash 7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243 remain unchanged. Exact declaration/private-engine/cost dossiers retain their original scope; no synthetic or current-pin measurements become R4 budgets."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O4-XmlDb",
+  "reviewMode": "DeltaAndExistingProviderRevision",
+  "deltaApplicability": "R01: declared owning/borrowing capture entries represent the needed design route; their public bodies still throw and the current-pin internal guard is not that SDK. R02: capture/receipts may survive failed cleanup diagnostically; overall IsSuccess must be false on admission/work/execution/cleanup/partial/cancel errors. Copy mutable output bytes and properties under an explicit owner policy before export; deep immutability is not inferred. R03: preserve separate original admission/work/execution and ordered cleanup objects, provider aggregate boundaries and no retry; the committed native fix now prevents the known provider-side masking, within the recorded profile. R04: invocation-only selection, duplicate option and RawResult refusal, finite controls and explicitly qualified sequential gate composition remain required. Message counts do not bound individual message bytes or whole-engine/native/stack memory. No additional required Core limit is demonstrated by this finite ordinary profile; budgets and other owners remain separate. R05: ordinary membership and internal trusted-host raw lifetime are qualified on actual current-pin snapshots; BCAP foreign/closed operation and shared/distinct role admission through actual XSLT serialization are still candidate-specific follow-up, not Schema authority or runtime acceptance. R06: original graphs stay local/sensitive with the explicit projection/refusal policy below. R07: actual current-pin dedicated-thread XPath/serialization, wait cancellation, close/reentry and process-holder termination are qualified; exact new-Core/XSLT handoff, source-currentness workload policy and accepted costs remain open before R4. R08: AcceptWithScope is fresh exact-manifest design acceptance based on the committed finite provider fix; no required signature gap is demonstrated and no R4/C45/API freeze/pin or native public SDK acceptance follows.",
+  "originalExceptionGraphDisposition": "R03/R06: original exceptions are local diagnostic references only. Preserve original object identity, reference-deduplicated execution observations, provider AggregateException boundaries and reverse-acquisition cleanup order; admission/rollback belongs in AdmissionError rather than later CleanupErrors. These channels cannot reconstruct a failure already masked inside XmlDb. Exception/Data/InnerException graphs may retain live provider nodes, paths or sensitive state; retention is not detachment, immutable data or renewed authority. Do not serialize/publish the raw exception or run-result graph, blindly call arbitrary exception getters/ToString, or traverse Data/inner provider objects after revocation. Any future export needs owner-controlled bounded allowlisted primitive projection/redaction while required resources remain valid; default to withholding unknown payloads and sensitive paths/URIs. No generic recursive sanitizer, safe-IPC guarantee, automatic release retry or native cleanup success is inferred. No additional Core signature for this local-only diagnostic profile is demonstrated. The native fix now preserves these original local references; this does not turn them into detached data, safe IPC or confirmed release. No raw exception graph is included in this response; process test diagnostics use bounded primitive labels/counts.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+  "previousBcapResponseSha256": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "providerFixQualified": true,
+  "remainingCandidateQualificationItems": [
+    "Implemented ordinary-input/operation/BCAP adapter on an exact Core candidate without fabricated Schema authority",
+    "Actual new-Core/XSLT worker and role/outcome/cancellation/currentness/process workload qualification",
+    "Human/Core joint acceptance and R4 workload budgets; C45/API freeze/release gates remain separate"
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "Castable-UnionType-7",
+    "expression": "\n       import schema namespace s=\"http://www.w3.org/XQueryTest/unionListDefined\";\n      s:unrestrictedInteger(123) castable as s:myUnionType1\n       ",
+    "namespace": "http://www.w3.org/XQueryTest/unionListDefined",
+    "schema": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+    "constructor": "unrestrictedInteger",
+    "baseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CastableExpr.xml"
+  },
+  {
+    "id": "qischema030",
+    "expression": "\n        declare default function namespace \"http://www.w3.org/XQueryTest/hats\"; \n        import schema default element namespace \"http://www.w3.org/XQueryTest/hats\" at \"qischema030.xsd\"; \n        <a>{hatsize(5), bighatsize(8)}</a>\n      ",
+    "namespace": "http://www.w3.org/XQueryTest/hats",
+    "schema": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/hats.xsd",
+    "constructor": "hatsize",
+    "baseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/SchemaImport.xml"
+  }
+]

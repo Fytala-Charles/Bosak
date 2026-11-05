@@ -1,0 +1,690 @@
+{
+  "scope": "Three fresh-process 1.44.0/1.44.1 cost comparisons; 200 warmups and 4000 iterations per scenario; timing observations are not budgets",
+  "budgetsAccepted": false,
+  "rows": {
+    "baseline": [
+      {
+        "passed": true,
+        "compileMilliseconds": 38.78,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.3901
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 1.4341
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 2.6787
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 98720040,
+            "milliseconds": 84.2771
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 9.7643
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 14.9291
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 101120040,
+            "milliseconds": 108.07
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "191f1f99943657006c43692ca9d765dd21b2eb36b590292bd32e6b57312b10c1"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.0.0",
+            "sha256": "3b6a4c1cfcaee9baa58314adccd05d5c1de68812be6a1e4c7fbe27dfa282b025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.0.0",
+            "sha256": "b0fdf4182e9b39a3e5ed23406ee8a8bcd3bf5d14d14e5d89999cc23893b17735"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.0.0",
+            "sha256": "50dd58bb502f8e1e3b92a5fc95bf82d1a2db8c915780ec4ff4290033353e9a00"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.0.0",
+            "sha256": "a2407a792d2d27a01d00e6b391308b626e0326029afe4909ec359ffee0235954"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.0.0",
+            "sha256": "9ea74ee64ab5ae4bb63e91fcee89aea4ec4d82fae7a645cae0f1df8ba86a13a6"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.0.0",
+            "sha256": "ddc3fb2a80fd2e4ab8f2a8cd1b3ac7dc3fac2a880198a1dbf341d2ab353382e2"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.0.0",
+            "sha256": "bea3113f7f1401eaa5ef10faaba71d209948164ae1e045e9c9b2403ffcf99adf"
+          }
+        ]
+      },
+      {
+        "passed": true,
+        "compileMilliseconds": 40.2807,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.1879
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 1.9255
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 2.5527
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 98720040,
+            "milliseconds": 82.3393
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 8.1603
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 13.8206
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 101120040,
+            "milliseconds": 110.3656
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "191f1f99943657006c43692ca9d765dd21b2eb36b590292bd32e6b57312b10c1"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.0.0",
+            "sha256": "3b6a4c1cfcaee9baa58314adccd05d5c1de68812be6a1e4c7fbe27dfa282b025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.0.0",
+            "sha256": "b0fdf4182e9b39a3e5ed23406ee8a8bcd3bf5d14d14e5d89999cc23893b17735"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.0.0",
+            "sha256": "50dd58bb502f8e1e3b92a5fc95bf82d1a2db8c915780ec4ff4290033353e9a00"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.0.0",
+            "sha256": "a2407a792d2d27a01d00e6b391308b626e0326029afe4909ec359ffee0235954"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.0.0",
+            "sha256": "9ea74ee64ab5ae4bb63e91fcee89aea4ec4d82fae7a645cae0f1df8ba86a13a6"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.0.0",
+            "sha256": "ddc3fb2a80fd2e4ab8f2a8cd1b3ac7dc3fac2a880198a1dbf341d2ab353382e2"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.0.0",
+            "sha256": "bea3113f7f1401eaa5ef10faaba71d209948164ae1e045e9c9b2403ffcf99adf"
+          }
+        ]
+      },
+      {
+        "passed": true,
+        "compileMilliseconds": 52.4144,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.1958
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 1.4789
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 3.2944
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 98720040,
+            "milliseconds": 104.7992
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 10.131
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 15.3211
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 101120040,
+            "milliseconds": 104.2341
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "191f1f99943657006c43692ca9d765dd21b2eb36b590292bd32e6b57312b10c1"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.0.0",
+            "sha256": "3b6a4c1cfcaee9baa58314adccd05d5c1de68812be6a1e4c7fbe27dfa282b025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.0.0",
+            "sha256": "b0fdf4182e9b39a3e5ed23406ee8a8bcd3bf5d14d14e5d89999cc23893b17735"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.0.0",
+            "sha256": "50dd58bb502f8e1e3b92a5fc95bf82d1a2db8c915780ec4ff4290033353e9a00"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.0.0",
+            "sha256": "a2407a792d2d27a01d00e6b391308b626e0326029afe4909ec359ffee0235954"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.0.0",
+            "sha256": "9ea74ee64ab5ae4bb63e91fcee89aea4ec4d82fae7a645cae0f1df8ba86a13a6"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.0.0",
+            "sha256": "ddc3fb2a80fd2e4ab8f2a8cd1b3ac7dc3fac2a880198a1dbf341d2ab353382e2"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.0.0",
+            "sha256": "bea3113f7f1401eaa5ef10faaba71d209948164ae1e045e9c9b2403ffcf99adf"
+          }
+        ]
+      }
+    ],
+    "candidate": [
+      {
+        "passed": true,
+        "compileMilliseconds": 214.3129,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.1357
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 2.5658
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 2.6049
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 21696040,
+            "milliseconds": 34.7826
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 9.9245
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 15.3016
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 24096040,
+            "milliseconds": 53.8292
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "d97dacc4cf57eee8ff31ef7e21a654562b395ed40d2325223ef7eec7332e9dc4"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.1.0",
+            "sha256": "8954541b549db5ebec500fe3c5e352591fcb7b90727e41764441d12dcfc0c025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.1.0",
+            "sha256": "9915f6cc7eba034e816b46c5901abc31626f81f842dd162ed37a891188439899"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.1.0",
+            "sha256": "f1e83b5956b4578e43786f69235bb02234a5869243caa7fb136b327149f4e919"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.1.0",
+            "sha256": "117c4c84f19b8e66016baf1922c628606a48618108b2d33b40ab8ec1a808d393"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.1.0",
+            "sha256": "8bd689637acdf91b679c81e770ea5002134f82918beb66014f3dde9c64e11884"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.1.0",
+            "sha256": "4916c8a585dcfb7cf31394f23e12074fb479bc20f2add76296b5b88ebbcba023"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.1.0",
+            "sha256": "f0988d86e10da12fc8e581c66ea9cff02ff16c4b9e2553d58650b898e5fb641e"
+          }
+        ]
+      },
+      {
+        "passed": true,
+        "compileMilliseconds": 39.3124,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.1948
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 1.3636
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 2.7517
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 21696040,
+            "milliseconds": 29.9118
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 8.819
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 13.4866
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 24096040,
+            "milliseconds": 46.7348
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "d97dacc4cf57eee8ff31ef7e21a654562b395ed40d2325223ef7eec7332e9dc4"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.1.0",
+            "sha256": "8954541b549db5ebec500fe3c5e352591fcb7b90727e41764441d12dcfc0c025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.1.0",
+            "sha256": "9915f6cc7eba034e816b46c5901abc31626f81f842dd162ed37a891188439899"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.1.0",
+            "sha256": "f1e83b5956b4578e43786f69235bb02234a5869243caa7fb136b327149f4e919"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.1.0",
+            "sha256": "117c4c84f19b8e66016baf1922c628606a48618108b2d33b40ab8ec1a808d393"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.1.0",
+            "sha256": "8bd689637acdf91b679c81e770ea5002134f82918beb66014f3dde9c64e11884"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.1.0",
+            "sha256": "4916c8a585dcfb7cf31394f23e12074fb479bc20f2add76296b5b88ebbcba023"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.1.0",
+            "sha256": "f0988d86e10da12fc8e581c66ea9cff02ff16c4b9e2553d58650b898e5fb641e"
+          }
+        ]
+      },
+      {
+        "passed": true,
+        "compileMilliseconds": 35.1134,
+        "rows": [
+          {
+            "name": "typed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1760040,
+            "milliseconds": 1.1861
+          },
+          {
+            "name": "typed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 352040,
+            "milliseconds": 1.3109
+          },
+          {
+            "name": "ordinary-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 1120040,
+            "milliseconds": 2.9087
+          },
+          {
+            "name": "ordinary-warm-operation",
+            "iterations": 4000,
+            "allocatedBytes": 21696040,
+            "milliseconds": 30.1065
+          },
+          {
+            "name": "assessed-open-close",
+            "iterations": 4000,
+            "allocatedBytes": 10912040,
+            "milliseconds": 8.9396
+          },
+          {
+            "name": "assessed-warm-read",
+            "iterations": 4000,
+            "allocatedBytes": 4960040,
+            "milliseconds": 14.0781
+          },
+          {
+            "name": "assessed-warm-identity",
+            "iterations": 4000,
+            "allocatedBytes": 24096040,
+            "milliseconds": 46.0454
+          }
+        ],
+        "bindings": [
+          {
+            "name": "Bosak.XPath.Runtime.Tests",
+            "version": "1.0.0.0",
+            "sha256": "d97dacc4cf57eee8ff31ef7e21a654562b395ed40d2325223ef7eec7332e9dc4"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.44.1.0",
+            "sha256": "8954541b549db5ebec500fe3c5e352591fcb7b90727e41764441d12dcfc0c025"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.44.1.0",
+            "sha256": "9915f6cc7eba034e816b46c5901abc31626f81f842dd162ed37a891188439899"
+          },
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.44.1.0",
+            "sha256": "f1e83b5956b4578e43786f69235bb02234a5869243caa7fb136b327149f4e919"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.44.1.0",
+            "sha256": "117c4c84f19b8e66016baf1922c628606a48618108b2d33b40ab8ec1a808d393"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.44.1.0",
+            "sha256": "8bd689637acdf91b679c81e770ea5002134f82918beb66014f3dde9c64e11884"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.44.1.0",
+            "sha256": "4916c8a585dcfb7cf31394f23e12074fb479bc20f2add76296b5b88ebbcba023"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.44.1.0",
+            "sha256": "f0988d86e10da12fc8e581c66ea9cff02ff16c4b9e2553d58650b898e5fb641e"
+          }
+        ]
+      }
+    ]
+  },
+  "phases": {
+    "baseline": {
+      "passed": true,
+      "rows": [
+        {
+          "name": "fresh-context",
+          "iterations": 4000,
+          "allocatedBytes": 10560040,
+          "milliseconds": 4.8816
+        },
+        {
+          "name": "fresh-context-and-populate",
+          "iterations": 4000,
+          "allocatedBytes": 87584040,
+          "milliseconds": 55.9072
+        },
+        {
+          "name": "copied-context",
+          "iterations": 4000,
+          "allocatedBytes": 10560040,
+          "milliseconds": 3.2443
+        },
+        {
+          "name": "copied-context-and-populate",
+          "iterations": 4000,
+          "allocatedBytes": 87584040,
+          "milliseconds": 53.851
+        }
+      ],
+      "standardFunctions": 379,
+      "bindings": [
+        {
+          "name": "Bosak.XPath.Runtime.Tests",
+          "version": "1.0.0.0",
+          "sha256": "3616891ccbb24b572dcc13df71da82d54b83c08138e2ef6292265fd77f8f7978"
+        },
+        {
+          "name": "Bosak.XPath.Runtime",
+          "version": "1.44.0.0",
+          "sha256": "3b6a4c1cfcaee9baa58314adccd05d5c1de68812be6a1e4c7fbe27dfa282b025"
+        },
+        {
+          "name": "Bosak.XPath.Core",
+          "version": "1.44.0.0",
+          "sha256": "b0fdf4182e9b39a3e5ed23406ee8a8bcd3bf5d14d14e5d89999cc23893b17735"
+        },
+        {
+          "name": "Bosak.XPath.Standard",
+          "version": "1.44.0.0",
+          "sha256": "ddc3fb2a80fd2e4ab8f2a8cd1b3ac7dc3fac2a880198a1dbf341d2ab353382e2"
+        },
+        {
+          "name": "Bosak.XPath.Providers",
+          "version": "1.44.0.0",
+          "sha256": "bea3113f7f1401eaa5ef10faaba71d209948164ae1e045e9c9b2403ffcf99adf"
+        }
+      ]
+    },
+    "candidate": {
+      "passed": true,
+      "rows": [
+        {
+          "name": "fresh-context",
+          "iterations": 4000,
+          "allocatedBytes": 10560040,
+          "milliseconds": 5.2935
+        },
+        {
+          "name": "fresh-context-and-populate",
+          "iterations": 4000,
+          "allocatedBytes": 87584040,
+          "milliseconds": 57.1442
+        },
+        {
+          "name": "copied-context",
+          "iterations": 4000,
+          "allocatedBytes": 10560040,
+          "milliseconds": 3.6258
+        },
+        {
+          "name": "copied-context-and-populate",
+          "iterations": 4000,
+          "allocatedBytes": 10560040,
+          "milliseconds": 2.6123
+        }
+      ],
+      "firstIsolatedContextAndPopulateAllocatedBytes": 22712,
+      "standardFunctions": 379,
+      "bindings": [
+        {
+          "name": "Bosak.XPath.Runtime.Tests",
+          "version": "1.0.0.0",
+          "sha256": "ec11aaf28acc7ddd5a1c58b9fbb35a629be99b5232feb1c7eee58ba64b3bde6d"
+        },
+        {
+          "name": "Bosak.XPath.Runtime",
+          "version": "1.44.1.0",
+          "sha256": "8954541b549db5ebec500fe3c5e352591fcb7b90727e41764441d12dcfc0c025"
+        },
+        {
+          "name": "Bosak.XPath.Core",
+          "version": "1.44.1.0",
+          "sha256": "9915f6cc7eba034e816b46c5901abc31626f81f842dd162ed37a891188439899"
+        },
+        {
+          "name": "Bosak.XPath.Standard",
+          "version": "1.44.1.0",
+          "sha256": "4916c8a585dcfb7cf31394f23e12074fb479bc20f2add76296b5b88ebbcba023"
+        },
+        {
+          "name": "Bosak.XPath.Providers",
+          "version": "1.44.1.0",
+          "sha256": "f0988d86e10da12fc8e581c66ea9cff02ff16c4b9e2553d58650b898e5fb641e"
+        }
+      ]
+    }
+  },
+  "warmBytesSavedPerCapturedEvaluation": 19256,
+  "ordinaryBytes": [
+    24680,
+    5424
+  ],
+  "assessedIdentityBytes": [
+    25280,
+    6024
+  ],
+  "publicContextBytes": [
+    2640,
+    2640
+  ],
+  "publicPopulatedContextBytes": [
+    21896,
+    21896
+  ],
+  "isolatedPopulatedContextBytes": [
+    21896,
+    2640
+  ],
+  "firstIsolatedContextAndPopulateAllocatedBytes": 22712,
+  "summary": "78.0% ordinary / 76.2% assessed identity allocation reduction; measured public/legacy cached-scalar paths unchanged. Private shared snapshot has one-time cold allocation per trusted profile; no context pooling."
+}

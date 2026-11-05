@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k03-render/README.md.html",
+      "sha256": "bb12da3f370f4264cc19f8303940e0c09e3f95149820a98387c2518e0472b875"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k03-render/docs_ARCHITECTURE.md.html",
+      "sha256": "fce9fd718ff787e74107a275f062d3353dad51517ac3e16beea7a3ac76ddb07b"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k03-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "72e9bbf9ba5cab08033a1628f3983c65131e16c9f67a444ef541d743bc5e5f5d"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k03-render/docs_INTEGRATION.md.html",
+      "sha256": "ec62f3e5306573ed0cbea2270d9f88f41c562f4740aea1647d5d773517dbe3f5"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k03-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "6cdacb440aa0e8732778ad61d4ac51d4a103c73b7c5d1fbb7d7f44166b514b4f"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k03-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "974ba54c1e443ff38783e82d5d41c623631146b4a9604929b01c1ae7958a27aa"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k03-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "936a4f8e1f4a290c450ff48683a779794d6bd65a8a6314d89b0a4d76d23690c3"
+    },
+    {
+      "source": "docs/xpath40-catalog/functions/map-to-element.md",
+      "html": ".guard-tmp/k03-render/docs_xpath40-catalog_functions_map-to-element.md.html",
+      "sha256": "24c1ad3d76a20dc221f354b20dbe0ae3cf1fbce2c86d2e1d9dd6f49287bd5e0b"
+    },
+    {
+      "source": "docs/conformance/k03-unicode-names/README.md",
+      "html": ".guard-tmp/k03-render/docs_conformance_k03-unicode-names_README.md.html",
+      "sha256": "eee7055a57df5fe928472c8369a04a6fbb1195e07948253349bbf52c6796c995"
+    }
+  ]
+}

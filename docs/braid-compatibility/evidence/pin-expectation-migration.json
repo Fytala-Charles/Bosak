@@ -1,0 +1,7 @@
+{
+  "scope": "Isolated candidate test fixture only; original Braid unchanged",
+  "before": "Assert.Equal(\"1.26.2+6a3372fc3b91e733b71a426cf40f26feaaeb3bcb\", adapter.Capabilities.EngineVersion);",
+  "after": "Assert.Equal(\"1.34.1+2e33d3b7c02eb20a1bfe757a73bb78ebb034c980\", adapter.Capabilities.EngineVersion);",
+  "productionChange": false,
+  "originalFullRunPreserved": true
+}

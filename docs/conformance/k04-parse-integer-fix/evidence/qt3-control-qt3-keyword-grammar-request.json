@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml", "Name": "control-qt3-keyword-grammar", "category": "positive", "expression": "parse-integer(radix := 16, value := 'ff')", "expectationOrigin": "3.1 keyword syntax is rejected at grammar stage with XPST0003 before function lookup"}

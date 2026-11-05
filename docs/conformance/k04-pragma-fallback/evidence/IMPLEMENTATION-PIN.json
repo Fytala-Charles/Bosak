@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C37",
+  "sourceBase": "5ba5528c752d8ae57cfb73cd5a97a6371265ed5b",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#id-extension-expressions",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "3.22 Extension Expressions",
+      "A.1: ValueExpr / ExtensionExpr / Pragma / PragmaContents"
+    ]
+  },
+  "adoptedPolicy": [
+    "Recognized pragma namespace set is empty. All syntactically valid pragmas are ignored; no handler or registration API is added.",
+    "Resolve all prefixed names statically in their declaring module and direct-constructor lexical namespace scope; unprefixed/no-namespace names are ignored in XQuery 3.1.",
+    "Raw pragma content ends at the first #); quotes, comments, braces and entity-like content inside it do not alter scanning. Validate EQName and explicit XML whitespace boundaries.",
+    "Parse ExtensionExpr at ValueExpr precedence; missing associated expression raises XQST0079; unbound prefix raises XPST0081. Validate and compile the associated expression, preserving static and dynamic errors.",
+    "Preserve XPath 3.1 and XPath 4.0 QName-literal grammar. Normal pragma routing guard, dependency policy, fixtures and exact baseline remain unchanged.",
+    "Feature candidate 1.33.0, unpublished. No release, schema callback acceptance, backend change or Braid action."
+  ],
+  "originalCohort": "60 C36 originals, including two independent exact-XQ10 exclusions. Older no-namespace pragma error expectation is not a 3.1 requirement; preserve results separately rather than weakening assertions."
+}

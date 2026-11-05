@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k02-admission-render/README.md.html",
+      "sha256": "b64e34f6abc7fd6ec2b3ec100c51226743c75ded0f1c8fc130ceefc2640cf020"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k02-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "9c017ca54bc6b9d58e2ba824c80328a679c3a05e8ecf5a0553607843ab172650"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k02-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "d036ea9c380b56d0ca331755f24a9912e1308f25765291c67f56dcedfcb9eece"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k02-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "822f13e3e478056bcbc2fc474039b062122f86544d1e58e2ba26825410a7e626"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k02-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "fb6a0f1daa05002ccac3de1f657b95e8ad68951752a10d269ccfc3ac42996a3e"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k02-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "e7a0b20493c465c114cde5d7f8c911df1f269759cf5f7b8dc971bd65dc18c69b"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k02-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "fc67d9f38eb6f52a09ce26590a1771c84c232488549b2eb90d0b7c31e49084e7"
+    },
+    {
+      "source": "docs/conformance/k02-relative-schema-uri/README.md",
+      "html": ".guard-tmp/k02-admission-render/docs_conformance_k02-relative-schema-uri_README.md.html",
+      "sha256": "49cb5777a9775934ff6b0d7b36c5fd13977d700aaf2d7b9a0eef87c965a1ee4c"
+    },
+    {
+      "source": "docs/conformance/k02-admission-review/README.md",
+      "html": ".guard-tmp/k02-admission-render/docs_conformance_k02-admission-review_README.md.html",
+      "sha256": "62fdf8a61899c9a1c45fdb669efb5fe5e873a14c8b5d90218bbabe5a5b751ed7"
+    },
+    {
+      "source": "docs/conformance/k02-admission-review/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k02-admission-render/docs_conformance_k02-admission-review_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "2b2278d04c78e7633cfe03e9534a7e7a936485f7a0b8f5f8fe5ea52a58b91571"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-02",
+  "channel": "Authorized local Schema workspace inbox and registry pointers",
+  "target": "D:\\Development\\Bosak.Schema.Public\\docs\\core-disposition-inbox\\2026-11-02",
+  "requestSha256": "df25b6530411809eb2d089360896475248a1fbcd98aabec84af1644716c14de7",
+  "sourcePinsSha256": "b3e544a960d6c341c176b76ed3b8aab4c689a057cc09222af539d1d06f1de5a1",
+  "registryEdits": [
+    {
+      "file": "D:\\Development\\Bosak.Schema.Public\\docs\\FEATURE_REQUESTS.md",
+      "beforeSha256": "e38c0aa79b0326da035b1e569ca38ba67bec21418127f56b6cc563d47a07b685",
+      "afterSha256": "7f1c7f7bca12be901fff4d5f0e3b47ebedbf6b0c1deabbded050d7ff2f2f98df"
+    },
+    {
+      "file": "D:\\Development\\Bosak.Schema.Public\\docs\\INTEGRATION.md",
+      "beforeSha256": "d7a2359c1e2e3216a9c313dc2bd9bd90f3ea636959404935e389e1b5af3ec3df",
+      "afterSha256": "0231b230a340dc03aa48c7128927cdad10aab33939e0555c5f39124d9e8106fb"
+    }
+  ],
+  "ownerAcknowledged": false,
+  "updatedOwnerDispositionObtained": false,
+  "messagesPosted": false,
+  "ownerCommitPush": false
+}

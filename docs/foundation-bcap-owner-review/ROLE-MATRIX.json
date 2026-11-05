@@ -1,0 +1,62 @@
+{
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "roles": [
+    {
+      "returnId": "BCAP-O1-Schema",
+      "priorReturnId": "O1-Schema",
+      "owner": "Schema",
+      "mode": "MissingFullReturn",
+      "template": "templates/BCAP-O1-Schema.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O1-XmlDb",
+      "priorReturnId": "O1-XmlDb",
+      "owner": "XmlDb",
+      "mode": "ExplicitUnchangedScopeCarryForward",
+      "template": "templates/BCAP-O1-XmlDb.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O2-Schema",
+      "priorReturnId": "O2-Schema",
+      "owner": "Schema",
+      "mode": "MissingFullReturn",
+      "template": "templates/BCAP-O2-Schema.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O2-Core",
+      "priorReturnId": "O2-Core",
+      "owner": "Core",
+      "mode": "ExplicitUnchangedScopeCarryForward",
+      "template": "templates/BCAP-O2-Core.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O3-Braid",
+      "priorReturnId": "O3-Braid",
+      "owner": "Braid",
+      "mode": "CaptureDeltaReview",
+      "template": "templates/BCAP-O3-Braid.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O4-XmlDb",
+      "priorReturnId": "O4-XmlDb",
+      "owner": "XmlDb",
+      "mode": "DeltaAndExistingProviderRevision",
+      "template": "templates/BCAP-O4-XmlDb.template.json",
+      "status": "NotSubmitted"
+    },
+    {
+      "returnId": "BCAP-O4-Core",
+      "priorReturnId": "O4-Core",
+      "owner": "Core",
+      "mode": "CaptureOutcomeDeltaReview",
+      "template": "templates/BCAP-O4-Core.template.json",
+      "status": "NotSubmitted"
+    }
+  ],
+  "ownerAccepted": false
+}

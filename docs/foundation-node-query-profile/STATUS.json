@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-05",
+  "sourceVersion": "1.61.1",
+  "baseCommit": "6523c64943589b0683c6e594daa2f85ebdb36323",
+  "stage": "TA-12 public original-node nilled profile selected",
+  "implementationStarted": false,
+  "publicNodeProfileActivated": false,
+  "metadataOnlyReadImplemented": false,
+  "newSignatureGapDemonstrated": false,
+  "newCasesNotRun": 24,
+  "existingControlsPassed": 349,
+  "fullUnitTestsHistorical": 25193,
+  "fullGatesRerun": false,
+  "sourceChanged": false,
+  "nativeProviderQualified": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "nextStep": "Implement and qualify an internal metadata-only facts mode with NotRequested state; then wire the selected public nilled profile and advisor bridge under NP01-NP24. Separate data/provenance atomization follows."
+}

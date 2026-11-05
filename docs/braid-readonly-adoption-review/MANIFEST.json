@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Proposal review only; no product implementation",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 308,
+      "sha256": "138457b6b3861944a4e35591709b60f494121c1445fc3cd6a05abdf3efa8efde"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4618,
+      "sha256": "7f61638353a94b7e82e00dd890ad529761ebae82a7719eaf6344847820938280"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1730,
+      "sha256": "6a957f23d266854d591eb8d735de38f6370d147e83dd5ad8f593d0e95dc63559"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2536,
+      "sha256": "fbd9433464e57c577c687eb7a43de3a08e037ba288be4def2090877180e0373f"
+    }
+  ]
+}

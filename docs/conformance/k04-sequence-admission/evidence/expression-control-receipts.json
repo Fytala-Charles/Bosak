@@ -1,0 +1,322 @@
+[
+  {
+    "name": "qt3-control-one",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-one-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31807609999668784,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-one",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-one.log"
+  },
+  {
+    "name": "qt4-control-one",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-one-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31349000000045635,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-one",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-one.log"
+  },
+  {
+    "name": "qt3-control-zero",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-zero-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3234115999948699,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-zero",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-zero.log"
+  },
+  {
+    "name": "qt4-control-zero",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-zero-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2849530999956187,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-zero",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-zero.log"
+  },
+  {
+    "name": "qt3-control-two",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-two-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2995567000180017,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-two",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-two.log"
+  },
+  {
+    "name": "qt4-control-two",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-two-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29957579998881556,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-two",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-two.log"
+  },
+  {
+    "name": "qt3-control-ten",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-ten-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2877108000102453,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ten",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ten.log"
+  },
+  {
+    "name": "qt4-control-ten",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-ten-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2713213999813888,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ten",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ten.log"
+  },
+  {
+    "name": "qt3-control-original",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-original-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28707399999257177,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-original",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-original.log"
+  },
+  {
+    "name": "qt4-control-original",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-original-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2961180999991484,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-original",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-original.log"
+  },
+  {
+    "name": "qt3-control-negative",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-negative-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2973495000042021,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-negative",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-negative.log"
+  },
+  {
+    "name": "qt4-control-negative",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-negative-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3080382999905851,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-negative",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-negative.log"
+  },
+  {
+    "name": "qt3-control-recognized-circled",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-recognized-circled-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33575649998965673,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-recognized-circled",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-recognized-circled.log"
+  },
+  {
+    "name": "qt4-control-recognized-circled",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-recognized-circled-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32268449998809956,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-recognized-circled",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-recognized-circled.log"
+  },
+  {
+    "name": "qt3-control-recognized-arabic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt3-control-recognized-arabic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35469050001120195,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-recognized-arabic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-recognized-arabic.log"
+  },
+  {
+    "name": "qt4-control-recognized-arabic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-parse-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-sequence-admission\\evidence\\qt4-control-recognized-arabic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28210480001871474,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-recognized-arabic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-recognized-arabic.log"
+  }
+]

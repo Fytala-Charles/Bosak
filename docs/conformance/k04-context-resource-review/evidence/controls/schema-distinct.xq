@@ -1,0 +1,1 @@
+module namespace m='urn:c27:other'; import schema namespace s='urn:c27:schema'; declare context item as s:integer external; declare variable $m:v := .;

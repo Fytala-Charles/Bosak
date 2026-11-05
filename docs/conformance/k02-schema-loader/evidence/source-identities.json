@@ -1,0 +1,30 @@
+{
+  "tests/Bosak.XPath.Conformance/DependencyFilter.cs": {
+    "sha256": "867021dc94729dffc3ae50b76ce77f18bd638ada3907139b74c896c118344334",
+    "gitBlob": "807c85b6a6724beafa3495135fd20260185f4fac"
+  },
+  "tests/Bosak.XPath.Conformance/ResultComparer.cs": {
+    "sha256": "165bc64ea949f26a6e5c47be33180c3d81a34e8839169868b713f987dfe4c0b2",
+    "gitBlob": "9e045c25f8b8344c64ee9647a4ca4c7e423c3c46"
+  },
+  "tests/Bosak.XPath.Conformance/TestCase.cs": {
+    "sha256": "2a9988271fcbda34f946f6c9412bd21f9116f932e1ebd9a59e690f5d31630490",
+    "gitBlob": "959c67ef3ed06c572dd82a56f292b903033aa9c6"
+  },
+  "tests/Bosak.XPath.Conformance/TestEnvironment.cs": {
+    "sha256": "8c73c39573cae5d3585d2cc7146c0a11c33f8dbee6d86c50c544ec2be4ce457a",
+    "gitBlob": "9c79f969b845f2a604350ba6dd84381b242a7403"
+  },
+  "tests/Bosak.XPath.Conformance/TestExecutor.cs": {
+    "sha256": "054f856d1fafa746aeec6f49084c6efff9cd8ee65927c344550b4b01e70c6c0a",
+    "gitBlob": "67f10a3a4252ec89e8f7389da94b5006b14fed7b"
+  },
+  "tests/Bosak.XPath.Conformance/TestOutcome.cs": {
+    "sha256": "40b315713eccebd94eae051c14655b048473ba4b0f9502b2e27d10f9fce75b98",
+    "gitBlob": "ba2a774c3909054c40d7968430e9fab1c8072ed8"
+  },
+  "tests/Bosak.XPath.Conformance/TestReport.cs": {
+    "sha256": "a93eacaa750b7ca7db43cb034223f15dacece0a98f7243d9164977501b21812a",
+    "gitBlob": "888388175675c6e4ce66ef6c8400ecb8f86842c8"
+  }
+}

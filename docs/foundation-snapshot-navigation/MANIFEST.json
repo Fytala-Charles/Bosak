@@ -1,0 +1,22 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "DISPOSITION.json": "6ff054abd8576413b98f17509f0da5b76eb6fa22355e2219529418306c92e38e",
+  "evidence/baseline-runner-build.txt": "c32ec773e82faf7bf180cf589f9926d14304ca520d4b82642dfad3aa688a8c11",
+  "evidence/holder-core-build.txt": "953d8bf5951233e81cc36df72635c7e03fcea205163d4a01fb92e892b5f56b90",
+  "evidence/holder-runner-build.txt": "053cd8d14b145a4a72d5a6d9d30926f4907eb5a66f77ba828dec2b61f84c13c1",
+  "evidence/holder-XdmValue.cs.txt": "b7f898cdf07af9c501f565247a51a10feadeb773cf9e5fd06dfe98f71482174b",
+  "evidence/INPUTS.json": "000bf242b9fe01596dac99712662759a6f5bb7952b708fcde702f51e73e59c92",
+  "evidence/round-0-baseline.json": "4d2c0566be37b49f6485fa11f2c3eaee0a19b9d42857e737208c70b0bcb2c3a1",
+  "evidence/round-0-baseline.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evidence/round-0-holder.json": "fc248e284b30362856dad84a11a4ceb9617dfeaf4cb925332e97905074f65ef4",
+  "evidence/round-0-holder.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evidence/round-1-baseline.json": "4d2c0566be37b49f6485fa11f2c3eaee0a19b9d42857e737208c70b0bcb2c3a1",
+  "evidence/round-1-baseline.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "evidence/round-1-holder.json": "fc248e284b30362856dad84a11a4ceb9617dfeaf4cb925332e97905074f65ef4",
+  "evidence/round-1-holder.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "README.md": "0e0e7e6d80f621fa840a5ab7638c172e6862db658438308089717913b42223f6",
+  "SPEC-BASIS.md": "cd312604fcde9699bd695608d1dfe424d1895bf5a0328a24dd5dae626a042b49",
+  "tools/Probe.cs.txt": "8916a3e0317924aa33107c3c9ddc309100dbf64d97749ef9206b850fa1a7dd67",
+  "tools/run.py": "28de8c65d726eb2535dd786278071a271653fd65a867961d2ddbb0a285f41382",
+  "tools/verify.py": "3c69b2bf81f947e50e2b8fc5b07148105579608103c10f677047ea272084ad87"
+}

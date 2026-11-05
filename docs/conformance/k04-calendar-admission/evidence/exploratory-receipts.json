@@ -1,0 +1,66 @@
+[
+  {
+    "mode": "current",
+    "name": "fn-format-date",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-date"
+    ],
+    "log": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-date-current.log",
+    "skipDump": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-date-current-skips.txt",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.45072829999844544
+  },
+  {
+    "mode": "current",
+    "name": "fn-format-dateTime",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-dateTime"
+    ],
+    "log": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-dateTime-current.log",
+    "skipDump": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-dateTime-current-skips.txt",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.3515256000100635
+  },
+  {
+    "mode": "prototype",
+    "name": "fn-format-date",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-calendar-harness-qt4/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-date"
+    ],
+    "log": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-date-prototype.log",
+    "skipDump": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-date-prototype-skips.txt",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.44429699997999705
+  },
+  {
+    "mode": "prototype",
+    "name": "fn-format-dateTime",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-calendar-harness-qt4/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-dateTime"
+    ],
+    "log": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-dateTime-prototype.log",
+    "skipDump": "docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-dateTime-prototype-skips.txt",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.3489970000227913
+  }
+]

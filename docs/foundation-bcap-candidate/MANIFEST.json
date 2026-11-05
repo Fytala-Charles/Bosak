@@ -1,0 +1,23 @@
+{
+  ".gitattributes": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8",
+  "evidence/api-0.json": "1afe23a2a672a130a6ada632691743fb22e2e9b497a1971711f2f4005e5e5195",
+  "evidence/api-1.json": "1afe23a2a672a130a6ada632691743fb22e2e9b497a1971711f2f4005e5e5195",
+  "evidence/Bosak.XQuery.C45Proposal-build.txt": "e2239b434c0388b75aa5508d078e992bb34a8dae4cb92674dc5f3c8ddeaaafe0",
+  "evidence/Bosak.Xslt.C45Proposal-build.txt": "e3dae2f6ca5a780227d03ab25044e5d90fb449d6ee6b7ef90e326a7262fa6c50",
+  "evidence/DOCUMENTATION-CHECKS.json": "2c025095b08224ede51a3bfa340fab4cc20812aee668293c1f3d288f4877749f",
+  "evidence/INPUTS.json": "6170497fa9d58ca76c808ea021c8147869b6c03b6c368b971c0ea2c0902a4431",
+  "evidence/inventory-0.txt": "039b45309e0edde500914c8662b8e8448bc4e03a9e29e7eb3731d2b9af81ee99",
+  "evidence/inventory-1.txt": "039b45309e0edde500914c8662b8e8448bc4e03a9e29e7eb3731d2b9af81ee99",
+  "evidence/inventory-build.txt": "dac2b8367e4d4871837c9f8e112c00e506862db9a76119c3a711fa8beb6d9c37",
+  "evidence/owner-registration.json": "4ee3ee5375231da68a14a174c8b9230de80ea55ec159debda76164280e85f9da",
+  "evidence/STATUS.json": "6eb0a7dce64fa26750db5483450383fe048044c4b7beb36ccc77e87e10bf424c",
+  "proposal/ExactNumeric.cs.txt": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364",
+  "proposal/OperationLifetime.cs.txt": "4666976ab15ddd2792ad00f7f2995e9f5623baa1bfb85ca5caac6d0731234b1e",
+  "proposal/Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+  "proposal/QueryFacade.cs.txt": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37",
+  "proposal/XQuery.cs.txt": "9c22a8d957f51f49d4214eaee760c498e95bb5cce00a0b3d7ad12ab26d5c00aa",
+  "proposal/Xslt.cs.txt": "41d0998f2aa50f0131965173606f30cd36a42e2fec98667c5d60881d8815bbc7",
+  "README.md": "389edd14cc9fafecd3dfb4aacdb026c909adbb51f786b739cb01d229909755c5",
+  "tools/build.py": "090a4cb03567cd9c6dc08214592fb3d28127532bdb2e21b9562559a35c200529",
+  "tools/Inventory.cs.txt": "a00a9a156678696a7b0c3276146278f7a644b400f92b92b57d85e93ba0fbd4c9"
+}

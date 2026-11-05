@@ -1,0 +1,24 @@
+{
+  "slice": "K04-C32 adoption",
+  "status": "owner-approved exact adoption verified",
+  "proposalCommit": "451f596a",
+  "qt3": [
+    31257,
+    0,
+    564
+  ],
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "removedSkips": 49,
+  "retainedSkipNamesAndReasonsUnchanged": true,
+  "solutionPassed": 24010,
+  "catalogCases": 31821,
+  "lexicalControls": 37,
+  "engineSourceChanged": false,
+  "candidateVersion": "1.31.0",
+  "publishedVersion": "1.26.3",
+  "release": false
+}

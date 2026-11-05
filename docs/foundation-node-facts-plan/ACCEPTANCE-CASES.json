@@ -1,0 +1,137 @@
+{
+  "implementationStatus": "NotStarted",
+  "cases": [
+    {
+      "id": "NF01",
+      "trigger": "owned element with atomic value",
+      "expected": "retain original governing/actual/provenance",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF02",
+      "trigger": "empty non-list typed result",
+      "expected": "empty; nilled false is explicit",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF03",
+      "trigger": "empty list typed result",
+      "expected": "empty list shape remains distinct",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF04",
+      "trigger": "singleton list",
+      "expected": "retain list shape and atomic provenance",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF05",
+      "trigger": "multi-atomic/list/union",
+      "expected": "ordered cells and selected actual types; full quota checks",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF06",
+      "trigger": "HasNoTypedValue true",
+      "expected": "record explicit absence; do not call typed-value getter",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF07",
+      "trigger": "IsNilled true",
+      "expected": "retain nilled fact; validate supported empty typed result when atomization requested",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF08",
+      "trigger": "contradictory nilled/no-typed-value or nonempty nilled payload",
+      "expected": "refuse malformed provider facts; never silently normalize",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF09",
+      "trigger": "typed-result Unsupported",
+      "expected": "owned capability refusal; never fabricate empty",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF10",
+      "trigger": "NotFound/Invalid/null result or Supported null payload",
+      "expected": "reject malformed fact read result",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF11",
+      "trigger": "foreign node or two admitted owners",
+      "expected": "reject before node/facts getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF12",
+      "trigger": "foreign facts or copied tuple on another input",
+      "expected": "reject before facts getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF13",
+      "trigger": "missing/mismatched/revoked original origin",
+      "expected": "reject; no originless original facts",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF14",
+      "trigger": "foreign governing/declaration or invalid actual type",
+      "expected": "reject before delivery",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF15",
+      "trigger": "getter/callback revokes source/advisor/authority",
+      "expected": "stop immediately; recheck after each external call",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF16",
+      "trigger": "cancellation/close at every getter and iterator stage",
+      "expected": "stop delivery; preserve raw-operation drain",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF17",
+      "trigger": "throwing getter/iterator/dispose and cleanup combination",
+      "expected": "preserve original error graph and cleanup order",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF18",
+      "trigger": "failed fact/value admission then valid retry",
+      "expected": "no poisoned registry/partial commit",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF19",
+      "trigger": "facts view retained beyond raw callback",
+      "expected": "all observation access refuses; no detached authority",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF20",
+      "trigger": "warm reads/allocation/callback counts",
+      "expected": "no new unbounded facts cache; record costs separately",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF21",
+      "trigger": "ordinary/typed identity/numeric route isolation",
+      "expected": "existing descriptors and refusal behavior retained",
+      "status": "NotRun"
+    },
+    {
+      "id": "NF22",
+      "trigger": "attribute/non-element facts",
+      "expected": "preserve node-kind distinctions; no element-only nilled result inferred",
+      "status": "NotRun"
+    }
+  ]
+}

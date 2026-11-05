@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "136e8026c385f75d9f9688fd3b404fe89f3ae890fda36942dffc7dbda065a015",
+  "qualifiedInternalSlice": "TA-08-internal-numeric-projection-v1",
+  "scope": "Unchanged exported declarations, XdmValue layout, friends and API source. Internal numeric projection qualified; existing public identity retained. No public numeric/native/freeze acceptance."
+}

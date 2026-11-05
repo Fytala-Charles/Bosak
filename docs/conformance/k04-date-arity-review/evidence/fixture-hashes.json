@@ -1,0 +1,5 @@
+{
+  "tests/qt4tests/fn/format-date.xml": "81a280f9234dc525d38a961eaa17d0773857a2ebdfbaa82cca41d0bb7ebba549",
+  "tests/qt4tests/fn/format-dateTime.xml": "cd507a0498dd0f8e12f3bda373fe0d6c5aa0002a8822336c554c8456c278349f",
+  "tests/qt4tests/fn/format-time.xml": "9313a0e4c9eb4e5fd9a1432208e0d0e53fb01fa614215856beb05464c25b80c2"
+}

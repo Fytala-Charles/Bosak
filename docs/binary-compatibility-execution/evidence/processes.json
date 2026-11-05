@@ -1,0 +1,88 @@
+[
+  {
+    "tag": "xmldb-baseline-tests",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 9.545,
+    "externalTimeoutSeconds": 300,
+    "command": [
+      "dotnet",
+      "vstest",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-xmldb-baseline\\tests\\Bosak.XmlDb.Xdm.Tests\\bin\\Release\\net10.0\\Bosak.XmlDb.Xdm.Tests.dll",
+      "/Logger:trx",
+      "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\binary-results\\xmldb-baseline-tests"
+    ]
+  },
+  {
+    "tag": "xmldb-baseline-probe",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.335,
+    "externalTimeoutSeconds": 90,
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-xmldb-baseline\\probe\\bin\\Release\\net10.0\\Probe.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-results\\xmldb-baseline-probe\\observations.json"
+    ]
+  },
+  {
+    "tag": "braid-baseline-tests",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 133.747,
+    "externalTimeoutSeconds": 300,
+    "command": [
+      "dotnet",
+      "vstest",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-baseline\\tests\\Bosak.Braid.Core.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Core.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-baseline\\tests\\Bosak.Braid.Application.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Application.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-baseline\\tests\\Bosak.Braid.Infrastructure.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Infrastructure.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-baseline\\tests\\Bosak.Braid.Workbench.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Workbench.Tests.dll",
+      "/Logger:trx",
+      "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\binary-results\\braid-baseline-tests"
+    ]
+  },
+  {
+    "tag": "xmldb-replacement-tests",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 9.787,
+    "externalTimeoutSeconds": 300,
+    "command": [
+      "dotnet",
+      "vstest",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-xmldb-replacement\\tests\\Bosak.XmlDb.Xdm.Tests\\bin\\Release\\net10.0\\Bosak.XmlDb.Xdm.Tests.dll",
+      "/Logger:trx",
+      "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\binary-results\\xmldb-replacement-tests"
+    ]
+  },
+  {
+    "tag": "xmldb-replacement-probe",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.318,
+    "externalTimeoutSeconds": 90,
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-xmldb-replacement\\probe\\bin\\Release\\net10.0\\Probe.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-results\\xmldb-replacement-probe\\observations.json"
+    ]
+  },
+  {
+    "tag": "braid-replacement-tests",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 135.869,
+    "externalTimeoutSeconds": 300,
+    "command": [
+      "dotnet",
+      "vstest",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-replacement\\tests\\Bosak.Braid.Core.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Core.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-replacement\\tests\\Bosak.Braid.Application.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Application.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-replacement\\tests\\Bosak.Braid.Infrastructure.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Infrastructure.Tests.dll",
+      "D:\\Development\\Bosak\\.guard-tmp\\binary-braid-replacement\\tests\\Bosak.Braid.Workbench.Tests\\bin\\Release\\net10.0\\Bosak.Braid.Workbench.Tests.dll",
+      "/Logger:trx",
+      "/ResultsDirectory:D:\\Development\\Bosak\\.guard-tmp\\binary-results\\braid-replacement-tests"
+    ]
+  }
+]

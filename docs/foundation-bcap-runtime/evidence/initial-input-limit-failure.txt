@@ -1,0 +1,12 @@
+System.NotSupportedException: Input binding or namespace limit reached.
+   at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs:line 373
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.CaptureInputs(EvaluationContext caller, Func`3 ownsNode, Int32 maxBindings, Int32 maxNamespaces) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 202
+   at Probe.<>c__DisplayClass10_0.<Run>b__5(Operation op) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 33
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 139
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaOperationLeaseSet.cs:line 108
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaOperationLeaseSet.cs:line 93
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 278
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 140
+   at Probe.Run() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 33
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 16

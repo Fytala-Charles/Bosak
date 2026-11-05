@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C04",
+  "status": "Complete for bounded existing-collation admission",
+  "sourceBase": "f797cb139962ecfa1ddd6395ed1a5e7a06407f3b",
+  "summary": {
+    "originalCases": 13,
+    "directDiagnosticPassed": 5,
+    "directDiagnosticFailedRetained": 8,
+    "normalCasesPassed": 5,
+    "normalCasesSkipped": 8,
+    "expressionControlsPassed": 7,
+    "filterControls": 248,
+    "filterProfileOutcomesPerPhase": 353,
+    "changedFilterOutcomes": 7,
+    "smallWatchdogProcesses": 37,
+    "timeouts": 0,
+    "solutionPassed": 22007,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "qt4ExperimentalPassed": 11,
+    "removedGatedSkips": [
+      "compare-010"
+    ],
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1892,
+    "exploratoryNewPasses": [
+      "K-SeqDeepEqualFunc-56",
+      "K-SeqDeepEqualFunc-57",
+      "fn-substring-after-24",
+      "fn-substring-before-24"
+    ],
+    "candidateVersion": "1.26.11",
+    "publishedVersion": "1.26.3"
+  },
+  "changedFilters": [
+    {
+      "id": "feature-qt4-non_unicode_codepoint_collation-True",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "feature-qt4-non_unicode_codepoint_collation-False",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "compare-010-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "K-SeqDeepEqualFunc-56-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "K-SeqDeepEqualFunc-57-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "fn-substring-after-24-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "fn-substring-before-24-full",
+      "before": false,
+      "after": true
+    }
+  ],
+  "limits": [
+    "Eight direct XPath failures retained;their original XQuery dependency guards still exclude them",
+    "Only existing HTML ASCII/UCA mechanisms;not support for every collation URI",
+    "No engine,fixture,assertion,GatedSets,schema,QT3 baseline or release change",
+    "No complete exploratory qt4 sweep;only13 named cases executed separately",
+    "REQ-126 remains Complete;Bosak.Schema retains XSD1.1 ownership"
+  ],
+  "next": "Review the four original qt4 fn-format-integer-CLDR declarations against the existing QT3 observations;do not infer complete CLDR support from two passing assertions."
+}

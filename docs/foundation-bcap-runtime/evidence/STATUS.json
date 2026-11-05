@@ -1,0 +1,72 @@
+{
+  "p03": "InProgress",
+  "cohortChecks": 26,
+  "repetitions": 2,
+  "existingRuntimeRegressions": 366,
+  "existingFocusedXsltRegressions": 265,
+  "bcap01Closed": false,
+  "publicCandidateImplemented": false,
+  "scope": "Private real-engine feasibility; explicit unsupported profiles; no native authority or full qualification",
+  "cases": [
+    {
+      "id": "C01",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C02",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C03",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C04",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C05",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C06",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C07",
+      "status": "ExercisedBoundedProfile",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C08",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C09",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    },
+    {
+      "id": "C10",
+      "status": "PartiallyExercised",
+      "ownerAcceptance": false
+    }
+  ],
+  "remaining": [
+    "Inherited execution-gate composition (currently refused)",
+    "Mid-run operation cancellation and time-limit schedules",
+    "Option mutation and initial mode profiles",
+    "Fault injection during serialization and multiple provider cleanup failures",
+    "Cold and native workload cost/latency, cancellation latency",
+    "Actual Schema/XmlDb consumer qualification",
+    "Full engine/conformance qualification before promotion",
+    "Braid review and exact revised API binding"
+  ]
+}

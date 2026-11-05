@@ -1,0 +1,32 @@
+[
+  {
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "before": "~~~xquery\nlet $($x, $y) := (1, 2, 3) return ($x, $y)\n  (: → (1, (2,3)) — last variable takes the rest :)\n\nlet $[$a, $b] := [3, 4, 5] return `a={$a} b={$b}`\n  (: → \"a=3 b=4\" — surplus member 5 discarded :)\n\nlet $[$a, $b] := [1] return $b\n  (: → FOAY0001 :)\n\nlet ${$name} := map {\"name\": \"Braid\"} return $name\n  (: → \"Braid\" — key = variable local name :)\n\nlet $($x as xs:short, $y) := (42, \"ok\") return ($x, $y)\n  (: → (42 xs:short, \"ok\") — PR 254 relabeling; annotation changes, datum untouched :)\n~~~",
+    "after": "Run each query independently at `XPath40` or `XPath40Experimental`:\n\n~~~xquery\nlet $($x, $y) := (1, 2, 3) return ($x, $y)\n  (: → (1,2,3) — $x=1, $y=(2,3); XDM flattens the returned sequence :)\n~~~\n\n~~~xquery\nlet $[$a, $b] := [3, 4, 5] return `a={$a} b={$b}`\n  (: → \"a=3 b=4\" — surplus member 5 discarded :)\n~~~\n\n~~~xquery\nlet $[$a, $b] := [1] return $b\n  (: → FOAY0001 :)\n~~~\n\n~~~xquery\nlet ${$name} := map {\"name\": \"Braid\"} return $name\n  (: → \"Braid\" — key = variable local name :)\n~~~\n\n~~~xquery\nlet $($x as xs:short, $y) := (42, \"ok\") return ($x, $y)\n  (: → (42 xs:short, \"ok\") — PR 254 relabeling; annotation changes, datum untouched :)\n~~~",
+    "reason": "Separate five independent examples and correct the displayed flattened result; no expression is changed."
+  },
+  {
+    "entry": "operators-and-syntax/destructuring-let.md",
+    "before": "- The **map form binds by variable name** (`${$name}` looks up key `\"name\"`), closer to ES6 object destructuring than to map lookup — but a missing key binds `()` rather than throwing.",
+    "after": "- The **ordinary map form binds by variable name** (`${$name}` looks up key `\"name\"`); a missing ordinary-map key binds `()`. Annotated records have a separate undeclared-field lookup rule. The current engine incorrectly binds empty for that record case; C05 K03 retains the required `XPTY0004` expectation.",
+    "reason": "Qualify ordinary maps and retain the distinct annotated-record defect."
+  },
+  {
+    "entry": "rejected/mapping-arrow-gtgt.md",
+    "before": "~~~xquery\nstring-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')\n  (: → \"FILTER-A,BOLT-M8\" — one call per product code :)\n\n(' FILTER-A ') =>> normalize-space()\n  (: → XPST0003 at every level — old spelling, never implemented :)\n~~~",
+    "after": "Run these as independent queries. The first uses frozen `XPath40`; the second deliberately refuses the old spelling:\n\n~~~xquery\nstring-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')\n  (: → \"FILTER-A,BOLT-M8\" — one call per product code :)\n~~~\n\n~~~xquery\n(' FILTER-A ') =>> normalize-space()\n  (: → XPST0003 at every level — old spelling, never implemented :)\n~~~",
+    "reason": "Separate a successful replacement example from the independently refused old spelling."
+  },
+  {
+    "entry": "functions/timestamp-deadlines.md",
+    "before": "`unix-dateTime` uses **nonnegative epoch milliseconds**, returning a UTC\n`xs:dateTimeStamp` in Bosak. Omitted or empty input means zero (the epoch),\nnot the current time. A negative argument raises FOCA0002. Unix time assumes\n86,400-second days and does not account for leap seconds.",
+    "after": "In frozen `XPath40`, `unix-dateTime` uses **nonnegative epoch milliseconds** and returns a UTC `xs:dateTimeStamp`; a negative argument raises `FOCA0002`. `XPath40Experimental` supports signed epoch milliseconds within the existing bounded calendar representation. Omitted or empty input means zero (the epoch), not the current time. Unix time assumes 86,400-second days and does not account for leap seconds.",
+    "reason": "Make the already-delivered Experimental signed-epoch contract explicit in Language Alignment."
+  },
+  {
+    "entry": "operators-and-syntax/mapping-arrow.md",
+    "before": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. The accepted spelling is =!>. Map each item, not the whole input sequence; =>> is rejected.",
+    "after": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. The accepted spelling is =!>. Map each item, not the whole input sequence; =>> is rejected.\n\nUnder the pinned semantics, additional arguments retain the containing focus. Released Bosak instead evaluates focus-sensitive extra arguments under mapped-item focus (C04 G02). Use an explicit `for $u in $seq return f($u, ...)` when those arguments depend on dot, position or size; the simple unary examples do not certify that boundary.",
+    "reason": "Keep the containing-focus mismatch explicit rather than inferring parity from unary examples."
+  }
+]

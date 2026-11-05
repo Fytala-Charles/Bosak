@@ -1,0 +1,3602 @@
+{
+  "date": "2026-10-26",
+  "entries": {
+    "rejected/obsolete-quantifier-functions.md": {
+      "status": "Verified rejected names and quantified alternative",
+      "contracts": [
+        {
+          "id": "C12-01-1",
+          "statement": "all and some-of are absent rather than aliases",
+          "caseIds": [
+            "obsolete-quantifier-functions-all",
+            "obsolete-quantifier-functions-alternative",
+            "obsolete-quantifier-functions-some-of"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-01-2",
+          "statement": "Every predicate match differs from all-values-equal",
+          "caseIds": [
+            "obsolete-quantifier-functions-all",
+            "obsolete-quantifier-functions-alternative",
+            "obsolete-quantifier-functions-some-of"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-01-3",
+          "statement": "The supplied every alternative has an explicit XPath40 context",
+          "caseIds": [
+            "obsolete-quantifier-functions-all",
+            "obsolete-quantifier-functions-alternative",
+            "obsolete-quantifier-functions-some-of"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Names borrowed from other languages are not XPath aliases. Equality of all values differs from every value satisfying a predicate.",
+      "remaining": [
+        "No cross-language alias or universal duplicate/partition contract is adopted."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "Rejected XPath shape: refusal plus supported alternative; no positive gate promotion."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "rejected/xpath-switch-expression.md": {
+      "status": "Verified XPath refusal and conditional alternative",
+      "contracts": [
+        {
+          "id": "C12-02-1",
+          "statement": "XPath refuses the XQuery-style switch expression",
+          "caseIds": [
+            "xpath-switch-expression-alternative",
+            "xpath-switch-expression-refusal"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-02-2",
+          "statement": "The portable conditional alternative returns the declared dispatch value",
+          "caseIds": [
+            "xpath-switch-expression-alternative",
+            "xpath-switch-expression-refusal"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-02-3",
+          "statement": "XSLT switch is a separate instruction with value comparisons",
+          "caseIds": [
+            "xpath-switch-expression-alternative",
+            "xpath-switch-expression-refusal"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Language alignment is local to the host grammar. XQuery or XSLT acceptance does not make an expression legal in XPath.",
+      "remaining": [
+        "Host grammar acceptance does not transfer to standalone XPath; XQuery4 remains outside this contract."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "Rejected XPath shape: refusal plus supported alternative; no positive gate promotion."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/choice-types.md": {
+      "status": "Limited membership/cast; matching-coercion blocker",
+      "contracts": [
+        {
+          "id": "C12-03-1",
+          "statement": "Membership and cardinality differ from converting alternatives",
+          "caseIds": [
+            "choice-types-before",
+            "choice-types-edge",
+            "choice-types-main"
+          ],
+          "probeIds": [
+            "choice-cast-first",
+            "choice-cast-reverse",
+            "choice-coerce-matches-first",
+            "choice-nested",
+            "choice-cardinality",
+            "choice-argument-matches-first",
+            "choice-return-matches-first"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-03-2",
+          "statement": "Explicit cast tries alternatives in order",
+          "caseIds": [
+            "choice-types-before",
+            "choice-types-edge",
+            "choice-types-main"
+          ],
+          "probeIds": [
+            "choice-cast-first",
+            "choice-cast-reverse",
+            "choice-coerce-matches-first",
+            "choice-nested",
+            "choice-cardinality",
+            "choice-argument-matches-first",
+            "choice-return-matches-first"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-03-3",
+          "statement": "Already-matching typed let, argument and return values must retain the matching alternative",
+          "caseIds": [
+            "choice-types-before",
+            "choice-types-edge",
+            "choice-types-main"
+          ],
+          "probeIds": [
+            "choice-cast-first",
+            "choice-cast-reverse",
+            "choice-coerce-matches-first",
+            "choice-nested",
+            "choice-cardinality",
+            "choice-argument-matches-first",
+            "choice-return-matches-first"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.",
+      "remaining": [
+        "C05-K02: six fresh controls still convert an already-matching string to an earlier integer alternative; explicit-cast success does not resolve this."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XPath type contract: named unit and catalog evidence; only explicitly named current gate assignments are retained."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+            "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+            "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/enum-types.md": {
+      "status": "Verified bounded enumeration",
+      "contracts": [
+        {
+          "id": "C12-04-1",
+          "statement": "Allowed string values match case-sensitively",
+          "caseIds": [
+            "enum-types-before",
+            "enum-types-edge",
+            "enum-types-main"
+          ],
+          "probeIds": [
+            "enum-cast",
+            "enum-castable"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-04-2",
+          "statement": "Invalid lexical values differ from a permitted business payload",
+          "caseIds": [
+            "enum-types-before",
+            "enum-types-edge",
+            "enum-types-main"
+          ],
+          "probeIds": [
+            "enum-cast",
+            "enum-castable"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-04-3",
+          "statement": "Cast and castable have independently retained results",
+          "caseIds": [
+            "enum-types-before",
+            "enum-types-edge",
+            "enum-types-main"
+          ],
+          "probeIds": [
+            "enum-cast",
+            "enum-castable"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-types",
+              "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+              "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Enum_Castable_ReportsMembership"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Matching is case-sensitive; an allowed enum does not establish that the rest of a business record is valid.",
+      "remaining": [
+        "Not complete schema-union, collation, nested function/record or error-precedence acceptance."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XPath type contract: named unit and catalog evidence; only explicitly named current gate assignments are retained."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Compile_EnumType_31Mode_ThrowsXpst0003",
+            "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+            "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/nominative-records.md": {
+      "status": "Verified bounded XSLT nominal identity",
+      "contracts": [
+        {
+          "id": "C12-05-1",
+          "statement": "Declarations establish identity in the compiled stylesheet context",
+          "caseIds": [
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "nominative-records-alternative"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-05-2",
+          "statement": "Own versus other nominal types differ despite matching fields",
+          "caseIds": [
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "nominative-records-alternative"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-05-3",
+          "statement": "Standalone structural alternatives do not register nominal names",
+          "caseIds": [
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "nominative-records-alternative"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Unlike a structural alias, nominal identity is not established by matching fields alone. A C# or TypeScript name does not register a type in Bosak; the compiled XSLT declaration provides the tested context.",
+      "remaining": [
+        "Package visibility, transitive imports, complete static/default field combinations and arbitrary host registration remain bounded by C03/C05/C06."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+          "gitBlob": "392ee66e2cdc428c12d74f131e23084693649ef3",
+          "methods": []
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/record-updates.md": {
+      "status": "Verified bounded annotated reconstruction",
+      "contracts": [
+        {
+          "id": "C12-06-1",
+          "statement": "but with constructs a new annotated value and preserves the original",
+          "caseIds": [
+            "record-contract-cast-extra",
+            "record-contract-cast-invalid",
+            "record-contract-cast-lexical",
+            "record-contract-castable-invalid",
+            "record-contract-castable-plain",
+            "record-contract-coerce-extra",
+            "record-contract-coerce-missing",
+            "record-contract-coerce-nested",
+            "record-contract-coerce-order",
+            "record-contract-coerce-original",
+            "record-contract-coerce-promote",
+            "record-contract-coerce-string",
+            "record-contract-lookup-unknown",
+            "record-contract-map-get-unknown",
+            "record-contract-missing-empty",
+            "record-contract-missing-required",
+            "record-contract-plain-map",
+            "record-contract-record-star-assert",
+            "record-contract-record-star-plain",
+            "record-contract-refuse31-cast-lexical",
+            "record-contract-refuse31-coerce-promote",
+            "record-contract-refuse31-update-value",
+            "record-contract-report-3-empty",
+            "record-contract-report-3-invalid",
+            "record-contract-report-3-normal",
+            "record-contract-report-3-reordered",
+            "record-contract-report-4-empty",
+            "record-contract-report-4-invalid",
+            "record-contract-report-4-normal",
+            "record-contract-report-4-reordered",
+            "record-contract-typed-let-extra",
+            "record-contract-typed-let-promote",
+            "record-contract-update-annotation",
+            "record-contract-update-decimal",
+            "record-contract-update-empty-optional",
+            "record-contract-update-empty-required",
+            "record-contract-update-extra",
+            "record-contract-update-key-type",
+            "record-contract-update-nested",
+            "record-contract-update-nonmap",
+            "record-contract-update-order",
+            "record-contract-update-original",
+            "record-contract-update-plain",
+            "record-contract-update-promote",
+            "record-contract-update-string",
+            "record-contract-update-value"
+          ],
+          "probeIds": [
+            "retained-record-contract-update-value",
+            "retained-record-contract-update-annotation",
+            "retained-record-contract-update-original",
+            "retained-record-contract-update-extra",
+            "retained-record-contract-update-plain",
+            "retained-record-contract-update-nonmap",
+            "retained-record-contract-update-promote",
+            "retained-record-contract-update-string",
+            "retained-record-contract-update-decimal",
+            "retained-record-contract-update-empty-optional",
+            "retained-record-contract-update-empty-required",
+            "retained-record-contract-update-order",
+            "retained-record-contract-update-nested",
+            "retained-record-contract-update-key-type",
+            "retained-record-contract-refuse31-update-value"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-06-2",
+          "statement": "Unknown fields and noncoercible replacements refuse; optional empty values remain present entries",
+          "caseIds": [
+            "record-contract-cast-extra",
+            "record-contract-cast-invalid",
+            "record-contract-cast-lexical",
+            "record-contract-castable-invalid",
+            "record-contract-castable-plain",
+            "record-contract-coerce-extra",
+            "record-contract-coerce-missing",
+            "record-contract-coerce-nested",
+            "record-contract-coerce-order",
+            "record-contract-coerce-original",
+            "record-contract-coerce-promote",
+            "record-contract-coerce-string",
+            "record-contract-lookup-unknown",
+            "record-contract-map-get-unknown",
+            "record-contract-missing-empty",
+            "record-contract-missing-required",
+            "record-contract-plain-map",
+            "record-contract-record-star-assert",
+            "record-contract-record-star-plain",
+            "record-contract-refuse31-cast-lexical",
+            "record-contract-refuse31-coerce-promote",
+            "record-contract-refuse31-update-value",
+            "record-contract-report-3-empty",
+            "record-contract-report-3-invalid",
+            "record-contract-report-3-normal",
+            "record-contract-report-3-reordered",
+            "record-contract-report-4-empty",
+            "record-contract-report-4-invalid",
+            "record-contract-report-4-normal",
+            "record-contract-report-4-reordered",
+            "record-contract-typed-let-extra",
+            "record-contract-typed-let-promote",
+            "record-contract-update-annotation",
+            "record-contract-update-decimal",
+            "record-contract-update-empty-optional",
+            "record-contract-update-empty-required",
+            "record-contract-update-extra",
+            "record-contract-update-key-type",
+            "record-contract-update-nested",
+            "record-contract-update-nonmap",
+            "record-contract-update-order",
+            "record-contract-update-original",
+            "record-contract-update-plain",
+            "record-contract-update-promote",
+            "record-contract-update-string",
+            "record-contract-update-value"
+          ],
+          "probeIds": [
+            "retained-record-contract-update-value",
+            "retained-record-contract-update-annotation",
+            "retained-record-contract-update-original",
+            "retained-record-contract-update-extra",
+            "retained-record-contract-update-plain",
+            "retained-record-contract-update-nonmap",
+            "retained-record-contract-update-promote",
+            "retained-record-contract-update-string",
+            "retained-record-contract-update-decimal",
+            "retained-record-contract-update-empty-optional",
+            "retained-record-contract-update-empty-required",
+            "retained-record-contract-update-order",
+            "retained-record-contract-update-nested",
+            "retained-record-contract-update-key-type",
+            "retained-record-contract-refuse31-update-value"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-06-3",
+          "statement": "Complete before/after reports retain input order and invalid-delta errors",
+          "caseIds": [
+            "record-contract-cast-extra",
+            "record-contract-cast-invalid",
+            "record-contract-cast-lexical",
+            "record-contract-castable-invalid",
+            "record-contract-castable-plain",
+            "record-contract-coerce-extra",
+            "record-contract-coerce-missing",
+            "record-contract-coerce-nested",
+            "record-contract-coerce-order",
+            "record-contract-coerce-original",
+            "record-contract-coerce-promote",
+            "record-contract-coerce-string",
+            "record-contract-lookup-unknown",
+            "record-contract-map-get-unknown",
+            "record-contract-missing-empty",
+            "record-contract-missing-required",
+            "record-contract-plain-map",
+            "record-contract-record-star-assert",
+            "record-contract-record-star-plain",
+            "record-contract-refuse31-cast-lexical",
+            "record-contract-refuse31-coerce-promote",
+            "record-contract-refuse31-update-value",
+            "record-contract-report-3-empty",
+            "record-contract-report-3-invalid",
+            "record-contract-report-3-normal",
+            "record-contract-report-3-reordered",
+            "record-contract-report-4-empty",
+            "record-contract-report-4-invalid",
+            "record-contract-report-4-normal",
+            "record-contract-report-4-reordered",
+            "record-contract-typed-let-extra",
+            "record-contract-typed-let-promote",
+            "record-contract-update-annotation",
+            "record-contract-update-decimal",
+            "record-contract-update-empty-optional",
+            "record-contract-update-empty-required",
+            "record-contract-update-extra",
+            "record-contract-update-key-type",
+            "record-contract-update-nested",
+            "record-contract-update-nonmap",
+            "record-contract-update-order",
+            "record-contract-update-original",
+            "record-contract-update-plain",
+            "record-contract-update-promote",
+            "record-contract-update-string",
+            "record-contract-update-value"
+          ],
+          "probeIds": [
+            "retained-record-contract-update-value",
+            "retained-record-contract-update-annotation",
+            "retained-record-contract-update-original",
+            "retained-record-contract-update-extra",
+            "retained-record-contract-update-plain",
+            "retained-record-contract-update-nonmap",
+            "retained-record-contract-update-promote",
+            "retained-record-contract-update-string",
+            "retained-record-contract-update-decimal",
+            "retained-record-contract-update-empty-optional",
+            "retained-record-contract-update-empty-required",
+            "retained-record-contract-update-order",
+            "retained-record-contract-update-nested",
+            "retained-record-contract-update-key-type",
+            "retained-record-contract-refuse31-update-value"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "This is XPath's annotation-driven reconstruction, not JavaScript object spread or an unrestricted immutable dictionary update. Undeclared fields and noncoercible values fail. A cast may discard surplus keys and convert a lexical string to an integer; update uses coercion and therefore does not automatically perform that lexical cast. Optional empty values are entries whose values are empty, not absent keys. Structural records are distinct from XSLT-defined nominal identity.",
+      "remaining": [
+        "No persistence, concurrency or nonnegative-stock business validation; nested/schema/nominal combinations remain bounded. C05-K03 annotated-record destructuring remains a distinct defect."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XPath type contract: named unit and catalog evidence; only explicitly named current gate assignments are retained."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+          "gitBlob": "29a556aa648f365db75ff1f70f36d982561143c8",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "gitBlob": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+          "methods": [
+            "ButWith_ResultKeepsRecordAnnotation",
+            "ButWith_UnknownField_XPTY0004",
+            "ButWith_PlainMapLhs_XPTY0004",
+            "ButWith_CoercesRhsValuesToFieldTypes",
+            "ButWith_ResultEntriesFollowDeclarationOrder"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/structural-records.md": {
+      "status": "Verified bounded conversion and annotation",
+      "contracts": [
+        {
+          "id": "C12-07-1",
+          "statement": "Plain map membership differs from an annotated record",
+          "caseIds": [
+            "structural-records-before",
+            "structural-records-edge",
+            "structural-records-main"
+          ],
+          "probeIds": [
+            "retained-record-contract-cast-extra",
+            "retained-record-contract-cast-lexical",
+            "retained-record-contract-cast-invalid",
+            "retained-record-contract-coerce-extra",
+            "retained-record-contract-coerce-string",
+            "retained-record-contract-coerce-promote",
+            "retained-record-contract-coerce-nested",
+            "retained-record-contract-missing-empty",
+            "retained-record-contract-missing-required",
+            "retained-record-contract-coerce-missing",
+            "retained-record-contract-coerce-order",
+            "retained-record-contract-plain-map",
+            "retained-record-contract-record-star-plain",
+            "retained-record-contract-record-star-assert",
+            "retained-record-contract-castable-plain",
+            "retained-record-contract-castable-invalid",
+            "retained-record-contract-lookup-unknown",
+            "retained-record-contract-map-get-unknown",
+            "retained-record-contract-coerce-original",
+            "retained-record-contract-refuse31-cast-lexical",
+            "retained-record-contract-refuse31-coerce-promote"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-07-2",
+          "statement": "Cast may discard extra fields and lexically convert; coercion refuses them",
+          "caseIds": [
+            "structural-records-before",
+            "structural-records-edge",
+            "structural-records-main"
+          ],
+          "probeIds": [
+            "retained-record-contract-cast-extra",
+            "retained-record-contract-cast-lexical",
+            "retained-record-contract-cast-invalid",
+            "retained-record-contract-coerce-extra",
+            "retained-record-contract-coerce-string",
+            "retained-record-contract-coerce-promote",
+            "retained-record-contract-coerce-nested",
+            "retained-record-contract-missing-empty",
+            "retained-record-contract-missing-required",
+            "retained-record-contract-coerce-missing",
+            "retained-record-contract-coerce-order",
+            "retained-record-contract-plain-map",
+            "retained-record-contract-record-star-plain",
+            "retained-record-contract-record-star-assert",
+            "retained-record-contract-castable-plain",
+            "retained-record-contract-castable-invalid",
+            "retained-record-contract-lookup-unknown",
+            "retained-record-contract-map-get-unknown",
+            "retained-record-contract-coerce-original",
+            "retained-record-contract-refuse31-cast-lexical",
+            "retained-record-contract-refuse31-coerce-promote"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-07-3",
+          "statement": "Required, optional-empty and unknown-field lookup have separate errors",
+          "caseIds": [
+            "structural-records-before",
+            "structural-records-edge",
+            "structural-records-main"
+          ],
+          "probeIds": [
+            "retained-record-contract-cast-extra",
+            "retained-record-contract-cast-lexical",
+            "retained-record-contract-cast-invalid",
+            "retained-record-contract-coerce-extra",
+            "retained-record-contract-coerce-string",
+            "retained-record-contract-coerce-promote",
+            "retained-record-contract-coerce-nested",
+            "retained-record-contract-missing-empty",
+            "retained-record-contract-missing-required",
+            "retained-record-contract-coerce-missing",
+            "retained-record-contract-coerce-order",
+            "retained-record-contract-plain-map",
+            "retained-record-contract-record-star-plain",
+            "retained-record-contract-record-star-assert",
+            "retained-record-contract-castable-plain",
+            "retained-record-contract-castable-invalid",
+            "retained-record-contract-lookup-unknown",
+            "retained-record-contract-map-get-unknown",
+            "retained-record-contract-coerce-original",
+            "retained-record-contract-refuse31-cast-lexical",
+            "retained-record-contract-refuse31-coerce-promote"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-update",
+              "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+              "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_ResultKeepsRecordAnnotation"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_UnknownField_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "ButWith_CoercesRhsValuesToFieldTypes"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. A plain map is not an annotated record in Bosak. Coercion policy and undeclared fields must be understood before adapting broad payloads.",
+      "remaining": [
+        "No full schema/type-context acceptance. C05-K03 still affects destructuring unknown annotated fields; ordinary-map empty lookup is separate."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XPath type contract: named unit and catalog evidence; only explicitly named current gate assignments are retained."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "gitBlob": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+          "methods": [
+            "Coercion_BuildsAnnotatedRecord",
+            "Coercion_MissingFieldBecomesEmptyEntry",
+            "Coercion_SurplusKeys_XPTY0004"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "type-system/typed-let-coercion.md": {
+      "status": "Limited typed binding; choice blocker retained",
+      "contracts": [
+        {
+          "id": "C12-08-1",
+          "statement": "Typed binding applies coercion rather than numeric truncation",
+          "caseIds": [
+            "typed-let-coercion-before",
+            "typed-let-coercion-edge",
+            "typed-let-coercion-main"
+          ],
+          "probeIds": [
+            "choice-coerce-matches-first",
+            "retained-record-contract-typed-let-promote",
+            "retained-record-contract-typed-let-extra"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "REQ123-destructuring",
+              "assessment": "Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured.",
+              "remaining": "K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_TypedLet_FrozenXPath40_Coerces"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-08-2",
+          "statement": "Untyped lexical conversion and permitted numeric promotion differ from fractional-to-integer refusal",
+          "caseIds": [
+            "typed-let-coercion-before",
+            "typed-let-coercion-edge",
+            "typed-let-coercion-main"
+          ],
+          "probeIds": [
+            "choice-coerce-matches-first",
+            "retained-record-contract-typed-let-promote",
+            "retained-record-contract-typed-let-extra"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "REQ123-destructuring",
+              "assessment": "Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured.",
+              "remaining": "K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_TypedLet_FrozenXPath40_Coerces"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-08-3",
+          "statement": "Choice matching rules are required separately from ordinary scalar examples",
+          "caseIds": [
+            "typed-let-coercion-before",
+            "typed-let-coercion-edge",
+            "typed-let-coercion-main"
+          ],
+          "probeIds": [
+            "choice-coerce-matches-first",
+            "retained-record-contract-typed-let-promote",
+            "retained-record-contract-typed-let-extra"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S6-record-conversion",
+              "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+              "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Cast_DiscardsSurplusKeys"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_SurplusKeys_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Coercion_PromotesFieldValuesRecursively"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+                  "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+                  "method": "RecordSignatures"
+                }
+              ]
+            },
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "REQ123-destructuring",
+              "assessment": "Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured.",
+              "remaining": "K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_TypedLet_FrozenXPath40_Coerces"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Coercion is not truncation. A fractional number cannot be silently relabeled as an integer.",
+      "remaining": [
+        "C05-K02 remains for choice-typed let/argument/return; passing scalar examples do not certify all declared types or error precedence."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XPath type contract: named unit and catalog evidence; only explicitly named current gate assignments are retained."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Evaluate_TypedLet_FrozenXPath40_Coerces"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/compound-patterns.md": {
+      "status": "Verified bounded pattern sets and priorities",
+      "contracts": [
+        {
+          "id": "C12-09-1",
+          "statement": "Pattern membership and template priority are separate",
+          "caseIds": [
+            "manual-patterns-axis30",
+            "manual-patterns-axis40",
+            "manual-patterns-direct-atomic",
+            "manual-patterns-invalid-item-set",
+            "manual-patterns-missing-operand",
+            "manual-patterns-next-local30",
+            "manual-patterns-next-local40",
+            "manual-patterns-next30",
+            "manual-patterns-next40",
+            "manual-patterns-parenthesized-atomic",
+            "manual-patterns-parenthesized-node",
+            "manual-patterns-quoted-operators",
+            "manual-patterns-report-3-empty",
+            "manual-patterns-report-3-normal",
+            "manual-patterns-report-3-reordered",
+            "manual-patterns-report-4-empty",
+            "manual-patterns-report-4-normal",
+            "manual-patterns-report-4-reordered",
+            "manual-patterns-set-earlier30",
+            "manual-patterns-set-explicit-left40",
+            "manual-patterns-set-grouped40",
+            "manual-patterns-set-left40",
+            "manual-patterns-set-priority-first",
+            "manual-patterns-set-priority-high",
+            "manual-patterns-set-priority-low",
+            "manual-patterns-set-priority-predicate",
+            "manual-patterns-union-earlier30",
+            "manual-patterns-union-explicit40",
+            "manual-patterns-union-max40",
+            "manual-patterns-union-word40"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-compound",
+              "assessment": "Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical.",
+              "remaining": "Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs",
+                  "method": "NamespaceBrackets"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs",
+                  "method": "NamedElementPriority"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-09-2",
+          "statement": "Grouping changes union/intersect/except interpretation",
+          "caseIds": [
+            "manual-patterns-axis30",
+            "manual-patterns-axis40",
+            "manual-patterns-direct-atomic",
+            "manual-patterns-invalid-item-set",
+            "manual-patterns-missing-operand",
+            "manual-patterns-next-local30",
+            "manual-patterns-next-local40",
+            "manual-patterns-next30",
+            "manual-patterns-next40",
+            "manual-patterns-parenthesized-atomic",
+            "manual-patterns-parenthesized-node",
+            "manual-patterns-quoted-operators",
+            "manual-patterns-report-3-empty",
+            "manual-patterns-report-3-normal",
+            "manual-patterns-report-3-reordered",
+            "manual-patterns-report-4-empty",
+            "manual-patterns-report-4-normal",
+            "manual-patterns-report-4-reordered",
+            "manual-patterns-set-earlier30",
+            "manual-patterns-set-explicit-left40",
+            "manual-patterns-set-grouped40",
+            "manual-patterns-set-left40",
+            "manual-patterns-set-priority-first",
+            "manual-patterns-set-priority-high",
+            "manual-patterns-set-priority-low",
+            "manual-patterns-set-priority-predicate",
+            "manual-patterns-union-earlier30",
+            "manual-patterns-union-explicit40",
+            "manual-patterns-union-max40",
+            "manual-patterns-union-word40"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-compound",
+              "assessment": "Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical.",
+              "remaining": "Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs",
+                  "method": "NamespaceBrackets"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs",
+                  "method": "NamedElementPriority"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-09-3",
+          "statement": "Delivered union-minimum and explicit-priority controls retain normal/empty/reordered reports",
+          "caseIds": [
+            "manual-patterns-axis30",
+            "manual-patterns-axis40",
+            "manual-patterns-direct-atomic",
+            "manual-patterns-invalid-item-set",
+            "manual-patterns-missing-operand",
+            "manual-patterns-next-local30",
+            "manual-patterns-next-local40",
+            "manual-patterns-next30",
+            "manual-patterns-next40",
+            "manual-patterns-parenthesized-atomic",
+            "manual-patterns-parenthesized-node",
+            "manual-patterns-quoted-operators",
+            "manual-patterns-report-3-empty",
+            "manual-patterns-report-3-normal",
+            "manual-patterns-report-3-reordered",
+            "manual-patterns-report-4-empty",
+            "manual-patterns-report-4-normal",
+            "manual-patterns-report-4-reordered",
+            "manual-patterns-set-earlier30",
+            "manual-patterns-set-explicit-left40",
+            "manual-patterns-set-grouped40",
+            "manual-patterns-set-left40",
+            "manual-patterns-set-priority-first",
+            "manual-patterns-set-priority-high",
+            "manual-patterns-set-priority-low",
+            "manual-patterns-set-priority-predicate",
+            "manual-patterns-union-earlier30",
+            "manual-patterns-union-explicit40",
+            "manual-patterns-union-max40",
+            "manual-patterns-union-word40"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-compound",
+              "assessment": "Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical.",
+              "remaining": "Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs",
+                  "method": "NamespaceBrackets"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs",
+                  "method": "NamedElementPriority"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Pattern operators do not inherit every XPath-expression or C#/SQL precedence intuition. Parenthesized XNode contexts can differ from unparenthesized item patterns. A priority selects a rule after membership; it does not change which nodes satisfy a set expression.",
+      "remaining": [
+        "The delivered minimum-priority correction remains closed. Complete current pattern/model combinations, schema and generic JNode semantics remain outside this bounded review."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/instruction-separators.md": {
+      "status": "Verified bounded iteration separators",
+      "contracts": [
+        {
+          "id": "C12-10-1",
+          "statement": "Separator insertion is between iterations",
+          "caseIds": [
+            "instruction-separators-before",
+            "instruction-separators-edge",
+            "instruction-separators-main"
+          ],
+          "probeIds": [
+            "separator-()",
+            "separator-1",
+            "separator-(1,2,3)",
+            "separator-apply"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-10-2",
+          "statement": "Empty iteration bodies do not redefine iteration count",
+          "caseIds": [
+            "instruction-separators-before",
+            "instruction-separators-edge",
+            "instruction-separators-main"
+          ],
+          "probeIds": [
+            "separator-()",
+            "separator-1",
+            "separator-(1,2,3)",
+            "separator-apply"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-10-3",
+          "statement": "for-each and apply-templates have separate named host controls",
+          "caseIds": [
+            "instruction-separators-before",
+            "instruction-separators-edge",
+            "instruction-separators-main"
+          ],
+          "probeIds": [
+            "separator-()",
+            "separator-1",
+            "separator-(1,2,3)",
+            "separator-apply"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. The separator is between iterations; emitted text and empty iteration bodies need deliberate handling.",
+      "remaining": [
+        "No universal streaming, arbitrary serialization or callback/sequence-constructor combination claim."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+          "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+          "methods": [
+            "ForEach_Separator_BetweenItems",
+            "ForEach_Separator_WithSort",
+            "ForEach_Separator_EmptyAndSingleItem_NoSeparator"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/module-profiles.md": {
+      "status": "Verified bounded direct module policy",
+      "contracts": [
+        {
+          "id": "C12-11-1",
+          "statement": "Includes, imports and use-package retain child versions and the selected host",
+          "caseIds": [
+            "module-profile-import-report-baseline-empty-draft40",
+            "module-profile-import-report-baseline-empty-legacy",
+            "module-profile-import-report-baseline-invalid-draft40",
+            "module-profile-import-report-baseline-invalid-legacy",
+            "module-profile-import-report-baseline-normal-draft40",
+            "module-profile-import-report-baseline-normal-legacy",
+            "module-profile-import-report-baseline-reordered-draft40",
+            "module-profile-import-report-baseline-reordered-legacy",
+            "module-profile-import-report-module40-empty-draft40",
+            "module-profile-import-report-module40-empty-legacy",
+            "module-profile-import-report-module40-invalid-draft40",
+            "module-profile-import-report-module40-invalid-legacy",
+            "module-profile-import-report-module40-normal-draft40",
+            "module-profile-import-report-module40-normal-legacy",
+            "module-profile-import-report-module40-reordered-draft40",
+            "module-profile-import-report-module40-reordered-legacy",
+            "module-profile-import-root3-module3-draft40",
+            "module-profile-import-root3-module3-legacy",
+            "module-profile-import-root3-module3-local4-draft40",
+            "module-profile-import-root3-module3-local4-legacy",
+            "module-profile-import-root3-module4-draft40",
+            "module-profile-import-root3-module4-legacy",
+            "module-profile-import-root4-module3-draft40",
+            "module-profile-import-root4-module3-legacy",
+            "module-profile-import-root4-module4-draft40",
+            "module-profile-import-root4-module4-legacy",
+            "module-profile-import-root4-module4-local3-draft40",
+            "module-profile-import-root4-module4-local3-legacy",
+            "module-profile-import-scan-root4-module4-draft40",
+            "module-profile-import-scan-root4-module4-legacy",
+            "module-profile-import-static-root4-module3-draft40",
+            "module-profile-import-static-root4-module3-legacy",
+            "module-profile-import-validation-root3-module5-draft40",
+            "module-profile-import-validation-root3-module5-legacy",
+            "module-profile-import-validation-root5-module4-draft40",
+            "module-profile-import-validation-root5-module4-legacy",
+            "module-profile-import-validation-root5-module5-local3-draft40",
+            "module-profile-import-validation-root5-module5-local3-legacy",
+            "module-profile-include-report-baseline-empty-draft40",
+            "module-profile-include-report-baseline-empty-legacy",
+            "module-profile-include-report-baseline-invalid-draft40",
+            "module-profile-include-report-baseline-invalid-legacy",
+            "module-profile-include-report-baseline-normal-draft40",
+            "module-profile-include-report-baseline-normal-legacy",
+            "module-profile-include-report-baseline-reordered-draft40",
+            "module-profile-include-report-baseline-reordered-legacy",
+            "module-profile-include-report-module40-empty-draft40",
+            "module-profile-include-report-module40-empty-legacy",
+            "module-profile-include-report-module40-invalid-draft40",
+            "module-profile-include-report-module40-invalid-legacy",
+            "module-profile-include-report-module40-normal-draft40",
+            "module-profile-include-report-module40-normal-legacy",
+            "module-profile-include-report-module40-reordered-draft40",
+            "module-profile-include-report-module40-reordered-legacy",
+            "module-profile-include-root3-module3-draft40",
+            "module-profile-include-root3-module3-legacy",
+            "module-profile-include-root3-module3-local4-draft40",
+            "module-profile-include-root3-module3-local4-legacy",
+            "module-profile-include-root3-module4-draft40",
+            "module-profile-include-root3-module4-legacy",
+            "module-profile-include-root4-module3-draft40",
+            "module-profile-include-root4-module3-legacy",
+            "module-profile-include-root4-module4-draft40",
+            "module-profile-include-root4-module4-legacy",
+            "module-profile-include-root4-module4-local3-draft40",
+            "module-profile-include-root4-module4-local3-legacy",
+            "module-profile-include-scan-root4-module4-draft40",
+            "module-profile-include-scan-root4-module4-legacy",
+            "module-profile-include-static-root4-module3-draft40",
+            "module-profile-include-static-root4-module3-legacy",
+            "module-profile-include-validation-root3-module5-draft40",
+            "module-profile-include-validation-root3-module5-legacy",
+            "module-profile-include-validation-root5-module4-draft40",
+            "module-profile-include-validation-root5-module4-legacy",
+            "module-profile-include-validation-root5-module5-local3-draft40",
+            "module-profile-include-validation-root5-module5-local3-legacy",
+            "module-profile-package-report-baseline-empty-draft40",
+            "module-profile-package-report-baseline-empty-legacy",
+            "module-profile-package-report-baseline-invalid-draft40",
+            "module-profile-package-report-baseline-invalid-legacy",
+            "module-profile-package-report-baseline-normal-draft40",
+            "module-profile-package-report-baseline-normal-legacy",
+            "module-profile-package-report-baseline-reordered-draft40",
+            "module-profile-package-report-baseline-reordered-legacy",
+            "module-profile-package-report-module40-empty-draft40",
+            "module-profile-package-report-module40-empty-legacy",
+            "module-profile-package-report-module40-invalid-draft40",
+            "module-profile-package-report-module40-invalid-legacy",
+            "module-profile-package-report-module40-normal-draft40",
+            "module-profile-package-report-module40-normal-legacy",
+            "module-profile-package-report-module40-reordered-draft40",
+            "module-profile-package-report-module40-reordered-legacy",
+            "module-profile-package-root3-module3-draft40",
+            "module-profile-package-root3-module3-legacy",
+            "module-profile-package-root3-module3-local4-draft40",
+            "module-profile-package-root3-module3-local4-legacy",
+            "module-profile-package-root3-module4-draft40",
+            "module-profile-package-root3-module4-legacy",
+            "module-profile-package-root4-module3-draft40",
+            "module-profile-package-root4-module3-legacy",
+            "module-profile-package-root4-module4-draft40",
+            "module-profile-package-root4-module4-legacy",
+            "module-profile-package-root4-module4-local3-draft40",
+            "module-profile-package-root4-module4-local3-legacy",
+            "module-profile-package-scan-root4-module4-draft40",
+            "module-profile-package-scan-root4-module4-legacy",
+            "module-profile-package-static-root4-module3-draft40",
+            "module-profile-package-static-root4-module3-legacy",
+            "module-profile-package-validation-root3-module5-draft40",
+            "module-profile-package-validation-root3-module5-legacy",
+            "module-profile-package-validation-root5-module4-draft40",
+            "module-profile-package-validation-root5-module4-legacy",
+            "module-profile-package-validation-root5-module5-local3-draft40",
+            "module-profile-package-validation-root5-module5-local3-legacy"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-11-2",
+          "statement": "Legacy uses effective local version; Draft supplies frozen XPath40 independently",
+          "caseIds": [
+            "module-profile-import-report-baseline-empty-draft40",
+            "module-profile-import-report-baseline-empty-legacy",
+            "module-profile-import-report-baseline-invalid-draft40",
+            "module-profile-import-report-baseline-invalid-legacy",
+            "module-profile-import-report-baseline-normal-draft40",
+            "module-profile-import-report-baseline-normal-legacy",
+            "module-profile-import-report-baseline-reordered-draft40",
+            "module-profile-import-report-baseline-reordered-legacy",
+            "module-profile-import-report-module40-empty-draft40",
+            "module-profile-import-report-module40-empty-legacy",
+            "module-profile-import-report-module40-invalid-draft40",
+            "module-profile-import-report-module40-invalid-legacy",
+            "module-profile-import-report-module40-normal-draft40",
+            "module-profile-import-report-module40-normal-legacy",
+            "module-profile-import-report-module40-reordered-draft40",
+            "module-profile-import-report-module40-reordered-legacy",
+            "module-profile-import-root3-module3-draft40",
+            "module-profile-import-root3-module3-legacy",
+            "module-profile-import-root3-module3-local4-draft40",
+            "module-profile-import-root3-module3-local4-legacy",
+            "module-profile-import-root3-module4-draft40",
+            "module-profile-import-root3-module4-legacy",
+            "module-profile-import-root4-module3-draft40",
+            "module-profile-import-root4-module3-legacy",
+            "module-profile-import-root4-module4-draft40",
+            "module-profile-import-root4-module4-legacy",
+            "module-profile-import-root4-module4-local3-draft40",
+            "module-profile-import-root4-module4-local3-legacy",
+            "module-profile-import-scan-root4-module4-draft40",
+            "module-profile-import-scan-root4-module4-legacy",
+            "module-profile-import-static-root4-module3-draft40",
+            "module-profile-import-static-root4-module3-legacy",
+            "module-profile-import-validation-root3-module5-draft40",
+            "module-profile-import-validation-root3-module5-legacy",
+            "module-profile-import-validation-root5-module4-draft40",
+            "module-profile-import-validation-root5-module4-legacy",
+            "module-profile-import-validation-root5-module5-local3-draft40",
+            "module-profile-import-validation-root5-module5-local3-legacy",
+            "module-profile-include-report-baseline-empty-draft40",
+            "module-profile-include-report-baseline-empty-legacy",
+            "module-profile-include-report-baseline-invalid-draft40",
+            "module-profile-include-report-baseline-invalid-legacy",
+            "module-profile-include-report-baseline-normal-draft40",
+            "module-profile-include-report-baseline-normal-legacy",
+            "module-profile-include-report-baseline-reordered-draft40",
+            "module-profile-include-report-baseline-reordered-legacy",
+            "module-profile-include-report-module40-empty-draft40",
+            "module-profile-include-report-module40-empty-legacy",
+            "module-profile-include-report-module40-invalid-draft40",
+            "module-profile-include-report-module40-invalid-legacy",
+            "module-profile-include-report-module40-normal-draft40",
+            "module-profile-include-report-module40-normal-legacy",
+            "module-profile-include-report-module40-reordered-draft40",
+            "module-profile-include-report-module40-reordered-legacy",
+            "module-profile-include-root3-module3-draft40",
+            "module-profile-include-root3-module3-legacy",
+            "module-profile-include-root3-module3-local4-draft40",
+            "module-profile-include-root3-module3-local4-legacy",
+            "module-profile-include-root3-module4-draft40",
+            "module-profile-include-root3-module4-legacy",
+            "module-profile-include-root4-module3-draft40",
+            "module-profile-include-root4-module3-legacy",
+            "module-profile-include-root4-module4-draft40",
+            "module-profile-include-root4-module4-legacy",
+            "module-profile-include-root4-module4-local3-draft40",
+            "module-profile-include-root4-module4-local3-legacy",
+            "module-profile-include-scan-root4-module4-draft40",
+            "module-profile-include-scan-root4-module4-legacy",
+            "module-profile-include-static-root4-module3-draft40",
+            "module-profile-include-static-root4-module3-legacy",
+            "module-profile-include-validation-root3-module5-draft40",
+            "module-profile-include-validation-root3-module5-legacy",
+            "module-profile-include-validation-root5-module4-draft40",
+            "module-profile-include-validation-root5-module4-legacy",
+            "module-profile-include-validation-root5-module5-local3-draft40",
+            "module-profile-include-validation-root5-module5-local3-legacy",
+            "module-profile-package-report-baseline-empty-draft40",
+            "module-profile-package-report-baseline-empty-legacy",
+            "module-profile-package-report-baseline-invalid-draft40",
+            "module-profile-package-report-baseline-invalid-legacy",
+            "module-profile-package-report-baseline-normal-draft40",
+            "module-profile-package-report-baseline-normal-legacy",
+            "module-profile-package-report-baseline-reordered-draft40",
+            "module-profile-package-report-baseline-reordered-legacy",
+            "module-profile-package-report-module40-empty-draft40",
+            "module-profile-package-report-module40-empty-legacy",
+            "module-profile-package-report-module40-invalid-draft40",
+            "module-profile-package-report-module40-invalid-legacy",
+            "module-profile-package-report-module40-normal-draft40",
+            "module-profile-package-report-module40-normal-legacy",
+            "module-profile-package-report-module40-reordered-draft40",
+            "module-profile-package-report-module40-reordered-legacy",
+            "module-profile-package-root3-module3-draft40",
+            "module-profile-package-root3-module3-legacy",
+            "module-profile-package-root3-module3-local4-draft40",
+            "module-profile-package-root3-module3-local4-legacy",
+            "module-profile-package-root3-module4-draft40",
+            "module-profile-package-root3-module4-legacy",
+            "module-profile-package-root4-module3-draft40",
+            "module-profile-package-root4-module3-legacy",
+            "module-profile-package-root4-module4-draft40",
+            "module-profile-package-root4-module4-legacy",
+            "module-profile-package-root4-module4-local3-draft40",
+            "module-profile-package-root4-module4-local3-legacy",
+            "module-profile-package-scan-root4-module4-draft40",
+            "module-profile-package-scan-root4-module4-legacy",
+            "module-profile-package-static-root4-module3-draft40",
+            "module-profile-package-static-root4-module3-legacy",
+            "module-profile-package-validation-root3-module5-draft40",
+            "module-profile-package-validation-root3-module5-legacy",
+            "module-profile-package-validation-root5-module4-draft40",
+            "module-profile-package-validation-root5-module4-legacy",
+            "module-profile-package-validation-root5-module5-local3-draft40",
+            "module-profile-package-validation-root5-module5-local3-legacy"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-11-3",
+          "statement": "Complete reports retain dependency locations, package registrations and invalid input errors",
+          "caseIds": [
+            "module-profile-import-report-baseline-empty-draft40",
+            "module-profile-import-report-baseline-empty-legacy",
+            "module-profile-import-report-baseline-invalid-draft40",
+            "module-profile-import-report-baseline-invalid-legacy",
+            "module-profile-import-report-baseline-normal-draft40",
+            "module-profile-import-report-baseline-normal-legacy",
+            "module-profile-import-report-baseline-reordered-draft40",
+            "module-profile-import-report-baseline-reordered-legacy",
+            "module-profile-import-report-module40-empty-draft40",
+            "module-profile-import-report-module40-empty-legacy",
+            "module-profile-import-report-module40-invalid-draft40",
+            "module-profile-import-report-module40-invalid-legacy",
+            "module-profile-import-report-module40-normal-draft40",
+            "module-profile-import-report-module40-normal-legacy",
+            "module-profile-import-report-module40-reordered-draft40",
+            "module-profile-import-report-module40-reordered-legacy",
+            "module-profile-import-root3-module3-draft40",
+            "module-profile-import-root3-module3-legacy",
+            "module-profile-import-root3-module3-local4-draft40",
+            "module-profile-import-root3-module3-local4-legacy",
+            "module-profile-import-root3-module4-draft40",
+            "module-profile-import-root3-module4-legacy",
+            "module-profile-import-root4-module3-draft40",
+            "module-profile-import-root4-module3-legacy",
+            "module-profile-import-root4-module4-draft40",
+            "module-profile-import-root4-module4-legacy",
+            "module-profile-import-root4-module4-local3-draft40",
+            "module-profile-import-root4-module4-local3-legacy",
+            "module-profile-import-scan-root4-module4-draft40",
+            "module-profile-import-scan-root4-module4-legacy",
+            "module-profile-import-static-root4-module3-draft40",
+            "module-profile-import-static-root4-module3-legacy",
+            "module-profile-import-validation-root3-module5-draft40",
+            "module-profile-import-validation-root3-module5-legacy",
+            "module-profile-import-validation-root5-module4-draft40",
+            "module-profile-import-validation-root5-module4-legacy",
+            "module-profile-import-validation-root5-module5-local3-draft40",
+            "module-profile-import-validation-root5-module5-local3-legacy",
+            "module-profile-include-report-baseline-empty-draft40",
+            "module-profile-include-report-baseline-empty-legacy",
+            "module-profile-include-report-baseline-invalid-draft40",
+            "module-profile-include-report-baseline-invalid-legacy",
+            "module-profile-include-report-baseline-normal-draft40",
+            "module-profile-include-report-baseline-normal-legacy",
+            "module-profile-include-report-baseline-reordered-draft40",
+            "module-profile-include-report-baseline-reordered-legacy",
+            "module-profile-include-report-module40-empty-draft40",
+            "module-profile-include-report-module40-empty-legacy",
+            "module-profile-include-report-module40-invalid-draft40",
+            "module-profile-include-report-module40-invalid-legacy",
+            "module-profile-include-report-module40-normal-draft40",
+            "module-profile-include-report-module40-normal-legacy",
+            "module-profile-include-report-module40-reordered-draft40",
+            "module-profile-include-report-module40-reordered-legacy",
+            "module-profile-include-root3-module3-draft40",
+            "module-profile-include-root3-module3-legacy",
+            "module-profile-include-root3-module3-local4-draft40",
+            "module-profile-include-root3-module3-local4-legacy",
+            "module-profile-include-root3-module4-draft40",
+            "module-profile-include-root3-module4-legacy",
+            "module-profile-include-root4-module3-draft40",
+            "module-profile-include-root4-module3-legacy",
+            "module-profile-include-root4-module4-draft40",
+            "module-profile-include-root4-module4-legacy",
+            "module-profile-include-root4-module4-local3-draft40",
+            "module-profile-include-root4-module4-local3-legacy",
+            "module-profile-include-scan-root4-module4-draft40",
+            "module-profile-include-scan-root4-module4-legacy",
+            "module-profile-include-static-root4-module3-draft40",
+            "module-profile-include-static-root4-module3-legacy",
+            "module-profile-include-validation-root3-module5-draft40",
+            "module-profile-include-validation-root3-module5-legacy",
+            "module-profile-include-validation-root5-module4-draft40",
+            "module-profile-include-validation-root5-module4-legacy",
+            "module-profile-include-validation-root5-module5-local3-draft40",
+            "module-profile-include-validation-root5-module5-local3-legacy",
+            "module-profile-package-report-baseline-empty-draft40",
+            "module-profile-package-report-baseline-empty-legacy",
+            "module-profile-package-report-baseline-invalid-draft40",
+            "module-profile-package-report-baseline-invalid-legacy",
+            "module-profile-package-report-baseline-normal-draft40",
+            "module-profile-package-report-baseline-normal-legacy",
+            "module-profile-package-report-baseline-reordered-draft40",
+            "module-profile-package-report-baseline-reordered-legacy",
+            "module-profile-package-report-module40-empty-draft40",
+            "module-profile-package-report-module40-empty-legacy",
+            "module-profile-package-report-module40-invalid-draft40",
+            "module-profile-package-report-module40-invalid-legacy",
+            "module-profile-package-report-module40-normal-draft40",
+            "module-profile-package-report-module40-normal-legacy",
+            "module-profile-package-report-module40-reordered-draft40",
+            "module-profile-package-report-module40-reordered-legacy",
+            "module-profile-package-root3-module3-draft40",
+            "module-profile-package-root3-module3-legacy",
+            "module-profile-package-root3-module3-local4-draft40",
+            "module-profile-package-root3-module3-local4-legacy",
+            "module-profile-package-root3-module4-draft40",
+            "module-profile-package-root3-module4-legacy",
+            "module-profile-package-root4-module3-draft40",
+            "module-profile-package-root4-module3-legacy",
+            "module-profile-package-root4-module4-draft40",
+            "module-profile-package-root4-module4-legacy",
+            "module-profile-package-root4-module4-local3-draft40",
+            "module-profile-package-root4-module4-local3-legacy",
+            "module-profile-package-scan-root4-module4-draft40",
+            "module-profile-package-scan-root4-module4-legacy",
+            "module-profile-package-static-root4-module3-draft40",
+            "module-profile-package-static-root4-module3-legacy",
+            "module-profile-package-validation-root3-module5-draft40",
+            "module-profile-package-validation-root3-module5-legacy",
+            "module-profile-package-validation-root5-module4-draft40",
+            "module-profile-package-validation-root5-module4-legacy",
+            "module-profile-package-validation-root5-module5-local3-draft40",
+            "module-profile-package-validation-root5-module5-local3-legacy"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "The current XSLT draft gives included/imported modules and packages their own declaration/static-context rules. Bosak propagates the selected processor host through compilation; it does not overwrite the child version. Legacy's hybrid policy selects embedded XPath by effective version, whereas Xslt40Draft supplies frozen 4.0 even in a 3.0 library. The tests use nonconflicting function names to isolate that policy. They do not establish import precedence, override/accept/expose semantics, or general equivalence between composition mechanisms.",
+      "remaining": [
+        "Direct nonconflicting examples do not establish arbitrary transitive graphs, import precedence, package versions, override/accept/expose or full lexical defaults. C06 complete static-detection mode remains unproved."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "gitBlob": "b716c33db17c53f629a486b30ede046c946bfe6a",
+          "methods": [
+            "ModulesInheritProfile",
+            "ModuleValidationInheritsProfile",
+            "UsedPackageInheritsProfile"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/processor-profiles.md": {
+      "status": "Verified bounded frozen host policy",
+      "contracts": [
+        {
+          "id": "C12-12-1",
+          "statement": "Legacy is the preserved version-sensitive compatibility policy",
+          "caseIds": [
+            "host-profile-ancestor-root3-wrapper4-draft40",
+            "host-profile-ancestor-root3-wrapper4-legacy",
+            "host-profile-ancestor-root3-wrapper4-local3-draft40",
+            "host-profile-ancestor-root3-wrapper4-local3-legacy",
+            "host-profile-ancestor-root4-wrapper3-draft40",
+            "host-profile-ancestor-root4-wrapper3-legacy",
+            "host-profile-ancestor-root4-wrapper3-local4-draft40",
+            "host-profile-ancestor-root4-wrapper3-local4-legacy",
+            "host-profile-avt-root3-draft40",
+            "host-profile-avt-root3-legacy",
+            "host-profile-avt-root3-local4-draft40",
+            "host-profile-avt-root3-local4-legacy",
+            "host-profile-avt-root4-draft40",
+            "host-profile-avt-root4-legacy",
+            "host-profile-avt-root4-local3-draft40",
+            "host-profile-avt-root4-local3-legacy",
+            "host-profile-future-attribute-root3-draft40",
+            "host-profile-future-attribute-root3-legacy",
+            "host-profile-future-attribute-root3-local4_1-draft40",
+            "host-profile-future-attribute-root3-local4_1-legacy",
+            "host-profile-future-attribute-root4-draft40",
+            "host-profile-future-attribute-root4-legacy",
+            "host-profile-future-attribute-root5-draft40",
+            "host-profile-future-attribute-root5-legacy",
+            "host-profile-future-attribute-root5-local3_0-draft40",
+            "host-profile-future-attribute-root5-local3_0-legacy",
+            "host-profile-output-version-root3-output4-draft40",
+            "host-profile-output-version-root3-output4-legacy",
+            "host-profile-output-version-root4-output3-draft40",
+            "host-profile-output-version-root4-output3-legacy",
+            "host-profile-report-baseline-empty-draft40",
+            "host-profile-report-baseline-empty-legacy",
+            "host-profile-report-baseline-invalid-draft40",
+            "host-profile-report-baseline-invalid-legacy",
+            "host-profile-report-baseline-normal-draft40",
+            "host-profile-report-baseline-normal-legacy",
+            "host-profile-report-baseline-reordered-draft40",
+            "host-profile-report-baseline-reordered-legacy",
+            "host-profile-report-local40-empty-draft40",
+            "host-profile-report-local40-empty-legacy",
+            "host-profile-report-local40-invalid-draft40",
+            "host-profile-report-local40-invalid-legacy",
+            "host-profile-report-local40-normal-draft40",
+            "host-profile-report-local40-normal-legacy",
+            "host-profile-report-local40-reordered-draft40",
+            "host-profile-report-local40-reordered-legacy",
+            "host-profile-scan-root3-draft40",
+            "host-profile-scan-root3-legacy",
+            "host-profile-scan-root4-draft40",
+            "host-profile-scan-root4-legacy",
+            "host-profile-select-root3-draft40",
+            "host-profile-select-root3-legacy",
+            "host-profile-select-root3-local4-draft40",
+            "host-profile-select-root3-local4-legacy",
+            "host-profile-select-root4-draft40",
+            "host-profile-select-root4-legacy",
+            "host-profile-select-root4-local3-draft40",
+            "host-profile-select-root4-local3-legacy",
+            "host-profile-shadow-root3-draft40",
+            "host-profile-shadow-root3-legacy",
+            "host-profile-shadow-root4-draft40",
+            "host-profile-shadow-root4-legacy",
+            "host-profile-use-when-root3-draft40",
+            "host-profile-use-when-root3-legacy",
+            "host-profile-use-when-root4-draft40",
+            "host-profile-use-when-root4-legacy"
+          ],
+          "probeIds": [
+            "local-3.0-none-Legacy",
+            "local-3.0-none-Xslt40Draft",
+            "local-3.0-3.0-Legacy",
+            "local-3.0-3.0-Xslt40Draft",
+            "local-3.0-4.0-Legacy",
+            "local-3.0-4.0-Xslt40Draft",
+            "local-4.0-none-Legacy",
+            "local-4.0-none-Xslt40Draft",
+            "local-4.0-3.0-Legacy",
+            "local-4.0-3.0-Xslt40Draft",
+            "local-4.0-4.0-Legacy",
+            "local-4.0-4.0-Xslt40Draft",
+            "serialization-version-Legacy",
+            "serialization-version-Xslt40Draft",
+            "scan-refusal",
+            "scan-direct-refusal",
+            "future-fallback-3.0-Legacy",
+            "future-fallback-3.0-Xslt40Draft",
+            "future-fallback-4.0-Legacy",
+            "future-fallback-4.0-Xslt40Draft",
+            "future-fallback-5.0-Legacy",
+            "future-fallback-5.0-Xslt40Draft"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-12-2",
+          "statement": "Draft uses frozen XPath40 in effective3.0 and4.0 contexts; serialization version does not promote XPath",
+          "caseIds": [
+            "host-profile-ancestor-root3-wrapper4-draft40",
+            "host-profile-ancestor-root3-wrapper4-legacy",
+            "host-profile-ancestor-root3-wrapper4-local3-draft40",
+            "host-profile-ancestor-root3-wrapper4-local3-legacy",
+            "host-profile-ancestor-root4-wrapper3-draft40",
+            "host-profile-ancestor-root4-wrapper3-legacy",
+            "host-profile-ancestor-root4-wrapper3-local4-draft40",
+            "host-profile-ancestor-root4-wrapper3-local4-legacy",
+            "host-profile-avt-root3-draft40",
+            "host-profile-avt-root3-legacy",
+            "host-profile-avt-root3-local4-draft40",
+            "host-profile-avt-root3-local4-legacy",
+            "host-profile-avt-root4-draft40",
+            "host-profile-avt-root4-legacy",
+            "host-profile-avt-root4-local3-draft40",
+            "host-profile-avt-root4-local3-legacy",
+            "host-profile-future-attribute-root3-draft40",
+            "host-profile-future-attribute-root3-legacy",
+            "host-profile-future-attribute-root3-local4_1-draft40",
+            "host-profile-future-attribute-root3-local4_1-legacy",
+            "host-profile-future-attribute-root4-draft40",
+            "host-profile-future-attribute-root4-legacy",
+            "host-profile-future-attribute-root5-draft40",
+            "host-profile-future-attribute-root5-legacy",
+            "host-profile-future-attribute-root5-local3_0-draft40",
+            "host-profile-future-attribute-root5-local3_0-legacy",
+            "host-profile-output-version-root3-output4-draft40",
+            "host-profile-output-version-root3-output4-legacy",
+            "host-profile-output-version-root4-output3-draft40",
+            "host-profile-output-version-root4-output3-legacy",
+            "host-profile-report-baseline-empty-draft40",
+            "host-profile-report-baseline-empty-legacy",
+            "host-profile-report-baseline-invalid-draft40",
+            "host-profile-report-baseline-invalid-legacy",
+            "host-profile-report-baseline-normal-draft40",
+            "host-profile-report-baseline-normal-legacy",
+            "host-profile-report-baseline-reordered-draft40",
+            "host-profile-report-baseline-reordered-legacy",
+            "host-profile-report-local40-empty-draft40",
+            "host-profile-report-local40-empty-legacy",
+            "host-profile-report-local40-invalid-draft40",
+            "host-profile-report-local40-invalid-legacy",
+            "host-profile-report-local40-normal-draft40",
+            "host-profile-report-local40-normal-legacy",
+            "host-profile-report-local40-reordered-draft40",
+            "host-profile-report-local40-reordered-legacy",
+            "host-profile-scan-root3-draft40",
+            "host-profile-scan-root3-legacy",
+            "host-profile-scan-root4-draft40",
+            "host-profile-scan-root4-legacy",
+            "host-profile-select-root3-draft40",
+            "host-profile-select-root3-legacy",
+            "host-profile-select-root3-local4-draft40",
+            "host-profile-select-root3-local4-legacy",
+            "host-profile-select-root4-draft40",
+            "host-profile-select-root4-legacy",
+            "host-profile-select-root4-local3-draft40",
+            "host-profile-select-root4-local3-legacy",
+            "host-profile-shadow-root3-draft40",
+            "host-profile-shadow-root3-legacy",
+            "host-profile-shadow-root4-draft40",
+            "host-profile-shadow-root4-legacy",
+            "host-profile-use-when-root3-draft40",
+            "host-profile-use-when-root3-legacy",
+            "host-profile-use-when-root4-draft40",
+            "host-profile-use-when-root4-legacy"
+          ],
+          "probeIds": [
+            "local-3.0-none-Legacy",
+            "local-3.0-none-Xslt40Draft",
+            "local-3.0-3.0-Legacy",
+            "local-3.0-3.0-Xslt40Draft",
+            "local-3.0-4.0-Legacy",
+            "local-3.0-4.0-Xslt40Draft",
+            "local-4.0-none-Legacy",
+            "local-4.0-none-Xslt40Draft",
+            "local-4.0-3.0-Legacy",
+            "local-4.0-3.0-Xslt40Draft",
+            "local-4.0-4.0-Legacy",
+            "local-4.0-4.0-Xslt40Draft",
+            "serialization-version-Legacy",
+            "serialization-version-Xslt40Draft",
+            "scan-refusal",
+            "scan-direct-refusal",
+            "future-fallback-3.0-Legacy",
+            "future-fallback-3.0-Xslt40Draft",
+            "future-fallback-4.0-Legacy",
+            "future-fallback-4.0-Xslt40Draft",
+            "future-fallback-5.0-Legacy",
+            "future-fallback-5.0-Xslt40Draft"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-12-3",
+          "statement": "Local resets, forward fallback and Experimental scan refusal remain explicit",
+          "caseIds": [
+            "host-profile-ancestor-root3-wrapper4-draft40",
+            "host-profile-ancestor-root3-wrapper4-legacy",
+            "host-profile-ancestor-root3-wrapper4-local3-draft40",
+            "host-profile-ancestor-root3-wrapper4-local3-legacy",
+            "host-profile-ancestor-root4-wrapper3-draft40",
+            "host-profile-ancestor-root4-wrapper3-legacy",
+            "host-profile-ancestor-root4-wrapper3-local4-draft40",
+            "host-profile-ancestor-root4-wrapper3-local4-legacy",
+            "host-profile-avt-root3-draft40",
+            "host-profile-avt-root3-legacy",
+            "host-profile-avt-root3-local4-draft40",
+            "host-profile-avt-root3-local4-legacy",
+            "host-profile-avt-root4-draft40",
+            "host-profile-avt-root4-legacy",
+            "host-profile-avt-root4-local3-draft40",
+            "host-profile-avt-root4-local3-legacy",
+            "host-profile-future-attribute-root3-draft40",
+            "host-profile-future-attribute-root3-legacy",
+            "host-profile-future-attribute-root3-local4_1-draft40",
+            "host-profile-future-attribute-root3-local4_1-legacy",
+            "host-profile-future-attribute-root4-draft40",
+            "host-profile-future-attribute-root4-legacy",
+            "host-profile-future-attribute-root5-draft40",
+            "host-profile-future-attribute-root5-legacy",
+            "host-profile-future-attribute-root5-local3_0-draft40",
+            "host-profile-future-attribute-root5-local3_0-legacy",
+            "host-profile-output-version-root3-output4-draft40",
+            "host-profile-output-version-root3-output4-legacy",
+            "host-profile-output-version-root4-output3-draft40",
+            "host-profile-output-version-root4-output3-legacy",
+            "host-profile-report-baseline-empty-draft40",
+            "host-profile-report-baseline-empty-legacy",
+            "host-profile-report-baseline-invalid-draft40",
+            "host-profile-report-baseline-invalid-legacy",
+            "host-profile-report-baseline-normal-draft40",
+            "host-profile-report-baseline-normal-legacy",
+            "host-profile-report-baseline-reordered-draft40",
+            "host-profile-report-baseline-reordered-legacy",
+            "host-profile-report-local40-empty-draft40",
+            "host-profile-report-local40-empty-legacy",
+            "host-profile-report-local40-invalid-draft40",
+            "host-profile-report-local40-invalid-legacy",
+            "host-profile-report-local40-normal-draft40",
+            "host-profile-report-local40-normal-legacy",
+            "host-profile-report-local40-reordered-draft40",
+            "host-profile-report-local40-reordered-legacy",
+            "host-profile-scan-root3-draft40",
+            "host-profile-scan-root3-legacy",
+            "host-profile-scan-root4-draft40",
+            "host-profile-scan-root4-legacy",
+            "host-profile-select-root3-draft40",
+            "host-profile-select-root3-legacy",
+            "host-profile-select-root3-local4-draft40",
+            "host-profile-select-root3-local4-legacy",
+            "host-profile-select-root4-draft40",
+            "host-profile-select-root4-legacy",
+            "host-profile-select-root4-local3-draft40",
+            "host-profile-select-root4-local3-legacy",
+            "host-profile-shadow-root3-draft40",
+            "host-profile-shadow-root3-legacy",
+            "host-profile-shadow-root4-draft40",
+            "host-profile-shadow-root4-legacy",
+            "host-profile-use-when-root3-draft40",
+            "host-profile-use-when-root3-legacy",
+            "host-profile-use-when-root4-draft40",
+            "host-profile-use-when-root4-legacy"
+          ],
+          "probeIds": [
+            "local-3.0-none-Legacy",
+            "local-3.0-none-Xslt40Draft",
+            "local-3.0-3.0-Legacy",
+            "local-3.0-3.0-Xslt40Draft",
+            "local-3.0-4.0-Legacy",
+            "local-3.0-4.0-Xslt40Draft",
+            "local-4.0-none-Legacy",
+            "local-4.0-none-Xslt40Draft",
+            "local-4.0-3.0-Legacy",
+            "local-4.0-3.0-Xslt40Draft",
+            "local-4.0-4.0-Legacy",
+            "local-4.0-4.0-Xslt40Draft",
+            "serialization-version-Legacy",
+            "serialization-version-Xslt40Draft",
+            "scan-refusal",
+            "scan-direct-refusal",
+            "future-fallback-3.0-Legacy",
+            "future-fallback-3.0-Xslt40Draft",
+            "future-fallback-4.0-Legacy",
+            "future-fallback-4.0-Xslt40Draft",
+            "future-fallback-5.0-Legacy",
+            "future-fallback-5.0-Xslt40Draft"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S0",
+              "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+              "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+                },
+                {
+                  "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+                  "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "DraftXPathIndependentOfVersion"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+                  "method": "PublishedExample_MatchesDeclaredOutcome"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModulesInheritProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "ModuleValidationInheritsProfile"
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": "UsedPackageInheritsProfile"
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "The pinned XSLT 4.0 draft defines effective version from the nearest applicable [xsl:]version attribute, with special rules including xsl:output. It defines no 3.0-versus4.0 compatibility-mode differences for a 4.0 processor. The draft profile's acceptance of frozen 4.0 XPath within version 3.0 is therefore intentional. Bosak Legacy is its preserved compatibility policy, not an assertion that it exactly emulates every W3C3.0 processor: it uses a 3.0 forwards-compatible ceiling while selecting embedded XPath 4.0 at effective versions at least 4.0.",
+      "remaining": [
+        "Neither profile implements all current draft syntax or enables Experimental scan. C06-H01 requires a complete static-detection mode; lazy timing alone is not classified as a defect."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "gitBlob": "b716c33db17c53f629a486b30ede046c946bfe6a",
+          "methods": [
+            "DefaultAndInvalidProfile",
+            "UnknownAttributeMatrix",
+            "LocalVersion",
+            "DraftXPathIndependentOfVersion",
+            "StaticXPathProfile",
+            "CompilationCapturesProfile"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/structured-value-patterns.md": {
+      "status": "Verified bounded structured matching",
+      "contracts": [
+        {
+          "id": "C12-13-1",
+          "statement": "Pattern syntax differs from sequence types and constructors",
+          "caseIds": [
+            "intake-types-alias-duplicate",
+            "intake-types-alias-expanded-name",
+            "intake-types-alias-missing-as",
+            "intake-types-alias-version30",
+            "intake-types-array-empty-member",
+            "intake-types-array-member-plus",
+            "intake-types-array-member-star",
+            "intake-types-array-not-map",
+            "intake-types-array-pattern-version30",
+            "intake-types-array-singletons",
+            "intake-types-array-vacuous",
+            "intake-types-array-whole-sequence",
+            "intake-types-array-wrong-type",
+            "intake-types-enum-allowed",
+            "intake-types-enum-rejected",
+            "intake-types-enum-treat-error",
+            "intake-types-map-closed",
+            "intake-types-map-empty-missing",
+            "intake-types-map-empty-present",
+            "intake-types-map-extra-closed",
+            "intake-types-map-extra-open",
+            "intake-types-map-numeric-key",
+            "intake-types-map-pattern-version30",
+            "intake-types-map-sequence-allowed",
+            "intake-types-map-singleton-required",
+            "intake-types-nominal-no-constructor",
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-nominal-plain-map",
+            "intake-types-report-3-empty",
+            "intake-types-report-3-normal",
+            "intake-types-report-3-reordered",
+            "intake-types-report-4-empty",
+            "intake-types-report-4-normal",
+            "intake-types-report-4-reordered",
+            "intake-types-structural-binding",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "intake-types-type-structural-annotated",
+            "intake-types-type-structural-map"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-13-2",
+          "statement": "Present-empty map fields differ from missing fields",
+          "caseIds": [
+            "intake-types-alias-duplicate",
+            "intake-types-alias-expanded-name",
+            "intake-types-alias-missing-as",
+            "intake-types-alias-version30",
+            "intake-types-array-empty-member",
+            "intake-types-array-member-plus",
+            "intake-types-array-member-star",
+            "intake-types-array-not-map",
+            "intake-types-array-pattern-version30",
+            "intake-types-array-singletons",
+            "intake-types-array-vacuous",
+            "intake-types-array-whole-sequence",
+            "intake-types-array-wrong-type",
+            "intake-types-enum-allowed",
+            "intake-types-enum-rejected",
+            "intake-types-enum-treat-error",
+            "intake-types-map-closed",
+            "intake-types-map-empty-missing",
+            "intake-types-map-empty-present",
+            "intake-types-map-extra-closed",
+            "intake-types-map-extra-open",
+            "intake-types-map-numeric-key",
+            "intake-types-map-pattern-version30",
+            "intake-types-map-sequence-allowed",
+            "intake-types-map-singleton-required",
+            "intake-types-nominal-no-constructor",
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-nominal-plain-map",
+            "intake-types-report-3-empty",
+            "intake-types-report-3-normal",
+            "intake-types-report-3-reordered",
+            "intake-types-report-4-empty",
+            "intake-types-report-4-normal",
+            "intake-types-report-4-reordered",
+            "intake-types-structural-binding",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "intake-types-type-structural-annotated",
+            "intake-types-type-structural-map"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-13-3",
+          "statement": "Vacuous arrays differ from arrays containing empty members; matching does not coerce",
+          "caseIds": [
+            "intake-types-alias-duplicate",
+            "intake-types-alias-expanded-name",
+            "intake-types-alias-missing-as",
+            "intake-types-alias-version30",
+            "intake-types-array-empty-member",
+            "intake-types-array-member-plus",
+            "intake-types-array-member-star",
+            "intake-types-array-not-map",
+            "intake-types-array-pattern-version30",
+            "intake-types-array-singletons",
+            "intake-types-array-vacuous",
+            "intake-types-array-whole-sequence",
+            "intake-types-array-wrong-type",
+            "intake-types-enum-allowed",
+            "intake-types-enum-rejected",
+            "intake-types-enum-treat-error",
+            "intake-types-map-closed",
+            "intake-types-map-empty-missing",
+            "intake-types-map-empty-present",
+            "intake-types-map-extra-closed",
+            "intake-types-map-extra-open",
+            "intake-types-map-numeric-key",
+            "intake-types-map-pattern-version30",
+            "intake-types-map-sequence-allowed",
+            "intake-types-map-singleton-required",
+            "intake-types-nominal-no-constructor",
+            "intake-types-nominal-other",
+            "intake-types-nominal-own",
+            "intake-types-nominal-plain-map",
+            "intake-types-report-3-empty",
+            "intake-types-report-3-normal",
+            "intake-types-report-3-reordered",
+            "intake-types-report-4-empty",
+            "intake-types-report-4-normal",
+            "intake-types-report-4-reordered",
+            "intake-types-structural-binding",
+            "intake-types-type-nominal-other",
+            "intake-types-type-nominal-own",
+            "intake-types-type-structural-annotated",
+            "intake-types-type-structural-map"
+          ],
+          "probeIds": [],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+              "key": "S8-patterns",
+              "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+              "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+                  "method": ""
+                },
+                {
+                  "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Pattern syntax is not XPath constructor syntax. `array(atomic(xs:integer)+)` in match differs from a sequence type in @as. Matching does not perform the annotation/conversion that an @as binding may apply.",
+      "remaining": [
+        "C05-K01 generic model/JNode and complete nested schema/nominal pattern combinations remain limited; no universal generic-node promotion."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ArrayPatternTests.cs",
+          "gitBlob": "4fb204aa0e57aeb89316fb23a1d97c1bae27e295",
+          "methods": [
+            "Matching"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40MapEntryPatternTests.cs",
+          "gitBlob": "10de8512e7a5c1e94e94692e92d48f44cebadcd1",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs",
+          "gitBlob": "4521e6e960596bb55a9e5aaaa8db3bc25475562d",
+          "methods": []
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-array.md": {
+      "status": "Verified bounded sequence-valued members",
+      "contracts": [
+        {
+          "id": "C12-14-1",
+          "statement": "select alone creates a member per item",
+          "caseIds": [
+            "xsl-array-before",
+            "xsl-array-edge",
+            "xsl-array-main"
+          ],
+          "probeIds": [
+            "array-empty",
+            "array-sequence-members",
+            "array-empty-members",
+            "array-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-14-2",
+          "statement": "for-each plus select and explicit array-member preserve whole sequences including empty ones",
+          "caseIds": [
+            "xsl-array-before",
+            "xsl-array-edge",
+            "xsl-array-main"
+          ],
+          "probeIds": [
+            "array-empty",
+            "array-sequence-members",
+            "array-empty-members",
+            "array-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-14-3",
+          "statement": "Select/content and fallback ordering retain independent native boundary checks",
+          "caseIds": [
+            "xsl-array-before",
+            "xsl-array-edge",
+            "xsl-array-main"
+          ],
+          "probeIds": [
+            "array-empty",
+            "array-sequence-members",
+            "array-empty-members",
+            "array-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. With select alone, each item becomes a member. With for-each plus select, each focused input produces one sequence-valued member, including an empty one; explicit array-member also retains a whole sequence.",
+      "remaining": [
+        "No full instruction-combination, streamability or host/package/type acceptance."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+          "gitBlob": "495cb9309dc003d6239a71377968397d356aef05",
+          "methods": [
+            "Array_Select_OneSingletonMemberPerItem",
+            "Array_Select_TokenizedString",
+            "Array_ForEachSelect_MemberIsWholeSequence"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-if.md": {
+      "status": "Verified bounded conditional instruction",
+      "contracts": [
+        {
+          "id": "C12-15-1",
+          "statement": "Effective Boolean value selects then or else",
+          "caseIds": [
+            "xsl-if-before",
+            "xsl-if-edge",
+            "xsl-if-main"
+          ],
+          "probeIds": [
+            "if-false-lazy",
+            "if-true-lazy",
+            "if-then-content",
+            "if-empty",
+            "if-bad-ebv"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-15-2",
+          "statement": "Unselected dynamic errors remain lazy",
+          "caseIds": [
+            "xsl-if-before",
+            "xsl-if-edge",
+            "xsl-if-main"
+          ],
+          "probeIds": [
+            "if-false-lazy",
+            "if-true-lazy",
+            "if-then-content",
+            "if-empty",
+            "if-bad-ebv"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-15-3",
+          "statement": "Then/content exclusivity and invalid EBV retain errors",
+          "caseIds": [
+            "xsl-if-before",
+            "xsl-if-edge",
+            "xsl-if-main"
+          ],
+          "probeIds": [
+            "if-false-lazy",
+            "if-true-lazy",
+            "if-then-content",
+            "if-empty",
+            "if-bad-ebv"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. This demonstration treats absent or non-urgent priorities as normal; it does not validate a priority vocabulary.",
+      "remaining": [
+        "The synthetic priority example does not validate an application vocabulary; full static-detection mode remains a separate C06 boundary."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+          "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+          "methods": [
+            "If_ThenElse_TrueBranch",
+            "If_ThenElse_FalseBranch",
+            "If_ThenOnly_FalseIsEmpty"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-map.md": {
+      "status": "Verified bounded merge policies",
+      "contracts": [
+        {
+          "id": "C12-16-1",
+          "statement": "duplicates selects use-first, use-last, combine or reject",
+          "caseIds": [
+            "xsl-map-before",
+            "xsl-map-edge",
+            "xsl-map-main"
+          ],
+          "probeIds": [
+            "map-use-first",
+            "map-use-last",
+            "map-combine",
+            "map-reject",
+            "map-default-duplicate",
+            "map-nonmap",
+            "map-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-16-2",
+          "statement": "Default duplicates and non-map inputs retain explicit errors",
+          "caseIds": [
+            "xsl-map-before",
+            "xsl-map-edge",
+            "xsl-map-main"
+          ],
+          "probeIds": [
+            "map-use-first",
+            "map-use-last",
+            "map-combine",
+            "map-reject",
+            "map-default-duplicate",
+            "map-nonmap",
+            "map-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-16-3",
+          "statement": "Select/content interaction is distinct from duplicate resolution",
+          "caseIds": [
+            "xsl-map-before",
+            "xsl-map-edge",
+            "xsl-map-main"
+          ],
+          "probeIds": [
+            "map-use-first",
+            "map-use-last",
+            "map-combine",
+            "map-reject",
+            "map-default-duplicate",
+            "map-nonmap",
+            "map-select-content"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. use-last is an intentional override policy, not a safe default for every payload.",
+      "remaining": [
+        "use-last is an explicit override policy, not broad payload validation; no universal nested type/collation/map contract."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+          "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+          "methods": [
+            "Map_Select_MergesInputMaps",
+            "Map_Select_DuplicatesDefault_XTDE3365",
+            "Map_Select_DuplicatesUseFirst"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-note.md": {
+      "status": "Verified inert authoring content",
+      "contracts": [
+        {
+          "id": "C12-17-1",
+          "statement": "Notes produce no result text",
+          "caseIds": [
+            "xsl-note-before",
+            "xsl-note-edge",
+            "xsl-note-main"
+          ],
+          "probeIds": [
+            "note-inert"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-17-2",
+          "statement": "Their contained expressions do not execute",
+          "caseIds": [
+            "xsl-note-before",
+            "xsl-note-edge",
+            "xsl-note-main"
+          ],
+          "probeIds": [
+            "note-inert"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-17-3",
+          "statement": "Source parsing and declared host/version remain part of the context",
+          "caseIds": [
+            "xsl-note-before",
+            "xsl-note-edge",
+            "xsl-note-main"
+          ],
+          "probeIds": [
+            "note-inert"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [
+            {
+              "report": "HOST-PROFILE-RECONCILIATION.json",
+              "key": "S7",
+              "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+              "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+              "namedTests": [
+                {
+                  "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+                  "method": ""
+                }
+              ]
+            }
+          ],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Notes do not contribute result text and do not execute their content.",
+      "remaining": [
+        "No arbitrary extension instruction or complete forwards-compatible authoring validation is inferred."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+          "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+          "methods": [
+            "Note_InTemplate_IsDiscarded",
+            "Note_AtTopLevel_IsDiscarded",
+            "Note_ContentIsNotValidated"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-select.md": {
+      "status": "Verified bounded XPath body instruction",
+      "contracts": [
+        {
+          "id": "C12-18-1",
+          "statement": "Text or CDATA contains XPath rather than a sequence constructor",
+          "caseIds": [
+            "dispatch-grammar-array-empty",
+            "dispatch-grammar-array-empty-member",
+            "dispatch-grammar-array-per-item",
+            "dispatch-grammar-array-per-sequence",
+            "dispatch-grammar-array-select-content",
+            "dispatch-grammar-expression-local30",
+            "dispatch-grammar-expression-local40",
+            "dispatch-grammar-expression-root30",
+            "dispatch-grammar-expression-root40",
+            "dispatch-grammar-member-select-content",
+            "dispatch-grammar-recognized-array-3",
+            "dispatch-grammar-recognized-array-4",
+            "dispatch-grammar-recognized-select-3",
+            "dispatch-grammar-recognized-select-4",
+            "dispatch-grammar-recognized-switch-3",
+            "dispatch-grammar-recognized-switch-4",
+            "dispatch-grammar-report-3-empty",
+            "dispatch-grammar-report-3-normal",
+            "dispatch-grammar-report-3-reordered",
+            "dispatch-grammar-report-4-empty",
+            "dispatch-grammar-report-4-normal",
+            "dispatch-grammar-report-4-reordered",
+            "dispatch-grammar-select-cdata",
+            "dispatch-grammar-select-child",
+            "dispatch-grammar-select-coercion",
+            "dispatch-grammar-select-focus",
+            "dispatch-grammar-select-focus-text",
+            "dispatch-grammar-select-late-fallback",
+            "dispatch-grammar-select-required-empty",
+            "dispatch-grammar-select-type-error",
+            "dispatch-grammar-switch-duplicate-otherwise",
+            "dispatch-grammar-switch-empty-selector",
+            "dispatch-grammar-switch-late-when",
+            "dispatch-grammar-switch-no-selector",
+            "dispatch-grammar-switch-no-when",
+            "dispatch-grammar-switch-node-identity",
+            "dispatch-grammar-switch-select-content"
+          ],
+          "probeIds": [
+            "select-cdata",
+            "select-as",
+            "select-child-invalid",
+            "select-node-identity"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-18-2",
+          "statement": "Raw item/node identity differs from explicitly constructed text",
+          "caseIds": [
+            "dispatch-grammar-array-empty",
+            "dispatch-grammar-array-empty-member",
+            "dispatch-grammar-array-per-item",
+            "dispatch-grammar-array-per-sequence",
+            "dispatch-grammar-array-select-content",
+            "dispatch-grammar-expression-local30",
+            "dispatch-grammar-expression-local40",
+            "dispatch-grammar-expression-root30",
+            "dispatch-grammar-expression-root40",
+            "dispatch-grammar-member-select-content",
+            "dispatch-grammar-recognized-array-3",
+            "dispatch-grammar-recognized-array-4",
+            "dispatch-grammar-recognized-select-3",
+            "dispatch-grammar-recognized-select-4",
+            "dispatch-grammar-recognized-switch-3",
+            "dispatch-grammar-recognized-switch-4",
+            "dispatch-grammar-report-3-empty",
+            "dispatch-grammar-report-3-normal",
+            "dispatch-grammar-report-3-reordered",
+            "dispatch-grammar-report-4-empty",
+            "dispatch-grammar-report-4-normal",
+            "dispatch-grammar-report-4-reordered",
+            "dispatch-grammar-select-cdata",
+            "dispatch-grammar-select-child",
+            "dispatch-grammar-select-coercion",
+            "dispatch-grammar-select-focus",
+            "dispatch-grammar-select-focus-text",
+            "dispatch-grammar-select-late-fallback",
+            "dispatch-grammar-select-required-empty",
+            "dispatch-grammar-select-type-error",
+            "dispatch-grammar-switch-duplicate-otherwise",
+            "dispatch-grammar-switch-empty-selector",
+            "dispatch-grammar-switch-late-when",
+            "dispatch-grammar-switch-no-selector",
+            "dispatch-grammar-switch-no-when",
+            "dispatch-grammar-switch-node-identity",
+            "dispatch-grammar-switch-select-content"
+          ],
+          "probeIds": [
+            "select-cdata",
+            "select-as",
+            "select-child-invalid",
+            "select-node-identity"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-18-3",
+          "statement": "Optional as, required-empty errors and invalid children retain separate checks",
+          "caseIds": [
+            "dispatch-grammar-array-empty",
+            "dispatch-grammar-array-empty-member",
+            "dispatch-grammar-array-per-item",
+            "dispatch-grammar-array-per-sequence",
+            "dispatch-grammar-array-select-content",
+            "dispatch-grammar-expression-local30",
+            "dispatch-grammar-expression-local40",
+            "dispatch-grammar-expression-root30",
+            "dispatch-grammar-expression-root40",
+            "dispatch-grammar-member-select-content",
+            "dispatch-grammar-recognized-array-3",
+            "dispatch-grammar-recognized-array-4",
+            "dispatch-grammar-recognized-select-3",
+            "dispatch-grammar-recognized-select-4",
+            "dispatch-grammar-recognized-switch-3",
+            "dispatch-grammar-recognized-switch-4",
+            "dispatch-grammar-report-3-empty",
+            "dispatch-grammar-report-3-normal",
+            "dispatch-grammar-report-3-reordered",
+            "dispatch-grammar-report-4-empty",
+            "dispatch-grammar-report-4-normal",
+            "dispatch-grammar-report-4-reordered",
+            "dispatch-grammar-select-cdata",
+            "dispatch-grammar-select-child",
+            "dispatch-grammar-select-coercion",
+            "dispatch-grammar-select-focus",
+            "dispatch-grammar-select-focus-text",
+            "dispatch-grammar-select-late-fallback",
+            "dispatch-grammar-select-required-empty",
+            "dispatch-grammar-select-type-error",
+            "dispatch-grammar-switch-duplicate-otherwise",
+            "dispatch-grammar-switch-empty-selector",
+            "dispatch-grammar-switch-late-when",
+            "dispatch-grammar-switch-no-selector",
+            "dispatch-grammar-switch-no-when",
+            "dispatch-grammar-switch-node-identity",
+            "dispatch-grammar-switch-select-content"
+          ],
+          "probeIds": [
+            "select-cdata",
+            "select-as",
+            "select-child-invalid",
+            "select-node-identity"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "The body is XPath, not JavaScript or an XSLT sequence constructor. Literal braces belong to XPath maps/strings, not AVT or expand-text interpolation. Returning items does not imply writing text nodes.",
+      "remaining": [
+        "CDATA is an XML authoring mechanism; complete schema/static/package/resource combinations and global static-detection mode remain unaccepted."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/ArraySelectNativeBoundaryTests.cs",
+          "gitBlob": "20eed0b87d73cc49018d6d940840e2d7df872d31",
+          "methods": [
+            "NativeBoundary"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs",
+          "gitBlob": "2f1fa063937e21653ace204a2ccf2e3a06b3d1d8",
+          "methods": []
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    },
+    "xslt-instructions/xsl-switch.md": {
+      "status": "Limited selection; incomparable-comparison blocker",
+      "contracts": [
+        {
+          "id": "C12-19-1",
+          "statement": "When test values use general comparison with the singleton selector",
+          "caseIds": [
+            "xsl-switch-before",
+            "xsl-switch-edge",
+            "xsl-switch-main"
+          ],
+          "probeIds": [
+            "switch-empty-selected",
+            "switch-general-comparison",
+            "switch-not-boolean-guard",
+            "switch-missing-select",
+            "switch-direct-comparison"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-19-2",
+          "statement": "A selected empty branch terminates dispatch; later branches stay lazy",
+          "caseIds": [
+            "xsl-switch-before",
+            "xsl-switch-edge",
+            "xsl-switch-main"
+          ],
+          "probeIds": [
+            "switch-empty-selected",
+            "switch-general-comparison",
+            "switch-not-boolean-guard",
+            "switch-missing-select",
+            "switch-direct-comparison"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        },
+        {
+          "id": "C12-19-3",
+          "statement": "Incomparable numeric/Boolean operands require XPTY0004 rather than empty output",
+          "caseIds": [
+            "xsl-switch-before",
+            "xsl-switch-edge",
+            "xsl-switch-main"
+          ],
+          "probeIds": [
+            "switch-empty-selected",
+            "switch-general-comparison",
+            "switch-not-boolean-guard",
+            "switch-missing-select",
+            "switch-direct-comparison"
+          ],
+          "functionSpecificC02Evidence": [],
+          "inheritedGrammarEvidence": [],
+          "evidenceScope": "Exact normal/empty/error/profile/context receipts and named tests establish only the documented bounded forms, not all grammar/casting combinations."
+        }
+      ],
+      "languageAlignment": "Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Tests are values compared with the selector, not boolean guards. The otherwise branch handles absent/unrecognized values.",
+      "remaining": [
+        "C06-H02: both fresh host controls still return empty instead of XPTY0004. Ordinary dispatch success does not certify full general-comparison semantics."
+      ],
+      "gates": {
+        "assignedSets": [],
+        "reason": "Only current named applicable assignments are used; deferred/rejected shapes and unassigned grammar use named tests/refusals/alternatives. Frozen gate membership is not adoption of current changed syntax.",
+        "applicability": "XSLT-only: standalone XPath gate not applicable; use exact stylesheet/host, native tests and retained grammar receipts."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+          "gitBlob": "495cb9309dc003d6239a71377968397d356aef05",
+          "methods": [
+            "Switch_LookupTable_SelectBranches",
+            "Switch_TestSequences_DaysInMonth",
+            "Switch_GeneralComparison_NumericPromotion"
+          ]
+        }
+      ],
+      "acceptance": "Bounded semantic review; C13 retains final owner acceptance and blocker disposition"
+    }
+  },
+  "policy": "Preserve current-draft unmet requirements and qualified historical/frozen alternatives. Source review pin is not an adopted snapshot; no unsupported shape is implemented for coverage."
+}

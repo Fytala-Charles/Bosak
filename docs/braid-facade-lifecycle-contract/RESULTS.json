@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-29",
+  "scopeOnly": true,
+  "concurrencyPolicyProposed": "one active engine-backed call per session; immediate refusal of overlapping/reentrant calls",
+  "statesProposed": [
+    "Ready",
+    "Quiescing",
+    "Closed"
+  ],
+  "cancellationDoesNotReleaseActiveLeaseEarly": true,
+  "engineFactsDistinctFromAdmittedProfile": true,
+  "freshExecution": false,
+  "productionChanged": false,
+  "newPublicApiOrCodesAssigned": false,
+  "next": "deterministic isolated lifecycle/callback/cancellation proof",
+  "uncommitted": true
+}

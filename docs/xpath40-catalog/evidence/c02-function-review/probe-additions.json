@@ -1,0 +1,83 @@
+{
+  "reason": "Existing manifest normal-result candidates were absent for array:sort-with and element-to-map-plan; add explicit independent normal/empty/error controls rather than accept availability as behavior.",
+  "additions": [
+    {
+      "id": "array-sort-with-normal",
+      "expression": "string-join(array:sort-with([3,1,2],function($a,$b){compare($a,$b)})?*,',')",
+      "expected": "1,2,3",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "array-sort-with-empty",
+      "expression": "array:size(array:sort-with([],function($a,$b){compare($a,$b)}))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "array-sort-with-invalid",
+      "expression": "array:sort-with([3,1],42)",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "element-to-map-plan-normal",
+      "expression": "map:size(element-to-map-plan(parse-xml('<A>1</A>')/A)) gt 0",
+      "expected": "true",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "element-to-map-plan-empty",
+      "expression": "map:size(element-to-map-plan(()))",
+      "expected": "0",
+      "error": null,
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    },
+    {
+      "id": "element-to-map-plan-invalid",
+      "expression": "element-to-map-plan(1)",
+      "expected": null,
+      "error": "XPTY0004",
+      "classification": "control",
+      "ticket": null,
+      "profiles": [
+        "XPath40",
+        "XPath40Experimental"
+      ],
+      "currentDraftExpectation": null
+    }
+  ]
+}

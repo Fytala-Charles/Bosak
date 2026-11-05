@@ -1,0 +1,1564 @@
+{
+  "checks": [
+    {
+      "name": "real-inspection-admitted",
+      "passed": true
+    },
+    {
+      "name": "real-nochange-returns-wrapper",
+      "passed": true
+    },
+    {
+      "name": "engine-capability-facts-retained",
+      "passed": true
+    },
+    {
+      "name": "admitted-profile-separate-from-engine-facts",
+      "passed": true
+    },
+    {
+      "name": "changed-candidate-still-refused",
+      "passed": true
+    },
+    {
+      "name": "partial-failed-result-publishes-no-authority",
+      "passed": true
+    },
+    {
+      "name": "close-before-new-admission-refuses",
+      "passed": true
+    },
+    {
+      "name": "publication-before-close-leaves-only-revoked-port",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-Operation",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-MoveContext",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-ConditionalParentId",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-ModuleUri",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-NodeId",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-Range",
+      "passed": true
+    },
+    {
+      "name": "previous-target-getter-refused-after-close-LocalName",
+      "passed": true
+    },
+    {
+      "name": "historical-bytes-remain-readable",
+      "passed": true
+    },
+    {
+      "name": "idle-close-drains",
+      "passed": true
+    },
+    {
+      "name": "first-terminal-cause-preserved",
+      "passed": true
+    },
+    {
+      "name": "overlap-refusal-task-completes-without-queue",
+      "passed": true
+    },
+    {
+      "name": "overlap-is-busy",
+      "passed": true
+    },
+    {
+      "name": "overlap-never-forwards",
+      "passed": true
+    },
+    {
+      "name": "profile-shows-not-dispatchable-while-busy",
+      "passed": true
+    },
+    {
+      "name": "original-busy-operation-completes",
+      "passed": true
+    },
+    {
+      "name": "lane-reusable-after-completion",
+      "passed": true
+    },
+    {
+      "name": "actual-callback-reentrant-inspection-refused",
+      "passed": true
+    },
+    {
+      "name": "actual-callback-reentrant-port-refused",
+      "passed": true
+    },
+    {
+      "name": "cached-target-metadata-readable-during-active-call",
+      "passed": true
+    },
+    {
+      "name": "cached-target-metadata-does-not-dispatch",
+      "passed": true
+    },
+    {
+      "name": "callback-can-return-without-deadlock",
+      "passed": true
+    },
+    {
+      "name": "callback-close-is-nonblocking",
+      "passed": true
+    },
+    {
+      "name": "logical-operation-context-refuses-self-drain",
+      "passed": true
+    },
+    {
+      "name": "external-drain-waits-for-real-completion",
+      "passed": true
+    },
+    {
+      "name": "terminal-refusal-precedes-busy",
+      "passed": true
+    },
+    {
+      "name": "close-during-callback-suppresses-late-authority",
+      "passed": true
+    },
+    {
+      "name": "external-drain-finishes-after-callback",
+      "passed": true
+    },
+    {
+      "name": "pre-cancellation-propagates",
+      "passed": true
+    },
+    {
+      "name": "pre-cancellation-owns-no-lease",
+      "passed": true
+    },
+    {
+      "name": "actual-callback-sees-admitted-token-cancel",
+      "passed": true
+    },
+    {
+      "name": "cancellation-does-not-release-active-lease",
+      "passed": true
+    },
+    {
+      "name": "cancellation-pending-lane-stays-busy",
+      "passed": true
+    },
+    {
+      "name": "post-admission-cancellation-propagates-after-raw-completion",
+      "passed": true
+    },
+    {
+      "name": "cancelled-lease-released-once",
+      "passed": true
+    },
+    {
+      "name": "session-remains-usable-after-nonterminal-cancel",
+      "passed": true
+    },
+    {
+      "name": "close-and-cancel-retains-blocked-operation",
+      "passed": true
+    },
+    {
+      "name": "cancel-close-does-not-publish-authority",
+      "passed": true
+    },
+    {
+      "name": "cancel-close-drains-once",
+      "passed": true
+    },
+    {
+      "name": "caller-wait-cancellation-observed",
+      "passed": true
+    },
+    {
+      "name": "caller-abandonment-does-not-release-operation",
+      "passed": true
+    },
+    {
+      "name": "abandoned-operation-still-excludes-new-work",
+      "passed": true
+    },
+    {
+      "name": "owned-operation-completes-even-without-original-waiter",
+      "passed": true
+    },
+    {
+      "name": "bounded-drain-reports-incomplete",
+      "passed": true
+    },
+    {
+      "name": "drain-timeout-keeps-active-context-owned",
+      "passed": true
+    },
+    {
+      "name": "timed-out-drain-eventually-suppresses-authority",
+      "passed": true
+    },
+    {
+      "name": "multiple-drain-waiters-complete-once",
+      "passed": true
+    },
+    {
+      "name": "actual-drift-before-publication-refuses",
+      "passed": true
+    },
+    {
+      "name": "artifact-refusal-quiesces-and-releases",
+      "passed": true
+    },
+    {
+      "name": "restored-artifact-does-not-reopen",
+      "passed": true
+    },
+    {
+      "name": "independent-sessions-can-own-separate-active-calls",
+      "passed": true
+    },
+    {
+      "name": "one-session-completes-while-other-blocked",
+      "passed": true
+    },
+    {
+      "name": "other-independent-session-completes",
+      "passed": true
+    },
+    {
+      "name": "duplicate-lease-disposal-counted-once",
+      "passed": true
+    },
+    {
+      "name": "repeated-idle-close-releases-once",
+      "passed": true
+    },
+    {
+      "name": "all-cases-finish-with-balanced-leases",
+      "passed": true
+    },
+    {
+      "name": "no-engine-or-adapter-default-context-fallback",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "Label": "publish-then-close",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 5,
+      "LeasesReleased": 5,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 4,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 6,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 7,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 8,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 9,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 10,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 11,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 12,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 13,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 4
+        },
+        {
+          "sequence": 14,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 15,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 5
+        },
+        {
+          "sequence": 16,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 5
+        },
+        {
+          "sequence": 17,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 5
+        },
+        {
+          "sequence": 18,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 19,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 20,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 21,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 22,
+          "name": "repeat-close:ArtifactRefused",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 23,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.XPath.Api.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Runtime",
+          "Identity": "Bosak.XPath.Runtime, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9",
+          "Mvid": "bb2f1325-7b42-4c78-95a2-572e024b9f95",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.XPath.Runtime.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Core",
+          "Identity": "Bosak.XPath.Core, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a",
+          "Mvid": "d64bde03-cadb-4a9c-868e-60ab4191a1e7",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.XPath.Core.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Parser",
+          "Identity": "Bosak.XPath.Parser, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc",
+          "Mvid": "0833e8e5-ec84-4ce1-8582-c13655cc254f",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\publish-then-close\\Bosak.XPath.Parser.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "busy",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 2,
+      "LeasesReleased": 2,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 2,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "busy-refused",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 5,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 7,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 8,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 9,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 10,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 11,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\busy\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\busy\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\busy\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "callback-reentry",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 3,
+      "LeasesReleased": 3,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 3,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 6,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 7,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 8,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 9,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 10,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 11,
+          "name": "busy-refused",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 12,
+          "name": "busy-refused",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 13,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 3
+        },
+        {
+          "sequence": 14,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 15,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 16,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.XPath.Api.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Runtime",
+          "Identity": "Bosak.XPath.Runtime, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9",
+          "Mvid": "bb2f1325-7b42-4c78-95a2-572e024b9f95",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.XPath.Runtime.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Core",
+          "Identity": "Bosak.XPath.Core, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a",
+          "Mvid": "d64bde03-cadb-4a9c-868e-60ab4191a1e7",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.XPath.Core.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Parser",
+          "Identity": "Bosak.XPath.Parser, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc",
+          "Mvid": "0833e8e5-ec84-4ce1-8582-c13655cc254f",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-reentry\\Bosak.XPath.Parser.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "callback-close-self-drain",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-close-self-drain\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-close-self-drain\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\callback-close-self-drain\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "pre-cancel",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 0,
+      "LeasesReleased": 0,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 0,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 2,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\pre-cancel\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\pre-cancel\\Bosak.Xslt.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "post-admission-cancel",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 2,
+      "LeasesReleased": 2,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 2,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "busy-refused",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 6,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 7,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 2
+        },
+        {
+          "sequence": 8,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 9,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 10,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\post-admission-cancel\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\post-admission-cancel\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\post-admission-cancel\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "cancel-and-close",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\cancel-and-close\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\cancel-and-close\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\cancel-and-close\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "caller-stops-awaiting",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "busy-refused",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 5,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 7,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\caller-stops-awaiting\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\caller-stops-awaiting\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\caller-stops-awaiting\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "bounded-drain",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "repeat-close:UserClose",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 1
+        },
+        {
+          "sequence": 5,
+          "name": "lease-ended",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 7,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\bounded-drain\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\bounded-drain\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\bounded-drain\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "drift-during-callback",
+      "State": "Closed",
+      "Reason": "ArtifactRefused",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "ArtifactRefused",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Quiescing",
+          "reason": "ArtifactRefused",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "ArtifactRefused",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "ArtifactRefused",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\drift-during-callback\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\drift-during-callback\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\drift-during-callback\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "independent-a",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-a\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-a\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-a\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "independent-b",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 1,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "raw-dispatch",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 3,
+          "name": "publication-admitted",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 4,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-b\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-b\\Bosak.Xslt.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.XPath.Api",
+          "Identity": "Bosak.XPath.Api, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a",
+          "Mvid": "83d050a5-429e-46b2-aeec-c97bdb49730b",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\independent-b\\Bosak.XPath.Api.dll",
+          "Location": ""
+        }
+      ]
+    },
+    {
+      "Label": "lease-idempotence",
+      "State": "Closed",
+      "Reason": "UserClose",
+      "LeasesCreated": 1,
+      "LeasesReleased": 1,
+      "ReleaseRequests": 1,
+      "ForwardedCalls": 0,
+      "events": [
+        {
+          "sequence": 1,
+          "name": "lease-reserved",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 1
+        },
+        {
+          "sequence": 2,
+          "name": "lease-ended",
+          "state": "Ready",
+          "reason": "",
+          "activeId": 0
+        },
+        {
+          "sequence": 3,
+          "name": "quiesce",
+          "state": "Quiescing",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 4,
+          "name": "release-requested",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 5,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        },
+        {
+          "sequence": 6,
+          "name": "repeat-close:UserClose",
+          "state": "Closed",
+          "reason": "UserClose",
+          "activeId": 0
+        }
+      ],
+      "loaded": [
+        {
+          "Name": "Bosak.Braid.Infrastructure",
+          "Identity": "Bosak.Braid.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72",
+          "Mvid": "9c382402-b50a-45ac-a788-1eb06d37510e",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\lease-idempotence\\Bosak.Braid.Infrastructure.dll",
+          "Location": ""
+        },
+        {
+          "Name": "Bosak.Xslt",
+          "Identity": "Bosak.Xslt, Version=1.26.2.0, Culture=neutral, PublicKeyToken=null",
+          "SnapshotSha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9",
+          "Mvid": "c2387a95-88c6-4bca-88ab-07b1e841bf9d",
+          "SourcePath": "D:\\Development\\Bosak\\.guard-tmp\\lifecycle-proof\\work-f2c97e9588094c6fa10dbf037c92aaec\\lease-idempotence\\Bosak.Xslt.dll",
+          "Location": ""
+        }
+      ]
+    }
+  ],
+  "actualAdapterCallbackSchedules": true,
+  "partialResponseFaultInjected": true,
+  "gateAccountingControlIsDirect": true,
+  "arbitraryConcurrencyQualified": false,
+  "actualBraidProductChanged": false
+}

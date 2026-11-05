@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1922e4cd-a48a-4e96-92e0-255480d52f75" name="charl@CHARLES 2026-10-27 05:51:41" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-27T05:51:41.1966745+01:00" queuing="2026-10-27T05:51:41.1966751+01:00" start="2026-10-27T05:51:39.6515695+01:00" finish="2026-10-27T05:51:41.2021645+01:00" />
+  <TestSettings name="default" id="8d33873b-16a9-4f1a-a0c8-80d6e5920214">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-27_05_51_41" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="344b3599-d615-45c6-bef7-994baee9eeda" testId="d608a62b-bebf-607c-241f-70a5b35b5df5" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;xs:dayTimeDuration&quot;)" computerName="CHARLES" duration="00:00:00.0007110" startTime="2026-10-27T05:51:40.9843957+01:00" endTime="2026-10-27T05:51:40.9845409+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="344b3599-d615-45c6-bef7-994baee9eeda" />
+    <UnitTestResult executionId="6fb5be96-994d-4f33-85c5-ff8e393bca49" testId="21867890-16db-9d81-aa8f-515069aa26db" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;t:MissingType&quot;)" computerName="CHARLES" duration="00:00:00.0230355" startTime="2026-10-27T05:51:40.9682186+01:00" endTime="2026-10-27T05:51:40.9838430+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fb5be96-994d-4f33-85c5-ff8e393bca49" />
+    <UnitTestResult executionId="38601df6-8704-469b-9199-7d7c973e4a44" testId="0df20992-3116-8e00-ae3e-a5c36bfda24b" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.ResolverIoFailure_IsPreserved" computerName="CHARLES" duration="00:00:00.0005511" startTime="2026-10-27T05:51:41.0787199+01:00" endTime="2026-10-27T05:51:41.0790154+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="38601df6-8704-469b-9199-7d7c973e4a44" />
+    <UnitTestResult executionId="7b456330-2f87-40a2-8f44-9a27ea5a955e" testId="bc7a0e21-02ef-9252-9aad-4d115706d758" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.ValidSchema_ExecutesQuery(baseType: &quot;xs:string&quot;)" computerName="CHARLES" duration="00:00:00.0009831" startTime="2026-10-27T05:51:41.0763510+01:00" endTime="2026-10-27T05:51:41.0772455+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7b456330-2f87-40a2-8f44-9a27ea5a955e" />
+    <UnitTestResult executionId="3a51b8d3-07cd-4768-9ead-99bf590b741c" testId="161dc550-2473-787c-576e-a6519a80eb57" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.InvalidFacet_ReportsXqst0012" computerName="CHARLES" duration="00:00:00.0006514" startTime="2026-10-27T05:51:41.0791729+01:00" endTime="2026-10-27T05:51:41.0797777+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a51b8d3-07cd-4768-9ead-99bf590b741c" />
+    <UnitTestResult executionId="dd608751-58c0-49e3-8769-db7c44c99781" testId="9e331a3c-bf14-90d8-49ce-8975873d5660" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.MissingSchema_RetainsXqst0059" computerName="CHARLES" duration="00:00:00.8761201" startTime="2026-10-27T05:51:40.0786457+01:00" endTime="2026-10-27T05:51:40.9602097+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd608751-58c0-49e3-8769-db7c44c99781" />
+    <UnitTestResult executionId="4e66c40f-70ef-4ad5-b566-f9b651682545" testId="478f208e-ef36-2c38-ab8e-32a2eb93186a" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.ValidSchema_ExecutesQuery(baseType: &quot;xs:duration&quot;)" computerName="CHARLES" duration="00:00:00.0912036" startTime="2026-10-27T05:51:40.9849036+01:00" endTime="2026-10-27T05:51:41.0761459+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e66c40f-70ef-4ad5-b566-f9b651682545" />
+    <UnitTestResult executionId="d996d210-345e-41e4-aa9a-a944875069c3" testId="fca84582-7cf1-9886-99a2-a1b27d4a6d2c" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;xs:yearMonthDuration&quot;)" computerName="CHARLES" duration="00:00:00.0002168" startTime="2026-10-27T05:51:40.9846408+01:00" endTime="2026-10-27T05:51:40.9847683+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d996d210-345e-41e4-aa9a-a944875069c3" />
+    <UnitTestResult executionId="15daf020-f3db-48bb-8854-e8d7a4907d4d" testId="b2f6aac9-d0e4-c42b-6fed-130a30eb9acc" testName="Bosak.XQuery.Tests.SchemaImportErrorTests.MalformedXml_IsPreserved" computerName="CHARLES" duration="00:00:00.0010217" startTime="2026-10-27T05:51:41.0774651+01:00" endTime="2026-10-27T05:51:41.0783914+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15daf020-f3db-48bb-8854-e8d7a4907d4d" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.InvalidFacet_ReportsXqst0012" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="161dc550-2473-787c-576e-a6519a80eb57">
+      <Execution id="3a51b8d3-07cd-4768-9ead-99bf590b741c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="InvalidFacet_ReportsXqst0012" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.MalformedXml_IsPreserved" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="b2f6aac9-d0e4-c42b-6fed-130a30eb9acc">
+      <Execution id="15daf020-f3db-48bb-8854-e8d7a4907d4d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="MalformedXml_IsPreserved" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.MissingSchema_RetainsXqst0059" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="9e331a3c-bf14-90d8-49ce-8975873d5660">
+      <Execution id="dd608751-58c0-49e3-8769-db7c44c99781" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="MissingSchema_RetainsXqst0059" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;xs:dayTimeDuration&quot;)" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="d608a62b-bebf-607c-241f-70a5b35b5df5">
+      <Execution id="344b3599-d615-45c6-bef7-994baee9eeda" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="CompilationFailure_ReportsXqst0012" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.ValidSchema_ExecutesQuery(baseType: &quot;xs:string&quot;)" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="bc7a0e21-02ef-9252-9aad-4d115706d758">
+      <Execution id="7b456330-2f87-40a2-8f44-9a27ea5a955e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="ValidSchema_ExecutesQuery" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;xs:yearMonthDuration&quot;)" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="fca84582-7cf1-9886-99a2-a1b27d4a6d2c">
+      <Execution id="d996d210-345e-41e4-aa9a-a944875069c3" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="CompilationFailure_ReportsXqst0012" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.CompilationFailure_ReportsXqst0012(baseType: &quot;t:MissingType&quot;)" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="21867890-16db-9d81-aa8f-515069aa26db">
+      <Execution id="6fb5be96-994d-4f33-85c5-ff8e393bca49" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="CompilationFailure_ReportsXqst0012" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.ValidSchema_ExecutesQuery(baseType: &quot;xs:duration&quot;)" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="478f208e-ef36-2c38-ab8e-32a2eb93186a">
+      <Execution id="4e66c40f-70ef-4ad5-b566-f9b651682545" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="ValidSchema_ExecutesQuery" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaImportErrorTests.ResolverIoFailure_IsPreserved" storage="d:\development\bosak\tests\bosak.xquery.tests\bin\release\net10.0\bosak.xquery.tests.dll" id="0df20992-3116-8e00-ae3e-a5c36bfda24b">
+      <Execution id="38601df6-8704-469b-9199-7d7c973e4a44" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaImportErrorTests" name="ResolverIoFailure_IsPreserved" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d608a62b-bebf-607c-241f-70a5b35b5df5" executionId="344b3599-d615-45c6-bef7-994baee9eeda" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21867890-16db-9d81-aa8f-515069aa26db" executionId="6fb5be96-994d-4f33-85c5-ff8e393bca49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0df20992-3116-8e00-ae3e-a5c36bfda24b" executionId="38601df6-8704-469b-9199-7d7c973e4a44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc7a0e21-02ef-9252-9aad-4d115706d758" executionId="7b456330-2f87-40a2-8f44-9a27ea5a955e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="161dc550-2473-787c-576e-a6519a80eb57" executionId="3a51b8d3-07cd-4768-9ead-99bf590b741c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9e331a3c-bf14-90d8-49ce-8975873d5660" executionId="dd608751-58c0-49e3-8769-db7c44c99781" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="478f208e-ef36-2c38-ab8e-32a2eb93186a" executionId="4e66c40f-70ef-4ad5-b566-f9b651682545" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fca84582-7cf1-9886-99a2-a1b27d4a6d2c" executionId="d996d210-345e-41e4-aa9a-a944875069c3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2f6aac9-d0e4-c42b-6fed-130a30eb9acc" executionId="15daf020-f3db-48bb-8854-e8d7a4907d4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.06]   Discovering: Bosak.XQuery.Tests&#xD;
+[xUnit.net 00:00:00.10]   Discovered:  Bosak.XQuery.Tests&#xD;
+[xUnit.net 00:00:00.11]   Starting:    Bosak.XQuery.Tests&#xD;
+[xUnit.net 00:00:01.13]   Finished:    Bosak.XQuery.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

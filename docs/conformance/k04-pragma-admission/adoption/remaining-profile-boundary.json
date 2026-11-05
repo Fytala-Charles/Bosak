@@ -1,0 +1,9 @@
+{
+  "remainingSkips": 426,
+  "unsupportedDependencySkips": 370,
+  "allRoutingPredicatesAllow": true,
+  "all370IndependentlyExcludedUnderBothProfiles": true,
+  "otherRetainedSkips": 56,
+  "schemaHarnessErrors": 6,
+  "disposition": "An admission ledger, not 370 engine defects. Further policy/backend review remains separate."
+}

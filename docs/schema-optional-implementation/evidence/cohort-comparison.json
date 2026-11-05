@@ -1,0 +1,232 @@
+{
+  "originalCases": 45,
+  "allPresentInFinal": true,
+  "allFinalPassed": true,
+  "cases": [
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.MissingProjection_RefusesWithoutShiftingLaterValue",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><b>2</b><b>2</b><c>3</c>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 6)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b ne a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 4)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b le a or a gt 0\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b eq a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \" 0 \", maximum: \" 1 \", supported: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"unbounded\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 5)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 0)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"0\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 2)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"2\", maximum: \"1\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 1)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EmptyRoot_PreservesWhitespaceSemanticsAndAtomizationError",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><c>3</c><unknown>0</unknown>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"-0\", maximum: \"1\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<c>3</c><a>1</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XQueryCopies_RetainPresentStateOnly(preserve: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b le a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><c>3</c>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b lt a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"+0\", maximum: \"1\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<unknown>0</unknown><a>1</a><c>3</c>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"1\", supported: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><a>1</a><c>3</c>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><c>3</c><b>2</b>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b ge a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"00\", maximum: \"01\", supported: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 3)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"\", maximum: \"1\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"01\", maximum: \"001\", supported: True)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"0\", maximum: \"2\", supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<a>1</a><b>2</b><c>3</c>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b gt a\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b eq b\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.AbsentComparison_UsesEffectiveBooleanValue(assertion: \"b le a and a gt 0\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.EveryOptionalPresenceCombination_RetainsOriginalState(mask: 7)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.XsltCopies_HandleGapsAndEmptyRoots(empty: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite(minimum: \"1\", maximum: \"1\", supported: True)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.OptionalDecimalAssessmentTests.OrderedMatching_DoesNotSeekAhead(children: \"<b>2</b><c>3</c>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# Private transport trial — pre-execution basis
+
+31 October 2026. Immutable specification revisions: XPath 3.1 REC-xpath-31-20170321 sections 2.1.1, 2.4.2, 3.14.2; XDM 3.1 REC-xpath-datamodel-31-20170321 sections 3.3.1.1–3 and 5.14; F&O 3.1 REC-xpath-functions-31-20170321 sections 18.1, 19, 19.1. No new normative adoption or intentional specification deviation. Source baseline is production 8080b18ba69959f4fc33feebb6810914da3f817d, with the prior sealed optimized field carrier.
+
+Isolated candidate changes: internal Core attachment/read path sealed by the existing kernel; internal Runtime operation methods for issued-value read and explicit conversion admission; reject marked issuer payloads and conversion sources from another snapshot. Remove diagnostic public helpers and the host-owned frame. The host uses existing friend access for negative controls only. Existing Equals/GetHashCode overrides still need compatibility disposition. No product or owner checkout edits, public provider API acceptance, full XSD 1.1, arbitrary nested constructor instrumentation or multi-source operation adoption.

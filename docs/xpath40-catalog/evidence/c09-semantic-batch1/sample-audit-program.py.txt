@@ -1,0 +1,30 @@
+import sys
+sys.stdout.reconfigure(encoding="utf-8")
+from pathlib import Path
+import json,re,hashlib,collections
+C=Path('docs/xpath40-catalog');E=C/'evidence/c09-semantic-batch1';src=json.loads((E/'entry-sources.json').read_text(encoding='utf-8'));cases=json.loads((C/'examples/cases.json').read_text(encoding='utf-8'));ids={v['id']:v for v in cases};paths={str((C/'examples'/v['file']).resolve()):v for v in cases};result={}
+def norm(t):return t.replace('\r\n','\n').strip()
+for name,v in src.items():
+ p=C/name;t=p.read_text(encoding='utf-8');v=dict(v);v['sections']={m.group(1):m.group(2).strip() for m in re.finditer(r'^## (\d+)\.[^\n]*\n(.*?)(?=^## \d+\.|\Z)',t,re.M|re.S)};files={}
+ for target in re.findall(r'\]\(([^)]+)\)',t):
+  if re.match(r'^[A-Za-z][A-Za-z0-9+.-]*:',target) or target.startswith('#'):continue
+  f=(p.parent/target.split('#')[0]).resolve()
+  if f.is_file() and f.suffix in ['.xpath','.xsl','.xq','.xml','.json']:files[str(f)]=f
+ caseids=set(re.findall(r'[A-Za-z0-9_-]+',t))&set(ids);caseids.update(paths[n]['id'] for n in files if n in paths)
+ # Named wildcard case families are only expanded when explicitly cited in the entry.
+ if name=='functions/csv-parsing.md':caseids.update(q['id'] for q in cases if q['id'].startswith('csv-contract-'))
+ if name=='functions/customer-reference-matching.md':caseids.update(q['id'] for q in cases if q['file'].startswith('equality-contracts/'))
+ if name in ['deferred/xslt-item-type.md','deferred/xslt-record-type.md']:caseids.update(q['id'] for q in cases if q['file'].startswith('intake-types/'))
+ fixtures={}
+ for id in caseids:
+  q=ids[id]
+  for key in ['file','input']:
+   if key in q:
+    f=(C/'examples'/q[key]).resolve();fixtures[str(f)]=f
+ fixtures.update(files)
+ blocks=[]
+ for i,m in enumerate(re.finditer(r'^(?P<f>`{3,}|~{3,})(?P<lang>[^\n]*)\n(?P<code>.*?)(?:\n)(?P=f)[ \t]*$',v['sections']['13'],re.M|re.S)):
+  code=norm(m['code']);matches=[f.relative_to(Path.cwd()).as_posix() for f in fixtures.values() if norm(f.read_text(encoding='utf-8-sig'))==code];sub=[f.relative_to(Path.cwd()).as_posix() for f in fixtures.values() if code in norm(f.read_text(encoding='utf-8-sig')) and f.relative_to(Path.cwd()).as_posix() not in matches];out=[id for id in caseids if isinstance(ids[id].get('expected'),str) and norm(ids[id]['expected'])==code];blocks.append(dict(index=i,language=m['lang'].strip(),code=code,exactFiles=matches,containedInFiles=sub,expectedOutputCases=sorted(out)))
+ result[name]=dict(caseIds=sorted(caseids),fixtures=[str(f.relative_to(Path.cwd())).replace('\\','/') for f in sorted(fixtures.values())],blocks=blocks)
+ print(name,'cases',len(caseids),'blocks',len(blocks),'unmapped',[(b['index'],b['language'],b['code'][:60].replace('\n',' ')) for b in blocks if not b['exactFiles'] and not b['containedInFiles'] and not b['expectedOutputCases']])
+(E/'sample-audit.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

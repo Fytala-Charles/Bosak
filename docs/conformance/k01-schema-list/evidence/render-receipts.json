@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k01-render/README.md.html",
+      "sha256": "56d6943a8c107e38d871dad0ff4e5324ed078e044329ce3108edf0d5f200d519"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k01-render/docs_ARCHITECTURE.md.html",
+      "sha256": "dcb62259eaf58b6d96dd6e87289a62d9537b65a6094fcd770f557d5afc0e2364"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k01-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "4b9d884279d813fd71aee403fab6e3124a00db9ae3346ba10c9b307272c69eb3"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k01-render/docs_INTEGRATION.md.html",
+      "sha256": "25c82eea13edb20a791522d628a9bcbc285e4636439ec2e97372c2bfb89cfbe3"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k01-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "c4b20465858bbff1011816113b6f9ab95de3caf850d2219fb643a211152f65e0"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k01-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "6bcf1638e6504570f8a42fd1821bd89efb8985dc9a7b6448f6d2b83b88eb8cfc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k01-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "7f9b6d0e037bed43816dc3578781368f7c615662a41ed39a22436cb79f01528e"
+    },
+    {
+      "source": "docs/conformance/k01-schema-list/README.md",
+      "html": ".guard-tmp/k01-render/docs_conformance_k01-schema-list_README.md.html",
+      "sha256": "99d820ae4d4d537638ed14297363278c3646370769942601ba01caeab6dff1ac"
+    },
+    {
+      "source": "docs/conformance/k01-schema-list/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k01-render/docs_conformance_k01-schema-list_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "0ca2077800a24b63ef10e2ce61d1dea5d2f790994be73eca79d90e3a532dccec"
+    }
+  ]
+}

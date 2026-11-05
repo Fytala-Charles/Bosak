@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "cad1c05b7e3ddc7da923fb82e522687f2b5a614f",
+  "specification": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+  "revision": "W3C Recommendation 21 March 2017",
+  "sections": [
+    "4.11 Schema Import",
+    "2.1 Static and Dynamic Context"
+  ],
+  "fixtureRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "scope": "Isolated design experiment over exact copied QT3 harness sources and unchanged engine binaries; no production or admission change",
+  "guards": [
+    "XQuery routing and compiled import metadata required",
+    "All environment schema namespaces must be imported with exactly one existing file each",
+    "No validated sources, modules, parameters, inline context-item expression or collection queries",
+    "Compilation/namespace association uncertainty falls back to current eager behavior"
+  ],
+  "boundary": "Compiler metadata is inspected using reflection only in this diagnostic copy. A production implementation needs an explicit supported metadata interface and independent review. XSD1.1 declarations/support remain unresolved."
+}

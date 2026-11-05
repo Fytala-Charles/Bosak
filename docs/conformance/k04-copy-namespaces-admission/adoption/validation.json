@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "checksBeforeManifest": 6564,
+  "exactOwnerPatch": true,
+  "solutionPassed": 24010,
+  "qt3": [
+    31257,
+    0,
+    564
+  ],
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "retainedSkipNamesAndReasonsUnchanged": true,
+  "reviewEvidencePreserved": true
+}

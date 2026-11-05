@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-02",
+  "submitted": 7,
+  "required": 7,
+  "scopedDesignAccepts": 5,
+  "revise": 2,
+  "missing": [],
+  "decisions": {
+    "BCAP-O1-Schema": "Revise",
+    "BCAP-O2-Schema": "Revise",
+    "BCAP-O1-XmlDb": "AcceptWithScope",
+    "BCAP-O2-Core": "AcceptWithScope",
+    "BCAP-O3-Braid": "AcceptWithScope",
+    "BCAP-O4-Core": "AcceptWithScope",
+    "BCAP-O4-XmlDb": "AcceptWithScope"
+  },
+  "remainingDesignRevisions": [
+    "BCAP-O1-Schema",
+    "BCAP-O2-Schema"
+  ],
+  "xdbLife01": "ResolvedWithinQualifiedCurrentPinProviderScope",
+  "xmlDbFix": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+  "xmlDbProductCore": "1.26.2",
+  "xmlDbObservedHead": "fbb829052f606f683aaf8620fa9401b4ba46c8e9",
+  "nativeBcapCandidateQualified": false,
+  "performanceBudgetsAccepted": false,
+  "r2Closed": false,
+  "apiFrozen": false,
+  "productionChanged": false,
+  "nextStep": "Obtain precise Schema scoped API/policy/source-feasibility dispositions using the reconciliation; Core may prepare R3 neutral-admission scope but public implementation remains gated"
+}

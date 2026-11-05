@@ -1,0 +1,3 @@
+# Invocation/profile qualification basis
+
+2 November 2026. Verify the unchanged isolated outcome candidate from c5565a07 and its source archive; no new engine semantics or public adoption. Immutable invocation source remains XSLT REC-xslt-30-20170608, sections 2.3.2–2.3.4, 3.5.6 and 10.1.1, as recorded in the earlier explicit-context adoption and [outcome basis](../foundation-bcap-outcomes/SPEC-BASIS.md). Exercise named/default modes, named-template focus, required global context, explicit source membership and honest option/compilation refusals. Profiles remain bounded and ordinary XML with synthetic authority; native consumer acceptance is separate.

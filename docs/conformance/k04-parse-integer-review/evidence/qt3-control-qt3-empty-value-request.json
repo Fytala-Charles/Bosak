@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-parse-integer-review/evidence/control-fixtures.xml", "Name": "control-qt3-empty-value", "category": "boolean", "expression": "empty(parse-integer(()))", "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"}

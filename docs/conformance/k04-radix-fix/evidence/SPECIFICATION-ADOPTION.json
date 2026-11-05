@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "a8b520fd3ca7dfdc4816c0779b0d3d4436bf58e4",
+  "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+  "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+  "section": "fn:format-integer / radix prefix, digit-pattern, grouping and ordinal rules",
+  "kind": "New bounded semantic adoption before implementation",
+  "rationale": "Reuse the exact frozen catalog revision already recorded by REQ-126 changed31 audit;test-fixture and publication revisions remain separate",
+  "futureImplementationRequirements": [
+    "Record explicit adoption and intentional bounds before modifying semantics",
+    "Preserve3.1 interpretation of caret-grouped decimal pictures",
+    "Keep radix formatting distinct from source numeric literals and generic wide-integer conversion"
+  ],
+  "candidateVersion": "1.27.0",
+  "affectedSections": [
+    "fn:format-integer:radix recognition,digit-pattern conversion,padding,grouping,ordinal modifier"
+  ],
+  "intentionalLimits": [
+    "4.0 contexts only;3.1 and XSLT3 routes preserve existing interpretation",
+    "Existing public Int64 input range retained;BigInteger magnitude prevents minimum-value overflow",
+    "No parse-integer registration or round-trip case012 closure",
+    "No full modifier-grammar rewrite;existing supported numeric modifiers retained",
+    "No GatedSets,fixture,assertion,QT3 baseline or REQ-126 acceptance changes"
+  ]
+}

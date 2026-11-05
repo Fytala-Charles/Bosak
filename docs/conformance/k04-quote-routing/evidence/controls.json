@@ -1,0 +1,67 @@
+[
+  {
+    "id": "doubled-string",
+    "expression": "\"a\"\"\"",
+    "expected": true
+  },
+  {
+    "id": "single-string",
+    "expression": "'\"\"\"'",
+    "expected": true
+  },
+  {
+    "id": "comment",
+    "expression": "(: \"\"\" :) 1",
+    "expected": true
+  },
+  {
+    "id": "nested-comment",
+    "expression": "(: a (: \"\"\" :) b :) 1",
+    "expected": true
+  },
+  {
+    "id": "direct-attribute",
+    "expression": "<e a=\"\"\"\"/>",
+    "expected": true
+  },
+  {
+    "id": "cdata",
+    "expression": "<e><![CDATA[\"\"\"]]></e>",
+    "expected": true
+  },
+  {
+    "id": "pi",
+    "expression": "<?p \"\"\"?>",
+    "expected": true
+  },
+  {
+    "id": "malformed-attribute",
+    "expression": "<e a=\"\"\"/>",
+    "expected": true
+  },
+  {
+    "id": "context-prolog",
+    "expression": "declare context item := 3; .",
+    "expected": false
+  },
+  {
+    "id": "construction-prolog",
+    "expression": "declare construction strip; 1",
+    "expected": false
+  },
+  {
+    "id": "copy-prolog",
+    "expression": "declare copy-namespaces preserve, inherit; 1",
+    "expected": false
+  },
+  {
+    "id": "pragma",
+    "expression": "(#p:a#){1}",
+    "expected": false
+  },
+  {
+    "id": "commented-prolog",
+    "expression": "declare(: \"\"\" :)construction strip;1",
+    "expected": false
+  }
+]

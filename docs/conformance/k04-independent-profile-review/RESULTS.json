@@ -1,0 +1,42 @@
+{
+  "slice": "K04-C39",
+  "base": "2806ddac",
+  "reviewComplete": true,
+  "dependencyCases": 370,
+  "blockerOccurrences": 371,
+  "categories": {
+    "earlier-spec-applicability": 165,
+    "xml-version-profile": 39,
+    "negative-on-frozen-admitted-feature": 26,
+    "legacy-xsd-profile-review": 37,
+    "declared-unsupported-optional-feature": 93,
+    "negative-on-implemented-normalization": 2,
+    "different-default-language": 1,
+    "unreported-unicode-version": 5,
+    "known-xib-polarity-candidate": 2
+  },
+  "catalogCases": 78806,
+  "normalQt3": [
+    31395,
+    0,
+    426
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "diagnosticOriginals": {
+    "passed": 4,
+    "counterProfileFailuresPreserved": 5
+  },
+  "publicControlsPassed": 12,
+  "processes": 34,
+  "inheritedSolutionPasses": 24164,
+  "normalBaselineChanged": false,
+  "adoptionQualified": false,
+  "next": "C40 exact xib dependency qualification",
+  "candidate": "1.33.0",
+  "published": "1.26.3",
+  "releaseApproved": false
+}

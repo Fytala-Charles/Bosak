@@ -1,0 +1,29 @@
+// Generated read-only Unicode17 conformance probe against the actual compiled backend.
+using System.Globalization;
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text;
+using System.Text.Json;
+var root=Directory.GetCurrentDirectory();var directory=Path.Combine(root,"tests/Bosak.XPath.Conformance/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(ctx,n)=>{var p=Path.Combine(directory,n.Name+".dll");return File.Exists(p)?Assembly.LoadFrom(p):null;};
+var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Standard.dll"));var type=assembly.GetType("Bosak.XPath.Standard.Functions.FullNormalizationEngine",true)!;
+var flags=BindingFlags.Static|BindingFlags.NonPublic;
+var nfc=type.GetMethod("NormalizeNfc",flags)!.CreateDelegate<Func<string,string>>();
+var full=type.GetMethod("Normalize",flags)!.CreateDelegate<Func<string,string>>();
+var actualComposing=type.GetMethod("IsComposing",flags)!.CreateDelegate<Func<int,bool>>();
+var dataRoot=Path.Combine(root,".guard-tmp/k04-normalization-spec");
+var classes=new HashSet<int>();var mappings=new Dictionary<int,int[]>();var excluded=new HashSet<int>();
+foreach(var line in File.ReadLines(Path.Combine(dataRoot,"UnicodeData.txt"))){var f=line.Split(';');int cp=Convert.ToInt32(f[0],16);if(f[3]!="0")classes.Add(cp);if(f[5].Length>0&&!f[5].StartsWith('<'))mappings.Add(cp,f[5].Split(' ').Select(v=>Convert.ToInt32(v,16)).ToArray());}
+foreach(var line in File.ReadLines(Path.Combine(dataRoot,"DerivedNormalizationProps.txt"))){var f=line.Split('#')[0].Split(';');if(f.Length<2||f[1].Trim()!="Full_Composition_Exclusion")continue;var b=f[0].Trim().Split("..");for(int cp=Convert.ToInt32(b[0],16),end=Convert.ToInt32(b[^1],16);cp<=end;cp++)excluded.Add(cp);}
+var seconds=mappings.Where(p=>p.Value.Length==2&&!excluded.Contains(p.Key)).Select(p=>p.Value[1]).ToHashSet();
+bool ExpectedComposing(int cp)=>classes.Contains(cp)||seconds.Contains(cp)||(cp>=0x1161&&cp<=0x1175)||(cp>=0x11A8&&cp<=0x11C2);
+string Decode(string field){var s=new StringBuilder();foreach(var v in field.Trim().Split(' ',StringSplitOptions.RemoveEmptyEntries))s.Append(char.ConvertFromUtf32(Convert.ToInt32(v,16)));return s.ToString();}
+var failures=new List<object>();int mismatches=0;long equations=0;int cases=0;var partOne=new HashSet<int>();bool inPartOne=false;
+void Check(string actual,string expected,string label){equations++;if(actual==expected)return;mismatches++;if(failures.Count<20)failures.Add(new{label,actual,expected});}
+foreach(var raw in File.ReadLines(Path.Combine(dataRoot,"NormalizationTest.txt"))){var line=raw.Split('#')[0].Trim();if(line.Length==0)continue;if(line.StartsWith('@')){inPartOne=line.StartsWith("@Part1");continue;}var fields=line.Split(';');if(fields.Length<5)continue;var values=fields.Take(5).Select(Decode).ToArray();cases++;if(inPartOne&&values[0].EnumerateRunes().Count()==1)partOne.Add(values[0].EnumerateRunes().First().Value);
+ for(int i=0;i<5;i++){string expected=values[i<3?1:3];Check(nfc(values[i]),expected,"NFC-"+cases+"-"+i);string prefix=values[i].Length>0&&ExpectedComposing(Rune.GetRuneAt(values[i],0).Value)?" ":"";Check(full(values[i]),prefix+expected,"FULL-"+cases+"-"+i);}}
+long scalars=0,identityChecks=0;
+for(int cp=0;cp<=0x10FFFF;cp++){if(cp>=0xD800&&cp<=0xDFFF)continue;scalars++;if(actualComposing(cp)!=ExpectedComposing(cp)){mismatches++;if(failures.Count<20)failures.Add(new{label="classifier-"+cp});}if(!partOne.Contains(cp)){string s=char.ConvertFromUtf32(cp);Check(nfc(s),s,"identity-"+cp);identityChecks++;}}
+int malformedChecks=0;foreach(var f in new[]{nfc,full})foreach(var bad in new[]{"\uD800","\uDC00"}){try{f(bad);mismatches++;}catch(ArgumentException){malformedChecks++;}}
+string ResourceHash(string name){using var stream=assembly.GetManifestResourceStream("Bosak.XPath.Standard.Resources."+name)!;return Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(stream)).ToLowerInvariant();}
+Console.WriteLine(JsonSerializer.Serialize(new{unicodeVersion="17.0.0",embeddedDataSha256=ResourceHash("UnicodeNormalization17.bin"),embeddedLicenseSha256=ResourceHash("Unicode17-LICENSE.txt"),cases,normalizationEquations=cases*10,scalarClassifications=scalars,identityChecks,totalStringChecks=equations,malformedChecks,mismatches,failures}));return mismatches==0?0:2;

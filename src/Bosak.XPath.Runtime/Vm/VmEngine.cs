@@ -431,8 +431,13 @@
 //                      | Charles Korthout | 2.204 | 25-10-2026     | Propagate empty atomized numeric binary and modern range operands before conversion.         |
 //                      | Charles Korthout | 2.205 | 25-10-2026     | Report function/map atomization errors for numeric-union function parameters.                |
 //                      | Charles Korthout | 2.206 | 26-10-2026     | Retain atomization errors for integer function parameters including rounding precision.     |
+//                      | Charles Korthout | 2.207 | 27-10-2026     | Validate legacy binding item types before atomization and cardinality checks (K01).        |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.208 | 28-10-2026     | Resolve pending XQuery initial focus at semantic context-load instructions (1.30.0).     |
+//                      | Charles Korthout | 2.209 | 28-10-2026     | Pass constructor-local namespace-copy modes to provider node-content cloning (1.31.0). |
+//                      | Charles Korthout | 2.210 | 28-10-2026     | Carry construction mode and original attribute metadata through provider hooks (1.32.0). |
+//                      | Charles Korthout | 2.211 | 29-10-2026     | Share actual schema-element membership across node matching and sequence subtyping.       |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -662,18 +667,20 @@ internal static class VmEngine
                 // Context
                 // ------------------------------------------------------------------
                 case IrOpCode.LoadContextItem:
-                    if (context.ContextItem.IsUndefined)
+                    if (context.ResolveContextItem().IsUndefined)
                         throw new InvalidOperationException("XPDY0002: The context item is absent.");
                     registers[instr.RegisterA] = context.ContextItem;
                     ip++;
                     break;
 
                 case IrOpCode.LoadContextPosition:
+                    context.ResolveContextItem();
                     registers[instr.RegisterA] = XdmValue.FromInteger(context.ContextPosition);
                     ip++;
                     break;
 
                 case IrOpCode.LoadContextSize:
+                    context.ResolveContextItem();
                     registers[instr.RegisterA] = XdmValue.FromInteger(context.ContextSize);
                     ip++;
                     break;
@@ -1668,6 +1675,10 @@ internal static class VmEngine
                         // XQuery 3.1 'as SequenceType' enforcement for variable bindings: the
                         // value is atomized (unless the target is a node-kind test) and then
                         // instance-checked — no casts or promotions (XQuery 3.1 §4.16/§4.10).
+                        // An illegal list item type is XPST0051 regardless of whether its
+                        // value has one or multiple items (XQuery 3.1 §2.5.5.2). Validate
+                        // before InstanceOf can reject cardinality with XPTY0004.
+                        ValidateFunctionConversionTarget(enforceInfo.TypeName, context);
                         if (!IsNodeKindTest(enforceInfo.TypeName))
                             value = AtomizeItems(value);
                         if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, context.DefaultElementNamespace, context))
@@ -1815,10 +1826,11 @@ internal static class VmEngine
                                 // the namespace axis see it (K2-InScopePrefixesFunc-12/29).
                                 if (ns is null && !string.IsNullOrEmpty(context.DefaultElementNamespace))
                                     accumulator.Content.Insert(0, new XdmContentItem(XdmContentKind.Namespace, "", null, ""));
-                                AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix);
+                                AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix, computedInfo.LexicalNamespaces);
                                 if (context.ElementConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
-                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode);
+                                ApplyConstructionCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces, computedInfo.ConstructionMode);
+                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode) { ConstructionMode = computedInfo.ConstructionMode };
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                                 break;
                             }
@@ -1839,7 +1851,7 @@ internal static class VmEngine
                                     throw new InvalidOperationException("XQDY0091: An xml:id attribute value must not have leading or trailing whitespace.");
                                 if (context.AttributeConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no attribute-constructor provider is registered (EvaluationContext.AttributeConstructorHook).");
-                                registers[instr.RegisterA] = XdmValue.FromNode(context.AttributeConstructorHook(new XdmAttributeValue(local, prefix, ns, value)));
+                                registers[instr.RegisterA] = XdmValue.FromNode(context.AttributeConstructorHook(new XdmAttributeValue(local, prefix, ns, value) { ConstructionMode = computedInfo.ConstructionMode }));
                                 break;
                             }
                             case ComputedConstructorKind.Document:
@@ -1850,6 +1862,7 @@ internal static class VmEngine
                                 accumulator.Flush();
                                 if (context.DocumentConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no document-constructor provider is registered (EvaluationContext.DocumentConstructorHook).");
+                                ApplyConstructionCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces, computedInfo.ConstructionMode);
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.DocumentConstructorHook(accumulator.Content));
                                 break;
                             }
@@ -2132,7 +2145,7 @@ internal static class VmEngine
                                 {
                                     throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                                 }
-                                attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                                 return;
                             }
                             if (member.IsNode)
@@ -2187,7 +2200,7 @@ internal static class VmEngine
                                             {
                                                 throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                                             }
-                                            attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                            attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                                             continue;
                                         }
                                         // A namespace node in content becomes a namespace declaration
@@ -2237,7 +2250,7 @@ internal static class VmEngine
                                         if (item.IsNode)
                                         {
                                             FlushAtomic();
-                                            content.Add(new XdmContentItem(XdmContentKind.Node, null, item));
+                                            content.Add(new XdmContentItem(XdmContentKind.Node, null, item) { IsLiteralElement = part.IsLiteralElement });
                                             seenNonAttributeContent = true;
                                         }
                                         else if (item.IsFunction)
@@ -2271,7 +2284,7 @@ internal static class VmEngine
                             }
                         }
                         FlushAtomic();
-                        AppendConstructorLocalNamespaces(content, attributes, context, ctorInfo.Prefix);
+                        AppendConstructorLocalNamespaces(content, attributes, context, ctorInfo.Prefix, ctorInfo.LexicalNamespaces);
 
                         if (context.ElementConstructorHook is null)
                         {
@@ -2279,7 +2292,8 @@ internal static class VmEngine
                                 "Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
                         }
 
-                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode);
+                        ApplyConstructionCopyMode(content, ctorInfo.PreserveNamespaces, ctorInfo.InheritNamespaces, ctorInfo.ConstructionMode);
+                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode) { ConstructionMode = ctorInfo.ConstructionMode };
                         registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                         ip++;
                         break;
@@ -6153,46 +6167,95 @@ internal static class VmEngine
         var targetDecl = context.GetSchemaElement(targetNs, targetLocal)
             ?? throw new InvalidOperationException($"XPST0008: Schema element declaration Q{{{targetNs}}}{targetLocal} is not defined.");
 
-        var nodeDeclName = node.SchemaElementDeclaration;
-        if (nodeDeclName is null)
+        if (node.SchemaElementDeclaration is null)
             return false;
 
-        XmlSchemaElement? actualDecl = context.GetSchemaElement(nodeDeclName.Value.NamespaceUri, nodeDeclName.Value.LocalName);
-        if (actualDecl is null)
+        // XPath 3.1 2.5.5.4 uses the global declaration for the node's name N,
+        // including when its governing validation declaration is local.
+        var candidateDecl = context.GetSchemaElement(node.NamespaceUri, node.LocalName);
+        if (candidateDecl is null || !IsActualSubstitutionMember(candidateDecl, targetDecl, context))
+            return false;
+        if (node.IsNilled && !candidateDecl.IsNillable)
             return false;
 
-        if (!IsSameQName(nodeDeclName.Value, targetNs, targetLocal))
-        {
-            var currentDecl = actualDecl;
-            while (currentDecl != null)
-            {
-                var sg = currentDecl.SubstitutionGroup;
-                if (sg is null || sg.IsEmpty)
-                    return false;
-                if (sg.Namespace == targetNs && sg.Name == targetLocal)
-                    break;
-                currentDecl = context.GetSchemaElement(sg.Namespace, sg.Name);
-            }
-            if (currentDecl is null)
-                return false;
-        }
-
-        bool isNilled = node.IsNilled;
-        if (isNilled)
-            return actualDecl.IsNillable;
-
-        // XmlSchemaElement.SchemaType is null for type-referenced declarations; the
-        // post-compilation ElementSchemaType carries the effective type (REQ-105).
-        var targetType = targetDecl.ElementSchemaType ?? targetDecl.SchemaType;
-        if (targetType is null)
+        var candidateType = candidateDecl.ElementSchemaType ?? candidateDecl.SchemaType;
+        if (candidateType is null)
             return true;
 
-        // The annotation names the node's type; an anonymous type has no name, in which
-        // case the governing declaration's own type is the annotation (validation-0501).
+        // Retain the existing anonymous-type fallback. Named annotations must derive
+        // from declaration N's type, rather than the potentially broader head type.
         var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
-            ?? actualDecl.ElementSchemaType ?? actualDecl.SchemaType;
-        return actualType is not null
-            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
+            ?? candidateType;
+        return XmlSchemaType.IsDerivedFrom(actualType, candidateType, XmlSchemaDerivationMethod.Empty);
+    }
+
+    /// <summary>Tests actual membership in a compiled single-affiliation substitution group.</summary>
+    private static bool IsActualSubstitutionMember(XmlSchemaElement candidate, XmlSchemaElement head, EvaluationContext context)
+    {
+        if (candidate.IsAbstract)
+            return false;
+        if (ReferenceEquals(candidate, head))
+            return true;
+        if ((head.BlockResolved & XmlSchemaDerivationMethod.Substitution) != 0)
+            return false;
+
+        // Affiliation is transitive; an intermediate element's block applies to
+        // its own group, not automatically to the group of a different head.
+        var current = candidate;
+        int remaining = context.SchemaSet!.GlobalElements.Count;
+        while (remaining-- > 0)
+        {
+            var affiliation = current.SubstitutionGroup;
+            if (affiliation.IsEmpty)
+                return false;
+            current = context.GetSchemaElement(affiliation.Namespace, affiliation.Name);
+            if (current is null)
+                return false;
+            if (ReferenceEquals(current, head))
+                break;
+        }
+        if (!ReferenceEquals(current, head))
+            return false;
+
+        var candidateType = candidate.ElementSchemaType;
+        var headType = head.ElementSchemaType;
+        if (candidateType is null || headType is null ||
+            !XmlSchemaType.IsDerivedFrom(candidateType, headType, head.BlockResolved))
+            return false;
+
+        // XSD 1.0 3.3.6: derivation methods must also avoid prohibited
+        // substitutions on the head and intermediate complex type definitions.
+        var methods = XmlSchemaDerivationMethod.Empty;
+        var prohibited = head.BlockResolved;
+        if (headType is XmlSchemaComplexType headComplex)
+            prohibited |= headComplex.BlockResolved;
+        for (var type = candidateType; !ReferenceEquals(type, headType);)
+        {
+            methods |= type.DerivedBy;
+            var baseType = type.BaseXmlSchemaType;
+            if (baseType is null || ReferenceEquals(baseType, type))
+                break;
+            if (baseType is XmlSchemaComplexType complex)
+                prohibited |= complex.BlockResolved;
+            type = baseType;
+        }
+        return (methods & prohibited) == 0;
+    }
+
+    /// <summary>Compares schema-element types by actual member-set containment.</summary>
+    private static bool IsSchemaElementSubtype(string actual, string test, EvaluationContext context)
+    {
+        var (actualNs, actualLocal) = ResolveTypeQName(actual[15..^1].Trim(), context);
+        var (testNs, testLocal) = ResolveTypeQName(test[15..^1].Trim(), context);
+        var actualHead = context.GetSchemaElement(actualNs, actualLocal);
+        var testHead = context.GetSchemaElement(testNs, testLocal);
+        if (actualHead is null || testHead is null || context.SchemaSet is null)
+            return false;
+        foreach (XmlSchemaElement candidate in context.SchemaSet.GlobalElements.Values)
+            if (IsActualSubstitutionMember(candidate, actualHead, context) &&
+                !IsActualSubstitutionMember(candidate, testHead, context))
+                return false;
+        return true;
     }
 
     /// <summary>
@@ -11479,6 +11542,8 @@ internal static class VmEngine
         bool nillableType = typeName.TrimEnd().EndsWith("?");
         if (node.IsNilled)
             return nillableType;
+        // xs:anyType is the base of every element annotation, including xs:untyped.
+        if (targetNs == XmlSchema.Namespace && targetLocal == "anyType") return true;
         if (node.SchemaTypeAnnotation is not { } actual)
         {
             // Untyped parsed element: xs:anyType and xs:untyped both match.
@@ -14930,6 +14995,10 @@ internal static class VmEngine
         if (actualFamily || testFamily)
             return IsFunctionFamilySubtype(actual, test, context);
 
+        if (context is not null && actual.StartsWith("schema-element(", StringComparison.Ordinal) &&
+            test.StartsWith("schema-element(", StringComparison.Ordinal) && actual.EndsWith(')') && test.EndsWith(')'))
+            return IsSchemaElementSubtype(actual, test, context);
+
         // User-defined schema simple types (atomic restrictions, unions, and lists) can
         // be related even when their lexical forms differ (e.g. Q{ns}local vs p:local).
         if (context is not null && IsSchemaAwareSequenceSubtype(context, actualType, testType))
@@ -16345,7 +16414,7 @@ internal static class VmEngine
     // resolution reserved for real content declarations (K2-DirectConElemNamespace-77).
     private static void AppendConstructorLocalNamespaces(
         List<XdmContentItem> content, IReadOnlyList<XdmAttributeValue> attributes, EvaluationContext context,
-        string? tagPrefix)
+        string? tagPrefix, IReadOnlyList<(string Prefix, string Uri)>? lexicalNamespaces = null)
     {
         var declared = new HashSet<string>(StringComparer.Ordinal);
         foreach (var attr in attributes)
@@ -16358,11 +16427,24 @@ internal static class VmEngine
                 declared.Add(item.Target ?? "");
         if (tagPrefix is not null)
             declared.Add(tagPrefix);
-        foreach (var (prefix, uri) in context.ConstructorLocalNamespaces)
+        foreach (var (prefix, uri) in lexicalNamespaces ?? context.ConstructorLocalNamespaces)
         {
+            if (prefix.Length != 0 && uri.Length == 0) continue;
             if (!declared.Contains(prefix))
                 content.Add(new XdmContentItem(XdmContentKind.Namespace, uri, null, prefix));
         }
+    }
+
+    private static void ApplyConstructionCopyMode(List<XdmContentItem> content, bool preserve, bool inherit, XdmConstructionMode mode)
+    {
+        for (int i = 0; i < content.Count; i++)
+            if (content[i].Kind == XdmContentKind.Node)
+                content[i] = content[i] with
+                {
+                    ConstructionMode = mode,
+                    PreserveNamespaces = content[i].IsLiteralElement || preserve,
+                    InheritNamespaces = content[i].IsLiteralElement || inherit
+                };
     }
 
     private sealed class ComputedContentAccumulator
@@ -16411,7 +16493,7 @@ internal static class VmEngine
                 {
                     throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                 }
-                _attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                _attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                 return;
             }
             if (item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Namespace)

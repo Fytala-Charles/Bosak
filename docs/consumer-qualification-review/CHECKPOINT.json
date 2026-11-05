@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "8468f47511ef4ff741b952403f765cde2ea02176",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/consumer-qualification-review/README.md",
+  "reviewedDossiers": [
+    "schema-consumer-priorities",
+    "xmldb-compatibility",
+    "braid-compatibility"
+  ],
+  "productionChanged": false,
+  "freshTestExecution": false
+}

@@ -1,0 +1,14 @@
+{
+  "changed": {
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": {
+      "beforeSha256": "a2c62814f94ff8fb5425a728701586a07d186a7229a3ac80cf874cca9c0e1769",
+      "afterSha256": "8ceb98006fb7d84493464527be071d6e1eeae4d910c6591e47918a623b9b2874"
+    }
+  },
+  "added": {
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "92bf7bc7663375728c570c35fe34e1f2ceba1b8cfb75184829f69eefa5207a6c"
+  },
+  "exportedDeclarationsUnchanged": true,
+  "activationGuardsUnchanged": true,
+  "scope": "Internal candidate binding/input/read methods and internal adapter only; public CompileXPath, Advisor and ReadTypedValue retain existing guards, covered by poison controls."
+}

@@ -1,0 +1,7 @@
+{
+  "draftSha256": "3fbfeea5a88d93cf24ec137850c5f3358d0b6028577b133d9ff259c7b6beb940",
+  "feedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "project": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><GenerateDocumentationFile>true</GenerateDocumentationFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors><EnableDefaultCompileItems>false</EnableDefaultCompileItems></PropertyGroup><ItemGroup><Compile Include=\"Program.cs\"/><Compile Include=\"Contracts.cs\"/><Reference Include=\"Bosak.XPath.Core\"><HintPath>Bosak.XPath.Core.dll</HintPath><Private>true</Private></Reference></ItemGroup></Project>",
+  "productionModified": false
+}

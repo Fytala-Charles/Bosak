@@ -1,0 +1,34 @@
+{
+  "scope": "Only the qualified cohort establishes the final source; original/corrected receipts remain in EXECUTION-RECEIPTS.zip.",
+  "cohorts": [
+    {
+      "archive": "pre-entry-guard",
+      "units": "typed-identity-units.log.json",
+      "scope": "Initial implementation before closing general capture/evaluation routes."
+    },
+    {
+      "archive": "pre-constructor-compatibility",
+      "units": "typed-identity-units-final.log.json",
+      "scope": "Entry guards added; before preserving the existing internal constructor signature."
+    },
+    {
+      "archive": ".",
+      "units": "typed-identity-units-qualified.log.json",
+      "scope": "Final source with closed general routes and existing constructor signature retained."
+    }
+  ],
+  "fixtureCorrections": [
+    {
+      "receipt": "typed-identity-controls-0.log.json",
+      "sha256": "b248ba9f563864141ca4b9010ae7922605eeef73ec74e060999f6e489ee3cfd8",
+      "exitCode": 1,
+      "correction": "Match the established ArgumentException contract for default query limits."
+    },
+    {
+      "receipt": "typed-identity-controls-2.log.json",
+      "sha256": "9634b4dd1b6b7501caafa6a723925ac72dca50da2986135b70e0d667b6067488",
+      "exitCode": 1,
+      "correction": "Allow the standard namespace count when preparing the general-entry guard fixture."
+    }
+  ]
+}

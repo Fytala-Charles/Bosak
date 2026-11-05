@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-radix-fix/evidence/control-fixtures.xml", "Name": "control-qt4-int64-max", "case": "int64-max", "expression": "format-integer(9223372036854775807,'16^x')", "boundary": true, "expected": "7fffffffffffffff"}

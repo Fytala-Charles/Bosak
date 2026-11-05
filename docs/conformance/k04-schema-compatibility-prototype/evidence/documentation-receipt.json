@@ -1,0 +1,87 @@
+{
+  "kind": "HTML render only; no screenshot/PDF acceptance",
+  "date": "2026-10-29",
+  "priorFilesPreserved": 141,
+  "productBinariesUnchanged": 7,
+  "correctControls": 123,
+  "mutationModes": 12,
+  "finalProcesses": 13,
+  "timeoutCount": 0,
+  "proposalTypes": 32,
+  "localLinksChecked": 39,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "e2352d98ac62c1b9f494fe8a96862a714cc43cb56d35d19652a8f428c6f5412e",
+      "html": ".guard-tmp/c44r2-compatibility-render/README.md.html",
+      "htmlSha256": "5f4421c6f28f0330783339d5217e7e1ea6a282a21e2efa16db4682d386cd8f5e"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "f24fadafd73ae64aa447078136186833987c5148acb0a523816259d556c27d7a",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_ARCHITECTURE.md.html",
+      "htmlSha256": "619ebf013328082ae53328d9d0901282691ace97e4d675b8e93767812d9cfeeb"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "8125b93e4da6319a54fc49218e600ebab4820a928cd03c01a028ee88125a0732",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_FEATURE_REQUESTS.md.html",
+      "htmlSha256": "ba5dc12264decb5d26bb4af28531d0b242740dc0b43f02863d739e8cf33f2bea"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "3efc1d3a94a9bcba064e997fb6285afe11c2ed43378a75f15e0a149e5a6f8429",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_INTEGRATION.md.html",
+      "htmlSha256": "4770918d1b825a797e5f046f6e938ab313e5c7970f58a015663ea7fe6b71ab74"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "b830177a4ee3d1e30b0932175fb00bb67ff213b2df6bb6198d5f3a8ee8f37903",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_AGENT_HANDOVER.md.html",
+      "htmlSha256": "e762816bab47251ec0825ba5daaa209f4e5e0f3f1d20a8c9488d1afa4a9581f1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "d37170306b2e2cac8094ac1f9b5fd8e0ec3e4b42702666d57b42537d765bc940",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "htmlSha256": "bae105894f3f11723b0de2bdc2d1fbaf48c01bc8df03b669968b0ff9b52fd98d"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "sourceSha256": "aec1a20ac8073556d525d09dae88d9a521a71d7297662c07d5bf7e84bc059db4",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_RESTART-2026-10-29.md.html",
+      "htmlSha256": "47e38473b51b5f8ad8c906ea7bf5be4574d419f69fc343be5be84f4d7ffa8c79"
+    },
+    {
+      "source": "docs/XDM40-COMPATIBILITY-REVIEW-PLAN.md",
+      "sourceSha256": "4926d6f0c3863ba18a7fa0985f2672c8f03234db929c4c643d54a6f3c582c5c1",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_XDM40-COMPATIBILITY-REVIEW-PLAN.md.html",
+      "htmlSha256": "5a0b96bca41eea275cf7ee085f6cd291cb38aaf9daca2ac565ac6a0cdf84700a"
+    },
+    {
+      "source": "docs/conformance/k04-schema-compatibility-prototype/README.md",
+      "sourceSha256": "5965f5d97da0c0cff6e1e2bd1d8df0dbcbe7e7aa361650ab09c7310a980953cf",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_conformance_k04-schema-compatibility-prototype_README.md.html",
+      "htmlSha256": "2a026e1a784ac6aa231cece3b517ad0945e422fdccf843aac62871115b9800ca"
+    },
+    {
+      "source": "docs/conformance/k04-schema-compatibility-prototype/API-PROPOSAL.md",
+      "sourceSha256": "a04097c13637d9da7d66c3fde53faa6f6e9c1e3348a5058399d08b31d6fb0ba4",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_conformance_k04-schema-compatibility-prototype_API-PROPOSAL.md.html",
+      "htmlSha256": "b22d84358e3bc183f2ac1a500fe92ff79236eae9870dafdf074540493b6ebe3e"
+    },
+    {
+      "source": "docs/conformance/k04-schema-compatibility-prototype/QUALIFICATION.md",
+      "sourceSha256": "0b1ff01ac9df0fd742bd68d84fb21bf2e33dd017982e2489168c1f626d6c2401",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_conformance_k04-schema-compatibility-prototype_QUALIFICATION.md.html",
+      "htmlSha256": "b400707ab4a72620c6b877d2feffdecc15bd0933eca16b873c16b40f823a3d38"
+    },
+    {
+      "source": "docs/conformance/k04-schema-compatibility-prototype/OWNER-DECISION.md",
+      "sourceSha256": "5816309c1582d6b16c0bb20269944a1c2ff8cc3a4826a8f7f019e6641d671ee9",
+      "html": ".guard-tmp/c44r2-compatibility-render/docs_conformance_k04-schema-compatibility-prototype_OWNER-DECISION.md.html",
+      "htmlSha256": "d365815e4f17c942328ba91fb831c6a8d150b6ab0d73bfaad395b78604dadd58"
+    }
+  ]
+}

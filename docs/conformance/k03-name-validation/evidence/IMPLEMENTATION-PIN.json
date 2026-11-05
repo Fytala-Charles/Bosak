@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "0d89801c14ea6b0fcb44a055162a999e0354efb5",
+  "specification": "https://www.w3.org/TR/2008/REC-xml-20081126/#NT-NameStartChar",
+  "revision": "XML 1.0 Fifth Edition, 26 November 2008; productions4/4a; same scalar name ranges in XML1.1 Second Edition",
+  "scope": "K03-C01 only: scalar-aware ElementMap NCName validity, malformed UTF16 rejection and FOJS0009 classification. Existing empty-valued attribute path exercises valid-name parsing without claiming provider storage support. Provider name representation/serialization and qt4 skip remain unchanged.",
+  "candidate": "1.26.9",
+  "qt3": [
+    31145,
+    0,
+    676
+  ],
+  "qt4": [
+    8436,
+    0,
+    1894
+  ]
+}

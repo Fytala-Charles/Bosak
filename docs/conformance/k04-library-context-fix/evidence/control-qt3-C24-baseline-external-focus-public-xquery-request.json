@@ -1,0 +1,1 @@
+{"Suite": "qt3", "Name": "C24-baseline-external-focus", "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests", "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-declaration-review\\evidence\\control-fixtures.xml", "Expression": ".", "Dependencies": [], "ExpectedKind": "assert-eq", "Expected": "27", "InitialContextExpression": "27"}

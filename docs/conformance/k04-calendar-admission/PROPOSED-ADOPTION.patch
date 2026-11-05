@@ -1,0 +1,63 @@
+--- a/tests/Bosak.XPath.Conformance/DependencyFilter.cs
++++ b/tests/Bosak.XPath.Conformance/DependencyFilter.cs
+@@ -33,6 +33,7 @@
+ //                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
+ //                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+ //                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
++//                      | Charles Korthout | 0.18  | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -106,6 +107,15 @@
+ 
+         foreach (var dep in dependencies)
+         {
++            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
++            // Other calendar names retain their existing admission policy.
++            if (dep.Type == "calendar" && dep.Value == "CB")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+             // Keep other sequence names and dependency kinds under their existing policy.
+             if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+--- a/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
++++ b/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
+@@ -20,6 +20,7 @@
+ //                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
+ //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+ //                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
++//                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -102,6 +103,15 @@
+     {
+         foreach (var dep in dependencies)
+         {
++            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
++            // Other calendar names retain their existing admission policy.
++            if (dep.Type == "calendar" && dep.Value == "CB")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+             // Keep other sequence names and dependency kinds under their existing policy.
+             if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@
+ 
+ Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
+ 
+-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,162/0/659** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660.
++- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,164/0/657** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659.
+ - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
+ 
+ ## Architecture Overview

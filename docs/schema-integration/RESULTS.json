@@ -1,0 +1,510 @@
+{
+  "date": "2026-10-29",
+  "testedCoreRevision": "5f2dec11c16a7287f45f717779d6f9e92534eb30",
+  "publicSchemaRevision": "044d2cb2e67decd46e03e0f5ee7cb03029f34bd9",
+  "changes": "Optional source-integration example, tests and CI only; no core production source/API/version change",
+  "coreSolution": {
+    "passed": 24203,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0.trx",
+        "sha256": "c2933aca8bd46837c777a3be962769dc52544ef7a17bf3f91c6906a063bd279e",
+        "runOutcome": "Completed",
+        "total": 66,
+        "passed": 66,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[1].trx",
+        "sha256": "12e189ca11ece790f8a189e13a4b1fe897b35558ecd5e9a8a3d94c88792a6afa",
+        "runOutcome": "Completed",
+        "total": 202,
+        "passed": 202,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[2].trx",
+        "sha256": "2afcfc9d970efefc447fce9d8db8414fd33d269703a2acaf19acfa6266fb63eb",
+        "runOutcome": "Completed",
+        "total": 269,
+        "passed": 269,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[3].trx",
+        "sha256": "9f8e4ef12b51421ef7cec62da3dd9e8b6ec7207dde5b44b903868f72f375b5fb",
+        "runOutcome": "Completed",
+        "total": 132,
+        "passed": 132,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[4].trx",
+        "sha256": "9c47c1d2fc193fd9358e59a7b36091e2d7ebe53e97a1a5afec5fd895b36663cd",
+        "runOutcome": "Completed",
+        "total": 489,
+        "passed": 489,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[5].trx",
+        "sha256": "635c78054b83f47251ffcd2c322a7128c337d0101c64efd195a941d442e317f9",
+        "runOutcome": "Completed",
+        "total": 804,
+        "passed": 804,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[6].trx",
+        "sha256": "d96580669b33b7f7efbba161ea58add7a13b09cdf5c0ef36a1be97f2d842c793",
+        "runOutcome": "Completed",
+        "total": 47,
+        "passed": 47,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_00_net10.0[7].trx",
+        "sha256": "9589d934a84882303303a7a602672bf24820f273a9e37ad1ddae369cfd4d0457",
+        "runOutcome": "Completed",
+        "total": 201,
+        "passed": 201,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_01_net10.0.trx",
+        "sha256": "8132ff52150373973409c4b16f4f4f0802877d21b5134a640726251b7db6fecf",
+        "runOutcome": "Completed",
+        "total": 13797,
+        "passed": 13797,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-core-results-unrestricted\\charl_CHARLES_2026-10-29_11_51_02_net10.0.trx",
+        "sha256": "ae9ad36cf47fd1e9168d6e39bcdca015252ce8f4a956e928467caf71002b5a35",
+        "runOutcome": "Completed",
+        "total": 8196,
+        "passed": 8196,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "schemaSourceIntegration": {
+    "passed": 122,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\schema-integration-final-source\\qualified.trx",
+        "sha256": "c24ca20c2fbb32413bf3c159cdc39bd36cbae57937d8e4b62581f091fbb6c7c9",
+        "runOutcome": "Completed",
+        "total": 122,
+        "passed": 122,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "schemaUnchangedBinaryReplacement": {
+    "passed": 114,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\schema-binary-results\\charl_CHARLES_2026-10-29_11_55_51_net10.0.trx",
+        "sha256": "c51ed1c7fc6bd495f68d116a4e1f219c9218b4b356e45851351030923d2e3cbe",
+        "runOutcome": "Completed",
+        "total": 114,
+        "passed": 114,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "braid": {
+    "originalUnchangedTests": {
+      "passed": 1872,
+      "failed": 4,
+      "receipts": [
+        {
+          "receipt": ".guard-tmp\\schema-consumer-results\\Braid-final\\charl_CHARLES_2026-10-29_11_51_58_net10.0.trx",
+          "sha256": "eaf3afc48fe3ade010dfa2b2244182869d599f7ce5e9914d81803387af5cb0e9",
+          "runOutcome": "Completed",
+          "total": 27,
+          "passed": 27,
+          "failed": 0,
+          "failures": []
+        },
+        {
+          "receipt": ".guard-tmp\\schema-consumer-results\\Braid-final\\charl_CHARLES_2026-10-29_11_52_00_net10.0.trx",
+          "sha256": "24266d02f7f4a33a216de28318fa2b11e2c5bea0309f60e1429f52602ca8c838",
+          "runOutcome": "Completed",
+          "total": 514,
+          "passed": 514,
+          "failed": 0,
+          "failures": []
+        },
+        {
+          "receipt": ".guard-tmp\\schema-consumer-results\\Braid-final\\charl_CHARLES_2026-10-29_11_52_10_net10.0.trx",
+          "sha256": "3edc830e813fa4b0fab8f726dbc776ae87aba4e912c22047527cc7e3f05357f5",
+          "runOutcome": "Completed",
+          "total": 370,
+          "passed": 370,
+          "failed": 0,
+          "failures": []
+        },
+        {
+          "receipt": ".guard-tmp\\schema-consumer-results\\Braid-final\\charl_CHARLES_2026-10-29_11_52_10_net10.0[1].trx",
+          "sha256": "0b6e9dc87614513af5c4233c2b3c063d07526035ada44b8d6655e124bab1a802",
+          "runOutcome": "Failed",
+          "total": 965,
+          "passed": 961,
+          "failed": 4,
+          "failures": [
+            {
+              "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)",
+              "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.33.1+5f2dec11c16a7287f45f717779d6f9e925\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+            },
+            {
+              "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)",
+              "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.33.1+5f2dec11c16a7287f45f717779d6f9e925\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+            },
+            {
+              "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)",
+              "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.33.1+5f2dec11c16a7287f45f717779d6f9e925\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+            },
+            {
+              "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)",
+              "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.33.1+5f2dec11c16a7287f45f717779d6f9e925\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+            }
+          ]
+        }
+      ]
+    },
+    "exactIdentityAdjustedRerun": {
+      "passed": 4,
+      "failed": 0,
+      "receipts": [
+        {
+          "receipt": ".guard-tmp\\schema-consumer-results\\Braid-pin-adjusted\\charl_CHARLES_2026-10-29_11_57_25_net10.0.trx",
+          "sha256": "409ded00cef480ec6dec95aad159daba20f0588af0d44a95e711f692734b1056",
+          "runOutcome": "Completed",
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "failures": []
+        }
+      ]
+    },
+    "interpretation": "1872 unchanged passing cases plus four passing cases after isolated exact-identity adjustment; not one unchanged 1876-case pass"
+  },
+  "xmldbBaseline": {
+    "passed": 1878,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\schema-consumer-results\\XmlDb-final\\charl_CHARLES_2026-10-29_11_51_33_net10.0.trx",
+        "sha256": "85db659800acaf5e357da4ba80028d1c59b19de9f5d80303c715e9e6b840b091",
+        "runOutcome": "Failed",
+        "total": 1258,
+        "passed": 1258,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-consumer-results\\XmlDb-final\\charl_CHARLES_2026-10-29_11_51_34_net10.0.trx",
+        "sha256": "7bf3b5652e61ca3cd94b2f65f55b82e2bd246659d381cfe3b0445aea3cd7fc7d",
+        "runOutcome": "Completed",
+        "total": 27,
+        "passed": 27,
+        "failed": 0,
+        "failures": []
+      },
+      {
+        "receipt": ".guard-tmp\\schema-consumer-results\\XmlDb-final\\charl_CHARLES_2026-10-29_11_51_35_net10.0.trx",
+        "sha256": "74e2d0ac4ba678a602e0b118f81e9e56b9320425875e269764af807013d7da74",
+        "runOutcome": "Completed",
+        "total": 593,
+        "passed": 593,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "xmldbBaselineComplete": false,
+  "xmldbBaselineDisposition": "Storage baseline stopped after 1258 observed passes; its run-level Failed status is cancellation, not a complete suite pass. Completed published-dependency adapter/integration baselines are 27 and 593. No full XmlDb source-suite acceptance.",
+  "xmldbCurrentSource": {
+    "passed": 27,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\schema-consumer-results\\XmlDb-current-source\\charl_CHARLES_2026-10-29_12_11_26_net10.0.trx",
+        "sha256": "ed4e66a9988a037c38c3329323e011e2d5f77b4aa2590b2603b475174c5e2e7b",
+        "runOutcome": "Completed",
+        "total": 27,
+        "passed": 27,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "xmldbUnchangedBinaryReplacement": {
+    "passed": 590,
+    "failed": 3,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\xmldb-binary-results\\charl_CHARLES_2026-10-29_12_11_03_net10.0.trx",
+        "sha256": "5cf2f8d7fac4d86aa868c339d7ca046119c2c1c179f8bf0e34c345bf5fed4277",
+        "runOutcome": "Failed",
+        "total": 593,
+        "passed": 590,
+        "failed": 3,
+        "failures": [
+          {
+            "test": "Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: \"Published\")",
+            "message": "System.TimeoutException : The operation has timed out."
+          },
+          {
+            "test": "Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads",
+            "message": "Assert.NotNull() Failure: Value is null"
+          },
+          {
+            "test": "Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: \"normal\")",
+            "message": "System.TimeoutException : The operation has timed out."
+          }
+        ]
+      }
+    ]
+  },
+  "xmldbBinaryLayoutCorrection": {
+    "passed": 1,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\xmldb-binary-layout-results\\charl_CHARLES_2026-10-29_12_13_16_net10.0.trx",
+        "sha256": "53b425afb6c0418aa65fb1424e4624a8e3132c8ec1ae1ad607647933256b95ce",
+        "runOutcome": "Completed",
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "xmldbBinaryRestoreRerun": {
+    "passed": 6,
+    "failed": 0,
+    "receipts": [
+      {
+        "receipt": ".guard-tmp\\xmldb-binary-restore-rerun-results\\charl_CHARLES_2026-10-29_12_25_19_net10.0.trx",
+        "sha256": "e9461becdb7b3541be241c05f942dc59fd17ba6494e01b4dc0c6c4971c3a3401",
+        "runOutcome": "Completed",
+        "total": 6,
+        "passed": 6,
+        "failed": 0,
+        "failures": []
+      }
+    ]
+  },
+  "xmldbBinaryDisposition": {
+    "uniqueOriginalCases": 593,
+    "initialPassed": 590,
+    "initialFailed": 3,
+    "originallyFailedCases": [
+      "Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: \"Published\")",
+      "Bosak.XmlDb.IntegrationTests.EpochBackupRestoreProcessTests.Restore_FreshProcessOrKill_PublishesWholeIndependentBundle(stage: \"normal\")",
+      "Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads"
+    ],
+    "allOriginallyFailedCasesPassUnchangedOnRerun": true,
+    "uniqueCasesWithPassingEvidence": 593,
+    "qualification": "590 initial passes plus three corrected rerun outcomes; not one uninterrupted 593-case pass. One lost-layout fixture and two process timeouts; no test assertion or timeout changes."
+  },
+  "localPreviewPackages": "evidence/local-preview-packages.json",
+  "skipIdentityChecks": [
+    {
+      "gate": "qt3",
+      "baseline": "docs\\conformance\\k04-schema-advisor-proposal\\evidence\\qt3-normal-skips.txt",
+      "currentSha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187",
+      "identicalNamesAndReasons": true
+    },
+    {
+      "gate": "qt4",
+      "baseline": "docs\\conformance\\k04-schema-advisor-proposal\\evidence\\qt4-normal-skips.txt",
+      "currentSha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a",
+      "identicalNamesAndReasons": true
+    }
+  ],
+  "gates": {
+    "qt3": {
+      "passed": 31397,
+      "failed": 0,
+      "skipped": 424
+    },
+    "qt4": {
+      "passed": 8941,
+      "failed": 0,
+      "skipped": 1918,
+      "gatedSets": 230,
+      "experimentalPasses": 11
+    }
+  },
+  "sourcePinControls": {
+    "lfCheckoutBuildPassed": true,
+    "changedSourceBuildRefused": true
+  },
+  "specificationReview": {
+    "xsltDatedHtmlSha256": "d9626241dc8e53380a30fb4c4f37a46c72ddc997548b65ee2ae641d20a350ab7",
+    "correction": "SPEC-REFERENCE-CORRECTION.md; section reference correction, no semantic change"
+  },
+  "environmentCorrections": [
+    "Sandbox blocks loopback HTTP fixtures; full core tests rerun with local networking available.",
+    "Sandbox blocks Avalonia cache access; isolated Braid rerun outside sandbox.",
+    "Initial XmlDb project-file edits tripped architecture manifest assertions; restore original manifests and use a separate build import.",
+    "The first XmlDb build import selected no candidate references; its completed suites are published-dependency baseline evidence only. Corrected explicit routing is inspected and source/binary candidate checks are separate.",
+    "Original Braid exact-identity checks retained as four failures; separate four-case rerun changes expected candidate identity only.",
+    "Flat-copy XmlDb binary run loses its solution/sample layout; one unchanged reopen case passes with layout restored.",
+    "Two XmlDb restore-process cases time out during overlapping disk-fault sweeps; six unchanged restore cases pass in a separate fresh run with original deadlines.",
+    "The independent storage baseline is stopped after 1258 observed passes; no complete storage-suite acceptance is claimed.",
+    "First attempt used one TRX filename for all core suites; corrected run retains distinct TRX files."
+  ],
+  "logs": [
+    {
+      "path": "docs\\schema-integration\\evidence\\core-build.txt",
+      "sha256": "2e624c19fed043502b3b19b8ca8d5a928fb834d047254e580b1ac4a869e5477e",
+      "originalRawSha256": "3d348741dd47dab2a019c07e5fc05d2120ba3e365da53c6eb6dcd023285a001c",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\core-tests.txt",
+      "sha256": "218fa7032a1adeec8d8e021ae737ab563ebfe70d6e14bcab3da6c98b0eb454da",
+      "originalRawSha256": "f9b024f6e97562903c568cf159d9ff29406108b075d553557419c9dee9848cb0",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\schema-tests.txt",
+      "sha256": "3cd4cb4dc506de787468eeedcbad958f264b0221ed2f9e8a37f5e4762bdebf4d",
+      "originalRawSha256": "71bc54e4b44e136e81edf84478723e07160e9f9381d4085ca87646d74a96486c",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\schema-binary-tests.txt",
+      "sha256": "7133c5d11fa0ccbbc504273a5054ce1ab251c1a9d3ee752a4d1fca739b09855b",
+      "originalRawSha256": "b2a12b3381f1547777eb56b340955209f25f88a6866cba367bb0b82e2e539e2c",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\braid-original-tests.txt",
+      "sha256": "25ca8f802caffcc828dab4641f3cc0428fb0125923223675353cd61cca1afa40",
+      "originalRawSha256": "f56a0ed5517f673fe2f0a090895cd5bf068d6d9bbeb3c33380f70bfe88cfd844",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\braid-identity-rerun.txt",
+      "sha256": "785b6a7b3f8580ff3a77650601148095b009e4ea8d319cb9a1025fbc70c96483",
+      "originalRawSha256": "0aab09b708077608907c137a567579fcda828d0d538fa317935708edaa076e74",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\schema-lf-pin.txt",
+      "sha256": "aa15c359ed7c7326ce67b3d7a2bc9a725bc086d31bb67264e4d380b4ed831c10",
+      "originalRawSha256": "ce4001c6e0a93babcd328acc61defd63725712ad9c7e70907c15aa2f4a9f2449",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\schema-pin-refusal.txt",
+      "sha256": "ac452d65ae093a5ce0bc7d475b38e8fe451d492a1517f72089c222f178972eb9",
+      "originalRawSha256": "8e16fa85eaf51d3166cff06e999844145888743266712e67849fa1c8cac3ee01",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\qt3.txt",
+      "sha256": "1bdef22709b1b6e1906112b00b71fa6e36b3c7cc3da4514c4253fa7072919b8c",
+      "originalRawSha256": "e196b31e3cb392cc516453beb22c45eeca8b69fc7e27d4040b708da2c4ae79b5",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\qt4.txt",
+      "sha256": "b04183cb49c0911d36ac7dc4022fd21207d4839f60db63e624254982de508e1b",
+      "originalRawSha256": "9b3bc639da6bc14442d3bb58315af8f4a3ecc06de64b2337c5115fece79c36f5",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\core-sandbox-initial.txt",
+      "sha256": "ebbbcebb18eeedd56f14cd2667ee5ae195dd92e2fc9bd0fae5237557c5b91be2",
+      "originalRawSha256": "09c91186dca7bb12cd9c9e38e228dc5002c63a73cf14b2ba3fbeba384ba0e2a5",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-routing-initial.txt",
+      "sha256": "4eadd024083396fe7f961e1de45ed431b06ed054559aea417aee9dfe63f192de",
+      "originalRawSha256": "8a59317d3f6466a75619c64ea9d1c31b9a44badad50618fe355df79c89c02bda",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\braid-sandbox-initial.txt",
+      "sha256": "fca374a9f0fa08d1e4492fc92364c46e94afab9ed07fc2153d4d994191d9d844",
+      "originalRawSha256": "a06ff8dfb8f642eae4864aa90a6ffc233a3a1ddbb56f6a74957bd9e41c54e7a0",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-tests.txt",
+      "sha256": "73255e125589f679406a6981f883d245d46f51b7f80c171fe1eb9457c9422ae4",
+      "originalRawSha256": "d4cd7c54b7b9649fd659a6c4aedd37b0f9015d3aacd314a49660641f785fcfd8",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-current-source-tests.txt",
+      "sha256": "770379d2acc40682523dfaaba6a62eba0f67cc94c9f044fb2186efc049c0661c",
+      "originalRawSha256": "761043d3dc7129f2808c268e74d27076584637ba5555339a9633343d55ea8cc1",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-binary-original-tests.txt",
+      "sha256": "286f8b8e77a148717e985d162ee66f450dba02443617916c2f0beff100b52638",
+      "originalRawSha256": "e3ee9fa24fbb4ae64a4cbb981e7c893bbdba2b06753d5f8095b99f7fecae5aff",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-binary-layout-rerun.txt",
+      "sha256": "b6d460dba170af4457b8284d790360d943608037f0237dc34648011698941af8",
+      "originalRawSha256": "749e84170bb8b2b0fea1f4799fe3b9b5a98ae6764b80d4da2742aeb17e87c761",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\xmldb-binary-restore-rerun.txt",
+      "sha256": "ff798ecdd0cbb9957842bc1e7c1363877bfc40c0dedf974e3935d8be2f9bd005",
+      "originalRawSha256": "ef99f2f7522c29cecde93874531fe988e187906b2a3f79a17c55003307e89b1f",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\local-preview-core-pack.txt",
+      "sha256": "7b7b59cfde59a28e4334b3db936abeb62a11487b0f11adc7de9c362d7707007e",
+      "originalRawSha256": "65c47b4085fd2d51367e022383930f4168ce2c5a02e5ab9926cbf94a20ee153e",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\local-preview-schema-pack.txt",
+      "sha256": "5df84002840b91a28a200a6a81573b4ac52b641afbc41d91b72327d076df6144",
+      "originalRawSha256": "81fde43e612f81da58a11f9943666556305e0fd1d52b527e744274a3821aa511",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    },
+    {
+      "path": "docs\\schema-integration\\evidence\\local-preview-smoke.txt",
+      "sha256": "01affa01be230a06763b6678a84c07607bc05449e4e215a81f678a72b21a0ffb",
+      "originalRawSha256": "fd7d0311bf166116c071a5e445553f5dc189b00142f5b9a9620d72c53f192fa8",
+      "retainedEncoding": "UTF-8 LF; trailing whitespace trimmed for review"
+    }
+  ],
+  "apiFreeze": false,
+  "consumerAdoption": false,
+  "packagePublication": false,
+  "hostedCiExecuted": false
+}

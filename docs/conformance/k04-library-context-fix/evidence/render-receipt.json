@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/README.md.html",
+      "sha256": "4cb002afc26e9b8b21ecb524f01201451e89b2994326b533edf2b969bae0f7ae"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6b2aaa6842d6058132bbc724fd9b78c9c99511a6edcd261000417f4d2c9c0775"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "3d5deb6c9fc246bf914d84fc6ce885097d5c2ea076f9311f74594e8f784796da"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "f4ff910575550d2cd9c3c8366883d2a0706a91cb4fe8140fd2fac1611f1b1e8e"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "6d122f873ce0d9246d8559fb194b37e6cab582bf69ef667dbecb0e6180089c8d"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "746db32d7646db3dd97b223991ea8c0a2021f5f85c0cb39334e6ff9167f682fc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "89d18ee4599eac0c862860372865bdd36fc06a87d811fdf3fe9735e42991e559"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "46371a02501a34055ded9004f3c09f0bd9ba15833e9c0a1059e2082ddc7d361f"
+    },
+    {
+      "source": "docs/conformance/k04-library-context-fix/README.md",
+      "html": ".guard-tmp/k04-library-context-fix-render/docs_conformance_k04-library-context-fix_README.md.html",
+      "sha256": "874cf3a6dc8a48cc3ae73b82709859350f6683e3640fefdb5c23135285d1511f"
+    }
+  ]
+}

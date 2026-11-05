@@ -1,0 +1,13 @@
+{
+  "processId": 50772,
+  "assemblies": [
+    {
+      "name": "Bosak.XQuery.Tests",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XQuery.Tests.dll",
+      "sha256": "ec96bff058e7c450687637e0c510f04752a32a6d4c5e97f4ad3db497674e43c2",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

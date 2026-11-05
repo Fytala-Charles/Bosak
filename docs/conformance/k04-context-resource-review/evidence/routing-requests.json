@@ -1,0 +1,2446 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-014",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $x := . + 5;\n        declare context item := 17;\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>22</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-015",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := /works/employee;\n        declare context item := $y[9];\n        declare variable $x external := if (./*) then fn:position() else 0;\n        ($x, $y)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n          <ns0:any-of>\n            <ns0:error code=\"XPDY0002\" />\n            <ns0:error code=\"XQDY0054\" />\n          </ns0:any-of>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-016",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := (<a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a>);\n        declare context item := $y[3];\n        declare variable $x external := fn:position();\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n        <ns0:assert-eq>1</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-017",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := <root><a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a></root>;\n        declare context item := $y;\n        declare variable $x external := fn:last();\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n        <ns0:assert-eq>1</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-018",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := last() + 1; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n        <ns0:any-of>\n          <ns0:assert-eq>2</ns0:assert-eq>\n          <ns0:error code=\"XPDY0002\" />\n          <ns0:error code=\"XQDY0054\" />\n        </ns0:any-of>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-019",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := position() + 1; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n        <ns0:any-of>\n          <ns0:assert-eq>2</ns0:assert-eq>\n          <ns0:error code=\"XPDY0002\" />\n          <ns0:error code=\"XQDY0054\" />\n        </ns0:any-of>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-020",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:integer external; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-021",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:integer := 'London'; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-022",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:string := 2; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n        <ns0:any-of>\n          <ns0:error code=\"XPTY0004\" />\n        </ns0:any-of>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-023",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer+ := (1 to 17)[position() = 5];\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0003\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-028",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := 3; . + 4 ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>7</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-029",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := <a>bananas</a>;\n        string-length()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>7</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-030",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := <a id=\"qwerty\">bananas</a>;\n        string-length(@id)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>6</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-031",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := contains(?, \"e\");\n        .(\"raspberry\")\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-032",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item := (1 to 17)[20]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-033",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item := (1 to 17)[position() gt 5]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-034",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item as xs:integer := (1 to 17)[position() = 5]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>5</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-035",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := (1 to 17)[position() = 5];\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>5</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-036",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := current-date();\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-037",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := <a>23</a>;\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-038",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:anyURI := \"http://www.w3.org/\";\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-039",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:double := 1.234;\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-040",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item external;\n        . instance of document-node()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Resource-bearing environment"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-041",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as document-node() external;\n        name(/*)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>\"works\"</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Resource-bearing environment"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-042",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item external := 17;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-043",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer external := 17;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-044",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:double external := 17; . = 17",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-045",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:double external; . = 17",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPDY0002\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-046",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:double external;\n        declare context item as xs:integer := 15;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XQST0099\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Resource-bearing environment"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-047",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        . gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-048",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule1\"; \n      \t. = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XQST0113\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-049",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as xs:date := current-date();\n        . gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-050",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as xs:integer := 23;\n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-051",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as node() external;\n        . instance of element()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-052",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule3\"; \n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XQST0113\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-053",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $p := \"base-uri\";\n        declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n        declare context item := $f();\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n          <ns0:any-of>\n            <ns0:error code=\"XPDY0002\" />\n            <ns0:error code=\"XQDY0054\" />\n          </ns0:any-of>\n      </ns0:result>\n   ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-054",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        xs:date(.) gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-055",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n      declare context item := <e/>;\n      declare variable $p := \"local-name\";\n      $f()\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>\"e\"</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-056",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule4\";\n      declare context item as xs:numeric external;\n      $m:v eq 4\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-057",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule4\";\n      declare context item as xs:date external;\n      $m:v eq 4\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-058",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule5\";\n      declare context item as array(xs:string) external;\n      $m:v eq 'green'\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "Module mapping present"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-059",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := 15 to 25;\n      . = 17\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-060",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := ();\n      . = 17\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-061",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := 'x';\n      declare variable $a := .;\n      1[$a]\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>1</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": true,
+    "Disposition": "Selected bounded resource-free main declaration"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-014",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $x := . + 5;\n        declare context item := 17;\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>22</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-015",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := /works/employee;\n        declare context item := $y[9];\n        declare variable $x external := if (./*) then fn:position() else 0;\n        ($x, $y)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:any-of>\n        <ns0:error code=\"XPDY0002\" />\n        <ns0:error code=\"XQDY0054\" />\n      </ns0:any-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-016",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := (<a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a>);\n        declare context item := $y[3];\n        declare variable $x external := fn:position();\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>1</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-017",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $y := <root><a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a></root>;\n        declare context item := $y;\n        declare variable $x external := fn:last();\n        $x\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>1</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-018",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := last() + 1; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:any-of>\n        <ns0:assert-eq>2</ns0:assert-eq>\n        <ns0:error code=\"XPDY0002\" />\n        <ns0:error code=\"XQDY0054\" />\n      </ns0:any-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-019",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := position() + 1; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:any-of>\n        <ns0:assert-eq>2</ns0:assert-eq>\n        <ns0:error code=\"XPDY0002\" />\n        <ns0:error code=\"XQDY0054\" />\n      </ns0:any-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-020",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:integer external; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-021",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:integer := 'London'; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-022",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:string := 2; . ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:any-of>\n        <ns0:error code=\"XPTY0004\" />\n      </ns0:any-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-023",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer+ := (1 to 17)[position() = 5];\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPST0003\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-028",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item := 3; . + 4 ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>7</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-029",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := <a>bananas</a>;\n        string-length()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>7</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-030",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := <a id=\"qwerty\">bananas</a>;\n        string-length(@id)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>6</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-031",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item := contains(?, \"e\");\n        .(\"raspberry\")\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-032",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item := (1 to 17)[20]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-033",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item := (1 to 17)[position() gt 5]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-034",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "declare context item as xs:integer := (1 to 17)[position() = 5]; .",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>5</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-035",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := (1 to 17)[position() = 5];\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>5</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-036",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := current-date();\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-037",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := <a>23</a>;\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30 XQ31",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-037a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer := <a>23</a>;       .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>23</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-038",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:anyURI := \"http://www.w3.org/\";\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30 XQ31",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-038a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:anyURI := \"http://www.w3.org/\";\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:all-of>\n        <ns0:assert-eq>\"http://www.w3.org/\"</ns0:assert-eq>\n        <ns0:assert-type>xs:anyURI</ns0:assert-type>\n      </ns0:all-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-039",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:double := 1.234;\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30 XQ31",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-039a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:double := 1.234;\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:all-of>\n        <ns0:assert-eq>1.234e0</ns0:assert-eq>\n        <ns0:assert-type>xs:double</ns0:assert-type>\n      </ns0:all-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-040",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item external;\n        . instance of document-node()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-041",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as document-node() external;\n        name(/*)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>\"works\"</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-042",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item external := 17;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-043",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:integer external := 17;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-044",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:double external := 17; . = 17",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30 XQ31",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-044a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:double external := 17; . = 17",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-045",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": " declare context item as xs:double external; . = 17",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPDY0002\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-046",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare context item as xs:double external;\n        declare context item as xs:integer := 15;\n        . = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XQST0099\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-047",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        . gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-048",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule1\"; \n      \t. = 17\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XQST0113\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-049",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as xs:date := current-date();\n        . gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-050",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as xs:integer := 23;\n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-051",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        declare context item as node() external;\n        . instance of element()\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "works-mod",
+    "EnvironmentFields": [
+      "source"
+    ],
+    "Resources": [
+      "source"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-052",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        import module namespace m=\"http://www.w3.org/TestModules/libmodule3\"; \n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XQST0113\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-053",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n        declare variable $p := \"base-uri\";\n        declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n        declare context item := $f();\n        .\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:any-of>\n        <ns0:error code=\"XPDY0002\" />\n        <ns0:error code=\"XQDY0054\" />\n      </ns0:any-of>\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-054",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule2\"; \n        xs:date(.) gt xs:date('1900-01-01')\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": false,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-055",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n      declare context item := <e/>;\n      declare variable $p := \"local-name\";\n      $f()\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>\"e\"</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": "empty",
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-056",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule4\";\n      declare context item as xs:numeric external;\n      $m:v eq 4\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-057",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule4\";\n      declare context item as xs:date external;\n      $m:v eq 4\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-058",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      import module namespace m=\"http://www.w3.org/TestModules/libmodule5\";\n      declare context item as array(xs:string) external;\n      $m:v eq 'green'\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "higherOrderFunctions",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "context-item"
+    ],
+    "Resources": [],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-059",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := 15 to 25;\n      . = 17\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-060",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := ();\n      . = 17\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-061",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := 'x';\n      declare variable $a := .;\n      1[$a]\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>1</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-062",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      declare context item := 'x';\n      declare variable $a := .;\n      1[$a]\n    ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>1</ns0:assert-eq>\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [],
+    "Resources": [],
+    "ModuleCount": 0,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-063",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule4\"; \n        declare context item as xs:integer := <a>23</a>;\n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-064",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule4\"; \n        declare context item as xs:double := <a>23.2</a>;\n        . eq 23.2e0\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-065",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule4\"; \n        declare context item as xs:decimal external;\n        . eq 23\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-true />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt4",
+    "Name": "contextDecl-066",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt4tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\prod\\ContextItemDecl.xml",
+    "Expression": "\n      \timport module namespace m=\"http://www.w3.org/TestModules/libmodule4\"; \n        declare context item as xs:double external;\n        . eq 23e0\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ40+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      }
+    ],
+    "Assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  ",
+    "EnvironmentRef": null,
+    "EnvironmentFields": [
+      "schema",
+      "context-item"
+    ],
+    "Resources": [
+      "schema"
+    ],
+    "ModuleCount": 1,
+    "MainDeclaration": true,
+    "Selected": false,
+    "Disposition": "qt4 XQuery applicability not executed"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-value",
+    "Expression": "declare context item := 3; .",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-comments",
+    "Expression": "declare(:a:)context(:b:)item external; .",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-type-error",
+    "Expression": "declare context item as xs:integer+ := 3; .",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-in-string",
+    "Expression": "\"declare context item := 3;\"",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-in-comment",
+    "Expression": "(: declare context item := 3; :) 1",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-in-nested-comment",
+    "Expression": "(: outer (: declare context item := 3; :) :) 1",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-construction",
+    "Expression": "declare construction strip; 1",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-copy-namespaces",
+    "Expression": "declare copy-namespaces preserve, inherit; 1",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-pragma",
+    "Expression": "(# p:opaque #){1}",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-and-construction",
+    "Expression": "declare context item := 3; declare construction strip; .",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-and-copy",
+    "Expression": "declare copy-namespaces preserve, inherit; declare context item := 3; .",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-context-and-pragma",
+    "Expression": "declare context item := 3; (# p:opaque #){.}",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-plain-expression",
+    "Expression": "1+1",
+    "Dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "Name": "routing-module-import",
+    "Expression": "import module namespace m=\"urn:c27\"; 1",
+    "Dependencies": []
+  }
+]

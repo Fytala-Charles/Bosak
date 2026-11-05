@@ -1,0 +1,5 @@
+{
+  "src/Bosak.XPath.Standard/Functions/FormatDateTimeEngine.cs": "b13c3d52bf9ffa0fdca239281ab67b0bab7f74f7",
+  "src/Directory.Build.props": "0c117bdf974e496c90853a2ded857c73b98860c0",
+  "tests/Bosak.XPath.Standard.Tests/CalendarFallbackTests.cs": "fdf34b7c25887d1445bf0286efa3129eb8ad9714"
+}

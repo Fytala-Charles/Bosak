@@ -1,0 +1,62 @@
+
+========================================
+Documentation Validation
+Project: D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment
+========================================
+
+1. Required Files
+  [PASS]  Found README.md
+  [PASS]  Found AGENTS.md
+  [PASS]  Found ROADMAP.md
+  [PASS]  Found LICENSE.md
+  [PASS]  Found docs\ARCHITECTURE.md
+  [PASS]  Found docs\FEATURE_REQUESTS.md
+  [PASS]  Found docs\INTEGRATION.md
+  [PASS]  Found docs\AGENT_HANDOVER.md
+  [PASS]  Found docs\DOCUMENTATION_STYLE_GUIDE.md
+  [PASS]  Found .kimi\HANDOVER.md
+
+2. Recommended Files
+  [PASS]  Found Directory.Build.props
+  [PASS]  Found .editorconfig
+  [PASS]  Found global.json
+  [PASS]  Found .env.example
+  [PASS]  Found docs\ADR-000-TEMPLATE.md
+  [PASS]  Found tools\rebuild.ps1
+  [PASS]  Found tools\check-docs.ps1
+  [PASS]  Found .github\workflows\build.yml
+
+3. AGENTS.md Required Sections
+  [PASS]  AGENTS.md contains File Headers section
+  [PASS]  AGENTS.md contains XML Documentation section
+  [PASS]  AGENTS.md contains Testing Requirements section
+  [PASS]  AGENTS.md contains Versioning section
+  [PASS]  AGENTS.md contains Architecture Decision Records section
+  [PASS]  AGENTS.md contains Documentation Sync Checklist section
+  [PASS]  AGENTS.md contains a file header template
+  [PASS]  AGENTS.md contains Pre-Handover Checklist
+
+4. Stale Placeholders
+  [PASS]  No stale placeholders found in any .md file
+
+5. Old Prefixed Document Names
+  [PASS]  No stale prefixed document references found
+  [PASS]  No old prefixed physical files in docs/
+
+6. Section Numbering
+  [PASS]  docs\ARCHITECTURE.md section numbering is sequential (6 sections)
+  [PASS]  docs\INTEGRATION.md section numbering is sequential (6 sections)
+  [PASS]  docs\FEATURE_REQUESTS.md section numbering is sequential (4 sections)
+  [INFO]  docs\AGENT_HANDOVER.md — fewer than 2 numbered sections; numbering check skipped
+
+7. Referenced Documents Exist
+  [PASS]  All referenced documents exist
+
+8. Last-Updated Date Freshness
+  [PASS]  docs\FEATURE_REQUESTS.md last updated 0 day(s) ago (2026-10-29)
+  [PASS]  docs\AGENT_HANDOVER.md last updated 0 day(s) ago (2026-10-29)
+  [PASS]  .kimi\HANDOVER.md last updated 0 day(s) ago (2026-10-29)
+
+========================================
+RESULT: ALL CHECKS PASSED
+========================================

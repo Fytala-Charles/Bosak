@@ -1,0 +1,9 @@
+{
+  "bytesPerRead": {
+    "evaluate": 4504
+  },
+  "warmupReads": 100,
+  "measuredReads": 1000,
+  "scope": "Owned input, pre-held current raw operation, public context capture, registered-owner resolution and actual compiled identity pre/post checks; no payload getters, no accepted owner/latency/retained-memory budgets.",
+  "budgetsAccepted": false
+}

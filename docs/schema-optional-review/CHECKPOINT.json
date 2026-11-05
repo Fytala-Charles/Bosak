@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "authorization": "Continue review, commit/push recommendations, then scope bounded repetitions",
+  "core": {
+    "sourceBase": "6b362a15f6fb62eebc36f82e803e35faf42cecd4",
+    "target": "origin/checkpoint/restart-2026-10-29",
+    "deliveryResolver": "git log -1 --format=%H -- docs/schema-optional-review/README.md"
+  },
+  "schema": {
+    "sourceBase": "33a9039a9fc605f8f7192bfcec88ea559c5c0e19",
+    "target": "origin/feature/bounded-document-assessment",
+    "deliveryResolver": "git log -1 --format=%H -- docs/OPTIONAL-DECIMAL-REVIEW.md",
+    "commit": "773fd69faa9ff7a5bb27f1c4f8469f3024efc043",
+    "remoteVerified": true,
+    "workingTreeClean": true
+  },
+  "merge": false,
+  "tag": false,
+  "publication": false
+}

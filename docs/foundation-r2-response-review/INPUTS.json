@@ -1,0 +1,20 @@
+{
+  "capturedAtUtc": "2026-11-01T19:05:57.319278+00:00",
+  "coreRevision": "f5941e38d7e992ceb9b2e5ee1a49e4680251a0b6",
+  "issueSha256": "69d6729307d1e824161cb60fc1aa5bfe0ad9caa37d4175b149f412823e566547",
+  "braidResponseSha256": "b9de8b1f79f399cd9e618ca724dfe08d785279653ae7f6ab20f2243ec30bae78",
+  "originalBraidResponse": "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O3-Braid.response.json",
+  "sourceFiles": {
+    "src/Bosak.Xslt/Api/XsltExecutable.cs": "c2055cf39e1d58b06cb1347847589677996a16029791ce19b8ad4f05f35e8d32",
+    "src/Bosak.Xslt/Capture/XsltCaptureOptions.cs": "7c7662562434085e826040198e06c55a272c939479b0e31d94ee0995fb216595",
+    "src/Bosak.Xslt/Capture/XsltCaptureResult.cs": "1aa67b3cb60ed54ca821c728241029af38d0628942e0317c0dd83645b1e114ab",
+    "src/Bosak.Xslt/Api/SchemaHostExecution.cs": "63572b93fcf62df93741c8559ec47ae54aabb4d94ba36719484c3fa23cc58a87",
+    "src/Bosak.XPath.Runtime/Resources/ControlledResourcePolicy.cs": "10ff8d6fd67e2a29b36af79f058d449bbe6a69afcd0936f936cb5eb9db33a0d3",
+    "docs/foundation-r2-ledger/proposal/Xslt.cs.txt": "71eb74f642a2c776d270653817eb848184949fee8b2179e628578220b397d7a5",
+    "docs/foundation-r2-owner-review/PACKETS.json": "6ca6b7418d401c6bed7772bda907b7a74d02eb38b28f40accb430af0734895c9"
+  },
+  "braidSourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "braidExecutorPath": "D:/Development/Bosak.Braid/src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+  "braidExecutorSha256": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2",
+  "productionChanged": false
+}

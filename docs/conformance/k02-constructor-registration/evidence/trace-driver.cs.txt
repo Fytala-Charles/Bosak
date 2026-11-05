@@ -1,0 +1,27 @@
+// Generated read-only public-API and XmlSchemaSet mechanism diagnostics.
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Schema;
+using Bosak.XQuery.Api;
+var results=new List<object>();
+foreach(var q in JsonDocument.Parse(File.ReadAllText(args[0])).RootElement.EnumerateArray()){
+ var ns=q.GetProperty("namespace").GetString()!;var name=q.GetProperty("constructor").GetString()!;
+ var context=new XQueryContext().WithSchemaResolver((uri,hints)=>File.OpenRead(q.GetProperty("schema").GetString()!));context.EvaluationContext.IsSchemaAware=true;context.EvaluationContext.BaseUri=q.GetProperty("baseUri").GetString();
+ var query=new XQueryCompiler().Compile(q.GetProperty("expression").GetString()!);
+ string? error1=null,error2=null,result1=null,result2=null;
+ try{result1=query.Evaluate(context).ToString();}catch(Exception ex){error1=ex.Message;}
+ bool typeAfterFirst=context.EvaluationContext.GetSchemaType(ns,name) is not null;
+ bool functionAfterFirst=context.EvaluationContext.TryResolveFunction(ns,name,1,out _);
+ try{result2=query.Evaluate(context).ToString();}catch(Exception ex){error2=ex.Message;}
+ bool functionAfterSecond=context.EvaluationContext.TryResolveFunction(ns,name,1,out _);
+ results.Add(new{id=q.GetProperty("id").GetString(),error1,result1,typeAfterFirst,functionAfterFirst,error2,result2,functionAfterSecond});
+}
+var file=Path.GetFullPath("tests/qt3tests/prod/SchemaImport/qischema032.xsd");
+foreach(var withBase in new[]{false,true}){
+ var events=new List<object>();var set=new XmlSchemaSet{XmlResolver=new XmlUrlResolver()};set.ValidationEventHandler+=(s,e)=>events.Add(new{severity=e.Severity.ToString(),message=e.Message});
+ using var stream=File.OpenRead(file);using var reader=withBase?XmlReader.Create(stream,null,new Uri(file).AbsoluteUri):XmlReader.Create(stream);
+ var schema=XmlSchema.Read(reader,null)!;string? error=null;
+ try{set.Add(schema);set.Compile();}catch(Exception ex){error=ex.Message;}
+ results.Add(new{schemaFile=file,withBase,sourceUri=schema.SourceUri,compiled=set.IsCompiled,globalTypes=set.GlobalTypes.Count,events,error});
+}
+File.WriteAllText(args[1],JsonSerializer.Serialize(results,new JsonSerializerOptions{WriteIndented=true}));

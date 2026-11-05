@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "recordedBy": "Core coordination, Codex under user direction",
+  "status": "ClosedWithScope",
+  "r2Closed": true,
+  "scope": "Exact additive contract representation and bounded source/design feasibility only",
+  "proposalManifestPath": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "publicTypes": 47,
+  "publicMetadataRows": 651,
+  "allSevenRoleValidationReceipt": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json",
+  "allSevenRoleValidationSha256": "fe0c76522d7a59efc9cbd4b42e7689ce2a881bfb46e5cdf6d233e731c4c97fb4",
+  "requirementDispositions": "docs/foundation-r2-closure/REQUIREMENT-DISPOSITIONS.json",
+  "requirementDispositionsSha256": "9b951c4cf94a8caf923d13c1ad7989cf6dd638d00f132a8ccd14f6b50405c1d8",
+  "requiredDesignSignatureGaps": [],
+  "unresolvedR2ApiPolicyOrSourceFeasibilityBlockers": [],
+  "implementationStarted": false,
+  "runtimeQualification": false,
+  "nativeBcapIntegrationQualified": false,
+  "performanceBudgetsAccepted": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "targetReleaseVersion": null,
+  "releaseDate": null,
+  "basis": "Seven explicit agent-authored scoped design returns with preserved authorship and exact bindings; no independently authenticated human signatures or joint runtime acceptance inferred. Core records closure of this design stage, not acceptance on another owner behalf.",
+  "remainingObligations": [
+    {
+      "id": "R3-OWN",
+      "stage": "R3/R4",
+      "obligation": "Neutral ordinary host-selected ownership predicate, exactly-one-owner before getters; optional Schema issuance and complete node/facts/copy/container routes, explicit unsupported profiles."
+    },
+    {
+      "id": "R3-NUM",
+      "stage": "R3/R4",
+      "obligation": "Implement all six numeric intents, exact-decimal operations and caller-finite bounds across parsing/arithmetic/casts/map keys/serialization; retain list/union/nil/no-value and provenance distinctions."
+    },
+    {
+      "id": "R3-HOST",
+      "stage": "R3/R4",
+      "obligation": "Implement all-host exact operation/executable/environment capture, supported initial modes and focus roles, ordered local error preservation, cleanup and drain; copy mutable output before retention/handoff."
+    },
+    {
+      "id": "R4-NATIVE",
+      "stage": "R4",
+      "obligation": "Choose one hash-bound actual BCAP dependency candidate for Schema/XmlDb/Braid; native projection, compatibility and actual-resource positive/negative controls; legacy product pins do not qualify new Core."
+    },
+    {
+      "id": "R4-PERF",
+      "stage": "R4",
+      "obligation": "Owner PF-01 through PF-09 workloads and accepted finite budgets; no implicit workload defaults, message-byte/total-memory or hard single-expression interruption guarantee."
+    },
+    {
+      "id": "R5-R7",
+      "stage": "R5/R6/R7",
+      "obligation": "Four-owner exact-candidate C45/freeze, version and package review, publication authorization and availability verification remain separate."
+    }
+  ]
+}

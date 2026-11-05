@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "f2286c40d5dd08696558ee549d7bb973f3de6a76bbd2853c297bc1397ac9530c",
+  "scope": "Unchanged exported metadata/friends and XdmValue field layout; internal container slice qualified separately. No new public profile, native ABI or freeze acceptance.",
+  "qualifiedInternalSlice": "TA-01-internal-uncached-v1"
+}

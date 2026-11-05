@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-31",
+  "status": "Proposed; requires explicit owner/semantic adoption before production implementation",
+  "laws": [
+    {
+      "id": "PL-01",
+      "boundary": "Original node assessment",
+      "proposal": "Retain immutable original assessment and actual declared/member types; views must not rewrite them.",
+      "guard": "Existing native assessment/PSVI remains independently retained; full real-provider cases required."
+    },
+    {
+      "id": "PL-02",
+      "boundary": "Selection and unchanged transport",
+      "proposal": "Carry authority only with the selected original value through variables, containers, function identity and reordering.",
+      "guard": "Do not reconstruct authority from equal lexical/value contents or QName/digest caches."
+    },
+    {
+      "id": "PL-03",
+      "boundary": "Atomization",
+      "proposal": "Obtain actual typed values from admitted provider facts; retain actual member type and original assessment source where issued.",
+      "guard": "No typed value, nilled empty value and empty/singleton list metadata remain distinct."
+    },
+    {
+      "id": "PL-04",
+      "boundary": "Cast and constructor",
+      "proposal": "The result has the requested current type; do not inherit the input assessment claim automatically, even for same-type/equal-value casts.",
+      "guard": "Original node/assessment is unchanged. A user-defined target type needs its own authority-backed operation/fact; a numeric conversion alone cannot issue one."
+    },
+    {
+      "id": "PL-05",
+      "boundary": "Computed values",
+      "proposal": "Arithmetic, comparisons and string computation do not automatically inherit input assessment authority.",
+      "guard": "If audit lineage is needed, keep it separate, optional and non-authorizing; do not allocate unbounded per-item histories."
+    },
+    {
+      "id": "PL-06",
+      "boundary": "Value equality and keys",
+      "proposal": "Provenance must not alter XPath comparison/hash/map-key semantics.",
+      "guard": "Canonicalized/reconstructed keys cannot claim an incompatible input type. CLR default equality still needs an explicit separate disposition."
+    },
+    {
+      "id": "PL-07",
+      "boundary": "Distinct/representative selection",
+      "proposal": "Keep provenance only for the representative actually retained unchanged under the language rules.",
+      "guard": "Never combine authorities merely because values compare equal."
+    },
+    {
+      "id": "PL-08",
+      "boundary": "Copy, strip and compatible view",
+      "proposal": "Preserve or strip state explicitly; accepted directional views retain original PSVI.",
+      "guard": "Deep materialization does not imply resource detachment; changed content requires strip/reassessment/refusal."
+    },
+    {
+      "id": "PL-09",
+      "boundary": "Serialization and process boundaries",
+      "proposal": "Serialize a representation, not live authority, session or lease ownership.",
+      "guard": "Restore semantic currentness and authority through explicit trusted admission; diagnostic IDs cannot self-authenticate."
+    },
+    {
+      "id": "PL-10",
+      "boundary": "Ownership and cached values",
+      "proposal": "A retained provenance object or cached scalar is not a resource lease.",
+      "guard": "Provider dereference uses the original live owner; cached metadata may remain readable after closure."
+    }
+  ],
+  "accepted": false,
+  "productionImplemented": false
+}

@@ -1,0 +1,113 @@
+{
+  "reviewDate": "2026-10-26",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "documentationBase": "7721f5a20641d874c0bdbedf4be1b17978a27c05",
+  "upstreamHeadRead": "git ls-remote https://github.com/qt4cg/qtspecs.git HEAD",
+  "upstreamHead": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "upstreamCatalogUrl": "https://raw.githubusercontent.com/qt4cg/qtspecs/b4723ff52fd9d4fabf2b4cd33bd44f21939c512c/specifications/xpath-functions-40/src/function-catalog.xml",
+  "files": {
+    "baseline-function-catalog.xml": "0a387a2a160d608788e293479412fc4b43152a07193184b315e6323b799426da",
+    "capture-program.cs.txt": "45d1cf5d12d684164018257098b9a091800c20a52087d065493cb397ec603441",
+    "capture-project.csproj.txt": "57c79ac97e43f992ae44d994bc625ae7a285be21801145e64474c5bed910c36e",
+    "current-function-catalog.xml": "feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010",
+    "live-signatures.json": "0b09c272d3bca59a43057305d03bacbe5058924248d9094da81462d0dd05f680",
+    "lookup-program.cs.txt": "1eb9abfa6645a3aa0f2afe3c8e993dc1e4a9fd9b4ca1dc387d85c2aaeea58b46",
+    "lookup-project.csproj.txt": "8d49bd5a88862a1b8f32f8643065c64ed5700eba35a3c24ea7d94d6795879936",
+    "lookup-requests.json": "d668f27c9351ff87a43004b5c27ed2059b2f7a404692490ee1d52bc98e83577b",
+    "lookup-results.jsonl": "c987820e92e785483b4eff745e6609d28a5e7445bb0cde931f68751ddaec2257",
+    "render-program.cjs.txt": "e5a2cc5efd2fe2af1787f11ead910167a8fcf54a7649e793958b54e9fea3974b",
+    "render-receipts.json": "647cd1b3d64f5f851a10a01f57d19cb69f9af0a110943bd61d5fb797afb30f9e",
+    "retained-audit-changed31-contracts.json": "61dd5ce345c3759e4de2bbd732d7e37886036442a9026e0353b3bc0e3e612350",
+    "retained-audit-function-inventory.json": "6a094325b7468ccc58bd20e9e22d3ccfb7ba1fd60b284ebc19d6f292eb2e911d",
+    "retained-audit-signature-contracts.json": "35610aea6674a8bc657e3379532cce8e82078c7b825aced8c6b75f6603f75d77",
+    "retained-function-catalog.xml": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5"
+  },
+  "outputs": {
+    "CURRENT-FUNCTION-INVENTORY.json": "f1f95317ec919fea8db36f37466d84176c87fa222b5541f309b0bc1f2b7cf121",
+    "CLOSURE-PLAN.json": "5fdea9ae0a736c571bdac89dc9d6c0a74fef0a9c25505861d376e28938659921",
+    "CONFORMANCE-SKIP-TRIAGE.json": "b2b4fa5925928081caf25480530eb0ac98244ee04b2567c7d54414be18761138"
+  },
+  "sourceFiles": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "85383daf06921a46ff81656cce8174ad66a7ae01",
+    "src/Directory.Build.props": "4bbd3394519d40282be0d97700cd9416bde8a400",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "807c85b6a6724beafa3495135fd20260185f4fac",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "4f7681cd78f72d43406ccac47df82d16750bcec1",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "67f10a3a4252ec89e8f7389da94b5006b14fed7b",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "f97a0faf5c5b6ab0b286163dbc7eeb018c8de95c",
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+    "AGENTS.md": "f2362c6510a24b928d330b61aa2fc3d3ce034748",
+    "docs/xpath40-catalog/build-c01-inventory.py": "382167efeac7b67ee47d2ee1b47bd4940a9caf76",
+    "docs/xpath40-catalog/build-closure-plan.py": "806453342f03fd56ee3c0fe92a3470435ed21065"
+  },
+  "binaryIdentities": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-capture\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c01-lookup\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "releasedBinary": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll"
+    }
+  ],
+  "inheritedValidation": "../closure-triage/inherited-validation.json",
+  "inheritedGates": "../closure-triage/gate-receipts.json"
+}

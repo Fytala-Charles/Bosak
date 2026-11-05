@@ -1,0 +1,6 @@
+{
+  "date": "2026-11-03",
+  "sourceVersion": "1.44.0",
+  "result": "Verified 1.44 optional original-scalar association: 24447 unit passes, 33 association/24 ordinary controls, exact frozen gates/skip maps and unchanged public metadata. Full transport/public/native/freeze remain pending.",
+  "qualificationScope": "Internal original-scalar/node-association profile; full transport/public/native/freeze remain pending"
+}

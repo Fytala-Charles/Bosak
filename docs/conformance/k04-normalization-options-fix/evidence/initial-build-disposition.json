@@ -1,0 +1,6 @@
+{
+  "receipt": "initial-build-error.log",
+  "reason": "Initial call used an incorrect existing helper name NormalizeWhitespace. Corrected to NormalizeSpaceString; no semantic scope change.",
+  "finalBuildReceipt": "build.log",
+  "regressionReceipt": "regressions-after.log"
+}

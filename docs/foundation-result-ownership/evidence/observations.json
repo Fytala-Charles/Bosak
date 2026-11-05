@@ -1,0 +1,97 @@
+{
+  "status": "Observed existing behavior; not freeze/consumer acceptance",
+  "passed": 10,
+  "failed": 0,
+  "results": [
+    {
+      "id": "LO-01",
+      "observedAsExpected": true,
+      "observation": {
+        "Started": 0,
+        "note": "Public enumerator creation does not start the source"
+      }
+    },
+    {
+      "id": "LO-02",
+      "observedAsExpected": true,
+      "observation": {
+        "Started": 1,
+        "Disposed": 0,
+        "note": "Break does not call optional concrete IDisposable"
+      }
+    },
+    {
+      "id": "LO-03",
+      "observedAsExpected": true,
+      "observation": {
+        "count": 2,
+        "CanRead": false,
+        "note": "Normal completion closes owned reader/input with CloseInput=true"
+      }
+    },
+    {
+      "id": "LO-04",
+      "observedAsExpected": true,
+      "observation": {
+        "CanRead": true,
+        "note": "Early direct-axis exit does not finish or close the stream; fixture caller disposes it"
+      }
+    },
+    {
+      "id": "LO-05",
+      "observedAsExpected": true,
+      "observation": {
+        "CanRead": true,
+        "note": "CloseInput=false preserves caller stream even after completion"
+      }
+    },
+    {
+      "id": "LO-06",
+      "observedAsExpected": true,
+      "observation": {
+        "readState": "EndOfFile",
+        "CanRead": true,
+        "note": "Supplied reader remains caller-owned at completion"
+      }
+    },
+    {
+      "id": "LO-07",
+      "observedAsExpected": true,
+      "observation": {
+        "caught": true,
+        "callbacks": 1,
+        "CanRead": true,
+        "note": "Throwing completion callback precedes reader disposal; fixture caller closes input"
+      }
+    },
+    {
+      "id": "LO-08",
+      "observedAsExpected": true,
+      "observation": {
+        "caught": true,
+        "CanRead": true,
+        "note": "Record callback failure leaves source unfinished; caller closes fixture"
+      }
+    },
+    {
+      "id": "LO-09",
+      "observedAsExpected": true,
+      "observation": {
+        "IsSinglePass": true,
+        "CanRead": true,
+        "note": "VM lazy path result survives EvaluateNodes; early exit does not close input"
+      }
+    },
+    {
+      "id": "LO-10",
+      "observedAsExpected": true,
+      "observation": {
+        "found": true,
+        "sameReference": true,
+        "text": "1",
+        "CanRead": false,
+        "note": "Map retains the materialized in-memory node after reader completion; not a persistent snapshot lifetime proof"
+      }
+    }
+  ]
+}

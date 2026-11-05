@@ -1,0 +1,19 @@
+{
+  "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "686b673cb63efbfff7136bcf02b1860d7eb409e3",
+  "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "f13158aa59e4af03c106497c7630733a462aa1f4",
+  "tests/Bosak.XPath.Conformance/Program.cs": "b88e51ae87bd081610ddae09b65e1423d61d0b1e",
+  "tests/Bosak.XPath.Conformance/ResultComparer.cs": "9e045c25f8b8344c64ee9647a4ca4c7e423c3c46",
+  "tests/Bosak.XPath.Conformance/TestCase.cs": "959c67ef3ed06c572dd82a56f292b903033aa9c6",
+  "tests/Bosak.XPath.Conformance/TestEnvironment.cs": "8ef6198afd2882534264cb1e92a5612eb87b4ee6",
+  "tests/Bosak.XPath.Conformance/TestExecutor.cs": "ad1d9160b86fff29dc06715c061f64bc89c1cd94",
+  "tests/Bosak.XPath.Conformance/TestOutcome.cs": "ba2a774c3909054c40d7968430e9fab1c8072ed8",
+  "tests/Bosak.XPath.Conformance/TestReport.cs": "888388175675c6e4ce66ef6c8400ecb8f86842c8",
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "d2dec917564c8a84eee5bc9d9c58f0abaaea10f1",
+  "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "d7fca12a5404f0f84c19eaf9dc145a88f2fa91ba",
+  "tests/Bosak.XPath.Conformance40/Program.cs": "e83bc5648b7eefc9de5721dfa887265983a804c6",
+  "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+  "AGENTS.md": "45d5fe518e886685abeee74269bcb7e944193fbc",
+  "src/Directory.Build.props": "669aa1e39cb8d096cd48bf4114316a3c3a7c77cd",
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "ee037a29aa573dd1d7e840298e43445e492d0d6e",
+  "src/Bosak.XPath.Standard/Functions/FullNormalizationEngine.cs": "616d9d50942cc66f1b16fe12b2462aca2c4028d4"
+}

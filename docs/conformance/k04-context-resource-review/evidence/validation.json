@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C27",
+  "sourceBase": "a061ea52562c1ef5430d5792ec5b2a2e7cb41ba4",
+  "candidateVersion": "1.30.0",
+  "publishedVersion": "1.26.3",
+  "originals": 13,
+  "originalNormal": {
+    "Passed": 4,
+    "Skipped": 9
+  },
+  "originalPrototype": {
+    "Passed": 11,
+    "Failed": 2
+  },
+  "failedOriginals": [
+    "contextDecl-056",
+    "contextDecl-057"
+  ],
+  "controls": 12,
+  "controlsPassed": 8,
+  "controlsFailed": 4,
+  "normalQt3Context": [
+    4,
+    0,
+    40
+  ],
+  "prototypeQt3Context": [
+    42,
+    2,
+    0
+  ],
+  "normalQt4Context": [
+    0,
+    0,
+    53
+  ],
+  "routingRowsPerPhase": 111,
+  "routingObservations": 222,
+  "routingBoundaryRowsPerPhase": 14,
+  "finalBoundedProcesses": 56,
+  "inheritedSolutionPassed": 23822,
+  "inheritedQt3Gate": [
+    31165,
+    0,
+    656
+  ],
+  "inheritedQt4Gate": [
+    8939,
+    0,
+    1920
+  ],
+  "gatedSets": 230,
+  "freshFullSolutionRun": false,
+  "freshFullGateRun": false,
+  "engineChanged": false,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false,
+  "admissionReady": false
+}

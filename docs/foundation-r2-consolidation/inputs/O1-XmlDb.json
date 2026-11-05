@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O1-XmlDb",
+  "packet": "O1",
+  "owner": "XmlDb",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+  "signer": "Codex - XmlDb source/design review requested by repository owner; not a human acceptance signature",
+  "date": "2026-11-01",
+  "profile": "Codex-authored design/source disposition only for neutral ordinary immutable/version-pinned XmlDb input on Core 1.26.2. No Schema-issued assessment, implemented adapter, actual R2 runtime integration, owner authentication or human acceptance is claimed.",
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": "The reviewed draft's neutral ISchemaAssessmentInput.OwnsNode(IXdmNode) is the right source-membership boundary for ordinary persistent XML. Current PersistentXdmNode is sealed and retains private _snapshot/_id; its constructor validates snapshot.GetNode(nodeId), and all Open-created descendants retain the same actual snapshot. IsSameNode checks the concrete provider type and snapshot reference plus node ID; it never calls arbitrary foreign node getters, but it compares only one node, not arbitrary descendant membership. There is currently NO implemented general OwnsNode/OwnsSnapshot adapter or accessible snapshot-membership method. Feasible plan: add a provider-local trusted membership bridge inside the Xdm implementation that first type-checks this sealed provider, checks the actual retained snapshot reference (including live-owner check), then uses the already validated stored ID if necessary. Do not traverse/copy the graph, compare DocumentId/CommitSequence/URI labels as authority, call a purported foreign node's Document/Parent/NodeKind getters, or fake an existing membership API. This requires a local XmlDb adapter change and tests, not an additional required Core IXdmNode member."
+    },
+    {
+      "id": "O1-Q2",
+      "answer": "For XmlDb this is ordinary source membership ONLY: reference equality of the actual ImmutableXmlSnapshot owner plus a valid local node ID. Same IDs or bytes in another snapshot/generation/import/copy do not confer membership. PersistentXdmNode.TypedValue currently returns XdmValue.FromString(StringValue); optional schema defaults remain ordinary legacy behavior. This provider issues no schema facts/origin/components and cannot authenticate preserved or copied PSVI. Schema's OwnsNode(node,facts,input,origin) remains a separate issuer obligation, not satisfied by XmlDb membership. Do not alter untyped atomization/numeric semantics or FXG-01 by this design review."
+    },
+    {
+      "id": "O1-Q3",
+      "answer": "Ordinary XmlDb admission must use assessor=null, session Advisor=null, originalAssessment=null and no fabricated compatibility view or schema origin. The revised snapshot argument on ReadTypedValue and input/originalAssessment on advisor OwnsTypedValue can express source-specific schema-issued values when a real Schema adapter exists. Those issuer checks are explicitly not applicable to this ordinary XmlDb profile because this provider supplies no ISchemaTypedValue/schema assessment. Never route current string TypedValue through a fabricated schema container. No current implementation of the new proposal route is claimed."
+    },
+    {
+      "id": "O1-Q4",
+      "answer": "Concrete candidate feasibility plan, not new runtime evidence: own an actual BeginRead snapshot; verify root/child/attribute/namespace wrappers of that snapshot are members without reading their content. Reject a throwing foreign IXdmNode before any getter, a wrapper from a second BeginRead with identical DocumentId/CommitSequence, an independently imported/copied document and an invalid node ID. Revoke input/close admission while raw work owns a lease; reject subsequent entries and keep the actual snapshot until raw completion. After actual snapshot disposal, availability checks reject. Include duplicate admissions, two generations and disposed-input controls, plus original node identity/order/namespace/error regression. The private membership bridge and exact R2 candidate adapter remain unimplemented; these are R4 obligations. No additional required Core signature is demonstrated by source mapping; accepted design scope is only the neutral ordinary-source shape, not implemented ownership or human sign-off."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb b09c7341e7961f90f2c320fd9a180367b35e0035: src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs; src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs (BeginRead/OpenPinnedSnapshot); ImmutableXmlSnapshot.cs (OpenAdmittedEpoch/EpochSnapshotLifetime/Dispose); GenerationLease.cs. Exact SHA-256 pins in D:/Development/Bosal.XmlDb/docs/foundation-requirements/r2-owner-review/INPUTS.json."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak exact draft 0890592eaf79ccb462f9635dd33e7536862685bb: foundation-r2-ledger/proposal/Provider.cs.txt, QueryFacade.cs.txt, OperationLifetime.cs.txt, DECISIONS.md D01-D03/D05/D11/D13; proposal manifest 63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb docs/foundation-requirements/README.md FXR-01..15/FXG-01..06; tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs and tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs. Prior current-pin/FX009 receipts retain their own scope; no tests rerun and no candidate runtime qualification inferred."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

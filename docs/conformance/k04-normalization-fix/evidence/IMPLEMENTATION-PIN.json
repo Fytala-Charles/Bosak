@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-28",
+  "kind": "Pre-implementation semantic adoption:FULLY-NORMALIZED conversion",
+  "sourceBase": "4ff820672daa9cd74472b7ddc28105232cedeb1f",
+  "xpath31": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+    "sections": [
+      "func-normalize-unicode"
+    ],
+    "scope": "fn:normalize-unicode conversion, composing-character definition and effective form-name rules"
+  },
+  "xpath40": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+    "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+    "section": "fn:normalize-unicode"
+  },
+  "unicodeVersion": "17.0.0",
+  "data": [
+    {
+      "file": "UnicodeData.txt",
+      "source": "https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt",
+      "sha256": "2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c"
+    },
+    {
+      "file": "DerivedNormalizationProps.txt",
+      "source": "https://www.unicode.org/Public/17.0.0/ucd/DerivedNormalizationProps.txt",
+      "sha256": "71fd6a206a2c0cdd41feb6b7f656aa31091db45e9cedc926985d718397f9e488"
+    },
+    {
+      "file": "NormalizationTest.txt",
+      "source": "https://www.unicode.org/Public/17.0.0/ucd/NormalizationTest.txt",
+      "sha256": "5019ffd530751a741900c849c0e010332f142a3612234639bd200b82138a87db"
+    }
+  ],
+  "policy": {
+    "backend": "Self-contained pinned UCD17 canonical decomposition/order/composition for FULLY only; classifier and NFC share the same data.",
+    "prefix": "First original scalar: nonzero CCC or canonical-composition second, including algorithmic Hangul V/T; prefix one U+0020 before NFC.",
+    "unassigned": "UCD17-unassigned scalars have identity decomposition and CCC0.",
+    "otherForms": "Existing platform normalization paths remain; no claim all forms share or certify Unicode17.",
+    "limits": [
+      "No serializer normalization change",
+      "No XML-whitespace or 4.0 default/keyword changes",
+      "No dependency filter, known skip mapping, GatedSets or exact baseline change"
+    ]
+  }
+}

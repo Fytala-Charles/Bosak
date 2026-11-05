@@ -1,0 +1,14 @@
+{
+  "p02": "CompleteIsolatedDeclaration",
+  "next": "P03",
+  "proposedTypes": 46,
+  "previousProposedTypes": 45,
+  "addedTypes": [
+    "SchemaXsltCaptureResult"
+  ],
+  "addedMethod": "SchemaXsltExecutable.CaptureTransform",
+  "productionChanged": false,
+  "proposalBodiesExecuted": false,
+  "runtimeCasesRun": 0,
+  "ownerReview": "Pending exact new manifest disposition"
+}

@@ -1,0 +1,5 @@
+# Capture/drain outcome feasibility basis
+
+Recorded 1 November 2026 before this experiment. Base: 1ed1f82c; immutable language/profile evidence is inherited from [the gate/fault cohort](../foundation-bcap-controls/SPEC-BASIS.md). This adds private host outcome orchestration and original-exception retention, not language semantics. Ordinary public capture and throwing session Run behavior must remain unchanged.
+
+Proposed policy: one owned capture operation completes serialization, then attempts every admission release once before returning a detached final outcome. Capture classifications and original execution exceptions coexist; admission/work/cleanup errors retain their boundaries and object identity. Never flatten a provider AggregateException or infer native release success from a thrown cleanup. Local exception objects are not wire-safe and require explicit redaction/projection before IPC. Native provider authority, concurrent gate use and complete public adoption remain outside this experiment.

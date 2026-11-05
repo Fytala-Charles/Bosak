@@ -1,0 +1,665 @@
+{
+  "schema": "<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:c33' xmlns:t='urn:c33' elementFormDefault='qualified'><xs:complexType name='Root'><xs:sequence><xs:element name='count' type='xs:int'/><xs:element name='refs' type='xs:IDREFS'/><xs:element name='nil' type='xs:string' nillable='true'/></xs:sequence><xs:attribute name='id' type='xs:ID'/><xs:attribute name='qname' type='xs:QName'/></xs:complexType><xs:element name='root' type='t:Root'/></xs:schema>",
+  "xml": "<t:root xmlns:t='urn:c33' xmlns:p='urn:c33:q' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' id='A' qname='p:entry'><t:count>7</t:count><t:refs>A A</t:refs><t:nil xsi:nil='true'/></t:root>",
+  "schemaValidated": true,
+  "sourceUnchanged": true,
+  "outcomes": [
+    {
+      "constructor": "direct",
+      "source": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}ID",
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "ID",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}QName",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "QName",
+              "type": "QName",
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}int",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "Integer",
+              "type": "int",
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}IDREFS",
+          "nilled": false,
+          "isId": false,
+          "isIdref": true,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            },
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}string",
+          "nilled": true,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": []
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "copied": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "sameNode": false
+    },
+    {
+      "constructor": "computed",
+      "source": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}ID",
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "ID",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}QName",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "QName",
+              "type": "QName",
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}int",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "Integer",
+              "type": "int",
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}IDREFS",
+          "nilled": false,
+          "isId": false,
+          "isIdref": true,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            },
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}string",
+          "nilled": true,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": []
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "copied": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "sameNode": false
+    },
+    {
+      "constructor": "document",
+      "source": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}ID",
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "ID",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}QName",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "QName",
+              "type": "QName",
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}int",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "Integer",
+              "type": "int",
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}IDREFS",
+          "nilled": false,
+          "isId": false,
+          "isIdref": true,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            },
+            {
+              "kind": "String",
+              "type": "IDREF",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": "Q{http://www.w3.org/2001/XMLSchema}string",
+          "nilled": true,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": []
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "copied": [
+        {
+          "name": "root",
+          "kind": "Element",
+          "type": "Q{urn:c33}Root",
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": true,
+          "typedValues": []
+        },
+        {
+          "name": "id",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": true,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "name": "qname",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "p:entry"
+            }
+          ]
+        },
+        {
+          "name": "count",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "7"
+            }
+          ]
+        },
+        {
+          "name": "refs",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "A A"
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Element",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": ""
+            }
+          ]
+        },
+        {
+          "name": "nil",
+          "kind": "Attribute",
+          "type": null,
+          "nilled": false,
+          "isId": false,
+          "isIdref": false,
+          "hasNoTypedValue": false,
+          "typedValues": [
+            {
+              "kind": "String",
+              "type": null,
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "sameNode": false
+    }
+  ]
+}

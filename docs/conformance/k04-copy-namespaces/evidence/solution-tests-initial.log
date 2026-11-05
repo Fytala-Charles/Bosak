@@ -1,0 +1,62 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 89 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 184 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+[xUnit.net 00:00:00.74]     Bosak.XQuery.Tests.PlaceholderTests.XQuery_OutputOption_Indent [FAIL]
+  Failed Bosak.XQuery.Tests.PlaceholderTests.XQuery_OutputOption_Indent [1 ms]
+  Error Message:
+   Assert.Contains() Failure: Sub-string not found
+String:    "<?xml version="1.0" encoding="UTF-8"?><a>"···
+Not found: "\n   <b/>"
+  Stack Trace:
+     at Bosak.XQuery.Tests.PlaceholderTests.XQuery_OutputOption_Indent() in D:\Development\Bosak\tests\Bosak.XQuery.Tests\PlaceholderTests.cs:line 1234
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:   606, Skipped:     0, Total:   607, Duration: 544 ms - Bosak.XQuery.Tests.dll (net10.0)
+[xUnit.net 00:00:00.70]     Bosak.XPath.Providers.Tests.UnicodeNodeRoundTripTests.ConstructedDocument_PreservesNamesAndValues [FAIL]
+  Failed Bosak.XPath.Providers.Tests.UnicodeNodeRoundTripTests.ConstructedDocument_PreservesNamesAndValues [2 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+              ↓ (pos 3)
+Expected: "<𝄞>ǀ0041ǁ</𝄞>"
+Actual:   "<𝄞 xmlns="">ǀ0041ǁ</𝄞>"
+              ↑ (pos 3)
+  Stack Trace:
+     at Bosak.XPath.Providers.Tests.UnicodeNodeRoundTripTests.ConstructedDocument_PreservesNamesAndValues() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\UnicodeNodeRoundTripTests.cs:line 67
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Passed!  - Failed:     0, Passed:   269, Skipped:     0, Total:   269, Duration: 838 ms - Bosak.XPath.Runtime.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 1 s - Bosak.XPath.Core.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 922 ms - Bosak.XPath.Api.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed: 13797, Skipped:     0, Total: 13797, Duration: 2 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 4 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+
+Failed!  - Failed:     1, Passed:   200, Skipped:     0, Total:   201, Duration: 8 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+
+Passed!  - Failed:     0, Passed:  8196, Skipped:     0, Total:  8196, Duration: 3 m 20 s - Bosak.Xslt.Tests.dll (net10.0)

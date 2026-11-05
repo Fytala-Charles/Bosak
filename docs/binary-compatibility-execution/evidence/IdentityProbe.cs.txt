@@ -1,0 +1,21 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Reads unchanged Braid public engine identities during isolated DLL replacement diagnostics.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated XmlDb provider compatibility diagnostic                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using Bosak.Braid.Infrastructure;
+using System.Text.Json;
+var inspector = new BosakSourceInspector();
+Console.WriteLine(JsonSerializer.Serialize(new { inspectorIdentity=inspector.EngineIdentity, capabilityEngineVersion=inspector.Capabilities.EngineVersion, previewIdentity=new BosakPreviewExecutor().EngineIdentity }));

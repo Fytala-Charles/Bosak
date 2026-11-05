@@ -1,0 +1,976 @@
+{
+  "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": {
+    "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+    "methods": [
+      "Compile_FnReplicate_DefaultOptions_ThrowsXpst0017",
+      "Compile_UnprefixedReplicate_DefaultOptions_ThrowsXpst0017",
+      "Compile_NamedFunctionRefReplicate_DefaultOptions_ThrowsXpst0017",
+      "Compile_SliceInDefaultMode_ThrowsXpst0017",
+      "Compile_HigherOrderFunctions_DefaultOptions_ThrowXpst0017",
+      "Compile_XPath30Mode_AlsoRejectsXPath40Functions",
+      "Compile_ExperimentalFunctions_DefaultOptions_ThrowXpst0017",
+      "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017",
+      "Evaluate_Scan_XPath40Experimental_Works",
+      "Compile_Frozen40Functions_DefaultOptions_ThrowXpst0017",
+      "Evaluate_Op_FrozenXPath40_Works",
+      "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+      "Evaluate_ParseCsv_FrozenXPath40_Works",
+      "FunctionLookup_ScanIn31AndFrozen40_ReturnsEmpty",
+      "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction",
+      "Compile_Part2Functions_DefaultOptions_ThrowXpst0017",
+      "FunctionLookup_Part2FunctionIn31Mode_ReturnsEmpty",
+      "Compile_Part3Functions_DefaultOptions_ThrowXpst0017",
+      "FunctionLookup_Part3FunctionIn31Mode_ReturnsEmpty",
+      "Evaluate_Part3Functions_XPath40Mode_Work",
+      "FunctionLookup_ReplicateIn31Mode_ReturnsEmpty",
+      "FunctionLookup_FootIn31Mode_ReturnsEmpty",
+      "Compile_RemovedFunction_StillReportsRemoved",
+      "Compile_31Function_DefaultOptions_StillWorks",
+      "Compile_Replicate_XPath40Mode_Succeeds",
+      "Evaluate_Replicate_XPath40Mode_ReturnsReplicatedSequence",
+      "Evaluate_NamedFunctionRefReplicate_XPath40Mode_IsFunctionItem",
+      "FunctionLookup_ReplicateIn40Mode_FindsFunction",
+      "FunctionLookupResult_ReplicateIn40Mode_IsCallable",
+      "Evaluate_Slice_XPath40Mode_Works",
+      "Evaluate_Char_XPath40Mode_Works",
+      "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+      "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+      "Evaluate_Otherwise_EmptyLeftYieldsRight",
+      "Evaluate_Otherwise_NonEmptyLeftWins",
+      "Evaluate_Otherwise_NonEmptyLeftReturnsWholeSequence",
+      "Evaluate_Otherwise_Chained_IsLeftAssociative",
+      "Evaluate_Otherwise_BindsTighterThanComparison",
+      "Evaluate_Otherwise_BindsLessTightlyThanArithmeticAndConcat",
+      "Evaluate_Otherwise_RightOperandIsGuarded",
+      "Evaluate_Otherwise_LeftErrorPropagates",
+      "Evaluate_Otherwise_RightErrorSurfacesWhenLeftEmpty",
+      "Evaluate_Otherwise_InPredicate",
+      "Evaluate_Otherwise_WithLookupOperator",
+      "Evaluate_Otherwise_NodeSequenceLeftWins",
+      "Evaluate_Otherwise_RightOperandGetsContainingFocus",
+      "Evaluate_HexBinaryLiterals_XPath40Mode_Work",
+      "Evaluate_UnderscoreSeparators_XPath40Mode_Work",
+      "Evaluate_HexBinaryLiterals_31Mode_ThrowXpst0003",
+      "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+      "Compile_PositionalAfterKeyword_XPath40Mode_ThrowsXpst0003",
+      "Evaluate_KeywordArgs_FullyKeyworded_Works",
+      "Evaluate_KeywordArgs_MixedWithPositionals_Works",
+      "Evaluate_KeywordArgs_OmittedParamTakesDeclaredDefault",
+      "Evaluate_KeywordArgs_SortWithKeyFunction_Works",
+      "Evaluate_KeywordArgs_MapMerge_Works",
+      "Evaluate_KeywordArgs_SliceAndParseUri_Work",
+      "Compile_DuplicateKeyword_XPath40Mode_ThrowsXpst0017",
+      "Compile_UnknownKeyword_XPath40Mode_ThrowsXpst0017",
+      "Compile_KeywordMatchingPositionalParam_XPath40Mode_ThrowsXpst0017",
+      "Compile_UnmatchedRequiredParam_XPath40Mode_ThrowsXpst0017",
+      "Compile_KeywordOnFunctionWithoutKeywordSignature_XPath40Mode_ThrowsXpst0017",
+      "Compile_KeywordsOnDynamicCall_XPath40Mode_ThrowsXpst0017",
+      "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+      "Evaluate_StringTemplate_FixedOnly_Works",
+      "Evaluate_StringTemplate_Interpolation_Works",
+      "Evaluate_StringTemplate_EmptyInterpolation_ContributesNothing",
+      "Evaluate_StringTemplate_Escapes_Work",
+      "Evaluate_StringTemplate_BothQuoteKindsNeedNoEscaping",
+      "Evaluate_StringTemplate_NestedTemplateInInterpolation_Works",
+      "Evaluate_StringTemplate_NodeInterpolationIsAtomized",
+      "Evaluate_StringTemplate_StringsAndCommentsInsideInterpolation_Work",
+      "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+      "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+      "Evaluate_Pipeline_SpecExample_SumOfPowers",
+      "Evaluate_Pipeline_SpecExample_ReduceWithIf",
+      "Evaluate_Pipeline_SpecExample_MapReduceChain",
+      "Evaluate_Pipeline_BindsWholeSequenceAsContextValue",
+      "Evaluate_Pipeline_SetsFixedFocusPositionOneSizeOne",
+      "Evaluate_Pipeline_LeftAssociativeAndPrecedence",
+      "Evaluate_Pipeline_RhsMayUseAnyExpression",
+      "Evaluate_Pipeline_LhsErrorPropagates",
+      "Evaluate_Pipeline_FocusRestoredAfterEvaluation",
+      "Evaluate_Pipeline_CastPrecedenceFromSpecGrammar",
+      "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+      "Evaluate_MappingArrow_AppliesFunctionPerItem",
+      "Evaluate_MappingArrow_WithArgumentsPrependsContextItem",
+      "Evaluate_MappingArrow_DynamicAndInlineFunctionTargets",
+      "Evaluate_MappingArrow_SingletonSourceSameAsSequenceArrow",
+      "Compile_FocusFunction_31Mode_ThrowsXpst0003",
+      "Evaluate_FocusFunction_SpecExamples",
+      "Evaluate_FocusFunction_BindsArgumentAsWholeContextValue",
+      "Evaluate_FocusFunction_AfterMappingArrow",
+      "Evaluate_FocusFunction_WrongArityThrows",
+      "Compile_ForMember_31Mode_ThrowsXpst0003",
+      "Evaluate_ForMember_IteratesMembers",
+      "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole",
+      "Evaluate_ForMember_SequenceOfArraysCountsPositionsAcrossArrays",
+      "Evaluate_ForMember_SpecExample_ParseJson",
+      "Evaluate_ForMember_NonArrayItemThrowsXpty0141",
+      "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+      "Evaluate_ForKeyValue_IteratesEntries",
+      "Evaluate_ForKeyValue_PositionalCountsAcrossMaps",
+      "Compile_ForKeyValue_DuplicateKeyValueNames_ThrowsXqst0089",
+      "Evaluate_ForKeyValue_NonMapItemThrowsXpty0141",
+      "Evaluate_ForKeyValue_SpecExample_Template",
+      "Compile_EnumType_31Mode_ThrowsXpst0003",
+      "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+      "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive",
+      "Evaluate_Enum_InstanceOf_OccurrenceIndicatorsApply",
+      "Evaluate_Enum_Cast_MemberSucceedsAsPlainString",
+      "Evaluate_Enum_Cast_NonMemberFailsForg0001",
+      "Evaluate_Enum_Castable_ReportsMembership",
+      "Evaluate_Enum_Cast_NonStringAtomCoercedViaXsString",
+      "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+      "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+      "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins",
+      "Evaluate_Choice_Cast_NoAlternativeSucceedsForg0001",
+      "Evaluate_Enum_FunctionArgument_MatchingMemberPasses",
+      "Evaluate_Enum_FunctionArgument_NonMemberThrowsXpty0004",
+      "Evaluate_Enum_FunctionReturnType_Enforced",
+      "Evaluate_Choice_FunctionArgument_InOrderCoercionYieldsString",
+      "Evaluate_Choice_FunctionArgument_MixedNodeAndAtomicAlternatives",
+      "Evaluate_Choice_FunctionArgument_AllNodeKindAlternativesPassNodeThrough",
+      "Compile31_RecordTypesAndButWith_XPST0003",
+      "Evaluate_RecordType_BasicSemanticsAvailableIn40",
+      "Compile_ElementMapFunctions_DefaultOptions_ThrowXpst0017",
+      "Evaluate_ElementToMap_FrozenXPath40_Works",
+      "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+      "Evaluate_AtomicEqual_FrozenXPath40_Works",
+      "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+      "Compile_ArityOneConstructors_DefaultOptions_StillWork",
+      "Evaluate_FocusConstructors_FrozenXPath40_Works",
+      "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+      "Compile_SortWithCluster_3Point1Functions_StillWork",
+      "Evaluate_SortWithCluster_FrozenXPath40_Works",
+      "Compile_CollationAvailable_DefaultOptions_ThrowXpst0017",
+      "Evaluate_CollationAvailable_FrozenXPath40_Works",
+      "Compile_QNameLiterals_DefaultOptions_ThrowXpst0003",
+      "Evaluate_QNameLiterals_FrozenXPath40_Works",
+      "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+      "Evaluate_JNodeFunctions_FrozenXPath40_Work",
+      "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+      "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+      "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004",
+      "Evaluate_DestructuringArray_FrozenXPath40_Works",
+      "Evaluate_DestructuringMap_FrozenXPath40_Works",
+      "Evaluate_TypedLet_FrozenXPath40_Coerces",
+      "Evaluate_LetBinding_LexicalScope"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs": {
+    "gitBlob": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+    "methods": [
+      "RecordType_DuplicateFieldNames_XPST0021",
+      "RecordType_MalformedFieldList_XPST0003",
+      "RecordType_TrailingComma_IsAccepted",
+      "RecordType_QuotedFieldNames_AreAccepted",
+      "InstanceOf_AnnotatedRecord_MatchesOwnType",
+      "InstanceOf_PlainMap_NeverMatchesRecordType",
+      "InstanceOf_Record_MatchesRecordStar",
+      "InstanceOf_EmptyRecord_MatchesOnlyEmptyRecord",
+      "InstanceOf_FieldCountMismatch_IsFalse",
+      "InstanceOf_FieldTypeMismatch_IsFalse",
+      "InstanceOf_FieldTypeCovariance_IsStructural",
+      "InstanceOf_OptionalField_AllowsEmptyEntryValue",
+      "Cast_DiscardsSurplusKeys",
+      "Cast_MissingFieldBecomesEmptyEntry",
+      "Cast_MissingNonEmptiableField_XPTY0004",
+      "Cast_CastsNonMatchingFieldValue",
+      "Cast_UncastableFieldValue_FORG0001",
+      "Cast_RecordStar_IsAnAssertion",
+      "Castable_RecordTypes",
+      "Coercion_BuildsAnnotatedRecord",
+      "Coercion_MissingFieldBecomesEmptyEntry",
+      "Coercion_SurplusKeys_XPTY0004",
+      "Coercion_MissingNonEmptiableField_XPTY0004",
+      "Coercion_PlainMapToRecordStar_XPTY0004",
+      "Coercion_PromotesFieldValuesRecursively",
+      "Coercion_EntriesAreInDeclarationOrder",
+      "Coercion_NonMapValue_XPTY0004",
+      "Lookup_DeclaredField_Works",
+      "Lookup_UnknownFieldOnRecord_XPTY0004",
+      "Lookup_RecordAsFunctionUnknownKey_XPTY0004",
+      "Lookup_MultiKeyFormChecksEachKey",
+      "Lookup_Wildcard_IsUnaffected",
+      "Lookup_PlainMapUnknownKey_StillReturnsEmpty",
+      "MapGet_DoesNotFieldCheck",
+      "ButWith_ReplacesEntryValues",
+      "ButWith_ResultKeepsRecordAnnotation",
+      "ButWith_UnknownField_XPTY0004",
+      "ButWith_PlainMapLhs_XPTY0004",
+      "ButWith_NonMapRhs_XPTY0004",
+      "ButWith_CoercesRhsValuesToFieldTypes",
+      "ButWith_ResultEntriesFollowDeclarationOrder"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs": {
+    "gitBlob": "29a556aa648f365db75ff1f70f36d982561143c8",
+    "methods": [
+      "RecordSignatures",
+      "OrdinaryNodeNames"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/FocusConstructorTests.cs": {
+    "gitBlob": "45aa71a2e5802be0eaf23bd81afc9ff47af6e4ba",
+    "methods": [
+      "Evaluate_FocusConstructor_ReturnsTypedValue",
+      "Evaluate_FocusConstructor_StringAsWhitespaceIsNormalized",
+      "Evaluate_FocusConstructor_UnsignedLongMaxValue",
+      "Evaluate_FocusConstructor_NodeContextAtomizes",
+      "Evaluate_FocusConstructor_QNameResolvesPrefixFromContext",
+      "Evaluate_FocusConstructor_NamedFunctionRef",
+      "Evaluate_FocusConstructor_NoContextItem_ThrowsXpdy0002",
+      "Evaluate_FocusConstructor_MapContext_ThrowsFoty0013",
+      "Evaluate_FocusConstructor_InvalidLexical_ThrowsForg0001",
+      "Evaluate_FocusConstructor_WrongSourceType_ThrowsXpty0004"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/ArrayMemberFunctionTests.cs": {
+    "gitBlob": "9a103e7fc1af4f255e7a67a2b35cecc1711601ad",
+    "methods": [
+      "Values",
+      "IdentityAndParents",
+      "TypeErrors",
+      "LookupProfile",
+      "Profiles"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs": {
+    "gitBlob": "b613b6d4290091933750b208105b982cf8b0106a",
+    "methods": [
+      "JTree_Array_UnwrapsToArray",
+      "JTree_Map_UnwrapsToMap",
+      "JTree_EmptySequence_RootJNodeWithEmptyValue",
+      "JTree_JNodeInput_WrapsSecondTime",
+      "JTree_Atomic_PassesThrough",
+      "JTree_FunctionItem_PassesThrough",
+      "InstanceOf_TwoArg_Array",
+      "InstanceOf_TwoArg_Map",
+      "InstanceOf_Bare_MatchesAnyJNode",
+      "InstanceOf_RootForm_MatchesKeylessRoot",
+      "InstanceOf_KeySpecifier_MatchesEntryKey",
+      "JKey_RootIsEmpty",
+      "JKey_ArrayMember_IsPosition",
+      "JKey_MapEntry_IsKey",
+      "JKey_QNameKey_ReturnsQName",
+      "JKey_SequenceChildren_KeyedByPosition",
+      "JKey_TwoItems_Xpty0004",
+      "JKey_NonJNode_Xpty0004",
+      "JKey_NoContext_Xpdy0002",
+      "JValue_NonJNode_Xpty0004",
+      "JValue_EmptyInput_EmptySequence",
+      "Coerce_GeneralComparison_ExtractsJValue",
+      "Coerce_Arithmetic_ExtractsJValue",
+      "Coerce_MapArrayParams_ExtractJValue",
+      "Coerce_String_ExtractsJValue",
+      "Coerce_Data_ExtractsJValue",
+      "Coerce_Ebv_JNodeIsTrue",
+      "Nav_ChildOfArray_PositionKeyedJNodes",
+      "Nav_ParentRoundTrip_ReturnsMapJNode",
+      "Nav_RootParent_IsEmpty",
+      "Nav_RawMap_ImplicitWrap",
+      "Nav_DeepNameTest_FindsNestedKey",
+      "Nav_SequenceValue_ChildrenKeyedByPosition",
+      "Nav_StringLiteralLookupStep_SelectsEntry",
+      "Nav_IntegerLookupStep_SelectsPositionOrIntKey",
+      "Nav_BracedKeySelector_EvaluatesKeyExpression",
+      "Nav_WildcardWithPredicate_WorksOnMapSteps",
+      "Nav_AttributeAxisOnJNode_IsEmpty",
+      "Serialize_Json_SerializesJValue",
+      "Serialize_Adaptive_SerializesJValue",
+      "DeepEqual_JNodes_CompareByValue"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/JNodeSumTests.cs": {
+    "gitBlob": "39da79d7214bb7b341ef8923c4eac2884997f36e",
+    "methods": [
+      "Values",
+      "Errors"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs": {
+    "gitBlob": "13aebfad0fc72b27eb484796f5533f94e2466a2d",
+    "methods": [
+      "NamespaceBrackets"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/PatternCompilerPredicateTests.cs": {
+    "gitBlob": "14d81054ea9e75b7c269bc5e86109db4c9b73bcb",
+    "methods": [
+      "CanCompilePatternsWithPredicates",
+      "BarePredicate_MatchesNodeWithAttribute",
+      "ElementWithPredicate_MatchesOnlyWhenPredicateTrue",
+      "BarePredicate_MatchesAnyNodeKindWithAttribute",
+      "DescendantAxisWithPositionPredicate_MatchesCorrectPosition",
+      "DisallowedFunctionAtPatternStart_ThrowsXtse0340",
+      "KeyNonLiteralArgument_ThrowsXtse0340",
+      "ProcessingInstructionWithColonArgument_ThrowsXtse0340",
+      "NumericPathStep_ThrowsXtse0340",
+      "NumericPatternStart_ThrowsXtse0340",
+      "ParentStepAtTopLevel_ThrowsXtse0340",
+      "ParentStepInsidePredicate_Compiles",
+      "ElementWithIdAtPatternStart_Compiles",
+      "KeyContextDependentStepArgument_Compiles",
+      "KeyFunctionCallArgument_StillThrowsXtse0340"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40AliasCastTests.cs": {
+    "gitBlob": "3c3a58eb5676567468f4151bd5d90a223acac5ef",
+    "methods": [
+      "Cast_Alias",
+      "Cast_NestedAndNamespaceAliases",
+      "Declaration_UnknownType",
+      "Cast_InvalidTarget",
+      "Cast_NamedRecordAlias"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40AliasExpressionTests.cs": {
+    "gitBlob": "152f2bd4bec9f218544c95ad3d765ff29aef7405",
+    "methods": [
+      "InstanceOf_ArrayAndAtomicAliases",
+      "InstanceOf_Occurrences",
+      "Treat_ArrayAlias",
+      "Treat_IncompatibleValues",
+      "InstanceOf_NamespaceForms",
+      "InstanceOf_InlineNamespaceDeclaration",
+      "InstanceOf_AttributeValueTemplate",
+      "InstanceOf_NestedArrays",
+      "PublicEnumerationOption_StillRejectsStructuralDefinitions",
+      "InstanceOf_EnumerationMembers",
+      "InstanceOf_MixedVersionDoesNotExposeAliases",
+      "InstanceOf_PackageIsolation"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArrayAliasBindingTests.cs": {
+    "gitBlob": "5ea316dd26791949991d08e69feb08ccea1deb61",
+    "methods": [
+      "ArrayAlias_FunctionAndVariableConversion",
+      "ArrayAlias_DefinitionNamespaceAndNestedArrays",
+      "ArrayAlias_OptionalAndRepeatedBindings",
+      "ArrayAlias_DynamicFunctionConversion",
+      "ArrayAlias_InvalidVariable",
+      "ArrayAlias_CyclesAreStaticErrors",
+      "ArrayAlias_DefinitionMustBeAnItemType",
+      "Aliases_AtomicAndEnumerationMembers",
+      "ArrayCoercion_PreservesXPath31Behavior",
+      "ArrayAlias_CoordinateReferenceExample"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArrayMemberSumTests.cs": {
+    "gitBlob": "72326d329f83c4b3131059ac6119498150da4d3f",
+    "methods": [
+      "IterateMembers"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArrayPatternTests.cs": {
+    "gitBlob": "4fb204aa0e57aeb89316fb23a1d97c1bae27e295",
+    "methods": [
+      "Matching",
+      "Priorities",
+      "NamedRecords",
+      "EqNamePriority",
+      "Invalid",
+      "Profile"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs": {
+    "gitBlob": "495cb9309dc003d6239a71377968397d356aef05",
+    "methods": [
+      "Array_ForEachMixedJNode_RaisesXTTE4060",
+      "ArrayMember_JNodeValueAndNestedEmptyMembers",
+      "Array_Select_OneSingletonMemberPerItem",
+      "Array_Select_TokenizedString",
+      "Array_ForEachSelect_MemberIsWholeSequence",
+      "Array_Content_ArrayMemberSiblings",
+      "Array_Content_ForEachGroup_ArrayMemberSelect",
+      "Array_Content_NestedArrayMemberInForEach",
+      "Array_InFunctionBody",
+      "Array_SelectPlusContent_XTSE3185",
+      "ArrayMember_SelectPlusContent_XTSE3185",
+      "Array_AsElementChild_XTDE0450",
+      "Array_WorksAtVersion_3_0",
+      "Array_WorksInForwardsCompatible_4_0",
+      "Switch_LookupTable_SelectBranches",
+      "Switch_TestSequences_DaysInMonth",
+      "Switch_GeneralComparison_NumericPromotion",
+      "Switch_UsesDefaultCollationInScope",
+      "Switch_LaterBranchesNotEvaluated",
+      "Switch_NoOtherwiseNoMatch_Empty",
+      "Switch_ContentBranches",
+      "Switch_OtherwiseSelect",
+      "Switch_SelectorNotSingleAtomic_XPTY0004",
+      "Switch_WhenSelectPlusContent_XTSE3185",
+      "Switch_OtherwiseSelectPlusContent_XTSE3185",
+      "Switch_RequiresSelect_XTSE0010",
+      "Switch_RequiresAtLeastOneWhen_XTSE0010",
+      "Switch_RejectsNonBranchChildren_XTSE0010",
+      "Switch_WhenAfterOtherwise_XTSE0010",
+      "Switch_ChooseWhenSelect_IsIgnoredByChoose",
+      "Switch_InFunctionBody",
+      "Switch_WorksAtVersion_3_0",
+      "Switch_WorksInForwardsCompatible_4_0"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs": {
+    "gitBlob": "2f9bed9d8747a0ed448b4de616e3e0cf5d5b589c",
+    "methods": [
+      "Matching",
+      "NamesAndAliases",
+      "DefaultPriority",
+      "InvalidPatterns",
+      "AliasNamespaceAndContext",
+      "AliasPriority",
+      "ProfileAndAliasErrors"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ChoiceCastValidationTests.cs": {
+    "gitBlob": "d45643e35b17901be5d199e6018a02f19d9d11b0",
+    "methods": [
+      "Cast_AtomicChoice",
+      "Castable_NonAtomicAlias",
+      "Compile_DirectInvalidTarget",
+      "Castable_NestedAliases",
+      "InstanceOf_ContainerChoiceStillAllowed",
+      "Compile_FrozenProfileRefusesChoiceGrammar"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40EnumerationBindingTests.cs": {
+    "gitBlob": "56066b536e09d4783da246c8d682dfbede4065fe",
+    "methods": [
+      "Variables_MembersAndCardinality",
+      "Variables_SourceAttribute_IsConverted",
+      "Variables_NamespaceAliasesAndLiteralMembers",
+      "Function_BoundariesAndDynamicCalls",
+      "TemplateParameterAndSelectResult",
+      "RecordField_NamedEnumerationAndDefault",
+      "Variable_InvalidValue_XTTE0570",
+      "InvalidBoundary_ExactCode",
+      "InlineEnumeration_AndVersionBoundary",
+      "PackageAliases_AreIsolatedAndRestored"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs": {
+    "gitBlob": "75b39914d6ccbcbb6e075991b765a4f9734489f9",
+    "methods": [
+      "NamedElementPriority",
+      "EffectiveTemplateVersion",
+      "SyntaxOutsideUri",
+      "PathAndWildcardControls",
+      "AttributePriority"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40FixedTypeNamespaceTests.cs": {
+    "gitBlob": "f53218ae9e90e4f375f6e3d81de919fd10dfc946",
+    "methods": [
+      "StandardPrefixes",
+      "ExplicitBindingsRemainFixed",
+      "RootBindingAndLastToken",
+      "UnprefixedNamesKeepTheirDefault",
+      "OmittedNativePrefixIsUnavailable",
+      "InvalidBindings",
+      "NamespaceDocument",
+      "IncludedModuleIsolation"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ForwardAxisPriorityTests.cs": {
+    "gitBlob": "8d5c51a9e102040bb846d2efc719ec27fda9f236",
+    "methods": [
+      "SupportedPriorities",
+      "EarlierProfile",
+      "AttributeUnionNextMatch",
+      "EqNameUriAxisPunctuation",
+      "ProcessingInstructionTargetBoundary"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40FunctionChoiceAliasTests.cs": {
+    "gitBlob": "7325cbafa8dfee6f55110ce176353d24a6896224",
+    "methods": [
+      "FunctionAlias_CallbackConversion",
+      "FunctionAlias_FunctionBoundaries",
+      "FunctionAlias_TypeExpressions",
+      "FunctionAlias_ReturnAndOuterOccurrences",
+      "FunctionAlias_ParameterAndResultSequences",
+      "FunctionAlias_NestedReferences",
+      "FunctionAlias_InvalidBinding",
+      "ChoiceAlias_BindingAndTypeExpressions",
+      "ChoiceAlias_AlternativeOrder",
+      "ChoiceAlias_NestedReferencesAndOccurrences",
+      "ChoiceAlias_InvalidTreat",
+      "Alias_RecursiveDefinitions",
+      "FunctionAlias_InvalidOuterOccurrence",
+      "ChoiceAlias_LiteralDelimitersAndComments",
+      "FunctionAlias_CalibrationReferenceExample",
+      "FunctionAlias_ItemSequenceOccurrences",
+      "ChoiceAlias_MixedVersionBoundary",
+      "FunctionAlias_DocumentaryGrammar",
+      "FunctionAlias_WildcardSynonym",
+      "FunctionAlias_DocumentaryMatching",
+      "FunctionAlias_DirectBindingWithoutAliases",
+      "FunctionAlias_InvalidDocumentaryGrammar",
+      "FunctionAlias_DistinctParameterNamespaces",
+      "FunctionAlias_GrammarVersionBoundary",
+      "FunctionAlias_DirectHostGrammar",
+      "FunctionAlias_NestedDocumentaryGrammar",
+      "FunctionAlias_HigherOrderDocumentaryGrammar",
+      "FunctionAlias_MixedDocumentaryParameters",
+      "FunctionAlias_DuplicateEmptyNamespaceName",
+      "FunctionAlias_UnknownDocumentaryReturnType"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40InlineAliasContractTests.cs": {
+    "gitBlob": "edfb8f25b5f9da87dc8532f8788957ac6a2f5110",
+    "methods": [
+      "StructuralRecordContract",
+      "ParameterCardinality",
+      "ReturnOnlyContract",
+      "NestedArrayContract",
+      "NamespaceForms",
+      "InvalidValues",
+      "StaticSignatureErrors",
+      "NamedRecordContract",
+      "InlineNamespaceProlog",
+      "OmittedAnnotations",
+      "MixedVersionRefusal",
+      "PublicEnumerationAlias",
+      "PublicEnumerationRejectsInvalidDefinitions",
+      "AttributeValueTemplate"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs": {
+    "gitBlob": "80c05a40cf69633862f4493cda507a2da3e56c0f",
+    "methods": [
+      "Enumeration_MembersAndCardinality",
+      "Enumeration_NamespaceRebinding",
+      "Enumeration_DefaultNamespaceAndTreat",
+      "Enumeration_TreatRejectsUnknownMember",
+      "Enumeration_InvalidDeclarations"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40MapAliasTests.cs": {
+    "gitBlob": "6c87a981d324354c8e0be08b08cc870bd63eade9",
+    "methods": [
+      "MapAlias_BindingAndOrder",
+      "MapAlias_FunctionCalls",
+      "MapAlias_InstanceAndTreat",
+      "NestedReferences_BindingsAndTypeExpressions",
+      "MapAlias_DefinitionAndUseNamespaces",
+      "NestedReferences_QuotedMembersAndComments",
+      "MapAlias_Occurrences",
+      "MapAlias_InvalidBinding",
+      "MapCoercion_KeysAndCollisions",
+      "MapAlias_RecursiveDefinition",
+      "MapCoercion_XPath31Boundary",
+      "MapAlias_InvalidDefinition",
+      "MapAlias_FunctionResult",
+      "NestedReferences_StructuralWhitespace",
+      "MapAlias_SensorReferenceExample",
+      "MapCoercion_AlreadyMatchingRecordRetainsIdentity"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40MapEntryPatternTests.cs": {
+    "gitBlob": "10de8512e7a5c1e94e94692e92d48f44cebadcd1",
+    "methods": [
+      "SequenceValues",
+      "OuterPredicates",
+      "PrioritiesAndNextMatch",
+      "InvalidConstraints"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40NamedRecordCastTests.cs": {
+    "gitBlob": "43d74b8610748b769915263784a50df259132732",
+    "methods": [
+      "NamedCast_MissingRequiredField",
+      "NamedCast_NonemptyEmptyField",
+      "NamedCast_EmptySequenceField",
+      "NamedCast_NestedFunctionSignatureNamespace",
+      "NamedCast_InvalidCardinalities",
+      "NamedCast_OptionalFieldSequences",
+      "NamedCast_SensorProjection",
+      "NamedCast_Castable",
+      "NamedCast_InvalidLexicalValue",
+      "NamedCast_StaticInjection",
+      "NamedCast_ExistingAndOptional",
+      "NamedCast_SequenceFields",
+      "NamedCast_NestedBindingNamespace",
+      "NamedCast_NestedRecordField"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40NodeKindAliasTests.cs": {
+    "gitBlob": "ca35dde9c86ee83521903d2127f96bb5d8ccaf8e",
+    "methods": [
+      "Alias_NodeKind",
+      "Alias_StructuralTypes",
+      "Declaration_UnknownComposite",
+      "Alias_ChoiceCastRejected",
+      "Alias_BindingRejectsAtomicValue",
+      "Alias_NamedNode",
+      "Alias_NamedNodeMismatch",
+      "Alias_DefaultNamespaces",
+      "Alias_NestedNamedNodes",
+      "Alias_UnboundNodePrefix",
+      "Declaration_NamedNodeAndUnknownType",
+      "Alias_ProcessingInstructionTarget",
+      "Alias_NestedProcessingInstructions",
+      "Alias_InvalidProcessingInstructionTarget",
+      "Declaration_ProcessingInstructionAndUnknownType",
+      "Alias_PartialWildcard",
+      "Alias_PartialWildcardMismatch",
+      "Alias_UnboundWildcardPrefix",
+      "Alias_NestedWildcard",
+      "Alias_AnyDefaultNamespace",
+      "Declaration_WildcardAndUnknownType",
+      "Alias_NodeNameUnion",
+      "Alias_NodeNameUnionMismatch",
+      "Alias_EmptyNodeNameUnionAlternative",
+      "Alias_NodeNameUnionUnboundPrefix",
+      "Declaration_NodeNameUnionAndUnknownType",
+      "Alias_NestedNodeNameUnion",
+      "Alias_NodeNameUnionAnyDefault",
+      "Alias_SchemaAnnotation",
+      "Alias_SchemaAnnotationMismatch",
+      "Alias_InvalidSchemaAnnotation",
+      "Alias_SchemaAnnotationDeclarationNamespace",
+      "Alias_SchemaAnnotationAnyDefault",
+      "Alias_SchemaAnnotationDoesNotExpandItemAlias",
+      "Alias_NestedSchemaAnnotation",
+      "Declaration_UnknownSchemaAnnotation",
+      "Alias_ImportedSchemaAnnotation",
+      "Alias_DocumentNameShorthand",
+      "Alias_DocumentNameShorthandMismatch",
+      "Alias_SchemaDeclaration",
+      "Alias_InvalidSchemaDeclaration",
+      "Declaration_DirectDocumentShorthand",
+      "Alias_NestedDocumentShorthandAnyDefault",
+      "Declaration_SchemaDeclarationAndUnknownType",
+      "Alias_SchemaDeclarationDefaultNamespaces",
+      "Declaration_DirectHostDocumentShorthand",
+      "Declaration_UnknownSchemaElementInUnusedBinding"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40NominativeRecordCoercionTests.cs": {
+    "gitBlob": "55e033486939906b7632d3153714457c0c7f5b6d",
+    "methods": [
+      "NominalCoercion_SensorExample",
+      "NominalCoercion_FunctionBoundaries",
+      "NominalCoercion_InvalidBinding",
+      "NominalCoercion_OccurrencesAndExistingIdentity",
+      "NominalCoercion_IdentityChecks"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40PackageTypeTests.cs": {
+    "gitBlob": "214cc452eec67fd7fb8d542ee3a323e4dee4a6f3",
+    "methods": [
+      "TemplatePatternKeepsPackageScope",
+      "PublicAliasPreservesPrivateDependency",
+      "AcceptUsesOwnNamespaceContext",
+      "PublicRecordConstructor",
+      "InvalidAccept",
+      "UnavailableAlias",
+      "InvalidExposure",
+      "TransitiveVisibility",
+      "AcceptedTypeCannotBeOverridden"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ParenthesizedFilterPathTests.cs": {
+    "gitBlob": "5f3811b3c5dbfb8619d66e5ea5db08a71757a4f5",
+    "methods": [
+      "CandidateFilter",
+      "UriSlashes",
+      "RealPathPositions",
+      "NamespacedPathPositions",
+      "DescendantPathPositions",
+      "Nonmatches",
+      "AliasInPredicate",
+      "EarlierPathPositions"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ParenthesizedItemPatternTests.cs": {
+    "gitBlob": "52cb53e79b568f898f55a39c0d8838fcfb16becd",
+    "methods": [
+      "MatchesNodes",
+      "NonNodesDoNotMatch",
+      "AliasPriority",
+      "PredicateAlias",
+      "DefaultNamespace",
+      "FalsePredicate",
+      "EarlierProfileRejectsPredicate",
+      "DirectItemUnionRejected",
+      "UnknownAlias"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40PatternFixedNamespaceTests.cs": {
+    "gitBlob": "2308b77ec115502b21091e41c32ad531fc01d25e",
+    "methods": [
+      "FixedBindings",
+      "NoNativeDeclaration",
+      "AttributeName",
+      "QuotedPrefix",
+      "NativeBindings"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40PatternPrefixDiagnosticTests.cs": {
+    "gitBlob": "dda858a338e3c3b501adb2bdd14ff0278a0fa777",
+    "methods": [
+      "OmittedPrefix",
+      "ProtectedText",
+      "NativeBindings",
+      "UndeclaredNativePrefix",
+      "MapEntryDelimiter"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40RecordConstructorTests.cs": {
+    "gitBlob": "21d4cf577e6991734d14408cccb1eb8fc176580f",
+    "methods": [
+      "Constructor_FieldOrderAndEmptyValue",
+      "Constructor_StaticFieldAndDefaultArity",
+      "Constructor_NominativeIdentity",
+      "Constructor_ReboundNamespace",
+      "Constructor_NumericPromotion",
+      "Constructor_StaticGlobalFocusAndRestoration",
+      "Constructor_DefaultHasAbsentFocus",
+      "Constructor_InvalidCallOrBinding",
+      "Constructor_InvalidDeclaration"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs": {
+    "gitBlob": "392ee66e2cdc428c12d74f131e23084693649ef3",
+    "methods": [
+      "Matching",
+      "TypeNames",
+      "Priorities",
+      "Invalid",
+      "RecordContextItem",
+      "NonRecordAliases"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40RecursiveContainerCastTests.cs": {
+    "gitBlob": "de6b0e2dfeeb3a0a54d6a8f5c408fa8ff863e0dc",
+    "methods": [
+      "ContainerCast_StructuralRecordFields",
+      "ContainerCast_StructuralRecordCastable",
+      "ContainerCast_EmptyContainerTypes",
+      "ContainerCast_CardinalityAndKinds",
+      "RecursiveRecord_ArrayCast",
+      "ContainerCast_ArrayMembers",
+      "ContainerCast_NestedArrays",
+      "ContainerCast_MapEntries",
+      "ContainerCast_KeyCollision",
+      "ContainerCast_CastableBoundaries",
+      "ContainerCast_WildcardsAndOptional",
+      "ContainerCast_NamedRecordFields",
+      "RecursiveRecord_LinkedListBinding",
+      "RecursiveRecord_LinkedListCast",
+      "RecursiveRecord_MutualReferences",
+      "RecursiveRecord_InvalidNestedValue"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs": {
+    "gitBlob": "2f1fa063937e21653ace204a2ccf2e3a06b3d1d8",
+    "methods": [
+      "Select_CDataMap_PreservesText",
+      "Select_CurrentFocus_PreservesWholeSequence",
+      "Select_FunctionAndSimpleContent",
+      "Select_FunctionCollation_IsScoped",
+      "Select_AccumulatorRule_UsesValueBinding",
+      "Select_EmptyAndCoercion",
+      "Select_InvalidResult_XPTY0004",
+      "Select_StreamedLast_XTSE3430",
+      "Select_InvalidContent_XTSE0010",
+      "Select_InlineNamespaces_ResolveAndRestore",
+      "Select_DefaultAnyNamespace_RealWorldVocabularyVersions",
+      "Select_UndeclaredVariableNamespace_XPST0008",
+      "Select_InlineNamespaces_StreamedLast_XTSE3430"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SetPatternAssociativityTests.cs": {
+    "gitBlob": "1748717013d7c46d9c1fd67c4573a64f6bc0549a",
+    "methods": [
+      "LeftAssociativeMembership",
+      "UriOperands",
+      "EarlierProfile",
+      "MissingOperand"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SetPatternAxisFocusTests.cs": {
+    "gitBlob": "a4e19170d896a741bebcf0c2e6e2e18bdf926266",
+    "methods": [
+      "AxisMembership",
+      "Attributes",
+      "MixedPaths",
+      "AllPathPositions",
+      "NamedAxisPriority",
+      "UriAxis",
+      "EarlierProfile"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SetPatternPriorityTests.cs": {
+    "gitBlob": "635ad3953ea77c81d5e46720815f895e590c5075",
+    "methods": [
+      "FirstOperandPriority",
+      "PredicatePriority",
+      "BareDotMatchesAtomicValues",
+      "OperatorTextBoundaries",
+      "ExcludedNodeDoesNotMatch",
+      "FalsePredicateDoesNotMatch",
+      "EarlierSetPriority"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40StaticNamedTypeTests.cs": {
+    "gitBlob": "f4eb7bf3829bcbd39f5292deabd0d8617945bd40",
+    "methods": [
+      "Declaration_UnknownType",
+      "Declaration_UnboundPrefix",
+      "Declaration_ForwardAndRecursiveNames",
+      "Declaration_LiteralNames",
+      "Expression_UnknownType",
+      "Expression_UnboundTypePrefix",
+      "Avt_UnknownType",
+      "Cast_NominativeChoice",
+      "Record_ReboundNamespace",
+      "Record_InlineNamespace",
+      "InstanceOf_NominativeChoice",
+      "InstanceOf_BuiltInTypes",
+      "FrozenElement_RetainsProfile"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs": {
+    "gitBlob": "1eabb25de32d4594317bd5adffa8f06be3aef055",
+    "methods": [
+      "KeySets",
+      "RecordsAreMaps",
+      "DefaultPriorityAndNextMatch",
+      "UnsupportedPatternsFailStatically",
+      "EarlierProfilesRejectMapPatterns",
+      "LocalEarlierProfileRejectsMapPattern",
+      "ParenthesizedMapPatternRequiresNode"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordAliasTests.cs": {
+    "gitBlob": "ed061a8e84861027a390f28d1daa65da9f16a731",
+    "methods": [
+      "RecordAlias_DeclarationNamespacesAndFunctions",
+      "RecordAlias_NestedFieldsAndComments",
+      "RecordAlias_SensorExample",
+      "RecordAlias_InlineTypeChecks",
+      "RecordAlias_NestedTypes",
+      "RecordAlias_LiteralFieldNames",
+      "RecordAlias_InvalidBinding",
+      "RecordAlias_Cycle",
+      "RecordAlias_EmptyWildcardAndOccurrences"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordBindingTests.cs": {
+    "gitBlob": "1c9059b1be4a05a5f781058d10fb470e1688c885",
+    "methods": [
+      "LocalRecordBinding",
+      "GlobalAndParameterBindings",
+      "SequenceCardinality",
+      "InvalidVariableBindings",
+      "InvalidParameterBinding",
+      "FieldNamespaceContext",
+      "AnyRecordRequiresAnnotation",
+      "RequiredInlineRecordIsNotOptional"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs": {
+    "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+    "methods": [
+      "Note_InTemplate_IsDiscarded",
+      "Note_AtTopLevel_IsDiscarded",
+      "Note_ContentIsNotValidated",
+      "If_ThenElse_TrueBranch",
+      "If_ThenElse_FalseBranch",
+      "If_ThenOnly_FalseIsEmpty",
+      "If_ElseWithContent_ContentIsTrueBranch",
+      "If_ThenWithChildren_XTSE0010",
+      "If_NoEffectiveBooleanValue_FORG0006",
+      "If_ThenElse_InFunctionBody",
+      "If_ThenElse_WorksAtVersion_3_0",
+      "ForEach_Separator_BetweenItems",
+      "ForEach_Separator_WithSort",
+      "ForEach_Separator_EmptyAndSingleItem_NoSeparator",
+      "ForEach_Separator_IsAnAvt",
+      "ForEach_Separator_InRawSequenceVariable",
+      "ForEach_Separator_WorksAtVersion_3_0",
+      "ApplyTemplates_Separator_BetweenItems",
+      "ApplyTemplates_Separator_WithSort",
+      "ApplyTemplates_Separator_WorksAtVersion_3_0",
+      "Map_Select_MergesInputMaps",
+      "Map_Select_DuplicatesDefault_XTDE3365",
+      "Map_Select_DuplicatesUseFirst",
+      "Map_Select_DuplicatesUseLast",
+      "Map_Select_DuplicatesCombine",
+      "Map_Select_DuplicatesReject_FOJS0003",
+      "Map_Select_DuplicatesInvalidString_FOJS0005",
+      "Map_Select_DuplicatesFunctionItem",
+      "Map_Select_NonMapInput_XTTE3375",
+      "Map_SelectPlusContent_XTSE3185",
+      "Map_DuplicatesWithContent_UseLast",
+      "Map_ContentDuplicateDefault_StillXTDE3365",
+      "Map_Select_WorksAtVersion_3_0",
+      "MapEntry_StandaloneInVariable_AsSingleEntryMap",
+      "MapEntry_SelectPlusContent_StillXTSE3280",
+      "Version_4_0_RemainsForwardsCompatible_UnknownInstructionIgnored",
+      "Version_3_0_UnknownInstruction_StillErrors",
+      "Version_5_0_RemainsForwardsCompatible",
+      "Note_WorksInForwardsCompatible_5_0"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs": {
+    "gitBlob": "4521e6e960596bb55a9e5aaaa8db3bc25475562d",
+    "methods": [
+      "AnnotatedRecordAliases",
+      "NominativeRecordPattern",
+      "EqNameDelimiter",
+      "StructuralRecordsKeepAnnotationBoundary",
+      "PredicateSemantics",
+      "TypePriorities",
+      "AliasAndFixedNamespaces",
+      "QuotedFields",
+      "ExplicitPriority",
+      "InvalidPatterns"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40UnionPatternTests.cs": {
+    "gitBlob": "71cc1d2fe4976b2c2bd29666c10eaa07758a3368",
+    "methods": [
+      "MinimumAlternativePriority",
+      "UnmatchedLowerPriorityAlternative",
+      "EqualAlternativePriorities",
+      "NextMatchVisitsSingleRule",
+      "ExplicitPriority",
+      "AlternativesDoNotCreateAmbiguity",
+      "TemplateProfileOverride",
+      "NestedUnionNamespace",
+      "OperatorDelimiters",
+      "EmptyAlternative"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40WildcardNodePatternTests.cs": {
+    "gitBlob": "ff6ba43762f0c5be94ea0f59f5d1d311e500e346",
+    "methods": [
+      "WildcardMatching",
+      "WrongTypeDoesNotMatch",
+      "DefaultPriority",
+      "OwningProfile",
+      "InvalidNameTests",
+      "EqNameNamespaceDelimiters"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/XsltPatternDelimiterTests.cs": {
+    "gitBlob": "7ff30f20d33f4c729403d47390fabcab8a2e5599",
+    "methods": [
+      "QuotedDelimiters",
+      "FalseOuterPredicate",
+      "UriParentheses",
+      "ContainedPriority",
+      "EarlierNodePatterns"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/XsltPatternOperatorTests.cs": {
+    "gitBlob": "b944589783333e4a28d884ea73de74ffd895b52a",
+    "methods": [
+      "QuotedOperators",
+      "Nonmatches",
+      "UriOperators",
+      "OperatorNames",
+      "EarlierUnion"
+    ]
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "304ed0b3ca19174a7b5a40a1129222d9122625a345a43d45462aaf80a82935b4"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "9517a106bf134f3a52d33cae6e9be839169329e51b45915e212fbc19ed9f4eee"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "173a556f40a05e2ad6608fa36b4d63d975673bdf89d1285d2ec50a62159766b3"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "a34fabc2a2bf0b89c6152d7dd6169909dcb1fc6f3607f8c83bd0329afe4b77f1"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "067477e33dde19ef106800d5977981bae92d6dddbc2d3a52665f50cb8fd96d4c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "f43393222d4cfd7ef8a66d2089518abb4a29fc5d5a74622f7516a3fb683f8211"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "da31f4426a5c12e9dd84f85c36cf88271256915e38318e5302efce9ccaf9d8bc"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "ea79d634bd71f8f74acc27c48b6e0fc3dc205029f5ea23515095db0676c8ea47"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/FOUNDATION-API-FREEZE-PLAN.md",
+      "htmlSha256": "00467e839cd20e62db5fe2180b092e83a4f994a4e3741904a2aa1827399fc2fc"
+    },
+    {
+      "source": "docs/foundation-api-baseline/README.md",
+      "htmlSha256": "200daab3625b8b485e510ff1172a5ef370ffad3511efd575b6f4468028f9bfaa"
+    },
+    {
+      "source": "docs/foundation-api-baseline/CONTRACTS.md",
+      "htmlSha256": "314ecc5998193e49d4f699b7c7f24124b3ff36140d721e7f3900dba8add0580c"
+    },
+    {
+      "source": "docs/foundation-api-baseline/GAPS.md",
+      "htmlSha256": "c7b570dbea9dd86f67da91ca6b25b36ff000072d9dce8f2db4e02b4b51df9529"
+    },
+    {
+      "source": "docs/foundation-api-contract-draft/README.md",
+      "htmlSha256": "422e202251fa38b4d2e8274c81f29c00158c7141dad744c16e8e8b73fd05fdcf"
+    },
+    {
+      "source": "docs/foundation-api-contract-draft/COMPATIBILITY-MATRIX.md",
+      "htmlSha256": "66ca1ca465bc5862ae598c2565bd9aba670c7b8dec90ac447de451d327f2e866"
+    },
+    {
+      "source": "docs/foundation-result-ownership/README.md",
+      "htmlSha256": "d0e9157a55520e9ec98ac35c72bed665e24eb9fa56a7a237b621c544d614bd73"
+    },
+    {
+      "source": "docs/foundation-result-ownership/DECISION.md",
+      "htmlSha256": "a7c0513a41f7af1e9bff456244a1f01dd6c62d142a885bf531d5e4a28937e2bd"
+    },
+    {
+      "source": "docs/streaming-completion-cleanup/README.md",
+      "htmlSha256": "8c2baa92830ecd69e80a45391d8a838216981b42c1e6d069dd0a8e76069fb918"
+    },
+    {
+      "source": "docs/streaming-completion-cleanup/ADOPTION.md",
+      "htmlSha256": "c96c6cb7da4fcac032c6b5f220b009bbb10ed876d0ca5584aaaff7409aee4b08"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "htmlSha256": "8a9ffd30257450088ef20064393611129fd07ebeb7f6351b21fa01c6db314bd2"
+    },
+    {
+      "source": "docs/foundation-external-dependencies/README.md",
+      "htmlSha256": "47c98d92475f364f8c8ebf2da2a0c18cf3ea6032ca6e351cb92dcd7809ed9dfe"
+    },
+    {
+      "source": "docs/foundation-external-dependencies/BOUNDARY.md",
+      "htmlSha256": "dd74761231bdbd577b34a59f8cfb0594dfb0ea761130b9f110d403864e98c08b"
+    },
+    {
+      "source": "docs/foundation-legacy-compatibility/README.md",
+      "htmlSha256": "de8d6e9442aa59043fd104fa16b810510e58acf776022bafdee25b52e36c6fdb"
+    },
+    {
+      "source": "docs/foundation-legacy-compatibility/CASES.md",
+      "htmlSha256": "840405519b658dcb4fa516142d5411233dbe531c6f1f03491e6d06ae86cfd1ed"
+    },
+    {
+      "source": "docs/foundation-package-qualification/README.md",
+      "htmlSha256": "365bfc1e5a5108cf781c491c6ced6c773f236647886944e9071547e013c93754"
+    },
+    {
+      "source": "docs/foundation-package-gates/README.md",
+      "htmlSha256": "d65f4b190dce5e0a419e397b64eb3659d7579674b38e640d199088ea62add7a2"
+    },
+    {
+      "source": "docs/foundation-readiness/README.md",
+      "htmlSha256": "408c7d116e7925969d570743a4c84e2f11fa7fa701d923292f941c685ac55ac4"
+    },
+    {
+      "source": "docs/foundation-readiness/OWNER-ACCEPTANCE.md",
+      "htmlSha256": "119a19d1fcae4ff726cab7dc62111fa049db0682e1296873835b49560934277c"
+    },
+    {
+      "source": "docs/foundation-contract-decision/README.md",
+      "htmlSha256": "43035f960741610ffd69b6583130c0d171a1978b7bc52eb9ab25c0210e8a63f3"
+    },
+    {
+      "source": "docs/foundation-implementation-scope/README.md",
+      "htmlSha256": "815746ef01f37db602eca2e5bf26319584c8d6e6a8a7f8fdd0d720f698851437"
+    },
+    {
+      "source": "docs/foundation-owner-reconciliation/README.md",
+      "htmlSha256": "d2d5f642278edfc999e6eb79ae8acdbe385ff4a2f900f0ca990b9703cc620d54"
+    },
+    {
+      "source": "docs/braid-foundation-requirements/README.md",
+      "htmlSha256": "1646d28947eae506c0ab72a7d52968dfe5da84ae12afaff9e854ae6b7145c6cb"
+    },
+    {
+      "source": "docs/foundation-performance/README.md",
+      "htmlSha256": "e05ddb165db0703945670773a04a49619d1583a6aa36ec73c844ad2e5cc0f4c5"
+    },
+    {
+      "source": "docs/foundation-contract-design/README.md",
+      "htmlSha256": "b1a07a0aff24840a9238edc0d2f8a5b161af5a93fb445d7aea59a6a6bc8afc5b"
+    },
+    {
+      "source": "docs/foundation-carrier-experiments/README.md",
+      "htmlSha256": "63a62839e0c50a5ef0db8badc13fad4ac21363a66b9e4ff40c209a3db633aab3"
+    },
+    {
+      "source": "docs/foundation-vm-carrier-probe/README.md",
+      "htmlSha256": "39cc108ad37abac77a179a0a6b687f7563b838639a510d591a088c03709ce820"
+    },
+    {
+      "source": "docs/foundation-provenance-lifetime/README.md",
+      "htmlSha256": "0f11a76f29e6445e83545468efc99fabe9eb7f713dd2e09fe4b1ecc973482de5"
+    },
+    {
+      "source": "docs/foundation-advisor-contract/README.md",
+      "htmlSha256": "4f1d552019d037789267df78f5fadc90b4e05ebee46e3b10af380b7a3df65005"
+    },
+    {
+      "source": "docs/foundation-granularity-experiment/README.md",
+      "htmlSha256": "a7a87d8ae90a6b69f1c0f0f29d03c8b89c3cb6b53d82e0131485b2f16e31b076"
+    },
+    {
+      "source": "docs/foundation-callsite-disposition/README.md",
+      "htmlSha256": "6aeed4e4a0d7ad4a3d7885e1a2ee60f312496e8a4cb7e8c5212a34f6e797f043"
+    },
+    {
+      "source": "docs/foundation-boundary-experiment/README.md",
+      "htmlSha256": "02e9b1ca8a5f30d3e57ac45b848143887a8650c2ca87dd901fe57e950a2e9a28"
+    },
+    {
+      "source": "docs/foundation-native-adapter/README.md",
+      "htmlSha256": "927e706a2324d63dce5bf88ab00052f1571b7cd487312413a2f1810b767cb08c"
+    },
+    {
+      "source": "docs/foundation-snapshot-navigation/README.md",
+      "htmlSha256": "1b84ec499aa90b1fd96ca1098249da1993e799a783976edf39885063933b3605"
+    },
+    {
+      "source": "docs/foundation-evidence-kernel/README.md",
+      "htmlSha256": "b7bc0fb8a332a73dde75d2dc5bbd7a5e9b0e6a9dd1603f779e3c8c46df398c98"
+    },
+    {
+      "source": "docs/foundation-production-admission/README.md",
+      "htmlSha256": "51fa4cea8641cddf0e2bb15aea214781da3ef03adb81b231d33ccb374e54307f"
+    },
+    {
+      "source": "docs/foundation-runner-safety/README.md",
+      "htmlSha256": "f6a01cc1fac647d7151b5854cd4eb4838fc4eed548cd2e917ed98ad176460182"
+    },
+    {
+      "source": "docs/foundation-carrier-equality/README.md",
+      "htmlSha256": "594fe03685153ccac684080b985fdcf36e85977461697609f496dd4cec5bc5bf"
+    },
+    {
+      "source": "docs/foundation-carrier-field-equality/README.md",
+      "htmlSha256": "12975af565a0c863a6585bf2bb0f0ea4c718b538955aa63cc3ee08615f516404"
+    },
+    {
+      "source": "docs/foundation-native-kernel-carrier/README.md",
+      "htmlSha256": "8a389e902702979572ccd20d58a6bf0c0ffc480d98f9344764c607df4ac0e5ab"
+    },
+    {
+      "source": "docs/foundation-private-transport/README.md",
+      "htmlSha256": "8b652560f13acbe6b0c6188a37c5f3a733621f4481b8d1d62b0be53a6829c022"
+    },
+    {
+      "source": "docs/foundation-transport-atomic-cost/README.md",
+      "htmlSha256": "1985478a763b7228367b4b9a34bbb05cd0cad37e06e1bf33b7762b9121da5734"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "c77d15aee82e141a2c97732eb86f6ab3a926ba799285ccf55f28cdfe6b0a48fb"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "83829d78d25c1dae137f8482623b02dea39a19ae115e006269b20185d2b1f94d"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "8fb72fd5ef18b278fa875a04b4adfc5288f617f97cb4bc39cbc35127638a00fa"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "c3a36ecb8fa9d8a9510fde84ddda08ac0d4657ad579d70ac54207ff95340f142"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "46d6ecb969fe59d0d2b3d1bdcf80bd861ef196aad7a1dd636bd8301d582045d1"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "2c9e95b21e2a03683764d9fb3a5bafd5fd807881f66eb12324a2a81040f8d4d9"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
+    }
+  ],
+  "localLinks": 3295,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

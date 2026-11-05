@@ -1,0 +1,38 @@
+{
+  "baseline": [
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n                  \u2193 (pos 7)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n                  \u2191 (pos 7)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n                  \u2193 (pos 7)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n                  \u2191 (pos 7)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n                  \u2193 (pos 7)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n                  \u2191 (pos 7)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n                  \u2193 (pos 7)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n                  \u2191 (pos 7)"
+    }
+  ],
+  "candidate": [
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.34.1+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.34.1+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.34.1+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+    },
+    {
+      "test": "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)",
+      "message": "Assert.Equal() Failure: Strings differ\r\n             \u2193 (pos 2)\r\nExpected: \"1.26.2+6a3372fc3b91e733b71a426cf40f26feaa\"\u00b7\u00b7\u00b7\r\nActual:   \"1.34.1+2e33d3b7c02eb20a1bfe757a73bb78ebb0\"\u00b7\u00b7\u00b7\r\n             \u2191 (pos 2)"
+    }
+  ]
+}

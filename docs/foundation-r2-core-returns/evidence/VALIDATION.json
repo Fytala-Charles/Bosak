@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "returnId": "O2-Core",
+      "formatAndDraftBindingValid": true,
+      "scope": "Core design disposition; not runtime/C45/freeze acceptance"
+    },
+    {
+      "returnId": "O4-Core",
+      "formatAndDraftBindingValid": true,
+      "scope": "Core design disposition; not runtime/C45/freeze acceptance"
+    }
+  ],
+  "productionChanged": false,
+  "r2Complete": false,
+  "externalRoleReturnsPending": 5
+}

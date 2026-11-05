@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "691183c2eb3ee46668509fd0086b508491d2eac3",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-lifecycle-review/README.md",
+  "reviewedDossiers": [
+    "braid-facade-lifecycle-contract",
+    "braid-lifecycle-proof"
+  ],
+  "productionChanged": false,
+  "actualProductIntegration": false
+}

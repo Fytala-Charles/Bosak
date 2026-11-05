@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-29",
+  "actualRuntimeControlsPassed": 34,
+  "independentWorkerExchanges": 9,
+  "realOperations": [
+    "XSLT",
+    "XQuery"
+  ],
+  "engineMembersAfterXslt": 8,
+  "engineMembersAfterDeferredXQuery": 9,
+  "approvedByteSnapshots": true,
+  "controlledPostcheckReplacementBoundApprovedBytes": true,
+  "actualBraidIntegration": false,
+  "productPinChanged": false,
+  "coreApiChanged": false,
+  "productionChanged": false,
+  "next": "review checkpoint then consumer-owned boundary/type-identity integration design",
+  "uncommitted": true
+}

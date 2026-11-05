@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — Boolean options and component precedence</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited URI options; query precedence gap**. C02-F04: empty structured query map falls back to raw query; unsupported string Booleans remain a type-validation limit. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **URI option policy — Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri) and [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri).
@@ -65,6 +67,8 @@ A nonempty query map overrides raw query. **Observed draft gap:** an empty map i
 UNC construction uses a literal `:////` prefix after `file`. The tested leading path slash therefore yields `file://///server/share`; this is verified spelling, not a claim of canonical file-URI representation. Password-free userinfo with an empty password (`demo:`) is retained.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Boolean deprecated/default-port/UNC policies; Structured versus raw authority/path/query precedence; Nonmap option and malformed authority errors. **Boundaries:** String false currently enables a Boolean option; empty query map currently falls back to raw query. Raw-authority bypass itself is draft-defined. Follow-up groups: F01, F04. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 See [FunctionLibrary](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs): `UriBooleanOption`, `ParseUri` and `BuildUri`. The empty-query-map branch and option truthiness are observed implementation limits. Public function conversion rejects non-map options with `XPTY0004`, including empty parse input; unmatched bracket authority raises `FOUR0001`. No engine changes are included here.
 

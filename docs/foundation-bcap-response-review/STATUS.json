@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "requiredReturns": 7,
+  "submitted": 3,
+  "scopedDesignAccepts": 2,
+  "revise": 1,
+  "missing": [
+    "BCAP-O1-Schema",
+    "BCAP-O2-Schema",
+    "BCAP-O2-Core",
+    "BCAP-O4-Core"
+  ],
+  "decisions": {
+    "BCAP-O3-Braid": "AcceptWithScope",
+    "BCAP-O1-XmlDb": "AcceptWithScope",
+    "BCAP-O4-XmlDb": "Revise"
+  },
+  "bcap01Design": "AcceptedByBraidWithinBoundedScope",
+  "bcap01Implementation": "Pending public R3 implementation; no native adoption",
+  "xdbLife01": "Revise; native cleanup/fault-profile evidence pending",
+  "r2Closed": false,
+  "apiFrozen": false,
+  "humanSignaturesAuthenticated": false,
+  "nativeConsumersQualified": false,
+  "productionChanged": false,
+  "nextCoreTask": "Complete BCAP-O2-Core carry-forward and BCAP-O4-Core outcome review; reconcile Schema full returns and XmlDb native revision separately"
+}

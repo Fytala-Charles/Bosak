@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-29",
+  "braidHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "coreHead": "2e33d3b7c02eb20a1bfe757a73bb78ebb034c980",
+  "baselineEnginePin": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+  "braidInitialStatus": [],
+  "consumerArchiveSha256": "8b9b6d5ca836d817fbdd1c76928428a9f54fad9991cd791becf1ce4ba5451adf",
+  "baselineEngineArchiveSha256": "aaf36aef9f227379c9de796bd2d79a4bfebf5b0aae98b0f69c1f769787994520",
+  "scope": "Actual committed consumer source in two ignored workspaces; original pins and checkout unchanged"
+}

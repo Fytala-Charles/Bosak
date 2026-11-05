@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-01",
+  "version": "1.40.0",
+  "productionSourceApplied": true,
+  "unitTests": {
+    "passed": 24362,
+    "failed": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Parser.Tests": 202,
+      "Bosak.XPath.Runtime.Tests": 338,
+      "Bosak.XPath.Api.Tests": 489,
+      "Bosak.XPath.Standard.Tests": 13797,
+      "Bosak.XPath.Compiler.Tests": 66,
+      "Bosak.Xslt.Tests": 8234,
+      "Bosak.XQuery.Tests": 804,
+      "Bosak.XPath.Providers.Tests": 223,
+      "Bosak.XPath.Providers.Database.Tests": 47
+    }
+  },
+  "newRegressionCases": [
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.CloseDuringEntry",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.PreCanceledEntry",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.PartialEntryRollsBack",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidMembershipDoesNotAcquire(kind: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.OrderedExactlyOnceCompletion",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.RevocationDoesNotCompleteLeases",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.ConcurrentCompletion",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.EmptySetStillChecksSession",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidBoundDoesNotAcquire",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.WorkFailureAlone",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.SingleCleanupFailure",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidMembershipDoesNotAcquire(kind: 2)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.NestedSets",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.WorkAndCleanupFailures",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.RollbackRetainsAllFailures",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.CancellationAfterAcquisition",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.CanceledWaitRetainsRawOwnership",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidMembershipDoesNotAcquire(kind: 1)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.MultipleCleanupFailures",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidMembershipDoesNotAcquire(kind: 3)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaOperationLeaseSetTests.InvalidMembershipDoesNotAcquire(kind: 4)",
+      "outcome": "Passed"
+    }
+  ],
+  "fnTransformControls": [
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Stylesheet_Params",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_DenyAll_RefusesStylesheetAcquisitionWithoutFallback",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_InheritsPolicy_AcquisitionsAuthorized",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Limits.SliceDExecutionControlTests.D_NestedTransformInheritsSharedOperationBudget",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Initial_Template",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_ResultDocumentTextContent_IsCaptured",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_MissingSource_RaisesFOXT0002",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_Basic_Transform",
+      "outcome": "Passed"
+    }
+  ],
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchanged": true,
+  "solutionRebuilt": true,
+  "publicDeclarationsUnchanged": true,
+  "assemblyMetadataCaptured": true,
+  "productArchiveSha256": "6b1f99da12a5f1b0f321edf3102327ad509503b56710067ece18046df5000734",
+  "published": false,
+  "publicFacadeImplemented": false,
+  "ownerAcceptance": "Pending",
+  "apiFreeze": false
+}

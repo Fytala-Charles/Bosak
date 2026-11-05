@@ -1,0 +1,7 @@
+{
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "adf7a91074f9c88b231998a1c48c214fe3a281fd",
+  "src/Directory.Build.props": "2d7840612e3c55ffc6dddaab465ea1614e8c2c06",
+  "tests/Bosak.XPath.Standard.Tests/DateFormattingOptionalTests.cs": "f223ea9488264f8ac6502273bece48a86f52e31c",
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "d2dec917564c8a84eee5bc9d9c58f0abaaea10f1",
+  "docs/xpath40-catalog/examples/cases.json": "aa26e08f5339072e1c8d388a4d50325c325c99e7"
+}

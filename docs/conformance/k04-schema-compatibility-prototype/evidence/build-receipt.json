@@ -1,0 +1,26 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\Prototype.csproj",
+    "-c",
+    "Release",
+    "--nologo"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 45,
+  "wallSeconds": 0.9398440999993909,
+  "sources": {
+    "Contracts.cs": "5071d49436cb2e5b5d6c48e829974c38ed84bfa10dc9f05548674c9e98df99db",
+    "Model.cs": "e3e938db8e625765599c0e6b777ca716a548296005fd36c634333b2b768e8c5a",
+    "Program.cs": "37ab1c303edb70a22580e5e4855dc4b4d823000110aa580ae184d5d97fc95af1",
+    "Contracts.csproj": "65c499de78d1992f1a3c00512cd416076d94f18fec37696eec354cba7b9ec76b",
+    "Prototype.csproj": "2947e8e1de07850c5d1d03665124f0949d9eb200c99f9f251dda2d36c3a3ed8b"
+  },
+  "binaries": {
+    "C44R2.Prototype.dll": "6f8388c247b84e2beef4aea12c7b6e89c9d22c10882ade94218c3f62b6f57d35",
+    "C44R2.SchemaContracts.dll": "ff899f0781ab9873f8fc3a9fe354821a3b2921995659572bf41f3a9cf1d88ced",
+    "Bosak.XPath.Core.dll": "e5329cc3f7cafb462c29eff9b500b9ed1a8564d40dd22b1b2ceb4676da39b6d8"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "root": "D:\\Development\\Bosak.Schema",
+  "head": "228c9bea101760bce480b1f011998f887217097c",
+  "workingTreeStatus": "?? assets/brand/\n?? assets/css/\n?? assets/icons-png/\n?? assets/icons/\n?? assets/images/\n?? assets/logos/\n?? docs/Bosak_Enterprise_Fabric_Architecture_Overview_Two_Page_v1.0.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.1.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.1.pdf\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.2.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.2.pdf",
+  "documents": [
+    {
+      "source": "docs/ADR-006-xsd11-engine-seam-compatibility.md",
+      "sha256": "61b304da73ccaefaca8af8ce2b565cf954fe2e7ef51e57448bbeb730b00929a7",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/ADR-006-xsd11-engine-seam-compatibility.md.txt"
+    },
+    {
+      "source": "docs/ADR-005-xsd11-compiled-model-and-validation.md",
+      "sha256": "0e99cb118a70ed6fc08ce228b9efb0d0a126f901c4b4a65a8e046838a6a55b5f",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/ADR-005-xsd11-compiled-model-and-validation.md.txt"
+    },
+    {
+      "source": "docs/XSD11_S4_DESIGN_PREP.md",
+      "sha256": "3d4cd7e32bb34090c65ee4a0862c95e6910d74ef17141684f877b08cb3736946",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/XSD11_S4_DESIGN_PREP.md.txt"
+    },
+    {
+      "source": "docs/XSD11_GAP_MATRIX.md",
+      "sha256": "af8087ef6a8f00e0be97833a096016912d3ea1892e5a8de78b3547f7039ecf16",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/XSD11_GAP_MATRIX.md.txt"
+    },
+    {
+      "source": "docs/XSD11_SOURCE_AUDIT.md",
+      "sha256": "c4ab0cdc90a084089f9d6d935da21c9231bf59c69285c37cf100dae774a319a6",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/XSD11_SOURCE_AUDIT.md.txt"
+    },
+    {
+      "source": "docs/SEAM_DESIGN.md",
+      "sha256": "f2f2bebcd94592ff1ea5620d039398800a3d672b3cb3b988c294c13867831174",
+      "snapshot": "docs/conformance/k04-schema-advisor-proposal/evidence/schema-context/SEAM_DESIGN.md.txt"
+    }
+  ],
+  "sourceSha256": {
+    "src/Bosak.Schema/ActivatedLicense.cs": "b1644de9de17a450fb63bde389290ba338d243793c9e4afe90b5993b345b7cb1",
+    "src/Bosak.Schema/AssemblyInfo.cs": "829b1e76e990c3c286ef42e1a3651ba66618e5ef74978d712c8b3e1bb1afd4d8",
+    "src/Bosak.Schema/License.cs": "39347df4264706949a2abda2ab32d9e715a90ac32acae3a5349d03b3af2f9490",
+    "src/Bosak.Schema/LicenseGate.cs": "2ad32186e4eaa96118623b9430a80d6379eae724438ddb6958ce47e43329c88d",
+    "src/Bosak.Schema/LicenseKey.cs": "d9f3218e6aed75bb59add381acda66318fcaf021e070b728233ea32e80d159b7",
+    "src/Bosak.Schema/LicenseKeyIssuer.cs": "974927778083d4ea5741e88b5628474b40fdd4f3c07a28d347978077d42b69a8",
+    "src/Bosak.Schema/LicenseTier.cs": "c7a39f007e4a90773cbcdb55c56a9b333eec848f007cbfe049b089a6b5d66463",
+    "src/Bosak.Schema/LicenseValidationException.cs": "fb904e59d99ea961c8247cbbc270c815277d93fdc63a302df7d5240ace3dda62",
+    "src/Bosak.Schema/SchemaAwareXslt.cs": "51da6c35357eeba67b0b3a4ed0a12af28fbafaf4886910d64b76c8ae06ea3acc",
+    "src/Bosak.Schema/SchemaServices.cs": "ecf565da87d5ef06bb0f0f95d26335784a88d29b8a8e845a971b84d5bb589a00",
+    "src/Bosak.Schema/Compilation/SchemaCompileOptions.cs": "bccaa3061053bc14580c304b01f06c930445999820ab307bb0447bcea7cb874c",
+    "src/Bosak.Schema/Compilation/SchemaCompiler.cs": "9e32d52d41484e13c1ded8eea6b6f190f59cfdbbc69115aa1c3e434f53ed7434",
+    "src/Bosak.Schema/Compilation/SchemaResolution.cs": "226d84629524c636128958fe775743ca852fa0f5682775e83dab621db35e7067",
+    "src/Bosak.Schema/Model/AssertionDefinition.cs": "9e728bb70279f350ebd299cca14b8e4a916f256c8217641c4bc7f7a91aa39477",
+    "src/Bosak.Schema/Model/CompiledSchema.cs": "273aee5a8b9bdebf68e52462996951f6c87ac563d0f921eaa7735fa795982235",
+    "src/Bosak.Schema/Model/DefaultAttributesDefinition.cs": "2e3ecd5ecf38aab59c25dcf4518f118d7849197eb538442505686a2cf73c05b8",
+    "src/Bosak.Schema/Model/ElementDeclaration.cs": "83b60b518b4ee033ce5092623bd19a6edc355708ac0b7d102ff665c4b83fb150",
+    "src/Bosak.Schema/Model/OpenContentDefinition.cs": "75b0c99777226d30a6a694cf32c1624b82ed28c8714268fcb033b836076603ef",
+    "src/Bosak.Schema/Model/SchemaDiagnostic.cs": "3e5f9863850e98c22f71cf7e69d9a7ea590a75bc7f9b0f6dd60365f8068b53be",
+    "src/Bosak.Schema/Model/SimpleTypeDeclaration.cs": "774f8f9cb21b64252d28c46b0d094b32c0c804afd05dbb1077a86351d4c2a4a8",
+    "src/Bosak.Schema/Model/XsdLanguageVersion.cs": "dd4a5ffd4fb06a7e2ab7b3393a0d1264aad9dbd90b3da358c81cafcb9dc77911",
+    "src/Bosak.Schema/Validation/SchemaValidationResult.cs": "c96779ef8fe5bd296582be646c19c2737c05fc41544316eae378e3f6c7cd163a",
+    "src/Bosak.Schema/Validation/XsdValidationService.cs": "2ce71480ca20e6b0541505f2cd321cb5f9cadcfebad3a44bcf46f56feaec8a04",
+    "src/Bosak.Schema/Bosak.Schema.csproj": "3145d906466fb2cbb4c00718710ed1cc5afbaf314865f06260b67f2bcf20f646"
+  },
+  "disposition": "Read-only content identities; commercial source is not copied or executed, activation is not attempted, no sibling write."
+}

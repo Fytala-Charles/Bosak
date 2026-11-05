@@ -29,6 +29,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 21-09-2026     | API freeze stage D: StreamCompleted is an event; EnableReplay -> TryEnableReplay         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 30-10-2026     | 1.34.2: Dispose owned reader on callback failure; retain dual errors                   |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using System.Xml;
@@ -574,9 +576,33 @@ FoundRoot:
     private void FinishPump()
     {
         _pumpState = PumpState.Done;
-        StreamCompleted?.Invoke();
-        if (_ownsReader)
-            _reader.Dispose();
+        Exception? completionFailure = null;
+        try
+        {
+            StreamCompleted?.Invoke();
+        }
+        catch (Exception error)
+        {
+            completionFailure = error;
+            throw;
+        }
+        finally
+        {
+            if (_ownsReader)
+            {
+                try
+                {
+                    _reader.Dispose();
+                }
+                catch (Exception disposalFailure) when (completionFailure is not null)
+                {
+                    // Keep both original faults instead of replacing the callback failure.
+                    throw new AggregateException(
+                        "Stream completion and owned-reader disposal both failed.",
+                        completionFailure, disposalFailure);
+                }
+            }
+        }
     }
 
     /// <summary>

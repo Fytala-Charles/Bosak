@@ -1,0 +1,1 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:c27:union-left"><xs:simpleType name="choice"><xs:union memberTypes="xs:decimal xs:string"/></xs:simpleType></xs:schema>

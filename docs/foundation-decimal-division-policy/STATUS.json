@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04",
+  "sourceVersion": "1.50.0",
+  "policy": "ExactTerminatingDecimalDivision",
+  "corePolicySelected": true,
+  "roundingFallback": false,
+  "proposedProfile": "bosak-exact-division-v4",
+  "productionImplemented": false,
+  "referenceExperimentPassed": true,
+  "runtimeTestsRerun": false,
+  "fullDecimalDivisionQualified": false,
+  "publicApiChanged": false,
+  "ownerAcceptance": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "nextStep": "Implement and qualify exact terminating div from IMPLEMENTATION.md; wider decimal rounding/error policy and schema/all-host/native acceptance remain pending."
+}

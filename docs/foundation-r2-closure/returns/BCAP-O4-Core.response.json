@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O4-Core",
+  "packet": "BCAP-O4",
+  "owner": "Core",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+  "signer": "Codex - Core engineering scoped design review requested by repository owner; not an independently authenticated human signature",
+  "date": "2026-11-02",
+  "profile": "Exact 47-type/651-row design disposition only. Unchanged shipping Core 1.42.0; private prototype evidence is not the public SDK. No other owner/native/budget/C45/freeze/publication acceptance.",
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": "Resources are acquired/owned by host/provider before synchronous admission. Borrowing CaptureTransform requires an exact same-executable/session operation and keeps raw evaluation/serialization inside it. Owning RunCaptureTransform admits the complete immutable snapshot set, serializes, then attempts every admission release once before publishing the final outcome; one lease per unique admission, empty membership only for source-free inputs without other nodes. Admission release is not automatic disposal of coordinator/store/borrowed advisor or proof of native physical release. The private schema kernel is not the implemented public ordinary-XML admission route: R3 must supply neutral input with absent assessment, without a fabricated issuer or concrete Schema/XmlDb dependency."
+    },
+    {
+      "id": "O4-Q2",
+      "answer": "Accept the exact candidate's separate AdmissionError, WorkError, ExecutionErrors and reverse-acquisition CleanupErrors, retaining completed capture when cleanup fails. Admission rollback remains in its original admission diagnostic. Preserve original observed exception objects, reference deduplication and provider AggregateException boundaries; do not flatten or retry. Overall IsSuccess requires successful capture and no error in any channel; Partial/Cancelled remain unsuccessful. The isolated prototype exercises serializer originals, raw work errors and multiple release callbacks on actual Core leases, with full regression/conformance receipts. It cannot recover a failure masked before a provider returns it. XmlDb's current native masking/fault-latch/release uncertainty remains Revise and requires owner fix/failure evidence. No further Core disposal/acquisition signature is demonstrated."
+    },
+    {
+      "id": "O4-Q3",
+      "answer": "Accept exact-source membership before getters, separate match/global/focus inputs, copied invocation/options precedence and qualified sequential borrowed-gate composition retaining both budgets/deadlines/tokens. Default data-only capture refuses gates; opt-in capture preserves the engine-owned gate. Arbitrary authority replacement, unsupported services, concurrent/reentrant gate reuse and raw-result capture refuse. Cancelled waits do not end raw tasks or drain, and source close revokes new work while admitted resources remain retained. Serialized outputs are detached managed data, but legacy Bytes arrays/properties require consumer copies; original exception graphs are local, mutable/sensitive diagnostics and never safe automatic IPC. No universal node/enumerator disposal guarantee or required Dispose member is added."
+    },
+    {
+      "id": "O4-Q4",
+      "answer": "The 47-type proposal, 651 rows, both capture entries and final result shape represent the bounded need without an additional required Core signature. Core accepts this design with scope, not throwing public declarations as a shipping SDK. R3 must implement exact invocation/limit validation, neutral admission and outcome semantics with preserved legacy APIs. Full private qualification (83 controls twice, 24390 units, exact QT3/qt4, public shipping metadata/friends unchanged) and bounded cost/cancellation observations are immutable evidence for that private profile only. Native provider thread handoff/reentry/concurrent-close, unchanged-store/binary consumers and owner PF budgets remain R4. Schema O1/O2 and XmlDb O4 revisions remain open; no C45/freeze/pin/publication acceptance."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/PROPOSAL-MANIFEST.json",
+      "sha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/evidence/DECLARATION-DELTA.json",
+      "sha256": "55e776c3be9a0a0b74f773013f7e8b0830b70e205052322736b784388e170a6c"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/QueryFacade.cs.txt",
+      "sha256": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/ExactNumeric.cs.txt",
+      "sha256": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt",
+      "sha256": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+      "sha256": "9ea447ed168687144284c7f628c145956f693f7a1cd6ce95f9d60736e352a922"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "sha256": "134470bafa2f13b4084c1885dee2718c1549d31452d66e3728969a4ba37184ff"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-schema-response-review/STATUS.json",
+      "sha256": "dc423f956fe07cd6989cebe4fe73b1ad835fdbec240381a7dd9ba95efaf550bf"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O4-Core",
+  "reviewMode": "CaptureOutcomeDeltaReview",
+  "deltaApplicability": "R01/R02: capture/outcome entries and serialized data do not change numeric/typed authority; no public body is implemented. R03: separate original local errors and ordered cleanup preserve failed/partial/cancelled status. R04: caller-supplied finite limits, invalid default struct and no implicit budget are intentional; immutable invocation selectors, copied/refused options and qualified sequential gate composition apply. MaxMessages is count-only, not a message-byte or memory sandbox. R05: exact admission/raw lifetime remains through serialization and cleanup attempts. R06: local exception identity is not detachment or authority. R07: observed costs/checkpoint cancellation are not native workload budgets or worst-case expression interruption. R08: scoped Core design acceptance only; Schema/XmlDb revisions and R2/R3/R4/C45/freeze remain separate.",
+  "originalExceptionGraphDisposition": "Original Exception/Data/InnerException graphs remain local diagnostics. Preserve exact objects, reference-deduplicated observations and provider aggregate boundaries without traversing arbitrary provider payloads, revoked nodes or ToString for transport. Retaining an exception confers no renewed authority or physical release proof. Export requires a bounded allowlisted primitive projection with credential/path redaction; do not serialize raw graphs or assume mutable exception state is thread-safe/immutable. Unknown projection payloads refuse/are withheld, never convert failure to success. No generic recursive sanitizer or additional Core transport signature is selected.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "48ec1cb1f07470c8bf7f7a7366e7350b52fd80954cf88eb9b27f246c757bac26"
+}

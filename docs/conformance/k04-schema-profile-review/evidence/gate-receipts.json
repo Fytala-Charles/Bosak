@@ -1,0 +1,27 @@
+[
+  {
+    "name": "qt3-normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 66.70312219997868,
+    "log": "qt3-normal.log"
+  },
+  {
+    "name": "qt4-normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 18.642286899965256,
+    "log": "qt4-normal.log"
+  }
+]

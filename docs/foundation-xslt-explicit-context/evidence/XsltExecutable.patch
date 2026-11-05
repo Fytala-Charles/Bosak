@@ -1,0 +1,24 @@
+--- a/src/Bosak.Xslt/Api/XsltExecutable.cs
++++ b/src/Bosak.Xslt/Api/XsltExecutable.cs
+@@ -1,3 +1,4 @@
++// Generated isolated context-policy candidate; original license/history retained below.
+ // ===========================================================================================================================================================
+ // AUTHOR               : Charles Korthout
+ // CREATE DATE          : 25 mei 2026
+@@ -106,6 +107,16 @@
+     /// during the last transformation, if any.
+     /// </summary>
+     internal Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
++
++    // Isolated opt-in bridge: null global input means absent, never source fallback.
++    internal XdmValue TransformWithExplicitContext(IXdmNode? matchInput, IXdmNode? globalInput, string? initialTemplate, EvaluationContext? context)
++    {
++        if (matchInput != null && matchInput.NodeKind != XdmNodeKind.Document)
++            throw new NotSupportedException("This isolated bridge admits only document-root initial match inputs.");
++        return RunWithStack(() => new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError)
++            .TransformCore(matchInput, initialTemplate, null, true, null, null, true, true, globalInput, false), DefaultTransformStackSize);
++    }
++
+ 
+     /// <summary>
+     /// Default stack size (bytes) allocated for the transformation thread.  A larger

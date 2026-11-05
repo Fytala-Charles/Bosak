@@ -1,0 +1,109 @@
+{
+  "passed": 25,
+  "failed": 0,
+  "size": 48,
+  "hasAddition": false,
+  "tests": [
+    {
+      "name": "plain 0",
+      "passed": true
+    },
+    {
+      "name": "copy 0",
+      "passed": true
+    },
+    {
+      "name": "array 0",
+      "passed": true
+    },
+    {
+      "name": "boxed 0",
+      "passed": true
+    },
+    {
+      "name": "generic 0",
+      "passed": true
+    },
+    {
+      "name": "plain 1",
+      "passed": true
+    },
+    {
+      "name": "copy 1",
+      "passed": true
+    },
+    {
+      "name": "array 1",
+      "passed": true
+    },
+    {
+      "name": "boxed 1",
+      "passed": true
+    },
+    {
+      "name": "generic 1",
+      "passed": true
+    },
+    {
+      "name": "plain 2",
+      "passed": true
+    },
+    {
+      "name": "copy 2",
+      "passed": true
+    },
+    {
+      "name": "array 2",
+      "passed": true
+    },
+    {
+      "name": "boxed 2",
+      "passed": true
+    },
+    {
+      "name": "generic 2",
+      "passed": true
+    },
+    {
+      "name": "plain 3",
+      "passed": true
+    },
+    {
+      "name": "copy 3",
+      "passed": true
+    },
+    {
+      "name": "array 3",
+      "passed": true
+    },
+    {
+      "name": "boxed 3",
+      "passed": true
+    },
+    {
+      "name": "generic 3",
+      "passed": true
+    },
+    {
+      "name": "plain 4",
+      "passed": true
+    },
+    {
+      "name": "copy 4",
+      "passed": true
+    },
+    {
+      "name": "array 4",
+      "passed": true
+    },
+    {
+      "name": "boxed 4",
+      "passed": true
+    },
+    {
+      "name": "generic 4",
+      "passed": true
+    }
+  ],
+  "scope": "Synthetic same-assembly-identity carrier only; no Bosak product DLL replacement or production ABI claim."
+}

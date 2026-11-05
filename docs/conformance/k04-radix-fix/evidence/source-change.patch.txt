@@ -1,0 +1,143 @@
+diff --git a/src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs b/src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs
+index 68d9be51..9e9231a7 100644
+--- a/src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs
++++ b/src/Bosak.XPath.Standard/Functions/FormatIntegerEngine.cs
+@@ -25,6 +25,7 @@
+ //                      | Charles Korthout | 0.11  | 21-09-2026     | API freeze stage C: internalized type                                                   |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.12  | 27-10-2026     | Correct cardinal variation parsing and bounded German named ordinal endings (1.26.12). |
++//                      | Charles Korthout | 0.13  | 27-10-2026     | Add bounded XPath4 radix pictures and original-value ordinals (candidate 1.27.0).       |
+ // ===========================================================================================================================================================
+ 
+ using System.Globalization;
+@@ -82,7 +83,14 @@ internal static class FormatIntegerEngine
+         // 3. Format based on primary token
+         BigInteger absValue = BigInteger.Abs(value);
+         string result;
+-        if (TryFormatNamedToken(absValue, primaryToken, language, out result))
++        int radix = 0;
++        string radixPattern = string.Empty;
++        bool isRadix = ctx.IsXPath40 && TryParseRadix(primaryToken, out radix, out radixPattern);
++        if (isRadix)
++        {
++            result = FormatRadixPattern(absValue, radixPattern, radix);
++        }
++        else if (TryFormatNamedToken(absValue, primaryToken, language, out result))
+         {
+             // Named token handled
+         }
+@@ -109,11 +117,20 @@ internal static class FormatIntegerEngine
+         // 4. Apply ordinal transformation
+         if (ordinal)
+         {
+-            result = ToOrdinal(result, absValue, ordinalSuffix, language);
++            if (isRadix)
++            {
++                // Radix digits (including letters) are numeric; suffixes use the original value.
++                result += !string.IsNullOrEmpty(ordinalSuffix)
++                    && !ordinalSuffix.StartsWith('%') && !ordinalSuffix.StartsWith('-')
++                    ? ordinalSuffix
++                    : GetEnglishOrdinalSuffix((long)(absValue % 100));
++            }
++            else
++                result = ToOrdinal(result, absValue, ordinalSuffix, language);
+         }
+ 
+         // 5. Apply title case
+-        if (titleCase)
++        if (titleCase && !isRadix)
+         {
+             result = ToTitleCase(result);
+         }
+@@ -127,6 +144,78 @@ internal static class FormatIntegerEngine
+         return result;
+     }
+ 
++    private static bool TryParseRadix(string token, out int radix, out string pattern)
++    {
++        radix = 0;
++        pattern = string.Empty;
++        int caret = token.IndexOf('^');
++        if (caret is < 1 or > 2 || token[0] == '0')
++            return false;
++        for (int i = 0; i < caret; i++)
++            if (token[i] is < '0' or > '9')
++                return false;
++        if (!int.TryParse(token.AsSpan(0, caret), NumberStyles.None, CultureInfo.InvariantCulture, out radix)
++            || radix is < 2 or > 36)
++            return false;
++        var tail = token.AsSpan(caret + 1);
++        if (tail.IndexOfAny('x', 'X') < 0)
++            return false; // Without x/X, caret retains its decimal-grouping interpretation.
++        pattern = token.Substring(caret + 1);
++        return true;
++    }
++
++    private static string FormatRadixPattern(BigInteger magnitude, string pattern, int radix)
++    {
++        var codepoints = GetCodepoints(pattern).ToList();
++        var separators = new List<(int Position, int Codepoint)>();
++        int totalDigits = 0;
++        int mandatoryDigits = 0;
++        bool sawOptional = false;
++        int mandatorySign = 0;
++        for (int i = codepoints.Count - 1; i >= 0; i--)
++        {
++            int cp = codepoints[i];
++            if (cp == '#')
++            {
++                sawOptional = true;
++                totalDigits++;
++            }
++            else if (cp is 'x' or 'X')
++            {
++                if (sawOptional || (mandatorySign != 0 && mandatorySign != cp))
++                    throw new InvalidOperationException("FODF1310");
++                mandatorySign = cp;
++                mandatoryDigits++;
++                totalDigits++;
++            }
++            else if (IsGroupingSeparator(cp))
++            {
++                if (i == 0 || i == codepoints.Count - 1
++                    || (codepoints[i - 1] != '#' && IsGroupingSeparator(codepoints[i - 1])))
++                    throw new InvalidOperationException("FODF1310");
++                separators.Add((totalDigits, cp));
++            }
++            else
++                throw new InvalidOperationException("FODF1310");
++        }
++        if (mandatoryDigits == 0)
++            throw new InvalidOperationException("FODF1310");
++
++        string alphabet = mandatorySign == 'X'
++            ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
++            : "0123456789abcdefghijklmnopqrstuvwxyz";
++        var reversed = new StringBuilder();
++        do
++        {
++            magnitude = BigInteger.DivRem(magnitude, radix, out var remainder);
++            reversed.Append(alphabet[(int)remainder]);
++        } while (magnitude > 0);
++        char[] digits = reversed.ToString().ToCharArray();
++        Array.Reverse(digits);
++        string padded = new string(digits).PadLeft(mandatoryDigits, '0');
++        return InsertGroupingSeparators(padded, BuildGroupingTemplate(separators, totalDigits));
++    }
++
+     private static bool HasMandatoryDigits(string token)
+     {
+         foreach (int cp in GetCodepoints(token))
+diff --git a/src/Directory.Build.props b/src/Directory.Build.props
+index ec310783..17f4f591 100644
+--- a/src/Directory.Build.props
++++ b/src/Directory.Build.props
+@@ -3,7 +3,7 @@
+   <PropertyGroup>
+     <IsPackable>true</IsPackable>
+     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+-    <Version>1.26.12</Version>
++    <Version>1.27.0</Version>
+     <Authors>Fytala</Authors>
+     <Company>Fytala</Company>
+     <Copyright>Copyright (c) 2026 FYTALA</Copyright>

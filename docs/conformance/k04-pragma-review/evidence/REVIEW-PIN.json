@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C36",
+  "kind": "Read-only remaining skips and pragma boundary review",
+  "sourceBase": "1b5554b6b18e381e02cc4544db00bc233becbfdd",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "3.22 Extension Expressions",
+      "A.1 EBNF: ValueExpr / ExtensionExpr / Pragma / PragmaContents"
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "scope": [
+    "Complete QT3 inventory and classification of every retained normal skip",
+    "Isolate pragma guard only; retain all independent dependency and runner rules",
+    "Preserve original assertions and failures; no semantic implementation or admission"
+  ],
+  "limits": [
+    "No engine, normal routing, fixture, baseline, version or release change",
+    "No schema backend or ADR-006/REQ-139 acceptance"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-30",
+  "sourceRevision": "4427cde54ef1981086455a959e7abf9bfa26e3d6",
+  "candidateVersion": "1.34.1",
+  "classification": "Existing behavior inspection and bounded memory-only observations; no new normative semantic adoption",
+  "files": [
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+      "sha256": "ecd3ad5db439462533537b81a5d3673249c47a6cf0c6edae8c260ff20088c8fb"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "sha256": "5c7b06d6898c9a626bcc9474d9c8fb4cc9c7961f3a1190ca164f4a3b019f2791"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/ISinglePassSequence.cs",
+      "sha256": "61bc4ea97202853e71415c308c8e6b218e6e8a2c2611d47c2e6ad6e81f81b1d9"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmSequence.cs",
+      "sha256": "e81a3ff7fad9edfc71d916d2db58523bc982f8eec5c05b12cbb2e9d7f66c792d"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/EnumerableXdmSequence.cs",
+      "sha256": "bd66be7f647afa66b9843a5e5d717aea1fd3d05f573a00d315e88f4f5a5fa447"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "sha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmMap.cs",
+      "sha256": "52fa2b45504a427bb52e0770483c28ab558b703fd3883932567700eaf0f052a4"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmArray.cs",
+      "sha256": "2585a8ba8d3c15b91a34751c2671b6a0caaec97cf2931490c451a0c0dc59b244"
+    },
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/FunctionItem.cs",
+      "sha256": "1781231392722a056ac1c8ecfbb8ddb5288b54ba8dc59960e012f7d91104aaa8"
+    },
+    {
+      "path": "src/Bosak.XPath.Api/XPath31Expression.cs",
+      "sha256": "3214a568d94f1d87e2af4f92a3b550dc2ab8a68120054b7febd65122543abc41"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/SinglePassXdmSequence.cs",
+      "sha256": "af08e6c5bdf869c3ff12a2f6d0ff965aaa7c840438e730b06e770096d3bc4df9"
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSinglePassSequence.cs",
+      "sha256": "2b7c27f5655eae2fb2325cdc317d1273eaa4f1218a3a170ea7781de79c6d95c2"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSource.cs",
+      "sha256": "8da2b5e75cc58415a443e163c80b4bf782a8e4a869a0b519e953bca1d3519b57"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/XmlStreamingProvider.cs",
+      "sha256": "1e52582d2b16228e368379c2ccc73dd1839a8d12e304b2a41489e99dba542996"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/IStreamingDocument.cs",
+      "sha256": "2435a3896e28ad25137f8004a249f39ac6b227b2be28215d28efaf214d56bb19"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingLoadOptions.cs",
+      "sha256": "fbd8de4b78b12c97fa4a2c487bc28b4f58c55d37e13c4a46c067de3dbcec8cbd"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs",
+      "sha256": "293e5202d6caa6620e2a573ef1776b0663d7e6c294c91a963ea145f3014c6b13"
+    }
+  ]
+}

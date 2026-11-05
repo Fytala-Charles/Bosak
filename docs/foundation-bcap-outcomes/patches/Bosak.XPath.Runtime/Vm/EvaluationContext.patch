@@ -1,0 +1,38 @@
+--- a/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs
++++ b/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs
+@@ -129,6 +129,8 @@
+ //                      | Charles Korthout | 2.49  | 28-10-2026     | Add internal semantic-focus resolution and per-variable lazy-cache invalidation for XQuery. |
+ //                      | Charles Korthout | 2.50  | 01-11-2026     | Add nonreflective bounded private input capture. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 2.51 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
++//                      | Charles Korthout | 2.52 | 01-11-2026 | Isolated capture and cleanup outcome preservation. |
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Xdm;
+ using Bosak.XPath.Runtime.Functions;
+@@ -347,6 +349,8 @@
+ 
+     /// <summary>Captures the bounded data-only profile; services and populated execution state refuse.</summary>
+     internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null)
++        => CaptureSchemaInputs(ownsNode, maxBindings, maxNamespaces, snapshot, false);
++    internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot, bool allowExecutionGate)
+     {
+         ArgumentNullException.ThrowIfNull(ownsNode);
+         if (maxBindings <= 0) throw new ArgumentOutOfRangeException(nameof(maxBindings));
+@@ -361,7 +365,7 @@
+             || CurrentOutputUri is not null || IsStaticEvaluation || IsXPath40 || IsXPath40Experimental || IsXsltMode
+             || NamedRecordCoercion is not null || !EmptyOrdinal(NamedRecordTypes) || !EmptyOrdinal(BindingItemTypes)
+             || InStreamingMapContext || InStreamedPipeline || Xml11Mode || RegexGroups is not null || ResourcePolicy is not null
+-            || ExecutionGate is not null || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
++            || (!allowExecutionGate && ExecutionGate is not null) || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
+             || CollectionLoader is not null || Collections.Count != 0 || CollectionValues.Count != 0 || XQueryModuleSources.Count != 0
+             || XQueryModuleLoader is not null || DocumentPostProcessor is not null || ConstructedElementProcessor is not null
+             || ConstructedDocumentProcessor is not null || DocumentLoadPolicy is not null || BackwardsCompatible || XsltVersion is not null
+@@ -387,7 +391,7 @@
+                 throw new NotSupportedException("Only direct scalar or admitted node bindings are supported.");
+         }
+         return new SchemaOperationInputs(_contextItem, _contextPosition, _contextSize, _variables.ToArray(), _namespaces.ToArray(),
+-            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot);
++            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot, allowExecutionGate ? ExecutionGate : null);
+ 
+         static bool EmptyOrdinal<T>(IReadOnlyDictionary<string, T> values)
+             => values is Dictionary<string, T> dictionary && values.GetType() == typeof(Dictionary<string, T>) && dictionary.Count == 0

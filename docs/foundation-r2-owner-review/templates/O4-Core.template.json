@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O4-Core",
+  "packet": "O4",
+  "owner": "Core",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "NotSubmitted",
+  "decision": null,
+  "sourceRevision": null,
+  "signer": null,
+  "date": null,
+  "profile": null,
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": null
+    },
+    {
+      "id": "O4-Q2",
+      "answer": null
+    },
+    {
+      "id": "O4-Q3",
+      "answer": null
+    },
+    {
+      "id": "O4-Q4",
+      "answer": null
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": null,
+  "evidence": null,
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

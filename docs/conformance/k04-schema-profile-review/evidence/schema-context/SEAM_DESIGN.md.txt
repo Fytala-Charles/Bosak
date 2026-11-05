@@ -1,0 +1,159 @@
+# Bosak.Schema — Seam Design Contract
+
+This document defines the architectural contract between the open-source Bosak core
+(`Fytala-Charles/Bosak`) and this commercial add-on, and records the results of the
+seam audit (§3) that maps the schema-gated conformance surface onto the core's public
+API. It is a design contract, not an implementation plan.
+
+## Positioning
+
+Bosak.Schema is a **plug-in, not a fork**. It ships as a separate NuGet package that
+references the frozen `Bosak.XPath.*` public API. The core engine never references,
+loads, or knows about this package. All schema-awareness behavior is added by
+extending public seams that already exist in the core.
+
+## The Seam
+
+The seam is the set of public extension points in the Bosak core API.
+
+**Existing public hooks (frozen, usable today):**
+
+- `EvaluationContext.SchemaResolver` + `SchemaSet` + `GetSchemaElement` /
+  `GetSchemaAttribute` / `GetSchemaType` — schema supply and lookup. Consumed today
+  by the **XQuery** path (`import schema` prolog → `XmlSchemaSet` → user-defined
+  simple-type constructors, kind tests, `validate{}`). Reachable from a plug-in via
+  `XQueryContext.WithSchemaResolver`, `XPath31Expression.Evaluate(EvaluationContext)`,
+  and `XsltExecutable.Transform(..., EvaluationContext)` (the consumer's context
+  instance is kept by the transform engine).
+- Public constructor hooks on `EvaluationContext` (`ElementConstructorHook`,
+  `DocumentConstructorHook`, `AttributeConstructorHook`, `DocumentPostProcessor`) —
+  interception of node construction.
+- `EvaluationContext.RegisterFunction` — host function registration.
+- PSVI-annotated input trees: `XDocumentProvider.LoadFile(path, baseUri, schemaSet)`
+  / `ValidateXDocument`, public `XDocumentNode.Wrap(XObject)` — the engine already
+  honors typed values from PSVI-annotated trees, including complex-with-simple-content.
+- `IXdmNode` exposes the full schema-annotation surface (`TypedValue`,
+  `HasNoTypedValue`, `IsComplexType`, `SchemaTypeAnnotation`,
+  `SchemaElementDeclaration`, `SchemaAttributeDeclaration`, `IsNilled`) — a plug-in
+  can implement or wrap nodes freely.
+- The standalone public validator `Bosak.XPath.Api/Xsd/XsdValidator` (not wired into
+  the engine).
+
+**The hard boundary (why new core hooks are required):**
+
+- `xsl:import-schema` is an **unconditional compile-time throw** (XTSE1650) inside
+  stylesheet static validation (`Stylesheet.cs` ~line 3142); adjacent hard rejections:
+  XTSE1660 for `validation="strict"` and `@type`. No public interception point exists
+  and `XsltCompiler` has no schema option, so a plug-in cannot make any stylesheet
+  containing `xsl:import-schema` compile — no matter what it registers at runtime.
+- `SchemaResolver` is consulted only on the XQuery path; the XSLT engine never builds
+  a `SchemaSet`, and no schema can be declared at stylesheet-compile time.
+- The `validate` opcode exists only on the XQuery grammar path; XSLT `validation` /
+  `type` attributes have no runtime path.
+- No public hook annotates *constructed* nodes with complex-type schema information
+  (construction hooks create raw nodes; PSVI annotation only arises from
+  `XDocument.Validate` paths).
+
+## Seam Audit Results — 2026-09-22
+
+**Test surface.** The W3C XSLT 3.0 conformance suite (in the Bosak repo under
+`tests/xslt30-test/`) carries **913 tests with a positive schema dependency**
+(`schema_aware` / `schema-import`): 204 in the `import-schema` test set plus 709
+scattered across 46 other sets (~215 of those are streaming-tagged). All are skipped
+today. The 26 schema failures visible in the sweep baseline are catalog defects
+(shared stylesheets containing `xsl:import-schema` in the si-fork / si-map /
+source-document sets) — they flip to passes automatically once schema-awareness
+lands. `json-to-xml-typed-010` is a documented spec contradiction and stays skipped.
+
+**Group mapping** (import-schema set groups G1–G6; scattered sets by name):
+
+| Group | Size | Capability required | Category |
+|-------|-----:|---------------------|----------|
+| G1 `xsl:import-schema` declaration mechanics | 32 | Parse import-schema (inline + schema-location), build schema component model, merge across import/include with precedence, expose in-scope schema to the static context. Reuses the existing XQuery-side schema machinery. | **(b)** hooks H1 + H2 |
+| G2 `instance of` / `cast` with user-defined types | 23 | Mostly existing REQ-070 simple-type machinery; needs schema names resolvable in stylesheet context (`xpath-default-namespace` on type names, `as`-attribute coercion). | **(b)** hook H2 |
+| G3 schema-element()/schema-attribute() patterns | 7 | Runtime type annotations on nodes + schema-type pattern priorities + `xsl:mode/@typed`. | **(b)** hooks H2 + H3 |
+| G4 typed values & node properties | 12 | **The core investment:** typed-value storage on XDM nodes (annotations, is-id/is-idref), `data()` returning typed sequences, complex-type typed values. | **(b)** hook H3 |
+| G5 validation modes (strip/preserve/lax/strict, default-validation) | 13 | Result-tree validation semantics once H3 exists; medium complexity. | **(b)** hooks H3 + H4 |
+| G6 validating constructors (complex content) | 133 | Full XSD validation integrated with node construction, emitting typed nodes + XTTE15xx errors. Largest bucket. | **(b)** hooks H3 + H4 |
+| Scattered non-streaming (`attr/as`, `attr/match`, `attr/validation`, `attr/strip-type-annotations`, `expr/nodetest`, `insn/*`, `type/*`, `fn/*`) | ~494 | Mix of G2–G6 mechanics; plus schema-aware `fn:evaluate` and static typing. | **(b)** H1–H4 |
+| Streaming-tagged sets (`strm/*`, `attr/streamable`) | ~215 | Typed annotations through the burst-mode streaming provider; validate-then-strip fast path may cover a subset. | **(b)** H3 (streaming-aware), phased last |
+
+**Required new core hooks** (category b — additions to the Bosak public API; each is
+freeze-compatible and justifiable for any integrator; see Hard Rules 3):
+
+- **H1 — Schema-aware compilation mode on `XsltCompiler`.** An opt-in flag (e.g.
+  `XsltCompiler.SchemaAware = true`, name TBD) that gates the XTSE1650 / XTSE1660
+  throws in stylesheet static validation. Without the flag, behavior is bit-identical
+  to today. The core stays license-agnostic: the flag only means "the host declares a
+  schema-aware processor". **This is the unblock-everything hook** — nothing
+  compiles without it.
+- **H2 — Stylesheet-time schema resolution.** `XsltCompiler` gains a schema source
+  hook (resolver callback and/or pre-built `XmlSchemaSet`); `xsl:import-schema`
+  declarations compile into a merged schema set (import-precedence rules) that is
+  part of the compiled stylesheet and flows into the transform's `EvaluationContext`.
+- **H3 — Typed construction / annotation API.** A public way for host code invoked
+  through the constructor hooks to produce nodes carrying complex-type schema
+  annotations (validated construction), so G4–G6 and pattern matching can work.
+  **Design accepted 2026-09-22: [`ADR-001`](./ADR-001-h3-typed-construction-api.md)** —
+  `XdmSchemaAnnotator` (in-place PSVI annotation of constructed subtrees) plus
+  null-conditional `ConstructedElementProcessor` / `ConstructedDocumentProcessor`
+  consulted at XSLT construction finalize points.
+- **H4 — Public validation service for XSLT `validation` / `type` attributes.**
+  Generalize the existing validate machinery (today XQuery-grammar-only) into a
+  public service the add-on can drive; or accept these attributes at compile time in
+  schema-aware mode and route them to the same machinery.
+  **Design accepted 2026-09-22: [`ADR-002`](./ADR-002-h4-validation-service.md)** —
+  `XdmValidationMode`/`XdmValidationOptions` + `Validate`/`ValidateAttribute` on
+  `XdmSchemaAnnotator`, wired into TransformEngine at construction sites with the
+  XTTE15xx family, gated on a schema set being in scope.
+
+Category (c) — engine-internal, no public hook possible: **none identified.** Every
+group maps to (a) existing seam or (b) one of H1–H4. The four hooks are the complete
+ask from the core.
+
+**Phasing implication.** Acceptance target, revised from the early "~24 failures"
+estimate: Phase A = G1 + G2 + G4 non-streaming (import-schema + user-defined types +
+typed values); Phase B = G5 + G6 (validating constructors, XTTE15xx family);
+Phase C = streaming-tagged sets. QT3 schema-aware sets ride along with each phase.
+
+## Activation and Licensing
+
+```csharp
+Bosak.Schema.License.Activate(licenseKey);
+```
+
+- The license check lives **only** in this assembly. The core engine performs no
+  license validation and must stay buildable/testable without any knowledge of it.
+- Before activation, the package is inert: the engine behaves exactly as the free core
+  does today (`xsl:import-schema` raises XTSE1650, complex-type `validate` /
+  `instance of` / `treat as` are unavailable).
+- After activation, the package registers schema-aware behavior through the seam.
+
+## Hard Rules
+
+1. No changes to core engine internals that are visible only when this package is
+   present (no conditional compilation, no reflection into internals, no
+   `InternalsVisibleTo`).
+2. Core behavior without this package must be bit-identical before and after any
+   Bosak.Schema release.
+3. New seam hooks in the core ship as normal open-source PRs with tests, and must be
+   justifiable on their own merits (useful to any integrator), not as private
+   backdoors.
+4. This repository may not copy core source files; it references the published
+   packages only.
+
+---
+
+*Seam audit completed 2026-09-22. Core-side status: hooks **H1/H2 landed 2026-09-22** as
+core REQ-097 (PR #11, merge `2189a43` — `XsltCompiler.SchemaAware`, `SchemaResolver`,
+`SchemaSet`); hook **H3 merged 2026-09-22** as core REQ-098 (PR #13, merge `65bf888` —
+`XdmSchemaAnnotator`, `ConstructedElementProcessor`/`ConstructedDocumentProcessor`;
+design [`ADR-001`](./ADR-001-h3-typed-construction-api.md)); hook **H4 merged 2026-09-22** as
+core REQ-099 (PR #15, merge `77a7c5b` — mode-aware `XdmSchemaAnnotator.Validate`/`ValidateAttribute`
++ TransformEngine `validation`/`@type` wiring, XTTE15xx family;
+design [`ADR-002`](./ADR-002-h4-validation-service.md)). **All four seam hooks H1–H4 are on core
+main and ship in v0.12.0-beta** (tagged/published 2026-09-23, Trusted Publishing, registration
+verified on nuget.org) — the published-packages-only rule is cleared and `src/Bosak.Schema` can
+be scaffolded against the live packages. Companion core fix REQ-100 (merged 2026-09-23, PR #17)
+restores `schema-element()`/`schema-attribute()` match patterns, required for audit group G3
+(typed patterns); it rides the next core release.*

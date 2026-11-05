@@ -1,0 +1,25 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  prod-ContextItemDecl
+
+Discovered 738 test sets.
+  Starting: prod-ContextItemDecl ...
+  Done: prod-ContextItemDecl (53 tests total) [P+=0 F+=0 S+=53]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   53
+Passed:  0
+Failed:  0
+Skipped: 53
+
+Pass rate: 0.00%
+
+Skip reasons (grouped):
+     53  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.02s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-context-resource-review\evidence\qt4-set-normal-skips.txt

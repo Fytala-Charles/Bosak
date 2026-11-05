@@ -1,0 +1,128 @@
+{
+  "braid-baseline-identity": {
+    "assemblyLoadRows": 4,
+    "engineLoadRows": 1,
+    "engineAssemblies": [
+      "Bosak.Xslt"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "braid-baseline-tests": {
+    "assemblyLoadRows": 3268,
+    "engineLoadRows": 1959,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ],
+    "workerProcessesObserved": 254,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "braid-replacement-identity": {
+    "assemblyLoadRows": 4,
+    "engineLoadRows": 1,
+    "engineAssemblies": [
+      "Bosak.Xslt"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "braid-replacement-tests": {
+    "assemblyLoadRows": 3268,
+    "engineLoadRows": 1959,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ],
+    "workerProcessesObserved": 255,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "xmldb-baseline-probe": {
+    "assemblyLoadRows": 10,
+    "engineLoadRows": 7,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "xmldb-baseline-tests": {
+    "assemblyLoadRows": 11,
+    "engineLoadRows": 7,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "xmldb-replacement-probe": {
+    "assemblyLoadRows": 10,
+    "engineLoadRows": 7,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  },
+  "xmldb-replacement-tests": {
+    "assemblyLoadRows": 11,
+    "engineLoadRows": 7,
+    "engineAssemblies": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard"
+    ],
+    "workerProcessesObserved": 0,
+    "allLoadsWithinFrozenLayout": true,
+    "allLoadedHashesMatchLayout": true,
+    "expectedEngineAssemblyVersionsOnly": true
+  }
+}

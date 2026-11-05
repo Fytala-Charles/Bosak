@@ -1,0 +1,1909 @@
+[
+  {
+    "name": "XmlDb",
+    "revision": "4598346e324a4385381aa31a68d565bcdee9c479",
+    "scope": "Committed HEAD only; uncommitted sibling changes excluded",
+    "unchangedCSharpFiles": [
+      {
+        "path": "samples/EmbeddedQuickstart/Program.cs",
+        "sha256": "b84d0fbd5f61a651c66afb04f523b815808ff2e98ae84b8da44d420a9164bf92",
+        "archivedSha256": "b84d0fbd5f61a651c66afb04f523b815808ff2e98ae84b8da44d420a9164bf92"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Core/StorageNode.cs",
+        "sha256": "1f82b7a79e25c99bfd43b03b5df41f2a472370536c98a26b977f0e1365580bd6",
+        "archivedSha256": "1f82b7a79e25c99bfd43b03b5df41f2a472370536c98a26b977f0e1365580bd6"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/BackupCodec.cs",
+        "sha256": "90225bf3e55328241eb5e64852444605943ad19f9d4d3be7d609c54df3c7bc92",
+        "archivedSha256": "90225bf3e55328241eb5e64852444605943ad19f9d4d3be7d609c54df3c7bc92"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/BackupStorage.cs",
+        "sha256": "cb23419ffb2ce018730ed6c75de8777291a33f307c65a5a2ebdfc43e0c01c07b",
+        "archivedSha256": "cb23419ffb2ce018730ed6c75de8777291a33f307c65a5a2ebdfc43e0c01c07b"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/BinaryEnvelope.cs",
+        "sha256": "1ccb74db107670c95334c75f62f39f4f3acbfb580e35c579988b48b02287db70",
+        "archivedSha256": "1ccb74db107670c95334c75f62f39f4f3acbfb580e35c579988b48b02287db70"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/CheckpointCodec.cs",
+        "sha256": "33601b02ad8f1387b6c86eeb3284a129e2d4bd60e2797e9ec9e68b446e987a2b",
+        "archivedSha256": "33601b02ad8f1387b6c86eeb3284a129e2d4bd60e2797e9ec9e68b446e987a2b"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostJournalAppend.cs",
+        "sha256": "2f972ac5dc47c97044b51f9b1f1433055bd65fea792b7230dc27343663753b3f",
+        "archivedSha256": "2f972ac5dc47c97044b51f9b1f1433055bd65fea792b7230dc27343663753b3f"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostLifetime.cs",
+        "sha256": "d63659cf7c81abd4c6bd8845b273e49360c29e8a181c98b859eec4ba6e243684",
+        "archivedSha256": "d63659cf7c81abd4c6bd8845b273e49360c29e8a181c98b859eec4ba6e243684"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostOrchestrator.cs",
+        "sha256": "decddc62301fe8139f04691a9c50f3bfda239e0b4bd3c8d31bc1d4e502262872",
+        "archivedSha256": "decddc62301fe8139f04691a9c50f3bfda239e0b4bd3c8d31bc1d4e502262872"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostProvisioning.cs",
+        "sha256": "660a6b0f36a9eb50193bfa534ebae09d7b2545de072761482345b92e8a00d8cc",
+        "archivedSha256": "660a6b0f36a9eb50193bfa534ebae09d7b2545de072761482345b92e8a00d8cc"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostRestartReconciler.cs",
+        "sha256": "c9533e00be3add320701b3fd983257482cf487f9b9d80484e34b8d94814aec0d",
+        "archivedSha256": "c9533e00be3add320701b3fd983257482cf487f9b9d80484e34b8d94814aec0d"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedHostStoppedReconciliation.cs",
+        "sha256": "6f41118634d5f4eac6e2a33bc425a38a71a540abd5b90581775dcbb6b647940e",
+        "archivedSha256": "6f41118634d5f4eac6e2a33bc425a38a71a540abd5b90581775dcbb6b647940e"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Backup.cs",
+        "sha256": "87d5f6267933b19fbc5095686bf0609d01260f2fa6066d5b8cda1f141cdb3e54",
+        "archivedSha256": "87d5f6267933b19fbc5095686bf0609d01260f2fa6066d5b8cda1f141cdb3e54"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Cutover.cs",
+        "sha256": "252e413c6fd8d46ccd20a85381e83de8f9f52029f04349bfc15d39c90ef858b9",
+        "archivedSha256": "252e413c6fd8d46ccd20a85381e83de8f9f52029f04349bfc15d39c90ef858b9"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs",
+        "sha256": "c44a2b560dbfac03c958252649795e0e8edde2ccbfce95783b12c14000e35f3b",
+        "archivedSha256": "c44a2b560dbfac03c958252649795e0e8edde2ccbfce95783b12c14000e35f3b"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochAdministrativeAttemptExecution.cs",
+        "sha256": "983145df007b0ab157295beeee510b893fc3d8b467b96062b128bf3e00299d86",
+        "archivedSha256": "983145df007b0ab157295beeee510b893fc3d8b467b96062b128bf3e00299d86"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochAdministrativeAttemptPlan.cs",
+        "sha256": "0afef610c6dd0275259b0242df298859e483c21cd1afc33550e33cc0cd55f87e",
+        "archivedSha256": "0afef610c6dd0275259b0242df298859e483c21cd1afc33550e33cc0cd55f87e"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochAdmission.cs",
+        "sha256": "9485ce8b5cd2ceb9ba33ccbf0cb85c17425ccd56146c506328efcd1f7b919a02",
+        "archivedSha256": "9485ce8b5cd2ceb9ba33ccbf0cb85c17425ccd56146c506328efcd1f7b919a02"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochAuthorityCodec.cs",
+        "sha256": "b32648ab4a6849cc0c49e799c50d780c44904f5f67e4f79c4b742b843a9d0e11",
+        "archivedSha256": "b32648ab4a6849cc0c49e799c50d780c44904f5f67e4f79c4b742b843a9d0e11"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochBackupCodec.cs",
+        "sha256": "2cc7999d9550b57dee3cd2b5217085cfc6042ae4fb4f9fec007e422740b61ff6",
+        "archivedSha256": "2cc7999d9550b57dee3cd2b5217085cfc6042ae4fb4f9fec007e422740b61ff6"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochBackupRestore.cs",
+        "sha256": "02428fcb60fadf921a382419ccc4e17b367bbe5f7f7fa06c2ace8d7b24e8369f",
+        "archivedSha256": "02428fcb60fadf921a382419ccc4e17b367bbe5f7f7fa06c2ace8d7b24e8369f"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochBackupStorage.cs",
+        "sha256": "2a023864771b9c8c28492cdb0fd456b9310ecfd9b16f30dffca40b56eaae702c",
+        "archivedSha256": "2a023864771b9c8c28492cdb0fd456b9310ecfd9b16f30dffca40b56eaae702c"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochCodec.cs",
+        "sha256": "fb59d2b478f8267c1e2caf0d0882d91380f9a709dd636bf3e33ced007e11d04b",
+        "archivedSha256": "fb59d2b478f8267c1e2caf0d0882d91380f9a709dd636bf3e33ced007e11d04b"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochEmptyCoordinator.cs",
+        "sha256": "e2f7a7cd6e42509b541bfeadf7d8453b7f93549a9b7c8f54ec5bced7ead997b3",
+        "archivedSha256": "e2f7a7cd6e42509b541bfeadf7d8453b7f93549a9b7c8f54ec5bced7ead997b3"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochEmptyRoot.cs",
+        "sha256": "da551690307278847741be196ec5c98033d81e8dde185e75a5a2f8a7c705c820",
+        "archivedSha256": "da551690307278847741be196ec5c98033d81e8dde185e75a5a2f8a7c705c820"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochLegacyMigration.cs",
+        "sha256": "f7eb451a2a1324a6fe7afa40f028244448a9a71306a383bd458f2beb4d6b9f35",
+        "archivedSha256": "f7eb451a2a1324a6fe7afa40f028244448a9a71306a383bd458f2beb4d6b9f35"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochMigrationCodec.cs",
+        "sha256": "b737a1396c334d177afbeab14b66cec4e0e7dd3923d616463994468be6648224",
+        "archivedSha256": "b737a1396c334d177afbeab14b66cec4e0e7dd3923d616463994468be6648224"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochPublicationInspector.cs",
+        "sha256": "c56451d93521fb13b3e24c39958c13838e6bb40fdde353ab0c38ca8e3ca2ed7d",
+        "archivedSha256": "c56451d93521fb13b3e24c39958c13838e6bb40fdde353ab0c38ca8e3ca2ed7d"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.Backup.cs",
+        "sha256": "815ed26439824877d9743774056f8f7dfb8d7831a91a87e7bca0f135d825843c",
+        "archivedSha256": "815ed26439824877d9743774056f8f7dfb8d7831a91a87e7bca0f135d825843c"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.Cutover.cs",
+        "sha256": "7fec7af4ba701d840b66585414f38baab0417161dbe3ab27216e3fce35aa2609",
+        "archivedSha256": "7fec7af4ba701d840b66585414f38baab0417161dbe3ab27216e3fce35aa2609"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.cs",
+        "sha256": "dc4bc59b7963429cd87af78c217c8cc2db84a972bad7124c08a5514b0364bfb9",
+        "archivedSha256": "dc4bc59b7963429cd87af78c217c8cc2db84a972bad7124c08a5514b0364bfb9"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochScalarHistory.cs",
+        "sha256": "db2b8fc07a75fb052c1414a165cf3f88989ffb896e5e80d313217c3c17ce0323",
+        "archivedSha256": "db2b8fc07a75fb052c1414a165cf3f88989ffb896e5e80d313217c3c17ce0323"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochScalarRecovery.cs",
+        "sha256": "4e00417cafd0fc2ea1fb6e579891b1a8f3dd6305804da3568a44adf69252e3a3",
+        "archivedSha256": "4e00417cafd0fc2ea1fb6e579891b1a8f3dd6305804da3568a44adf69252e3a3"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/EpochSnapshotCodec.cs",
+        "sha256": "fdbf41af2b402723cd0def49770d9d945e46da57e9895a9b811f1c8e6ad6700f",
+        "archivedSha256": "fdbf41af2b402723cd0def49770d9d945e46da57e9895a9b811f1c8e6ad6700f"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/GenerationLease.cs",
+        "sha256": "acd377decd9d9bf0e6dad5983316e588128702f5b21daba2359207a8fcc602e2",
+        "archivedSha256": "acd377decd9d9bf0e6dad5983316e588128702f5b21daba2359207a8fcc602e2"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/HostAttemptLedgerClassifier.cs",
+        "sha256": "c485f66716c822609691aae0b1fe1a3e92c5eb59cad62e21467e3d3e206ef70c",
+        "archivedSha256": "c485f66716c822609691aae0b1fe1a3e92c5eb59cad62e21467e3d3e206ef70c"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/HostAttemptLedgerHarness.cs",
+        "sha256": "05af0557e39770d04c6d0ade6681e95d3e46c5b3bbb201b024b4ea815e6b596e",
+        "archivedSha256": "05af0557e39770d04c6d0ade6681e95d3e46c5b3bbb201b024b4ea815e6b596e"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/HostJournalCodec.cs",
+        "sha256": "42306ada55c5ebde004ec147a6404dac46510d383e0677a9bb74fb0b324ba3c7",
+        "archivedSha256": "42306ada55c5ebde004ec147a6404dac46510d383e0677a9bb74fb0b324ba3c7"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/HostJournalHistoryCodec.cs",
+        "sha256": "ab6083455f8ce8a2891479972c1bd2b24fbf95a2f1aac43f66f8d22bdb1ae4eb",
+        "archivedSha256": "ab6083455f8ce8a2891479972c1bd2b24fbf95a2f1aac43f66f8d22bdb1ae4eb"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/HostJournalPayloadCodec.cs",
+        "sha256": "7954951b66a3f060e74f9aff7263a194bba1474854c99d851c828d0afdc3fe82",
+        "archivedSha256": "7954951b66a3f060e74f9aff7263a194bba1474854c99d851c828d0afdc3fe82"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+        "sha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b",
+        "archivedSha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/LegacyMigrationVerifier.cs",
+        "sha256": "bef6b34800b638a4d331ede2a122d1e7b32d8c3290e2806aa0390f487b5159d6",
+        "archivedSha256": "bef6b34800b638a4d331ede2a122d1e7b32d8c3290e2806aa0390f487b5159d6"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/MigrationCutoverSession.cs",
+        "sha256": "0ae3793e3dabf1625ae6fbd2ebbfe5d2afd11675acbd2ee197fc7139d212e4c9",
+        "archivedSha256": "0ae3793e3dabf1625ae6fbd2ebbfe5d2afd11675acbd2ee197fc7139d212e4c9"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/MigrationCutoverValidation.cs",
+        "sha256": "6d1079c2148ade5eb8a5509c41f3f0e8357d24ffc26fdf8f1b712689afb83ea5",
+        "archivedSha256": "6d1079c2148ade5eb8a5509c41f3f0e8357d24ffc26fdf8f1b712689afb83ea5"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/MigrationRestartClassifier.cs",
+        "sha256": "85fd0244ed0e656c2f5b22b71a6f20de7a392ce0f45f711b8c86c60e8027defc",
+        "archivedSha256": "85fd0244ed0e656c2f5b22b71a6f20de7a392ce0f45f711b8c86c60e8027defc"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/ReadOnlyEpochDatabase.cs",
+        "sha256": "4bf8998615d56011e727a551de2ee090569b4133819f61f6d91adb4871c93638",
+        "archivedSha256": "4bf8998615d56011e727a551de2ee090569b4133819f61f6d91adb4871c93638"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/RetentionPlanner.cs",
+        "sha256": "1c43e5022d3c395e2b55a10b9943f7462d24f818bed8f3fe263c4685cf846aa4",
+        "archivedSha256": "1c43e5022d3c395e2b55a10b9943f7462d24f818bed8f3fe263c4685cf846aa4"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/ScalarEpochAdministration.cs",
+        "sha256": "e1cc73e89cb42d9be3d96edd85f658d1454a1c7f88449cec9c5f42949cf42396",
+        "archivedSha256": "e1cc73e89cb42d9be3d96edd85f658d1454a1c7f88449cec9c5f42949cf42396"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/ScalarEpochDatabase.cs",
+        "sha256": "0b8b7c228257605c14f22797e9663932d112631cdaa78f2c4d1fa9c60caf5234",
+        "archivedSha256": "0b8b7c228257605c14f22797e9663932d112631cdaa78f2c4d1fa9c60caf5234"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/ScalarGeneration.cs",
+        "sha256": "96cb64986660cdbea3bf05ba4b3c4385c8e0c19a1bd6ba4421e5427ced76f899",
+        "archivedSha256": "96cb64986660cdbea3bf05ba4b3c4385c8e0c19a1bd6ba4421e5427ced76f899"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/StoreCodec.cs",
+        "sha256": "a557d9b1a4fe6868253e56fba42f4320c9bd6214a247222e582ff4e2bfc7ef74",
+        "archivedSha256": "a557d9b1a4fe6868253e56fba42f4320c9bd6214a247222e582ff4e2bfc7ef74"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/TransactionCodec.cs",
+        "sha256": "d684b5b2e48bc065b9d6d613824cc26258e49ce541112f1df1ea3c815cd4a95a",
+        "archivedSha256": "d684b5b2e48bc065b9d6d613824cc26258e49ce541112f1df1ea3c815cd4a95a"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/TransactionStorage.cs",
+        "sha256": "ebd409ecdf30fc889695b87780115933d8baa6bd0db30f32541f224a8e78becb",
+        "archivedSha256": "ebd409ecdf30fc889695b87780115933d8baa6bd0db30f32541f224a8e78becb"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/XmlFragmentImporter.cs",
+        "sha256": "1c1b2c382123bdb76b4a9c0d1fd2484c68d3d553346a1dc48f6515c2319725e1",
+        "archivedSha256": "1c1b2c382123bdb76b4a9c0d1fd2484c68d3d553346a1dc48f6515c2319725e1"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Storage/XmlWriteTransaction.cs",
+        "sha256": "5c6ad8876484a51556c11c23521daa309c3b4fcc66a768ec1aa157918879b64f",
+        "archivedSha256": "5c6ad8876484a51556c11c23521daa309c3b4fcc66a768ec1aa157918879b64f"
+      },
+      {
+        "path": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+        "sha256": "d0718039606b9f5fe384ae4d88dc6b922b93de14a34d339535bbce24601f833d",
+        "archivedSha256": "d0718039606b9f5fe384ae4d88dc6b922b93de14a34d339535bbce24601f833d"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/BackupProcessTests.cs",
+        "sha256": "4ff8706b7042a572be30885888cc5a3147eefd9b7c35f55dd8828193cab7e14b",
+        "archivedSha256": "4ff8706b7042a572be30885888cc5a3147eefd9b7c35f55dd8828193cab7e14b"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/CheckpointProcessTests.cs",
+        "sha256": "5da50593af8626063f4f23a925e8b6fc1004a906f545a381e8f414b673698f6f",
+        "archivedSha256": "5da50593af8626063f4f23a925e8b6fc1004a906f545a381e8f414b673698f6f"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/CrashProbe.cs",
+        "sha256": "d40976d0f1d3ef7158d9b5e03c47b595ed15dab86791faec57ae9ef50f4c7ca0",
+        "archivedSha256": "d40976d0f1d3ef7158d9b5e03c47b595ed15dab86791faec57ae9ef50f4c7ca0"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/CrashRecoveryTests.cs",
+        "sha256": "32c514ebd924b0cc44136e65eef6eb75b759961f65184273dbfe750f14fae055",
+        "archivedSha256": "32c514ebd924b0cc44136e65eef6eb75b759961f65184273dbfe750f14fae055"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostJournalProcessTests.cs",
+        "sha256": "18415031f79e49072e930a84e6824ce40aa0711ac1bbd6305e1ac1d363be7a2d",
+        "archivedSha256": "18415031f79e49072e930a84e6824ce40aa0711ac1bbd6305e1ac1d363be7a2d"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostJournalPublicationTests.cs",
+        "sha256": "b3e079a35e1b840c848729cc2763b4d19b3ae63353dd75666764eae4e09c39a5",
+        "archivedSha256": "b3e079a35e1b840c848729cc2763b4d19b3ae63353dd75666764eae4e09c39a5"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostOrchestrationProcessTests.cs",
+        "sha256": "522ca575287db5d94054c1916b8443bbecc4a5f89f8913e68e4d51329a8e080b",
+        "archivedSha256": "522ca575287db5d94054c1916b8443bbecc4a5f89f8913e68e4d51329a8e080b"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostOrchestratorTests.cs",
+        "sha256": "d9c11d3f4754f8f9e66bd6d4b387a69e92b1a68b1bfa1cd87840eb21e6da808d",
+        "archivedSha256": "d9c11d3f4754f8f9e66bd6d4b387a69e92b1a68b1bfa1cd87840eb21e6da808d"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostProcessTests.cs",
+        "sha256": "29b4c0e14372f060a25d6fea1b5f3007bc0a16e7dd1c3d9a73f016b8855bab2d",
+        "archivedSha256": "29b4c0e14372f060a25d6fea1b5f3007bc0a16e7dd1c3d9a73f016b8855bab2d"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostProvisioningProcessTests.cs",
+        "sha256": "6c49bda81602e998e78021babf0a9a78d4d4e352cc5996f4521e2ed906924a9e",
+        "archivedSha256": "6c49bda81602e998e78021babf0a9a78d4d4e352cc5996f4521e2ed906924a9e"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostPublicationTests.cs",
+        "sha256": "223755009be6d451fe9bec6d002af64fcaed1c057b61d9806389b6c1496f12c1",
+        "archivedSha256": "223755009be6d451fe9bec6d002af64fcaed1c057b61d9806389b6c1496f12c1"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostRestartProcessTests.cs",
+        "sha256": "e14cac253b049dac0ed22fa03124875db27637c64bdbd2276b774fe9e294cb27",
+        "archivedSha256": "e14cac253b049dac0ed22fa03124875db27637c64bdbd2276b774fe9e294cb27"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostRestartReconcilerTests.cs",
+        "sha256": "902c5f70dbadac66c0142976c0d0b2a035b76b9c3eca212e3eb8d4ee963a9d48",
+        "archivedSha256": "902c5f70dbadac66c0142976c0d0b2a035b76b9c3eca212e3eb8d4ee963a9d48"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EmbeddedHostRetryTests.cs",
+        "sha256": "389bedc2d072454d11787ac337abebad2d4196d7ac9bd6e9389117a4b0013981",
+        "archivedSha256": "389bedc2d072454d11787ac337abebad2d4196d7ac9bd6e9389117a4b0013981"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochAdministrativeAttemptExecutionTests.cs",
+        "sha256": "072dd75eb21f445be1f7b64cf0f00aab4a0111d1039838b3530136136e1edfd7",
+        "archivedSha256": "072dd75eb21f445be1f7b64cf0f00aab4a0111d1039838b3530136136e1edfd7"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochAdministrativeAttemptPlanTests.cs",
+        "sha256": "ea945f712ad8a0c2b72e9225a7f74ab3c06924f75aa2a7760683bc4ac77e9b62",
+        "archivedSha256": "ea945f712ad8a0c2b72e9225a7f74ab3c06924f75aa2a7760683bc4ac77e9b62"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochAdministrativeAttemptProcessTests.cs",
+        "sha256": "9076d29599e25b8845af31b6ecfaa852aa506bc1721d09c7fd0281785410e59e",
+        "archivedSha256": "9076d29599e25b8845af31b6ecfaa852aa506bc1721d09c7fd0281785410e59e"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochBackupCaptureProcessTests.cs",
+        "sha256": "0d4cded59987e5dfeb9856aa519f7ee83464af6f13e7a81e43ef92f14a5bcb4f",
+        "archivedSha256": "0d4cded59987e5dfeb9856aa519f7ee83464af6f13e7a81e43ef92f14a5bcb4f"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochBackupRestoreProcessTests.cs",
+        "sha256": "62e3474f03c713ceb0f65b70d97fd05afab5872e0713e246c2f33453866433be",
+        "archivedSha256": "62e3474f03c713ceb0f65b70d97fd05afab5872e0713e246c2f33453866433be"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochCoordinatorProcessTests.cs",
+        "sha256": "439e97010c9920d2ad09d0d2eeeac14985eb8d66933a1594bc35710d8b728a64",
+        "archivedSha256": "439e97010c9920d2ad09d0d2eeeac14985eb8d66933a1594bc35710d8b728a64"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochLegacyMigrationProcessTests.cs",
+        "sha256": "7f2d4d4f380a00561d8213a40cd23c2f660c7e26aee10294a367bab763651fb4",
+        "archivedSha256": "7f2d4d4f380a00561d8213a40cd23c2f660c7e26aee10294a367bab763651fb4"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochProcessTests.cs",
+        "sha256": "5e8a55b505bd31520d6809386be395c71adc1c90cd2ef57c856225ee0a029d3b",
+        "archivedSha256": "5e8a55b505bd31520d6809386be395c71adc1c90cd2ef57c856225ee0a029d3b"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochPublicationInspectorTests.cs",
+        "sha256": "8b971d4cac2e3cd4aa6be3cdfd8f20b1a7222b9c9793987d7a498f76d157f232",
+        "archivedSha256": "8b971d4cac2e3cd4aa6be3cdfd8f20b1a7222b9c9793987d7a498f76d157f232"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/EpochScalarProcessTests.cs",
+        "sha256": "5af0ae6b7791dab5c2996bfd8ffd3e3313c78ce21184f2199fa9f27b153d83f4",
+        "archivedSha256": "5af0ae6b7791dab5c2996bfd8ffd3e3313c78ce21184f2199fa9f27b153d83f4"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/HostLedgerPlannedExecutionTests.cs",
+        "sha256": "b553cf114e9cde1012a3b6fd1d2b915dc4307bc85fd32de9a1eb08ced84715b5",
+        "archivedSha256": "b553cf114e9cde1012a3b6fd1d2b915dc4307bc85fd32de9a1eb08ced84715b5"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/LegacyReaderProbe.cs",
+        "sha256": "0349f82b11cc3b80125de5c8281a53a4c907dfbdc39e5a1c9bfdadb8e29f8f00",
+        "archivedSha256": "0349f82b11cc3b80125de5c8281a53a4c907dfbdc39e5a1c9bfdadb8e29f8f00"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MigratedBundleRejectionTests.cs",
+        "sha256": "f7743f50baeead9347f24a6f5995d8e98b6ef92c021a61a4e8aa286a57cb4ea6",
+        "archivedSha256": "f7743f50baeead9347f24a6f5995d8e98b6ef92c021a61a4e8aa286a57cb4ea6"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MigratedOwnershipTests.cs",
+        "sha256": "465744eef0bf63d5ca7da3fa03fe0c3803a4a529fcd57239a78b72436b2cace1",
+        "archivedSha256": "465744eef0bf63d5ca7da3fa03fe0c3803a4a529fcd57239a78b72436b2cace1"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MigrationCutoverProcessTests.cs",
+        "sha256": "db59b7819a87becabc3b150afbad66d481dd23466800ff7b6bcf11daa316a61b",
+        "archivedSha256": "db59b7819a87becabc3b150afbad66d481dd23466800ff7b6bcf11daa316a61b"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MigrationInterruptionStorage.cs",
+        "sha256": "8b5901988d822e6503602bd11887bad21fdd9b75630c17c36f71e8acb09a5fe9",
+        "archivedSha256": "8b5901988d822e6503602bd11887bad21fdd9b75630c17c36f71e8acb09a5fe9"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MigrationRuntimeIdentities.cs",
+        "sha256": "de19d9cf0f5e4addb9744c2454d07a26c0609ff1555ec6f61d60a4e24af286ed",
+        "archivedSha256": "de19d9cf0f5e4addb9744c2454d07a26c0609ff1555ec6f61d60a4e24af286ed"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/MutableProfileRejectionTests.cs",
+        "sha256": "32492991c3a2d3fd25e8ccaf951749ebf3fb3cdf36de5cfb5f8b5b5a8559b472",
+        "archivedSha256": "32492991c3a2d3fd25e8ccaf951749ebf3fb3cdf36de5cfb5f8b5b5a8559b472"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/ReadOnlyEpochProcessTests.cs",
+        "sha256": "8925488178cd596991a997d6816353c80cac70f7bb16b4efe6868f3810f3c6ce",
+        "archivedSha256": "8925488178cd596991a997d6816353c80cac70f7bb16b4efe6868f3810f3c6ce"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/ReopenTests.cs",
+        "sha256": "eab6a6f80a71e692ac1ae4f4ebeccb7e0e0ef023b1cfaf029fe4e592e91cdcbb",
+        "archivedSha256": "eab6a6f80a71e692ac1ae4f4ebeccb7e0e0ef023b1cfaf029fe4e592e91cdcbb"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/ScalarEpochAdministrationTests.cs",
+        "sha256": "2c655fc0cca2d0fb93b61a03e0d02c418870d9f1d64193ed2bceb639ad8d7d65",
+        "archivedSha256": "2c655fc0cca2d0fb93b61a03e0d02c418870d9f1d64193ed2bceb639ad8d7d65"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.IntegrationTests/ScalarEpochFacadeTests.cs",
+        "sha256": "6f5b1e0948d8cb07584af5f68d6051dcafc61be5537a3ca5ec9086a7217c1447",
+        "archivedSha256": "6f5b1e0948d8cb07584af5f68d6051dcafc61be5537a3ca5ec9086a7217c1447"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/BackupTests.cs",
+        "sha256": "c412782289fc0f4545a029a13a86e9ae1e462a10a3449ddfb55d836982ec2337",
+        "archivedSha256": "c412782289fc0f4545a029a13a86e9ae1e462a10a3449ddfb55d836982ec2337"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/CheckpointTests.cs",
+        "sha256": "20b6984552ee47c2060cddd957a9e5f4c1e1c3f5ad52cac80df8ba062f993754",
+        "archivedSha256": "20b6984552ee47c2060cddd957a9e5f4c1e1c3f5ad52cac80df8ba062f993754"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/DependencyBoundaryTests.cs",
+        "sha256": "9610c78e5887844d0271709f16c4f4587dbc8bf5651b58c12f93eadb49f626e8",
+        "archivedSha256": "9610c78e5887844d0271709f16c4f4587dbc8bf5651b58c12f93eadb49f626e8"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/DurabilityTests.cs",
+        "sha256": "c3445dfa8110bdbe37a5030d7f95607d076b84a1d27b5d42ce55caf85d1708f9",
+        "archivedSha256": "c3445dfa8110bdbe37a5030d7f95607d076b84a1d27b5d42ce55caf85d1708f9"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EmbeddedHostJournalAppendTests.cs",
+        "sha256": "4a2f39e46ef0d3fc4449c3962de5a2819cc2534ba96e48b9a521c7bdf1397899",
+        "archivedSha256": "4a2f39e46ef0d3fc4449c3962de5a2819cc2534ba96e48b9a521c7bdf1397899"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EmbeddedHostLifetimeTests.cs",
+        "sha256": "d3132322bc43547dec210e4f9f8acd8a0ffcb95edded970f4832550af5f8c617",
+        "archivedSha256": "d3132322bc43547dec210e4f9f8acd8a0ffcb95edded970f4832550af5f8c617"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EmbeddedHostProvisioningTests.cs",
+        "sha256": "1f3d56398e47e7acca652c808b210f5ccdc67254a2b6eb761e72c5a198d289d7",
+        "archivedSha256": "1f3d56398e47e7acca652c808b210f5ccdc67254a2b6eb761e72c5a198d289d7"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EmbeddedHostStoppedReconciliationTests.cs",
+        "sha256": "780a00dc8448bb2a598690dae33f51f4d59d6c09c898bfc7c178b5852fd377a6",
+        "archivedSha256": "780a00dc8448bb2a598690dae33f51f4d59d6c09c898bfc7c178b5852fd377a6"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochAdmissionTests.cs",
+        "sha256": "619cf9df0f4e8ee176969bdbdf0138f1aef621f7f01a5c93de10dd8a4620830f",
+        "archivedSha256": "619cf9df0f4e8ee176969bdbdf0138f1aef621f7f01a5c93de10dd8a4620830f"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochAuthorityTests.cs",
+        "sha256": "b6516b87ec1a599b3f1dc4d548452481930a16ea84080e1895fa138bd08ad1fb",
+        "archivedSha256": "b6516b87ec1a599b3f1dc4d548452481930a16ea84080e1895fa138bd08ad1fb"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochBackupCaptureTests.cs",
+        "sha256": "6497ec8b3da86d11d14d437d2cd584d96fb7fb4750f8c7f699e7f9ffb459a98c",
+        "archivedSha256": "6497ec8b3da86d11d14d437d2cd584d96fb7fb4750f8c7f699e7f9ffb459a98c"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochBackupCodecTests.cs",
+        "sha256": "853afc01ed8b3b7d3d548dbec9bc24dddaf30a7d8d3f89a7e4b83cef2d79db8b",
+        "archivedSha256": "853afc01ed8b3b7d3d548dbec9bc24dddaf30a7d8d3f89a7e4b83cef2d79db8b"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochBackupFaultTests.cs",
+        "sha256": "c1534496c50b4915a174645a6fcb59a1ebe29e0630de833797d5f1d45082cb44",
+        "archivedSha256": "c1534496c50b4915a174645a6fcb59a1ebe29e0630de833797d5f1d45082cb44"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochBackupRestoreTests.cs",
+        "sha256": "dd4f568cca52e90f979bda28709be3b6935a1cecc78298d6092bdf9b8fcd76da",
+        "archivedSha256": "dd4f568cca52e90f979bda28709be3b6935a1cecc78298d6092bdf9b8fcd76da"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochCoordinatorTests.cs",
+        "sha256": "bce05738528ab2baf1b718adb656bb80a655cfc8b79c3c7cc17203b03660229e",
+        "archivedSha256": "bce05738528ab2baf1b718adb656bb80a655cfc8b79c3c7cc17203b03660229e"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochLegacyMigrationTests.cs",
+        "sha256": "b7e4a201b0e2d2ac6f0a6f09c1d6f7fad2ef50ea62a5d84e194b438fa786b730",
+        "archivedSha256": "b7e4a201b0e2d2ac6f0a6f09c1d6f7fad2ef50ea62a5d84e194b438fa786b730"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochMigrationCodecTests.cs",
+        "sha256": "e60b962a2ed1cd8d07853884cad28e5e1626099accc6d775ba1b7d0bd83bfb1c",
+        "archivedSha256": "e60b962a2ed1cd8d07853884cad28e5e1626099accc6d775ba1b7d0bd83bfb1c"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochMigrationFaultTests.cs",
+        "sha256": "1cece2203886fe1d376812512ae23d93620efee361f56410a02c0c031506f38a",
+        "archivedSha256": "1cece2203886fe1d376812512ae23d93620efee361f56410a02c0c031506f38a"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochRecoveryMatrixTests.cs",
+        "sha256": "19d24f7ebbea3fd9d599c7a18e741ef835cf1a06b95a4c27a025e6cd65117d7a",
+        "archivedSha256": "19d24f7ebbea3fd9d599c7a18e741ef835cf1a06b95a4c27a025e6cd65117d7a"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochRecoveryTests.cs",
+        "sha256": "13c92a98277522835e4b19138958e2e47081e072347d594c5c51ee1062015366",
+        "archivedSha256": "13c92a98277522835e4b19138958e2e47081e072347d594c5c51ee1062015366"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/EpochScalarTests.cs",
+        "sha256": "c69c9a6d705f8a82eb256dfe34d370b922316c9a2cba3db6461b5e10592c3a53",
+        "archivedSha256": "c69c9a6d705f8a82eb256dfe34d370b922316c9a2cba3db6461b5e10592c3a53"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/FaultingTransactionStorage.cs",
+        "sha256": "023fa1ca3910955f148b210dcbbff5e6bf57aba011bdeffac14f1cf86b6dd990",
+        "archivedSha256": "023fa1ca3910955f148b210dcbbff5e6bf57aba011bdeffac14f1cf86b6dd990"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/FragmentStoreTests.cs",
+        "sha256": "57988b39e92ec1eb16eb268f92ab732e343696ddac9cac36627d13a6ca182052",
+        "archivedSha256": "57988b39e92ec1eb16eb268f92ab732e343696ddac9cac36627d13a6ca182052"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs",
+        "sha256": "2e8a2a06dfc8d47c1f0fd16e8304e4a054217ae6925abefe093bb211e4568171",
+        "archivedSha256": "2e8a2a06dfc8d47c1f0fd16e8304e4a054217ae6925abefe093bb211e4568171"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/HostAttemptLedgerClassifierTests.cs",
+        "sha256": "d20596c8bfd93e257d25858296abbd2fc6ae11e020a0aa75dd52d513af8e67f1",
+        "archivedSha256": "d20596c8bfd93e257d25858296abbd2fc6ae11e020a0aa75dd52d513af8e67f1"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/HostAttemptLedgerHarnessTests.cs",
+        "sha256": "c36d02b079707bb0f9f1791501844cbb7d37d8c13e5181a3236f9958c9d2da15",
+        "archivedSha256": "c36d02b079707bb0f9f1791501844cbb7d37d8c13e5181a3236f9958c9d2da15"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/HostJournalCodecTests.cs",
+        "sha256": "a3486289c6f067da97d28eefad6fc83e4074423612ab037b0cbac7f056d4f75a",
+        "archivedSha256": "a3486289c6f067da97d28eefad6fc83e4074423612ab037b0cbac7f056d4f75a"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/LegacyMigrationVerifierTests.cs",
+        "sha256": "8d883f98b1925f163d35353cca2fcb1c325d4245abf6963eaf19c49e2dd13253",
+        "archivedSha256": "8d883f98b1925f163d35353cca2fcb1c325d4245abf6963eaf19c49e2dd13253"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/MigrationCutoverTests.cs",
+        "sha256": "c683ad6cf1c2d2cff24c1fbd7a3a1623bb9ec72b208ccda8a6ec43ec9385b588",
+        "archivedSha256": "c683ad6cf1c2d2cff24c1fbd7a3a1623bb9ec72b208ccda8a6ec43ec9385b588"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/MigrationRestartClassifierTests.cs",
+        "sha256": "a02c4fde0614fee2a25d14e91061f56bdfe32fc3f5c4b042f107d7ab2e2c2565",
+        "archivedSha256": "a02c4fde0614fee2a25d14e91061f56bdfe32fc3f5c4b042f107d7ab2e2c2565"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/ReadOnlyEpochTests.cs",
+        "sha256": "ca9a49ec3329e110dde1c6f11b5e8a85a4c8e27a56d7c9ba8a7cc5e9922ff1a7",
+        "archivedSha256": "ca9a49ec3329e110dde1c6f11b5e8a85a4c8e27a56d7c9ba8a7cc5e9922ff1a7"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/StorageFailureTests.cs",
+        "sha256": "39e76fa55d555e266facac6d065c2a16f76baab277e6ea9638299b26a524df6a",
+        "archivedSha256": "39e76fa55d555e266facac6d065c2a16f76baab277e6ea9638299b26a524df6a"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Storage.Tests/TransactionTests.cs",
+        "sha256": "3cf0b8557300dc43aa5275afb1bc418558a2297d01952798babd7165b43e54e3",
+        "archivedSha256": "3cf0b8557300dc43aa5275afb1bc418558a2297d01952798babd7165b43e54e3"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Xdm.Tests/DependencyBoundaryTests.cs",
+        "sha256": "6a45002bb4e4e92e776c3fac3b51288399b64db6c7fa1a86b0105a9f284c91d8",
+        "archivedSha256": "6a45002bb4e4e92e776c3fac3b51288399b64db6c7fa1a86b0105a9f284c91d8"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs",
+        "sha256": "f18dc41d9cf66649afd00c13eb1838b3d712705539daf8fe42bbec824a8c8e77",
+        "archivedSha256": "f18dc41d9cf66649afd00c13eb1838b3d712705539daf8fe42bbec824a8c8e77"
+      },
+      {
+        "path": "tests/Bosak.XmlDb.Xdm.Tests/TransactionalQueryTests.cs",
+        "sha256": "6ae81b7a10ab324d652b7e13ace001886ebf621fafb6333b4d0b853e527fdabf",
+        "archivedSha256": "6ae81b7a10ab324d652b7e13ace001886ebf621fafb6333b4d0b853e527fdabf"
+      }
+    ],
+    "isolatedTestAdjustments": []
+  },
+  {
+    "name": "Braid",
+    "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+    "scope": "Committed HEAD only; uncommitted sibling changes excluded",
+    "unchangedCSharpFiles": [
+      {
+        "path": "src/Bosak.Braid.Application/ConditionalElementEvidence.cs",
+        "sha256": "c9acfc15758f21c47619ed7e41f285dcecc23a064b44bd1e49bc6d448f76be17",
+        "archivedSha256": "c9acfc15758f21c47619ed7e41f285dcecc23a064b44bd1e49bc6d448f76be17"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IExpressionEditor.cs",
+        "sha256": "c58c7d14eec4980f02ee521e0fceb3c449884cc5b53939775529523e704268a2",
+        "archivedSha256": "c58c7d14eec4980f02ee521e0fceb3c449884cc5b53939775529523e704268a2"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ILiteralAttributeEditor.cs",
+        "sha256": "a993d9b85b7c7f9c482a8954f9d1e56920838419812b2e45201885759cde95eb",
+        "archivedSha256": "a993d9b85b7c7f9c482a8954f9d1e56920838419812b2e45201885759cde95eb"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ILiteralElementEditor.cs",
+        "sha256": "9d33d83c702d239eac6c27e4e8dcaaaf565096b1673054f95d6f140a8b6dc4da",
+        "archivedSha256": "9d33d83c702d239eac6c27e4e8dcaaaf565096b1673054f95d6f140a8b6dc4da"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ILiteralElementInserter.cs",
+        "sha256": "d339cbc357d373adc19cad1d0b819c623715e7f2e7eac571cfbf46b080aa7b6a",
+        "archivedSha256": "d339cbc357d373adc19cad1d0b819c623715e7f2e7eac571cfbf46b080aa7b6a"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IRecoveryCatalog.cs",
+        "sha256": "0e0ce8b013767d3e2f2c7a2afe27f8e29666028c9f4d8e71c2dab1a5f1f3d392",
+        "archivedSha256": "0e0ce8b013767d3e2f2c7a2afe27f8e29666028c9f4d8e71c2dab1a5f1f3d392"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IResourceReader.cs",
+        "sha256": "299b3080d5e487e700c8c10efce76044c12bc37d7c52ebd146088d388d0b5fcd",
+        "archivedSha256": "299b3080d5e487e700c8c10efce76044c12bc37d7c52ebd146088d388d0b5fcd"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IResultComparer.cs",
+        "sha256": "0112572b85ddb6dbde8a636eb8bda6a6870dcac0e045a1ee4aeee70e2504dd71",
+        "archivedSha256": "0112572b85ddb6dbde8a636eb8bda6a6870dcac0e045a1ee4aeee70e2504dd71"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ISourceCompilationChecker.cs",
+        "sha256": "0ee40548b9d01cada393d396384add12f71b5253b8587cee5ed15be2735a7dbd",
+        "archivedSha256": "0ee40548b9d01cada393d396384add12f71b5253b8587cee5ed15be2735a7dbd"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ISourceInspector.cs",
+        "sha256": "c056718a34813df36972456d6b813ee20e9815f30db4f3c7e380c60023909aa9",
+        "archivedSha256": "c056718a34813df36972456d6b813ee20e9815f30db4f3c7e380c60023909aa9"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ISourcePersistence.cs",
+        "sha256": "81508f86d09e7cd675aebeff57297699b9c7d5930a00bade21b441b105cca5da",
+        "archivedSha256": "81508f86d09e7cd675aebeff57297699b9c7d5930a00bade21b441b105cca5da"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ISourceValidator.cs",
+        "sha256": "998ea96f3f6a885ed852f2beb28d552796d355c25e4f5badd190e93ebdc8ec7b",
+        "archivedSha256": "998ea96f3f6a885ed852f2beb28d552796d355c25e4f5badd190e93ebdc8ec7b"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ITextBodyReplacer.cs",
+        "sha256": "6da9ed2eaa8a5e79374ef955f18deb93bae7274dbe3f6e548a46039fe4810de5",
+        "archivedSha256": "6da9ed2eaa8a5e79374ef955f18deb93bae7274dbe3f6e548a46039fe4810de5"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ITextDeleter.cs",
+        "sha256": "bb9af17749f00741f11c39fad2c0c62a75bf291032485465d92ac38b2c15cd45",
+        "archivedSha256": "bb9af17749f00741f11c39fad2c0c62a75bf291032485465d92ac38b2c15cd45"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/ITextInserter.cs",
+        "sha256": "8fe8c9caf0d963989eebc9d7b82f3c9af6edd1852df0e02f4f9958ebd8445e1d",
+        "archivedSha256": "8fe8c9caf0d963989eebc9d7b82f3c9af6edd1852df0e02f4f9958ebd8445e1d"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IThemePreferenceStore.cs",
+        "sha256": "1985c61ca20e926d13b14d28b3a268ada3472d3cf7f5f9efba2db9f3ed069a24",
+        "archivedSha256": "1985c61ca20e926d13b14d28b3a268ada3472d3cf7f5f9efba2db9f3ed069a24"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IValueOfDeleter.cs",
+        "sha256": "331679bda1b69ff8fef0448862588c4c31719c8a461fea100a75e9f4abfe82cb",
+        "archivedSha256": "331679bda1b69ff8fef0448862588c4c31719c8a461fea100a75e9f4abfe82cb"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IValueOfInserter.cs",
+        "sha256": "f9c295888fbd2db075948864e4dec9e632b74945c122b5c5c428d269d519607d",
+        "archivedSha256": "f9c295888fbd2db075948864e4dec9e632b74945c122b5c5c428d269d519607d"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/IXsltExportStore.cs",
+        "sha256": "f44d3888282a8f3134e5fb73f88804dbdec91d8d5400f5292d62185c96862adc",
+        "archivedSha256": "f44d3888282a8f3134e5fb73f88804dbdec91d8d5400f5292d62185c96862adc"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Licensing/LicenseActivationSession.cs",
+        "sha256": "c32d90efbca4e80a3ebb6fec2e6a0dbe7683733cd9b24adbf000bab574d17de7",
+        "archivedSha256": "c32d90efbca4e80a3ebb6fec2e6a0dbe7683733cd9b24adbf000bab574d17de7"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Licensing/LicenseContracts.cs",
+        "sha256": "385fd96ced3a4c2ec58fbcc7af1175e1d78ca922a704c502cb36b813874bb4c1",
+        "archivedSha256": "385fd96ced3a4c2ec58fbcc7af1175e1d78ca922a704c502cb36b813874bb4c1"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Licensing/LicensePolicy.cs",
+        "sha256": "a94387e4881c301363da05c68e8bf09420c63fd5e5355e0880587514349413ef",
+        "archivedSha256": "a94387e4881c301363da05c68e8bf09420c63fd5e5355e0880587514349413ef"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/RestrictedExportSession.cs",
+        "sha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c",
+        "archivedSha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceAuthoringCapabilities.cs",
+        "sha256": "183ae30a2c80826e2cdf8b628c623c5c007c3fe20d01499795e3bbc07040e197",
+        "archivedSha256": "183ae30a2c80826e2cdf8b628c623c5c007c3fe20d01499795e3bbc07040e197"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceCompilationSession.cs",
+        "sha256": "e170981857e5d05625e4ce9f8c3faad0d08d66458e3d73e9bbadba077cfce7ee",
+        "archivedSha256": "e170981857e5d05625e4ce9f8c3faad0d08d66458e3d73e9bbadba077cfce7ee"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceExpressionEditReview.cs",
+        "sha256": "d8cf4f0930eb7df2ea7a933945b9289c1d6be8e27b1ae320fce93110de3e4456",
+        "archivedSha256": "d8cf4f0930eb7df2ea7a933945b9289c1d6be8e27b1ae320fce93110de3e4456"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceExpressionSelection.cs",
+        "sha256": "bd5f00916d512820046efae9f049fc7ada68140aa7e9746373a0fb77ad72929d",
+        "archivedSha256": "bd5f00916d512820046efae9f049fc7ada68140aa7e9746373a0fb77ad72929d"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceGraphProjection.cs",
+        "sha256": "b5c774d119ee1af936f3470fa848f89c89ed4a6c763606f9e14aef8c753d19e3",
+        "archivedSha256": "b5c774d119ee1af936f3470fa848f89c89ed4a6c763606f9e14aef8c753d19e3"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceGraphRole.cs",
+        "sha256": "8884dbc91d447e7a81e78beb23214ea56e85f2a64f326aaa65afc06e7e1fcdb1",
+        "archivedSha256": "8884dbc91d447e7a81e78beb23214ea56e85f2a64f326aaa65afc06e7e1fcdb1"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.ConditionalEvidence.cs",
+        "sha256": "d64a44fee090525637eba8c7a06d50e269b714996b25f21281ed91f0b9a8bec2",
+        "archivedSha256": "d64a44fee090525637eba8c7a06d50e269b714996b25f21281ed91f0b9a8bec2"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.Deletion.cs",
+        "sha256": "e40ffd9d27b8e6cdefe27b4d4bef691945036394a8544a5523f26f7868da537c",
+        "archivedSha256": "e40ffd9d27b8e6cdefe27b4d4bef691945036394a8544a5523f26f7868da537c"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.DeletionEvidence.cs",
+        "sha256": "085b2d737f589e292d35691543ba6cf89018f3ee190145fcb52add7147de283b",
+        "archivedSha256": "085b2d737f589e292d35691543ba6cf89018f3ee190145fcb52add7147de283b"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.ExpressionReview.cs",
+        "sha256": "afc55d1997b6239d5f45a916e6306bdd0fc05a6bcb02cf677d842ca810fc5145",
+        "archivedSha256": "afc55d1997b6239d5f45a916e6306bdd0fc05a6bcb02cf677d842ca810fc5145"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.Insertion.cs",
+        "sha256": "eb1048e795d85ba0f9f54e50a1e5e1c54bd3b67b03115e9d3b4fc4f81840d9ab",
+        "archivedSha256": "eb1048e795d85ba0f9f54e50a1e5e1c54bd3b67b03115e9d3b4fc4f81840d9ab"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.InsertionEdits.cs",
+        "sha256": "b0b9a908afe701851bbc7caac0371a05ec68a0820d7ccffe62dbc22521e77917",
+        "archivedSha256": "b0b9a908afe701851bbc7caac0371a05ec68a0820d7ccffe62dbc22521e77917"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralAttributeEvidence.cs",
+        "sha256": "02cbe22556edfb9b0902b274445cbbc2fbce9792d008c8a30890da86d745bde3",
+        "archivedSha256": "02cbe22556edfb9b0902b274445cbbc2fbce9792d008c8a30890da86d745bde3"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralAttributes.cs",
+        "sha256": "c3a0310656535b902d42b6f1b3d591a7a0974504110804a4d74ee8e193f749de",
+        "archivedSha256": "c3a0310656535b902d42b6f1b3d591a7a0974504110804a4d74ee8e193f749de"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElementEvidence.cs",
+        "sha256": "b826c24999f483e678c9cf72bf9d4cbc807a229bd674422dc989f762428cb7d5",
+        "archivedSha256": "b826c24999f483e678c9cf72bf9d4cbc807a229bd674422dc989f762428cb7d5"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElementInsertion.cs",
+        "sha256": "9a7f7bfbffe7cf8e1caf58986017fcf71bef4882ba379308892c59488fb55bfe",
+        "archivedSha256": "9a7f7bfbffe7cf8e1caf58986017fcf71bef4882ba379308892c59488fb55bfe"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElementInsertionEdits.cs",
+        "sha256": "f20497e32fa262e973002007f6d8ddaf0db8c3ce9112b1f19678a9808552d52f",
+        "archivedSha256": "f20497e32fa262e973002007f6d8ddaf0db8c3ce9112b1f19678a9808552d52f"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElementInsertionEvidence.cs",
+        "sha256": "9e0d575b8e6ae1734e85703f81120013b9e8730ed2c23fbe1f9d7530eabce144",
+        "archivedSha256": "9e0d575b8e6ae1734e85703f81120013b9e8730ed2c23fbe1f9d7530eabce144"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElementReorderEvidence.cs",
+        "sha256": "5635c2e686f10c00568c16a82a3a9cf4212a73e7810735d86f0e8ef4dcced638",
+        "archivedSha256": "5635c2e686f10c00568c16a82a3a9cf4212a73e7810735d86f0e8ef4dcced638"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.LiteralElements.cs",
+        "sha256": "50ea6c8cc90886b06353bc86acdbc8abb4771b75833e3889ac1549f3ad3cff2a",
+        "archivedSha256": "50ea6c8cc90886b06353bc86acdbc8abb4771b75833e3889ac1549f3ad3cff2a"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextBodyReplacement.cs",
+        "sha256": "c7dcd439c52c180034c3edd4456b607acf25ce0cff2175d7d987878d99c7b919",
+        "archivedSha256": "c7dcd439c52c180034c3edd4456b607acf25ce0cff2175d7d987878d99c7b919"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextBodyReplacementEvidence.cs",
+        "sha256": "fc529af6ff1cb3a4bfeb76dcc96d69c104a0065e3b373f2a85db2bfb165378b3",
+        "archivedSha256": "fc529af6ff1cb3a4bfeb76dcc96d69c104a0065e3b373f2a85db2bfb165378b3"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextDeletion.cs",
+        "sha256": "e4e56ca718322ad39d3bf6c76cb912b9a42a9d497df6b8f79f6f4b74805a9fb5",
+        "archivedSha256": "e4e56ca718322ad39d3bf6c76cb912b9a42a9d497df6b8f79f6f4b74805a9fb5"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextDeletionEvidence.cs",
+        "sha256": "636e6f6bd679e21dbd6ca149583bc96a6d339af7f103bf2b80d1001c1a165e59",
+        "archivedSha256": "636e6f6bd679e21dbd6ca149583bc96a6d339af7f103bf2b80d1001c1a165e59"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextInsertion.cs",
+        "sha256": "df04d731b0da69df61f49c750750967c9dfa344386da460089b6947e4afd0da7",
+        "archivedSha256": "df04d731b0da69df61f49c750750967c9dfa344386da460089b6947e4afd0da7"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextInsertionEdits.cs",
+        "sha256": "454052ddee7b51f1885c8399fce4624baf2aeee762faab40078517a73fe310af",
+        "archivedSha256": "454052ddee7b51f1885c8399fce4624baf2aeee762faab40078517a73fe310af"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.TextInsertionEvidence.cs",
+        "sha256": "322fc1ac8bfd9c7bdafeacf2c1ac0375c7a633f11c94d6f8d63ea04bfda9d03e",
+        "archivedSha256": "322fc1ac8bfd9c7bdafeacf2c1ac0375c7a633f11c94d6f8d63ea04bfda9d03e"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceInspectionSession.cs",
+        "sha256": "73d55aa654f441127b5239b2064fd7aff78b1ba2066a2d68591e43144777f9a6",
+        "archivedSha256": "73d55aa654f441127b5239b2064fd7aff78b1ba2066a2d68591e43144777f9a6"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceLiteralElementInsertionReview.cs",
+        "sha256": "f2795490bd7dabe1a89b770455073f8b359a52775d62039e8fd03a927514030f",
+        "archivedSha256": "f2795490bd7dabe1a89b770455073f8b359a52775d62039e8fd03a927514030f"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceReviewSession.cs",
+        "sha256": "ccfdad5d52584c071fd7dfe9eeb70f25476b75f1c49101e46e7b512b1eaa41b2",
+        "archivedSha256": "ccfdad5d52584c071fd7dfe9eeb70f25476b75f1c49101e46e7b512b1eaa41b2"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceReviewSnapshot.cs",
+        "sha256": "0cceba7f0520cf809132b467e3b37e58ea2d2271517580099f9909a546a86945",
+        "archivedSha256": "0cceba7f0520cf809132b467e3b37e58ea2d2271517580099f9909a546a86945"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceTextBodyReplacementReview.cs",
+        "sha256": "82b3cfa93a4fd127839aafc8f283e72f1fa251d556d1d0ffbba599fecd254793",
+        "archivedSha256": "82b3cfa93a4fd127839aafc8f283e72f1fa251d556d1d0ffbba599fecd254793"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceTextInsertionReview.cs",
+        "sha256": "c9a06dd085d1972758f8f1a32b979d1ccd245334109c26ee5144bdd74d454cd1",
+        "archivedSha256": "c9a06dd085d1972758f8f1a32b979d1ccd245334109c26ee5144bdd74d454cd1"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceValidationSession.cs",
+        "sha256": "f1896ab5b1d23b66a4daa0b3f658b1935642abd840fc486c8b0066a404f243eb",
+        "archivedSha256": "f1896ab5b1d23b66a4daa0b3f658b1935642abd840fc486c8b0066a404f243eb"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/SourceValueOfInsertionReview.cs",
+        "sha256": "35eafefa2ccc19a3bec0e7fa343456815bedcd8aa4c09f54690c7b5da992e97b",
+        "archivedSha256": "35eafefa2ccc19a3bec0e7fa343456815bedcd8aa4c09f54690c7b5da992e97b"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/ComparedOutputResult.cs",
+        "sha256": "ec05b33f7627f269ec180bffdfbf98846ba256be1b83e1b66f5a03838977297d",
+        "archivedSha256": "ec05b33f7627f269ec180bffdfbf98846ba256be1b83e1b66f5a03838977297d"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/HistoricalRegressionBatchReport.cs",
+        "sha256": "c111bf48e95da0f025ce7b87cd9af367ad6dd685cb855abdf7bcb60d903eb9d3",
+        "archivedSha256": "c111bf48e95da0f025ce7b87cd9af367ad6dd685cb855abdf7bcb60d903eb9d3"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/IPreviewExecutor.cs",
+        "sha256": "b1c5160c1884092b4f4a824eb99629e85b6178064206aa7aa6128b46eb0fc369",
+        "archivedSha256": "b1c5160c1884092b4f4a824eb99629e85b6178064206aa7aa6128b46eb0fc369"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/PreviewExecutionSession.cs",
+        "sha256": "dca1bd2337e90c545fc45c33efad98533ded8d3873463666b41e99700eb7dd56",
+        "archivedSha256": "dca1bd2337e90c545fc45c33efad98533ded8d3873463666b41e99700eb7dd56"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/PreviewFixtureSession.cs",
+        "sha256": "08d1513ed94f6372d28c1099eaef8daeb5f51a3710aec1251ca1e662b2fa6c42",
+        "archivedSha256": "08d1513ed94f6372d28c1099eaef8daeb5f51a3710aec1251ca1e662b2fa6c42"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs",
+        "sha256": "229ff9e3be85384b331bb474b41c53147d9975d1de6248541cd61d93166f9de8",
+        "archivedSha256": "229ff9e3be85384b331bb474b41c53147d9975d1de6248541cd61d93166f9de8"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionBatchReportSession.cs",
+        "sha256": "d25898785f80202c632562e5c442ed2bc94c63a0f272e70900c01d15c6c72779",
+        "archivedSha256": "d25898785f80202c632562e5c442ed2bc94c63a0f272e70900c01d15c6c72779"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionBatchSession.cs",
+        "sha256": "d4d9f78f45723855c64d0b5adf030ec4f644641bac1deb6e724e4d593c33da2e",
+        "archivedSha256": "d4d9f78f45723855c64d0b5adf030ec4f644641bac1deb6e724e4d593c33da2e"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionBatchSnapshot.cs",
+        "sha256": "0405ab9b30a5f267f8557fbd40a4668c4a9587dd14edbf4479e580d11ab439d9",
+        "archivedSha256": "0405ab9b30a5f267f8557fbd40a4668c4a9587dd14edbf4479e580d11ab439d9"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionBatchViewSelection.cs",
+        "sha256": "fbe80add4a3186ae4a83618116904d3573a2528398d3573dafb22d4355835e24",
+        "archivedSha256": "fbe80add4a3186ae4a83618116904d3573a2528398d3573dafb22d4355835e24"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionCaseWorkspaceSession.cs",
+        "sha256": "2e2d9d5e416bffb42e5aa95af1b4beb3773e40ac9f4bdf54f2b8cf22dc7d61de",
+        "archivedSha256": "2e2d9d5e416bffb42e5aa95af1b4beb3773e40ac9f4bdf54f2b8cf22dc7d61de"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionSuite.cs",
+        "sha256": "2c7ec5a5a9719b902c5becc4841524b16d68f921d100f06b4396df9f65e22d37",
+        "archivedSha256": "2c7ec5a5a9719b902c5becc4841524b16d68f921d100f06b4396df9f65e22d37"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionSuiteSelection.cs",
+        "sha256": "8d8c8b826d0220b9b194f156a2f6039bc399a5059c478d87e84bddeead5f293a",
+        "archivedSha256": "8d8c8b826d0220b9b194f156a2f6039bc399a5059c478d87e84bddeead5f293a"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RegressionSuiteSession.cs",
+        "sha256": "3166116c27cb678adf7ac5dbe85da301adcaff54e008dd63fb8ab386ff23aace",
+        "archivedSha256": "3166116c27cb678adf7ac5dbe85da301adcaff54e008dd63fb8ab386ff23aace"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/RunEvidence.cs",
+        "sha256": "2a822c4b9ab82ee522041f1896cb9af7bbc1a0096b5b559978ad66dad84acfa5",
+        "archivedSha256": "2a822c4b9ab82ee522041f1896cb9af7bbc1a0096b5b559978ad66dad84acfa5"
+      },
+      {
+        "path": "src/Bosak.Braid.Application/Testing/SavedRegressionCase.cs",
+        "sha256": "dac2b2c75bbac30521fda8c4e0056471519e0cfb696c894f1734f245d3f61aab",
+        "archivedSha256": "dac2b2c75bbac30521fda8c4e0056471519e0cfb696c894f1734f245d3f61aab"
+      },
+      {
+        "path": "src/Bosak.Braid.Core/SourceDocument.cs",
+        "sha256": "8d8706eaafce24caa7c4bfa63c39f0ece03d8e627436ae7c496a3d4871e7ee15",
+        "archivedSha256": "8d8706eaafce24caa7c4bfa63c39f0ece03d8e627436ae7c496a3d4871e7ee15"
+      },
+      {
+        "path": "src/Bosak.Braid.Desktop/Program.cs",
+        "sha256": "66f4253b54bb15cc6e57b14c9292e1be702325ea65cc11b7ac5c0e5ec9d86097",
+        "archivedSha256": "66f4253b54bb15cc6e57b14c9292e1be702325ea65cc11b7ac5c0e5ec9d86097"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+        "sha256": "7990eef03a94f0fb82e745aca93999d5fec72c92f7343329fb6e29a90035d0e0",
+        "archivedSha256": "7990eef03a94f0fb82e745aca93999d5fec72c92f7343329fb6e29a90035d0e0"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.Deletion.cs",
+        "sha256": "1311fe007b19d750d69e0bc6fb632eaacfd999e242356cc96db7e45aefa1c39b",
+        "archivedSha256": "1311fe007b19d750d69e0bc6fb632eaacfd999e242356cc96db7e45aefa1c39b"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.Insertion.cs",
+        "sha256": "2c87548acce93b62f85ff17f4c7ff11db68cc7c350be9d771831cc094a2c34f9",
+        "archivedSha256": "2c87548acce93b62f85ff17f4c7ff11db68cc7c350be9d771831cc094a2c34f9"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.LiteralAttributes.cs",
+        "sha256": "2c34b8e778f393a1999ed405a35a6147915dff4cf2656af0fdc1f453af55a4c0",
+        "archivedSha256": "2c34b8e778f393a1999ed405a35a6147915dff4cf2656af0fdc1f453af55a4c0"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.LiteralElementInsertion.cs",
+        "sha256": "50c2305eb833c211f857827ea5fc055c219bc80bbaf2f0b91920b2cdaf54aaf9",
+        "archivedSha256": "50c2305eb833c211f857827ea5fc055c219bc80bbaf2f0b91920b2cdaf54aaf9"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.LiteralElements.cs",
+        "sha256": "517e76cbef9932dd1520c1a49b5a2a0b535b43dda6dbb57da4307b7cd17878a1",
+        "archivedSha256": "517e76cbef9932dd1520c1a49b5a2a0b535b43dda6dbb57da4307b7cd17878a1"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.TextBodyReplacement.cs",
+        "sha256": "811837d46397516c26ad3849b9a2888e7e5d5c2a6045d2b1acccaf906ba1bbce",
+        "archivedSha256": "811837d46397516c26ad3849b9a2888e7e5d5c2a6045d2b1acccaf906ba1bbce"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.TextDeletion.cs",
+        "sha256": "4f105d2b459f98f9a1bada1ba6c674ce9bc2ebc8c11100ab0c2f44f4f9269a7f",
+        "archivedSha256": "4f105d2b459f98f9a1bada1ba6c674ce9bc2ebc8c11100ab0c2f44f4f9269a7f"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.TextInsertion.cs",
+        "sha256": "ed3693848abfd0fe8b755681e22a3e086915867093c84804352d66078c5f737a",
+        "archivedSha256": "ed3693848abfd0fe8b755681e22a3e086915867093c84804352d66078c5f737a"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+        "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748",
+        "archivedSha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/Es256LicenseVerifier.cs",
+        "sha256": "f4b6fa26b38adca76e230fbd98a61c920fbd80394bea2a0a3a6aadab6bd0cb98",
+        "archivedSha256": "f4b6fa26b38adca76e230fbd98a61c920fbd80394bea2a0a3a6aadab6bd0cb98"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalRegressionBatchReportStore.cs",
+        "sha256": "fb776e1078d153eb9d89ddf81bc980bc43ee9eea149b31665a11d7b0d0c3417e",
+        "archivedSha256": "fb776e1078d153eb9d89ddf81bc980bc43ee9eea149b31665a11d7b0d0c3417e"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalRegressionCaseStore.cs",
+        "sha256": "f2787805c4e27a3f4e72321659c7216b56c24cc17ddda7e5b9836e19cd8f815c",
+        "archivedSha256": "f2787805c4e27a3f4e72321659c7216b56c24cc17ddda7e5b9836e19cd8f815c"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalRegressionSuiteStore.cs",
+        "sha256": "a90c1174518c1e3c15d5b786140f902fcf7dcea997abb050557497eeeccd7ea3",
+        "archivedSha256": "a90c1174518c1e3c15d5b786140f902fcf7dcea997abb050557497eeeccd7ea3"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalResourceReader.cs",
+        "sha256": "0629444816ef1a44fa3eb19444ac9008c001566abb7ad8582b04f5c00787aebb",
+        "archivedSha256": "0629444816ef1a44fa3eb19444ac9008c001566abb7ad8582b04f5c00787aebb"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalSourcePersistence.cs",
+        "sha256": "84d8df80a83763a62b3c63f860e6a18a9af53ab85c077439416f17b48c1da444",
+        "archivedSha256": "84d8df80a83763a62b3c63f860e6a18a9af53ab85c077439416f17b48c1da444"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalThemePreferenceStore.cs",
+        "sha256": "65950fea938ee7736518a09c6a6cb65349c0d7668a97e8dd479d9e89eb8b234f",
+        "archivedSha256": "65950fea938ee7736518a09c6a6cb65349c0d7668a97e8dd479d9e89eb8b234f"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/LocalXsltExportStore.cs",
+        "sha256": "8ce7c86643f82fb46b8207a2cba644e73cae46a099b81be5bd8114780fc5d3cf",
+        "archivedSha256": "8ce7c86643f82fb46b8207a2cba644e73cae46a099b81be5bd8114780fc5d3cf"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs",
+        "sha256": "ad1604c56b45e61507a70ae3b81aee2d33c8132629a91f06dfa5cacb79f06891",
+        "archivedSha256": "ad1604c56b45e61507a70ae3b81aee2d33c8132629a91f06dfa5cacb79f06891"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerServer.cs",
+        "sha256": "4a2a037b0b04ef79a7806253277bde729f06a780e1699d955c9c27c2081e2735",
+        "archivedSha256": "4a2a037b0b04ef79a7806253277bde729f06a780e1699d955c9c27c2081e2735"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/ResultComparer.cs",
+        "sha256": "64e20be8564d754aac7cf5549f9fa6ebabec0e14c5e2e4ea2aedcb1146b326c5",
+        "archivedSha256": "64e20be8564d754aac7cf5549f9fa6ebabec0e14c5e2e4ea2aedcb1146b326c5"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/WindowsRememberedLicenseStore.cs",
+        "sha256": "8fbf31632fa2b4b41dc4c30839062856f3993b7aa737429f6932d7591c9ee49e",
+        "archivedSha256": "8fbf31632fa2b4b41dc4c30839062856f3993b7aa737429f6932d7591c9ee49e"
+      },
+      {
+        "path": "src/Bosak.Braid.Infrastructure/WorkerProcessPreviewExecutor.cs",
+        "sha256": "a274f1a06dda9d74b8272bf8e2f64b2a0def5f918f69f84ac70fc4c3255cd742",
+        "archivedSha256": "a274f1a06dda9d74b8272bf8e2f64b2a0def5f918f69f84ac70fc4c3255cd742"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/BraidApp.cs",
+        "sha256": "26fe030f495e3704bb3a63d41be253e04632b2d0e8733ebb1c0624f42cde0bc2",
+        "archivedSha256": "26fe030f495e3704bb3a63d41be253e04632b2d0e8733ebb1c0624f42cde0bc2"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/BraidThemeResources.cs",
+        "sha256": "3daa152ccc74caf564de72192d3832fc553651cc6a78fddad77ea19c8945c996",
+        "archivedSha256": "3daa152ccc74caf564de72192d3832fc553651cc6a78fddad77ea19c8945c996"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ExpressionEditWindow.cs",
+        "sha256": "44f35442b88baeffdad5fdcbd8038f0a9155b3a04c7b908e04f9afb9294ccf0f",
+        "archivedSha256": "44f35442b88baeffdad5fdcbd8038f0a9155b3a04c7b908e04f9afb9294ccf0f"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/LicenseActivationWindow.cs",
+        "sha256": "6f96ea76078989ccc25420c9897c6767255f0c920d8a5e50a90c2d9b9d0320c5",
+        "archivedSha256": "6f96ea76078989ccc25420c9897c6767255f0c920d8a5e50a90c2d9b9d0320c5"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/LiteralAttributeWindow.cs",
+        "sha256": "da84f9956362288eb58fbb609e10df582195b8bad90e21fb0cbd0f2f26d88749",
+        "archivedSha256": "da84f9956362288eb58fbb609e10df582195b8bad90e21fb0cbd0f2f26d88749"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/LiteralElementInsertionWindow.cs",
+        "sha256": "b52a35c08e6db335932ca38e80be8d4c0f3b420643c3d390e265b3a03f78a9b5",
+        "archivedSha256": "b52a35c08e6db335932ca38e80be8d4c0f3b420643c3d390e265b3a03f78a9b5"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/LiteralElementWindow.cs",
+        "sha256": "590e30566fda7c2204d218d4ff524c4c97d87fa1a4bb682f4e90597a7a58393a",
+        "archivedSha256": "590e30566fda7c2204d218d4ff524c4c97d87fa1a4bb682f4e90597a7a58393a"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/PreviewWindow.cs",
+        "sha256": "f1fab080882eef78d98f8c2794d7352c65c88da69a3948353324d14ff8fa6308",
+        "archivedSha256": "f1fab080882eef78d98f8c2794d7352c65c88da69a3948353324d14ff8fa6308"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/RecoveryCatalogWindow.cs",
+        "sha256": "2a7edb5c86a6fa21b6a939838ba518f0b864c3981844fe26baa06da5707a23db",
+        "archivedSha256": "2a7edb5c86a6fa21b6a939838ba518f0b864c3981844fe26baa06da5707a23db"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/RegressionBatchWindow.cs",
+        "sha256": "91f0e7c7d74c3a2e010a8fd3067423c29159a2d2541665d6220c3f875df243c7",
+        "archivedSha256": "91f0e7c7d74c3a2e010a8fd3067423c29159a2d2541665d6220c3f875df243c7"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/RegressionCasesWindow.cs",
+        "sha256": "132094f6ef86a9ad3f9ab21bbaa2972273c5b9d44c88f8927829a39de7eee357",
+        "archivedSha256": "132094f6ef86a9ad3f9ab21bbaa2972273c5b9d44c88f8927829a39de7eee357"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/RestrictedExportWindow.cs",
+        "sha256": "5252f375f60d3ace628070b98fb47c0cb6e8b947a12cac7e5885b582d1defe32",
+        "archivedSha256": "5252f375f60d3ace628070b98fb47c0cb6e8b947a12cac7e5885b582d1defe32"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.Deletion.cs",
+        "sha256": "dac9652b8e12172661a3593f844561321d24dfe39da7a54e7f0b1f147ccb1a4e",
+        "archivedSha256": "dac9652b8e12172661a3593f844561321d24dfe39da7a54e7f0b1f147ccb1a4e"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.Insertion.cs",
+        "sha256": "50fa63b0472a7e86aae775931880694b9b266424de8760529bf8a80cc3dcb6e9",
+        "archivedSha256": "50fa63b0472a7e86aae775931880694b9b266424de8760529bf8a80cc3dcb6e9"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.LiteralAttributes.cs",
+        "sha256": "a3cd3d4e7ef0a8274faace8ee1316de9d760d95c4441bfc158c5e9e846a0e2f6",
+        "archivedSha256": "a3cd3d4e7ef0a8274faace8ee1316de9d760d95c4441bfc158c5e9e846a0e2f6"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.LiteralElementInsertion.cs",
+        "sha256": "1c3217b9106b94285988bfbde10b5333d71121d8e7991b80ea078ce8d0279b22",
+        "archivedSha256": "1c3217b9106b94285988bfbde10b5333d71121d8e7991b80ea078ce8d0279b22"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.LiteralElements.cs",
+        "sha256": "0347f2cd4cd2fbb4ba153ec4065747dfd4cc702e8b1041d916926b42dab9d567",
+        "archivedSha256": "0347f2cd4cd2fbb4ba153ec4065747dfd4cc702e8b1041d916926b42dab9d567"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.TextBodyReplacement.cs",
+        "sha256": "06426969f3f43bfd7e6303819c78db738f4ad526c734727b175a59d81325c564",
+        "archivedSha256": "06426969f3f43bfd7e6303819c78db738f4ad526c734727b175a59d81325c564"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.TextDeletion.cs",
+        "sha256": "a9acbe111672aed915f4e72fd6ab66026c3d816d69d5aadf5e51fad1df8cf804",
+        "archivedSha256": "a9acbe111672aed915f4e72fd6ab66026c3d816d69d5aadf5e51fad1df8cf804"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.TextInsertion.cs",
+        "sha256": "0119ccebc5ff1e6cfc115a578de788de50b7f9c0c508c22e952dcbadc25b3a07",
+        "archivedSha256": "0119ccebc5ff1e6cfc115a578de788de50b7f9c0c508c22e952dcbadc25b3a07"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceGraphWindow.cs",
+        "sha256": "577edc1d7d14d4fc2c9d447fa4dc6ece2c3981e43133f5c004e5f7b7bca64e97",
+        "archivedSha256": "577edc1d7d14d4fc2c9d447fa4dc6ece2c3981e43133f5c004e5f7b7bca64e97"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.Deletion.cs",
+        "sha256": "0e458cbdb00a8184c512731f1d213abb06d03d9f796c8b65d8180da573cdc700",
+        "archivedSha256": "0e458cbdb00a8184c512731f1d213abb06d03d9f796c8b65d8180da573cdc700"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.Insertion.cs",
+        "sha256": "0e1a2ce3fb8587a8d08dcf1f3381eeedda35fb56b30fbaa95e793d99bb50c3eb",
+        "archivedSha256": "0e1a2ce3fb8587a8d08dcf1f3381eeedda35fb56b30fbaa95e793d99bb50c3eb"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.LiteralAttributes.cs",
+        "sha256": "ee602218d33784bbcebc1092ce61942a2f822fbc53880d6b9b64a9617f428711",
+        "archivedSha256": "ee602218d33784bbcebc1092ce61942a2f822fbc53880d6b9b64a9617f428711"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.LiteralElementInsertion.cs",
+        "sha256": "0de63156032d4019cee6f5fb348b401044f5761718cf3cfada1865e4e62a5b4d",
+        "archivedSha256": "0de63156032d4019cee6f5fb348b401044f5761718cf3cfada1865e4e62a5b4d"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.LiteralElements.cs",
+        "sha256": "e03f428451b63227f0f7573f4178c1594a01529fe8577a345d220748ac3fb23f",
+        "archivedSha256": "e03f428451b63227f0f7573f4178c1594a01529fe8577a345d220748ac3fb23f"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.TextBodyReplacement.cs",
+        "sha256": "bd6a88f3a7fafd8fe1e7379890514d7e49a2630a0533b09ac46ea2f194d1fbad",
+        "archivedSha256": "bd6a88f3a7fafd8fe1e7379890514d7e49a2630a0533b09ac46ea2f194d1fbad"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.TextDeletion.cs",
+        "sha256": "3054d5276f1c0d67ef3d24ec8375906bf69f3902b6a3fb77499ae70b7ec27e6a",
+        "archivedSha256": "3054d5276f1c0d67ef3d24ec8375906bf69f3902b6a3fb77499ae70b7ec27e6a"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.TextInsertion.cs",
+        "sha256": "f9d0c3376aac7816cf132e76692d05aff3a77e7eb6ad29c117d3060191cf96ae",
+        "archivedSha256": "f9d0c3376aac7816cf132e76692d05aff3a77e7eb6ad29c117d3060191cf96ae"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceReviewWindow.cs",
+        "sha256": "f05ba58b47110fd52e4fcf0150bde8bcf70998da07aaaa0f5806fc323d975d3c",
+        "archivedSha256": "f05ba58b47110fd52e4fcf0150bde8bcf70998da07aaaa0f5806fc323d975d3c"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/SourceSelectionAppearance.cs",
+        "sha256": "a29d9ba01bfcfbf425f12532a096c12decebbc81b39764618cad051976f649db",
+        "archivedSha256": "a29d9ba01bfcfbf425f12532a096c12decebbc81b39764618cad051976f649db"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/TextBodyReplacementWindow.cs",
+        "sha256": "f5036a7c46ef4ca5e1b1ddef293a1ff7f7a0777aa1be8a11afabb232e37fb550",
+        "archivedSha256": "f5036a7c46ef4ca5e1b1ddef293a1ff7f7a0777aa1be8a11afabb232e37fb550"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/TextDeletionWindow.cs",
+        "sha256": "927806b934acf0ad136d449179132406724253ff0df1283acdd3a3ed3e8ad2b4",
+        "archivedSha256": "927806b934acf0ad136d449179132406724253ff0df1283acdd3a3ed3e8ad2b4"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/TextInsertionWindow.cs",
+        "sha256": "25e5b615cb3e5fd6ff17f64fb150644e321c139bb009f6c7bc6443bdda2ae568",
+        "archivedSha256": "25e5b615cb3e5fd6ff17f64fb150644e321c139bb009f6c7bc6443bdda2ae568"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ThemeSettingsSession.cs",
+        "sha256": "6d216c9fa7f38742f5fcdc2443e37d76e6c03eb66557605cf98536458ab5070d",
+        "archivedSha256": "6d216c9fa7f38742f5fcdc2443e37d76e6c03eb66557605cf98536458ab5070d"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ThemeSettingsWindow.cs",
+        "sha256": "36d67d1d0dc5a79a5d29b49454adcfd2d320ee7a23e517826d35426b3f8d8116",
+        "archivedSha256": "36d67d1d0dc5a79a5d29b49454adcfd2d320ee7a23e517826d35426b3f8d8116"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ValidationWindow.cs",
+        "sha256": "34c98f3dded01cd005cfe1d232a37736c226a6fc01558e96db45eb5f46fde3eb",
+        "archivedSha256": "34c98f3dded01cd005cfe1d232a37736c226a6fc01558e96db45eb5f46fde3eb"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ValueOfDeletionWindow.cs",
+        "sha256": "a131ffe20dcbef5b3ea94c8380475bf30cb05ed731e7354fa89e9223b422183e",
+        "archivedSha256": "a131ffe20dcbef5b3ea94c8380475bf30cb05ed731e7354fa89e9223b422183e"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/ValueOfInsertionWindow.cs",
+        "sha256": "6e8dd3f230bfa0670e893a705c30b97d20e914b393fd3d9411a15499e6fc232b",
+        "archivedSha256": "6e8dd3f230bfa0670e893a705c30b97d20e914b393fd3d9411a15499e6fc232b"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/XsltHighlightingRegistry.cs",
+        "sha256": "2382fc026b31e7bc5e669eb7ed629517366c62377833145cba4cd49249eeb6b5",
+        "archivedSha256": "2382fc026b31e7bc5e669eb7ed629517366c62377833145cba4cd49249eeb6b5"
+      },
+      {
+        "path": "src/Bosak.Braid.Workbench/XsltSourceView.cs",
+        "sha256": "3b1c84af0991f70f76397086d040869d6bf7757060ca942d50f4c9bcf17de0af",
+        "archivedSha256": "3b1c84af0991f70f76397086d040869d6bf7757060ca942d50f4c9bcf17de0af"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ExpressionEditingTests.cs",
+        "sha256": "2394d3c450b4128cf75cf4071abaa0e2891747bb3e4a5a15cde282d5b832a04b",
+        "archivedSha256": "2394d3c450b4128cf75cf4071abaa0e2891747bb3e4a5a15cde282d5b832a04b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ExpressionReviewSessionTests.cs",
+        "sha256": "9a3a456bcaf0f2a1598c47818713b1ed8781d93b61e84f5b58aeb8e698ca49e9",
+        "archivedSha256": "9a3a456bcaf0f2a1598c47818713b1ed8781d93b61e84f5b58aeb8e698ca49e9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LicenseActivationSessionTests.cs",
+        "sha256": "6834a0f5aed46a7718f4d97996dee8b80942baa88b613ade041beb9e627942c5",
+        "archivedSha256": "6834a0f5aed46a7718f4d97996dee8b80942baa88b613ade041beb9e627942c5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LicensePolicyTests.cs",
+        "sha256": "6e59bf9d48c78d9d75f3e4ba7813f9dc7fef8c61046f0cd1b16743e197b6118e",
+        "archivedSha256": "6e59bf9d48c78d9d75f3e4ba7813f9dc7fef8c61046f0cd1b16743e197b6118e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LiteralAttributeSessionTests.cs",
+        "sha256": "42afe9eec7e2c386290744a4523670d991207f6ae95de1fdeeef4f31d3933b0e",
+        "archivedSha256": "42afe9eec7e2c386290744a4523670d991207f6ae95de1fdeeef4f31d3933b0e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LiteralElementInsertionSessionTests.cs",
+        "sha256": "889fb2279b71dd61e2242fcc07bc008407bb5d798a51a699c89fdce367dbcee7",
+        "archivedSha256": "889fb2279b71dd61e2242fcc07bc008407bb5d798a51a699c89fdce367dbcee7"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LiteralElementReorderSessionTests.cs",
+        "sha256": "b5158978c14ab28c201b627140cbcb22df86050598e6f53ae3f3ca328e54b46b",
+        "archivedSha256": "b5158978c14ab28c201b627140cbcb22df86050598e6f53ae3f3ca328e54b46b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/LiteralElementSessionTests.cs",
+        "sha256": "0f0ea9707f9784ab97884d45eb929cbd1052881202926a99d6e8241b8cadc6c5",
+        "archivedSha256": "0f0ea9707f9784ab97884d45eb929cbd1052881202926a99d6e8241b8cadc6c5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/PreviewExecutionSessionTests.cs",
+        "sha256": "c5bba740775ebf5f14b1af575485c72896b95c12c576a5ae3909dadf0b1307ee",
+        "archivedSha256": "c5bba740775ebf5f14b1af575485c72896b95c12c576a5ae3909dadf0b1307ee"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/PreviewFixtureSessionTests.cs",
+        "sha256": "adaa16eb737a7ac67a5afca77050f9b69712aad61f9496b1225a3981e1da5a3b",
+        "archivedSha256": "adaa16eb737a7ac67a5afca77050f9b69712aad61f9496b1225a3981e1da5a3b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/PreviewRunConfigurationTests.cs",
+        "sha256": "81244be7a05fb02b6f45abedb9ea45ff70bacad66b5ff445bc8cc0d844bed5e9",
+        "archivedSha256": "81244be7a05fb02b6f45abedb9ea45ff70bacad66b5ff445bc8cc0d844bed5e9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ReadableInsertionTests.cs",
+        "sha256": "b3d4a017df716b0b839b18905d8fcc38d3679ee5ba73c61a862ae40f4ce00cdf",
+        "archivedSha256": "b3d4a017df716b0b839b18905d8fcc38d3679ee5ba73c61a862ae40f4ce00cdf"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionBatchReportSessionTests.cs",
+        "sha256": "60dac70fc6561258716e17b059fb5c90add58927d4c42455881478a1552f7209",
+        "archivedSha256": "60dac70fc6561258716e17b059fb5c90add58927d4c42455881478a1552f7209"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionBatchSessionTests.cs",
+        "sha256": "c1023fecc1b76e350bc8cb57e4c2965fed4083bbb7d8a4005d6cac936fb3912f",
+        "archivedSha256": "c1023fecc1b76e350bc8cb57e4c2965fed4083bbb7d8a4005d6cac936fb3912f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionBatchViewSelectionTests.cs",
+        "sha256": "6a3dda69946c420d6feec99f0c1da36ffde01185a1c8e27cc706bed550256909",
+        "archivedSha256": "6a3dda69946c420d6feec99f0c1da36ffde01185a1c8e27cc706bed550256909"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionCaseWorkspaceSessionTests.cs",
+        "sha256": "be25dbbab4d2c0cfa41adb78d81e9518e34b96f9116335ff02c3534e462b36b9",
+        "archivedSha256": "be25dbbab4d2c0cfa41adb78d81e9518e34b96f9116335ff02c3534e462b36b9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionSuiteSelectionTests.cs",
+        "sha256": "bd7dcd47ef8c7adaef1d4c9f0b5b4b8f288c5b761a72f1d6225c704b44489464",
+        "archivedSha256": "bd7dcd47ef8c7adaef1d4c9f0b5b4b8f288c5b761a72f1d6225c704b44489464"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RegressionSuiteSessionTests.cs",
+        "sha256": "84bef8ac9bcd4c039af50a4411effeaa3b6e8370a0810dfffa7dfd693867ae33",
+        "archivedSha256": "84bef8ac9bcd4c039af50a4411effeaa3b6e8370a0810dfffa7dfd693867ae33"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RestrictedExportSessionTests.cs",
+        "sha256": "46b30d73eaf3b77d1b05e2fd706f78cf07c5a8f8f2b2425a6c14f758e64fadeb",
+        "archivedSha256": "46b30d73eaf3b77d1b05e2fd706f78cf07c5a8f8f2b2425a6c14f758e64fadeb"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/RunEvidenceTests.cs",
+        "sha256": "f4efd4a5d7417c443049bd797d746926ff0152e1c303efde4d62955f0a46ff1e",
+        "archivedSha256": "f4efd4a5d7417c443049bd797d746926ff0152e1c303efde4d62955f0a46ff1e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/SourceCompilationSessionTests.cs",
+        "sha256": "3e3bba55728ef9f486a937c6153aa5c6c4bb0ad3202387626f893cf19b529a3a",
+        "archivedSha256": "3e3bba55728ef9f486a937c6153aa5c6c4bb0ad3202387626f893cf19b529a3a"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/SourceGraphProjectionTests.cs",
+        "sha256": "5fb6dcef60ded63ad3befefe213e6a80606438f0764296d3f8f4d43169f0f41e",
+        "archivedSha256": "5fb6dcef60ded63ad3befefe213e6a80606438f0764296d3f8f4d43169f0f41e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/SourceInspectionSessionTests.cs",
+        "sha256": "423529567493b2937af824bc7d255381bed3f64b391a8ecd11b3662f092e22f6",
+        "archivedSha256": "423529567493b2937af824bc7d255381bed3f64b391a8ecd11b3662f092e22f6"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/SourceReviewSessionTests.cs",
+        "sha256": "dd09ac5f49689c75525d02797d130cafa1904b3f4bf65595d4e1cd824b3ac0a0",
+        "archivedSha256": "dd09ac5f49689c75525d02797d130cafa1904b3f4bf65595d4e1cd824b3ac0a0"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/SourceValidationSessionTests.cs",
+        "sha256": "758e9eb879317601d80ab6c7509de9f930e06abbe37df8f9035deab00cf82905",
+        "archivedSha256": "758e9eb879317601d80ab6c7509de9f930e06abbe37df8f9035deab00cf82905"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/TextBodyReplacementSessionTests.cs",
+        "sha256": "4cef0cc45d31404995f989c99f8fa36a178d2b60964aca5aff52b82bef16dfbe",
+        "archivedSha256": "4cef0cc45d31404995f989c99f8fa36a178d2b60964aca5aff52b82bef16dfbe"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/TextDeletionSessionTests.cs",
+        "sha256": "59ac1ce90bec04a4eac041f110c6de5d8a1796bf21d59aaf983fbf30cacdef78",
+        "archivedSha256": "59ac1ce90bec04a4eac041f110c6de5d8a1796bf21d59aaf983fbf30cacdef78"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/TextInsertionSessionTests.cs",
+        "sha256": "8073f5db432e226b9a875d8dd72bd2446defa88ad10257b57a102e821be5d6c4",
+        "archivedSha256": "8073f5db432e226b9a875d8dd72bd2446defa88ad10257b57a102e821be5d6c4"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ValueOfDeletionSessionTests.cs",
+        "sha256": "2692254b2d507e9fbedb4a858f0906c14098c844b2ac9ce8c0d489c4265bb2bc",
+        "archivedSha256": "2692254b2d507e9fbedb4a858f0906c14098c844b2ac9ce8c0d489c4265bb2bc"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ValueOfInsertionApplyTests.cs",
+        "sha256": "b57aad076f9fd0e9dd9352ce2ab83a9e6ffdf281ddec5d5f725537458517c11e",
+        "archivedSha256": "b57aad076f9fd0e9dd9352ce2ab83a9e6ffdf281ddec5d5f725537458517c11e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Application.Tests/ValueOfInsertionSessionTests.cs",
+        "sha256": "b030d57f7f3a1e7e42dd68d581cde149a82ac33d33a033af6c125c340dc25033",
+        "archivedSha256": "b030d57f7f3a1e7e42dd68d581cde149a82ac33d33a033af6c125c340dc25033"
+      },
+      {
+        "path": "tests/Bosak.Braid.Core.Tests/SourceDisplayExtentTests.cs",
+        "sha256": "53216531c0d7cbbd49a44a4dc9ca5e4f2a39cb3e27e26832212d26f439b3b8e5",
+        "archivedSha256": "53216531c0d7cbbd49a44a4dc9ca5e4f2a39cb3e27e26832212d26f439b3b8e5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Core.Tests/SourceDocumentTests.cs",
+        "sha256": "edbe959317233dc93a49d8021b811a72af3edf2fa6358a5c931fd9fca85a061b",
+        "archivedSha256": "edbe959317233dc93a49d8021b811a72af3edf2fa6358a5c931fd9fca85a061b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/Bosak1261NumericConsumerTests.cs",
+        "sha256": "b19f324cb59fd952a448a5df26b0d274b8f893af6fd85e92a5ee453e8fd57cd5",
+        "archivedSha256": "b19f324cb59fd952a448a5df26b0d274b8f893af6fd85e92a5ee453e8fd57cd5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/Bosak1261PreviewConsumerTests.cs",
+        "sha256": "7a6aade4d5ae6677a3541bcce6b87e50c487783e8f7f5a414ad562c2e68a6767",
+        "archivedSha256": "7a6aade4d5ae6677a3541bcce6b87e50c487783e8f7f5a414ad562c2e68a6767"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/Bosak1262PreviewConsumerTests.cs",
+        "sha256": "12516c5ab94aca32aaa89a047dca397344da3d5f0f437f595c146e49e1174dad",
+        "archivedSha256": "12516c5ab94aca32aaa89a047dca397344da3d5f0f437f595c146e49e1174dad"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/Bosak1262RoundingConsumerTests.cs",
+        "sha256": "d701023f1dc7dc57b775e769d8dff6dc67f784ea25ead2c634e8a0baa3658fc9",
+        "archivedSha256": "d701023f1dc7dc57b775e769d8dff6dc67f784ea25ead2c634e8a0baa3658fc9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/BosakControlledPreviewContractTests.cs",
+        "sha256": "ca614d0751e9dbf1fe1bef79912a6e9e6d0d29341470401ab6d5c3f9c3fa0b5f",
+        "archivedSha256": "ca614d0751e9dbf1fe1bef79912a6e9e6d0d29341470401ab6d5c3f9c3fa0b5f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/BosakExpressionEditingTests.cs",
+        "sha256": "2cb2fd24b6745d5c4592bcd0d62fb9c0a664beb1c9e900f03a4e76564058b98c",
+        "archivedSha256": "2cb2fd24b6745d5c4592bcd0d62fb9c0a664beb1c9e900f03a4e76564058b98c"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/BosakPreviewExecutorTests.cs",
+        "sha256": "82a6455de93b85e4718db3b0dcf8b8f9b00ad121840b2e32a8e353550f57bb19",
+        "archivedSha256": "82a6455de93b85e4718db3b0dcf8b8f9b00ad121840b2e32a8e353550f57bb19"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/BosakSourceInspectorTests.cs",
+        "sha256": "af98c11bc7292d009c74bba126e5733cd118010b7409d0f5d57ed500872d1819",
+        "archivedSha256": "af98c11bc7292d009c74bba126e5733cd118010b7409d0f5d57ed500872d1819"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ConditionalWrapperWorkflowTests.cs",
+        "sha256": "90a0e4cee4bf7b50df1b9247a2963ca4df1bcf9f766cd19db100a78d4e0c5594",
+        "archivedSha256": "90a0e4cee4bf7b50df1b9247a2963ca4df1bcf9f766cd19db100a78d4e0c5594"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/DesktopAcceptanceFixtureTests.cs",
+        "sha256": "fe201d18e461073e5cef0caab57ea26dbecfb01afe0904455a7b25ef5857f430",
+        "archivedSha256": "fe201d18e461073e5cef0caab57ea26dbecfb01afe0904455a7b25ef5857f430"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/Es256LicenseVerifierTests.cs",
+        "sha256": "71529db04baba5cdc98d2cf30e71f26e456598f735b816ad142b8caa9281d93f",
+        "archivedSha256": "71529db04baba5cdc98d2cf30e71f26e456598f735b816ad142b8caa9281d93f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/GraphAcceptanceFixtureTests.cs",
+        "sha256": "0bed0136df82aabb8362e73de022f1b481d261f9c05850da18f6757083cf05c5",
+        "archivedSha256": "0bed0136df82aabb8362e73de022f1b481d261f9c05850da18f6757083cf05c5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/GraphAuthoringWorkflowTests.cs",
+        "sha256": "2416b1f8b265fca13fa6214f47f89f70e79c75f5e7786229542cd35468d83d94",
+        "archivedSha256": "2416b1f8b265fca13fa6214f47f89f70e79c75f5e7786229542cd35468d83d94"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralAttributeEvidenceTests.cs",
+        "sha256": "851c6dad19f9381a51e463e0f7ff92ef527ac2f995032f58dce8bf07e527d597",
+        "archivedSha256": "851c6dad19f9381a51e463e0f7ff92ef527ac2f995032f58dce8bf07e527d597"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralAttributeIntegrationTests.cs",
+        "sha256": "a925cd7b95069b4316db7034f7facd556d6ccc46cb87c63c88cc1894a255ca9e",
+        "archivedSha256": "a925cd7b95069b4316db7034f7facd556d6ccc46cb87c63c88cc1894a255ca9e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralAttributeWorkflowTests.cs",
+        "sha256": "85a10602ceceeaac15646e531deeebd5c091906efcb2882d7429a14991234bb3",
+        "archivedSha256": "85a10602ceceeaac15646e531deeebd5c091906efcb2882d7429a14991234bb3"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementInsertionIntegrationTests.cs",
+        "sha256": "ab9bb181536be050ed1d4ba112dd14c0a706344ffbff226a38b02c29c11db590",
+        "archivedSha256": "ab9bb181536be050ed1d4ba112dd14c0a706344ffbff226a38b02c29c11db590"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementInsertionWorkflowTests.cs",
+        "sha256": "107b61d7c1e422d89c88bd4ffbece912b69a66fdcdedd2085bbc7f82fc00825c",
+        "archivedSha256": "107b61d7c1e422d89c88bd4ffbece912b69a66fdcdedd2085bbc7f82fc00825c"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementIntegrationTests.cs",
+        "sha256": "8148df586de9418e77f42a0ca16f364ff4efea450234fa91fd5e7f326b683302",
+        "archivedSha256": "8148df586de9418e77f42a0ca16f364ff4efea450234fa91fd5e7f326b683302"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementLifecycleWorkflowTests.cs",
+        "sha256": "949a589bc999d634ad1b0c65bc896b79c170985b6bb948caac7d42a12f7d8f26",
+        "archivedSha256": "949a589bc999d634ad1b0c65bc896b79c170985b6bb948caac7d42a12f7d8f26"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementReorderIntegrationTests.cs",
+        "sha256": "7d2c57528f16d003539d8b07148ee186d51bb323fe7e270d4a284c1a6407d73a",
+        "archivedSha256": "7d2c57528f16d003539d8b07148ee186d51bb323fe7e270d4a284c1a6407d73a"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LiteralElementReorderWorkflowTests.cs",
+        "sha256": "f4f4d144d9887c28a1f8973b3d6162b4d5e03773f39464ae900c15e184d19850",
+        "archivedSha256": "f4f4d144d9887c28a1f8973b3d6162b4d5e03773f39464ae900c15e184d19850"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalRegressionBatchReportStoreTests.cs",
+        "sha256": "3fb280539c8551c1689a997ffa4d226aa9185ec488b4fbd059edc2bc41c25108",
+        "archivedSha256": "3fb280539c8551c1689a997ffa4d226aa9185ec488b4fbd059edc2bc41c25108"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalRegressionCaseStoreTests.cs",
+        "sha256": "d8df917c2d7f70abd4ca878e53477312860ca26f7592a8de7c035b929e061462",
+        "archivedSha256": "d8df917c2d7f70abd4ca878e53477312860ca26f7592a8de7c035b929e061462"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalRegressionSuiteStoreTests.cs",
+        "sha256": "e29e5067c934649b5c3c637c4cf47ca80f7af4f6361824fb97b5bcd13c602ba6",
+        "archivedSha256": "e29e5067c934649b5c3c637c4cf47ca80f7af4f6361824fb97b5bcd13c602ba6"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalResourceReaderTests.cs",
+        "sha256": "445675c4461eb98078f034503e9d1c4a934e87658981b5049833b0716440d970",
+        "archivedSha256": "445675c4461eb98078f034503e9d1c4a934e87658981b5049833b0716440d970"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalSourcePersistenceTests.cs",
+        "sha256": "7fe2043e936e1e6d54c7198ffa6e68c7956242b247b84c06f1d51faba1d5bb13",
+        "archivedSha256": "7fe2043e936e1e6d54c7198ffa6e68c7956242b247b84c06f1d51faba1d5bb13"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/LocalThemePreferenceStoreTests.cs",
+        "sha256": "dfe411153b9958c73a127fa50a84a92fb680f3e184072e7aaee760ba2501520d",
+        "archivedSha256": "dfe411153b9958c73a127fa50a84a92fb680f3e184072e7aaee760ba2501520d"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/PreviewExecutionSessionIntegrationTests.cs",
+        "sha256": "78ffbedc29db24a96a0272e1e8bf863f31454dd78b6c508ea85d0845fb8afcbe",
+        "archivedSha256": "78ffbedc29db24a96a0272e1e8bf863f31454dd78b6c508ea85d0845fb8afcbe"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/RestrictedExportIntegrationTests.cs",
+        "sha256": "d0a0c89789295db812695d56f5cf3d4e1045fbaa0c51830230a3c619e29f2a95",
+        "archivedSha256": "d0a0c89789295db812695d56f5cf3d4e1045fbaa0c51830230a3c619e29f2a95"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ResultComparerTests.cs",
+        "sha256": "3119a247a47848423a48683dca2d68cb7f0c8d94233533be0b7ca5ccda36f707",
+        "archivedSha256": "3119a247a47848423a48683dca2d68cb7f0c8d94233533be0b7ca5ccda36f707"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/SourceGraphInspectionTests.cs",
+        "sha256": "336290e19dfe2fced58edd3b046621daa11bacf08e08caf066af0179e4a4c7dc",
+        "archivedSha256": "336290e19dfe2fced58edd3b046621daa11bacf08e08caf066af0179e4a4c7dc"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextBodyReplacementIntegrationTests.cs",
+        "sha256": "871fb5aa4ca1198d8db8b5a0a5414657d66dd3bda8f16bb8a0bd25b21c784d6e",
+        "archivedSha256": "871fb5aa4ca1198d8db8b5a0a5414657d66dd3bda8f16bb8a0bd25b21c784d6e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextBodyReplacementWorkflowTests.cs",
+        "sha256": "dfb83fad2756d30a14021b1c13471cb50745c65a5286cdd2381b33bc094a27a7",
+        "archivedSha256": "dfb83fad2756d30a14021b1c13471cb50745c65a5286cdd2381b33bc094a27a7"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextDeletionIntegrationTests.cs",
+        "sha256": "813a6c12712a2902348c3e2b18664d1a32aac029844147c0f2f79770668f37ac",
+        "archivedSha256": "813a6c12712a2902348c3e2b18664d1a32aac029844147c0f2f79770668f37ac"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextDeletionWorkflowTests.cs",
+        "sha256": "daacf72a1288794717c8cae52d99c19a3e2217c48631d098bc8e04764a8c5cb9",
+        "archivedSha256": "daacf72a1288794717c8cae52d99c19a3e2217c48631d098bc8e04764a8c5cb9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextInsertionIntegrationTests.cs",
+        "sha256": "516cde0673aaff745cc7ea4eb1385efe24eefe35fcb6485c650d4379d4457da9",
+        "archivedSha256": "516cde0673aaff745cc7ea4eb1385efe24eefe35fcb6485c650d4379d4457da9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/TextInsertionWorkflowTests.cs",
+        "sha256": "0e55ca918b4a45e8f4c6567f82dfc33712bf86eb270fb66d0ea9d82335b5574b",
+        "archivedSha256": "0e55ca918b4a45e8f4c6567f82dfc33712bf86eb270fb66d0ea9d82335b5574b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfDeletionIntegrationTests.cs",
+        "sha256": "7c745c5e9535ff37b69a7fe120431b246074101bd002c04e84bc1d15022820db",
+        "archivedSha256": "7c745c5e9535ff37b69a7fe120431b246074101bd002c04e84bc1d15022820db"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfDeletionWorkflowTests.cs",
+        "sha256": "af70886edcf891f11d10e52b8f823f3da3a3ef6a7825e4ab80e9dc31d7f31541",
+        "archivedSha256": "af70886edcf891f11d10e52b8f823f3da3a3ef6a7825e4ab80e9dc31d7f31541"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfInsertionApplyIntegrationTests.cs",
+        "sha256": "b6f4e6ba1a1f40b107749eac2cb74927f83d6e34c42438a500b4df70ebabcf6b",
+        "archivedSha256": "b6f4e6ba1a1f40b107749eac2cb74927f83d6e34c42438a500b4df70ebabcf6b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfInsertionIntegrationTests.cs",
+        "sha256": "196d4bb79fb2859f4a7fbee56d15017eecf420fc98713fe3ec41575947602354",
+        "archivedSha256": "196d4bb79fb2859f4a7fbee56d15017eecf420fc98713fe3ec41575947602354"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfInsertionWorkflowTests.cs",
+        "sha256": "362346c64ee13eb3e90db98ead6b0f55662f428f2edf9a90c2af29319b8ee94e",
+        "archivedSha256": "362346c64ee13eb3e90db98ead6b0f55662f428f2edf9a90c2af29319b8ee94e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ValueOfLifecycleWorkflowTests.cs",
+        "sha256": "f0b098f6f624201820dbc51e7edf4cc3bf8c37f7211aced6a5f38de962f59d1d",
+        "archivedSha256": "f0b098f6f624201820dbc51e7edf4cc3bf8c37f7211aced6a5f38de962f59d1d"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/WindowsRememberedLicenseStoreTests.cs",
+        "sha256": "b10f97a58480a928b21b0ec2a723e367b10f7e36102072b8e2c48ef01cc8de31",
+        "archivedSha256": "b10f97a58480a928b21b0ec2a723e367b10f7e36102072b8e2c48ef01cc8de31"
+      },
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/WorkerProcessPreviewExecutorTests.cs",
+        "sha256": "6213df125e89a0509b5881a58ba4b3765128e93ca18bca68ae787a3b3f181a0e",
+        "archivedSha256": "6213df125e89a0509b5881a58ba4b3765128e93ca18bca68ae787a3b3f181a0e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ConditionalWrapperWindowTests.cs",
+        "sha256": "6d4ba7bf1af21bf3befbf8b1c650c708075942fd34280502b95d867a0aa4c0e9",
+        "archivedSha256": "6d4ba7bf1af21bf3befbf8b1c650c708075942fd34280502b95d867a0aa4c0e9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/DraftHistoryWindowTests.cs",
+        "sha256": "e4fc5a55062e2aa98a2ba9727d881ba534268cdc7fbdcacb0ad7c435ab372fad",
+        "archivedSha256": "e4fc5a55062e2aa98a2ba9727d881ba534268cdc7fbdcacb0ad7c435ab372fad"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ExpressionEditWindowTests.cs",
+        "sha256": "cdf422f9ba15e4c09f5f04494d69bfc334d61433d6d4f9ab804373685731127b",
+        "archivedSha256": "cdf422f9ba15e4c09f5f04494d69bfc334d61433d6d4f9ab804373685731127b"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LicenseActivationWindowTests.cs",
+        "sha256": "87e7ac0883c0372834a6ce3573e8f3f5c3f9d90e0817f35ff0962fa7b157c320",
+        "archivedSha256": "87e7ac0883c0372834a6ce3573e8f3f5c3f9d90e0817f35ff0962fa7b157c320"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LicenseRestartAcceptanceTests.cs",
+        "sha256": "79fcaae1b063af854d92f491cdbe8e798710f749573cc672db967fa840009b87",
+        "archivedSha256": "79fcaae1b063af854d92f491cdbe8e798710f749573cc672db967fa840009b87"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LiteralAttributeWindowTests.cs",
+        "sha256": "dab9221521cb6adc0dd54b54e4e23f8d65aca43c552e086c145a6c263c078a10",
+        "archivedSha256": "dab9221521cb6adc0dd54b54e4e23f8d65aca43c552e086c145a6c263c078a10"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LiteralElementInsertionWindowTests.cs",
+        "sha256": "eff588eb48cc7df79a661f953dd71ebe852ee68a190ab742728058d886330779",
+        "archivedSha256": "eff588eb48cc7df79a661f953dd71ebe852ee68a190ab742728058d886330779"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LiteralElementReorderWindowTests.cs",
+        "sha256": "f680aca979f15e4655f1f7b30ba72055ebe027dd6da0d0e7c6ba5612a02b4948",
+        "archivedSha256": "f680aca979f15e4655f1f7b30ba72055ebe027dd6da0d0e7c6ba5612a02b4948"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/LiteralElementWindowTests.cs",
+        "sha256": "7570eff85dce765feb73c6949b07a2c4ae6c2a50124b1fd0291db4a5e20680a5",
+        "archivedSha256": "7570eff85dce765feb73c6949b07a2c4ae6c2a50124b1fd0291db4a5e20680a5"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/PreviewWindowTests.cs",
+        "sha256": "a7a1b8c365c10f011ed5e157e6e903ba17f570db8270071f0895d1aa3dcd7c24",
+        "archivedSha256": "a7a1b8c365c10f011ed5e157e6e903ba17f570db8270071f0895d1aa3dcd7c24"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ReadableInsertionWindowTests.cs",
+        "sha256": "91a6373e8a6ae56f10d56100767b64534e4817f9807e8982d13b44d8f48cfdf9",
+        "archivedSha256": "91a6373e8a6ae56f10d56100767b64534e4817f9807e8982d13b44d8f48cfdf9"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionBatchAccessibilityTests.cs",
+        "sha256": "ebc33b9adc6b80dbab7bf5700e70ac1c1a1aa3198632555d9ab1a1d7a29e77c3",
+        "archivedSha256": "ebc33b9adc6b80dbab7bf5700e70ac1c1a1aa3198632555d9ab1a1d7a29e77c3"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionBatchWindowTests.cs",
+        "sha256": "da1c895b3218b5e726c3150777d34f8f7c24f0281505c5c986ad9d92af15b91f",
+        "archivedSha256": "da1c895b3218b5e726c3150777d34f8f7c24f0281505c5c986ad9d92af15b91f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionCaseOrderingTests.cs",
+        "sha256": "f234e3b61d248fcfc74fd63bb409cc280131169ac1c02c79bd1aa99bd142ac67",
+        "archivedSha256": "f234e3b61d248fcfc74fd63bb409cc280131169ac1c02c79bd1aa99bd142ac67"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionCasesWindowTests.cs",
+        "sha256": "41d2763f6a7b6f85484c3a13b77bdce9d1d85f8581453b6f29cbf1845566912d",
+        "archivedSha256": "41d2763f6a7b6f85484c3a13b77bdce9d1d85f8581453b6f29cbf1845566912d"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionReportWindowTests.cs",
+        "sha256": "6f46e691657439253f3ff3d2effc6cd77ae1cfc8b5a05775c2beae11de59381f",
+        "archivedSha256": "6f46e691657439253f3ff3d2effc6cd77ae1cfc8b5a05775c2beae11de59381f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RegressionSuiteWindowTests.cs",
+        "sha256": "4e8fc88f6966f2ca22686fdb6186265890354bf9af0a6c094e35a7bc854cdaeb",
+        "archivedSha256": "4e8fc88f6966f2ca22686fdb6186265890354bf9af0a6c094e35a7bc854cdaeb"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/RestrictedExportWindowTests.cs",
+        "sha256": "e44ed8afea8853fb86d54cd45e77cde5fd9d66f0de0ba157c4ee9b987ca12655",
+        "archivedSha256": "e44ed8afea8853fb86d54cd45e77cde5fd9d66f0de0ba157c4ee9b987ca12655"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/SourceGraphWindowTests.cs",
+        "sha256": "10dcf0311be336c00ac2da562fb900b81d4781225a1710f003ba7a6fe7ad9465",
+        "archivedSha256": "10dcf0311be336c00ac2da562fb900b81d4781225a1710f003ba7a6fe7ad9465"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/SourceOutlineNavigationTests.cs",
+        "sha256": "f477c111219fc9bd8f996b1140ed917a61c7a0500647abecc3bc8996f27ade6e",
+        "archivedSha256": "f477c111219fc9bd8f996b1140ed917a61c7a0500647abecc3bc8996f27ade6e"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/TextBodyReplacementWindowTests.cs",
+        "sha256": "ffc0918fcb47f4e34ac2a1bdf5403486b9b5c5f29c3dfa3cac34b37b4bfca97f",
+        "archivedSha256": "ffc0918fcb47f4e34ac2a1bdf5403486b9b5c5f29c3dfa3cac34b37b4bfca97f"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/TextDeletionWindowTests.cs",
+        "sha256": "fc3efcb6319ff8dc2f4f905c2e742d50b57382f2a11f1538a0e1cdd4cca73eb0",
+        "archivedSha256": "fc3efcb6319ff8dc2f4f905c2e742d50b57382f2a11f1538a0e1cdd4cca73eb0"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/TextInsertionWindowTests.cs",
+        "sha256": "4cdbfeed9189f9f5098c09eceb94befecd67dec86b2b38d7702a65b6b14aaa94",
+        "archivedSha256": "4cdbfeed9189f9f5098c09eceb94befecd67dec86b2b38d7702a65b6b14aaa94"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ThemeSettingsTests.cs",
+        "sha256": "5da19b682af248951024a7cb52058d26671310094abd4f5acbcb81b5075b5e69",
+        "archivedSha256": "5da19b682af248951024a7cb52058d26671310094abd4f5acbcb81b5075b5e69"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ValidationWindowTests.cs",
+        "sha256": "b23c614582a86c549be99b7d1d52942ea65869aa89f6815f3401a67fa61d7d59",
+        "archivedSha256": "b23c614582a86c549be99b7d1d52942ea65869aa89f6815f3401a67fa61d7d59"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ValueOfDeletionWindowTests.cs",
+        "sha256": "67a90e3bd2df04a3278bb513ea0a27b835b6712f9d25279cb89397b1f343d2db",
+        "archivedSha256": "67a90e3bd2df04a3278bb513ea0a27b835b6712f9d25279cb89397b1f343d2db"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/ValueOfInsertionWindowTests.cs",
+        "sha256": "e9b7e7c487dad9ef839326e488f85fb72a9ecd437ac4dae67aefdd11aed29a4a",
+        "archivedSha256": "e9b7e7c487dad9ef839326e488f85fb72a9ecd437ac4dae67aefdd11aed29a4a"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/WorkspaceTests.cs",
+        "sha256": "95c4253f7f35a668ce5e0578eab9f7e4f66ff4c3efa009edfa7d546833e030d4",
+        "archivedSha256": "95c4253f7f35a668ce5e0578eab9f7e4f66ff4c3efa009edfa7d546833e030d4"
+      },
+      {
+        "path": "tests/Bosak.Braid.Workbench.Tests/XsltSourceViewTests.cs",
+        "sha256": "42db4cc19af694db5fac13c069226b4c378663459cbd7a74ef1c7038a0042a9b",
+        "archivedSha256": "42db4cc19af694db5fac13c069226b4c378663459cbd7a74ef1c7038a0042a9b"
+      },
+      {
+        "path": "tools/Bosak.Braid.LocalTestHost/Program.cs",
+        "sha256": "9e179f44f5735862fb4d9a6496780cfa85b6598e2a469789eb6f6f5753ec2e94",
+        "archivedSha256": "9e179f44f5735862fb4d9a6496780cfa85b6598e2a469789eb6f6f5753ec2e94"
+      }
+    ],
+    "isolatedTestAdjustments": [
+      {
+        "path": "tests/Bosak.Braid.Infrastructure.Tests/ReadableInsertionIntegrationTests.cs",
+        "sha256": "807b5b0d3e46031a918c49dc11f97547a8aa173821807f5ae237fa39f4f513e0",
+        "archivedSha256": "c4a9b3ea7b185b35f7e93f52820a438055540d07f0f4489031a10fa49a14d9a1"
+      }
+    ]
+  }
+]

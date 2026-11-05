@@ -1,0 +1,27 @@
+{
+  "initialIncompleteReports": [
+    {
+      "path": "evidence/bindings/26232.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/bindings/26660.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    }
+  ],
+  "correctedCoreControls": 30,
+  "positiveTestAssemblyCoverage": [
+    "Bosak.XPath.Api.Tests",
+    "Bosak.XPath.Compiler.Tests",
+    "Bosak.XPath.Core.Tests",
+    "Bosak.XPath.Parser.Tests",
+    "Bosak.XPath.Providers.Database.Tests",
+    "Bosak.XPath.Providers.Tests",
+    "Bosak.XPath.Runtime.Tests",
+    "Bosak.XPath.Standard.Tests",
+    "Bosak.Xslt.Tests"
+  ],
+  "scope": "Two original process-exit reports are retained as empty bytes; corrected Core run supplies missing positive-host coverage. Not a production/test semantic failure."
+}

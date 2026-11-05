@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "b2715c5b59c3b1992abdefa6ead62c85f4447b14b97c4688f23beddafd0a85e0"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "ee4313e7d680286283a2f41256832796e9b754848f1fd47aece6dd19d9d5a7fa"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "8f560c3fe35e0571ce538aa0a7d73ef48bb021eb8759e8c28b5adfb537acae88"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "44215d89f8e3a49cc377d5165f342215f206730db896ae78d8f960342100361a"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "cfcedae51efe3a9948d79eab5ee9286af6da9d2f492266a62fd0597225873673"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "4a1db08c07a724cc2a4b35a6846b4949ab7f0add8417fc381b2c09b313ad4602"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "14b7183ab64dcf7a2180bdddf7908a41c31d8fb36bcea87f51b1ae0f29939a31"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "cd458c6d9ae5b0200dc0e86e3b7a08c3f4cac1af7eae8094bf527597d90a84cd"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-count-implementation/README.md",
+      "htmlSha256": "ff732085a9c7b07cd6d451cb075a26f5b82ff3f97136a5fe5020e8b00498f046"
+    },
+    {
+      "source": "docs/schema-count-implementation/GUIDE.md",
+      "htmlSha256": "af228badf3de1cc301f1c1033641c9dfe2eee6e115ff1687ea094dae3359018e"
+    },
+    {
+      "source": "docs/schema-count-implementation/ASSESSMENT-GUIDE.md",
+      "htmlSha256": "960166cfa50af9a0814bb1c0a130372e7b793f10602c1e0a5358183171ef8a3f"
+    },
+    {
+      "source": "docs/schema-count-implementation/ADOPTION.md",
+      "htmlSha256": "88b29b8faa9f6a053815cdd1ac3fe1e1c24715566667b484fc052cb6456c89f6"
+    },
+    {
+      "source": "docs/schema-presence-implementation/README.md",
+      "htmlSha256": "b94bbeada04114ffd93fc3858f986cf47ab2cef587d82a7610ab92a659517935"
+    },
+    {
+      "source": "docs/schema-presence-review/README.md",
+      "htmlSha256": "ef62962c85cfadf81a82d403353b031f847ae1344c8214424304200e854ead35"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "1baef5b4edf0597aac92e5d5aa15b61fdba665170e4870afe96ee61b0b638a45"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "d93b00da3d9569810966f6cf5f5f8680f8aebdc1ab2c8b5db33d14f98b1aecab"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "4a18749c05dfc5002be8142867272a502f849fcfd775f64a646984f8ca0c50ac"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "c033025268523720a5adfc0827a7317c0218e31128aed9b2ba5d78aaf6d237d0"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "be1d8effe2cec68859417cc2d63f5d4ce81cc06284c0f5232d69f97ed075ed53"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "98dbf8347c89a2f558082397f082c64d8ce6267d76172dcab4649b09a7534829"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "260d81716f4b2dfe5f7a3e25f62000f923d8bc471b85de612c6a55f7759c0d49"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/COUNT-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "b61b98430ba2e9fd28d3b2d05e4db156d262287adadeb623b929ad8b68bac73b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/PRESENCE-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "bd935d167dbfed5328790ff4f4cfa28c37f3262a5f86e2962529f6b01a995d51"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/PRESENCE-ASSERTION-REVIEW.md",
+      "htmlSha256": "bea68eb59281a5b2dccb535f1e21450fdd52a4e971ea287e6a1d70c3411f7b80"
+    }
+  ],
+  "localLinks": 2122,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

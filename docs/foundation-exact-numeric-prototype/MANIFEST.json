@@ -1,0 +1,15 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "evidence/build.txt": "57712c1a4ad832b257fbfe2f96544e7a36ef5a502d697f43a613a166ea045da2",
+  "evidence/documentation-checks.json": "4a3f07b8d6dae420d1001194f46871059f135710b0782e453150122d087ad3ad",
+  "evidence/INPUTS.json": "42860c0c72030403f6975ea8de113786ea54784bb36d37a897106d55f406f239",
+  "evidence/measurement-before-binding-observer.json": "5a9eeeef89d1620b4a8ee1b5f749218daf828649c5f05ebdf2d81d92297bf5f3",
+  "evidence/measurement-before-narrowing-boundary-review.json": "3a1edeab7d9a3c9beb15e5431d2e7f0d782d8af930cbb93e08385288c5e2a5fb",
+  "evidence/run-0.json": "e67bcfe84aa6ed288d8c84f99d4daa381055fede0d46de5ad3defcfce7236919",
+  "evidence/run-1.json": "e67bcfe84aa6ed288d8c84f99d4daa381055fede0d46de5ad3defcfce7236919",
+  "README.md": "c2145f5e38192c292f3b6931629573d9383903846caf95977a697af82fb18147",
+  "SPEC-BASIS.md": "e2bdb4dc660ceccbfb5ee3b6db5c27005063ec1ef26023704baa7b2cc636217e",
+  "tools/Prototype.cs.txt": "bb87be4a43dd17e06fb4c732a5bd817595ca662894bd3986f7c7b2ed004592a7",
+  "tools/run.py": "c42798f93b1843aa4883faa6a75da43351e7ee7f1bab7fb17d03b296782b79b1",
+  "tools/verify.py": "5ce89c9695fc13edfe218aa1f2a5bec4fba4999342195378ef595c655151b6f6"
+}

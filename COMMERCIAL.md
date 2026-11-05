@@ -1,6 +1,6 @@
 # Commercial Offerings — Bosak
 
-Bosak's engine core — the `Bosak.XPath.*` and `Bosak.Xslt` packages — is free, open-source software under the [Apache License 2.0](license.md). Everyone, including commercial users, can build on it, embed it, and ship it in closed-source products without a fee.
+Bosak's XPath, XSLT and XQuery engine is free, open-source software under the [Apache License 2.0](license.md). [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) is also Apache-2.0 and requires no activation, trial or subscription. Commercial users can build on the Apache components subject to their license conditions, without a schema access fee.
 
 This document describes what Fytala offers on top of the free core.
 
@@ -8,12 +8,13 @@ This document describes what Fytala offers on top of the free core.
 
 The free core is community-supported: questions and usage help go to [GitHub Discussions](https://github.com/Fytala-Charles/Bosak/discussions), bugs to [GitHub Issues](https://github.com/Fytala-Charles/Bosak/issues), and engine-correctness work is always done in the open. A commercial support contract adds direct engineering access (email/video), guaranteed response times, and priority triage on top of that — it does not gate the community channels, and it never gates conformance fixes.
 
-## What is free (no license needed, ever)
+## What is free under Apache-2.0
 
 - The complete XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine
 - All NuGet packages published from this repository
 - Conformance fixes and engine correctness work — always community work, never paywalled
 - The VS Code language-server extension
+- The public Bosak.Schema source and its supported schema compilation/validation services; see the [Apache publication record](docs/SCHEMA-APACHE-PUBLICATION-2026-10-29.md)
 
 ## Commercial offerings
 
@@ -25,9 +26,11 @@ The free core is community-supported: questions and usage help go to [GitHub Dis
 | **Consulting & development** | Custom engine features, adapters, performance work, migration from Saxon/XmlCompiledTransform |
 | **Indemnification & custom terms** | Available for OEM redistributors on request |
 
-## Future "Bosak Pro" boundary
+## Product boundaries
 
-A possible commercial add-on package, separated from the conformant core, may cover advanced schema-awareness scenarios and similar enterprise-grade extensions. The conformance engine core will remain Apache-2.0 regardless.
+The earlier proposal to charge separately for Schema is superseded by its Apache-2.0 transition on 29 October 2026. Schema remains modular, with staged XSD 1.1 coverage and a separate compatibility lifecycle; that technical boundary does not impose an activation or subscription requirement.
+
+Braid and Folio retain their separate commercial/proprietary terms. Billing and key-generation infrastructure remains private in Bosak.Licensing. Commercial services and product agreements are separate from access to the open engine and Schema; this documentation does not change existing customer agreements or live billing configuration.
 
 ## Contact
 

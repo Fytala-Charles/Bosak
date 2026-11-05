@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded multi-container iteration**. Not a full generic collection/type-model promotion. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Iteration across collection sequences — Frozen 4.0.** [Bosak PR #87](https://github.com/Fytala-Charles/Bosak/pull/87) / [immutable revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813). This is the shipped engine delivery.
@@ -55,6 +57,9 @@ The routing planner passes an XDM map to portable XSLT through a required parame
 The initial REQ-118 stability table deferred sequences of arrays/maps, but S4 shipped this extension. for member binds complete array members, including multi-item sequences; for key/value binds map entries. Positional counting continues across the outer collection sequence. Non-array/non-map input is XPTY0141. Map entry ordering is not an application sorting contract. Nested loops that flatten array members can destroy a parcel boundary. Map entry order should not be treated as stable business order; explicitly sort when presentation order matters.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S4-iteration. Members and map-entry values remain whole sequences, positions continue across container sequences, empty collections bind nothing, and invalid container items refuse XPTY0141. Container iteration preserves containing focus. Do not flatten member boundaries or infer portable map entry order. Complete typed iteration combinations and host bindings remain outside bounded controls. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 

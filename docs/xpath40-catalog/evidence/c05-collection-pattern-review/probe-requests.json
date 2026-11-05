@@ -1,0 +1,1553 @@
+[
+  {
+    "id": "member-groups",
+    "expression": "string-join(for member $m in [(1,2),(),[3]] return string(count($m)),',')",
+    "expected": "2,0,1",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-global-position",
+    "expression": "string-join(for member $m at $p in ([],[5,6],[7]) return string($p),',')",
+    "expected": "1,2,3",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-empty",
+    "expression": "count(for member $m in () return $m)",
+    "expected": "0",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-node-identity",
+    "expression": "let $n := parse-xml('<r/>')/r return (for member $m in [$n] return $m) is $n",
+    "expected": "true",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-invalid",
+    "expression": "for member $m in ([1],42) return $m",
+    "expected": null,
+    "error": "XPTY0141",
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-outer-focus",
+    "expression": "string-join((100 ! (for member $m in [1,2] return concat($m,':',.))),'|')",
+    "expected": "1:100|2:100",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "member-old",
+    "expression": "for member $m in [1] return $m",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "map-groups",
+    "expression": "string-join(sort(for key $k value $v in map{'a':(1,2),'b':()} return concat($k,':',count($v))),',')",
+    "expected": "a:2,b:0",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "map-position",
+    "expression": "string-join(for key $k at $p in (map{'a':1},map{},map{'b':2}) return string($p),',')",
+    "expected": "1,2",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "map-empty",
+    "expression": "count(for key $k value $v in map{} return $k)",
+    "expected": "0",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "map-value-only",
+    "expression": "sum(for value $v in (map{'a':2},map{'b':3}) return $v)",
+    "expected": "5",
+    "error": null,
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "map-invalid",
+    "expression": "for key $k in (map{},'bad') return $k",
+    "expected": null,
+    "error": "XPTY0141",
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "map-duplicate-variable",
+    "expression": "for key $k value $k in map{'a':1} return $k",
+    "expected": null,
+    "error": "XQST0089",
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "map-old",
+    "expression": "for key $k in map{'a':1} return $k",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S4-iteration",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "enum-cast",
+    "expression": "'ready' cast as enum('ready','held')",
+    "expected": "ready",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "enum-castable",
+    "expression": "'READY' castable as enum('ready','held')",
+    "expected": "false",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "choice-cast-first",
+    "expression": "('12' cast as (xs:integer|xs:string)) instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "choice-cast-reverse",
+    "expression": "('12' cast as (xs:string|xs:integer)) instance of xs:string",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "choice-coerce-matches-first",
+    "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null
+  },
+  {
+    "id": "choice-nested",
+    "expression": "[1,'a'] instance of array((xs:integer|xs:string))",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "choice-cardinality",
+    "expression": "let $v as (xs:integer|xs:string) := (1,2) return $v",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-cast-extra",
+    "expression": "(: REQ-126 record contract: cast-extra; explicit input, no external context. :)\nmap:contains(map{'a':1,'extra':2} cast as record(a as xs:integer),'extra')\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-cast-lexical",
+    "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-cast-invalid",
+    "expression": "(: REQ-126 record contract: cast-invalid; explicit input, no external context. :)\nmap{'a':'oops'} cast as record(a as xs:integer)\n",
+    "expected": null,
+    "error": "FORG0001",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-extra",
+    "expression": "(: REQ-126 record contract: coerce-extra; explicit input, no external context. :)\nfunction($r as record(a)) { $r }(map{'a':1,'extra':2})\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-string",
+    "expression": "(: REQ-126 record contract: coerce-string; explicit input, no external context. :)\nfunction($r as record(a as xs:integer)) { $r }(map{'a':'12'})\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-promote",
+    "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-nested",
+    "expression": "(: REQ-126 record contract: coerce-nested; explicit input, no external context. :)\nfunction($r as record(nested as record(a as xs:double))) { $r?nested?a instance of xs:double }(map{'nested':map{'a':1}})\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-missing-empty",
+    "expression": "(: REQ-126 record contract: missing-empty; explicit input, no external context. :)\nlet $r := map{} cast as record(note as xs:string?) return concat(map:contains($r,'note'), ':', count($r?note))\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-missing-required",
+    "expression": "(: REQ-126 record contract: missing-required; explicit input, no external context. :)\nmap{} cast as record(a as xs:integer)\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-missing",
+    "expression": "(: REQ-126 record contract: coerce-missing; explicit input, no external context. :)\nfunction($r as record(note as xs:string?)) { concat(map:contains($r,'note'), ':',count($r?note)) }(map{})\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-order",
+    "expression": "(: REQ-126 record contract: coerce-order; explicit input, no external context. :)\nmap:keys(function($r as record(b,a)) { $r }(map{'a':1,'b':2})) => string-join('|')\n",
+    "expected": "b|a",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-plain-map",
+    "expression": "(: REQ-126 record contract: plain-map; explicit input, no external context. :)\nmap{'a':1} instance of record(a)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-record-star-plain",
+    "expression": "(: REQ-126 record contract: record-star-plain; explicit input, no external context. :)\nmap{'a':1} cast as record(*)\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-record-star-assert",
+    "expression": "(: REQ-126 record contract: record-star-assert; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) cast as record(*)) instance of record(a as xs:integer)\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-castable-plain",
+    "expression": "(: REQ-126 record contract: castable-plain; explicit input, no external context. :)\nmap{'a':1} castable as record(*)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-castable-invalid",
+    "expression": "(: REQ-126 record contract: castable-invalid; explicit input, no external context. :)\nmap{'a':'oops'} castable as record(a as xs:integer)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-lookup-unknown",
+    "expression": "(: REQ-126 record contract: lookup-unknown; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer))?missing\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-map-get-unknown",
+    "expression": "(: REQ-126 record contract: map-get-unknown; explicit input, no external context. :)\ncount(map:get((map{'a':1} cast as record(a as xs:integer)), 'missing'))\n",
+    "expected": "0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-typed-let-promote",
+    "expression": "(: REQ-126 record contract: typed-let-promote; explicit input, no external context. :)\nlet $r as record(a as xs:double) := map{'a':1} return $r?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-typed-let-extra",
+    "expression": "(: REQ-126 record contract: typed-let-extra; explicit input, no external context. :)\nlet $r as record(a) := map{'a':1,'extra':2} return $r?a\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-coerce-original",
+    "expression": "(: REQ-126 record contract: coerce-original; explicit input, no external context. :)\nlet $raw := map{'a':1} let $r := function($x as record(a as xs:double)) {$x}($raw) return concat($raw?a instance of xs:integer,':',$r?a instance of xs:double)\n",
+    "expected": "true:true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-refuse31-cast-lexical",
+    "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-refuse31-coerce-promote",
+    "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-value",
+    "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+    "expected": "2",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-annotation",
+    "expression": "(: REQ-126 record contract: update-annotation; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2}) instance of record(a as xs:integer)\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-original",
+    "expression": "(: REQ-126 record contract: update-original; explicit input, no external context. :)\nlet $r := (map{'a':1} cast as record(a as xs:integer)) let $u := $r but with map{'a':2} return concat($r?a,'|',$u?a)\n",
+    "expected": "1|2",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-extra",
+    "expression": "(: REQ-126 record contract: update-extra; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'extra':2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-plain",
+    "expression": "(: REQ-126 record contract: update-plain; explicit input, no external context. :)\nmap{'a':1} but with map{'a':2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-nonmap",
+    "expression": "(: REQ-126 record contract: update-nonmap; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with 42\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-promote",
+    "expression": "(: REQ-126 record contract: update-promote; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:double)) but with map{'a':2})?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-string",
+    "expression": "(: REQ-126 record contract: update-string; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':'2'}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-decimal",
+    "expression": "(: REQ-126 record contract: update-decimal; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':2.5}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-empty-optional",
+    "expression": "(: REQ-126 record contract: update-empty-optional; explicit input, no external context. :)\nlet $r := map{'note':'x'} cast as record(note as xs:string?) let $u := $r but with map{'note':()} return concat(map:contains($u,'note'),':',count($u?note))\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-empty-required",
+    "expression": "(: REQ-126 record contract: update-empty-required; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':()}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-order",
+    "expression": "(: REQ-126 record contract: update-order; explicit input, no external context. :)\nmap:keys((map{'a':1,'b':2} cast as record(b,a)) but with map{'a':3}) => string-join('|')\n",
+    "expected": "b|a",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-nested",
+    "expression": "(: REQ-126 record contract: update-nested; explicit input, no external context. :)\nlet $r := map{'nested':map{'a':1}} cast as record(nested as record(a as xs:double)) return ($r but with map{'nested':map{'a':2}})?nested?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-update-key-type",
+    "expression": "(: REQ-126 record contract: update-key-type; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{1:2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "retained-record-contract-refuse31-update-value",
+    "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-update",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-seq-rest",
+    "expression": "let $($x,$y) := (1,2,3) return concat($x,':',string-join($y,','))",
+    "expected": "1:2,3",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-seq-single",
+    "expression": "let $($x) := (1,2,3) return count($x)",
+    "expected": "3",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-seq-short",
+    "expression": "let $($x,$y,$z) := (1,2) return count($z)",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-seq-empty",
+    "expression": "let $($x,$y) := () return count(($x,$y))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-array-group",
+    "expression": "let $[$x,$y] := [(1,2),3] return concat(count($x),':',$y)",
+    "expected": "2:3",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-array-surplus",
+    "expression": "let $[$x,$y] := [1,2,3] return $y",
+    "expected": "2",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-array-short",
+    "expression": "let $[$x,$y] := [1] return $y",
+    "expected": null,
+    "error": "FOAY0001",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-array-wrong",
+    "expression": "let $[$x] := map{} return $x",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-map-missing",
+    "expression": "let ${$a,$b} := map{'a':1} return concat($a,':',count($b))",
+    "expected": "1:0",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-map-whole-type",
+    "expression": "let ${$a} as record(a as xs:integer) := map{'a':1} return $a",
+    "expected": "1",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-map-surplus",
+    "expression": "let ${$a} as record(a as xs:integer) := map{'a':1,'extra':2} return $a",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-typed-value",
+    "expression": "let $($x,$y) as xs:integer* := [1,2] return $x+$y",
+    "expected": "3",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-typed-error",
+    "expression": "let $($x,$y) as xs:integer+ := (1,'bad') return $x",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-scope",
+    "expression": "let $x := 9 return concat((let $($x,$y) := (1,2) return $x),':',$x)",
+    "expected": "1:9",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-body-error",
+    "expression": "let $x := 9 return (let $($x,$y) := (1,2) return error())",
+    "expected": null,
+    "error": "FOER0000",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-old",
+    "expression": "let $($x,$y) := (1,2) return $x",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "constructor-direct",
+    "expression": "'12' ! xs:integer() eq 12",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-constructors",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "constructor-reference",
+    "expression": "'12' ! (xs:integer#0)() eq 12",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-constructors",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "constructor-missing",
+    "expression": "xs:integer()",
+    "expected": null,
+    "error": "XPDY0002",
+    "row": "REQ123-constructors",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "constructor-empty",
+    "expression": "count(() ! xs:integer())",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-constructors",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "constructor-old",
+    "expression": "xs:integer()",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "REQ123-constructors",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "jnode-value",
+    "expression": "jvalue(jtree(map{'a':7})/a)",
+    "expected": "7",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-key",
+    "expression": "jkey(jtree(map{'a':7})/a)",
+    "expected": "a",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-parent",
+    "expression": "jvalue(jtree(map{'a':7})/a/parent::*)?a",
+    "expected": "7",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-root-parent",
+    "expression": "count(jtree(map{})/parent::*)",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-absent-child",
+    "expression": "count(jtree(map{})/missing)",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-type",
+    "expression": "jtree(map{}) instance of jnode()",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-attributes",
+    "expression": "count(jtree(map{'a':7})/@*)",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-wrong-value",
+    "expression": "jvalue(map{})",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-key",
+    "expression": "string-join(array:members([(),(1,2)]) ! string(jkey(.)),',')",
+    "expected": "1,2",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-values",
+    "expression": "string-join(array:members([(),(1,2)]) ! string(count(jvalue(.))),',')",
+    "expected": "0,2",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-parent",
+    "expression": "array:size(jvalue(array:members([1,2])[1]/parent::*))",
+    "expected": "2",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-roundtrip",
+    "expression": "let $a := [(),(1,2),map{'a':1},[]] return deep-equal(array:of-members(array:members($a)),$a)",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-empty",
+    "expression": "count(array:members([]))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "of-members-empty",
+    "expression": "array:size(array:of-members(()))",
+    "expected": "0",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-invalid",
+    "expression": "array:members(map{})",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "of-members-invalid",
+    "expression": "array:of-members((1,2))",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "members-old",
+    "expression": "array:members([])",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "jnode-old",
+    "expression": "jtree(map{})",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath30",
+      "XPath31"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": "compile"
+  },
+  {
+    "id": "jnode-generic-node",
+    "expression": "jtree(map{}) instance of node()",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K01-generic-jnode-model",
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-identity",
+    "expression": "let $n := jtree(map{}) return $n is $n",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K01-generic-jnode-model",
+    "requiredPhase": null
+  },
+  {
+    "id": "xnode-xml",
+    "expression": "parse-xml('<r/>')/r instance of xnode()",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K01-generic-jnode-model",
+    "requiredPhase": null
+  },
+  {
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null,
+    "expected": "true",
+    "id": "choice-argument-matches-first",
+    "expression": "function($v as (xs:integer|xs:string)) {$v instance of xs:string}('12')"
+  },
+  {
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null,
+    "expected": "true",
+    "id": "choice-return-matches-first",
+    "expression": "function() as (xs:integer|xs:string) {'12'}() instance of xs:string"
+  },
+  {
+    "id": "destructure-duplicate-names",
+    "expression": "let $($x,$x) := (1,2,3) return string-join($x,',')",
+    "expected": "2,3",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-per-variable-type",
+    "expression": "let $($x as xs:integer,$y as xs:integer*) := (1,2,3) return $x+sum($y)",
+    "expected": "6",
+    "error": null,
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-per-variable-cardinality",
+    "expression": "let $($x,$y as xs:integer) := (1,2,3) return $y",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "destructure-record-undeclared",
+    "expression": "let ${$missing} := (map{'a':1} cast as record(a)) return $missing",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "REQ123-destructuring",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K03-record-destructuring-lookup",
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-root-type",
+    "expression": "jtree(map{}) instance of jnode(())",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-key-type",
+    "expression": "jtree(map{'a':7})/a instance of jnode('a',xs:integer)",
+    "expected": "true",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-key-mismatch",
+    "expression": "jtree(map{'a':7})/a instance of jnode('b',xs:integer)",
+    "expected": "false",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  },
+  {
+    "id": "jnode-value-type-mismatch",
+    "expression": "jtree(map{'a':7})/a instance of jnode('a',xs:string)",
+    "expected": "false",
+    "error": null,
+    "row": "REQ123-jnode",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null
+  }
+]
