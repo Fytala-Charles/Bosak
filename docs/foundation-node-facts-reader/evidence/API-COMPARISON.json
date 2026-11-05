@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "dc1737ddca44e909b8564d4543c5d32c0f71aff6424983a09c33b5a9e61063cb",
+  "qualifiedInternalSlice": "TA-10-internal-original-facts-v1",
+  "scope": "Unchanged exported declarations, XdmValue layout and friends. Internal uncached original-node facts reader qualified; public profiles unchanged; no native/freeze acceptance."
+}

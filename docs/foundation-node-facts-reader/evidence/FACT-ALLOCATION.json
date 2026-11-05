@@ -1,0 +1,11 @@
+{
+  "observed": {
+    "cold": 35051,
+    "warm": 64,
+    "callbacksPerObservation": 108
+  },
+  "warmupReads": 10,
+  "measuredReads": 100,
+  "scope": "Uncached internal original-facts read and metadata observation; selected issuer callbacks and test-provider outcome allocations included. No payload getter replay for retained metadata. No accepted owner/latency/retained-memory/native budget.",
+  "budgetsAccepted": false
+}

@@ -39,6 +39,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.12   | 05-11-2026     | Execute bounded public typed numeric operations with live authorization (1.60.0).          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.13   | 05-11-2026     | Add uncached original-node facts and exact selected ownership (1.61.0).                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -260,6 +262,21 @@ internal sealed class QuerySourceSession : IDisposable
         {
             RequireMember(snapshot);
             return new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation).Read();
+        }
+        internal QueryNodeFacts ReadNodeFacts(Snapshot snapshot,IQueryNodeFactsIssuer issuer,
+            Bosak.XPath.Core.Schema.ISchemaAssessmentInput input,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin,
+            IXdmNode node,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts,int atoms,int digits,int scale)
+            =>new QueryNodeFactsReader(this,snapshot,_owner.Environment,issuer,input,origin,node,facts,atoms,digits,scale,_cancellation).Read();
+        internal void RequireNodeOwner(Snapshot selected,IXdmNode node)
+        {
+            RequireMember(selected); int owners=0; Snapshot? owner=null;
+            foreach(var snapshot in _snapshots)
+            {
+                snapshot.Check(_cancellation); bool owns=snapshot.Input.OwnsNode(node); Check(); snapshot.Check(_cancellation);
+                if(owns){owners++;owner=snapshot;}
+            }
+            if(owners!=1||!ReferenceEquals(owner,selected))throw new ArgumentException("Node requires exactly the selected admitted owner.",nameof(node));
+            Check();
         }
         internal void CheckRegistrationActive(Snapshot snapshot)
         {

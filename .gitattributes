@@ -431,3 +431,6 @@ docs/foundation-public-typed-numeric/** -text whitespace=cr-at-eol,-blank-at-eof
 
 # Preserve exact original-node fact preparation evidence.
 docs/foundation-node-facts-plan/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-10 original-node facts qualification evidence.
+docs/foundation-node-facts-reader/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
