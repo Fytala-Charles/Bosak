@@ -152,7 +152,7 @@
       "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
       "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
       "preparation": "docs/foundation-typed-container/README.md",
-      "progress": "1.61.1 original metadata guard cost qualified: 25193 tests, 8 new authority-callback controls plus all 71 reader controls; cold 1396 bytes, warm 0, issuer callbacks 54/observation; unchanged gates/API source/metadata. Next bounded public original-node profile selection; native/owner budgets/freeze pending.",
+      "progress": "1.61.1 guard-cost qualification retained. TA-12 public original-node nilled profile selected, 349 existing controls on unchanged binaries; 24 new cases NotRun. Next metadata-only reader with NotRequested state, then public nilled binding/capture/profile qualification. No atomization/native/freeze acceptance.",
       "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
       "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
       "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
@@ -167,7 +167,8 @@
       "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
       "nodeFactsPreparation": "docs/foundation-node-facts-plan/IMPLEMENTATION.md",
       "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
-      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json"
+      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json",
+      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/IMPLEMENTATION.md"
     },
     {
       "id": "P10",

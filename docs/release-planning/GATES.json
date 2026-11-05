@@ -118,14 +118,14 @@
         "R2"
       ],
       "exitEvidence": "Implement selected surface, immutable semantic adoption, happy/error/lifetime tests and package-backed member inventory.",
-      "w1ReadinessPlan": "docs/foundation-node-facts-cost/README.md",
+      "w1ReadinessPlan": "docs/foundation-node-query-profile/README.md",
       "w1PlanPrepared": true,
       "w1ImplementationStarted": true,
       "w1AcceptanceCasesNotRun": 3,
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Select a bounded public original-node query profile/descriptor with exact ownership, optional nilled results and absent-value atomization. R3 InProgress; native/R4-R7 pending.",
+      "nextCoreTask": "Implement internal metadata-only original-facts mode with NotRequested state, then selected public nilled profile under NP01-NP24. Data/provenance atomization separately; R3 InProgress, R4-R7 pending.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -155,7 +155,8 @@
       "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
       "nodeFactsPreparation": "docs/foundation-node-facts-plan/STATUS.json",
       "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
-      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json"
+      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json",
+      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/STATUS.json"
     },
     {
       "id": "R4",

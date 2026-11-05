@@ -4,7 +4,7 @@ Updated 5 November 2026. Current source version: **1.61.1**. Target publication 
 
 The [scoped R2 closure](../foundation-r2-closure/README.md) records all seven exact role returns as AcceptWithScope. R3 is in progress: the ordinary facade, finite numeric profiles, TA-01 container reader, TA-02 registry, TA-03 evidence and TA-04 adapter and TA-05 internal compiled identity and TA-06 allocation reduction and TA-07 public identity and TA-08 internal numeric projection and TA-09 public typed numeric execution and TA-10 internal original-facts reader and TA-11 guard cost reduction are qualified at source 1.61.1. Broader schema activation remains pending.
 
-Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. Next select a bounded public original-node query profile and descriptor. Bounded public single-atomic identity is active. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
+Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain pending. The bounded public nilled profile is selected in TA-12. Next implement its internal metadata-only prerequisite, then public binding/capture/profile qualification. Bounded public single-atomic identity is active. Actual consumer/performance qualification, four-owner acceptance, release candidate preparation and publication remain separate gates. The [owner capability map](OWNER-CAPABILITIES.md) and [GATES.json](GATES.json) retain their requirements and statuses.
 
 | Gate | Status | Accountable role | Exit evidence |
 |---|---|---|---|
@@ -67,6 +67,8 @@ Identity setup now measures 4,104 bytes/call, down 82.4%; owner budgets remain p
 5 November: [TA-10 internal original-facts reader](../foundation-node-facts-reader/README.md) qualified at 1.61.0: 25,185 tests, 71 new controls and unchanged frozen gates/API metadata. Current next task: reduce redundant guard callbacks before public node-query selection; no public node-facts/native/freeze activation. Earlier dated preparation entries retain their historical scope.
 
 5 November: [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) qualified at 1.61.1: 25,193 tests, 8 new callback controls, unchanged gates/API metadata. Cold allocation 1,396 bytes; warm 0; 54 issuer callbacks per metadata observation. Current next task: bounded public original-node query profile selection; native/owner budgets and freeze remain pending.
+
+5 November: [TA-12 public original-node nilled profile selected](../foundation-node-query-profile/README.md) at unchanged 1.61.1: 349 existing controls pass, 24 new cases NotRun. Current next task: internal metadata-only mode with NotRequested, then public nilled implementation. Atomization remains separate; no public node activation/freeze.
 
 ## Earlier planning checkpoints
 

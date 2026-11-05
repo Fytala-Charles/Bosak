@@ -51,6 +51,8 @@ Updated 5 November 2026. The [scoped R2 closure](../foundation-r2-closure/README
 
 5 November: [TA-11 original-facts guard cost reduction](../foundation-node-facts-cost/README.md) qualified at 1.61.1: 25,193 tests, 8 new callback controls, unchanged gates/API metadata. Cold allocation 1,396 bytes; warm 0; 54 issuer callbacks per metadata observation. Current next task: bounded public original-node query profile selection; native/owner budgets and freeze remain pending.
 
+5 November: [TA-12 public original-node nilled profile selected](../foundation-node-query-profile/README.md) at unchanged 1.61.1: 349 existing controls pass, 24 new cases NotRun. Current next task: internal metadata-only mode with NotRequested, then public nilled implementation. Atomization remains separate; no public node activation/freeze.
+
 ## Earlier disposition checkpoints
 
 The entries below preserve the earlier decisions and gates in date order; the current summary above supersedes their then-pending statuses.

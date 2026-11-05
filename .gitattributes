@@ -437,3 +437,6 @@ docs/foundation-node-facts-reader/** -text whitespace=cr-at-eol,-blank-at-eof,-b
 
 # Preserve exact TA-11 original metadata guard cost evidence.
 docs/foundation-node-facts-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact selected public original-node profile evidence.
+docs/foundation-node-query-profile/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

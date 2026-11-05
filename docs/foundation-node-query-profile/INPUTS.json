@@ -1,0 +1,58 @@
+{
+  "revision": "6523c64943589b0683c6e594daa2f85ebdb36323",
+  "sourceVersion": "1.61.1",
+  "priorQualification": "docs/foundation-node-facts-cost/evidence/SOURCE-AND-BINARY-PINS.json",
+  "priorQualificationSha256": "1a8bf8b9adce5637da375ce8a369691e226776e0aeeef9a97fcd5d74affa7f61",
+  "files": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": {
+      "workspaceSha256": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+      "committedSha256": "81cd033b47b6761499d5cb5b91031885a959588f178e3fc95ef138986cbc66d9",
+      "normalizedSha256": "81cd033b47b6761499d5cb5b91031885a959588f178e3fc95ef138986cbc66d9"
+    },
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+      "workspaceSha256": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e",
+      "committedSha256": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e",
+      "normalizedSha256": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e"
+    },
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": {
+      "workspaceSha256": "b01d87fef6eb2d2ecc9cab67e15da04b9e1c2347499fcda9fd68dc91129ad1b6",
+      "committedSha256": "b01d87fef6eb2d2ecc9cab67e15da04b9e1c2347499fcda9fd68dc91129ad1b6",
+      "normalizedSha256": "b01d87fef6eb2d2ecc9cab67e15da04b9e1c2347499fcda9fd68dc91129ad1b6"
+    },
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": {
+      "workspaceSha256": "acd88b2f7c19e0ff837dcd1d4ab20b9fe7d7e1a78bb081c10f19944602aff50f",
+      "committedSha256": "1d824291e57e62090d3c83c835bb0ccd6f12147f41672869025ca98b4f384554",
+      "normalizedSha256": "1d824291e57e62090d3c83c835bb0ccd6f12147f41672869025ca98b4f384554"
+    },
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": {
+      "workspaceSha256": "0bdd7fef0723b89c5b7688db53867d1c8df32a4628b9a962426283f36a883881",
+      "committedSha256": "247dda5e5e30421a34a33c225a51d62e1beecfcb2f6e031c8be022c9fbd2ca1b",
+      "normalizedSha256": "247dda5e5e30421a34a33c225a51d62e1beecfcb2f6e031c8be022c9fbd2ca1b"
+    },
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": {
+      "workspaceSha256": "3ded9e00a5571e38cad434728472c451e7bbd3c6b81fc9f3d98d318cfed04633",
+      "committedSha256": "3ded9e00a5571e38cad434728472c451e7bbd3c6b81fc9f3d98d318cfed04633",
+      "normalizedSha256": "3ded9e00a5571e38cad434728472c451e7bbd3c6b81fc9f3d98d318cfed04633"
+    },
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": {
+      "workspaceSha256": "23c96ef1d4df44b3ba1503e082f542e1186936fcddbe848c64a61e6cf5d41f85",
+      "committedSha256": "23c96ef1d4df44b3ba1503e082f542e1186936fcddbe848c64a61e6cf5d41f85",
+      "normalizedSha256": "23c96ef1d4df44b3ba1503e082f542e1186936fcddbe848c64a61e6cf5d41f85"
+    },
+    "src/Bosak.XPath.Api/Schema/TypedIdentityPlan.cs": {
+      "workspaceSha256": "43eb19646f4e171c94714afc2c600bf26baa0e7b46b5d661b284d1690c1c3719",
+      "committedSha256": "43eb19646f4e171c94714afc2c600bf26baa0e7b46b5d661b284d1690c1c3719",
+      "normalizedSha256": "43eb19646f4e171c94714afc2c600bf26baa0e7b46b5d661b284d1690c1c3719"
+    },
+    "docs/foundation-node-facts-cost/MANIFEST.json": {
+      "workspaceSha256": "cb461a3ddcf6f617a60989bc3cf8c210ea879fb24b2280d0c44ed9baf440b7b0",
+      "committedSha256": "cb461a3ddcf6f617a60989bc3cf8c210ea879fb24b2280d0c44ed9baf440b7b0",
+      "normalizedSha256": "cb461a3ddcf6f617a60989bc3cf8c210ea879fb24b2280d0c44ed9baf440b7b0"
+    },
+    "docs/foundation-r2-closure/CLOSURE.json": {
+      "workspaceSha256": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+      "committedSha256": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+      "normalizedSha256": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2"
+    }
+  }
+}

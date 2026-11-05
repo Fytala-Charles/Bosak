@@ -38,6 +38,7 @@ for name,digest in source['files'].items():assert sha(R/name)==current['sources'
 engines=json.loads((R/'docs/foundation-xslt-source-membership/evidence/INPUTS.json').read_text())['engines']
 for value in current['engines'].values():assert sha(Path(value['path']))==value['sha256']
 subprocess.run(['python',str(R/'docs/foundation-node-facts-cost/tools/verify.py')],check=True,capture_output=True)
+subprocess.run(['python',str(R/'docs/foundation-node-query-profile/tools/verify.py')],check=True,capture_output=True)
 if (P/'MANIFEST.json').exists():
  m=json.loads((P/'MANIFEST.json').read_text());assert set(m)=={p.relative_to(P).as_posix() for p in P.rglob('*') if p.is_file() and p.name!='MANIFEST.json'}
  for name,digest in m.items():assert sha(P/name)==digest,name
