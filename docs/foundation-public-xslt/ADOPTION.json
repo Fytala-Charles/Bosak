@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.75.0",
+  "candidateVersion": "1.76.0",
+  "beforeHashes": {
+    "src/Bosak.XPath.Api/Schema/CapturedHostBinding.cs": "729c08ac8bb343cc7c873613a20ca8c9dc261580358520640147cd1adba2c4c9",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "a251b9fc6c9de9e91e3edb357785301d8215350a8d218889cf776ac0cb99b535",
+    "src/Bosak.XPath.Runtime/ExecutionGate.cs": "371cee85435390c45827c83ff8ebe33d82d85d9b52ed9403f246af53c214cddc",
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "6f18495a2bf51366bd42d244569055cc04976fc66fcaa7671a53357397ab05dd",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs": "1837c393e58bb8195b882a333967298f45a7d470285a366e3c92f2a804d8989d",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "2a9ae0d8676cec5b070f8b9ba514031676e686a34d6f7c053352a14dac0a508f",
+    "src/Bosak.Xslt/Api/XsltExecutable.cs": "c2055cf39e1d58b06cb1347847589677996a16029791ce19b8ad4f05f35e8d32",
+    "src/Bosak.Xslt/Capture/XsltCaptureSession.cs": "89fb54e650f2e7ae7f5c88ff49b3f1f6f4d9a7fdfd82d56e2a8e5cd00fd5e9f4",
+    "src/Directory.Build.props": "1103a448442dbdbf22d0a57037cde55ef97835aee9749776e8a9dfeac983211a",
+    "docs/foundation-host-outcome/MANIFEST.json": "aca131ebe6b182eb8be7207f796f89c234239719b68dd3021668d9c7e1b645ff",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+  },
+  "semanticScope": "AH-03 bounded public ordinary XSLT/BCAP. Adopt immutable XSLT REC https://www.w3.org/TR/2017/REC-xslt-30-20170608/ sections 2.3.2-2.3.4 (separate invocation inputs), 2.9 (errors), 3.5.6 (static parameters), 10.1.1 (result-document), and Serialization REC https://www.w3.org/TR/2017/REC-xslt-xquery-serialization-31-20170321/ existing XML/HTML/XHTML/text serializer behavior. No blanket conformance or new serializer implementation.",
+  "hostPolicy": "Implement the five exact reviewed public XSLT types at the proposal hash above; ordinary principal stylesheets only. Assessor/schema/external-module/mutable resolver/listener/nonlegacy compilation refuses. Input roles must be admitted document roots. Runtime unsupported contexts/shapes throw NotSupportedException, invalid duplicate/missing capture options throw ArgumentException; compiler profile refusals return Unsupported. Existing legacy APIs unchanged.",
+  "capturePolicy": "All four nonnegative count/byte caps and positive time/engine-operation caps are mandatory and copied; invocation is sole selection authority, options.Context/template/mode/base URI absent and capture RawResult=false. Linked raw/options cancellation plus inherited gate composed without weakening either. Capture uses actual serializer production, retains raw leases until serialization joins, and stages detached output/receipt diagnostics before final guards. Fresh closed resource policy per run; no external fallback. Bounds are cooperative and do not bound result construction/XPath working memory or arbitrary provider calls.",
+  "errorPolicy": "Preserve identity-deduplicated original execution/serialization exceptions without flattening, including swallowed/rewrapped capture failures. Admission/work/cleanup objects route directly through TA-31 and retain ordered duplicate cleanup obligations. Overall success requires successful classified capture with no errors. Raw revocation can prevent borrowed delivery while owned run retains staged diagnostics.",
+  "exclusions": "No schema-aware host, arbitrary structured context, external package/module/resource acquisition, public hard sandbox, owner/native/performance/budget/C45/freeze/package/publication acceptance. SchemaAtomics and other accepted requirements remain unwaived."
+}

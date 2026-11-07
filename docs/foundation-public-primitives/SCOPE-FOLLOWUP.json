@@ -1,0 +1,22 @@
+{
+  "publicProposedTypePresence": {
+    "present": 47,
+    "total": 47,
+    "missing": 0
+  },
+  "remainingPublicTypes": [],
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T06",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "pv01Complete": false,
+  "remaining": [
+    "Uri/Binary enum-only representation disposition; annotated String transport is distinct",
+    "Persistent/copy/nil/no-typed-value routes",
+    "General constructed containers",
+    "Legacy evidence disposition",
+    "Actual native/provider and aggregate retained-memory budgets",
+    "NU-01/SC-01",
+    "R4-R7"
+  ]
+}

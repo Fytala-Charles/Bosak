@@ -1,0 +1,8 @@
+{
+  "receipt": "evidence/focused-trx/charl_CHARLES_2026-11-06_11_41_26_net10.0.trx",
+  "sha256": "8446a310e74c5ec3f8c8e503ad3d313773f3edc3231487a8d783e6db72432187",
+  "observation": "Leased provenance cost: cold caller bytes 201329280; cold ticks 26190914; warm reads 8; warm caller bytes 1610627088; warm ticks 162884655; callbacks 56168328; frequency 10000000",
+  "scope": "Initial correct but redundant generic reader path; superseded by metadata-specific qualified candidate, not an owner budget.",
+  "initialCandidateFrozen": false,
+  "qualification": "Original initial focused TRX and execution log only; METADATA-READ-ADOPTION records before hashes, but no frozen intermediate binary/source archive is claimed."
+}

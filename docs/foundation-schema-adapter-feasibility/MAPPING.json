@@ -1,0 +1,86 @@
+{
+  "profile": "Proposed bounded native decimal/document adapter",
+  "implemented": false,
+  "rows": [
+    {
+      "id": "F01",
+      "concern": "Component authority",
+      "nativeEvidence": "XsdDocumentAssessor.RootDeclaration/ChildDeclarations and AssessedElementDeclaration.Type",
+      "publicContract": "ISchemaAuthority / ISchemaComponentHandle",
+      "requiredDesign": "One authority per compiled assessor; issue handles only for retained actual component objects. Authenticate membership by issuer-private reference identity; never QName, SchemaDigest or SchemaPath. Anonymous root stays anonymous.",
+      "feasibility": "PossibleWithNewProviderCode"
+    },
+    {
+      "id": "F02",
+      "concern": "Assessment origin",
+      "nativeEvidence": "AssessedDocument.AssessmentIdentity; Copy preserves it",
+      "publicContract": "ISchemaAssessmentOrigin / OwnsAssessment",
+      "requiredDesign": "Create advisor-issued origin retaining actual native assessment identity and source; GUID is descriptive only. No caller-supplied GUID admission. Independent advisor bindings do not inherit issuance.",
+      "feasibility": "PossibleWithNewProviderCode"
+    },
+    {
+      "id": "F03",
+      "concern": "Snapshot and source",
+      "nativeEvidence": "AssessedDocument.SnapshotIdentity; Copy creates independent snapshot; exported XML is mutable",
+      "publicContract": "ISchemaAssessmentInput / ISchemaSnapshotBinding",
+      "requiredDesign": "Keep original source distinct from each current snapshot. Capture a privately owned immutable node tree; maintain exact node membership. Copy receives fresh snapshot and node associations. Do not wrap arbitrary mutable exports as live assessed nodes.",
+      "feasibility": "NeedsExplicitInputAdapter"
+    },
+    {
+      "id": "F04",
+      "concern": "Node facts",
+      "nativeEvidence": "Elements[0] root, present decimal children in order",
+      "publicContract": "ISchemaAnnotatedNode / ISchemaNodeFacts / OwnsNode",
+      "requiredDesign": "Issue facts for exact adapter node,input,origin and advisor tuple. Verify input membership without reading purported node content. Same-name or reused facts on another node refuse; optional omissions have no placeholder nodes.",
+      "feasibility": "PossibleWithNewProviderCode"
+    },
+    {
+      "id": "F05",
+      "concern": "Typed container",
+      "nativeEvidence": "AssessedElement.TypedValue nullable decimal; root HasNoTypedValue",
+      "publicContract": "ISchemaTypedValue / SchemaAtomicItem / OwnsTypedValue",
+      "requiredDesign": "Issue immutable non-list singleton decimal containers with plain unmarked values and separate type/origin evidence. Root reports HasNoTypedValue, not empty list. Authenticate container before enumeration; do not reuse legacy evidence as authority.",
+      "feasibility": "PossibleWithinDecimalProfile"
+    },
+    {
+      "id": "F06",
+      "concern": "Bound environment",
+      "nativeEvidence": "Native Assess takes XDocument and token; no query binding",
+      "publicContract": "ISchemaAssessor.Bind / ISchemaAssessmentAdvisor.QueryEnvironment",
+      "requiredDesign": "Retain exact engine-issued environment; select only explicitly reviewed compatible host modes. Native assertions remain their adopted XPath 2.0 grammar, independent of ambient query dialect. Unknown environments return Unsupported.",
+      "feasibility": "NeedsBindingPolicy"
+    },
+    {
+      "id": "F07",
+      "concern": "Assessment request",
+      "nativeEvidence": "Native Valid/Invalid/Unsupported; only Valid exposes Document",
+      "publicContract": "Assess / ISchemaAssessmentResult",
+      "requiredDesign": "Initial proposal is strict bounded document assessment only. Lax/type/construction unsupported until separately adopted. Validate request ownership and diagnostic limits; only complete Valid publishes root. Cancellation throws and never publishes partial state.",
+      "feasibility": "NeedsRequestAndResultAdapter"
+    },
+    {
+      "id": "F08",
+      "concern": "Raw lifetime",
+      "nativeEvidence": "Native immutable assessor/results; no public operation admission",
+      "publicContract": "IQueryOperationLifetime / IQueryOperationLease",
+      "requiredDesign": "Host retains raw callback admission; provider checks token and exact input availability before work and resumed reads. Borrowed nodes/facts/containers expire at raw boundary; copied plain decimals survive. Dispose admission only, never caller-owned resources.",
+      "feasibility": "NeedsLifetimeIntegration"
+    },
+    {
+      "id": "F09",
+      "concern": "Copies and compatibility",
+      "nativeEvidence": "Native Copy retains component refs and assessment but fresh snapshot",
+      "publicContract": "OwnsNode / ISchemaCompatibilityAuthority",
+      "requiredDesign": "Reissue source/snapshot-bound associations under explicit provider ownership. Equal digest/name never grants compatibility. Cross-authority compatibility, persistence and legacy marker migration remain unsupported.",
+      "feasibility": "SeparateScope"
+    },
+    {
+      "id": "F10",
+      "concern": "Finite retained state",
+      "nativeEvidence": "Native instance bounded to 16 decimal children; Core limits separate",
+      "publicContract": "SchemaQueryLimits / provider issuance storage",
+      "requiredDesign": "No process-global strong issuer registry. Scope issuance state to advisor/input operations with bounded container reuse and cleanup on failure/cancellation. Measure real retained-memory and execution workloads; existing 451 timings are not budgets.",
+      "feasibility": "NeedsBudgetEvidence"
+    }
+  ]
+}

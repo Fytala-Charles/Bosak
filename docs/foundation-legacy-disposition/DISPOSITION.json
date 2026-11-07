@@ -1,0 +1,72 @@
+{
+  "status": "CoreDispositionCompleteWithScope",
+  "sourceVersion": "1.81.0",
+  "decisions": [
+    {
+      "id": "LG01",
+      "title": "Two distinct admissions",
+      "decision": "Keep internal Bosak.XPath.Runtime.Vm.SchemaQuerySession/QuerySchemaAssociation private scalar evidence distinct from public Bosak.XPath.Api.Schema.SchemaQuerySession and provider-issued complete containers. Shared field values or names do not identify the same authority or admission."
+    },
+    {
+      "id": "LG02",
+      "title": "Public observation refusal",
+      "decision": "SchemaAtomics continues returning false/null for SchemaEvidenceKernel.Evidence markers before consulting their fields or private issuer. The sealed legacy Evidence does not implement the trusted public-observation marker contract. No public marker SPI, callback, lease or promotion path is added."
+    },
+    {
+      "id": "LG03",
+      "title": "Opaque fields remain opaque",
+      "decision": "DeclaredType/ActualType/OriginalAssessment in the legacy kernel are object fields governed by ISchemaEvidenceIssuer and the private seal/snapshot. An object implementing ISchemaComponentHandle/ISchemaAssessmentOrigin is not enough; actual public authority/advisor ownership,input/origin/environment and current raw lifetime still need independent authentication."
+    },
+    {
+      "id": "LG04",
+      "title": "Preserve existing private execution",
+      "decision": "Do not remove/replace/retag private registrations, modify private issuer/type comparison or alter bounded quota,snapshot,release,cancellation,rebind and cleanup semantics. Existing private scalar callers and transports retain their qualified behavior. No public freeze/consumer ABI claim follows from private fixtures."
+    },
+    {
+      "id": "LG05",
+      "title": "No automatic bridge selected",
+      "decision": "Do not add a Core legacy-field cast, evidence adapter, public attachment/strip factory, marker promotion, latest-authority lookup or automatic snapshot conversion. There is no accepted exact owner requirement authorizing a known missing direct bridge in this step; future bridge needs remain subject to explicit owner/source evidence, not waived."
+    },
+    {
+      "id": "LG06",
+      "title": "Selected migration path",
+      "decision": "For public typed work re-obtain a provider-issued ISchemaTypedValue under an actual public advisor/authority, admitted source input/origin and matching environment. ReadTypedContainer or eligible ReadTypedValue then performs fresh complete ownership/admission in an explicit public raw operation. A real provider may reissue authentic existing assessment state; the engine does not invent historical origin or perform validation from a copied marker."
+    },
+    {
+      "id": "LG07",
+      "title": "No authority round trip",
+      "decision": "A locally assembled SchemaAtomicItem/ISchemaTypedValue wrapper or public-shaped legacy fields cannot attest provider issuance. A marked legacy scalar is not a plain provider cell; the generic reader rejects it. Reconstructing plain payload data is explicit declassification/application copying and does not migrate assessment,authority or authenticated scalar identity."
+    },
+    {
+      "id": "LG08",
+      "title": "Shape and origin remain required",
+      "decision": "A private scalar does not reconstruct complete empty/list/union boundaries,nilled/no-typed-value distinction or missing historical source metadata. Public migration must supply the actual complete container and source facts where required,or explicitly refuse unsupported coverage. Never relabel a singleton list or invent a selected union member from primitive payload/tags."
+    },
+    {
+      "id": "LG09",
+      "title": "Lifetime and proof remain exact",
+      "decision": "Do not carry private snapshot seals/leases into public authority or revive expired evidence. Public compatible work still needs its own source/target admission and raw-local paired proof; ordinary/constructed public metadata retains its existing expiry. No ambient authority,new independent lease,stable-cache issuer retention or public lifetime widening."
+    },
+    {
+      "id": "LG10",
+      "title": "Qualification scope",
+      "decision": "Fresh Core private-kernel/transport and Runtime private-session/provider/association/typed-evidence/public-refusal controls characterize existing behavior on unchanged1.81.0 binaries. Static sealed-type/interface inspection supports refusal reasoning. No new end-to-end native migration adapter or actual owner workload is executed/accepted here."
+    },
+    {
+      "id": "LG11",
+      "title": "Future bridge prerequisites",
+      "decision": "Before any direct bridge select an actual owner use case and exact immutable adoption,authenticate public issuer/input/origin/type universe and full container shape,define copies/lifetime/limits/rollback/cancellation/proof/cleanup and legacy identity behavior,and qualify fresh positive/caught-negative/public/native/binary/API/gate/budget evidence. Do not intentionally launch unhandled managed negatives or alter machine-wide reporting settings."
+    },
+    {
+      "id": "LG12",
+      "title": "Core closure and remaining work",
+      "decision": "PV-L01 Core disposition is CompleteWithScope: preserve private behavior,retain public refusal,select provider re-issuance for public migration. PV-01/R3 and owner/native/final-manifest/C45/freeze/publication remain open. Next PV-Q01 prepares exact-candidate actual-provider/performance qualification and evidence gaps; persistent/construction/nil/no-value,NU-01/SC-01 and R4-R7 stay unwaived."
+    }
+  ],
+  "publicLegacyObservationSelected": false,
+  "automaticBridgeSelected": false,
+  "selectedMigration": "Provider re-issuance and fresh public admission, never opaque-field casting or marker promotion",
+  "requirementsWaived": 0,
+  "ownerAccepted": false,
+  "apiFrozen": false
+}

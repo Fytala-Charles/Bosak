@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-07",
+  "rows": [
+    {
+      "id": "PF-01",
+      "owners": "Core",
+      "boundary": "Existing no-schema compile/evaluate and sequence enumeration",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "No-schema representative shipped/candidate baseline workloads"
+    },
+    {
+      "id": "PF-02",
+      "owners": "Core + Schema",
+      "boundary": "Compiled schema environment and authority lookup",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Cold compile/authority/cache measurements and general owned operations"
+    },
+    {
+      "id": "PF-03",
+      "owners": "Core + Schema",
+      "boundary": "Typed values and provenance transport",
+      "currentEvidence": "Candidate-only bounded decimal public consumer pilot",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "First resolve observed31.5 GB/cycle public data allocation;then owner fixtures/scale,comparable baseline,broader typed cases and accepted budgets"
+    },
+    {
+      "id": "PF-04",
+      "owners": "XmlDb + Core",
+      "boundary": "Persistent navigation and lazy results",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Actual owned XmlDb persistent snapshots/navigation"
+    },
+    {
+      "id": "PF-05",
+      "owners": "XmlDb + Core",
+      "boundary": "Snapshot leases and partial consumption",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Actual XmlDb resource/partial-consumption lifetimes"
+    },
+    {
+      "id": "PF-06",
+      "owners": "Braid + Core + Schema + XmlDb",
+      "boundary": "End-to-end typed and persistent preview",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Actual Braid/Schema/XmlDb preview integration"
+    },
+    {
+      "id": "PF-07",
+      "owners": "Braid + Core",
+      "boundary": "Run identity and resource invalidation",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Actual Braid run-identity and resource invalidation"
+    },
+    {
+      "id": "PF-08",
+      "owners": "All owners",
+      "boundary": "Scale, limits and failure responsiveness",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Owner-scale limits/failure responsiveness across providers"
+    },
+    {
+      "id": "PF-09",
+      "owners": "All owners",
+      "boundary": "API shape alternatives before final signatures",
+      "currentEvidence": "No current measurement for the full owner scenario",
+      "accepted": false,
+      "ownerBudget": null,
+      "baselineComparable": false,
+      "requiredGap": "Owner-reviewed API alternatives and final signature acceptance"
+    }
+  ],
+  "acceptedBudgets": 0,
+  "acceptedScenarios": 0,
+  "pilotMetrics": "evidence/PILOT-METRICS.json",
+  "pilotIsOwnerAcceptance": false,
+  "allocationBlockerObserved": true,
+  "phaseProbe": "evidence/PHASE-PROBE.json"
+}

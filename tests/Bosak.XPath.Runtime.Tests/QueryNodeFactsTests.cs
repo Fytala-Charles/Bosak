@@ -15,6 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 05-11-2026     | Qualify shared ownership guards and warm metadata allocation reduction (1.61.1).         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Qualify metadata-only reads, poison callbacks and live guards (1.62.0). |
+//                      | Charles Korthout | 0.4   | 07-11-2026     | Share fixture with captured-identity patch regression controls (1.81.1).                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Xml.Linq;
@@ -29,7 +32,7 @@ using static Bosak.XPath.Runtime.Tests.QueryTypedContainerTests;
 namespace Bosak.XPath.Runtime.Tests;
 /// <summary>Exercises uncached facts using actual raw source-session leases and the complete container reader.</summary>
 /// <param name="output">Records local allocation and callback observations.</param>
-public sealed class QueryNodeFactsTests(ITestOutputHelper output)
+public sealed partial class QueryNodeFactsTests(ITestOutputHelper output)
 {
     private sealed class Source : IQuerySourceInput,ISchemaAssessmentInput
     {
@@ -100,9 +103,108 @@ public sealed class QueryNodeFactsTests(ITestOutputHelper output)
             Facts=new(){Type=Type,Declaration=Declaration,Origin=Origin,Value=c};Issuer.IssuedFacts=Facts;Snapshot=Session.OpenSnapshot(env,Input,Input.Enter);
         }
         internal T Run<T>(Func<QuerySourceSession.Operation,T> work,CancellationToken token=default)=>Session.Run(Session.Environment,[Snapshot],work,token);
-        internal QueryNodeFacts Read(QuerySourceSession.Operation op,int atoms=8)=>op.ReadNodeFacts(Snapshot,Issuer,Input,Origin,Input.Node,Facts,atoms,128,128);
+        internal QueryNodeFacts Read(QuerySourceSession.Operation op,int atoms=8,bool metadataOnly=false)=>op.ReadNodeFacts(Snapshot,Issuer,Input,Origin,Input.Node,Facts,atoms,128,128,metadataOnly);
         /// <inheritdoc/>
         public void Dispose()=>Session.Dispose();
+    }
+    /// <summary>NM01 reads metadata without typed outcomes, container getters or iterators.</summary>
+    /// <param name="absent">Whether the original typed value is absent.</param>
+    /// <param name="nilled">Whether the element is nilled.</param>
+    [Theory][InlineData(false,false)][InlineData(true,false)][InlineData(false,true)]
+    public void MetadataOnlySkipsTypedValues(bool absent,bool nilled)
+    {
+        using var f=new Fixture(2,true);f.Facts.Absent=absent;f.Facts.Nilled=nilled;
+        f.Facts.Fail="typed";f.Facts.Value!.OnRead=_=>throw new Exception("container poison");
+        f.Run(op=>{var v=f.Read(op,metadataOnly:true);Assert.Same(f.Type,v.Type);Assert.Same(f.Declaration,v.Declaration);
+            Assert.Same(f.Origin,v.Origin);Assert.Equal(absent,v.HasNoTypedValue);Assert.Equal(nilled,v.IsNilled);
+            Assert.Equal(XdmNodeKind.Element,v.NodeKind);Assert.Equal(QueryNodeTypedValueKind.NotRequested,v.TypedValueKind);
+            Assert.Throws<NotSupportedException>(()=>v.TypedValue);return 0;});
+        Assert.Equal(new[]{"type","declaration","origin","absent","nilled"},f.Facts.Reads);Assert.Empty(f.Facts.Value.Reads);
+        Assert.Equal(0,(int)QueryNodeTypedValueKind.Absent);Assert.Equal(1,(int)QueryNodeTypedValueKind.Unsupported);
+        Assert.Equal(2,(int)QueryNodeTypedValueKind.Supported);Assert.Equal(3,(int)QueryNodeTypedValueKind.NotRequested);
+    }
+    /// <summary>NM02 metadata staging never examines missing or unsupported typed outcomes.</summary>
+    /// <param name="nullOutcome">Return null rather than Unsupported if invoked.</param>
+    [Theory][InlineData(false)][InlineData(true)]
+    public void MetadataOnlyIgnoresTypedOutcome(bool nullOutcome)
+    {
+        using var f=new Fixture();f.Facts.NullOutcome=nullOutcome;f.Facts.Kind=SchemaResultKind.Unsupported;f.Facts.Value=null;
+        f.Run(op=>{Assert.Equal(QueryNodeTypedValueKind.NotRequested,f.Read(op,metadataOnly:true).TypedValueKind);return 0;});
+        Assert.DoesNotContain("typed",f.Facts.Reads);
+    }
+    /// <summary>NM03 metadata-only preserves original tuple, component and nilled consistency checks.</summary>
+    /// <param name="stage">Invalid metadata or ownership layer.</param>
+    [Theory][InlineData("node")][InlineData("facts")][InlineData("tuple")][InlineData("input")][InlineData("origin-binding")]
+    [InlineData("type")][InlineData("declaration")][InlineData("origin")][InlineData("absent-nilled")][InlineData("attribute-nilled")]
+    public void MetadataOnlyRejectsMalformedEvidence(string stage)
+    {
+        using var f=new Fixture();
+        switch(stage){case "node":f.Input.Owned=false;break;case "facts":f.Issuer.FactsOwned=false;break;
+            case "tuple":f.Issuer.TupleOwned=false;break;case "input":f.Issuer.InputOwned=false;break;
+            case "origin-binding":f.Issuer.OriginOwned=false;break;case "type":f.Facts.Type=new Handle();break;
+            case "declaration":f.Facts.Declaration=new Handle();break;case "origin":f.Facts.Origin=new Origin();break;
+            case "absent-nilled":f.Facts.Absent=true;f.Facts.Nilled=true;break;
+            default:f.Input.Node=new XDocumentNode(new XAttribute("a",""));f.Facts.Nilled=true;break;}
+        f.Run(op=>{Assert.Throws<ArgumentException>(()=>f.Read(op,metadataOnly:true));return 0;});
+        Assert.DoesNotContain("typed",f.Facts.Reads);
+        if(stage is "node" or "facts" or "tuple" or "input" or "origin-binding")Assert.Empty(f.Facts.Reads);
+    }
+    /// <summary>NM04 every metadata callback stops delivery on cancellation or close, preserving raw ownership.</summary>
+    /// <param name="stage">Metadata callback.</param>
+    /// <param name="close">Close instead of cancel.</param>
+    /// <returns>A task completing after the interrupted operation has drained.</returns>
+    [Theory][InlineData("type",false)][InlineData("declaration",false)][InlineData("origin",false)][InlineData("absent",false)][InlineData("nilled",false)]
+    [InlineData("type",true)][InlineData("declaration",true)][InlineData("origin",true)][InlineData("absent",true)][InlineData("nilled",true)]
+    public async Task MetadataOnlyInterruption(string stage,bool close)
+    {
+        using var f=new Fixture();using var cancel=new CancellationTokenSource();
+        f.Facts.Hook=s=>{if(s==stage){if(close)f.Session.Dispose();else cancel.Cancel();}};
+        f.Run(op=>{if(close)Assert.Throws<ObjectDisposedException>(()=>f.Read(op,metadataOnly:true));
+            else Assert.Throws<OperationCanceledException>(()=>f.Read(op,metadataOnly:true));
+            Assert.Equal(0,f.Input.Releases);Assert.False(f.Session.DrainAsync().IsCompleted);return 0;},cancel.Token);
+        Assert.Equal(stage,f.Facts.Reads[^1]);Assert.DoesNotContain("typed",f.Facts.Reads);
+        await f.Session.DrainAsync().WaitAsync(TimeSpan.FromSeconds(5));if(close)Assert.Equal(1,f.Input.Releases);
+    }
+    /// <summary>NM05 failed metadata getters preserve the original exception and permit an uncached retry.</summary>
+    /// <param name="stage">Throwing metadata getter.</param>
+    [Theory][InlineData("type")][InlineData("declaration")][InlineData("origin")][InlineData("absent")][InlineData("nilled")]
+    public void MetadataOnlyRetry(string stage)
+    {
+        using var f=new Fixture();f.Facts.Fail=stage;
+        f.Run(op=>{Assert.Equal(stage,Assert.Throws<InvalidOperationException>(()=>f.Read(op,metadataOnly:true)).Message);
+            f.Facts.Fail="typed";Assert.Equal(QueryNodeTypedValueKind.NotRequested,f.Read(op,metadataOnly:true).TypedValueKind);return 0;});
+    }
+    /// <summary>NM06 retained metadata refuses every observation after completion without replaying getters.</summary>
+    [Fact] public void MetadataOnlyRetainedViewsExpire()
+    {
+        using var f=new Fixture();var v=f.Run(op=>f.Read(op,metadataOnly:true));int reads=f.Facts.Reads.Count;
+        foreach(var read in new Action[]{()=>{_=v.Type;},()=>{_=v.Declaration;},()=>{_=v.Origin;},()=>{_=v.HasNoTypedValue;},
+            ()=>{_=v.IsNilled;},()=>{_=v.NodeKind;},()=>{_=v.TypedValueKind;},()=>{_=v.TypedValue;}})
+            Assert.Throws<ObjectDisposedException>(read);
+        Assert.Equal(reads,f.Facts.Reads.Count);
+    }
+    /// <summary>NM07 retained metadata rechecks type ownership, tuple issuance and callback revocation.</summary>
+    /// <param name="stage">Revoked capability.</param>
+    [Theory][InlineData("type")][InlineData("declaration")][InlineData("tuple")][InlineData("facts")][InlineData("authority-callback")]
+    public void MetadataOnlyRetainedRevocation(string stage)
+    {
+        using var f=new Fixture();f.Run(op=>{var v=f.Read(op,metadataOnly:true);int reads=f.Facts.Reads.Count;
+            switch(stage){case "type":f.Authority.Types.Remove(f.Type);break;case "declaration":f.Authority.Types.Remove(f.Declaration);break;
+                case "tuple":f.Issuer.TupleOwned=false;break;case "facts":f.Issuer.FactsOwned=false;break;
+                default:f.Authority.OnOwn=_=>f.Issuer.TupleOwned=false;break;}
+            Assert.Throws<ArgumentException>(()=>v.IsNilled);Assert.Equal(reads,f.Facts.Reads.Count);return 0;});
+    }
+    /// <summary>NM08 observes local metadata cold/warm cost and proves no typed provider work.</summary>
+    [Fact] public void MetadataOnlyAllocation()
+    {
+        using var f=new Fixture();f.Facts.Fail="typed";f.Run(op=>{for(int i=0;i<10;i++)f.Read(op,metadataOnly:true);
+            long before=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<100;i++)f.Read(op,metadataOnly:true);
+            long cold=(GC.GetAllocatedBytesForCurrentThread()-before)/100;var v=f.Read(op,metadataOnly:true);int reads=f.Facts.Reads.Count;
+            for(int i=0;i<10;i++)_=v.IsNilled;int calls=f.Issuer.Calls;before=GC.GetAllocatedBytesForCurrentThread();
+            for(int i=0;i<100;i++)_=v.IsNilled;long warm=(GC.GetAllocatedBytesForCurrentThread()-before)/100;
+            output.WriteLine($"Metadata facts cold: {cold} bytes/read; warm: {warm} bytes/read; callbacks: {(f.Issuer.Calls-calls)/100} per observation");
+            Assert.InRange(cold,1,2000000);Assert.Equal(0,warm);Assert.Equal(54,(f.Issuer.Calls-calls)/100);
+            Assert.Equal(reads,f.Facts.Reads.Count);Assert.Empty(f.Facts.Value!.Reads);return 0;});
     }
     /// <summary>NF01-NF05 preserve ordered atomic/list shapes, original type, declaration and actual provenance.</summary>
     /// <param name="count">Atomic count.</param><param name="list">List shape.</param>

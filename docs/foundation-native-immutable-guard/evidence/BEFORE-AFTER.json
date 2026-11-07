@@ -1,0 +1,13 @@
+{
+  "beforePacket": "docs/foundation-native-consumer-handoff",
+  "beforeMetricsSha256": "57893553653e65282ae85218ee1208ec30151a33dad25b6d90b78e560366a84f",
+  "afterMetricsSha256": "a6eb3cd444ef70e903b9d9188a4320104166b3b19281563406a8e966281e1c27",
+  "sameWorkloadSource": true,
+  "beforeAllocatedBytesPerCycle": 31506735528.72,
+  "afterAllocatedBytesPerCycle": 149416.4,
+  "allocationReductionPercent": 99.99952576362644,
+  "beforeMedianMs": 1452.2708,
+  "afterMedianMs": 79.5632,
+  "medianSpeedup": 18.253046634625054,
+  "scope": "Diagnostic before/after isolated provider correction;not shipped baseline comparison,statistical significance or owner acceptance."
+}

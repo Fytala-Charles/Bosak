@@ -1,0 +1,37 @@
+{
+  "recordFormatVersion": 1,
+  "recordedUtc": "2026-10-30T20:32:46.647476+00:00",
+  "workPackage": "Bosak.XmlDb FX009-01",
+  "status": "Ready / pending requirements matrix delivery",
+  "completionFound": false,
+  "ownerAcceptanceRecorded": false,
+  "registrationCommit": "080859542786d514150d74f7ac9dd1ef56c6399a",
+  "consumerMainCommit": "2f9a36bc3ff22c8215d2f12ff38541770dd82585",
+  "consumerHasSeparateUncommittedM2Work": true,
+  "coreInspectedCommit": "94ed4413556d375bddf20955b6f1c41d26677aac",
+  "candidateSourceRevision": "c88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+  "candidateVersion": "1.34.2",
+  "candidateFeedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "registrationDocumentSha256": "2422e3c434714f3945de3d73a90dad7520f8ff253e7ff810923f964742e282c0",
+  "readOnlyCoreInputHashes": {
+    "docs/foundation-readiness/READINESS.json": "c220f6ddf1267e4fe79c4aa073ba76dfcaa27ac6d37ca2f484f630467279b546",
+    "docs/foundation-readiness/OWNER-ACCEPTANCE.md": "0738867c4b7faad804d562459855397d27b12c8382d0d028f36665d522783626",
+    "docs/foundation-readiness/OWNER-RESPONSE.template.json": "aaeec9cdf71db8ebbf8cf0cf4052bc409d90854bafc4292523f1f3b8aa8d3624",
+    "docs/foundation-api-contract-draft/evidence/member-manifest.json": "9de81974678e056748aca16b9bda0ade52d09f7cb50348420fe40ea6c70c090d"
+  },
+  "requiredContractGaps": null,
+  "decision": null,
+  "decidedBy": null,
+  "freezeAccepted": false,
+  "productAdoptionAuthorized": false,
+  "publicationAuthorized": false,
+  "runtimeTestsExecuted": false,
+  "notificationScope": "Local Bosak documentation; no remote message, commit or push",
+  "reportSha256": "30f586046d080da3f27f9b25a5087c0302f6e6547c084977765566ee86bfb552",
+  "validation": {
+    "localReportLinks": "passed",
+    "originalReadinessInputHashes": "unchanged",
+    "handoverReadback": "passed",
+    "runtimeOrDependencyChanges": false
+  }
+}

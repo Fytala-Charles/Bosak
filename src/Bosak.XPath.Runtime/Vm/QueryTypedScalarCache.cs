@@ -19,6 +19,10 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5 | 05-11-2026     | Separate stable payload scope from current compatible issuer (1.69.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6 | 06-11-2026     | Observe registered ordinary scalar metadata without provider callbacks (1.77.0). |
+//                      | Charles Korthout | 0.7 | 06-11-2026     | Read exact immutable compatible metadata under API-owned live proof validation (1.78.0). |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -32,7 +36,9 @@ internal sealed class QueryTypedScalarCache
 {
     private readonly object _gate=new();
     private readonly QuerySourceSession.Snapshot _snapshot;
-    private readonly IQueryTypedContainerIssuer _issuer;
+    private readonly IQueryTypedContainerIssuer? _issuer;
+    private readonly object _issuerIdentity;
+    private readonly bool _operationBound;
     private readonly ISchemaAssessmentInput _input;
     private readonly ISchemaAuthority _authority;
     private readonly int _limit;
@@ -62,20 +68,63 @@ internal sealed class QueryTypedScalarCache
             for(int i=0;i<Entries.Length;i++)Entries[i]=new Entry(this,i);
         }
     }
-    internal sealed class Entry
+    internal sealed class Entry : ISchemaAtomicObservation,ISchemaAtomicProvenance
     {
         internal Group Group {get;}
         internal int Ordinal {get;}
         internal XdmValue Transport {get;}
         internal Entry(Group group,int ordinal)
         {Group=group;Ordinal=ordinal;Transport=XdmValue.SchemaTransportAttach(group.Cells[ordinal].Value,this);}
+        bool ISchemaAtomicObservation.TryObserve(in XdmValue value,out ISchemaAtomicProvenance? provenance)
+        {
+            provenance=null;if(Group.Owner._operationBound)return false;
+            try
+            {
+                var cell=Group.Owner.ReadObservation(this);
+                if(!value.SchemaTransportMatches(cell.Value))return false;
+                _=Group.Owner.ReadObservation(this);provenance=this;return true;
+            }
+            catch(ObjectDisposedException){return false;}
+            catch(OperationCanceledException){return false;}
+            catch(ArgumentException){return false;}
+        }
+        ISchemaComponentHandle ISchemaAtomicProvenance.DeclaredType=>Group.Owner.ReadObservation(this).Declared;
+        ISchemaComponentHandle ISchemaAtomicProvenance.ActualType=>Group.Owner.ReadObservation(this).Actual;
+        ISchemaAssessmentOrigin? ISchemaAtomicProvenance.OriginalAssessment=>Group.Owner.ReadObservation(this).Origin;
+    }
+    private QueryTypedContainer.Cell ReadObservation(Entry entry)
+    {
+        _snapshot.CheckObservationActive();
+        lock(_gate)
+        {
+            ObjectDisposedException.ThrowIf(_closed,this);
+            if(_operationBound)throw new NotSupportedException("Compatible evidence requires a separately leased observation route.");
+            var group=entry.Group;
+            if(!ReferenceEquals(group.Owner,this)||(uint)entry.Ordinal>=(uint)group.Cells.Length
+                ||!_entries.TryGetValue(new(group.Container,group.Origin,entry.Ordinal),out var stored)||!ReferenceEquals(stored,entry))
+                throw new ArgumentException("Unregistered atomic observation.");
+            var cell=group.Cells[entry.Ordinal];_snapshot.CheckObservationActive();return cell;
+        }
     }
     internal QueryTypedScalarCache(QuerySourceSession.Snapshot snapshot,IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAuthority authority,int limit)
-    {ArgumentOutOfRangeException.ThrowIfNegativeOrZero(limit);_snapshot=snapshot;_issuer=issuer;_input=input;_authority=authority;_limit=limit;}
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(limit);_snapshot=snapshot;
+        (_issuerIdentity,_operationBound)=ScopeOf(issuer);_issuer=_operationBound?null:issuer;
+        _input=input;_authority=authority;_limit=limit;
+    }
+    private static (object Identity,bool OperationBound) ScopeOf(IQueryTypedContainerIssuer issuer)
+    {
+        ArgumentNullException.ThrowIfNull(issuer);
+        return issuer is IQueryOperationBoundTypedIssuer current
+            ? (current.ScopeIdentity??throw new ArgumentException("Missing operation-bound payload scope."),true)
+            : (issuer,false);
+    }
     internal int Count {get{lock(_gate)return _entries.Count;}}
     internal void RequireScope(IQueryTypedContainerIssuer issuer,ISchemaAssessmentInput input,ISchemaAuthority authority,int limit)
     {
-        lock(_gate){ObjectDisposedException.ThrowIf(_closed,this);if(!ReferenceEquals(_issuer,issuer)||!ReferenceEquals(_input,input)||!ReferenceEquals(_authority,authority)||_limit!=limit)throw new ArgumentException("Typed cache scope or scalar ceiling changed.");}
+        // Resolve trusted engine scope properties before entering the cache gate; never invoke a callback under it.
+        var (identity,operationBound)=ScopeOf(issuer);
+        lock(_gate){ObjectDisposedException.ThrowIf(_closed,this);if(operationBound!=_operationBound||!ReferenceEquals(_issuerIdentity,identity)||!ReferenceEquals(_input,input)||!ReferenceEquals(_authority,authority)||_limit!=limit)throw new ArgumentException("Typed cache scope or scalar ceiling changed.");}
     }
     internal Group? Find(ISchemaTypedValue value,ISchemaAssessmentOrigin? origin)
     {lock(_gate){ObjectDisposedException.ThrowIf(_closed,this);return _entries.TryGetValue(new(value,origin,0),out var entry)?entry.Group:null;}}
@@ -115,16 +164,39 @@ internal sealed class QueryTypedScalarCache
         }
     }
     internal QueryRegisteredTypedContainer ValidateTransport(QuerySourceSession.Operation operation,XdmValue value,int maxAtoms,int digits,int scale,CancellationToken cancellation)
+        => ValidateTransport(operation,value,maxAtoms,digits,scale,cancellation,
+            _issuer??throw new NotSupportedException("Current operation-bound issuer is required for this payload cache."));
+    internal QueryRegisteredTypedContainer ValidateTransport(QuerySourceSession.Operation operation,XdmValue value,int maxAtoms,int digits,int scale,
+        CancellationToken cancellation,IQueryTypedContainerIssuer issuer)
     {
-        operation.RequireMember(_snapshot);
+        operation.RequireMember(_snapshot);RequireScope(issuer,_input,_authority,_limit);
         if(XdmValue.SchemaTransportMarker(value) is not Entry entry||!ReferenceEquals(entry.Group.Owner,this))throw new ArgumentException("Foreign or missing typed scalar evidence.",nameof(value));
         var group=entry.Group;
         Check(group);
         if((uint)entry.Ordinal>=(uint)group.Entries.Length||!ReferenceEquals(group.Entries[entry.Ordinal],entry)
             ||!value.SchemaTransportMatches(group.Cells[entry.Ordinal].Value))throw new ArgumentException("Typed scalar representation or registration changed.",nameof(value));
-        var reader=new QueryTypedContainerReader(operation,_snapshot,_snapshot.Owner.Environment,_issuer,_input,group.Origin,group.Container,maxAtoms,digits,scale,cancellation);
-        RequireScope(_issuer,_input,reader.SelectedAuthority,_limit);
+        var reader=new QueryTypedContainerReader(operation,_snapshot,_snapshot.Owner.Environment,issuer,_input,group.Origin,group.Container,maxAtoms,digits,scale,cancellation);
+        RequireScope(issuer,_input,reader.SelectedAuthority,_limit);
         var result=new QueryRegisteredTypedContainer(this,reader,group);result.Check();return result;
+    }
+    // Engine-only immutable metadata read; the API's leased window checks live issuer/type ownership.
+    internal Group RequireCompatibleObservation(QuerySourceSession.Operation operation,XdmValue value,
+        IQueryTypedContainerIssuer issuer,int maxAtoms,int digits,int scale)
+    {
+        operation.RequireMember(_snapshot);RequireScope(issuer,_input,issuer.Authority,_limit);
+        if(!_operationBound||XdmValue.SchemaTransportMarker(value) is not Entry entry||!ReferenceEquals(entry.Group.Owner,this))
+            throw new ArgumentException("Compatible observation requires this snapshot's registered carrier.",nameof(value));
+        var group=entry.Group;Check(group);
+        if((uint)entry.Ordinal>=(uint)group.Entries.Length||!ReferenceEquals(group.Entries[entry.Ordinal],entry)
+            ||!value.SchemaTransportMatches(group.Cells[entry.Ordinal].Value))throw new ArgumentException("Compatible observation representation changed.",nameof(value));
+        if(group.List||group.Cells.Length!=1||entry.Ordinal!=0||group.Cells[0].Value.Kind is not(XdmValueKind.String or XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Decimal))
+            throw new NotSupportedException("Compatible provenance requires an eligible non-list singleton.");
+        if(maxAtoms<1)throw new NotSupportedException("Typed result exceeds atomic capacity.");
+        var plain=group.Cells[0].Value;
+        if(plain.Kind==XdmValueKind.Integer)_=new XdmExactDecimal(plain.BigIntegerValue,0,digits,scale);
+        else if(plain.Kind==XdmValueKind.Decimal){var(c,s)=plain.DecimalRepresentation;_=new XdmExactDecimal(c,s,digits,scale);}
+        else if(plain.Kind==XdmValueKind.String&&plain.StringValue is null)throw new ArgumentException("Compatible String payload is null.");
+        operation.RequireMember(_snapshot);Check(group);return group;
     }
     internal void Close(){lock(_gate){_closed=true;_entries.Clear();}}
     internal bool ContainsTransport(XdmValue value)
@@ -152,6 +224,16 @@ internal sealed class QueryTypedScalarRegistration
         var result=new QueryRegisteredTypedContainer(_cache,_reader,_group);
         var committed=_cache.Install(_operation,_group,faultAfter);result.Select(committed);
         result.Check();return result;
+    }
+    internal bool TryCommitCompatibleSingle(out XdmValue value,int faultAfter=-1)
+    {
+        CheckProvider();value=default;
+        if(_group.List||_group.Cells.Length!=1||_group.Origin is null)return false;
+        var plain=_group.Cells[0].Value;
+        if(plain.Kind is not(XdmValueKind.String or XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Decimal))return false;
+        if(plain.Kind==XdmValueKind.String&&plain.StringValue is null)throw new ArgumentException("Compatible String payload is null.");
+        if(faultAfter==-2)throw new InvalidOperationException("Injected compatible pre-delivery allocation boundary failure.");
+        value=Commit(faultAfter).GetTransport(0);return true;
     }
     internal bool TryCommitSingle(out XdmValue value)
     {

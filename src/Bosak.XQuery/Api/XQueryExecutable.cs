@@ -173,7 +173,10 @@ public sealed class XQueryExecutable
     }
 
     /// <summary>Evaluates on an operation-owned context without allocating an XQueryContext wrapper.</summary>
-    internal XdmValue EvaluateIsolatedContext(EvaluationContext evaluationContext)
+    internal XdmValue EvaluateIsolatedContext(EvaluationContext evaluationContext)=>EvaluateIsolatedContextCore(evaluationContext,false);
+    /// <summary>Preserves effective static context on a uniquely owned child for deferred consumption.</summary>
+    internal XdmValue EvaluateOwnedContext(EvaluationContext evaluationContext)=>EvaluateIsolatedContextCore(evaluationContext,true);
+    private XdmValue EvaluateIsolatedContextCore(EvaluationContext evaluationContext,bool ownedContext)
     {
         ArgumentNullException.ThrowIfNull(evaluationContext);
         var snapshot = evaluationContext.SnapshotNamespaces();
@@ -266,10 +269,13 @@ public sealed class XQueryExecutable
                 evaluationContext.InitialFocusResolver = savedFocusResolver;
                 evaluationContext.WithFocus(savedItem, savedPosition, savedSize);
             }
-            evaluationContext.RestoreNamespaces(snapshot);
-            evaluationContext.DefaultElementNamespace = savedDefaultNs;
-            evaluationContext.BaseUri = savedBaseUri;
-            evaluationContext.DefaultCollation = savedCollation;
+            if(!ownedContext)
+            {
+                evaluationContext.RestoreNamespaces(snapshot);
+                evaluationContext.DefaultElementNamespace = savedDefaultNs;
+                evaluationContext.BaseUri = savedBaseUri;
+                evaluationContext.DefaultCollation = savedCollation;
+            }
         }
     }
 

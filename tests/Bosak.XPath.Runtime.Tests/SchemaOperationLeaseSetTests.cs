@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 05-11-2026     | Verify separate admission/rollback outcomes and unchanged throwing entry (1.73.0). |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Runtime.Vm;
@@ -109,5 +110,95 @@ public sealed class SchemaOperationLeaseSetTests
         var f=new Fixture();var set=f.Open(f.Member("1"));var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         async Task Raw(){try{entered.SetResult();await resume.Task;set.Check();}finally{set.Complete();}}
         var raw=Raw();await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));using var c=new CancellationTokenSource();c.Cancel();await Assert.ThrowsAnyAsync<OperationCanceledException>(()=>raw.WaitAsync(c.Token));Assert.DoesNotContain("release1",f.Events);resume.SetResult();await raw.WaitAsync(TimeSpan.FromSeconds(10));Assert.Single(f.Events,x=>x=="release1");
+    }
+
+    /// <summary>Successful reports transfer the real leases without releasing them.</summary>
+    [Fact] public void OutcomeTransfersSuccessfulLeases()
+    {
+        var f = new Fixture();
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session, [f.Member("1"), f.Member("2")], 8, f.Check);
+        Assert.Null(outcome.AdmissionError); Assert.Empty(outcome.CleanupErrors);
+        var leases = Assert.IsType<SchemaOperationLeaseSet>(outcome.Leases);
+        Assert.Equal(new[] { "enter1", "enter2" }, f.Events);
+        leases.Check(); leases.Complete(); leases.Complete();
+        Assert.Equal(new[] { "enter1", "enter2", "release2", "release1" }, f.Events);
+    }
+
+    /// <summary>Admission and rollback errors retain identity, nesting, duplicates and order.</summary>
+    [Fact] public void OutcomeKeepsOriginalErrorsSeparate()
+    {
+        var f = new Fixture(); var primary = new AggregateException(new Exception("entry"));
+        var nested = new AggregateException(new Exception("cleanup"));
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session,
+            [f.Member("1", release: () => throw nested), f.Member("2", release: () => throw nested),
+             f.Member("3", enter: () => throw primary)], 8, f.Check);
+        Assert.Null(outcome.Leases); Assert.Same(primary, outcome.AdmissionError);
+        Assert.Equal(2, outcome.CleanupErrors.Length);
+        Assert.All(outcome.CleanupErrors, error => Assert.Same(nested, error));
+        Assert.Single(nested.InnerExceptions);
+        Assert.Equal(new[] { "enter1", "enter2", "enter3", "release2", "release1" }, f.Events);
+    }
+
+    /// <summary>Invalid membership is reported before any acquisition.</summary>
+    /// <param name="kind">Invalid membership shape.</param>
+    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)]
+    public void OutcomeInvalidMembership(int kind)
+    {
+        var f = new Fixture(); var one = f.Member("1");
+        ImmutableArray<SchemaOperationLeaseSet.Member> members = kind switch
+        { 0 => default, 1 => [null!], 2 => [one, one], 3 => [new Fixture().Member("x")], _ => [one, f.Member("2")] };
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session, members, kind == 4 ? 1 : 8, f.Check);
+        Assert.Null(outcome.Leases); Assert.IsAssignableFrom<ArgumentException>(outcome.AdmissionError);
+        Assert.Empty(outcome.CleanupErrors); Assert.Empty(f.Events);
+    }
+
+    /// <summary>Pre-cancellation remains admission failure and acquires nothing.</summary>
+    [Fact] public void OutcomePreCancellation()
+    {
+        var f = new Fixture(); using var cancellation = new CancellationTokenSource(); cancellation.Cancel();
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session, [f.Member("1")], 8, f.Check, cancellation.Token);
+        var error = Assert.IsAssignableFrom<OperationCanceledException>(outcome.AdmissionError);
+        Assert.Equal(cancellation.Token, error.CancellationToken);
+        Assert.Null(outcome.Leases); Assert.Empty(outcome.CleanupErrors); Assert.Empty(f.Events);
+    }
+
+    /// <summary>Final cancellation reports rollback failure separately after release.</summary>
+    [Fact] public void OutcomeFinalCancellationWithCleanupFailure()
+    {
+        var f = new Fixture(); using var cancellation = new CancellationTokenSource(); var cleanup = new Exception("cleanup");
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session,
+            [f.Member("1", enter: cancellation.Cancel, release: () => throw cleanup)], 8, f.Check, cancellation.Token);
+        Assert.IsAssignableFrom<OperationCanceledException>(outcome.AdmissionError);
+        Assert.Null(outcome.Leases); Assert.Same(cleanup, Assert.Single(outcome.CleanupErrors));
+        Assert.Equal(new[] { "enter1", "release1" }, f.Events);
+    }
+
+    /// <summary>A failed final lifetime recheck releases every acquired lease in reverse.</summary>
+    [Fact] public void OutcomeFinalRevocationWithMultipleCleanupFailures()
+    {
+        var f = new Fixture(); var first = new Exception("first"); var second = new Exception("second");
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session,
+            [f.Member("1", release: () => throw first), f.Member("2", enter: () => f.Available = false, release: () => throw second)], 8, f.Check);
+        Assert.IsType<ObjectDisposedException>(outcome.AdmissionError); Assert.Null(outcome.Leases);
+        Assert.Equal(new[] { second, first }, outcome.CleanupErrors);
+        Assert.Equal(new[] { "enter1", "enter2", "release2", "release1" }, f.Events);
+    }
+
+    /// <summary>A null lease refuses and rolls back only the prior successful lease.</summary>
+    [Fact] public void OutcomeNullLeaseRollsBackPriorEntry()
+    {
+        var f = new Fixture(); var invalid = new SchemaOperationLeaseSet.Member(f.Session, () => { }, () => null!);
+        var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session, [f.Member("1"), invalid], 8, f.Check);
+        Assert.IsType<InvalidOperationException>(outcome.AdmissionError); Assert.Null(outcome.Leases);
+        Assert.Empty(outcome.CleanupErrors); Assert.Equal(new[] { "enter1", "release1" }, f.Events);
+    }
+
+    /// <summary>Empty membership succeeds while still retaining session revocation checks.</summary>
+    [Fact] public void OutcomeEmptyMembershipChecksSession()
+    {
+        var f = new Fixture(); var outcome = SchemaOperationLeaseSet.AcquireOutcome(f.Session, [], 8, f.Check);
+        Assert.Null(outcome.AdmissionError); Assert.Empty(outcome.CleanupErrors);
+        var leases = Assert.IsType<SchemaOperationLeaseSet>(outcome.Leases);
+        f.Available = false; Assert.Throws<ObjectDisposedException>(leases.Check); leases.Complete(); Assert.Empty(f.Events);
     }
 }

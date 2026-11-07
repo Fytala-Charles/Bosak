@@ -1,0 +1,8 @@
+{
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "priorManifest": "docs/foundation-public-node-nilled/MANIFEST.json",
+  "priorManifestSha256": "f2855ac1bc5890d09f7077ecf93f70cb5a689c96036515701e0c9fc3436993c9",
+  "sourceVersion": "1.63.1",
+  "priorSourceVersion": "1.63.0",
+  "priorCandidateUncommitted": true
+}

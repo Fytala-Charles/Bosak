@@ -1,0 +1,24 @@
+{
+  "gates": {
+    "qt3": {
+      "passed": 31397,
+      "failed": 0,
+      "skipped": 424,
+      "logSha256": "1fa1c86e75255d50b58a0dc4faf2bafe7adc292395a3d58601cd180aa4b18df3",
+      "skipSha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187",
+      "baselineSkipSha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187",
+      "exactSkipMapEqual": true
+    },
+    "qt4": {
+      "passed": 8941,
+      "failed": 0,
+      "skipped": 1918,
+      "logSha256": "dacbd9f1b1ec08b5e4e16c3d17a64ced48c6bad0e141ecdd5e60d05ca0d2f41b",
+      "skipSha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a",
+      "baselineSkipSha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a",
+      "exactSkipMapEqual": true
+    }
+  },
+  "qt4GateOnly": true,
+  "qt4ExperimentalPassed": 11
+}

@@ -1,0 +1,85 @@
+{
+  "implementationStatus": "NotStarted",
+  "cases": [
+    {
+      "id": "CI01",
+      "trigger": "Default issuers retain exact-reference scope and legacy behavior",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI02",
+      "trigger": "Stable compatible scope is distinct from current raw proof/issuer",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI03",
+      "trigger": "Operation-bound issuer/view/guard is not retained by persistent cache",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI04",
+      "trigger": "Validation without current issuer/proof refuses, including generic VM fallback",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI05",
+      "trigger": "Fresh positive proof plus actual source container/input/origin issuance required",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI06",
+      "trigger": "Original governing/declared/actual types and assessment preserved",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI07",
+      "trigger": "Eligible singleton selected carrier preserves private identity and exact representation",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI08",
+      "trigger": "Empty/list/multi/other-family eligibility refuses before any commit",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI09",
+      "trigger": "Atom/digit/scale capacity and excess-Current checks",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI10",
+      "trigger": "Whole-batch publication/rollback and allocation fault boundaries",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI11",
+      "trigger": "Source markers/foreign target scopes/forged token/tampered representation reject",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI12",
+      "trigger": "New raw operation reuses only payload identity after fresh authorization",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI13",
+      "trigger": "Negative/unsupported/revoked/closed/canceled proof denies before getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI14",
+      "trigger": "No callbacks under cache state lock; paired tails retain real resources",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI15",
+      "trigger": "Source cache unchanged; target snapshot/count quota units preserved",
+      "status": "NotRun"
+    },
+    {
+      "id": "CI16",
+      "trigger": "Full regressions/gates/skips/API/layout/friends/source/binary/configuration proof",
+      "status": "NotRun"
+    }
+  ]
+}

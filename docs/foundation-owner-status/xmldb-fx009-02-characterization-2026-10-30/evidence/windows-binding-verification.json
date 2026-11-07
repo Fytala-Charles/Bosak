@@ -1,0 +1,34 @@
+{
+  "source-baseline": {
+    "allSevenInTesthostAndProbe": true,
+    "defaultContext": true,
+    "reports": [
+      ".tools/fx009-02/results/source-baseline-tests-bindings/58764.json",
+      ".tools/fx009-02/results/source-baseline-probe-bindings/52412.json"
+    ]
+  },
+  "source-candidate": {
+    "allSevenInTesthostAndProbe": true,
+    "defaultContext": true,
+    "reports": [
+      ".tools/fx009-02/results/source-candidate-tests-bindings/45368.json",
+      ".tools/fx009-02/results/source-candidate-probe-bindings/34324.json"
+    ]
+  },
+  "binary-control": {
+    "allSevenInTesthostAndProbe": true,
+    "defaultContext": true,
+    "reports": [
+      ".tools/fx009-02/results/binary-control-tests-bindings/41300.json",
+      ".tools/fx009-02/results/binary-control-probe-bindings/28336.json"
+    ]
+  },
+  "binary-replacement": {
+    "allSevenInTesthostAndProbe": true,
+    "defaultContext": true,
+    "reports": [
+      ".tools/fx009-02/results/binary-replacement-tests-bindings/56196.json",
+      ".tools/fx009-02/results/binary-replacement-probe-bindings/33932.json"
+    ]
+  }
+}

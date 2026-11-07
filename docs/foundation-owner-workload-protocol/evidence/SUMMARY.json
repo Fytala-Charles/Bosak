@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-07",
+  "measuredCycles": 30,
+  "decimalReads": 135,
+  "summaries": [
+    {
+      "workload": "native-decimal-1",
+      "repetitionMedianMs": [
+        106.7559,
+        80.4676,
+        80.7222
+      ],
+      "allocatedBytesPerCycle": [
+        149971.2,
+        149918.4,
+        149918.4
+      ],
+      "repetitions": 3,
+      "measuredCycles": 15,
+      "rootObservationCounts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "workload": "native-decimal-8",
+      "repetitionMedianMs": [
+        735.5319,
+        757.2829,
+        685.5627
+      ],
+      "allocatedBytesPerCycle": [
+        207828.8,
+        204489.6,
+        204406.4
+      ],
+      "repetitions": 3,
+      "measuredCycles": 15,
+      "rootObservationCounts": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "scope": "Small independent-session observations only;not a statistical regression result."
+}

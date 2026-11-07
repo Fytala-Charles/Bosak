@@ -1,0 +1,15 @@
+# Next implementation slices
+
+PV-H01 implements the exact reviewed public helper in Core while preserving the existing value layout, assembly friends/references and provider contracts. Use a sealed internal observation bridge for genuine engine transport. Core must not reference Runtime or API; trusted ordinary registry entries and constructed receipts supply only their cached immutable tuples and callback-free engine expiry checks. Observation must not attach, convert, enumerate or allocate a native/source/cache quota slot.
+
+Ordinary observations validate exact registered entry, ordinal, payload/type tags and engine session/snapshot/cache lifetime, including captured cancellation. Operation-local construction validates its genuine receipt and exact raw lifetime with null origin. A returned engine provenance view checks lifetime on every getter and returns stored references without dereferencing provider properties. Plain/unknown/tampered/private legacy/current-compatible markers return false/null under the bounded selection. Do not treat this as proof that returned provider handles may be used outside owner/raw lifetimes.
+
+Before editing source, record fresh immutable implementation adoption and actual input hashes. Then implement the 37 planned cases, positive and negative public routes, callback poison and close/cancellation schedules, exact no-layout/reference/friend regressions and observation cost. Run a complete build/test/gate/API inventory and refresh package/docs evidence for the implemented source version. Existing source characterization cannot substitute for those new controls.
+
+PV-H02 separately resolves the required leased compatible provenance route. Stable cache entries intentionally omit old operation issuers; avoid ambient operation state, latest-proof overwrites, new authority inferred from cached type references or incompatible value-identity changes. A public signature/disposition change needs exact reviewed evidence and remains a required gap before freeze.
+
+PV-T01 settles and implements complete public empty/list/union typed-container transport, including per-cell selected type/origin, governing/list shape, zero/singleton/multiple cells, whole-container limits and transactional quota behavior. Existing scalar helper and flattened atomization cannot represent that entire contract. PV-L01 records any required private legacy marker adaptation separately; opaque casts are insufficient.
+
+PV-Q01 qualifies actual provider/native/resource and representative cost coverage after the selected engine routes exist. Core policy selection is not Schema/XmlDb/Braid runtime acceptance or an agreed workload budget. NU-01/SC-01 and release gates remain unwaived.
+
+This dossier changes no production or test source, public API or development version. The fresh 475 cases are existing behavior characterization on exactly the TA-32 candidate. Prior 26054-unit/QT3/qt4/API/package receipts remain retained evidence, rechecked against current source/binary/config/corpus/asset hashes. No fresh full run, new helper tests, new package artifact or publication is claimed.

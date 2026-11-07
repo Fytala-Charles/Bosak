@@ -1,0 +1,194 @@
+{
+  "total": 44,
+  "cases": [
+    {
+      "id": "TC01",
+      "count": 6,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 3)"
+      ]
+    },
+    {
+      "id": "TC02",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 1)"
+      ]
+    },
+    {
+      "id": "TC03",
+      "count": 2,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: True)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: False)"
+      ]
+    },
+    {
+      "id": "TC04",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC04_WholeUnsupported"
+      ]
+    },
+    {
+      "id": "TC05",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 1)"
+      ]
+    },
+    {
+      "id": "TC06",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC06_RepeatedUncached"
+      ]
+    },
+    {
+      "id": "TC07",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC07_CompleteExpiry"
+      ]
+    },
+    {
+      "id": "TC08",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC08_CursorProtocol"
+      ]
+    },
+    {
+      "id": "TC09",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 3)"
+      ]
+    },
+    {
+      "id": "TC10",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC10_AtomCapacity"
+      ]
+    },
+    {
+      "id": "TC11",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC11_DeliveryIsNotIssuer"
+      ]
+    },
+    {
+      "id": "TC12",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC12_NoGetterReplay"
+      ]
+    },
+    {
+      "id": "TC13",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC13_ForeignBeforeGetters"
+      ]
+    },
+    {
+      "id": "TC14",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC14_Cancellation"
+      ]
+    },
+    {
+      "id": "TC15",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC15_MetadataSnapshot"
+      ]
+    },
+    {
+      "id": "TC16",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC16_FailureIdentity"
+      ]
+    },
+    {
+      "id": "TC17",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC17_Cost"
+      ]
+    },
+    {
+      "id": "TC18",
+      "count": 2,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: False)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: True)"
+      ]
+    },
+    {
+      "id": "TC19",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 0)"
+      ]
+    },
+    {
+      "id": "TC20",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC20_ActualBlockedTail"
+      ]
+    },
+    {
+      "id": "TC21",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC21_IndependentRawViews"
+      ]
+    },
+    {
+      "id": "TC22",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: \"enumerator\")",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: \"current\")",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: \"dispose\")"
+      ]
+    },
+    {
+      "id": "TC23",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC23_OtherProfileUnsupported"
+      ]
+    },
+    {
+      "id": "TC24",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.TC24_CompatibleContainerUnsupported"
+      ]
+    }
+  ],
+  "scope": "Executed TC cases; compatible implementation and the entire earlier CTV policy matrix are not claimed complete."
+}

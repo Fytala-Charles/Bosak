@@ -1,0 +1,50 @@
+{
+  "status": "SelectedPolicy_NotRuntimeBehavior",
+  "routes": [
+    {
+      "carrier": "ordinary/plain or computed",
+      "selectedObservation": "false / null",
+      "reason": "No engine-issued transport; type labels/payload are insufficient."
+    },
+    {
+      "carrier": "original ordinary registry atomic",
+      "selectedObservation": "true only with valid live engine observation",
+      "reason": "Cached declared/actual/origin, not fresh provider authority."
+    },
+    {
+      "carrier": "originless ordinary registry atomic",
+      "selectedObservation": "true only with valid live engine observation",
+      "reason": "Cached declared/actual and null origin."
+    },
+    {
+      "carrier": "constructed operation-local receipt",
+      "selectedObservation": "true only during its exact live raw operation",
+      "reason": "Null origin; no transfer into another operation."
+    },
+    {
+      "carrier": "expired/rebound/unregistered carrier",
+      "selectedObservation": "false / null",
+      "reason": "No callbacks or authority recovery."
+    },
+    {
+      "carrier": "current-compatible stable entry",
+      "selectedObservation": "false / null in context-free helper",
+      "reason": "Fresh proof is operation-local; leased observation remains an open route."
+    },
+    {
+      "carrier": "private legacy kernel marker",
+      "selectedObservation": "false / null until separately adapted",
+      "reason": "No automatic object-to-public authority cast."
+    },
+    {
+      "carrier": "flattened original-node data",
+      "selectedObservation": "false / null",
+      "reason": "No retained marker; no reverse lookup."
+    },
+    {
+      "carrier": "empty/list/sequence/map/array/node/function carrier",
+      "selectedObservation": "false / null as a whole",
+      "reason": "Container metadata is separate; individual admitted atomic cells follow their own policy."
+    }
+  ]
+}

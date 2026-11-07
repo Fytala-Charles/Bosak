@@ -1,0 +1,20 @@
+{
+  "passed": 10,
+  "failed": 0,
+  "skipped": 0,
+  "trx": "evidence/trx/charl_CHARLES_2026-11-07_01_38_17_net10.0.trx",
+  "sha256": "5be0d860b744066e156165244eec84625a853fe7d4288fd46715fad001942153",
+  "caseNames": [
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.AdmissionCanBeReopened",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.CallerDocumentsStayIndependent",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.CanceledAdmissionCanRetry",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.DuplicateAdmissionPreservesFirst",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: \"<order><amount>0.00000000000000000000000000001</am\"\u00b7\u00b7\u00b7, status: Unsupported)",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: \"<order><amount>bad</amount></order>\", status: Invalid)",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.ForeignResultNodeRefuses",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.PublicRoundTrip",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.ResultDisposalRevokesItsOutputOnly",
+    "Bosak.Schema.PublicConsumer.PublicConsumerTests.SessionAndResultHaveSeparateOwners"
+  ],
+  "scope": "Separate consumer assembly public API controls only. Prior TA-48 59 controls remain sealed,not rerun or summed."
+}

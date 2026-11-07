@@ -1,0 +1,11 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\baseline\\source\\qualification\\Probe\\bin\\Release\\net10.0\\Fx009Probe.dll",
+    "seed",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\existing"
+  ],
+  "exitCode": 0,
+  "seconds": 0.7101255999878049,
+  "timeoutSeconds": 180
+}

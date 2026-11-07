@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.66.0",
+  "candidateVersion": "1.67.0",
+  "beforeHashes": {
+    "docs/foundation-compatible-view-policy/MANIFEST.json": "db8d84863ae6ac86cf765aa7fafc523730a13e9f81bd65001b9422cbccf07442",
+    "docs/foundation-compatible-view-policy/POLICY.md": "a9e45402ff3f132bb7fd3ccf558c6522c613ccdcd8d98f0cffb07bbd3dde6d24",
+    "docs/foundation-compatible-view-policy/PREREQUISITE-CASES.json": "09fae864ccbab190a985205911f4118a5ef8bd7be32d01653df1d01eee1e7b45",
+    "src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs": "7c829714ef99c53ac28c83bfaa0bd0c0dd2a3ce3ba7909b5f7a4e2a75f50a449",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "1009091faa73b89287bfe144313ef9ace8a09f6aaa6c443e6318040dbd7cedd5",
+    "src/Bosak.XPath.Core/Xdm/QuerySnapshotLifetime.cs": "e5035cda8935ec3435a5aae0604c1fe82949ea4f86860c89a22d555b4c7bd486",
+    "src/Directory.Build.props": "c218724c3b36dfcf639603cbb631b5eefa3e150ef22b9d51763130e3bcca700b"
+  },
+  "priorSourcePins": "docs/foundation-public-construction/evidence/SOURCE-AND-BINARY-PINS.json",
+  "semanticScope": "TA-21 MC01-MC16 internal bounded two-advisor admission/call/drain and neutral retained-source transaction only. Existing dated XDM REC basis in TA-18/TA-21 is unchanged; no language/schema compatibility semantics are activated.",
+  "exclusions": "CV01-CV32 and CV-ENTRY-01 public delta remain unimplemented/unadopted. No new public signatures, provider members, proof authority, schema reassessment, packaging/publication or native acceptance."
+}

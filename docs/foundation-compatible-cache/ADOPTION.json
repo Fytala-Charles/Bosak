@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.68.0",
+  "candidateVersion": "1.69.0",
+  "beforeHashes": {
+    "docs/foundation-compatible-admission/MANIFEST.json": "71eedef223ce0e812160cb21c774aa32b0492b1d164136d06bde1605eeb58c28",
+    "docs/foundation-compatible-admission/CACHE-REQUIREMENT.md": "11e295a9cd6c61f3c43090731c801630a4c72bb344eac18f8c5aa82c96eb31f2",
+    "docs/foundation-compatible-admission/CACHE-CASES.json": "8118a8fb4a4b35d36c77311661b279b2a7d9fb50ef08e608d7ff38497d7b805f",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "a3eba897a1ee48f95ec746de18cc306f18bdb8406bb49237c08e6b8496304911",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "e86655326c8cc4ac29624cb787f387fc611ca36f39fef9ad9eae30af61658f29",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "1f5588b324da6a0d2d72bbca7dfde33ea08f4c800128147480c59df3a5d3991a",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "10d8ec00ce67678dbec14ad437b7fd412a23d4ef36613607f377d429add7b99b",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "3e642264503aefe175e505c2c117257513bd9a074cdc8e19e0c544ae16d2dee1",
+    "tests/Bosak.XPath.Runtime.Tests/CompatibleAdmissionTests.cs": "0a3c9f43f6954d45c8f7dc536d6b1f5b500530674fa12224ec222471cad8e42c",
+    "src/Directory.Build.props": "1b63fddc2c0a37d559f0ff0f161c3eb4cb0e7596aad2b93da972d32583280300"
+  },
+  "priorSourcePins": "docs/foundation-compatible-admission/evidence/SOURCE-AND-BINARY-PINS.json",
+  "semanticScope": "Selected CV-CACHE-01 and CI01-CI16: internal stable payload residency separated from operation-specific positive compatible proof/issuer. Original source component/assessment representation preserved; exact XDM REC 21 March 2017 sections 2.7.1/2.7.4 basis recorded by TA-18/TA-21 remains unchanged.",
+  "exclusions": "No public compatible entry/result or grammar activation, reassessment, target relabeling, general list/numeric/all-host/native or budget/freeze/publication acceptance. Original issuer reference semantics remain the default."
+}

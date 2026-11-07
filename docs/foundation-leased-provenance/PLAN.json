@@ -1,0 +1,16 @@
+{
+  "sourceVersion": "1.78.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T01",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-H02",
+      "status": "CompleteBoundedCoreSelection"
+    },
+    {
+      "id": "PV-01",
+      "status": "LeasedHelperImplemented_ContainersLegacyNativePending"
+    }
+  ]
+}

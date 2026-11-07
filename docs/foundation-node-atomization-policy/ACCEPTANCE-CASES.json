@@ -1,0 +1,245 @@
+{
+  "implementationStatus": "NotStarted",
+  "cases": [
+    {
+      "id": "AD01",
+      "trigger": "Original element with one issued atomic cell",
+      "expected": "Direct registered scalar; same exact payload, declared/actual type and original assessment; no legacy getters.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD02",
+      "trigger": "Original attribute with one issued atomic cell",
+      "expected": "Same bounded result/provenance as element; attribute channel/tuple authenticated.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD03",
+      "trigger": "Ordered typed list containing three cells and equal duplicate values",
+      "expected": "Materialized sequence preserves order, duplicate occurrences and per-ordinal marker identities.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD04",
+      "trigger": "Union/list container with different actual member types",
+      "expected": "Each cell retains actual atomic member type; governing container type is not substituted.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD05",
+      "trigger": "Explicit Undefined and no admitted snapshots",
+      "expected": "Undefined after current raw/advisor checks; zero node/facts/typed callbacks and slots.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD06",
+      "trigger": "Element HasNoTypedValue=true with typed outcome/getters poisoned",
+      "expected": "InvalidOperationException with FOTY0012 prefix after current metadata proof; typed method untouched, zero slots.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD07",
+      "trigger": "Supported empty atomic and supported empty list containers",
+      "expected": "Undefined; validated shape remains transient; no persistent empty-container record or slots.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD08",
+      "trigger": "Nilled original element with supported empty container",
+      "expected": "Undefined after validating real supported emptiness; no inferred empty shortcut.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD09",
+      "trigger": "Nilled plus absent, nilled nonempty, or attribute absent/nilled",
+      "expected": "ArgumentException for contradictory supported evidence; no successful empty or FOTY0012 masking.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD10",
+      "trigger": "Unsupported/NotFound/Invalid/unknown/null typed outcomes and Supported-null container",
+      "expected": "Unsupported maps to NotSupportedException; all malformed outcomes reject before payload use/cache mutation.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD11",
+      "trigger": "Missing annotated channel or selected original assessment",
+      "expected": "NotSupportedException; no legacy string/type/TypedValue fallback.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD12",
+      "trigger": "Known document/text/comment/PI/namespace and invalid/combined kind",
+      "expected": "Known other kinds NotSupported before facts; unknown/combined malformed ArgumentException.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD13",
+      "trigger": "Foreign, absent or ambiguously owned node",
+      "expected": "ArgumentException before NodeKind/OriginalSchemaFacts.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD14",
+      "trigger": "Null/unissued/copied facts or wrong node/input/origin tuple",
+      "expected": "ArgumentException before facts metadata.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD15",
+      "trigger": "Foreign type/declaration/origin, changed assessor/authority/environment and foreign/missing per-cell declared/actual/origin evidence",
+      "expected": "Current binding/component/tuple checks prevent delivery.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD16",
+      "trigger": "Missing/extra/prefixed variable, direct atomic, array/map/function or sequence input",
+      "expected": "Closed capture refusal without callbacks/enumeration; missing variable is not empty.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD17",
+      "trigger": "Focus, dynamic namespaces, services or populated execution state",
+      "expected": "NotSupportedException before node/facts access; same closed capture boundary.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD18",
+      "trigger": "Syntax data(), data(.), paths/operators/aliases/EQNames or foreign fn mapping",
+      "expected": "Unsupported compilation before Bind; only two exact trimmed forms select profile.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD19",
+      "trigger": "Canonical spelling, each of five limits, frozen CompileOptions mutation",
+      "expected": "Canonical forms agree; descriptor separates limits/static context and remains frozen.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD20",
+      "trigger": "Container exceeds MaxTypedValueAtoms including empty/single/list fast paths",
+      "expected": "Refuse excess before Current; no partial result/entries and owned iterator cleanup exactly once.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD21",
+      "trigger": "Whole new batch exceeds remaining scalar capacity",
+      "expected": "No partial install/eviction/unmarked fallback; previous entries/capacity remain valid for fitting retry.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD22",
+      "trigger": "Repeated exact issued nonempty container and unchanged original tuple",
+      "expected": "Reauthenticate original metadata/outcome/identity each query; reuse existing cells/markers/slots without payload/iterator replay.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD23",
+      "trigger": "Repeated fresh supported empty containers",
+      "expected": "No scalar/index growth; empty may be reread rather than kept in unbounded container cache.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD24",
+      "trigger": "Equal payloads from distinct containers, ordinals, origins or admitted snapshots",
+      "expected": "Keys stay reference/scoped; no semantic-equality merging or node-identity key expansion.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD25",
+      "trigger": "Precommit read/cleanup/allocation/insertion failure",
+      "expected": "No staged marker/output escape or partial registration; complete rollback before commit, original failure ordering retained.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD26",
+      "trigger": "Postcommit cancellation, revocation or delivery failure",
+      "expected": "No result/prefix; complete batch remains installed unless snapshot close clears it; retry reuses identity.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD27",
+      "trigger": "Same-key winner and remaining-capacity races",
+      "expected": "Use installed winner atomically; refusal never rolls back another operation or reserves capacity.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD28",
+      "trigger": "Callback close/cancel/revocation and false ownership answers at all stages",
+      "expected": "No delivery, correct error category; raw cleanup waits for actual callback completion/consumption.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD29",
+      "trigger": "Provider primary and iterator Dispose both fail",
+      "expected": "Original callback failure then cleanup failure in established aggregate order; no partial install/result.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD30",
+      "trigger": "Metadata-only nilled and default complete facts-reader controls",
+      "expected": "Old defaults, NotRequested/Absent/Unsupported/Supported distinctions and guard-cost optimization remain unchanged.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD31",
+      "trigger": "Enumerate materialized result repeatedly after raw completion/close",
+      "expected": "Copied carrier payload/order/count readable without provider calls; no active raw lifetime or authority implied.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD32",
+      "trigger": "Reuse an extracted scalar in a later same-admission raw operation",
+      "expected": "Authenticate current container/input/origin/components; original resident marker reused, raw view itself remains expired.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD33",
+      "trigger": "Extraction node/facts association revoked after successful extraction but container remains independently issued",
+      "expected": "Next extraction refuses; resident cell authorization follows current independent container/input/origin/component proof, not permanent node identity.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD34",
+      "trigger": "Container/input/origin/component revoked, forged marker or altered scalar representation",
+      "expected": "Later resident-cell operational authorization refuses; retained payload/label is not proof.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD35",
+      "trigger": "Return data output to another compiled session using same source/assessor",
+      "expected": "Foreign admission refuses; no implicit cross-session import, identity/numeric profile expansion or host adoption.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD36",
+      "trigger": "Same issued container legitimately shared by two original nodes in one input/origin",
+      "expected": "Authenticate each extraction tuple; preserve existing container/ordinal key, no fictional parent identity or duplicate scalar slots.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD37",
+      "trigger": "Multi-result buffer/wrapper allocation and commit winner selection",
+      "expected": "Allocate bounded unpublished storage before commit; fill only winning registered transports; publish only complete result after final facts/cell checks.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD38",
+      "trigger": "Wide integers/decimals, scales, mixed supported atomic payloads plus default, structured or already-marked provider cells",
+      "expected": "Existing numeric bounds preserve exact representation; refuse excess without rounding/retyping or numeric-name inference. Malformed/nonplain cells reject before registration or output.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD39",
+      "trigger": "Public Run and RunAsync plus source close/drain during extraction",
+      "expected": "Actual public compile/bind/admit/evaluate path qualified in both modes; source borrowed resource ownership remains correct.",
+      "status": "NotRun"
+    },
+    {
+      "id": "AD40",
+      "trigger": "Cold/warm public data query, empty/list reuse and final full qualification",
+      "expected": "Record allocations/provider reads/retained slot accounting; exact binaries, full tests/QT3/qt4 skips and API/layout/friends; no native owner budget inference.",
+      "status": "NotRun"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "project": "bosak.xpath.parser.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.parser.tests\\bin\\release\\net10.0\\bosak.xpath.parser.tests.dll",
+    "expected": 202,
+    "testSha256": "cb8142dc2a79c058d7a4376b19ea6da3c0e2e8c1753847b47b8306a476463a17"
+  },
+  {
+    "project": "bosak.xpath.compiler.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.compiler.tests\\bin\\release\\net10.0\\bosak.xpath.compiler.tests.dll",
+    "expected": 66,
+    "testSha256": "4ea77f3ff9dfd693d0e78af3d667a56a156371b3e29467a16c0a7bff7bf8b9f5"
+  },
+  {
+    "project": "bosak.xpath.api.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.api.tests\\bin\\release\\net10.0\\bosak.xpath.api.tests.dll",
+    "expected": 681,
+    "testSha256": "7c20aa88a227b00460e9977fb493f8d39d8df1c82c354258348c96a1c38a2fb7"
+  },
+  {
+    "project": "bosak.xpath.core.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.core.tests\\bin\\release\\net10.0\\bosak.xpath.core.tests.dll",
+    "expected": 266,
+    "testSha256": "bb3f179b71caaac066c819de400fa3f20c8d74205a322ba51d36be10c69bfe25"
+  },
+  {
+    "project": "bosak.xpath.providers.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.providers.tests\\bin\\release\\net10.0\\bosak.xpath.providers.tests.dll",
+    "expected": 223,
+    "testSha256": "e22fe749ae8ad2ea0273b4f63c1afc060928cecf40ce174b36665f98b7892939"
+  },
+  {
+    "project": "bosak.xpath.runtime.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.runtime.tests\\bin\\release\\net10.0\\bosak.xpath.runtime.tests.dll",
+    "expected": 1899,
+    "testSha256": "d3c93267c5b16cd925912fc76d7df7854c1441f90a1aa91fe83064dd313195fc"
+  },
+  {
+    "project": "bosak.xquery.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xquery.tests\\bin\\release\\net10.0\\bosak.xquery.tests.dll",
+    "expected": 841,
+    "testSha256": "7065949cd7b381d68576af8a40003e4cee3f6ff78e38bfd3c39ab705ed26eea7"
+  },
+  {
+    "project": "bosak.xpath.providers.database.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.providers.database.tests\\bin\\release\\net10.0\\bosak.xpath.providers.database.tests.dll",
+    "expected": 47,
+    "testSha256": "8f4fbfdabbc9f14ae44578e3629b65b3ff11623aeef157ad74005b0aaa701afc"
+  },
+  {
+    "project": "bosak.xpath.standard.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xpath.standard.tests\\bin\\release\\net10.0\\bosak.xpath.standard.tests.dll",
+    "expected": 13797,
+    "testSha256": "2545911c23259bd46ca8a336d6833f27359f0edd8f553961b82c68f7eee7c6f7"
+  },
+  {
+    "project": "bosak.xslt.tests",
+    "dll": "d:\\development\\bosak\\tests\\bosak.xslt.tests\\bin\\release\\net10.0\\bosak.xslt.tests.dll",
+    "expected": 8320,
+    "testSha256": "8db5713ef6b7f6f2d57881ecac2a458de70dab0dcaa3912dfd45f91e350a7e12"
+  }
+]

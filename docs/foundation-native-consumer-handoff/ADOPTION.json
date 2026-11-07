@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-07",
+  "sourceVersion": "1.81.0",
+  "recordedBeforeImplementation": true,
+  "scope": "PV-Q03d isolated provider-owned public consumer handoff and lifetime. Separate consumer assembly uses only public provider facade and existing public Core contracts;not production API adoption.",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "beforeFiles": {
+    "docs/foundation-native-assessment-prototype/MANIFEST.json": "69f5adba59a6505e9182d906aa8c1b935638d3155031fcfbfac6255695846c7c",
+    "docs/foundation-native-node-prototype/MANIFEST.json": "76dedd4c044674e16e60c0ceaf151625f6cc9814cc055f4bd3950b1c80b41852",
+    "docs/foundation-provider-qualification/PF-MATRIX.json": "31befb34e913ca1ad535d7fd70fa4055178bbde4603e2dba90599a2082a110d6",
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a"
+  },
+  "nativeFiles": {
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "docs/DOCUMENT-ASSESSMENT.md": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91",
+    "AGENTS.md": "095293df131025a5c786b8fab4e30946b8d19c8bfeeac858cdcab8f1b81fb1f7",
+    "docs/ASSESSMENT-ADOPTION-2026-10-29.md": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ],
+      "source": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/"
+    },
+    {
+      "revision": "REC-xmlschema11-2-20120405",
+      "sections": [
+        "3.3.3"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/"
+    },
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.8",
+        "3.13"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/"
+    }
+  ],
+  "intentionalDeviations": "No new XSD/XPath validation semantics. Experimental provider facade owns output input/lifetime and supplies exact admitted snapshot;Core result contracts stay unchanged. Output/result disposal revokes provider input but never disposes caller XML or an unrelated session. No arbitrary root/source recapture, public universal issuer factory, production Schema export, owner workload acceptance or performance budget.",
+  "implementationLocation": "Core dossier prototype test project only;production and sibling sources unchanged"
+}

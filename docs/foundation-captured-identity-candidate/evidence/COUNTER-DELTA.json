@@ -1,0 +1,44 @@
+{
+  "baselinePacket": "docs/foundation-public-data-callback-attribution",
+  "beforeSha256": "85f30366c31b28804063ea3eda8c0b4dffd22ef962a857787a4762584e990b1d",
+  "candidateSha256": "34b6bb65417f78e05ffc45e21f28a6da96f517c0442e9d2b5db8154c7edfa75b",
+  "rows": [
+    {
+      "children": 1,
+      "phase": "firstData",
+      "beforeOutputChecks": 2223750,
+      "candidateOutputChecks": 1824390,
+      "reductionPercent": 17.958853288364253,
+      "beforeBindingReads": 242845,
+      "candidateBindingReads": 199165
+    },
+    {
+      "children": 1,
+      "phase": "cachedData",
+      "beforeOutputChecks": 1573818,
+      "candidateOutputChecks": 1292218,
+      "reductionPercent": 17.892793194638767,
+      "beforeBindingReads": 171865,
+      "candidateBindingReads": 141065
+    },
+    {
+      "children": 8,
+      "phase": "firstData",
+      "beforeOutputChecks": 17789944,
+      "candidateOutputChecks": 14595064,
+      "reductionPercent": 17.95890982006464,
+      "beforeBindingReads": 1942760,
+      "candidateBindingReads": 1593320
+    },
+    {
+      "children": 8,
+      "phase": "cachedData",
+      "beforeOutputChecks": 12590488,
+      "candidateOutputChecks": 10337688,
+      "reductionPercent": 17.892872778243387,
+      "beforeBindingReads": 1374920,
+      "candidateBindingReads": 1128520
+    }
+  ],
+  "scope": "Exact observed call-count delta for unchanged diagnostic caller/provider with Runtime overlay;not accepted latency/CPU/owner budget."
+}

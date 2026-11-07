@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "productionChanged": false,
+  "policyBeforeImplementation": true,
+  "beforeHashes": {
+    "docs/foundation-provider-qualification/MANIFEST.json": "674d4cedb51e9406aa9311293c68a4b57887c528f89dd0f05dfa59468ce7b4d9",
+    "docs/schema-assessment/RESULTS.json": "e402322b5bfa6dfc1318a6e828f1a4806909c34d43cba33f1577b3a0e1cb1999",
+    "docs/schema-presence-implementation/RESULTS.json": "f84cc4013c34f8983160ff0fbdd4a551e087baf375a49ac6b626760ac8d76705",
+    "tools/run-retained-foundation-caller.py": "36e822df48bc78d1781d187e2e0357a24d97c438c5b33187fea6de0d9c84708e"
+  },
+  "candidatePins": "docs/foundation-public-primitives/evidence/SOURCE-AND-BINARY-PINS.json",
+  "candidatePinsSha256": "e04c42b8be0111cc4c9feed28c15734cc7b82af0a542a76a9a163507a2fdf0d6",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeStatus": "",
+  "scope": "PV-Q02 isolate existing native Schema regression source and unchanged-binary lanes against exact qualified1.81.0 engine DLLs. Preserve native/owner/core production sources,prior layouts and fixtures. No new public provider implementation,performance budget,owner/freeze/package acceptance.",
+  "semanticAdoption": "No native/engine semantic change selected. Native assessment specification/adoption receipts stay at their existing revisions; do not reinterpret this compatibility run as new XSD coverage.",
+  "runnerScope": "The retained foundation LegacyCaller uses the dedicated seven-assembly runner. Schema xUnit assemblies use scoped watchdog dotnet vstest; all negative cases remain caught by the test framework. No intentional unhandled managed diagnostics or machine-wide reporting changes."
+}

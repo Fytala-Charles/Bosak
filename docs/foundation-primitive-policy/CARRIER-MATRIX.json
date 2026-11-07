@@ -1,0 +1,100 @@
+{
+  "sourceVersion": "1.80.0",
+  "publicFactoryKinds": 11,
+  "currentlySelectedCompleteKinds": 4,
+  "additionalKindsSelectedForImplementation": 7,
+  "enumOnlyKinds": 2,
+  "rows": [
+    {
+      "kind": "String",
+      "representation": "String reference",
+      "publicFactory": "FromString",
+      "disposition": "PresentFourFamily",
+      "notes": "Includes annotated URI/binary/g-calendar lexical forms; no new interpretation."
+    },
+    {
+      "kind": "Integer",
+      "representation": "Inline long or immutable exact integer",
+      "publicFactory": "FromInteger",
+      "disposition": "PresentFourFamily",
+      "notes": "Captured numeric bounds remain."
+    },
+    {
+      "kind": "Decimal",
+      "representation": "Inline decimal or immutable exact decimal",
+      "publicFactory": "FromDecimal",
+      "disposition": "PresentFourFamily",
+      "notes": "Keep exact scale/representation and captured bounds."
+    },
+    {
+      "kind": "Boolean",
+      "representation": "Inline integer flag",
+      "publicFactory": "FromBoolean",
+      "disposition": "PresentFourFamily",
+      "notes": "Keep annotation fields."
+    },
+    {
+      "kind": "Double",
+      "representation": "Inline double",
+      "publicFactory": "FromDouble",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Preserve captured NaN/infinity/negative-zero bits."
+    },
+    {
+      "kind": "Float",
+      "representation": "Float converted to stored double by factory",
+      "publicFactory": "FromFloat",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Preserve stored representation, not lost pre-factory bits."
+    },
+    {
+      "kind": "Date",
+      "representation": "Read-only DateTimeWrapper plus XPathDateTime",
+      "publicFactory": "FromDate",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Keep fields/flags; never convert to DateTimeOffset."
+    },
+    {
+      "kind": "Time",
+      "representation": "Read-only DateTimeWrapper plus XPathDateTime",
+      "publicFactory": "FromTime",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Keep fields/flags and existing precision."
+    },
+    {
+      "kind": "DateTime",
+      "representation": "Read-only DateTimeWrapper plus XPathDateTime",
+      "publicFactory": "FromDateTime",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Extended years and g-calendar annotations remain supplied state."
+    },
+    {
+      "kind": "Duration",
+      "representation": "Lexical String reference",
+      "publicFactory": "FromDuration",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Nonnull lexical string; schema validity stays provider-owned."
+    },
+    {
+      "kind": "QName",
+      "representation": "Boxed readonly XsQName triple",
+      "publicFactory": "FromQName",
+      "disposition": "SelectedForPV-T05",
+      "notes": "Explicitly preserve prefix and all type annotations."
+    },
+    {
+      "kind": "Uri",
+      "representation": "Enum exists; matching kernel compares strings",
+      "publicFactory": null,
+      "disposition": "RequiredSeparateRepresentationDisposition",
+      "notes": "No public factory; annotated String is the current public route."
+    },
+    {
+      "kind": "Binary",
+      "representation": "Enum exists; matching kernel compares strings",
+      "publicFactory": null,
+      "disposition": "RequiredSeparateRepresentationDisposition",
+      "notes": "No public factory or byte-array representation; annotated String is distinct."
+    }
+  ]
+}

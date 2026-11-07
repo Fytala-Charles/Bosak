@@ -1,0 +1,26 @@
+{
+  "structureReady": false,
+  "errors": [
+    "scenario: expected PF-01 through PF-09",
+    "ownerRole: unsupported or absent",
+    "consumer: select one source or unchanged-binary cohort",
+    "consumer: exact source revision missing",
+    "consumer: shipped baseline pin missing",
+    "consumer input manifest: missing file receipt",
+    "loaded engines: required typed host assemblies absent",
+    "fixtures: exact fixture receipts required",
+    "query/settings: explicit workload required",
+    "raw results: missing file receipt",
+    "correctness receipt: missing file receipt",
+    "measurement: environment/method/samples/metrics incomplete",
+    "measurement: positive measured sample count required",
+    "measurement: nonempty method and metric list required",
+    "measurement: exact platform/build/tool context required",
+    "measurement: explicit nonnegative warmup count required",
+    "budget receipt: missing file receipt",
+    "budget: explicit thresholds and nonnegative tolerance required"
+  ],
+  "qualificationAccepted": false,
+  "ownerAcceptanceVerified": false,
+  "scope": "Structure/hash preflight only; no execution, semantic/native qualification, budget authenticity or owner approval."
+}

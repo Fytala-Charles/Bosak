@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "C:\\Program Files\\dotnet\\sdk\\10.0.301\\vstest.console.dll",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\frozen\\replacement\\tests\\Bosak.XmlDb.Xdm.Tests.dll",
+    "--Framework:.NETCoreApp,Version=v10.0",
+    "--logger:trx;LogFileName=results.trx",
+    "--ResultsDirectory:D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\results\\binary-replacement-tests"
+  ],
+  "exitCode": 0,
+  "seconds": 9.419111099996371,
+  "timeoutSeconds": 240,
+  "observer": "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\observer\\bin\\Release\\net10.0\\PackageBindingHook.dll"
+}

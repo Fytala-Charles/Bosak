@@ -1,0 +1,25 @@
+{
+  "recordedBeforeImplementation": "ADOPTION.json",
+  "selection": "Only GuardedIssuer.Environment/Authority engine-captured identity getters",
+  "callbackFreeGuards": [
+    "Operation.CheckObservationActive",
+    "Operation.CheckRegistrationActive(exact snapshot)",
+    "original cancellation token.ThrowIfCancellationRequested"
+  ],
+  "preserved": [
+    "GuardedIssuer.ThrowIfUnavailable calls full owner.CheckStored",
+    "GuardedIssuer.OwnsInput/Origin/Container call full CheckStored before and after underlying operation",
+    "Dynamic source/advisor/authority/facts/tuple/component/container authentication",
+    "Serialized provider scope,reentry/cancellation/expiry,resource disposal and failure precedence"
+  ],
+  "nonAdoptions": [
+    "No callback-boundary positive ownership cache",
+    "No generic substitution of active checks for full checks",
+    "No production source/API/version or package change"
+  ],
+  "promotionRequires": [
+    "Full exact candidate unit/conformance/API-ABI evidence",
+    "Review new callback mutation/close controls and remaining owner/performance scope",
+    "New production version/adoption/qualification if candidate is promoted"
+  ]
+}

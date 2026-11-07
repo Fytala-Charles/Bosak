@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="46e3e824-5139-4507-b6d6-615f1d9a9587" name="charl@CHARLES 2026-11-06 12:34:51" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-06T12:34:51.4685890+01:00" queuing="2026-11-06T12:34:51.4685893+01:00" start="2026-11-06T12:34:50.5257373+01:00" finish="2026-11-06T12:34:51.5240897+01:00" />
+  <TestSettings name="default" id="8906f519-5017-4bb1-88d2-945007ba87dd">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-06_12_34_51" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d158ac00-f23f-4b7f-8ecc-8c721b44052c" testId="f714230e-9c15-f020-8885-52c25852dde3" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 2)" computerName="CHARLES" duration="00:00:00.0003973" startTime="2026-11-06T12:34:51.4517247+01:00" endTime="2026-11-06T12:34:51.4517248+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d158ac00-f23f-4b7f-8ecc-8c721b44052c" />
+    <UnitTestResult executionId="f74bca27-84bc-4096-b4aa-688b39510b16" testId="be57b9d4-fe15-9473-ce78-b4192211dcdf" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC04_WholeUnsupported" computerName="CHARLES" duration="00:00:00.0007136" startTime="2026-11-06T12:34:51.4799215+01:00" endTime="2026-11-06T12:34:51.4799216+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f74bca27-84bc-4096-b4aa-688b39510b16" />
+    <UnitTestResult executionId="69974d0a-0907-431d-bf6d-b0bcea6a1eaf" testId="29a47237-5167-0053-ced5-f56e322817d8" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC07_CompleteExpiry" computerName="CHARLES" duration="00:00:00.0011333" startTime="2026-11-06T12:34:51.4788669+01:00" endTime="2026-11-06T12:34:51.4788670+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="69974d0a-0907-431d-bf6d-b0bcea6a1eaf" />
+    <UnitTestResult executionId="5532701d-889b-4dfb-bfda-7bea81ef90d9" testId="32534896-8a69-e6a8-89e8-b38ab477103c" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC16_FailureIdentity" computerName="CHARLES" duration="00:00:00.0011166" startTime="2026-11-06T12:34:51.4506954+01:00" endTime="2026-11-06T12:34:51.4506954+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5532701d-889b-4dfb-bfda-7bea81ef90d9" />
+    <UnitTestResult executionId="5afb4a2f-3b74-4e1c-8e6f-dd3fe45f1069" testId="33125f27-71f1-ba77-440a-0c8b9b55d621" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 3)" computerName="CHARLES" duration="00:00:00.0008344" startTime="2026-11-06T12:34:51.4506540+01:00" endTime="2026-11-06T12:34:51.4506541+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5afb4a2f-3b74-4e1c-8e6f-dd3fe45f1069" />
+    <UnitTestResult executionId="a48debee-85b3-4445-b4a7-c6b9c1b08c49" testId="a6285f1c-c279-4db3-bd4c-d81335446d8b" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: True)" computerName="CHARLES" duration="00:00:00.0002262" startTime="2026-11-06T12:34:51.4791811+01:00" endTime="2026-11-06T12:34:51.4791812+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a48debee-85b3-4445-b4a7-c6b9c1b08c49" />
+    <UnitTestResult executionId="6579f31d-9b24-4660-a869-b851e9830fe4" testId="d9e28853-6510-3ac1-2d17-956d639126e2" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC17_Cost" computerName="CHARLES" duration="00:00:00.0045878" startTime="2026-11-06T12:34:51.4316531+01:00" endTime="2026-11-06T12:34:51.4316533+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6579f31d-9b24-4660-a869-b851e9830fe4">
+      <Output>
+        <StdOut>Complete container cost: cold caller bytes 1376; cold ticks 3392; warm reads 8; warm caller bytes 3840; warm ticks 31750; frequency 10000000</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5e7d5511-df5d-49bc-9c5f-3c3d326c5561" testId="505d2121-a64c-dd76-becc-85cd6ca07d3d" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC20_ActualBlockedTail" computerName="CHARLES" duration="00:00:00.0053590" startTime="2026-11-06T12:34:51.4532897+01:00" endTime="2026-11-06T12:34:51.4532898+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e7d5511-df5d-49bc-9c5f-3c3d326c5561" />
+    <UnitTestResult executionId="d7d23cfb-04cd-4d88-847a-91751edc59de" testId="1c90d692-8396-1ee6-73d2-7849ff328d97" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 3)" computerName="CHARLES" duration="00:00:00.0005710" startTime="2026-11-06T12:34:51.4517150+01:00" endTime="2026-11-06T12:34:51.4517151+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7d23cfb-04cd-4d88-847a-91751edc59de" />
+    <UnitTestResult executionId="d718c392-f9da-4f8a-b538-a6940aa597a0" testId="e6d7aee2-6571-f57b-22e0-c724a42d5025" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 1)" computerName="CHARLES" duration="00:00:00.0002339" startTime="2026-11-06T12:34:51.4517342+01:00" endTime="2026-11-06T12:34:51.4517343+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d718c392-f9da-4f8a-b538-a6940aa597a0" />
+    <UnitTestResult executionId="a4078ee5-e15b-4029-9127-0d8e9c8540f3" testId="3883da13-c3f6-18c3-6cee-411c37dd20ca" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 0)" computerName="CHARLES" duration="00:00:00.0001953" startTime="2026-11-06T12:34:51.3990308+01:00" endTime="2026-11-06T12:34:51.3990309+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4078ee5-e15b-4029-9127-0d8e9c8540f3" />
+    <UnitTestResult executionId="4e71c0a3-40fb-4690-a903-62f403af811e" testId="11d9fd39-e03d-e6e8-1d87-853b7f06c37b" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;enumerator&quot;)" computerName="CHARLES" duration="00:00:00.0005459" startTime="2026-11-06T12:34:51.4516778+01:00" endTime="2026-11-06T12:34:51.4516778+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e71c0a3-40fb-4690-a903-62f403af811e" />
+    <UnitTestResult executionId="b9309683-fd23-4f42-b04a-399e8b1f12c8" testId="6951ac38-adcf-55d4-9562-f8d5de0f32d4" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 0)" computerName="CHARLES" duration="00:00:00.0006641" startTime="2026-11-06T12:34:51.4507265+01:00" endTime="2026-11-06T12:34:51.4507266+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9309683-fd23-4f42-b04a-399e8b1f12c8" />
+    <UnitTestResult executionId="a588217e-6e53-48d2-84f5-a86885c5d375" testId="a1b68292-70e4-a8bd-5046-8f76a1e998f3" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 3)" computerName="CHARLES" duration="00:00:00.0079428" startTime="2026-11-06T12:34:51.4069949+01:00" endTime="2026-11-06T12:34:51.4069950+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a588217e-6e53-48d2-84f5-a86885c5d375" />
+    <UnitTestResult executionId="445e3061-267b-4a86-b620-30bfea88eecb" testId="7503a747-e2a6-e316-bcc3-45ebf7d19e46" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: True)" computerName="CHARLES" duration="00:00:00.0019281" startTime="2026-11-06T12:34:51.4558850+01:00" endTime="2026-11-06T12:34:51.4558850+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="445e3061-267b-4a86-b620-30bfea88eecb" />
+    <UnitTestResult executionId="9253f656-8806-44c4-bec0-f3662fd940f8" testId="88185193-91f2-baa9-c7e5-c3a3552a2ea5" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 0)" computerName="CHARLES" duration="00:00:00.1849631" startTime="2026-11-06T12:34:51.3902674+01:00" endTime="2026-11-06T12:34:51.3903512+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9253f656-8806-44c4-bec0-f3662fd940f8" />
+    <UnitTestResult executionId="198ad133-b882-4741-996f-b7a406a5e4c1" testId="ba8ae083-eb42-67c6-59d2-6a16d5d9e4f4" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 0)" computerName="CHARLES" duration="00:00:00.0009437" startTime="2026-11-06T12:34:51.4780703+01:00" endTime="2026-11-06T12:34:51.4780704+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198ad133-b882-4741-996f-b7a406a5e4c1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs:line 411&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bfb97c73-f4c8-4f66-9bc9-882e5b4a36d0" testId="f005861d-3d05-4632-2913-1e6202d0ab9b" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 1)" computerName="CHARLES" duration="00:00:00.0003935" startTime="2026-11-06T12:34:51.4507359+01:00" endTime="2026-11-06T12:34:51.4507360+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bfb97c73-f4c8-4f66-9bc9-882e5b4a36d0" />
+    <UnitTestResult executionId="1e0f0261-4c7e-42d9-9a71-4bf0cb6ac099" testId="3f00c568-3b3b-41ef-fc0d-a72667a67336" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 1)" computerName="CHARLES" duration="00:00:00.0003356" startTime="2026-11-06T12:34:51.4506680+01:00" endTime="2026-11-06T12:34:51.4506680+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e0f0261-4c7e-42d9-9a71-4bf0cb6ac099" />
+    <UnitTestResult executionId="2ad29aa8-da01-42c3-829c-3ca9b06aa677" testId="da0e7eb2-fff9-1c6d-1124-9bbec87e056b" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 0)" computerName="CHARLES" duration="00:00:00.0022930" startTime="2026-11-06T12:34:51.4504899+01:00" endTime="2026-11-06T12:34:51.4504900+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ad29aa8-da01-42c3-829c-3ca9b06aa677" />
+    <UnitTestResult executionId="8b2d4c55-5adc-4574-9650-f20099463087" testId="ac80d932-b5a2-6f60-65bc-867847f021cb" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 3)" computerName="CHARLES" duration="00:00:00.0001847" startTime="2026-11-06T12:34:51.4516381+01:00" endTime="2026-11-06T12:34:51.4516381+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b2d4c55-5adc-4574-9650-f20099463087" />
+    <UnitTestResult executionId="b1d48b01-36ff-4a01-921c-7634fc8af551" testId="a75e0977-e7a1-c8aa-3579-70a203a23821" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;current&quot;)" computerName="CHARLES" duration="00:00:00.0010550" startTime="2026-11-06T12:34:51.4516577+01:00" endTime="2026-11-06T12:34:51.4516577+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1d48b01-36ff-4a01-921c-7634fc8af551" />
+    <UnitTestResult executionId="803a393f-ac32-4191-9ec3-c81027cc4b4a" testId="c1666ce0-3d54-658e-adf7-e4c5e2993143" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC10_AtomCapacity" computerName="CHARLES" duration="00:00:00.0006401" startTime="2026-11-06T12:34:51.4788924+01:00" endTime="2026-11-06T12:34:51.4788924+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="803a393f-ac32-4191-9ec3-c81027cc4b4a" />
+    <UnitTestResult executionId="ce17f7e9-dac0-4ee3-8e7d-6547574d834f" testId="62a33050-bc39-ffa8-9c87-7ac18f25c890" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 3)" computerName="CHARLES" duration="00:00:00.0136233" startTime="2026-11-06T12:34:51.4206795+01:00" endTime="2026-11-06T12:34:51.4206800+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce17f7e9-dac0-4ee3-8e7d-6547574d834f" />
+    <UnitTestResult executionId="f963678c-626e-4928-ab3a-7eef1e871da9" testId="1b01dcc2-fee6-3e38-0222-d42c3a65b5a0" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC06_RepeatedUncached" computerName="CHARLES" duration="00:00:00.0115328" startTime="2026-11-06T12:34:51.4688847+01:00" endTime="2026-11-06T12:34:51.4688849+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f963678c-626e-4928-ab3a-7eef1e871da9" />
+    <UnitTestResult executionId="e023f05a-ce46-45f2-bc02-38bdb2603541" testId="999e363d-e320-dc6e-7dad-496e17ea6552" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 1)" computerName="CHARLES" duration="00:00:00.0084592" startTime="2026-11-06T12:34:51.3981429+01:00" endTime="2026-11-06T12:34:51.3981430+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e023f05a-ce46-45f2-bc02-38bdb2603541" />
+    <UnitTestResult executionId="f4229140-e01c-46ad-bbeb-32fa7265277b" testId="4862bc52-8669-71e0-949a-677170c68ef6" testName="Bosak.XPath.Runtime.Tests.PublicCompatibleTests.TC24_CompatibleContainerUnsupported" computerName="CHARLES" duration="00:00:00.2191060" startTime="2026-11-06T12:34:51.4222443+01:00" endTime="2026-11-06T12:34:51.4222444+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4229140-e01c-46ad-bbeb-32fa7265277b" />
+    <UnitTestResult executionId="d6427979-f83e-422f-83af-aa378b9d244c" testId="f849dacb-e4d2-a87d-03b0-62c4c2e46653" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 1)" computerName="CHARLES" duration="00:00:00.0006320" startTime="2026-11-06T12:34:51.3988028+01:00" endTime="2026-11-06T12:34:51.3988029+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d6427979-f83e-422f-83af-aa378b9d244c" />
+    <UnitTestResult executionId="4f8d749a-0572-4870-9970-ec5bf8e9d0fb" testId="68b8c7fa-1891-ae1a-9dc8-02d326b44306" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC14_Cancellation" computerName="CHARLES" duration="00:00:00.0005354" startTime="2026-11-06T12:34:51.4694485+01:00" endTime="2026-11-06T12:34:51.4694486+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f8d749a-0572-4870-9970-ec5bf8e9d0fb" />
+    <UnitTestResult executionId="5078372d-de2c-4853-b61c-75776292933c" testId="57bb607f-451d-41c5-9f9c-e790c65807ff" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 2)" computerName="CHARLES" duration="00:00:00.0004970" startTime="2026-11-06T12:34:51.4784796+01:00" endTime="2026-11-06T12:34:51.4784797+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5078372d-de2c-4853-b61c-75776292933c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs:line 411&#xD;
+   at InvokeStub_PublicTypedIdentityTests.TC19_LiveRevocation(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2ba7f882-d6be-413f-8888-9b19f2527e4a" testId="b83d9dd5-1b7c-8fdd-52dc-c05b956079b9" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC13_ForeignBeforeGetters" computerName="CHARLES" duration="00:00:00.0003375" startTime="2026-11-06T12:34:51.4802935+01:00" endTime="2026-11-06T12:34:51.4802937+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ba7f882-d6be-413f-8888-9b19f2527e4a" />
+    <UnitTestResult executionId="c2fb09a2-00d9-4767-92b0-5038e5a08773" testId="d3fea7e0-c4c8-f635-7c82-2adb4274212a" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC15_MetadataSnapshot" computerName="CHARLES" duration="00:00:00.0005180" startTime="2026-11-06T12:34:51.4788808+01:00" endTime="2026-11-06T12:34:51.4788809+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2fb09a2-00d9-4767-92b0-5038e5a08773" />
+    <UnitTestResult executionId="14156543-e791-46ae-8a66-fb93959ccf42" testId="62e1ba0d-10e6-6509-a8ea-0c35f8913fc0" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC08_CursorProtocol" computerName="CHARLES" duration="00:00:00.0013292" startTime="2026-11-06T12:34:51.4517021+01:00" endTime="2026-11-06T12:34:51.4517022+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14156543-e791-46ae-8a66-fb93959ccf42" />
+    <UnitTestResult executionId="21da1f36-fee6-42ed-a209-f83e68590974" testId="c9a2ffb3-4d0f-f8d0-acf1-02937bdcad42" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC12_NoGetterReplay" computerName="CHARLES" duration="00:00:00.0008789" startTime="2026-11-06T12:34:51.4507145+01:00" endTime="2026-11-06T12:34:51.4507145+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21da1f36-fee6-42ed-a209-f83e68590974" />
+    <UnitTestResult executionId="f54e8f8d-ba86-4ec6-83fb-5ea53e2a77eb" testId="ca5d5591-a1ed-0e45-0c73-6bf5c82770c0" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;dispose&quot;)" computerName="CHARLES" duration="00:00:00.0007404" startTime="2026-11-06T12:34:51.4516676+01:00" endTime="2026-11-06T12:34:51.4516676+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f54e8f8d-ba86-4ec6-83fb-5ea53e2a77eb" />
+    <UnitTestResult executionId="751bdfdb-1fad-44fa-ad24-717626174e6c" testId="f2a41c53-1853-8e18-da45-6df50521eeb4" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 2)" computerName="CHARLES" duration="00:00:00.0003145" startTime="2026-11-06T12:34:51.4507464+01:00" endTime="2026-11-06T12:34:51.4507464+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="751bdfdb-1fad-44fa-ad24-717626174e6c" />
+    <UnitTestResult executionId="f37b54fc-6e0d-493b-9826-0d75c1fad0bb" testId="b7d4763c-185c-1e88-22f0-912dde3ff35c" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: False)" computerName="CHARLES" duration="00:00:00.0004841" startTime="2026-11-06T12:34:51.4789282+01:00" endTime="2026-11-06T12:34:51.4789283+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f37b54fc-6e0d-493b-9826-0d75c1fad0bb" />
+    <UnitTestResult executionId="4f4a275e-8168-4d34-9df1-ca32d4f7d866" testId="0b1b49b2-093a-6e89-1d18-d769c72685d8" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: False)" computerName="CHARLES" duration="00:00:00.0013519" startTime="2026-11-06T12:34:51.4572878+01:00" endTime="2026-11-06T12:34:51.4572880+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f4a275e-8168-4d34-9df1-ca32d4f7d866" />
+    <UnitTestResult executionId="71224afd-38b0-4431-9f25-aaa5719cbf59" testId="a1c8bd1b-846b-5001-d881-0c9c6016aabf" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC21_IndependentRawViews" computerName="CHARLES" duration="00:00:00.0006719" startTime="2026-11-06T12:34:51.4809882+01:00" endTime="2026-11-06T12:34:51.4809883+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="71224afd-38b0-4431-9f25-aaa5719cbf59" />
+    <UnitTestResult executionId="e9a1a185-0049-407b-8a06-31d3c428b759" testId="8cfb13fa-c31a-d3cd-2f54-f7e8ea179790" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC11_DeliveryIsNotIssuer" computerName="CHARLES" duration="00:00:00.0008798" startTime="2026-11-06T12:34:51.4516894+01:00" endTime="2026-11-06T12:34:51.4516894+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e9a1a185-0049-407b-8a06-31d3c428b759" />
+    <UnitTestResult executionId="1eb49c51-c26d-4fa6-8c2b-63aa547780ab" testId="4c7f2e9e-f3cb-fa38-d337-ba27fc6b70c6" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 1)" computerName="CHARLES" duration="00:00:00.0003141" startTime="2026-11-06T12:34:51.4786000+01:00" endTime="2026-11-06T12:34:51.4786000+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1eb49c51-c26d-4fa6-8c2b-63aa547780ab">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.NotNull() Failure: Value is null</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs:line 411&#xD;
+   at InvokeStub_PublicTypedIdentityTests.TC19_LiveRevocation(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="31fc5333-bc75-4605-8d40-913eeb90bbfc" testId="8a50b246-f47e-29d5-c87d-c6fe6807b458" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 0)" computerName="CHARLES" duration="00:00:00.0002833" startTime="2026-11-06T12:34:51.4519323+01:00" endTime="2026-11-06T12:34:51.4519324+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31fc5333-bc75-4605-8d40-913eeb90bbfc" />
+    <UnitTestResult executionId="2cf1d416-c8ca-4a21-b99d-8ad63cea1918" testId="c9549682-2a6b-30da-0063-aaea7cf8d341" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 2)" computerName="CHARLES" duration="00:00:00.0018402" startTime="2026-11-06T12:34:51.4506787+01:00" endTime="2026-11-06T12:34:51.4506787+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2cf1d416-c8ca-4a21-b99d-8ad63cea1918" />
+    <UnitTestResult executionId="84ad704f-6a78-47bc-a34a-aec260470b27" testId="b03771a9-5db0-db61-7aa8-da0ec15c68a2" testName="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC23_OtherProfileUnsupported" computerName="CHARLES" duration="00:00:00.0055180" startTime="2026-11-06T12:34:51.4264261+01:00" endTime="2026-11-06T12:34:51.4264263+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84ad704f-6a78-47bc-a34a-aec260470b27" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="e6d7aee2-6571-f57b-22e0-c724a42d5025">
+      <Execution id="d718c392-f9da-4f8a-b538-a6940aa597a0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC09_LiveOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC16_FailureIdentity" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="32534896-8a69-e6a8-89e8-b38ab477103c">
+      <Execution id="5532701d-889b-4dfb-bfda-7bea81ef90d9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC16_FailureIdentity" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 2)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="57bb607f-451d-41c5-9f9c-e790c65807ff">
+      <Execution id="5078372d-de2c-4853-b61c-75776292933c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC19_LiveRevocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f849dacb-e4d2-a87d-03b0-62c4c2e46653">
+      <Execution id="d6427979-f83e-422f-83af-aa378b9d244c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 3)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="62a33050-bc39-ffa8-9c87-7ac18f25c890">
+      <Execution id="ce17f7e9-dac0-4ee3-8e7d-6547574d834f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: False, count: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="88185193-91f2-baa9-c7e5-c3a3552a2ea5">
+      <Execution id="9253f656-8806-44c4-bec0-f3662fd940f8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC13_ForeignBeforeGetters" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="b83d9dd5-1b7c-8fdd-52dc-c05b956079b9">
+      <Execution id="2ba7f882-d6be-413f-8888-9b19f2527e4a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC13_ForeignBeforeGetters" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="4c7f2e9e-f3cb-fa38-d337-ba27fc6b70c6">
+      <Execution id="1eb49c51-c26d-4fa6-8c2b-63aa547780ab" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC19_LiveRevocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC14_Cancellation" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="68b8c7fa-1891-ae1a-9dc8-02d326b44306">
+      <Execution id="4f8d749a-0572-4870-9970-ec5bf8e9d0fb" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC14_Cancellation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC10_AtomCapacity" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="c1666ce0-3d54-658e-adf7-e4c5e2993143">
+      <Execution id="803a393f-ac32-4191-9ec3-c81027cc4b4a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC10_AtomCapacity" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC17_Cost" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="d9e28853-6510-3ac1-2d17-956d639126e2">
+      <Execution id="6579f31d-9b24-4660-a869-b851e9830fe4" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC17_Cost" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC07_CompleteExpiry" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="29a47237-5167-0053-ced5-f56e322817d8">
+      <Execution id="69974d0a-0907-431d-bf6d-b0bcea6a1eaf" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC07_CompleteExpiry" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="999e363d-e320-dc6e-7dad-496e17ea6552">
+      <Execution id="e023f05a-ce46-45f2-bc02-38bdb2603541" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC08_CursorProtocol" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="62e1ba0d-10e6-6509-a8ea-0c35f8913fc0">
+      <Execution id="14156543-e791-46ae-8a66-fb93959ccf42" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC08_CursorProtocol" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;dispose&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ca5d5591-a1ed-0e45-0c73-6bf5c82770c0">
+      <Execution id="f54e8f8d-ba86-4ec6-83fb-5ea53e2a77eb" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC22_ProviderCursorFailure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC23_OtherProfileUnsupported" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="b03771a9-5db0-db61-7aa8-da0ec15c68a2">
+      <Execution id="84ad704f-6a78-47bc-a34a-aec260470b27" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC23_OtherProfileUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC20_ActualBlockedTail" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="505d2121-a64c-dd76-becc-85cd6ca07d3d">
+      <Execution id="5e7d5511-df5d-49bc-9c5f-3c3d326c5561" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC20_ActualBlockedTail" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC15_MetadataSnapshot" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="d3fea7e0-c4c8-f635-7c82-2adb4274212a">
+      <Execution id="c2fb09a2-00d9-4767-92b0-5038e5a08773" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC15_MetadataSnapshot" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="7503a747-e2a6-e316-bcc3-45ebf7d19e46">
+      <Execution id="445e3061-267b-4a86-b620-30bfea88eecb" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC03_UnionMembers" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f005861d-3d05-4632-2913-1e6202d0ab9b">
+      <Execution id="bfb97c73-f4c8-4f66-9bc9-882e5b4a36d0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC05_InvalidTail" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC21_IndependentRawViews" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="a1c8bd1b-846b-5001-d881-0c9c6016aabf">
+      <Execution id="71224afd-38b0-4431-9f25-aaa5719cbf59" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC21_IndependentRawViews" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC06_RepeatedUncached" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="1b01dcc2-fee6-3e38-0222-d42c3a65b5a0">
+      <Execution id="f963678c-626e-4928-ab3a-7eef1e871da9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC06_RepeatedUncached" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;enumerator&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="11d9fd39-e03d-e6e8-1d87-853b7f06c37b">
+      <Execution id="4e71c0a3-40fb-4690-a903-62f403af811e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC22_ProviderCursorFailure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 3)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="33125f27-71f1-ba77-440a-0c8b9b55d621">
+      <Execution id="5afb4a2f-3b74-4e1c-8e6f-dd3fe45f1069" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC02_SelectedFamilies" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 2)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f2a41c53-1853-8e18-da45-6df50521eeb4">
+      <Execution id="751bdfdb-1fad-44fa-ad24-717626174e6c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC05_InvalidTail" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC11_DeliveryIsNotIssuer" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="8cfb13fa-c31a-d3cd-2f54-f7e8ea179790">
+      <Execution id="e9a1a185-0049-407b-8a06-31d3c428b759" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC11_DeliveryIsNotIssuer" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="3f00c568-3b3b-41ef-fc0d-a72667a67336">
+      <Execution id="1e0f0261-4c7e-42d9-9a71-4bf0cb6ac099" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC02_SelectedFamilies" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC12_NoGetterReplay" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="c9a2ffb3-4d0f-f8d0-acf1-02937bdcad42">
+      <Execution id="21da1f36-fee6-42ed-a209-f83e68590974" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC12_NoGetterReplay" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicCompatibleTests.TC24_CompatibleContainerUnsupported" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="4862bc52-8669-71e0-949a-677170c68ef6">
+      <Execution id="f4229140-e01c-46ad-bbeb-32fa7265277b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicCompatibleTests" name="TC24_CompatibleContainerUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 2)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="c9549682-2a6b-30da-0063-aaea7cf8d341">
+      <Execution id="2cf1d416-c8ca-4a21-b99d-8ad63cea1918" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC02_SelectedFamilies" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="b7d4763c-185c-1e88-22f0-912dde3ff35c">
+      <Execution id="f37b54fc-6e0d-493b-9826-0d75c1fad0bb" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC18_NumericBounds" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC04_WholeUnsupported" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="be57b9d4-fe15-9473-ce78-b4192211dcdf">
+      <Execution id="f74bca27-84bc-4096-b4aa-688b39510b16" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC04_WholeUnsupported" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 2)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f714230e-9c15-f020-8885-52c25852dde3">
+      <Execution id="d158ac00-f23f-4b7f-8ecc-8c721b44052c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC09_LiveOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="6951ac38-adcf-55d4-9562-f8d5de0f32d4">
+      <Execution id="b9309683-fd23-4f42-b04a-399e8b1f12c8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC05_InvalidTail" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC05_InvalidTail(kind: 3)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ac80d932-b5a2-6f60-65bc-867847f021cb">
+      <Execution id="8b2d4c55-5adc-4574-9650-f20099463087" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC05_InvalidTail" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC22_ProviderCursorFailure(stage: &quot;current&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="a75e0977-e7a1-c8aa-3579-70a203a23821">
+      <Execution id="b1d48b01-36ff-4a01-921c-7634fc8af551" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC22_ProviderCursorFailure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="3883da13-c3f6-18c3-6cee-411c37dd20ca">
+      <Execution id="a4078ee5-e15b-4029-9127-0d8e9c8540f3" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC03_UnionMembers(original: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="0b1b49b2-093a-6e89-1d18-d769c72685d8">
+      <Execution id="4f4a275e-8168-4d34-9df1-ca32d4f7d866" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC03_UnionMembers" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="8a50b246-f47e-29d5-c87d-c6fe6807b458">
+      <Execution id="31fc5333-bc75-4605-8d40-913eeb90bbfc" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC09_LiveOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC01_CompleteShape(list: True, count: 3)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="a1b68292-70e4-a8bd-5046-8f76a1e998f3">
+      <Execution id="a588217e-6e53-48d2-84f5-a86885c5d375" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC01_CompleteShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC09_LiveOwnership(kind: 3)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="1c90d692-8396-1ee6-73d2-7849ff328d97">
+      <Execution id="d7d23cfb-04cd-4d88-847a-91751edc59de" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC09_LiveOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC18_NumericBounds(scale: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="a6285f1c-c279-4db3-bd4c-d81335446d8b">
+      <Execution id="a48debee-85b3-4445-b4a7-c6b9c1b08c49" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC18_NumericBounds" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ba8ae083-eb42-67c6-59d2-6a16d5d9e4f4">
+      <Execution id="198ad133-b882-4741-996f-b7a406a5e4c1" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC19_LiveRevocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC02_SelectedFamilies(kind: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="da0e7eb2-fff9-1c6d-1124-9bbec87e056b">
+      <Execution id="2ad29aa8-da01-42c3-829c-3ca9b06aa677" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests" name="TC02_SelectedFamilies" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f714230e-9c15-f020-8885-52c25852dde3" executionId="d158ac00-f23f-4b7f-8ecc-8c721b44052c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be57b9d4-fe15-9473-ce78-b4192211dcdf" executionId="f74bca27-84bc-4096-b4aa-688b39510b16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="29a47237-5167-0053-ced5-f56e322817d8" executionId="69974d0a-0907-431d-bf6d-b0bcea6a1eaf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="32534896-8a69-e6a8-89e8-b38ab477103c" executionId="5532701d-889b-4dfb-bfda-7bea81ef90d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="33125f27-71f1-ba77-440a-0c8b9b55d621" executionId="5afb4a2f-3b74-4e1c-8e6f-dd3fe45f1069" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6285f1c-c279-4db3-bd4c-d81335446d8b" executionId="a48debee-85b3-4445-b4a7-c6b9c1b08c49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9e28853-6510-3ac1-2d17-956d639126e2" executionId="6579f31d-9b24-4660-a869-b851e9830fe4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="505d2121-a64c-dd76-becc-85cd6ca07d3d" executionId="5e7d5511-df5d-49bc-9c5f-3c3d326c5561" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c90d692-8396-1ee6-73d2-7849ff328d97" executionId="d7d23cfb-04cd-4d88-847a-91751edc59de" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6d7aee2-6571-f57b-22e0-c724a42d5025" executionId="d718c392-f9da-4f8a-b538-a6940aa597a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3883da13-c3f6-18c3-6cee-411c37dd20ca" executionId="a4078ee5-e15b-4029-9127-0d8e9c8540f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="11d9fd39-e03d-e6e8-1d87-853b7f06c37b" executionId="4e71c0a3-40fb-4690-a903-62f403af811e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6951ac38-adcf-55d4-9562-f8d5de0f32d4" executionId="b9309683-fd23-4f42-b04a-399e8b1f12c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1b68292-70e4-a8bd-5046-8f76a1e998f3" executionId="a588217e-6e53-48d2-84f5-a86885c5d375" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7503a747-e2a6-e316-bcc3-45ebf7d19e46" executionId="445e3061-267b-4a86-b620-30bfea88eecb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="88185193-91f2-baa9-c7e5-c3a3552a2ea5" executionId="9253f656-8806-44c4-bec0-f3662fd940f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba8ae083-eb42-67c6-59d2-6a16d5d9e4f4" executionId="198ad133-b882-4741-996f-b7a406a5e4c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f005861d-3d05-4632-2913-1e6202d0ab9b" executionId="bfb97c73-f4c8-4f66-9bc9-882e5b4a36d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f00c568-3b3b-41ef-fc0d-a72667a67336" executionId="1e0f0261-4c7e-42d9-9a71-4bf0cb6ac099" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="da0e7eb2-fff9-1c6d-1124-9bbec87e056b" executionId="2ad29aa8-da01-42c3-829c-3ca9b06aa677" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac80d932-b5a2-6f60-65bc-867847f021cb" executionId="8b2d4c55-5adc-4574-9650-f20099463087" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a75e0977-e7a1-c8aa-3579-70a203a23821" executionId="b1d48b01-36ff-4a01-921c-7634fc8af551" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1666ce0-3d54-658e-adf7-e4c5e2993143" executionId="803a393f-ac32-4191-9ec3-c81027cc4b4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="62a33050-bc39-ffa8-9c87-7ac18f25c890" executionId="ce17f7e9-dac0-4ee3-8e7d-6547574d834f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b01dcc2-fee6-3e38-0222-d42c3a65b5a0" executionId="f963678c-626e-4928-ab3a-7eef1e871da9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="999e363d-e320-dc6e-7dad-496e17ea6552" executionId="e023f05a-ce46-45f2-bc02-38bdb2603541" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4862bc52-8669-71e0-949a-677170c68ef6" executionId="f4229140-e01c-46ad-bbeb-32fa7265277b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f849dacb-e4d2-a87d-03b0-62c4c2e46653" executionId="d6427979-f83e-422f-83af-aa378b9d244c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68b8c7fa-1891-ae1a-9dc8-02d326b44306" executionId="4f8d749a-0572-4870-9970-ec5bf8e9d0fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57bb607f-451d-41c5-9f9c-e790c65807ff" executionId="5078372d-de2c-4853-b61c-75776292933c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b83d9dd5-1b7c-8fdd-52dc-c05b956079b9" executionId="2ba7f882-d6be-413f-8888-9b19f2527e4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d3fea7e0-c4c8-f635-7c82-2adb4274212a" executionId="c2fb09a2-00d9-4767-92b0-5038e5a08773" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="62e1ba0d-10e6-6509-a8ea-0c35f8913fc0" executionId="14156543-e791-46ae-8a66-fb93959ccf42" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9a2ffb3-4d0f-f8d0-acf1-02937bdcad42" executionId="21da1f36-fee6-42ed-a209-f83e68590974" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca5d5591-a1ed-0e45-0c73-6bf5c82770c0" executionId="f54e8f8d-ba86-4ec6-83fb-5ea53e2a77eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2a41c53-1853-8e18-da45-6df50521eeb4" executionId="751bdfdb-1fad-44fa-ad24-717626174e6c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b7d4763c-185c-1e88-22f0-912dde3ff35c" executionId="f37b54fc-6e0d-493b-9826-0d75c1fad0bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b1b49b2-093a-6e89-1d18-d769c72685d8" executionId="4f4a275e-8168-4d34-9df1-ca32d4f7d866" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1c8bd1b-846b-5001-d881-0c9c6016aabf" executionId="71224afd-38b0-4431-9f25-aaa5719cbf59" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8cfb13fa-c31a-d3cd-2f54-f7e8ea179790" executionId="e9a1a185-0049-407b-8a06-31d3c428b759" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4c7f2e9e-f3cb-fa38-d337-ba27fc6b70c6" executionId="1eb49c51-c26d-4fa6-8c2b-63aa547780ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a50b246-f47e-29d5-c87d-c6fe6807b458" executionId="31fc5333-bc75-4605-8d40-913eeb90bbfc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9549682-2a6b-30da-0063-aaea7cf8d341" executionId="2cf1d416-c8ca-4a21-b99d-8ad63cea1918" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b03771a9-5db0-db61-7aa8-da0ec15c68a2" executionId="84ad704f-6a78-47bc-a34a-aec260470b27" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="44" executed="44" passed="41" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.26]   Discovering: Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.37]   Discovered:  Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.37]   Starting:    Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.67]       Assert.NotNull() Failure: Value is null&#xD;
+[xUnit.net 00:00:00.67]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.67]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs(411,0): at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind)&#xD;
+[xUnit.net 00:00:00.67]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.67]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.67]       Assert.NotNull() Failure: Value is null&#xD;
+[xUnit.net 00:00:00.67]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.67]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs(411,0): at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind)&#xD;
+[xUnit.net 00:00:00.67]            at InvokeStub_PublicTypedIdentityTests.TC19_LiveRevocation(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.67]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.67]       Assert.NotNull() Failure: Value is null&#xD;
+[xUnit.net 00:00:00.67]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.67]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\PublicTypedIdentityTests.cs(411,0): at Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(Int32 kind)&#xD;
+[xUnit.net 00:00:00.67]            at InvokeStub_PublicTypedIdentityTests.TC19_LiveRevocation(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.67]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.68]   Finished:    Bosak.XPath.Runtime.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T12:34:51.4767410+01:00">
+        <Text>[xUnit.net 00:00:00.67]     Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 0) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T12:34:51.4784583+01:00">
+        <Text>[xUnit.net 00:00:00.67]     Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T12:34:51.4785807+01:00">
+        <Text>[xUnit.net 00:00:00.67]     Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.TC19_LiveRevocation(kind: 1) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

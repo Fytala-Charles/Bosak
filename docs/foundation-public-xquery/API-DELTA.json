@@ -1,0 +1,22 @@
+{
+  "scope": "AH-02 reviewed SchemaXQueryCompiler type and Compile method only; bounded ordinary XML profile, no required provider member.",
+  "assemblies": {
+    "Bosak.XQuery": {
+      "added": [
+        "A Bosak.XQuery.Api.Schema.SchemaXQueryCompiler.Compile(System.String query:None:none:required=:optional=:attrs=,Bosak.XPath.Api.Schema.SchemaQueryLimits limits:None:none:required=:optional=:attrs=,Bosak.XQuery.Api.XQueryCompiler compiler:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()],Bosak.XPath.Core.Schema.ISchemaAssessor assessor:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()],System.Boolean xml11LineEndings:Optional, HasDefault:False:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()],System.Threading.CancellationToken cancellationToken:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()]):[System.Runtime.CompilerServices.NullableContextAttribute((Byte)1)]",
+        "A Bosak.XQuery.Api.Schema.SchemaXQueryCompiler:",
+        "M Bosak.XQuery.Api.Schema.SchemaXQueryCompiler.Compile:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Api.Schema.SchemaQuerySession> :None:none:required=:optional=:attrs=(System.String query:None:none:required=:optional=:attrs=,Bosak.XPath.Api.Schema.SchemaQueryLimits limits:None:none:required=:optional=:attrs=,Bosak.XQuery.Api.XQueryCompiler compiler:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()],Bosak.XPath.Core.Schema.ISchemaAssessor assessor:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()],System.Boolean xml11LineEndings:Optional, HasDefault:False:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()],System.Threading.CancellationToken cancellationToken:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()]):",
+        "T Bosak.XQuery.Api.Schema.SchemaXQueryCompiler:Public, Abstract, Sealed, BeforeFieldInit:layout=Auto:pack=0:sizeMetadata=0:base=System.Object:interfaces=:constraints="
+      ],
+      "removed": []
+    }
+  },
+  "exportedTypes": 312,
+  "declarationRows": 6386,
+  "newExportedTypes": 1,
+  "newDeclarationRows": 4,
+  "referencesUnchanged": true,
+  "friendsUnchanged": true,
+  "ownerAcceptance": false,
+  "apiFrozen": false
+}

@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "rootProject": "Bosak.Xslt",
+  "selectedPackages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt"
+  ],
+  "currentSelectedClosure": 9,
+  "evaluatedProjects": 11,
+  "historicalSupersededScope": "docs/foundation-public-xquery/PACKAGE-SCOPE.json",
+  "historicalRoot": "Bosak.XQuery",
+  "historicalClosure": 8,
+  "derivation": "Existing qualified metadata dependency closure; no new dependency or packaging implementation",
+  "noticeOverlay": "docs/foundation-compatible-view-policy/packaging/PreviewAssets.targets",
+  "candidateCommit": null,
+  "previewVersion": null,
+  "packagesBuilt": false,
+  "publicationAuthorized": false
+}

@@ -1,3 +1,43 @@
+# TA-44 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-native-schema-lane/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-43 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-provider-qualification/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-42 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-legacy-disposition/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-41 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-uri-binary-disposition/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-40 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-public-primitives/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-39 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-primitive-policy/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-38 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-compatible-container/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-37 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-public-container/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-36 documentation check - 6 November 2026
+
+Fourteen current pages render to HTML with the existing Fytala stylesheet and local destinations checked. [Receipt](foundation-container-policy/evidence/DOCUMENTATION-CHECKS.json). No screenshot/PDF review is claimed.
+
+# TA-35 documentation check ? 6 November 2026
+
+Current source 1.78.0: fourteen current pages are rendered to HTML with the local Fytala stylesheet and local link destinations checked. [Receipt](foundation-leased-provenance/evidence/DOCUMENTATION-CHECKS.json). No screenshot or PDF review is claimed.
+
 29 October 2026: reader-facing README/ROADMAP cleanup, concise implementation status, historical snapshot relocation and related ecosystem/commercial/navigation/style/handover pages rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/reader-docs-cleanup/render`. New local links, archived text retention, preserved FYTALA statement, active Schema licensing wording and whitespace checked. HTML only; no screenshot/PDF acceptance or new runtime qualification.
 
 29 October 2026: Apache schema publication/checkpoint and canonical pages rendered as HTML using unchanged Fytala CSS under `.guard-tmp/schema-apache-core-render`. Public/private repository identities, Apache metadata, public 114-test/CI receipts, links and whitespace checked. HTML only; no screenshot/PDF or fresh complete core/consumer ABI acceptance.
@@ -760,3 +800,91 @@ Finite read-only adoption proposal (29 October 2026): additive inspection-only s
 
 
 Read-only adoption proposal reviewed (29 October 2026): compiled draft source/project/assembly/XML hashes and port-free data shape verified; zero-warning/error build receipt preserved. This is an additive inspection-only proposal at Braid 1.26.2, not implementation or actual public API adoption. Existing default editing/preview/export stays untouched; no product pin/core API/ID change. Earlier uncommitted notices are history; delivery resolves through review Git history. Next: consumer-owned implementation task/ADR at the unchanged pin. [Proposal review checkpoint](braid-readonly-adoption-review/README.md).
+
+5 November 2026: TA-13 metadata-only facts implementation and canonical status/plan pages rendered as HTML with unchanged Fytala CSS; local link destinations checked. Original receipt: `foundation-node-metadata-reader/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+5 November 2026: TA-14 public nilled, current release readiness and canonical implementation pages rendered as HTML with unchanged Fytala CSS and checked local destinations. Original receipt: `foundation-public-node-nilled/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+5 November 2026: TA-15 public guard-cost and canonical release/status pages rendered as HTML with unchanged Fytala CSS and checked local destinations; original receipt `foundation-public-nilled-cost/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+5 November 2026: TA-16 atomization policy, implementation/owner trace and canonical status/release pages rendered as HTML with unchanged Fytala CSS and checked local destinations. Original receipt `foundation-node-atomization-policy/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+5 November 2026: TA-17 public original-node data, implementation and canonical release/status pages rendered as HTML with unchanged Fytala CSS and checked local destinations. Original receipt `foundation-public-node-data/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+5 November 2026: TA-18 construction/lifetime policy, implementation/contract trace and canonical status/release pages rendered as HTML with unchanged Fytala CSS and checked local destinations. Original receipt `foundation-sourcefree-construction-policy/evidence/DOCUMENTATION-CHECKS.json`. HTML only; no screenshot/PDF claim.
+
+TA-19 (5 November 2026): render canonical documentation and the provider-operation prerequisite dossier; preserve HTML/source hashes and local destinations under its evidence. This checks HTML generation and links, not screenshots or PDF output.
+
+TA-20 (5 November 2026): render canonical documentation, public constructor dossier and consumer example; retain source/HTML/CSS hashes and local-link destinations. HTML/link verification only, no screenshot/PDF claim.
+
+TA-21 (5 November 2026): render current canonical docs, compatibility policy/signature proposal and package recipe/migration inventory; retain source/HTML/CSS hashes and local-link checks. Metadata preflight is not pack/PDF/screenshot qualification.
+
+TA-22 (5 November 2026): render canonical docs and the paired-provider internal qualification/refinement record; retain source/HTML/CSS/local-link identity. Package metadata refresh is not artifact/PDF/screenshot qualification.
+
+TA-23 (5 November 2026): render canonical docs, Core disposition/private admission record and cache requirement. Retain source/HTML/CSS/local destinations; no screenshot/PDF or package-content claim from metadata evaluation.
+
+
+TA-24 ? 5 November 2026: canonical pages, the release/dependency overview and new cache dossier rendered with the local Markdown renderer and branded CSS; local destinations checked. [Exact checks](foundation-compatible-cache/evidence/DOCUMENTATION-CHECKS.json) record source/HTML hashes. No screenshot/PDF verification claim.
+
+
+TA-25 - 5 November 2026: canonical/release pages and the public compatible dossier were rendered with local Markdown/branded CSS and local destinations checked. [Exact source/HTML checks](foundation-public-compatible/evidence/DOCUMENTATION-CHECKS.json) retain the result. No screenshot/PDF claim.
+
+
+TA-26 - 5 November 2026: canonical/release and scope/bridge pages rendered with local Markdown/branded CSS, local links checked. [Exact source/HTML hashes](foundation-r3-scope/evidence/DOCUMENTATION-CHECKS.json) retain this documentation-only audit; no screenshot/PDF claim.
+
+
+TA-27 - 5 November 2026: canonical/release and private host bridge pages rendered with the local Markdown renderer/branded CSS and local destinations checked. [Exact source/HTML hashes](foundation-host-operation-bridge/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-28 - 5 November 2026: canonical/release and public XQuery pages/guide rendered with local Markdown/branded CSS and local links checked. [Exact source/HTML hashes](foundation-public-xquery/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-29 - 5 November 2026: canonical/release and internal admission pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-xslt-admission/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-30 - 6 November 2026: canonical/release and completion pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-xslt-completion/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-31 - 6 November 2026: canonical/release and host outcome pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-host-outcome/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-32 - 6 November 2026: canonical/release and public XSLT guide/implementation pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-public-xslt/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-33 - 6 November 2026: canonical/release and provenance policy/implementation pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-provenance-policy/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-34 - 6 November 2026: canonical/release and public provenance guide/implementation pages rendered with local Markdown/branded CSS and local destinations checked. [Exact hashes](foundation-public-provenance/evidence/DOCUMENTATION-CHECKS.json) retain the result; no screenshot/PDF claim.
+
+
+TA-45 source review: current canonical and adapter documentation receive source-hash and local-destination checks. The existing renderer script is retained for a later environment with markdown-it available; HTML rendering was not performed in this checkpoint. No screenshot/PDF approval is claimed.
+
+
+TA-46 adds the isolated native decimal container prototype dossier. Current Markdown source hashes and local links are checked; no fresh HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-47 adds the isolated native original-node projection dossier. Current Markdown source hashes/local destinations are checked; no new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-48 adds the isolated strict native request/result prototype dossier. Current Markdown source hashes/local destinations are checked; no new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-49 (7 November 2026) checks current Markdown source hashes/local destinations for the public consumer handoff dossier. No new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-50 (7 November 2026) checks current Markdown hashes/local destinations for the immutable provider guard dossier. No new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-51 (7 November 2026) checks current Markdown hashes/local destinations for the owner-workload protocol dossier. No new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-52 (7 November 2026) checks current Markdown hashes/local destinations for callback attribution. No new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-53 (7 November 2026) checks current Markdown hashes/local destinations for the isolated captured-identity candidate. No new HTML rendering, screenshot or PDF approval is claimed.
+
+
+TA-54 (7 November 2026) checks current Markdown hashes/local destinations for exact candidate qualification. No new HTML rendering,screenshot or PDF approval is claimed.
+
+
+TA-55 (7 November 2026) checks current Markdown hashes/local destinations for production patch1.81.1. No fresh HTML rendering,screenshot or PDF approval is claimed.

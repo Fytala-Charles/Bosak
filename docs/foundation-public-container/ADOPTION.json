@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-06",
+  "beforeVersion": "1.78.0",
+  "candidateVersion": "1.79.0",
+  "beforeHashes": {
+    "docs/foundation-container-policy/MANIFEST.json": "d5ad3c0c1bfb54a7c82eae280111348cb8d77c264bf2489457223a1c86043510",
+    "docs/foundation-container-policy/POLICY.json": "6f4e1772984124053b8052bea0eb12346806aaa311d8f41120c39a502a72c8b5",
+    "docs/foundation-container-policy/ADOPTION.json": "772db9acee3216c7e1f491485a6691e57cb5eefcb7dd478c24d2891b815dd23a",
+    "src/Directory.Build.props": "e668bc514c73890637aa65d2c540813e5f973e8888eb0efc2c1d14bde66e9772",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "932edd4623a7436459accbc3934c3816d3d8a1d90386d48078545d08690bf92c",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "f6cc8f9808bf337dbfcef4337bcf77114e2fab00eb77fa4f00f4be29baa174be",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "tests/Bosak.XPath.Runtime.Tests/PublicTypedIdentityTests.cs": "65944345b9651030f95d7e813a838c5751648bf5a36e50226291af6bad9076a8"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.5",
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ]
+    }
+  ],
+  "selectedPolicy": "docs/foundation-container-policy/POLICY.json",
+  "scope": "PV-T02 ordinary public typed-identity complete container delivery. Selected four families, complete uncached materialization, exact raw-lifetime/current-ownership guarded metadata/cursors, plain values and separate evidence. Compatible PV-T03 remains Unsupported and required. No change to existing scalar behavior, registry accounting, layout or ordinary descriptors.",
+  "intentionalExtensions": "Raw-operation borrowed host adapter and additive API member are Bosak Core policy beyond XDM; original draft unchanged and final owner/manifest acceptance pending."
+}

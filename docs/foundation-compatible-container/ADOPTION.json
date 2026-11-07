@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-06",
+  "beforeVersion": "1.79.0",
+  "candidateVersion": "1.80.0",
+  "beforeHashes": {
+    "docs/foundation-public-container/MANIFEST.json": "22153741abde38e9af2b0dbb7a99cbb5adb0e3ec596c75f31948d5ede1b8cebe",
+    "docs/foundation-container-policy/POLICY.json": "6f4e1772984124053b8052bea0eb12346806aaa311d8f41120c39a502a72c8b5",
+    "src/Directory.Build.props": "155081b1c9bc05154df5e8ea86d5a8e799e8dbffa68ddb49c17f580791a596fc",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "ca00ceaa3ae5ee55f9fe9f408a5aaa01811a5837dc444faf3a64790c193bf44e",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "0134a844be1becca8940b41d8a75a255e110d375cc735a9accc39c72db9906d9",
+    "src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs": "27614477fb686230811eccf51b81d041053012010fb2dc04957b5ca07ac71d50",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "90f15cc396eb142328469249ddad94c37f0f063da3c845d0d31aad94f6d4a18b",
+    "tests/Bosak.XPath.Runtime.Tests/PublicCompatibleTests.cs": "3b74f424d8912b2c030ca9019eeb7b3ee4e6227849c61458fbca59c0044dbfbc"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.5",
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ]
+    }
+  ],
+  "selectedPolicy": "docs/foundation-container-policy/POLICY.json",
+  "scope": "PV-T03 bounded compatible complete-container transport. Existing ReadTypedContainer signature; no new public declarations. Materialize complete uncached four-family containers inside the exact raw serialized paired provider window. Every future metadata/cursor/evidence read uses that same raw window and established proof, with live original source/type/container ownership checks; no target-handle rewrite, cache/issuer retention, scalar registration or fresh Establish per getter. Ordinary behavior remains selected and compatible typed scalar identities remain unchanged.",
+  "intentionalExtensions": "Exact raw borrowed host delivery and serialized paired-provider windows are Core host policy beyond XDM. Wider primitive/persistent/construction/nil/no-value/legacy/native-budget scope and owner/signature/freeze acceptance remain unwaived."
+}

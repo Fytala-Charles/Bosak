@@ -1,0 +1,197 @@
+{
+  "implementationStatus": "NotStarted",
+  "cases": [
+    {
+      "id": "CV01",
+      "trigger": "Exact $compatible and supported target optional capabilities",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV02",
+      "trigger": "Missing source/target lifetime or target authority",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV03",
+      "trigger": "Engine original source snapshot lineage only",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV04",
+      "trigger": "Null/foreign/disposed source before getters",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV05",
+      "trigger": "No raw-view OpenSnapshot bypass",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV06",
+      "trigger": "Establish exact source/target/environment",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV07",
+      "trigger": "Compatible with exact non-null returned view",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV08",
+      "trigger": "Incompatible and Unsupported remain distinct without forbidden getters",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV09",
+      "trigger": "Null/unknown/malformed results and Compatible-null",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV10",
+      "trigger": "Spoofed/copied/mutating endpoint getters",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV11",
+      "trigger": "Re-establish proof in each raw operation",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV12",
+      "trigger": "Proof becomes negative or unsupported after admission",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV13",
+      "trigger": "Raw window/tail/drain guards on actual Establish/view callbacks",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV14",
+      "trigger": "Actual source and target resources retained and revoked independently",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV15",
+      "trigger": "Failed admission/second entry/cleanup rollback",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV16",
+      "trigger": "Source OwnsInput/Origin/Container before evidence getters",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV17",
+      "trigger": "Original governing/declared/actual handles and origin preserved",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV18",
+      "trigger": "No reassessment or target relabeling",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV19",
+      "trigger": "Singleton eligible carrier exact identity",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV20",
+      "trigger": "Lists/empty/multi/unsupported carrier refusal",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV21",
+      "trigger": "Count/digit/scale capacity and excess Current",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV22",
+      "trigger": "Transactional target snapshot cache, original cache unchanged",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV23",
+      "trigger": "Unmarked/source/foreign/tampered receipt refusal",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV24",
+      "trigger": "Target context closed capture and exact selector",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV25",
+      "trigger": "Source/target quota units and failed-slot rollback",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV26",
+      "trigger": "No transitive/already-compatible/constructor import",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV27",
+      "trigger": "Original/target session closure and canceled waits",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV28",
+      "trigger": "Concurrent/reentrant calls and independent operations",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV29",
+      "trigger": "No new mandatory provider slots; proposed API disposition",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV30",
+      "trigger": "Existing profiles and raw-view Unsupported behavior unchanged",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV31",
+      "trigger": "Actual native/budget/all-host exclusions remain open",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CV32",
+      "trigger": "Full unit/gates/skips/API/layout/friends/config/source/binary proof",
+      "expected": "Selected bounded public policy; qualify on actual admission and operation route.",
+      "status": "NotRun"
+    }
+  ]
+}

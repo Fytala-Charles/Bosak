@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3 | 01-11-2026     | Enable composite transforms only through exact match/global source admission. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4 | 05-11-2026     | Share unchanged frozen stylesheet capture with neutral host binding (1.71.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Globalization;
@@ -61,6 +63,15 @@ internal static class SchemaHostSessionCompilation
     {
         SchemaProviderSessionBinding.Validate(provider, snapshots, values, cancellationToken);
         ArgumentNullException.ThrowIfNull(compiler); ArgumentNullException.ThrowIfNull(ownsNode); session = null; unsupported = null;
+        if(!TryCaptureXslt(source,compiler,baseUri,out var executable,out var environment,out unsupported))return false;
+        session = SchemaProviderSessionBinding.Create(environment!, SchemaHostExecution.BindXslt(executable!, match, global, initialTemplate, ownsNode),
+            provider, snapshots, values, cancellationToken, compositeEvaluation: false, compositeAdmission: SchemaHostExecution.BindXsltAdmission(match, global)); return true;
+    }
+
+    internal static bool TryCaptureXslt(string source,XsltCompiler compiler,string? baseUri,
+        out XsltExecutable? executable,out SchemaQueryEnvironment? environment,out string? unsupported)
+    {
+        ArgumentNullException.ThrowIfNull(compiler);executable=null;environment=null;unsupported=null;
         if (compiler.UriResolver is not null || compiler.ResourcePolicy is not null || compiler.MessageListener is not null
             || compiler.SchemaAware || compiler.SchemaResolver is not null || compiler.SchemaSet is not null || compiler.EnvironmentSchemaSet is not null
             || compiler.ProcessorProfile != XsltProcessorProfile.Legacy)
@@ -87,7 +98,6 @@ internal static class SchemaHostSessionCompilation
             UriResolver = new ClosedResolver(), TreatRecoverableAmbiguousMatchAsError = compiler.TreatRecoverableAmbiguousMatchAsError,
             PackageVersionResolutionStrategy = compiler.PackageVersionResolutionStrategy
         };
-        XsltExecutable executable;
         try { executable = frozen.Compile(document, baseUri); }
         catch (ClosedCaptureException error) { unsupported = error.Message; return false; }
         catch (Exception) when (policy.Receipts.Count != 0) { unsupported = "Static resource acquisition is outside the captured profile."; return false; }
@@ -96,15 +106,14 @@ internal static class SchemaHostSessionCompilation
         if (statics.Values.Any(v => !PlainStatic(v))) { unsupported = "Effective static values require an unsupported captured representation."; return false; }
         var namespaces = document.Root!.Attributes().Where(a => a.IsNamespaceDeclaration)
             .ToImmutableDictionary(a => a.Name.LocalName == "xmlns" ? "" : a.Name.LocalName, a => a.Value, StringComparer.Ordinal);
-        var environment = new SchemaQueryEnvironment(namespaces, JsonSerializer.Serialize(new
+        environment = new SchemaQueryEnvironment(namespaces, JsonSerializer.Serialize(new
         {
             format = SchemaQueryEnvironment.DescriptorFormat, host = "XSLT", profile = SchemaProviderSessionBinding.Profile,
             engine = typeof(XsltExecutable).Assembly.GetName().Version!.ToString(), source, baseUri,
             processor = (int)frozen.ProcessorProfile, frozen.TreatRecoverableAmbiguousMatchAsError, strategy = (int)frozen.PackageVersionResolutionStrategy,
             supplied = Describe(copied), effective = Describe(statics)
         }));
-        session = SchemaProviderSessionBinding.Create(environment, SchemaHostExecution.BindXslt(executable, match, global, initialTemplate, ownsNode),
-            provider, snapshots, values, cancellationToken, compositeEvaluation: false, compositeAdmission: SchemaHostExecution.BindXsltAdmission(match, global)); return true;
+        return true;
     }
 
     private static bool PlainStatic(XdmValue value) => XdmValue.SchemaTransportMarker(value) is null

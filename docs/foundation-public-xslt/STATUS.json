@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.76.0",
+  "unitTestsPassed": 26054,
+  "newPublicXsltControlsPassed": 67,
+  "publicApiChanged": true,
+  "newPublicTypes": 5,
+  "newDeclarationRows": 71,
+  "exportedTypes": 317,
+  "declarationRows": 6457,
+  "qt3": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "skipMapsUnchanged": true,
+  "ah03Implemented": true,
+  "publicXsltBcapActivated": true,
+  "schemaAwareXsltActivated": false,
+  "proposedPublicTypesPresent": 46,
+  "proposedPublicTypesTotal": 47,
+  "remainingPublicType": "Bosak.XPath.Core.Schema.SchemaAtomics",
+  "previewSelectedPackages": 9,
+  "packagesBuilt": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "pushPerformed": false,
+  "nextStep": "PV-01 immutable policy for public atomic provenance observation and remaining typed-container coverage; NU-01/SC-01 and actual R4-R7 remain unwaived."
+}

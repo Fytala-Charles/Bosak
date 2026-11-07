@@ -1,0 +1,9 @@
+{
+  "prototype/NativeAssessmentTests.cs": "5e94edb32af8bb31d5ebaf1abebbb52664a3b90143c89957a7618a83529bb71e",
+  "prototype/NativeContainerAdapter.cs": "fa86c0b137e53d29c9a73cd0746c117e9762f3b4ccd7d38bb82a50b5dbebcd5c",
+  "prototype/NativeContainerTests.cs": "22c883694d3b69ede302e1c9c5b40bf00bb98dbc3bc08db432c4141bab388557",
+  "prototype/NativeNodeProjection.cs": "d5800eb85af1e285867e05dabea771047cbc23ab94aca1ba92f728330e09401e",
+  "prototype/NativeNodeTests.cs": "49fa1ab8a1125e0073e9a0aef7da99a3add0b7847deb13ab2188eed3121396d6",
+  "prototype/NativeStrictAssessment.cs": "bd48fc115ce84d140824824e8bbd0d395752dc2a379b0aedd754bf3f46802d19",
+  "prototype/Prototype.csproj": "c7173d838573b3da7462060d6b65272fcadd5b165974c3c71e4845db9cb5fd2f"
+}

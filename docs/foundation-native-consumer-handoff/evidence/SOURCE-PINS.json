@@ -1,0 +1,13 @@
+{
+  "provider/NativeContainerAdapter.cs": "fa86c0b137e53d29c9a73cd0746c117e9762f3b4ccd7d38bb82a50b5dbebcd5c",
+  "provider/NativeNodeProjection.cs": "d5800eb85af1e285867e05dabea771047cbc23ab94aca1ba92f728330e09401e",
+  "provider/NativeProviderSession.cs": "a0f42600061e912c4b155393bd65025627bef9ba692fbb36cf6f99cca335b5ea",
+  "provider/NativeStrictAssessment.cs": "bd48fc115ce84d140824824e8bbd0d395752dc2a379b0aedd754bf3f46802d19",
+  "provider/Provider.csproj": "5a2c4f357aa2d30190b6052e6388ce4171bf49604ee108d29cb29fcd69d017d4",
+  "consumer/Consumer.csproj": "b9f0e5228b6fa91b3e63d122f5445860081131a0de1e54f48dae87c00c90456b",
+  "consumer/PublicConsumerTests.cs": "7196ecc1695f6f423c15030d45b92e9024fb1a796903136205584e872983da87",
+  "workload/Program.cs": "0678dca3483db085b978490e76b4898c69a72cd08c2034e8415ca8110fa364c1",
+  "workload/Workload.csproj": "5767a53c273f9b8862ab4823c2f6a1009c3c188d3b72b99a5c9546f564d86004",
+  "phase-probe/PhaseProbe.csproj": "2edf8e8535e15f46baefcb2d5da9f70019b7be085b2ddae56d1aedc93f21bd8b",
+  "phase-probe/Program.cs": "ea9be518842c046160bc8bbbe1c6dadf5b1744a538b658e1b98c1856895f9ccd"
+}

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f2118c8f-6516-473f-ad65-20bdb629d299" name="charl@CHARLES 2026-11-05 19:37:08" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T19:37:08.1157750+01:00" queuing="2026-11-05T19:37:08.1157754+01:00" start="2026-11-05T19:37:06.4696931+01:00" finish="2026-11-05T19:37:08.1866439+01:00" />
+  <TestSettings name="default" id="4d98be0e-bc5e-47e6-91d1-065fd72d8949">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-05_19_37_08" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="b534f498-6a87-44df-8d9f-e3555cd14405" testId="74b7248e-d847-ea53-4a4d-7cd1a7b4f1d5" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC02_ActualForeignExecutable" computerName="CHARLES" duration="00:00:00.0010617" startTime="2026-11-05T19:37:08.1247541+01:00" endTime="2026-11-05T19:37:08.1258780+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b534f498-6a87-44df-8d9f-e3555cd14405" />
+    <UnitTestResult executionId="fc964ad3-9b59-4294-ac25-63d99f94c524" testId="eb11afc5-7bd9-9fa8-ae27-95a6e0d2acbe" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;distinct&quot;)" computerName="CHARLES" duration="00:00:00.0011681" startTime="2026-11-05T19:37:08.0716092+01:00" endTime="2026-11-05T19:37:08.0727282+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc964ad3-9b59-4294-ac25-63d99f94c524" />
+    <UnitTestResult executionId="440e8590-5dfb-44e8-a852-cab5bdd0075c" testId="454b7f70-e650-b0da-c27c-d9b48235b0d0" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC07_ClosureDuringConsumption" computerName="CHARLES" duration="00:00:00.0047073" startTime="2026-11-05T19:37:08.0569292+01:00" endTime="2026-11-05T19:37:08.0591472+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="440e8590-5dfb-44e8-a852-cab5bdd0075c" />
+    <UnitTestResult executionId="9ca3b0db-dc17-40cd-ad81-f71e49f25956" testId="0bfef586-a3ed-cf23-52e6-262a4febb0c7" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;include&quot;)" computerName="CHARLES" duration="00:00:00.0000337" startTime="2026-11-05T19:37:08.0567555+01:00" endTime="2026-11-05T19:37:08.0567838+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9ca3b0db-dc17-40cd-ad81-f71e49f25956" />
+    <UnitTestResult executionId="42fb3c68-0b9b-4a23-aba9-67718a60ad39" testId="4bf580ee-6b57-e97c-38ba-9a61a97a23a0" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_FrozenQueryCompiler" computerName="CHARLES" duration="00:00:00.0272199" startTime="2026-11-05T19:37:08.0966846+01:00" endTime="2026-11-05T19:37:08.1119963+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42fb3c68-0b9b-4a23-aba9-67718a60ad39" />
+    <UnitTestResult executionId="a153ef93-32c0-4f64-a28d-510761e54a39" testId="eda57fcd-0edb-7da4-f5d6-1c8e97d21fbd" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC10_SerializedConsumptionWindow" computerName="CHARLES" duration="00:00:00.3042690" startTime="2026-11-05T19:37:07.7266856+01:00" endTime="2026-11-05T19:37:08.0356240+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a153ef93-32c0-4f64-a28d-510761e54a39" />
+    <UnitTestResult executionId="f90ac14e-5bbb-4d55-b90e-6fc8869dedba" testId="3d2c3ff7-c626-a86e-f3fb-ec16682e98f5" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;shared&quot;)" computerName="CHARLES" duration="00:00:00.0015697" startTime="2026-11-05T19:37:08.0699983+01:00" endTime="2026-11-05T19:37:08.0715235+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f90ac14e-5bbb-4d55-b90e-6fc8869dedba" />
+    <UnitTestResult executionId="24dcc661-9481-473e-b9f1-13b94aaefff1" testId="abe6dfa0-b444-2ed6-7ef0-94430cb89ce0" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC08_QueryAsyncWait" computerName="CHARLES" duration="00:00:00.0070557" startTime="2026-11-05T19:37:08.1150621+01:00" endTime="2026-11-05T19:37:08.1237973+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24dcc661-9481-473e-b9f1-13b94aaefff1" />
+    <UnitTestResult executionId="abd44c7d-7bdc-48e9-99aa-cbd01be3755b" testId="8bee1fdd-2f1e-3825-1710-da7088660687" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC05_NoGlobalFallback" computerName="CHARLES" duration="00:00:00.0180887" startTime="2026-11-05T19:37:08.0568525+01:00" endTime="2026-11-05T19:37:08.0568747+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="abd44c7d-7bdc-48e9-99aa-cbd01be3755b" />
+    <UnitTestResult executionId="f5f63d8d-048a-4318-b8c7-6a2de0e87e7c" testId="684d5615-a845-bf72-9aa5-c9d45488ea29" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;conditional&quot;)" computerName="CHARLES" duration="00:00:00.0001823" startTime="2026-11-05T19:37:08.0566776+01:00" endTime="2026-11-05T19:37:08.0567045+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f5f63d8d-048a-4318-b8c7-6a2de0e87e7c" />
+    <UnitTestResult executionId="ad451316-3847-459b-90a3-4c5f122c5641" testId="b4d05d8c-2872-2bad-09e4-a28c1f1cafbb" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_FrozenStylesheetCompiler" computerName="CHARLES" duration="00:00:00.0051505" startTime="2026-11-05T19:37:08.1281438+01:00" endTime="2026-11-05T19:37:08.1332867+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ad451316-3847-459b-90a3-4c5f122c5641" />
+    <UnitTestResult executionId="737e8d83-6f04-4549-8252-ad2f5f35214c" testId="1c801579-89d4-6645-4adb-89376dbb650e" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;schema&quot;)" computerName="CHARLES" duration="00:00:00.0002329" startTime="2026-11-05T19:37:08.0562707+01:00" endTime="2026-11-05T19:37:08.0563301+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="737e8d83-6f04-4549-8252-ad2f5f35214c" />
+    <UnitTestResult executionId="e373e477-c566-4fcf-91a4-a054c3089b7a" testId="b9513584-693e-ba63-e710-9d4d52be07f2" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC09_ActualConsumerFailure" computerName="CHARLES" duration="00:00:00.0023826" startTime="2026-11-05T19:37:08.0965125+01:00" endTime="2026-11-05T19:37:08.0965402+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e373e477-c566-4fcf-91a4-a054c3089b7a" />
+    <UnitTestResult executionId="e079196d-1b6d-4a01-96ec-b4fcb7b15776" testId="8e4b4d37-8742-304f-d810-b987cf6096c2" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC03_QueryForeignNode" computerName="CHARLES" duration="00:00:00.0026389" startTime="2026-11-05T19:37:08.1122843+01:00" endTime="2026-11-05T19:37:08.1149429+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e079196d-1b6d-4a01-96ec-b4fcb7b15776" />
+    <UnitTestResult executionId="1dfa3eb9-244c-43b4-b412-d12e20a1a3b9" testId="8051d16e-db00-3b06-9d62-504f07b15a63" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC05_ActualSourceFree" computerName="CHARLES" duration="00:00:00.0010506" startTime="2026-11-05T19:37:08.1345859+01:00" endTime="2026-11-05T19:37:08.1346244+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1dfa3eb9-244c-43b4-b412-d12e20a1a3b9" />
+    <UnitTestResult executionId="e954940c-e649-4d56-b78f-a6faa9a4e8f8" testId="2eb5c318-49c3-f421-c3ff-fd101602c675" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedQuerySchema" computerName="CHARLES" duration="00:00:00.0081654" startTime="2026-11-05T19:37:08.0962137+01:00" endTime="2026-11-05T19:37:08.0962649+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e954940c-e649-4d56-b78f-a6faa9a4e8f8" />
+    <UnitTestResult executionId="34448dd2-490e-458f-a477-304608bc1d5d" testId="2af30b85-b85a-a791-80e9-0235ba21ebc2" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC13_NoPublicFacadeActivation" computerName="CHARLES" duration="00:00:00.0012283" startTime="2026-11-05T19:37:08.0966044+01:00" endTime="2026-11-05T19:37:08.0966265+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34448dd2-490e-458f-a477-304608bc1d5d" />
+    <UnitTestResult executionId="39bea52c-fd7a-4e5c-91c7-7a2641ce6571" testId="9ee709d9-da4a-4379-041c-00cfe587eb5c" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;template&quot;)" computerName="CHARLES" duration="00:00:00.0106947" startTime="2026-11-05T19:37:08.0592297+01:00" endTime="2026-11-05T19:37:08.0699214+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39bea52c-fd7a-4e5c-91c7-7a2641ce6571" />
+    <UnitTestResult executionId="6b4de1f3-5408-4a9f-aa64-ede0372c7226" testId="be4e4457-295b-9c6c-3379-792ef91ea64c" testName="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC01_ActualQuery" computerName="CHARLES" duration="00:00:00.0021703" startTime="2026-11-05T19:37:08.1260070+01:00" endTime="2026-11-05T19:37:08.1280481+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b4de1f3-5408-4a9f-aa64-ede0372c7226" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC13_NoPublicFacadeActivation" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="2af30b85-b85a-a791-80e9-0235ba21ebc2">
+      <Execution id="34448dd2-490e-458f-a477-304608bc1d5d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC13_NoPublicFacadeActivation" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_FrozenQueryCompiler" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="4bf580ee-6b57-e97c-38ba-9a61a97a23a0">
+      <Execution id="42fb3c68-0b9b-4a23-aba9-67718a60ad39" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_FrozenQueryCompiler" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC08_QueryAsyncWait" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="abe6dfa0-b444-2ed6-7ef0-94430cb89ce0">
+      <Execution id="24dcc661-9481-473e-b9f1-13b94aaefff1" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC08_QueryAsyncWait" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;include&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="0bfef586-a3ed-cf23-52e6-262a4febb0c7">
+      <Execution id="9ca3b0db-dc17-40cd-ad81-f71e49f25956" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_UnsupportedStylesheet" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC10_SerializedConsumptionWindow" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="eda57fcd-0edb-7da4-f5d6-1c8e97d21fbd">
+      <Execution id="a153ef93-32c0-4f64-a28d-510761e54a39" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC10_SerializedConsumptionWindow" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC07_ClosureDuringConsumption" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="454b7f70-e650-b0da-c27c-d9b48235b0d0">
+      <Execution id="440e8590-5dfb-44e8-a852-cab5bdd0075c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC07_ClosureDuringConsumption" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;conditional&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="684d5615-a845-bf72-9aa5-c9d45488ea29">
+      <Execution id="f5f63d8d-048a-4318-b8c7-6a2de0e87e7c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_UnsupportedStylesheet" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC01_ActualQuery" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="be4e4457-295b-9c6c-3379-792ef91ea64c">
+      <Execution id="6b4de1f3-5408-4a9f-aa64-ede0372c7226" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC01_ActualQuery" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedStylesheet(mode: &quot;schema&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="1c801579-89d4-6645-4adb-89376dbb650e">
+      <Execution id="737e8d83-6f04-4549-8252-ad2f5f35214c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_UnsupportedStylesheet" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC05_ActualSourceFree" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="8051d16e-db00-3b06-9d62-504f07b15a63">
+      <Execution id="1dfa3eb9-244c-43b4-b412-d12e20a1a3b9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC05_ActualSourceFree" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC09_ActualConsumerFailure" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="b9513584-693e-ba63-e710-9d4d52be07f2">
+      <Execution id="e373e477-c566-4fcf-91a4-a054c3089b7a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC09_ActualConsumerFailure" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;shared&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="3d2c3ff7-c626-a86e-f3fb-ec16682e98f5">
+      <Execution id="f90ac14e-5bbb-4d55-b90e-6fc8869dedba" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC04_ActualRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_FrozenStylesheetCompiler" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="b4d05d8c-2872-2bad-09e4-a28c1f1cafbb">
+      <Execution id="ad451316-3847-459b-90a3-4c5f122c5641" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_FrozenStylesheetCompiler" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC02_ActualForeignExecutable" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="74b7248e-d847-ea53-4a4d-7cd1a7b4f1d5">
+      <Execution id="b534f498-6a87-44df-8d9f-e3555cd14405" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC02_ActualForeignExecutable" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;template&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="9ee709d9-da4a-4379-041c-00cfe587eb5c">
+      <Execution id="39bea52c-fd7a-4e5c-91c7-7a2641ce6571" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC04_ActualRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC05_NoGlobalFallback" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="8bee1fdd-2f1e-3825-1710-da7088660687">
+      <Execution id="abd44c7d-7bdc-48e9-99aa-cbd01be3755b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC05_NoGlobalFallback" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC03_QueryForeignNode" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="8e4b4d37-8742-304f-d810-b987cf6096c2">
+      <Execution id="e079196d-1b6d-4a01-96ec-b4fcb7b15776" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC03_QueryForeignNode" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC04_ActualRoles(mode: &quot;distinct&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="eb11afc5-7bd9-9fa8-ae27-95a6e0d2acbe">
+      <Execution id="fc964ad3-9b59-4294-ac25-63d99f94c524" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC04_ActualRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.CapturedHostExecutionTests.HC06_UnsupportedQuerySchema" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="2eb5c318-49c3-f421-c3ff-fd101602c675">
+      <Execution id="e954940c-e649-4d56-b78f-a6faa9a4e8f8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.CapturedHostExecutionTests" name="HC06_UnsupportedQuerySchema" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="74b7248e-d847-ea53-4a4d-7cd1a7b4f1d5" executionId="b534f498-6a87-44df-8d9f-e3555cd14405" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eb11afc5-7bd9-9fa8-ae27-95a6e0d2acbe" executionId="fc964ad3-9b59-4294-ac25-63d99f94c524" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="454b7f70-e650-b0da-c27c-d9b48235b0d0" executionId="440e8590-5dfb-44e8-a852-cab5bdd0075c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0bfef586-a3ed-cf23-52e6-262a4febb0c7" executionId="9ca3b0db-dc17-40cd-ad81-f71e49f25956" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4bf580ee-6b57-e97c-38ba-9a61a97a23a0" executionId="42fb3c68-0b9b-4a23-aba9-67718a60ad39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eda57fcd-0edb-7da4-f5d6-1c8e97d21fbd" executionId="a153ef93-32c0-4f64-a28d-510761e54a39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d2c3ff7-c626-a86e-f3fb-ec16682e98f5" executionId="f90ac14e-5bbb-4d55-b90e-6fc8869dedba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="abe6dfa0-b444-2ed6-7ef0-94430cb89ce0" executionId="24dcc661-9481-473e-b9f1-13b94aaefff1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8bee1fdd-2f1e-3825-1710-da7088660687" executionId="abd44c7d-7bdc-48e9-99aa-cbd01be3755b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="684d5615-a845-bf72-9aa5-c9d45488ea29" executionId="f5f63d8d-048a-4318-b8c7-6a2de0e87e7c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b4d05d8c-2872-2bad-09e4-a28c1f1cafbb" executionId="ad451316-3847-459b-90a3-4c5f122c5641" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1c801579-89d4-6645-4adb-89376dbb650e" executionId="737e8d83-6f04-4549-8252-ad2f5f35214c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b9513584-693e-ba63-e710-9d4d52be07f2" executionId="e373e477-c566-4fcf-91a4-a054c3089b7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e4b4d37-8742-304f-d810-b987cf6096c2" executionId="e079196d-1b6d-4a01-96ec-b4fcb7b15776" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8051d16e-db00-3b06-9d62-504f07b15a63" executionId="1dfa3eb9-244c-43b4-b412-d12e20a1a3b9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2eb5c318-49c3-f421-c3ff-fd101602c675" executionId="e954940c-e649-4d56-b78f-a6faa9a4e8f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2af30b85-b85a-a791-80e9-0235ba21ebc2" executionId="34448dd2-490e-458f-a477-304608bc1d5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ee709d9-da4a-4379-041c-00cfe587eb5c" executionId="39bea52c-fd7a-4e5c-91c7-7a2641ce6571" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be4e4457-295b-9c6c-3379-792ef91ea64c" executionId="6b4de1f3-5408-4a9f-aa64-ede0372c7226" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="19" executed="19" passed="19" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.26]   Discovering: Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:00.93]   Discovered:  Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:00.95]   Starting:    Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:01.37]   Finished:    Bosak.Xslt.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

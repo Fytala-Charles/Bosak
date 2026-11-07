@@ -1,0 +1,13 @@
+# Stable payload and current authorization
+
+The private engine marker interface separates a callback-free scope identity from each current issuer. Only the new internal compatible identity candidate selects it. The persistent cache stores the token, input, source authority, snapshot and resident groups. Groups store container/origin/component references and unattached atomic payloads, plus transport markers; they contain no reader, operation, proof or validator. The operation-specific reader is created afresh for each explicit validation. No-issuer validation refuses this cache.
+
+The token identifies a target admission; it is not a public capability. Foreign marker/scope/mode/input/authority/limit combinations reject. Default issuers use their own exact object reference as before, including original singleton-list behavior. Public entry/result/signatures, required provider slots and public grammar are unchanged.
+
+Compatible read stages through the existing bounded reader, then checks non-list, exactly one cell, original origin and selected carrier eligibility before installation. Existing atom/digit/scale limits and excess-Current protection apply. A cached read validates stored source components and current source issuance without replaying container/evidence getters. It preserves the source payload and descriptive annotations rather than authorizing them as types.
+
+Scope properties are resolved before the cache state lock. The commit section has no provider callback; fixed integer fault seams roll back insertion. The -2 pre-delivery seam occurs after staging and group allocation, before commit; it is not proof of every possible allocation failure. Real allocation failures before installation cannot expose a marker. An arbitrary revocation after successful installation may retain a complete payload, but final current-operation checks prevent its delivery. Any subsequent operation must obtain a new proof and reauthenticate the source; snapshot closure clears residency. No partial group is published by insertion faults.
+
+Both exact provider leases and the actual original-source retainer surround typed callbacks and cleanup. A blocked enumerator can use real input/backend resources after host/session close until its raw tail finishes. Closure prevents result delivery; drain waits for completion. Escaped issuers/readers/guards fail before provider callbacks after the raw scope ends.
+
+[CI01-CI16 mapping](CASE-MAPPING.json) covers the private prerequisite. CI16 uses full source/binary/configuration/test/gate/API/skip/binding evidence. Public CV01-CV32 remain NotRun. Historical [TA-23 cache requirements](../foundation-compatible-admission/CACHE-REQUIREMENT.md) retain their original pre-implementation state.

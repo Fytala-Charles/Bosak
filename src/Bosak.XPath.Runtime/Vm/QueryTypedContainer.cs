@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 05-11-2026     | Authorize numeric projection through owned actual type relations (1.59.0).                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4 | 05-11-2026     | Separate stable payload scope from current compatible issuer (1.69.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Schema;
@@ -33,6 +35,12 @@ internal interface IQueryTypedContainerIssuer
     bool OwnsInput(ISchemaAssessmentInput originalInput,IQuerySourceInput input);
     bool OwnsOrigin(ISchemaAssessmentOrigin origin,ISchemaAssessmentInput originalInput,IQuerySourceInput input);
     bool OwnsContainer(ISchemaTypedValue value,ISchemaAssessmentInput originalInput,IQuerySourceInput input,ISchemaAssessmentOrigin? origin);
+}
+
+/// <summary>Engine-only current-operation issuer with a callback-free stable payload scope token.</summary>
+internal interface IQueryOperationBoundTypedIssuer : IQueryTypedContainerIssuer
+{
+    object ScopeIdentity { get; }
 }
 
 /// <summary>Uncached typed metadata whose later access remains bound to the original raw operation.</summary>

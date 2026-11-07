@@ -1,0 +1,76 @@
+{
+  "processId": 55640,
+  "assemblies": [
+    {
+      "name": "Bosak.Schema.ExperimentalProvider",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.Schema.ExperimentalProvider.dll",
+      "sha256": "ef4352faa6f87e0ef459228cf6136d554de2d1c0ad2e676335fe991ee6fa017a",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.Schema.PublicConsumer.Tests",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.Schema.PublicConsumer.Tests.dll",
+      "sha256": "28d6105bd0e1a72089168ae8323431734363570bdf02b8091a25aa407abd1f8f",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.Schema",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.Schema.dll",
+      "sha256": "8a41f9ebd7489f323c4006a0e3272795844c3e9974de29910b9acb7c58d8d119",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Api",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "3b09994c3347ea1b374ee5a4e594a7c7a624d2903cdf70e38619d2fedf187aab",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "3b51440160ab35042ee17e2b17d7e3707e97363af1fcc8d2e39928d325ead78b",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "dc5b66d766836526f8fa613fb7245324500c08fe62e395e58ba8fe50f62c5b52",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "88f590374f6f5d9357198e48f97469a033ac304bcefb5f8888b360fe233adc74",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "a158efb96c498f05d22d14027df27fc5dff2015cc0586e41fe25789493c67b7f",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "b93e0306d063c0a9b9f86d8f0d035a2479dcd0b048060dc62db119cf77bd9a03",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\consumer\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "7e1076934943a289a47d5b15ade6a985733b20c43e90c2f822678ab6e8e15e6e",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

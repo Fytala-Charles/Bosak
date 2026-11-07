@@ -1,0 +1,25 @@
+{
+  "sourceVersion": "1.81.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-Q02",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-Q01",
+      "status": "ReadinessAuditAndReceiptPreflightPrepared_ActualQualificationPending"
+    },
+    {
+      "id": "PV-Q02",
+      "status": "Next_NativeSchemaSourceAndUnchangedBinaryLanePreflight",
+      "work": "Resolve existing native assessment fixtures/consumer artifacts and exact current dependency lane in an isolated wrapper. Preserve public-provider binding gaps; no automatic native/general acceptance."
+    },
+    {
+      "id": "PV-Q03",
+      "status": "Required_ActualPublicSchemaProviderAdapterFeasibility"
+    },
+    {
+      "id": "R4-02",
+      "status": "OwnerBudgetAcceptancePending"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "status": "TemplateNotExecuted",
+  "qualifiedCommit": null,
+  "previewVersion": null,
+  "releaseDate": null,
+  "commands": [
+    [
+      "git",
+      "archive",
+      "--format=tar",
+      "--output=<FRESH_WORKSPACE>/source.tar",
+      "<QUALIFIED_COMMIT>",
+      "src",
+      "README.md",
+      "license.md",
+      "NOTICE",
+      "assets"
+    ],
+    [
+      "dotnet",
+      "build",
+      "<ARCHIVED_SOURCE>/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj",
+      "-c",
+      "Release",
+      "-p:Version=<PREVIEW_VERSION>",
+      "-p:PackageVersion=<PREVIEW_VERSION>",
+      "-p:SourceRevisionId=<QUALIFIED_COMMIT>",
+      "-p:RepositoryCommit=<QUALIFIED_COMMIT>"
+    ],
+    [
+      "dotnet",
+      "pack",
+      "<ARCHIVED_SOURCE>/src/<SELECTED_PROJECT>/<SELECTED_PROJECT>.csproj",
+      "-c",
+      "Release",
+      "--no-build",
+      "--no-restore",
+      "-o",
+      "<FRESH_WORKSPACE>/feed",
+      "-p:Version=<PREVIEW_VERSION>",
+      "-p:PackageVersion=<PREVIEW_VERSION>",
+      "-p:CustomBeforeMicrosoftCommonTargets=<PINNED_RECIPE>/PreviewAssets.targets",
+      "-p:CandidateSourceRoot=<ARCHIVED_SOURCE>",
+      "-p:SourceRevisionId=<QUALIFIED_COMMIT>",
+      "-p:RepositoryCommit=<QUALIFIED_COMMIT>"
+    ]
+  ],
+  "publicationCommandIncluded": false
+}

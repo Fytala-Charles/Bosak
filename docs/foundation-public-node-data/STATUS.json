@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.64.0",
+  "stage": "TA-17 bounded public original-node data qualified",
+  "dataProfileActivated": true,
+  "selectedAcceptanceCasesQualified": 40,
+  "newCasesPassed": 117,
+  "unitTestsPassed": 25453,
+  "qt3": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "skipMapsUnchanged": true,
+  "publicMetadataUnchanged": true,
+  "newPublicSignatures": false,
+  "allocation": {
+    "warmThreeBytesPerQuery": 2491,
+    "slots": 3,
+    "typedOutcomesInTenQueries": 10,
+    "coldThreeSessionBytes": 17112
+  },
+  "factsCacheIntroduced": false,
+  "persistentEmptyIndexIntroduced": false,
+  "generalImplicitAtomizationActivated": false,
+  "nativeProviderQualified": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "pushPerformed": false,
+  "nextStep": "Select source-free construction ownership/quota/lifetime without a fabricated source snapshot; prepare preview recipe/migration inventory alongside remaining R3 and actual native/owner qualification."
+}

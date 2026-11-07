@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice D)                                                               |
 //                      | Charles Korthout | 0.2   | 11-10-2026     | D-F1: unconditional terminal control observation without spending operations.            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3 | 06-11-2026     | Compose inherited and local capture controls (1.76.0). |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Runtime;
@@ -82,6 +83,7 @@ internal sealed class ExecutionInterruptException : Exception
 /// </remarks>
 internal sealed class ExecutionGate
 {
+    private readonly ExecutionGate? _parent, _local;
     private readonly CancellationToken _cancellationToken;
     private readonly long _deadlineTick;
     private long _remainingBudgetChecks;
@@ -93,6 +95,10 @@ internal sealed class ExecutionGate
         _deadlineTick = deadlineTick;
         _remainingOperations = operationBudget;
     }
+
+    private ExecutionGate(ExecutionGate parent,ExecutionGate local) { _parent=parent;_local=local; }
+    internal static ExecutionGate Compose(ExecutionGate? inherited,ExecutionGate local)
+        =>inherited is null?local:new(inherited,local);
 
     /// <summary>
     /// Creates a gate for the supplied controls. <paramref name="timeLimit"/> is turned into a
@@ -119,6 +125,7 @@ internal sealed class ExecutionGate
     /// </summary>
     internal void Checkpoint()
     {
+        if(_parent is not null){_parent.Checkpoint();_local!.Checkpoint();return;}
         if (--_remainingOperations < 0)
             throw new ExecutionInterruptException(ExecutionGateInterruptKind.OperationLimitExceeded,
                 "The engine-operation budget was exhausted.");
@@ -137,6 +144,7 @@ internal sealed class ExecutionGate
     /// </summary>
     internal void ObserveControls()
     {
+        if(_parent is not null){_parent.ObserveControls();_local!.ObserveControls();return;}
 
         if (_cancellationToken.IsCancellationRequested)
             throw new ExecutionInterruptException(ExecutionGateInterruptKind.Cancelled,

@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.67.0",
+  "candidateVersion": "1.68.0",
+  "beforeHashes": {
+    "docs/foundation-paired-provider-lifetime/MANIFEST.json": "aa67a28bdcf5b4f3ea018824aa9f3a3782a857dbc6df3cb19460a4fe90790921",
+    "docs/foundation-compatible-view-policy/SIGNATURE-PROPOSAL.md": "d45ea498a73b7c7e2033abf0c0abadb1cad67845118ea85c2d1c081ceffeb678",
+    "docs/foundation-compatible-view-policy/POLICY.md": "a9e45402ff3f132bb7fd3ccf558c6522c613ccdcd8d98f0cffb07bbd3dde6d24",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "fbd78cab2bf18d30c36260dc6fe81e54991debf7a575bf4964a28298d472b447",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "c73ba3b2bc063cc54365b02a43d6519c1fd8f371a4f20023236f0795d6fd90ca",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "e86655326c8cc4ac29624cb787f387fc611ca36f39fef9ad9eae30af61658f29",
+    "src/Directory.Build.props": "5a246aa5ea1f319b1462fb2625625f5c3c6fa30b32ba569df0aef56d541d49bd"
+  },
+  "priorSourcePins": "docs/foundation-paired-provider-lifetime/evidence/SOURCE-AND-BINARY-PINS.json",
+  "semanticScope": "Selected TA-21 directional proof/admission host policy, using qualified TA-22 paired resource scope. Exact XDM REC 21 March 2017 sections 2.7.1/2.7.4 basis already recorded in TA-18/TA-21; no new XPath grammar/type predicates, PSVI rewriting or general schema equivalence is adopted.",
+  "implementationScope": "Internal engine-captured original binding, authenticated Establish/endpoint validation, transactional neutral source admission and fresh proof on every internal raw operation. No returned view stored as persistent authority.",
+  "exclusions": "No public declarations/activation yet. CV-CACHE-01 per-operation cache authorization must be qualified before public singleton consumption. CV01-CV32 public qualification/native/owner/freeze/publication remain pending."
+}

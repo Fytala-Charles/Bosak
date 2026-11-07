@@ -1,0 +1,12 @@
+{
+  "allMatchQualifiedCandidate": true,
+  "observed": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard"
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "date": "2026-11-05",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "74a7b6b66cffcbd2e67b51ba3e25031cd0443b18a605a79befd7afe1289b89fa",
+      "htmlSha256": "f4fee07a41fbd99dc871fd8e04e57d9ac5c3542614b589ac85508a46860be696"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "c0d26a263aa92ee69de9a787f5e29f88c883f4f873b0f6ec3eedfbc23908b288",
+      "htmlSha256": "ad98b338e5eefbe54bae5b6342650622f312f2ce8405350fa32660a7c1792961"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "24895060f2c04d000ce49a85053f32a8b78a27d1ac241e7c9f94bf493bef9126",
+      "htmlSha256": "b3d6c3c62f463d101d874fc0848ab389b0e39fde278301f0259398791a99ba45"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "278012eb37526692c80ff10d2ffe78083b356b595e0518241fc27d1a985e4bd3",
+      "htmlSha256": "4e6b4735ff2af8fa64200178d913b4a3d1515f7018aef04290a980602338d1bd"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "4d037f4d1144870ba22451d43d51272272db6c8ea87f3da0e732f47030dfc075",
+      "htmlSha256": "1009ba0b1655170440810c99d943192f2e484d02e01862d140cedd6b4492568f"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "e0f8f027f21d63e9760b4dd00e443457f1474b721c18baef3bcb656cfb92aaf1",
+      "htmlSha256": "d85d569c68ca2b7d43540d0b4f1a0bc7622e7313e0128df1be82e51f836ef55d"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "e20153d77d664d0934d494a1f930d0a3ccde3fd519c1cbdb785f0b16ee342554",
+      "htmlSha256": "9a36c84f88d42226109248663f491015ed77ff43eb685a5119651b1d51300fa4"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "6ef52faddee07df612b20a8d8aa3ef4608181796fed3ad971cffaf9755ace639",
+      "htmlSha256": "386386703eda4535eed962fbffe36b4628e626d7d572dde8d017993b673129c9"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "3a01b6480eccc132f8a8235323be5b769f015379be2f06e901dff289068b9615",
+      "htmlSha256": "dd9d40e1d354a31d2ae08a80b588000c830eb49166be5a201b3eff74d27d5408"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "252e8b32c84498d4981abd81b075996d9a15c9cd2c27a142df1c5a6f927c5b6e",
+      "htmlSha256": "88997d8acc5f95350e7d78f9f8e1fa7398f71bcd87e256e333ee15d32f11f398"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "94c304acedf93db2788071da7cd354d9457b33f8878a4d97640e5083954d8b85",
+      "htmlSha256": "52c74ae20c2a192e1eb4edde9bbf850dcde261bc8d5b35082eddca7fdca54502"
+    },
+    {
+      "source": "docs/foundation-node-atomization-policy/README.md",
+      "sourceSha256": "638c4302f9369cd2f0e6a752d18011d6667945e75471453bdbcecbd812cefb70",
+      "htmlSha256": "ee8a3ea1d97a283006e191333f3a0a9ba61f2c7dba3b375d38608dfe3f1b0921"
+    },
+    {
+      "source": "docs/foundation-node-atomization-policy/POLICY.md",
+      "sourceSha256": "f0be2736c01cf9057a90c55bc6952d4a80a6c64105226530c9003c547a5567b7",
+      "htmlSha256": "568941cd5510ba4b85b283968bf0ba49700e8d21847057cdd9e5b6632ec00244"
+    },
+    {
+      "source": "docs/foundation-node-atomization-policy/SPEC-BASIS.md",
+      "sourceSha256": "f785884d23fca43c64130bc0c7d9186be39696da05e089707fecee3a6c5ef19d",
+      "htmlSha256": "dda38bfa932e8d5cedba5067f5838e5efeebd4450d3f3b25594458afd437ba3f"
+    },
+    {
+      "source": "docs/foundation-node-atomization-policy/IMPLEMENTATION.md",
+      "sourceSha256": "effbdbc16c91119b4cc120a5faba33dc7799e741fbe17b8a195cdcf64ab55ef9",
+      "htmlSha256": "c686916ed19caf635a6c7bab4731f2919af1c6617d64611c525a1c04c33ad576"
+    },
+    {
+      "source": "docs/foundation-node-atomization-policy/TRACEABILITY.md",
+      "sourceSha256": "16bd20e46b4671fe0767bce45b6d24b902a389869855b4c26239a5790f38c27c",
+      "htmlSha256": "73cede89b350c359a9922c02863e2d06f52d7fb93fd6e1c08d4699d074eddf15"
+    }
+  ],
+  "localLinks": 3482,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot/PDF claim"
+}

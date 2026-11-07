@@ -1,0 +1,6 @@
+{
+  "candidateBodyEqualsAdoptedBody": true,
+  "candidateSourceSha256": "c0213cb12b517d9f1124e29ed6220b902a1c85922a13dda2466cd50a535d597c",
+  "adoptedSourceSha256": "094461c70b6427f154d2344dfd56386a2647162e832e6e9acc229b99cb32d6ad",
+  "scope": "Qualified captured-identity getter body unchanged;production header/version/test integration reviewed separately. No further coalescing selected."
+}

@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2798581b-9ca8-4139-9236-768777dcefb3" name="charl@CHARLES 2026-11-06 17:47:45" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-06T17:47:45.3622830+01:00" queuing="2026-11-06T17:47:45.3622835+01:00" start="2026-11-06T17:47:42.7573378+01:00" finish="2026-11-06T17:47:45.3915278+01:00" />
+  <TestSettings name="default" id="270dbdce-9366-4ca8-8433-4924fff2390b">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-06_17_47_45" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a044028b-5221-4a13-8faa-f04523efd756" testId="bd629886-ee81-ae1d-130a-d6af9ee77eb5" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentAdvisorRefusesOrigin" computerName="CHARLES" duration="00:00:00.0005880" startTime="2026-11-06T17:47:45.3436506+01:00" endTime="2026-11-06T17:47:45.3436797+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a044028b-5221-4a13-8faa-f04523efd756" />
+    <UnitTestResult executionId="04435447-abf1-4357-9a23-9fa4035d567e" testId="0ae49266-ab36-a257-4307-29cc88345cf7" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.NoPhantomRootOrAbsentChildContainer" computerName="CHARLES" duration="00:00:00.0012787" startTime="2026-11-06T17:47:45.3176474+01:00" endTime="2026-11-06T17:47:45.3186281+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04435447-abf1-4357-9a23-9fa4035d567e" />
+    <UnitTestResult executionId="3441aa9c-f18e-4a3e-8d53-0d5a302d501b" testId="b89a6566-de23-119c-b692-40528e8bce70" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.RawEvidenceAndCursorExpire" computerName="CHARLES" duration="00:00:00.0009066" startTime="2026-11-06T17:47:45.3435491+01:00" endTime="2026-11-06T17:47:45.3435769+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3441aa9c-f18e-4a3e-8d53-0d5a302d501b" />
+    <UnitTestResult executionId="56cbe772-27d8-440d-8249-035cf43f4052" testId="8ba2b45a-6b0d-274d-409b-09d73e623a0b" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.ActualNativeCompleteContainers" computerName="CHARLES" duration="00:00:01.0441252" startTime="2026-11-06T17:47:44.2588082+01:00" endTime="2026-11-06T17:47:45.3083116+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="56cbe772-27d8-440d-8249-035cf43f4052" />
+    <UnitTestResult executionId="d91abbf6-d431-4762-bbbd-28e1c0a6f68e" testId="f3750f37-9a70-8f72-52ed-c958fcc5cb41" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactAuthorityMembership" computerName="CHARLES" duration="00:00:00.0023890" startTime="2026-11-06T17:47:45.3167065+01:00" endTime="2026-11-06T17:47:45.3167818+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d91abbf6-d431-4762-bbbd-28e1c0a6f68e" />
+    <UnitTestResult executionId="5a6b11b0-a79a-407e-89d6-e58d168a4a5f" testId="2cc72a22-d6a4-e7de-241d-578637b3bfa2" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentSnapshotRefusesContainer" computerName="CHARLES" duration="00:00:00.0007766" startTime="2026-11-06T17:47:45.3175655+01:00" endTime="2026-11-06T17:47:45.3175954+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a6b11b0-a79a-407e-89d6-e58d168a4a5f" />
+    <UnitTestResult executionId="93fb11f8-3f8a-4bd8-8c61-dd113431ee4b" testId="8e113c62-b08e-19db-b850-5bb088736b00" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.CallerMutationIsIsolated" computerName="CHARLES" duration="00:00:00.0030575" startTime="2026-11-06T17:47:45.3173859+01:00" endTime="2026-11-06T17:47:45.3174148+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="93fb11f8-3f8a-4bd8-8c61-dd113431ee4b" />
+    <UnitTestResult executionId="3ac910ce-59a8-47e6-86db-5d46cdd131aa" testId="251ab760-69e6-ed57-e858-b88e2872ddb0" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: &quot;&lt;order unknown='yes'/&gt;&quot;)" computerName="CHARLES" duration="00:00:00.0006077" startTime="2026-11-06T17:47:45.3172809+01:00" endTime="2026-11-06T17:47:45.3173060+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ac910ce-59a8-47e6-86db-5d46cdd131aa" />
+    <UnitTestResult executionId="400b789d-7c89-44ae-98c4-455fb95ce716" testId="5a936cc8-462b-e073-c4c9-525243f10a37" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.RawCompleteViewExpires" computerName="CHARLES" duration="00:00:00.0010621" startTime="2026-11-06T17:47:45.3429001+01:00" endTime="2026-11-06T17:47:45.3429608+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="400b789d-7c89-44ae-98c4-455fb95ce716" />
+    <UnitTestResult executionId="3981e8c8-97f4-4215-8f08-4645b453ea9f" testId="d061ce73-b659-b486-b9d5-7c555a6ca8ef" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.EqualSchemaIsNotAuthority" computerName="CHARLES" duration="00:00:00.0010125" startTime="2026-11-06T17:47:45.3433310+01:00" endTime="2026-11-06T17:47:45.3433608+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3981e8c8-97f4-4215-8f08-4645b453ea9f" />
+    <UnitTestResult executionId="f9d5362d-31f9-418c-a6ff-95c9e42d2ea6" testId="aaf2a18c-8dac-98cd-a66a-8776f8475d0f" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactInputRootMembership" computerName="CHARLES" duration="00:00:00.0007249" startTime="2026-11-06T17:47:45.3174833+01:00" endTime="2026-11-06T17:47:45.3175089+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9d5362d-31f9-418c-a6ff-95c9e42d2ea6" />
+    <UnitTestResult executionId="89fca880-4a59-49cf-bb01-4fedad05bd2d" testId="d40352bc-3bb3-b9e8-2852-4925609a8184" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.CanceledCaptureRefuses" computerName="CHARLES" duration="00:00:00.0006030" startTime="2026-11-06T17:47:45.3432061+01:00" endTime="2026-11-06T17:47:45.3432476+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89fca880-4a59-49cf-bb01-4fedad05bd2d" />
+    <UnitTestResult executionId="19c70e1c-f834-45d6-a394-b7ce44787e59" testId="c27b41ea-18f2-fa6a-31ee-4254b85ea1a6" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.InputRevocationRefuses" computerName="CHARLES" duration="00:00:00.0007512" startTime="2026-11-06T17:47:45.3186960+01:00" endTime="2026-11-06T17:47:45.3194377+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19c70e1c-f834-45d6-a394-b7ce44787e59" />
+    <UnitTestResult executionId="b0f4657e-205d-4150-9885-176035e848b7" testId="0108d667-525a-271a-89f1-70e619109dc6" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.ForgedContainerRefusesBeforeFields" computerName="CHARLES" duration="00:00:00.0005307" startTime="2026-11-06T17:47:45.3434396+01:00" endTime="2026-11-06T17:47:45.3434713+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0f4657e-205d-4150-9885-176035e848b7" />
+    <UnitTestResult executionId="c5a17887-568f-438c-be8a-e4db59fde6fd" testId="860d87f3-6234-f3b2-6c3d-df583e10fd9c" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: &quot;&lt;order&gt;&lt;amount&gt;bad&lt;/amount&gt;&lt;/order&gt;&quot;)" computerName="CHARLES" duration="00:00:00.0011944" startTime="2026-11-06T17:47:45.3171779+01:00" endTime="2026-11-06T17:47:45.3172192+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5a17887-568f-438c-be8a-e4db59fde6fd" />
+    <UnitTestResult executionId="720f105e-6cc7-43a7-8033-88097f5397fc" testId="ca4f98d2-c291-eaa5-fcf6-0b49691a93e1" testName="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeCopyReissuedExplicitly" computerName="CHARLES" duration="00:00:00.0030416" startTime="2026-11-06T17:47:45.3438637+01:00" endTime="2026-11-06T17:47:45.3439065+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="720f105e-6cc7-43a7-8033-88097f5397fc" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactInputRootMembership" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="aaf2a18c-8dac-98cd-a66a-8776f8475d0f">
+      <Execution id="f9d5362d-31f9-418c-a6ff-95c9e42d2ea6" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="ExactInputRootMembership" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeCopyReissuedExplicitly" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="ca4f98d2-c291-eaa5-fcf6-0b49691a93e1">
+      <Execution id="720f105e-6cc7-43a7-8033-88097f5397fc" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="NativeCopyReissuedExplicitly" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: &quot;&lt;order unknown='yes'/&gt;&quot;)" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="251ab760-69e6-ed57-e858-b88e2872ddb0">
+      <Execution id="3ac910ce-59a8-47e6-86db-5d46cdd131aa" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="NativeFailureDoesNotIssue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.RawCompleteViewExpires" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="5a936cc8-462b-e073-c4c9-525243f10a37">
+      <Execution id="400b789d-7c89-44ae-98c4-455fb95ce716" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="RawCompleteViewExpires" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentAdvisorRefusesOrigin" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="bd629886-ee81-ae1d-130a-d6af9ee77eb5">
+      <Execution id="a044028b-5221-4a13-8faa-f04523efd756" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="DifferentAdvisorRefusesOrigin" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.NoPhantomRootOrAbsentChildContainer" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="0ae49266-ab36-a257-4307-29cc88345cf7">
+      <Execution id="04435447-abf1-4357-9a23-9fa4035d567e" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="NoPhantomRootOrAbsentChildContainer" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: &quot;&lt;order&gt;&lt;amount&gt;bad&lt;/amount&gt;&lt;/order&gt;&quot;)" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="860d87f3-6234-f3b2-6c3d-df583e10fd9c">
+      <Execution id="c5a17887-568f-438c-be8a-e4db59fde6fd" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="NativeFailureDoesNotIssue" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.ForgedContainerRefusesBeforeFields" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="0108d667-525a-271a-89f1-70e619109dc6">
+      <Execution id="b0f4657e-205d-4150-9885-176035e848b7" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="ForgedContainerRefusesBeforeFields" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.CallerMutationIsIsolated" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="8e113c62-b08e-19db-b850-5bb088736b00">
+      <Execution id="93fb11f8-3f8a-4bd8-8c61-dd113431ee4b" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="CallerMutationIsIsolated" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.RawEvidenceAndCursorExpire" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="b89a6566-de23-119c-b692-40528e8bce70">
+      <Execution id="3441aa9c-f18e-4a3e-8d53-0d5a302d501b" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="RawEvidenceAndCursorExpire" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactAuthorityMembership" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="f3750f37-9a70-8f72-52ed-c958fcc5cb41">
+      <Execution id="d91abbf6-d431-4762-bbbd-28e1c0a6f68e" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="ExactAuthorityMembership" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.CanceledCaptureRefuses" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="d40352bc-3bb3-b9e8-2852-4925609a8184">
+      <Execution id="89fca880-4a59-49cf-bb01-4fedad05bd2d" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="CanceledCaptureRefuses" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.EqualSchemaIsNotAuthority" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="d061ce73-b659-b486-b9d5-7c555a6ca8ef">
+      <Execution id="3981e8c8-97f4-4215-8f08-4645b453ea9f" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="EqualSchemaIsNotAuthority" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.ActualNativeCompleteContainers" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="8ba2b45a-6b0d-274d-409b-09d73e623a0b">
+      <Execution id="56cbe772-27d8-440d-8249-035cf43f4052" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="ActualNativeCompleteContainers" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.InputRevocationRefuses" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="c27b41ea-18f2-fa6a-31ee-4254b85ea1a6">
+      <Execution id="19c70e1c-f834-45d6-a394-b7ce44787e59" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="InputRevocationRefuses" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentSnapshotRefusesContainer" storage="d:\development\bosak\docs\foundation-native-container-prototype\prototype\bin\release\net10.0\bosak.schema.container.prototype.tests.dll" id="2cc72a22-d6a4-e7de-241d-578637b3bfa2">
+      <Execution id="5a6b11b0-a79a-407e-89d6-e58d168a4a5f" />
+      <TestMethod codeBase="D:\Development\Bosak\docs\foundation-native-container-prototype\prototype\bin\Release\net10.0\Bosak.Schema.Container.Prototype.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.ContainerPrototype.NativeContainerTests" name="DifferentSnapshotRefusesContainer" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="bd629886-ee81-ae1d-130a-d6af9ee77eb5" executionId="a044028b-5221-4a13-8faa-f04523efd756" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ae49266-ab36-a257-4307-29cc88345cf7" executionId="04435447-abf1-4357-9a23-9fa4035d567e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b89a6566-de23-119c-b692-40528e8bce70" executionId="3441aa9c-f18e-4a3e-8d53-0d5a302d501b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8ba2b45a-6b0d-274d-409b-09d73e623a0b" executionId="56cbe772-27d8-440d-8249-035cf43f4052" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f3750f37-9a70-8f72-52ed-c958fcc5cb41" executionId="d91abbf6-d431-4762-bbbd-28e1c0a6f68e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2cc72a22-d6a4-e7de-241d-578637b3bfa2" executionId="5a6b11b0-a79a-407e-89d6-e58d168a4a5f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e113c62-b08e-19db-b850-5bb088736b00" executionId="93fb11f8-3f8a-4bd8-8c61-dd113431ee4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="251ab760-69e6-ed57-e858-b88e2872ddb0" executionId="3ac910ce-59a8-47e6-86db-5d46cdd131aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a936cc8-462b-e073-c4c9-525243f10a37" executionId="400b789d-7c89-44ae-98c4-455fb95ce716" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d061ce73-b659-b486-b9d5-7c555a6ca8ef" executionId="3981e8c8-97f4-4215-8f08-4645b453ea9f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aaf2a18c-8dac-98cd-a66a-8776f8475d0f" executionId="f9d5362d-31f9-418c-a6ff-95c9e42d2ea6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d40352bc-3bb3-b9e8-2852-4925609a8184" executionId="89fca880-4a59-49cf-bb01-4fedad05bd2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c27b41ea-18f2-fa6a-31ee-4254b85ea1a6" executionId="19c70e1c-f834-45d6-a394-b7ce44787e59" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0108d667-525a-271a-89f1-70e619109dc6" executionId="b0f4657e-205d-4150-9885-176035e848b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="860d87f3-6234-f3b2-6c3d-df583e10fd9c" executionId="c5a17887-568f-438c-be8a-e4db59fde6fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ca4f98d2-c291-eaa5-fcf6-0b49691a93e1" executionId="720f105e-6cc7-43a7-8033-88097f5397fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="16" executed="16" passed="16" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.31]   Discovering: Bosak.Schema.Container.Prototype.Tests&#xD;
+[xUnit.net 00:00:00.35]   Discovered:  Bosak.Schema.Container.Prototype.Tests&#xD;
+[xUnit.net 00:00:00.37]   Starting:    Bosak.Schema.Container.Prototype.Tests&#xD;
+[xUnit.net 00:00:01.48]   Finished:    Bosak.Schema.Container.Prototype.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

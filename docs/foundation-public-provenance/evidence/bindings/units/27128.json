@@ -1,0 +1,69 @@
+{
+  "processId": 27128,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "0d39ae4134bfb55c4235ac8f167fabc475b3c69d664516eabcadd90e9de36c0e",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "3062f15d0217582b8945bd75ae1839e9a5797a8c8d1a06aeb41b308ea09b6024",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "e247854fd0768888c2ab83bf756623cc506103d6af2b19cd7a7c1f2f52f300bc",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "d42b26ab0ef4eed8ec7312e74ff953024d429ed36771598aac637630cfbe67dd",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "4a1bc2b2262a325e8b21abfca7ea7c725331778c35b8953913903e649e479509",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "af0b1e81dddb729e77220ec2234e0bddfc0e6f7c16bd63fa80716d9c12cdc942",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "e294164593e69dd692e2fe9604560c107e409bdb96725a8fffc79890ad090002",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XQuery.Tests",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XQuery.Tests.dll",
+      "sha256": "07d802a165f036950d35517a2e54c376e24d648424f96cc9f04e33c23ed0f02f",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XQuery",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XQuery.Tests\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "5027a29308ba22876e6536e8215c7e9253331fe73bb895298a86dad3befb03a2",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

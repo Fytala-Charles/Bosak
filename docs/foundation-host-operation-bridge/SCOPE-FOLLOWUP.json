@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-05",
+  "sourceVersion": "1.71.0",
+  "historicalAudit": "docs/foundation-r3-scope/STATUS.json",
+  "completedWork": [
+    "AH-01"
+  ],
+  "nextCoreTask": "AH-02",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "publicProposedTypePresence": {
+    "present": 40,
+    "total": 47,
+    "missing": 7
+  },
+  "remainingWork": [
+    "AH-02",
+    "AH-03",
+    "PV-01",
+    "NU-01",
+    "SC-01",
+    "R4-01",
+    "R4-02",
+    "R5-01",
+    "PK-01"
+  ],
+  "scope": "Only the private shared host operation prerequisite is qualified; all 43 requirements/14 decisions/six obligations retain their broader uncompleted scope. No new public XQuery/XSLT type was added.",
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

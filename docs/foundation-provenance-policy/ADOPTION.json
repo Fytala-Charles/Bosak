@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.76.0",
+  "productionChanged": false,
+  "policyBeforeImplementation": true,
+  "beforeHashes": {
+    "docs/foundation-public-xslt/MANIFEST.json": "b65309781d69cc051a1c2897f415ccf83cfe995ce322bcee637c7f47792f5691",
+    "docs/foundation-public-xslt/PLAN.json": "4ae7961f00187e6523e3e5193c150fe95d8d0da7f03e2bb5cba7acc52df48be6",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+    "docs/foundation-r3-scope/REQUIREMENTS.json": "66f2463529ec136cdd7f3ac0cd4afad8d89cfb93cb131c73311e1dc99170dc81",
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "f3a71b08fb6d5a05b557563fd993de3669149cd58df81f7982991247843a7242",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": "d732c8bd6f42ee807303ba95ccfddb537eb8f6c56be57ac19ef9b15443545dba",
+    "src/Bosak.XPath.Runtime/Vm/QueryAtomizedSequence.cs": "f968c7b30d098132c826c8b64ae41c6a2ee3c4d0ce1d46dbd1cbb2fcaaefc65e",
+    "src/Bosak.XPath.Api/Schema/ConstructedAtomicPlan.cs": "ad2ee12f53cae3c7663b3aa1668dfe86513f9c6a83640979a75a7ad1c7ff5022",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "2bfc19eeaae8384c234ee13c45d231dd075ef8785bf35c066172b8ca5b1b58f7"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.5 Sequences",
+        "2.7.1 Representation of Types",
+        "2.7.5 Atomic Values"
+      ]
+    },
+    {
+      "revision": "W3C REC-xpath-functions-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sections": [
+        "2.4 fn:data"
+      ]
+    }
+  ],
+  "adoptionScope": "Atomic value/type identity and ordered atomization distinguish an atomic carrier from a complete provider list/union container. The unleased observation and revocation policy below is Bosak host policy, not a W3C requirement. This records policy only; no new runtime behavior or broad conformance adoption.",
+  "intentionalLimits": "Only engine-admitted cached metadata may be observed in a future bounded helper. Plain/flattened values have no inferred provenance. Current-compatible stable entries cannot establish live operation authority; the context-free helper will return false for this profile until a separately qualified leased observation route exists. General empty/list/union transport remains required and unwaived; scalar observation is not full container support.",
+  "separateEvidence": "Historical reviewed proposal hashes remain distinct from this dated policy selection and current fixture/binary execution. Owner/schema/C45 acceptance and publication remain pending."
+}

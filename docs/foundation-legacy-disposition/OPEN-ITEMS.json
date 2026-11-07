@@ -1,0 +1,33 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-L01",
+      "status": "CoreDispositionCompleteWithScope_OwnerNativeMigrationAcceptancePending"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderBudgetQualificationRequired"
+    },
+    {
+      "id": "DirectLegacyBridge",
+      "status": "FreshExplicitOwnerRequirementAndQualificationBeforeAnyBridge"
+    },
+    {
+      "id": "PersistentConstructionNilNoValue",
+      "status": "Open"
+    },
+    {
+      "id": "NU-01",
+      "status": "Open"
+    },
+    {
+      "id": "SC-01",
+      "status": "Open"
+    },
+    {
+      "id": "R4-R7",
+      "status": "Unwaived"
+    }
+  ]
+}

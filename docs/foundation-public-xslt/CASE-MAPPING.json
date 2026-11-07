@@ -1,0 +1,258 @@
+{
+  "cases": [
+    {
+      "id": "PX01",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX01_PublicCompileAndCapture"
+      ]
+    },
+    {
+      "id": "PX02",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX02_BorrowedRoutes"
+      ]
+    },
+    {
+      "id": "PX03",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: \"template\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: \"shared\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: \"distinct\")"
+      ]
+    },
+    {
+      "id": "PX04",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX04_AbsentGlobalContext"
+      ]
+    },
+    {
+      "id": "PX05",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: \"#unnamed\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: \"#default\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: \"named\")"
+      ]
+    },
+    {
+      "id": "PX06",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: \"assessor\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: \"schema\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: \"include\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: \"root\")"
+      ]
+    },
+    {
+      "id": "PX07",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX07_FrozenStatics"
+      ]
+    },
+    {
+      "id": "PX08",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"raw\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"total\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"zero-operations\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"template\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"time\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"context\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"operations\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"base\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"count\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"messages\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"per\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: \"mode\")"
+      ]
+    },
+    {
+      "id": "PX09",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX09_ZeroCaps"
+      ]
+    },
+    {
+      "id": "PX10",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: \"operations\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: \"total\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: \"per\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: \"count\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: \"messages\")"
+      ]
+    },
+    {
+      "id": "PX11",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: \"local-operations\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: \"inherited-operations\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: \"time\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: \"local-cancel\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: \"inherited-cancel\")"
+      ]
+    },
+    {
+      "id": "PX12",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX12_ForeignExecutable"
+      ]
+    },
+    {
+      "id": "PX13",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: \"foreign\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: \"default\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: \"missing-role\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: \"duplicate\")"
+      ]
+    },
+    {
+      "id": "PX14",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: \"map\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: \"loader\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: \"node\")"
+      ]
+    },
+    {
+      "id": "PX15",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX15_ActualCardinalities"
+      ]
+    },
+    {
+      "id": "PX16",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX16_SecondaryOutputs"
+      ]
+    },
+    {
+      "id": "PX17",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX17_OriginalSerializationError"
+      ]
+    },
+    {
+      "id": "PX18",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX18_CopiedOptions"
+      ]
+    },
+    {
+      "id": "PX19",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX19_PerRunReceipts"
+      ]
+    },
+    {
+      "id": "PX20",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX20_RawCancellation"
+      ]
+    },
+    {
+      "id": "PX21",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX21_SerializerTailAndCleanup"
+      ]
+    },
+    {
+      "id": "PX22",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: \"text\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: \"xhtml\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: \"xml\")",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: \"html\")"
+      ]
+    },
+    {
+      "id": "PX23",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: True)",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: False)"
+      ]
+    },
+    {
+      "id": "PX24",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership"
+      ]
+    },
+    {
+      "id": "PX25",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX25_CompileCancellation"
+      ]
+    },
+    {
+      "id": "PX26",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: False)",
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: True)"
+      ]
+    },
+    {
+      "id": "PX27",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX27_ExpiredOperation"
+      ]
+    },
+    {
+      "id": "PX28",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX28_QueryPolicyUnchanged"
+      ]
+    },
+    {
+      "id": "PX29",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX29_PartialSecondaryOutput"
+      ]
+    },
+    {
+      "id": "PX30",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX30_SerializationAndMultipleCleanupErrors"
+      ]
+    },
+    {
+      "id": "PX31",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "Bosak.Xslt.Tests.PublicXsltSessionTests.PX31_BoundedCostObservation"
+      ]
+    }
+  ],
+  "additionalPassedTestCount": false
+}

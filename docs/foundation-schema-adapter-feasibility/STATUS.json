@@ -1,0 +1,17 @@
+{
+  "checkpoint": "TA-45",
+  "sourceVersion": "1.81.0",
+  "feasibilityReviewComplete": true,
+  "mappingRows": 10,
+  "plannedControls": 12,
+  "adapterImplemented": false,
+  "newTestsRun": 0,
+  "nativePublicBindingQualified": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "packagesBuilt": false,
+  "pushPerformed": false,
+  "requirementsWaived": 0,
+  "next": "PV-Q03a isolated provider adapter prototype with refreshed immutable adoption and exact candidate references; no sibling source edit."
+}

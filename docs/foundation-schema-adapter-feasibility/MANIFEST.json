@@ -1,0 +1,12 @@
+{
+  "ADOPTION.json": "5b527989905f359d6b058d14e12bde8dd9e9b8e33d747a6c33b5bfca93b1f37a",
+  "evidence/DOCUMENTATION-CHECKS.json": "fdf84444292b1076e669a7417b600e9a9cc356ca837b3e773534bde5c67a1172",
+  "MAPPING.json": "f6d76c3dd0a22a0aacd0177d5bd290ab8d0247ad14d547b76bda37e6a7c97c1c",
+  "PROTOTYPE-CASES.json": "7a09b7b7da92b2545bb0d229aa3826bd4208bf7937617ccd13fa7b8cad4b9abb",
+  "README.md": "fc193be078db47c2634769df8d1e5fee4b5e6d3ca3476d92aae2b075ec8b7126",
+  "STATUS.json": "bf39f605776bc7227680c1d9c074261371f3699d764c1f01a4ed552158c9f4b7",
+  "tools/check_docs.py": "3cad840e6b4cf533713801213de3bb5805ddab885128d7d9344481846d7e7d5d",
+  "tools/render.cjs": "664506a61f3352abe176d7a5f54ec2771d61dfa536aa0481b3b486a00c92a660",
+  "tools/verify.py": "b5adcf5c4da3a4a518319531260cfd3ad7b6abdfc1c978a8752b9e34aaddf96c",
+  "tools/verify_compatibility.py": "a44ad15b2ffe0447951e4fb120ec2901aa1a0b6d8a14139f1d77da38985f7f4b"
+}

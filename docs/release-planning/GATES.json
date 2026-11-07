@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceVersion": "1.61.1",
+  "sourceVersion": "1.81.1",
   "targetReleaseVersion": null,
   "releaseDate": null,
   "apiFrozen": false,
@@ -55,7 +55,7 @@
       "schemaAlignmentGuidanceEvidence": "https://github.com/Fytala-Charles/Bosak/issues/468#issuecomment-6563123351",
       "schemaAlignmentIsFormalReturn": false,
       "consolidatedPlan": "docs/foundation-r2-consolidation/PLAN.json",
-      "nextCoreTask": "R2 is ClosedWithScope; continue the qualified R3 implementation queue recorded by the current R3 gate.",
+      "nextCoreTask": "PV-Q03 actual public native Schema provider adapter feasibility and immutable adoption. TA-44 passes451 baseline/source/unchanged-binary cases with exact nine-engine loads on unchanged1.81.0; counts overlap and public binding/budget/owner acceptance remain open.",
       "captureDeclarationCandidate": "docs/foundation-bcap-candidate/README.md",
       "captureRuntimeCandidate": "docs/foundation-bcap-runtime/evidence/STATUS.json",
       "captureControlCandidate": "docs/foundation-bcap-controls/evidence/STATUS.json",
@@ -107,7 +107,13 @@
       "schemaAcceptancePreparation": "docs/schema-acceptance-preparation/README.md",
       "w1ImplementationStatus": "Internal W1-A and bounded W1-B qualified; wider/public slices pending",
       "w1GateEvidence": "docs/foundation-r2-closure/GATE.json",
-      "scopedClosure": "docs/foundation-r2-closure/CLOSURE.json"
+      "scopedClosure": "docs/foundation-r2-closure/CLOSURE.json",
+      "laterSignatureReviewRequired": true,
+      "laterSignatureReviewItems": [
+        "CV-ENTRY-01"
+      ],
+      "laterSignatureReviewEvidence": "docs/foundation-compatible-admission/DISPOSITION.json",
+      "laterSignatureCoreDisposition": "SelectedForBoundedImplementation"
     },
     {
       "id": "R3",
@@ -125,7 +131,7 @@
       "w1EntryGate": "Ready for implementation",
       "w1InternalAcceptancePassed": 18,
       "w1Qualification": "docs/foundation-w1-schema-association/STATUS.json",
-      "nextCoreTask": "Implement internal metadata-only original-facts mode with NotRequested state, then selected public nilled profile under NP01-NP24. Data/provenance atomization separately; R3 InProgress, R4-R7 pending.",
+      "nextCoreTask": "PV-Q03 actual public native Schema provider adapter feasibility and immutable adoption. TA-44 passes451 baseline/source/unchanged-binary cases with exact nine-engine loads on unchanged1.81.0; counts overlap and public binding/budget/owner acceptance remain open.",
       "w1AQualification": "docs/foundation-w1-neutral-admission/STATUS.json",
       "w1BQualification": "docs/foundation-w1-schema-association/STATUS.json",
       "associationControlsPassed": 33,
@@ -156,7 +162,45 @@
       "nodeFactsPreparation": "docs/foundation-node-facts-plan/STATUS.json",
       "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
       "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json",
-      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/STATUS.json"
+      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/STATUS.json",
+      "nodeMetadataQualification": "docs/foundation-node-metadata-reader/STATUS.json",
+      "publicNodeNilledQualification": "docs/foundation-public-node-nilled/STATUS.json",
+      "publicNilledCostFollowup": "Bounded synthetic reduction qualified: warm 31848 to 1448 bytes/query and 15257 to 8607 callbacks, identical origin/facts/tuple and metadata counts. Actual native workloads/owner budgets remain pending.",
+      "publicNilledCostQualification": "docs/foundation-public-nilled-cost/STATUS.json",
+      "nodeAtomizationPolicy": "docs/foundation-node-atomization-policy/IMPLEMENTATION.md",
+      "nodeAtomizationPolicySelected": true,
+      "publicDataActivated": true,
+      "publicNodeDataQualification": "docs/foundation-public-node-data/STATUS.json",
+      "sourcefreeConstructionPolicy": "docs/foundation-sourcefree-construction-policy/IMPLEMENTATION.md",
+      "sourcefreeConstructionPolicySelected": true,
+      "sourcefreeConstructorActivated": true,
+      "providerOperationLifetime": "docs/foundation-provider-operation-lifetime/README.md",
+      "providerOperationAdmissionImplemented": true,
+      "nextImplementation": "PV-Q05 exact1.81.1 owner workload/budget and public-provider adoption gap review",
+      "publicConstructionQualification": "docs/foundation-public-construction/README.md",
+      "compatibleViewPolicy": "docs/foundation-compatible-view-policy/POLICY.md",
+      "compatibleViewActivated": true,
+      "compatibleSignatureNeed": "CV-ENTRY-01",
+      "compatibleSignatureAdopted": false,
+      "previewRecipe": "docs/foundation-compatible-view-policy/packaging/RECIPE.md",
+      "previewPackagesBuilt": false,
+      "pairedProviderPrerequisite": "docs/foundation-paired-provider-lifetime/README.md",
+      "multiAdvisorPrerequisiteImplemented": true,
+      "previewMetadata": "docs/foundation-captured-identity-production/evidence/PACKAGE-PREFLIGHT.json",
+      "compatibleAdmissionQualification": "docs/foundation-compatible-admission/README.md",
+      "compatiblePublicCoreDisposition": "ImplementedBoundedCoreSelection",
+      "compatibleCacheRequirement": "CV-CACHE-01",
+      "compatibleIdentityCacheImplemented": true,
+      "compatibleCacheQualification": "docs/foundation-compatible-cache/STATUS.json",
+      "publicCompatibleQualification": "docs/foundation-public-compatible/STATUS.json",
+      "compatibleSignatureCoreImplemented": true,
+      "compatibleSignatureDisposition": "ImplementedBoundedCoreSelection; external owner acceptance pending",
+      "remainingScopeAudit": "docs/foundation-r3-scope/STATUS.json",
+      "remainingScopePlan": "docs/foundation-r3-scope/PLAN.json",
+      "nextBoundedImplementation": "PV-Q05 exact1.81.1 owner workload/budget and public-provider adoption gap review",
+      "currentScopeFollowup": "docs/foundation-captured-identity-production/STATUS.json",
+      "hostOperationBridgeQualification": "docs/foundation-host-operation-bridge/STATUS.json",
+      "publicXQueryQualification": "docs/foundation-public-xquery/STATUS.json"
     },
     {
       "id": "R4",
@@ -186,7 +230,16 @@
       "dependsOn": [
         "R5"
       ],
-      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel. Final release SemVer and migration notes must account for the source-default overload ambiguity."
+      "exitEvidence": "Select SemVer, immutable packages/provenance, migration guide and fresh-cache package-only consumers; preparation may run in parallel. Final release SemVer and migration notes must account for the source-default overload ambiguity.",
+      "previewPreparation": "RecipeAndRefreshedMetadataOnly",
+      "previewRecipe": "docs/foundation-compatible-view-policy/packaging/RECIPE.md",
+      "candidateCommit": null,
+      "previewVersion": null,
+      "packagesBuilt": false,
+      "previewMetadata": "docs/foundation-captured-identity-production/evidence/PACKAGE-PREFLIGHT.json",
+      "selectedPreviewRoot": "Bosak.Xslt",
+      "selectedPreviewPackageClosure": 9,
+      "previewScope": "docs/foundation-provider-qualification/PACKAGE-SCOPE.json"
     },
     {
       "id": "R7",
@@ -198,5 +251,21 @@
       ],
       "exitEvidence": "Concrete reviewed artifacts, release approval, publication receipts and public-package verification; consumer pin upgrades remain separate."
     }
-  ]
+  ],
+  "xsltAdmissionQualification": "docs/foundation-xslt-admission/STATUS.json",
+  "xsltCompletionQualification": "docs/foundation-xslt-completion/STATUS.json",
+  "hostOutcomeQualification": "docs/foundation-host-outcome/STATUS.json",
+  "publicXsltQualification": "docs/foundation-public-xslt/STATUS.json",
+  "provenancePolicy": "docs/foundation-provenance-policy/POLICY.json",
+  "publicProvenanceQualification": "docs/foundation-public-provenance/STATUS.json",
+  "leasedProvenanceQualification": "docs/foundation-leased-provenance/STATUS.json",
+  "containerTransportPolicy": "docs/foundation-container-policy/STATUS.json",
+  "publicContainerQualification": "docs/foundation-public-container/STATUS.json",
+  "compatibleContainerQualification": "docs/foundation-compatible-container/STATUS.json",
+  "widerPrimitivePolicy": "docs/foundation-primitive-policy/STATUS.json",
+  "publicPrimitivesQualification": "docs/foundation-public-primitives/STATUS.json",
+  "uriBinaryDisposition": "docs/foundation-uri-binary-disposition/STATUS.json",
+  "legacyEvidenceDisposition": "docs/foundation-legacy-disposition/STATUS.json",
+  "providerQualificationReadiness": "docs/foundation-provider-qualification/STATUS.json",
+  "nativeSchemaLaneQualification": "docs/foundation-native-schema-lane/STATUS.json"
 }

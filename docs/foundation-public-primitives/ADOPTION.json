@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-06",
+  "beforeVersion": "1.80.0",
+  "candidateVersion": "1.81.0",
+  "beforeHashes": {
+    "docs/foundation-primitive-policy/MANIFEST.json": "be4463f475e79f5937ef4950b1ee1389bff4344db42b0e642d68ce7961cf3aa1",
+    "docs/foundation-primitive-policy/POLICY.json": "057e076acd49d69a67f3c468be00a44c2709346bdc7b20ab63a7d40b4638ecca",
+    "docs/foundation-primitive-policy/CARRIER-MATRIX.json": "a2bfbcb0aa7221e9b60eb274e24571592a27407a813f67278f9a989433f9939c",
+    "src/Directory.Build.props": "100095b54b9ce2eeda2b9ee5876ddc34aeed422ce5f7fac1d985ef1eabe5e748",
+    "src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs": "3ae985bf53a60ad6f2320b6be427da64cb52292135afbfdb3fbc1b7fcf7bb0c5",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "ed0ce4259a75c54fea4143465915aa203924809a9139abc5307a97c195562a3a",
+    "tests/Bosak.XPath.Runtime.Tests/PublicTypedIdentityTests.cs": "0515264ee063d4d1906b23f4058eb18339018ebe4e82dbf857c2ab26260047bf",
+    "tests/Bosak.XPath.Runtime.Tests/PublicCompatibleTests.cs": "5a68b836bd8d98596f2cf93d604df2e70cc82ed09c5623fe03e74f91c196218f",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "e9319bac2fc4dcef32feabdd470f3293ce0e9b13815a80d73ade88de0794bc4a"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "2.7.7",
+        "3.3.1.2",
+        "3.3.2",
+        "3.3.3",
+        "5.14"
+      ]
+    }
+  ],
+  "selectedPolicy": "docs/foundation-primitive-policy/POLICY.json",
+  "scope": "PV-T05 activate explicit eleven-public-factory-kind complete transport in ordinary and compatible profiles. Preserve existing payload representations without conversion; reject null duration/string and malformed QName field structure. Existing complete admission, quotas, raw lifetime, paired proof checks and scalar registry/evaluation remain unchanged. No public declaration/type/layout/friend/reference delta.",
+  "intentionalExtensions": "Bosak carrier-preserving host boundary and structural subset follow PP01-PP18 Core policy beyond XDM API requirements. No independent lexical/schema/calendar validity, scalar/numeric/construction expansion, invented Uri/Binary public factories or owner/native/budget/freeze/publication acceptance."
+}

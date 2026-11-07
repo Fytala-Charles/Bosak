@@ -1,0 +1,5 @@
+  Determining projects to restore...
+  Restored /work/candidate/source/src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj (in 91 ms).
+  Restored /work/candidate/source/src/Bosak.XmlDb.Core/Bosak.XmlDb.Core.csproj (in 91 ms).
+  Restored /work/candidate/source/src/Bosak.XmlDb.Storage/Bosak.XmlDb.Storage.csproj (in 91 ms).
+  Restored /work/candidate/source/qualification/Probe/Fx009Probe.csproj (in 91 ms).

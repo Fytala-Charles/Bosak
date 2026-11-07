@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-05",
+  "scope": "Private captured-host context binding correction before final qualification; no ordinary engine or public language behavior changed.",
+  "finding": "Real static-parameter case returned empty when the existing explicit transform evaluator received a fresh isolated child without its already-captured effective static bindings. The declaration/profile capture already records these values.",
+  "selection": "Copy the executable effective plain static values at host construction and bind them into the isolated child before dispatch, overriding dynamic caller variables with the same names. Preserve the immutable compiled static context, not a caller-owned dictionary.",
+  "specification": "Existing immutable XSLT REC-xslt-30-20170608 capture/static-context basis in ADOPTION.json and the retained BCAP cohort; this adapts the captured producer to existing semantics rather than changing static parameter evaluation.",
+  "beforeSourceSha256": "294f6cc4a98d07d48480feca90814dca236475e41a7fa3303356750fbc4a6d70",
+  "failedReceipts": [
+    "host-bridge-xslt-focused.log",
+    "host-bridge-static-retry.log"
+  ]
+}

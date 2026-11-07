@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-07",
+  "scenario": "PF-03 bounded native decimal public consumer subset pilot",
+  "sourceVersion": "1.81.0",
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "baselineRun": false,
+  "comparisonRatio": null,
+  "scope": "Candidate-only serial whole request/assessment/admission/data/dispose cycle;includes parse and guard overhead;not owner workload or regression acceptance.",
+  "warmup": 10,
+  "iterations": 100,
+  "runtime": "10.0.11",
+  "architecture": "X64",
+  "schemaSha256": "7d986ca6f13fe00bd4cd6e31c02b8aa2907f17c37dbeffd1399ae301616e2bed",
+  "instanceSha256": "2a917fc07afa664663dcf0db65d6a9fe506e3be70ea1bd401b71916dc208caec",
+  "elapsedMs": 8092.3709,
+  "cyclesPerSecond": 12.357317927679267,
+  "latencyMs": {
+    "min": 75.3231,
+    "median": 79.5632,
+    "p95": 90.2115,
+    "max": 92.7878
+  },
+  "allocatedBytes": 14941640,
+  "allocatedBytesPerCycle": 149416.4,
+  "gcDeltas": [
+    0,
+    0,
+    0
+  ],
+  "retainedBefore": 1023688,
+  "retainedAfter": 1035040,
+  "retainedDeltaBytes": 11352,
+  "outputRootsAliveAfterForcedGc": 0,
+  "retentionScope": "Weak roots and whole-process managed memory observation only;not proof of zero retention or an accepted resource budget."
+}

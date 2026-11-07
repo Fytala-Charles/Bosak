@@ -15,6 +15,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 05-11-2026     | Share adjacent metadata guards and avoid authority delegate allocation (1.61.1).         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Add explicit metadata-only NotRequested observation mode (1.62.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 05-11-2026     | Share adjacent live proofs and call issuer guards directly (1.63.1). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 05-11-2026     | Stage original typed values into resident scalar output (1.64.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 07-11-2026     | Adopt qualified callback-free captured issuer identity guards (1.81.1).                   |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Schema;
 using Bosak.XPath.Core.Xdm;
@@ -28,8 +35,8 @@ internal interface IQueryNodeFactsIssuer : IQueryTypedContainerIssuer
     bool OwnsNode(IXdmNode node, ISchemaNodeFacts facts, ISchemaAssessmentInput input, ISchemaAssessmentOrigin origin);
 }
 
-/// <summary>Distinguishes an absent typed value from an unsupported read and a supported empty value.</summary>
-internal enum QueryNodeTypedValueKind { Absent, Unsupported, Supported }
+/// <summary>Distinguishes unrequested typed values from absent, unsupported and supported observations.</summary>
+internal enum QueryNodeTypedValueKind { Absent, Unsupported, Supported, NotRequested }
 
 /// <summary>Uncached original facts whose every observation requires the live raw operation.</summary>
 internal sealed class QueryNodeFacts(Action check, ISchemaComponentHandle type, ISchemaComponentHandle? declaration,
@@ -42,10 +49,10 @@ internal sealed class QueryNodeFacts(Action check, ISchemaComponentHandle type, 
     internal bool IsNilled { get { check(); return nilled; } }
     internal XdmNodeKind NodeKind { get { check(); return nodeKind; } }
     internal QueryNodeTypedValueKind TypedValueKind { get { check(); return kind; } }
-    internal QueryTypedContainer TypedValue { get { check(); return value ?? throw new NotSupportedException("Original typed value is absent or unsupported."); } }
+    internal QueryTypedContainer TypedValue { get { check(); return value ?? throw new NotSupportedException("Original typed value was not requested, is absent or is unsupported."); } }
 }
 
-/// <summary>Stages authenticated original metadata and a complete bounded typed container without caching.</summary>
+/// <summary>Stages authenticated original metadata with an optional complete typed container without caching.</summary>
 internal sealed class QueryNodeFactsReader
 {
     private readonly QuerySourceSession.Operation _operation;
@@ -77,22 +84,31 @@ internal sealed class QueryNodeFactsReader
         _operation.RequireMember(_snapshot); _token.ThrowIfCancellationRequested(); _issuer.ThrowIfUnavailable(_token);
         _operation.Check(); _input.ThrowIfUnavailable(_token); _operation.Check(); _issuer.ThrowIfUnavailable(_token); _token.ThrowIfCancellationRequested();
     }
-    private T Call<T>(Func<T> callback)
-    { CheckLive(); var result=callback(); CheckLive(); return result; }
     private void CheckBinding()
     {
+        // Each post-proof also establishes the next callback's live precondition.
+        // No provider callback or cached observation occurs between these boundaries.
         CheckLive();
-        if(!ReferenceEquals(Call(()=>_issuer.Environment),_environment))throw new ArgumentException("Foreign facts environment.");
-        if(!Call(()=>_issuer.OwnsInput(_input,_snapshot.Input)))throw new ArgumentException("Foreign facts input binding.");
-        if(!Call(()=>_issuer.OwnsOrigin(_origin,_input,_snapshot.Input)))throw new ArgumentException("Foreign original assessment.");
-        if(_authority is not null&&!ReferenceEquals(Call(()=>_issuer.Authority),_authority))throw new ArgumentException("Selected authority changed.");
+        var environment=_issuer.Environment;CheckLive();
+        if(!ReferenceEquals(environment,_environment))throw new ArgumentException("Foreign facts environment.");
+        bool inputOwned=_issuer.OwnsInput(_input,_snapshot.Input);CheckLive();
+        if(!inputOwned)throw new ArgumentException("Foreign facts input binding.");
+        bool originOwned=_issuer.OwnsOrigin(_origin,_input,_snapshot.Input);CheckLive();
+        if(!originOwned)throw new ArgumentException("Foreign original assessment.");
+        if(_authority is not null)
+        {
+            var authority=_issuer.Authority;CheckLive();
+            if(!ReferenceEquals(authority,_authority))throw new ArgumentException("Selected authority changed.");
+        }
     }
     private void CheckFacts()
     {
         CheckBinding(); _operation.RequireNodeOwner(_snapshot,_node); CheckBinding();
-        if(!Call(()=>_issuer.OwnsFacts(_facts)))throw new ArgumentException("Unissued original facts.");
+        bool factsOwned=_issuer.OwnsFacts(_facts);CheckLive();
+        if(!factsOwned)throw new ArgumentException("Unissued original facts.");
         CheckBinding();
-        if(!Call(()=>_issuer.OwnsNode(_node,_facts,_input,_origin)))throw new ArgumentException("Foreign node/facts/input/origin tuple.");
+        bool tupleOwned=_issuer.OwnsNode(_node,_facts,_input,_origin);CheckLive();
+        if(!tupleOwned)throw new ArgumentException("Foreign node/facts/input/origin tuple.");
         CheckBinding();
     }
     private T Read<T>(Func<T> getter)
@@ -116,7 +132,7 @@ internal sealed class QueryNodeFactsReader
         if(_declaration is not null){CheckOwnedType(_declaration);CheckFacts();}
     }
 
-    internal QueryNodeFacts Read()
+    internal QueryNodeFacts Read(bool metadataOnly = false)
     {
         CheckFacts();
         var nodeKind=Read(()=>_node.NodeKind);
@@ -126,8 +142,8 @@ internal sealed class QueryNodeFactsReader
         if(!ReferenceEquals(origin,_origin))throw new ArgumentException("Original facts origin differs.");
         bool absent=Read(()=>_facts.HasNoTypedValue), nilled=Read(()=>_facts.IsNilled);
         if(nilled&&(absent||nodeKind!=XdmNodeKind.Element))throw new ArgumentException("Inconsistent nilled facts.");
-        QueryTypedContainer? value=null; var kind=QueryNodeTypedValueKind.Absent;
-        if(!absent)
+        QueryTypedContainer? value=null; var kind=metadataOnly ? QueryNodeTypedValueKind.NotRequested : QueryNodeTypedValueKind.Absent;
+        if(!metadataOnly&&!absent)
         {
             var outcome=Read(()=>_facts.ReadTypedValue(_token)) ?? throw new ArgumentException("Missing facts typed-value outcome.");
             var resultKind=Read(()=>outcome.Kind);
@@ -146,10 +162,58 @@ internal sealed class QueryNodeFactsReader
         }
         CheckStored(); return new QueryNodeFacts(CheckStored,_type!,_declaration,_origin,absent,nilled,nodeKind,kind,value);
     }
+    internal XdmValue Atomize(XdmNodeKind expectedKind,int maxCached,int faultAfter=-1)
+    {
+        var metadata=Read(true);
+        var kind=metadata.NodeKind;
+        if(kind!=expectedKind||kind is not(XdmNodeKind.Element or XdmNodeKind.Attribute))throw new ArgumentException("Original node kind changed.");
+        if(metadata.HasNoTypedValue)
+        {
+            CheckStored();
+            if(kind==XdmNodeKind.Attribute)throw new ArgumentException("An attribute cannot have an absent typed value.");
+            throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
+        }
+        bool nilled=metadata.IsNilled;
+        CheckStored();var outcome=_facts.ReadTypedValue(_token);CheckStored();
+        if(outcome is null)throw new ArgumentException("Missing facts typed-value outcome.");
+        CheckStored();var resultKind=outcome.Kind;CheckStored();
+        if(resultKind==SchemaResultKind.Unsupported)throw new NotSupportedException("Original typed value is unsupported.");
+        if(resultKind!=SchemaResultKind.Supported)throw new ArgumentException("Malformed original typed-value outcome.");
+        CheckStored();var container=outcome.Value;CheckStored();
+        if(container is null)throw new ArgumentException("Supported original typed value is missing.");
+        var cache=_snapshot.GetTypedScalars(_issuer,_input,_authority,maxCached);
+        var reader=new QueryTypedContainerReader(_operation,_snapshot,_environment,new GuardedIssuer(this),_input,_origin,container,_atoms,_digits,_scale,_token);
+        var group=cache.Find(container,_origin);
+        if(group is null)
+        {
+            var captured=reader.Read().Capture();CheckStored();
+            group=new QueryTypedScalarCache.Group(cache,container,_origin,captured.Governing,captured.List,captured.Cells);
+        }
+        reader.ValidateStored(group.Governing,group.Cells);CheckStored();
+        if(!ReferenceEquals(group.Governing,_type))throw new ArgumentException("Original governing type differs from typed value.");
+        if(nilled&&group.Cells.Length!=0)throw new ArgumentException("Nilled original node has a nonempty typed value.");
+        if(group.Cells.Length==0){CheckStored();return XdmValue.Undefined;}
+        if(faultAfter==-2)throw new InvalidOperationException("Injected atomization output allocation fault.");
+        var sequence=group.Cells.Length>1?new QueryAtomizedSequence(group.Cells.Length):null;
+        var result=sequence is null?default:XdmValue.FromSequence(XdmSequence.FromSource(sequence));
+        var registration=new QueryTypedScalarRegistration(cache,_operation,_snapshot,reader,group);
+        CheckStored();var installed=registration.Commit(faultAfter);CheckStored();
+        if(installed.Count!=group.Cells.Length)throw new ArgumentException("Issued container shape changed.");
+        if(sequence is null)result=installed.GetTransport(0);
+        else for(int index=0;index<group.Cells.Length;index++)sequence.Set(index,installed.GetTransport(index));
+        installed.Check();CheckStored();return result;
+    }
+    private void CheckCapturedIdentity()
+    {
+        // Captured engine identities are callback-free, not fresh provider ownership proofs.
+        _operation.CheckObservationActive();
+        _operation.CheckRegistrationActive(_snapshot);
+        _token.ThrowIfCancellationRequested();
+    }
     private sealed class GuardedIssuer(QueryNodeFactsReader owner) : IQueryTypedContainerIssuer
     {
-        SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment { get { owner.CheckStored(); return owner._environment; } }
-        ISchemaAuthority IQueryTypedContainerIssuer.Authority { get { owner.CheckStored(); return owner._authority; } }
+        SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment { get { owner.CheckCapturedIdentity(); return owner._environment; } }
+        ISchemaAuthority IQueryTypedContainerIssuer.Authority { get { owner.CheckCapturedIdentity(); return owner._authority; } }
         void IQueryTypedContainerIssuer.ThrowIfUnavailable(CancellationToken token){token.ThrowIfCancellationRequested();owner.CheckStored();}
         bool IQueryTypedContainerIssuer.OwnsInput(ISchemaAssessmentInput input,IQuerySourceInput current)
         {owner.CheckStored();var result=owner._issuer.OwnsInput(input,current);owner.CheckStored();return result;}

@@ -1,0 +1,30 @@
+{
+  "previousMatrix": "docs/foundation-provider-qualification/QUALIFICATION-MATRIX.json",
+  "rows": [
+    {
+      "id": "PVQ-S01",
+      "status": "Passed451ExistingNativeCases_IsolatedSourceAgainstExact181DLLs",
+      "actualPublicProviderBindingAccepted": false
+    },
+    {
+      "id": "PVQ-S02",
+      "status": "Passed451UnchangedConsumerCases_AfterPassingFrozenBaseline",
+      "consumerRebuilt": false,
+      "changedFiles": "Exactly nine engine DLLs"
+    },
+    {
+      "id": "PVQ-S03",
+      "status": "ActualPublicProviderAdapterFeasibilityStillRequired"
+    },
+    {
+      "id": "PVQ-P01",
+      "status": "NoOwnerBudgetOrPerformanceAcceptance"
+    },
+    {
+      "id": "PVQ-R01",
+      "status": "RequiredR3ScopeStillOpen"
+    }
+  ],
+  "r4Accepted": false,
+  "requirementsWaived": 0
+}

@@ -1,0 +1,27 @@
+# TA-23 authenticated compatible admission, internal only
+
+5 November 2026. Development candidate **1.68.0**, uncommitted on ec6daa0e538fe3c4e2ebc54177a1daeda5834b38. The Core [CV-ENTRY-01 disposition](DISPOSITION.json) selects the proposed three-decision public shape for bounded implementation. It is not owner/C45 acceptance and adds no public declarations in this slice. Historical R2 closure and all earlier receipts are preserved.
+
+## Implemented transaction
+
+The private `bosak-internal-compatible-admission-v1` profile and descriptor bind the actual captured target environment. They are distinct from the future public identity profile. Public assessor-bound CompileXPath("$compatible", ...) remains Unsupported; internal candidate public Run/RunAsync/OpenSnapshot data routes refuse. No compatible typed-value consumption or public snapshot/result is exposed.
+
+Original public source admissions now capture their exact engine binding internally. The private handoff accepts only an engine-created original snapshot with a non-null owned original assessment, exact captured binding/input metadata, real source/target optional lifetimes and the exact target advisor's existing ISchemaCompatibilityAuthority. Same-owner/transitive/missing capability sources refuse. The target retains the actual original source resource before availability callbacks, using TA-22 mechanics; no fake source/input or caller-provided view is accepted.
+
+Establish runs on the exact bound target authority with the captured source advisor, target advisor and actual target environment, inside one paired raw call window. Compatible requires a returned non-null view with exact endpoint/environment references. Incompatible and Unsupported remain distinct and do not read View or Diagnostics; diagnostics are fixed engine identifiers. Null/unknown/malformed proof and changed endpoints reject. No reassessment, type predicate, declaration match, container/value or facts getter is called.
+
+The neutral target snapshot is staged privately. Positive admission becomes returnable only after provider cleanup and final engine/source liveness checks. Negative proof/failure closes the staged source retainer and refunds its slot. Cleanup-induced close and injected pre-publication failure cannot leak a positive result. Real proof-call tails keep source/target backend and original input handles alive through close/drain; work/cleanup errors preserve original objects/order.
+
+An admission stores source lineage and endpoints, **not a view**. Every subsequent internal raw operation re-establishes proof under fresh actual admissions. A later negative proof denies work. Current view and binding/origin metadata are guarded through the work interval; an escaped proof guard is unusable after raw completion. Source snapshot metadata replacement, copied endpoint objects and equal fingerprints cannot mint authority. Admission-time compatibility does not validate an instance or replace later source value/fact tuple authentication.
+
+## Qualification and remaining boundary
+
+**25,717/0** unit tests include **67 new admission controls** and **197 legacy lifetime/construction controls**. AC01-AC28 qualify private actual Establish/admission/reproof behavior, including independently owned real files, poison getters, guarded negative outcomes, cleanup/slot rollback, raw cancellation, fresh concurrent operation proofs and expired guards. Native schema conformance/threading and owner budgets remain unaccepted.
+
+QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** plus 11 experimental passes retain exact skip maps. Eleven-assembly public metadata stays **310 types / 6,369 declarations**, with unchanged declarations/references/friends/value-field shape. Release and separate LanguageServer builds pass; actual loaded unit/gate hashes match the source/configuration/corpus/binary pins. The initial test build's incorrect synchronous assertion for RunAsync was corrected; its original failed log remains retained. No failed build is qualification evidence.
+
+[CV-CACHE-01](CACHE-REQUIREMENT.md) is the next internal prerequisite: current scalar cache retains an issuer, whereas compatible authorization must be fresh per operation. Separate stable resident payload scope from current proof/issuer; never persist a view/guard or silently reuse an expired validator. Also reject singleton-list shape before compatible cache commit. CI01-CI16 and public CV01-CV32 remain NotRun. After that qualification, add the selected public handoff/result and activate the bounded identity consumer. No additional public provider slot is required by this cache requirement.
+
+Package metadata is refreshed for 1.68.0: eleven projects, seven-library API closure and the explicit NOTICE overlay; **24 qualified source/package inputs differ from HEAD**. This is metadata evaluation, not built/restored/signed packages. The preview recipe still needs an immutable checkpoint and selected version. No source pin/owner/product adoption, package, commit, push, freeze or publication is performed. Broader persistent/list/general/all-host/parse-budget and actual native/consumer gates remain open.
+
+See [pre-edit adoption](ADOPTION.json), [case mapping](CASE-MAPPING.json), [exact status](STATUS.json) and [verifier](tools/verify.py). Earlier dossiers are sealed historical records; their original qualification is not relabeled as this candidate execution.

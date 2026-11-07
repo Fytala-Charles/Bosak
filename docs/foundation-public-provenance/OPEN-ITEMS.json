@@ -1,0 +1,30 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-H01",
+      "status": "CompleteBoundedCoreSelection",
+      "work": "Implement exact public SchemaAtomics helper with sealed internal marker observation, callback-free engine expiry checks and guarded cached views for selected ordinary/constructed routes."
+    },
+    {
+      "id": "PV-H02",
+      "status": "RequiredRouteUnresolved",
+      "work": "Resolve separately leased current-compatible provenance observation/disposition without breaking stable payload identity or weakening raw-local reproof."
+    },
+    {
+      "id": "PV-T01",
+      "status": "ImplementationPending",
+      "work": "Select/implement the complete public empty/list/union ordered-container route and marker-preserving transport; scalar helper cannot close N3."
+    },
+    {
+      "id": "PV-L01",
+      "status": "DispositionPending",
+      "work": "Resolve any required legacy private evidence adaptation without casting opaque fields into public authority."
+    },
+    {
+      "id": "PV-Q01",
+      "status": "CoreHelperQualified_NativeOwnerQualificationPending",
+      "work": "Execute new helper/container cases, full tests/gates/API/layout audit, actual provider and performance evidence; do not reuse characterization as new-helper qualification."
+    }
+  ]
+}

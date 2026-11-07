@@ -4,6 +4,10 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+> Named after **Jon Bosak**, the "father of XML" who led the W3C working group that created
+> XML 1.0 — making structured business documents interoperable across every system.
+> Full story: [Fytala Hall of Fame](../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak)
+
 ---
 
 <details>
@@ -52,6 +56,8 @@ Bosak and [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) are **A
 An opt-in [typed identity integration profile](docs/foundation-public-typed-identity/GUIDE.md) binds a supported assessor to a query session and preserves an issued scalar through `$value`. An opt-in
 [typed numeric profile](docs/foundation-public-typed-numeric/GUIDE.md) computes bounded exact arithmetic and
 comparisons from authenticated scalar operands. Broader schema operations remain staged.
+
+Development sources also provide [captured ordinary XQuery sessions](docs/foundation-public-xquery/GUIDE.md) and [captured ordinary XSLT transforms](docs/foundation-public-xslt/GUIDE.md) with explicit source and raw-operation lifetimes. [Bounded atomic provenance observation](docs/foundation-public-provenance/GUIDE.md) is also available in development sources. [Operation-bound compatible provenance](docs/foundation-leased-provenance/GUIDE.md) is available in development sources. [Complete ordinary and compatible typed-container reads](docs/foundation-public-primitives/GUIDE.md) are available in development sources. Published-package availability is tracked separately below.
 
 
 [Quick start](#quick-start) | [Integration](docs/INTEGRATION.md) | [Worked examples](docs/xpath40-catalog/worked-examples/README.md) | [Roadmap](ROADMAP.md)
@@ -132,6 +138,8 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Primitive numeric constructors](docs/foundation-exact-constructors/GUIDE.md) | Bounded integer/decimal conversion over the exact numeric grammar. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
+| [Provider qualification](docs/foundation-provider-qualification/GUIDE.md) | Candidate-bound owner workload receipts and evidence checks. |
+| [Native Schema compatibility](docs/foundation-native-schema-lane/GUIDE.md) | Source and unchanged-binary qualification scope. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
 | [Foundation integration readiness](docs/foundation-readiness/README.md) | Qualified candidate identities, integration evidence and pending consumer acceptance. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived checkpoints and earlier roadmap snapshots. |

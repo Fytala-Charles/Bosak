@@ -8,6 +8,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
 # Build results
+# Generated Python bytecode is local tooling output.
+__pycache__/
+*.py[cod]
+
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/

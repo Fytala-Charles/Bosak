@@ -1,0 +1,171 @@
+{
+  "total": 43,
+  "focusedTotal": 87,
+  "existingRegressions": 44,
+  "cases": [
+    {
+      "id": "CC01",
+      "count": 6,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: True, count: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: False, count: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: False, count: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: True, count: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: False, count: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC01_Shape(list: True, count: 0)"
+      ]
+    },
+    {
+      "id": "CC02",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC02_Families(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC02_Families(kind: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC02_Families(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC02_Families(kind: 2)"
+      ]
+    },
+    {
+      "id": "CC03",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC03_UnionMembers"
+      ]
+    },
+    {
+      "id": "CC04",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC04_InvalidTail(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC04_InvalidTail(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC04_InvalidTail(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC04_InvalidTail(kind: 3)"
+      ]
+    },
+    {
+      "id": "CC05",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC05_WholeUnsupported"
+      ]
+    },
+    {
+      "id": "CC06",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC06_AllExpiry"
+      ]
+    },
+    {
+      "id": "CC07",
+      "count": 8,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"origin\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"governing\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"actual\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"view-target\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"view-source\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"container\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"view-environment\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC07_CurrentOwnership(mode: \"declared\")"
+      ]
+    },
+    {
+      "id": "CC08",
+      "count": 5,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC08_Revocation(mode: \"snapshot\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC08_Revocation(mode: \"cancel\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC08_Revocation(mode: \"source\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC08_Revocation(mode: \"original\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC08_Revocation(mode: \"target\")"
+      ]
+    },
+    {
+      "id": "CC09",
+      "count": 2,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC09_NumericBounds(scale: True)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC09_NumericBounds(scale: False)"
+      ]
+    },
+    {
+      "id": "CC10",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC10_AtomCapacity"
+      ]
+    },
+    {
+      "id": "CC11",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC11_ScalarCacheUnchanged"
+      ]
+    },
+    {
+      "id": "CC12",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC12_NoGetterReplay"
+      ]
+    },
+    {
+      "id": "CC13",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC13_CursorProtocol"
+      ]
+    },
+    {
+      "id": "CC14",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC14_Reentry"
+      ]
+    },
+    {
+      "id": "CC15",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC15_Overlap"
+      ]
+    },
+    {
+      "id": "CC16",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC16_ActualGetterTail"
+      ]
+    },
+    {
+      "id": "CC17",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC17_IndependentRawViews"
+      ]
+    },
+    {
+      "id": "CC18",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC18_FailureIdentity"
+      ]
+    },
+    {
+      "id": "CC19",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC19_Cost"
+      ]
+    },
+    {
+      "id": "CC20",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.CC20_DeliveryNotIssuer"
+      ]
+    }
+  ],
+  "scope": "CC01-CC20 are43 new cases. TC24 is the existing signature handoff regression updated from refusal to supported behavior; not an additional new case."
+}

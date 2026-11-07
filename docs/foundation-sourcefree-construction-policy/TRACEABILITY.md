@@ -1,0 +1,15 @@
+# Contract review and open boundaries
+
+| Existing contract/evidence | Observation and selected disposition | Still unproven/open |
+|---|---|---|
+| ISchemaAssessmentAdvisor.OwnsTypedValue | Mandatory real ISchemaAssessmentInput; source-free values cannot truthfully use this slot. Use only a fresh exact constructor-call witness within a real leased raw operation. | Persistent/cross-operation arbitrary constructed-value authentication is not solved or accepted. |
+| Advisor.ConstructSimpleValue / public operation entry | Already returns a typed container and Supported/Invalid/Unsupported; current public operation refuses. Select a separate operation-local lexical scalar profile. | Full simple/list/namespace-sensitive construction, conversions and error conformance. |
+| IQueryOperationLifetime / IQueryOperationLease | Existing optional resource admission can be implemented on exact bound advisor; no new required provider member selected. | Actual provider adoption/coverage and new internal late acquisition/call-tail/drain integration. |
+| SchemaOperationLeaseSet / QuerySourceSession | Existing leases are fixed at raw entry and complete with callback/task. Dynamic source-free provider acquisition/call tails require new private ownership scope. | LC01-LC16; existing generic source-free raw controls do not qualify the new path. |
+| TA-02 scalar accounting | MaxCachedValuesPerSnapshot keeps its source-snapshot scalar units; source-free operation receipts use no source cache or fake snapshot. | If owners need persistent constructed values, select real owner/accounting/capability signatures before freeze. |
+| PL-04 historical proposal / advisor construction design | Fresh target evidence, null original assessment even for same-type/equal-value construction; preserve original source facts. | Historical proposal is not blanket semantic/owner acceptance; old no-op conversion receipts stay unchanged. |
+| Schema N3 list/union and real native scope | Preserve actual atomic member when provider returns eligible scalar; governing/declared target identity uses authority. | First profile does not finish required general list construction or establish backend facets/native conformance. |
+| PF and final-breaking-change intent | No byte/time/total-call/native budget inferred from output limits. The present constructor call carries no explicit parsing budget. | Explicit lexical/provider parsing budget and retained-value needs must receive owner disposition before general freeze. |
+| XmlDb/Braid/all-host requirements | No fabricated source ownership or cross-compilation import; operation receipts expire. | Actual persistent/provider/worker/source-free use cases can still require signatures; this selection does not close them. |
+
+INPUTS.json records exact inspected current contract hashes and historical requirement files. No external owner was contacted, no sibling repository/pin changed, and no new owner return was inferred. The finite optional capability avoids a new public signature only for the selected raw-operation profile; broader sufficiency remains pending.

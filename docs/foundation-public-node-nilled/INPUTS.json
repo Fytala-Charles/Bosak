@@ -1,0 +1,8 @@
+{
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "prerequisiteManifest": "docs/foundation-node-metadata-reader/MANIFEST.json",
+  "prerequisiteManifestSha256": "b8e0c1d41b2abeac02a22c29a29a09b8fa9eaf74c1a9af6fd248f0cc2abfb8bb",
+  "prerequisiteSourceVersion": "1.62.0",
+  "prerequisiteIsUncommitted": true,
+  "sourceVersion": "1.63.0"
+}

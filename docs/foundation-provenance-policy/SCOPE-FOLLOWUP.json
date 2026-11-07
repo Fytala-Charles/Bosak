@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.76.0",
+  "historicalAudit": "docs/foundation-r3-scope/STATUS.json",
+  "completedWork": [
+    "AH-01",
+    "AH-02",
+    "AH-03"
+  ],
+  "nextCoreTask": "PV-01",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "publicProposedTypePresence": {
+    "present": 46,
+    "total": 47,
+    "missing": 1
+  },
+  "remainingPublicTypes": [
+    "Bosak.XPath.Core.Schema.SchemaAtomics"
+  ],
+  "scope": "AH-02/AH-03 bounded ordinary host coverage retained. PV-01 policy selected but helper/container implementation and leased compatible observation unresolved; requirements remain unwaived.",
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "provenancePolicy": "docs/foundation-provenance-policy/POLICY.json",
+  "nextImplementation": "PV-H01",
+  "pv01Complete": false
+}

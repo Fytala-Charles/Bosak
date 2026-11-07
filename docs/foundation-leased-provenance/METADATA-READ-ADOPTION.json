@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-06",
+  "scope": "Metadata-only guarded read replaces redundant generic typed-container revalidation. The stable registry snapshot is immutable; verify exact operation-bound registration, shape, representation and captured numeric limits, then current issuer/input/origin/container/authority ownership inside the existing paired proof window before/after field selection. Existing generic typed execution methods remain unchanged.",
+  "beforeHashes": {
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "2b6c794593d35ecd433a0f234450f28e852657255d1cdbb878b37a87d2f2af2b",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "892a0781c69828ade5a46f38899732afbdf328d5f93a62a1c1ae0b5366112a94"
+  },
+  "selectedPolicy": "POLICY.json",
+  "nativeBudgetAccepted": false
+}

@@ -1,0 +1,158 @@
+{
+  "implementationStatus": "PrivateHostBridgeQualified",
+  "publicAllHostFacadeActivated": false,
+  "cases": [
+    {
+      "id": "HC01",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC01_ActualQuery",
+        "HC01_ExactHostMetadata"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC02",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC02_ActualForeignExecutable",
+        "HC02_BindingDoesNotMintSessionOwnership",
+        "HC02_ForeignIdentity",
+        "HC02_ForeignRoleBeforeRoot"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC03",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC03_ExactDynamicOwnership",
+        "HC03_QueryForeignNode"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC04",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC04_ActualRoles",
+        "HC04_RolesAndLeaseUnits"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC05",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC05_ActualSourceFree",
+        "HC05_EmptyMembership",
+        "HC05_NoGlobalFallback"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC06",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC06_BoundedCapture",
+        "HC06_ContextRefusal",
+        "HC06_CopiedDynamicData",
+        "HC06_FrozenQueryCompiler",
+        "HC06_FrozenStylesheetCompiler",
+        "HC06_UnsupportedQuerySchema",
+        "HC06_UnsupportedStylesheet"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC07",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC07_ClosureDuringConsumption",
+        "HC07_InputCallbackClosure",
+        "HC07_Revocation"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC08",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC08_ActualTailAndDrain",
+        "HC08_QueryAsyncWait"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC09",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC09_ActualConsumerFailure",
+        "HC09_FailureOrdering",
+        "HC09_MultipleCleanupFailures"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC10",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC10_ExpiredWindows",
+        "HC10_SerializedConsumptionWindow"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC11",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "Full unchanged public XPath/typed/node/construction/compatible regressions in unit evidence"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC12",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC12_IndependentOperations",
+        "HC12_ModeConfinement",
+        "HC12_Overlap",
+        "HC12_Reentry"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC13",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "HC13_Descriptors",
+        "HC13_NoPublicFacadeActivation"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC14",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "Exact metadata/friend/reference comparison in evidence"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC15",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "Source/binary/configuration/corpus/loaded binding proof in evidence"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    },
+    {
+      "id": "HC16",
+      "status": "QualifiedPrivateHostBridge",
+      "tests": [
+        "Full solution and exact conformance/skip/documentation qualification in evidence"
+      ],
+      "scope": "Private engine host operation bridge only. HC10 proves guarded output consumption/call tails, not public BCAP capture/receipt/outcome or native serializer qualification."
+    }
+  ]
+}

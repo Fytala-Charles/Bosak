@@ -1,0 +1,72 @@
+{
+  "status": "CoreDispositionCompleteWithScope",
+  "sourceVersion": "1.81.0",
+  "decisions": [
+    {
+      "id": "UB01",
+      "title": "Current public representation",
+      "decision": "Select immutable annotated String carriers for anyURI,hexBinary,base64Binary and their assessed derived types in the current public complete-container boundary. Separate governing/declared/actual handles and origins retain semantic source identity; Kind alone is not the full type."
+    },
+    {
+      "id": "UB02",
+      "title": "Preserve enum ABI",
+      "decision": "Keep existing XdmValueKind.Uri/Binary members and numeric ordinals unchanged. They remain outside the complete-delivery whitelist and have no public creation factory. Do not remove/rename/deprecate/reorder them or advertise thirteen active public factory kinds."
+    },
+    {
+      "id": "UB03",
+      "title": "No new public factory selected",
+      "decision": "Do not add FromUri,FromBinary,BinaryValue,byte-array or buffer APIs for this Core representation decision. Existing public String factories plus separate issued metadata represent the selected contract. No reviewed explicit owner requirement for a new discriminant factory is accepted/waived here; new representation needs remain recorded for actual owner/native review."
+    },
+    {
+      "id": "UB04",
+      "title": "Constructor versus transport",
+      "decision": "Preserve existing constructor/cast normalization and lexical checks in VmEngine. Complete-container transport preserves already supplied payload/tags without reparse, URI resolution, base64/hex transcoding or whitespace/case normalization. A raw FromString tag is not an independently validated constructor result."
+    },
+    {
+      "id": "UB05",
+      "title": "Actual producer evidence",
+      "decision": "Pinned production URI functions and anyURI/base64Binary/hexBinary cast routes return FromString with explicit tags. Function return-type metadata or enum dispatch arms are not proof that a separate public discriminant is constructed. Record static source receipts separately from runtime test evidence."
+    },
+    {
+      "id": "UB06",
+      "title": "Consumer activation hazard",
+      "decision": "Existing Uri consumer branches can call StringValue while the getter accepts String kind only; IsAtomic excludes Binary while some other atomic ranges include it. Do not claim those inactive discriminant paths are qualified. Before any activation review getters,casts,equality/hash,map keys,EBV,comparison,serialization,static metadata,all hosts and lifetime behavior together. This is a static future-activation finding, not a newly reproduced production defect."
+    },
+    {
+      "id": "UB07",
+      "title": "Immutable borrowing",
+      "decision": "Existing lexical String payloads require no new byte-buffer clone or native lease. Exact raw/container/provenance/cursor lifetime and compatible paired proof remain as qualified. Future mutable/native binary payloads need explicit copy/borrow/ownership/budget policy before implementation."
+    },
+    {
+      "id": "UB08",
+      "title": "Authority remains separate",
+      "decision": "String annotations are descriptive and cannot mint authority, selected union membership, original assessment, provider issuance or scalar markers. Ordinary/compatible complete reads still authenticate the exact container and every type/origin and preserve ordered list/empty/singleton boundaries."
+    },
+    {
+      "id": "UB09",
+      "title": "Not broad semantic acceptance",
+      "decision": "Selected carrier availability is not proof of full binary value-space equality/hash/order, canonical serialization, URI-resolution or all Schema/native behavior. Keep NU-01/SC-01, actual provider/PF budgets and broader semantic requests unwaived."
+    },
+    {
+      "id": "UB10",
+      "title": "No hidden tests or mutation",
+      "decision": "Do not fabricate Uri/Binary values through reflection/private constructors or intentionally launch unhandled managed negatives. Characterize existing public String-backed routes on unchanged qualified binaries; source audit of enum-only arms is not runtime qualification of them."
+    },
+    {
+      "id": "UB11",
+      "title": "Core closure scope",
+      "decision": "PV-T06 Core representation disposition is CompleteWithScope: retain the existing public representation, preserve enum ABI and record activation prerequisites. External owner/final manifest/native acceptance remains pending. This does not close PV-01/R3/C45/freeze/release."
+    },
+    {
+      "id": "UB12",
+      "title": "Next work",
+      "decision": "Proceed to PV-L01 private legacy evidence disposition; retain PV-Q01 actual provider/budget acceptance and persistent/construction/nil/no-value plus R4-R7 obligations. Record any future explicit native URI/binary representation request against refreshed exact sources before selecting new APIs."
+    }
+  ],
+  "publicRepresentation": "Annotated immutable String plus separately issued type/origin evidence",
+  "newFactorySelected": false,
+  "enumOnlyActivationSelected": false,
+  "requirementsWaived": 0,
+  "ownerAccepted": false,
+  "apiFrozen": false
+}

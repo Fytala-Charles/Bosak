@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-07",
+  "sourceVersion": "1.81.0",
+  "recordedBeforeImplementation": true,
+  "scope": "PV-Q04e read-only exact-cohort full solution binary tests,conformance,public metadata and review qualification. No new engine semantic change or production promotion.",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "beforeFiles": {
+    "docs/foundation-captured-identity-candidate/MANIFEST.json": "4a03779eba03c60c012addd36436093459f1fc451cff00e0121a138b84adb816",
+    "docs/foundation-captured-identity-candidate/candidate/QueryNodeFacts.cs": "c0213cb12b517d9f1124e29ed6220b902a1c85922a13dda2466cd50a535d597c",
+    "docs/foundation-public-primitives/evidence/SOURCE-AND-BINARY-PINS.json": "e04c42b8be0111cc4c9feed28c15734cc7b82af0a542a76a9a163507a2fdf0d6",
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": "d732c8bd6f42ee807303ba95ccfddb537eb8f6c56be57ac19ef9b15443545dba"
+  },
+  "nativeFiles": {
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "docs/DOCUMENT-ASSESSMENT.md": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91",
+    "AGENTS.md": "095293df131025a5c786b8fab4e30946b8d19c8bfeeac858cdcab8f1b81fb1f7",
+    "docs/ASSESSMENT-ADOPTION-2026-10-29.md": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ],
+      "source": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/"
+    },
+    {
+      "revision": "REC-xmlschema11-2-20120405",
+      "sections": [
+        "3.3.3"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/"
+    },
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.8",
+        "3.13"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/"
+    }
+  ],
+  "intentionalDeviations": "Qualification reuses exact TA-53 candidate bytes. Nine engine hashes remain pinned,only Runtime differs from production. Complete test assemblies are copied with their layouts;Runtime lane includes four candidate-specific controls. Production source,binaries,corpora and original receipts remain unchanged. No owner budget/API freeze or publication approval inferred.",
+  "implementationLocation": "Core dossier prototype test project only;production and sibling sources unchanged"
+}

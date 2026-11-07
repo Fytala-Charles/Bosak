@@ -1,0 +1,29 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-Q03",
+      "status": "ActualPublicNativeProviderBindingNotImplementedOrQualified"
+    },
+    {
+      "id": "PF-01-PF-09",
+      "status": "NoAcceptedOwnerBudgets"
+    },
+    {
+      "id": "R3",
+      "status": "NU-01_SC-01_PersistentConstructionNilNoValueRemainOpen"
+    },
+    {
+      "id": "R5",
+      "status": "FourOwnerC45FreezePending"
+    },
+    {
+      "id": "R6",
+      "status": "NoSelectedCommitVersionOrBuiltPackages"
+    },
+    {
+      "id": "R7",
+      "status": "PublicationNotAuthorized"
+    }
+  ]
+}

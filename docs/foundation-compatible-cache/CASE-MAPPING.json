@@ -1,0 +1,138 @@
+{
+  "implementationStatus": "InternalCacheQualified",
+  "publicCompatibilityActivated": false,
+  "cases": [
+    {
+      "id": "CI01",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI01_LegacySingletonList"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI02",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI02_FreshIssuerStablePayload"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI03",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI02_FreshIssuerStablePayload"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI04",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI02_FreshIssuerStablePayload"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI05",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI05_RevokeSourceEvidence"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI06",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI05_RevokeSourceEvidence",
+        "CI07_ExactCarriers"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI07",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI07_ExactCarriers"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI08",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI08_UnsupportedBeforeCommit"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI09",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI09_Capacities"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI10",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI10_MalformedCells",
+        "CI10_Rollback"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI11",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI11_Markers"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI12",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI02_FreshIssuerStablePayload"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI13",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI13_CallbackRevocation",
+        "CI13_NegativeProof"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI14",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI14_NoProviderUnderCacheGate",
+        "CI14_PairedTypedTailResources"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI15",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "CI15_IndependentQuota"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    },
+    {
+      "id": "CI16",
+      "status": "QualifiedInternalCache",
+      "tests": [
+        "Full solution/gates/API/binding qualification in evidence"
+      ],
+      "scope": "Private compatible singleton payload identity with current guarded source authorization; public handoff remains unavailable."
+    }
+  ]
+}

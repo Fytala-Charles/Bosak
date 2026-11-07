@@ -1,0 +1,20 @@
+{
+  "sourceVersion": "1.79.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T03",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-T02",
+      "status": "CompleteBoundedCoreSelection"
+    },
+    {
+      "id": "PV-T03",
+      "status": "RequiredCompatibleCompleteContainer"
+    },
+    {
+      "id": "PV-01",
+      "status": "OrdinaryContainerImplemented_WiderScopePending"
+    }
+  ]
+}

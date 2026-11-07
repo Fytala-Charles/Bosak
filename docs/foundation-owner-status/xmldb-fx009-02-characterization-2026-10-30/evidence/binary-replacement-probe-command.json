@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\frozen\\replacement\\probe\\Fx009Probe.dll",
+    "qualify",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\retained-existing",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\results\\binary-replacement-observations.json",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\fixtures\\binary-replacement-scratch"
+  ],
+  "exitCode": 0,
+  "seconds": 0.5869787000119686,
+  "timeoutSeconds": 180,
+  "observer": "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\observer\\bin\\Release\\net10.0\\PackageBindingHook.dll"
+}

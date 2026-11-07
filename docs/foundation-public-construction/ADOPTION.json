@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.65.0",
+  "candidateVersion": "1.66.0",
+  "adoptedSpecification": "Exact dated 2017 W3C REC sources and sections in TA-18 SPEC-BASIS.md; programmatic lexical construction only. Provider owns lexical/facet semantics; no language cast/constructor-function mapping or full XSD adoption.",
+  "selectedPolicy": "TA-18 POLICY.md and SC01-SC40 using TA-19 actual raw-owned provider operation scope.",
+  "intentionalDeviations": "Only exact $constructed consumer, unmarked lexical String, singleton non-list String/Boolean/Integer/Decimal; operation-local issuance, null origin, optional exact advisor lifetime, no source input/snapshot/cache. Other grammar/families/list/persistent/native/parse budgets remain excluded.",
+  "beforePins": {
+    "docs/foundation-provider-operation-lifetime/MANIFEST.json": "ff0780b348ae9c9305371a2cd86fc73596d6a89a7a1d60a78142a26eb6df173a",
+    "docs/foundation-sourcefree-construction-policy/MANIFEST.json": "7f5fd0e556e185f623f9d67cf1d313e2c94cf727c48e16586bafe1cef3061166",
+    "docs/foundation-sourcefree-construction-policy/SPEC-BASIS.md": "502c4a825e20090e67eb7af268e97acfc12ac4ea8bfe65872678f7551be6f291",
+    "docs/foundation-sourcefree-construction-policy/POLICY.md": "c2806b26710025f2674a74d9b8ce0a79dc52d420a3afd6283415d09afc368e20"
+  },
+  "priorSourcePins": "docs/foundation-provider-operation-lifetime/evidence/SOURCE-AND-BINARY-PINS.json",
+  "priorSourcePinsSha256": "43a098fd887bd99a2304c50a18cbabda1fe24b8e1f9ef5c5ca8171e516b26a59"
+}

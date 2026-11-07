@@ -1,0 +1,13 @@
+{
+  "observation": {
+    "coldCallerBytes": 33032800,
+    "coldTicks": 5898476,
+    "warmReads": 2,
+    "warmCallerBytes": 7936,
+    "warmTicks": 1830889,
+    "frequency": 10000000
+  },
+  "ownerBudgetAccepted": false,
+  "warmFixtureTraceCapacityReserved": true,
+  "scope": "Two-cell tracing fixture; cold includes trace growth, warm excludes pre-reserved trace storage; every callback still recorded. Caller allocations only, no native/aggregate retained-output budget acceptance."
+}

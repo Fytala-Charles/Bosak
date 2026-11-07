@@ -133,6 +133,15 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.52   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.63   | 05-11-2026     | Capture the closed original-node variable profile (1.63.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.64   | 05-11-2026     | Share closed original-node capture diagnostics with data profile (1.64.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.53 | 05-11-2026     | Guard source-free construction and operation-local capture (1.66.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.54 | 05-11-2026     | Capture closed compatible identity context (1.70.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.55 | 06-11-2026     | Permit inherited engine gate only for selected host capture (1.76.0). |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -374,8 +383,8 @@ public sealed class EvaluationContext
     }
 
     /// <summary>Captures the bounded data-only profile; services and populated execution state refuse.</summary>
-    internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null)
-        =>CaptureSchemaInputsCore(ownsNode,maxBindings,maxNamespaces,snapshot,false);
+    internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null,bool allowExecutionGate=false)
+        =>CaptureSchemaInputsCore(ownsNode,maxBindings,maxNamespaces,snapshot,false,allowExecutionGate:allowExecutionGate);
     internal XdmValue CaptureTypedIdentityScalar()
     {
         if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=1||!_variables.ContainsKey(("value","")))
@@ -383,7 +392,22 @@ public sealed class EvaluationContext
         var inputs=CaptureSchemaInputsCore(static _=>false,1,Math.Max(1,_namespaces.Count),null,true);
         return inputs.VariableBindings[0].Value;
     }
-    private SchemaOperationInputs CaptureSchemaInputsCore(Func<IXdmNode,bool> ownsNode,int maxBindings,int maxNamespaces,SchemaEvidenceKernel.Snapshot? snapshot,bool typedIdentity)
+    internal XdmValue CaptureCompatibleScalar()=>CaptureClosedScalar("compatible",true);
+    internal XdmValue CaptureOriginalNode()=>CaptureClosedScalar("node",false);
+    internal XdmValue CaptureConstructedScalar()=>CaptureClosedScalar("constructed",true);
+    private XdmValue CaptureClosedScalar(string variable,bool typed)
+    {
+        if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=1||!_variables.ContainsKey((variable,""))
+            ||_namespaces.Count!=9||_namespaces.Any(pair=>pair.Value!=(pair.Key switch {
+                "xml"=>"http://www.w3.org/XML/1998/namespace","xs"=>"http://www.w3.org/2001/XMLSchema",
+                "xsi"=>"http://www.w3.org/2001/XMLSchema-instance","fn"=>"http://www.w3.org/2005/xpath-functions",
+                "math"=>"http://www.w3.org/2005/xpath-functions/math","map"=>"http://www.w3.org/2005/xpath-functions/map",
+                "array"=>"http://www.w3.org/2005/xpath-functions/array","local"=>"http://www.w3.org/2005/xquery-local-functions",
+                "err"=>"http://www.w3.org/2005/xqt-errors",_=>null})))
+            throw new NotSupportedException("The selected scalar profile requires its single unprefixed variable, absent focus and default runtime namespaces.");
+        return CaptureSchemaInputsCore(_=>!typed,1,9,null,typed,!typed).VariableBindings[0].Value;
+    }
+    private SchemaOperationInputs CaptureSchemaInputsCore(Func<IXdmNode,bool> ownsNode,int maxBindings,int maxNamespaces,SchemaEvidenceKernel.Snapshot? snapshot,bool typedIdentity,bool originalNode=false,bool allowExecutionGate=false)
     {
         ArgumentNullException.ThrowIfNull(ownsNode);
         if (maxBindings <= 0) throw new ArgumentOutOfRangeException(nameof(maxBindings));
@@ -398,7 +422,7 @@ public sealed class EvaluationContext
             || CurrentOutputUri is not null || IsStaticEvaluation || IsXPath40 || IsXPath40Experimental || IsXsltMode
             || NamedRecordCoercion is not null || !EmptyOrdinal(NamedRecordTypes) || !EmptyOrdinal(BindingItemTypes)
             || InStreamingMapContext || InStreamedPipeline || Xml11Mode || RegexGroups is not null || ResourcePolicy is not null
-            || ExecutionGate is not null || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
+            || ExecutionGate is not null&&!allowExecutionGate || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
             || CollectionLoader is not null || Collections.Count != 0 || CollectionValues.Count != 0 || XQueryModuleSources.Count != 0
             || XQueryModuleLoader is not null || DocumentPostProcessor is not null || ConstructedElementProcessor is not null
             || ConstructedDocumentProcessor is not null || DocumentLoadPolicy is not null || BackwardsCompatible || XsltVersion is not null
@@ -419,13 +443,13 @@ public sealed class EvaluationContext
             {
                 if (!ownsNode(value.NodeValue!)) throw new NotSupportedException("Unadmitted variable node.");
             }
-            else if (typedIdentity ? value.Kind is < XdmValueKind.String or > XdmValueKind.Binary
+            else if (originalNode ? !value.IsUndefined : typedIdentity ? value.Kind is < XdmValueKind.String or > XdmValueKind.Binary
                 : value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
                 or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))
                 throw new NotSupportedException("Only direct scalar or admitted node bindings are supported.");
         }
         return new SchemaOperationInputs(_contextItem, _contextPosition, _contextSize, _variables.ToArray(), _namespaces.ToArray(),
-            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot);
+            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot,allowExecutionGate?ExecutionGate:null);
 
         static bool EmptyOrdinal<T>(IReadOnlyDictionary<string, T> values)
             => values is Dictionary<string, T> dictionary && values.GetType() == typeof(Dictionary<string, T>) && dictionary.Count == 0

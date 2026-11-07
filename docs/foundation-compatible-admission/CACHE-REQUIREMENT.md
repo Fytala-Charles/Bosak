@@ -1,0 +1,17 @@
+# CV-CACHE-01: payload residency and operation authorization must be separate
+
+Identified during the CV-ENTRY-01 Core review, before public compatible data activation. This is an internal implementation requirement, not another public provider slot or a completed cache implementation.
+
+Current QueryTypedScalarCache retains an IQueryTypedContainerIssuer reference and RequireScope compares that issuer by reference. A compatible issuer must additionally require the current raw operation's fresh proof and real source/target admissions. Reusing a first-operation issuer would reuse expired authorization; replacing it each operation would fail the existing reference-only cache scope. Storing a view, raw operation, proof guard or ambient AsyncLocal in the persistent cache is not an acceptable fix.
+
+## Selected direction for the next internal slice
+
+Introduce a trusted engine-only stable snapshot scope identity separately from the current operation's guarded issuer. Existing issuers retain their exact-reference behavior by default. An operation-bound compatible issuer must not be retained as the cache's reusable validator; a compatible validation entry must supply the current issuer/proof explicitly, and generic/no-issuer VM paths must refuse it. Stable identity alone never authorizes a read. No public issuer or attachment factory is introduced.
+
+The stable scope binds the exact admitted target snapshot, original source binding/input/origin and target environment metadata. Current authorization re-establishes the directional proof under both exact advisor admissions, authenticates the source container/input/origin tuple, and rechecks original component ownership. Source handles and original assessment remain unchanged. Target-resident scalar entry/representation may be reused only after this fresh authorization; neither source markers nor another target admission's entries can be imported.
+
+Validate complete bounded staging and first-profile eligibility before cache publication: non-list singleton String/Boolean/Integer/Decimal, plain provider cell without an existing private marker, original evidence retained, existing digit/scale/count bounds. Descriptive source annotations remain descriptive and must not substitute for authoritative evidence or be rewritten. The legacy TryCommitSingle path checks cardinality but does not reject a singleton list, so the compatible eligibility gate cannot simply reuse it without an explicit shape check. Unsupported shapes commit no slots; capacity rejects before excess Current; failures leave no prefix. Existing original-source cache and behavior stay unchanged.
+
+All provider callbacks run outside internal cache locks and inside the paired call window. No current proof/view or operation guard becomes persistent cache authority. Source/target close, canceled raw work, replaced metadata or negative/unsupported proof must deny before data/evidence getter use. The engine's stable token is not a digest/name/universe equivalence proof. There is no new aggregate byte/time/native workload budget.
+
+CI01-CI16 in CACHE-CASES.json are NotRun. Re-record exact dirty source/spec host-policy pins before implementation. First qualify this mechanism internally, then add the selected public entry/result and the bounded consumer under CV01-CV32. Actual provider/native/owner and C45/freeze acceptance remain separate.

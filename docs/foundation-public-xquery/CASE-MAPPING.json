@@ -1,0 +1,254 @@
+{
+  "implementationStatus": "PublicOrdinaryXQueryQualified",
+  "publicXQueryActivated": true,
+  "cases": [
+    {
+      "id": "XQ01",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ01_PublicEntry"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ02",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ02_ActualQueries"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ03",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ03_Arguments"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ04",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ04_UnsupportedSchema"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ05",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ05_SourceInput"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ06",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ06_ExactlyOneOwner"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ07",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ07_CompilerSnapshot"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ08",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ08_DeferredStaticContext"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ09",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ09_ErrorPropagation"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ10",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ10_ActualCaptureCounts"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ11",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ11_ClosedContext"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ12",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ12_StructuredResults"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ13",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ13_SequenceExpiryAndCachedValue"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ14",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ14_PrefixThenRefusal"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ15",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ15_AsyncAndCanceledWait"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ16",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ16_ActualResourceTail"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ17",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ17_Reentry"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ18",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ18_AdmissionLimits"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ19",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ19_DescriptorLimits"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ20",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ20_LineEndings"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ21",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ21_CleanupFailures"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ22",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ22_ActualCancellation"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ23",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ23_IndependentQueries"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ24",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ24_NoExpiredCallbackReplay"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ25",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ25_LengthAndSinglePass"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ26",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ26_DeferredErrors"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ27",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ27_MarkedCellsRefuse"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ28",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ28_ContinuationReentry"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ29",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ29_DeferredTailDrain"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ30",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ30_ExactEvaluatorTarget"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    },
+    {
+      "id": "XQ31",
+      "status": "QualifiedPublicOrdinaryXQuery",
+      "tests": [
+        "XQ31_RevocationBeforeCurrent"
+      ],
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results only; original errors, closure/raw ownership and honest refusal profiles."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+.
+./.transactions
+./.transactions/generations
+./.transactions/generations/00000000000000000001
+./.transactions/generations/00000000000000000001/documents
+./.transactions/generations/00000000000000000001/documents/1
+./.transactions/generations/00000000000000000001/fragments
+./.transactions/readers
+./.transactions/staging
+./.transactions/wal
+./documents
+./documents/1
+./fragments

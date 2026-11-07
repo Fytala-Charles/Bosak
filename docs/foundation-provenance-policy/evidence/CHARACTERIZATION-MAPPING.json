@@ -1,0 +1,100 @@
+{
+  "additionalPassedTestCount": false,
+  "cases": [
+    {
+      "id": "CH01",
+      "existingControl": "ViewsAreRawBoundButEntriesAreNot",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.QueryTypedScalarCacheTests.ViewsAreRawBoundButEntriesAreNot"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH02",
+      "existingControl": "CI02_FreshIssuerStablePayload",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI02_FreshIssuerStablePayload"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH03",
+      "existingControl": "SC05_SC29_RepeatedNoCache",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicConstructionTests.SC05_SC29_RepeatedNoCache"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH04",
+      "existingControl": "OriginlessAndOriginalRemainDistinct",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.QueryTypedScalarCacheTests.OriginlessAndOriginalRemainDistinct"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH05",
+      "existingControl": "MixedMetadataSurvivesWarmReuse",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.QueryTypedScalarCacheTests.MixedMetadataSurvivesWarmReuse"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH06",
+      "existingControl": "EmptyResultsDoNotFillCache",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.QueryTypedScalarCacheTests.EmptyResultsDoNotFillCache"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH07",
+      "existingControl": "SingletonListWarmReuse",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.SingletonListWarmReuse(original: True)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.SingletonListWarmReuse(original: False)"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH08",
+      "existingControl": "AD03_AD04_OrderedMembers",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicOriginalDataTests.AD03_AD04_OrderedMembers"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH09",
+      "existingControl": "CI11_Markers",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI11_Markers(mode: \"tampered\")",
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI11_Markers(mode: \"foreign\")",
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI11_Markers(mode: \"source\")",
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI11_Markers(mode: \"forged\")",
+        "Bosak.XPath.Runtime.Tests.CompatibleCacheTests.CI11_Markers(mode: \"plain\")"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    },
+    {
+      "id": "CH10",
+      "existingControl": "IdentityRemainsIdentity",
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedNumericTests.IdentityRemainsIdentity"
+      ],
+      "status": "CharacterizedExistingBehavior",
+      "newHelperQualification": false
+    }
+  ]
+}

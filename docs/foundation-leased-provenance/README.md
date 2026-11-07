@@ -1,0 +1,5 @@
+# TA-35 ? Leased compatible atomic provenance
+
+Development **1.78.0** qualifies [TA-35 leased compatible provenance](README.md): **26,149/0** tests, including **31 new controls**. `SchemaQueryOperation.ReadAtomicProvenance` returns a borrowed metadata view for selected compatible singleton atomics inside the matching raw operation. Every getter uses the serialized paired-provider window and established raw proof; expired views refuse before provider callbacks. The additive operation member adds two declaration rows: **318 public types / 6,463 rows**. QT3 **31,397/0/424** and gated qt4 **8,941/0/1,918** (+11 experimental) retain exact skip maps. PV-H02 is complete only for this bounded Core selection; final owner/signature acceptance, general empty/list/union transport, legacy disposition, native budgets, NU-01/SC-01 and R4-R7 remain open. Next: **PV-T01** container policy/shape and implementation. No package, commit, push or publication.
+
+[Guide](GUIDE.md) ? [Implementation](IMPLEMENTATION.md) ? [Policy](POLICY.json) ? [Adoption](ADOPTION.json) ? [Status](STATUS.json) ? [API delta](API-DELTA.json) ? [Evidence verifier](tools/verify.py)

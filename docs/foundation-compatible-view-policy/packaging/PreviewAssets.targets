@@ -1,0 +1,10 @@
+<Project>
+  <!-- Explicit preview recipe overlay; does not edit production pack metadata. -->
+  <ItemGroup Condition="'$(CandidateSourceRoot)' != ''">
+    <None Include="$(CandidateSourceRoot)/NOTICE" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+  <Target Name="RequirePreviewNotice" BeforeTargets="GenerateNuspec">
+    <Error Condition="'$(CandidateSourceRoot)' == '' Or !Exists('$(CandidateSourceRoot)/NOTICE')"
+           Text="Set CandidateSourceRoot to the exact archived candidate; its NOTICE is required." />
+  </Target>
+</Project>

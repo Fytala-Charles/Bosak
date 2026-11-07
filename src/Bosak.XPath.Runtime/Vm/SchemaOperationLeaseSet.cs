@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Expose engine-only active-state check for callback-free registration (1.54.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Preserve exact cleanup failures for deferred provider completion (1.65.0). |
+//                      | Charles Korthout | 0.4   | 05-11-2026     | Separate admission and original ordered rollback errors (1.73.0). |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.ExceptionServices;
@@ -40,25 +42,47 @@ internal sealed class SchemaOperationLeaseSet
     private SchemaOperationLeaseSet(Member[] members, IDisposable[] leases, Action checkSession, CancellationToken cancellation)
     { _members = members; _leases = leases; _checkSession = checkSession; _cancellation = cancellation; }
 
+    // A report is engine-owned data; provider aggregate boundaries remain intact.
+    internal sealed class Acquisition(SchemaOperationLeaseSet? leases, Exception? admissionError,
+        ImmutableArray<Exception> cleanupErrors)
+    {
+        internal SchemaOperationLeaseSet? Leases { get; } = leases;
+        internal Exception? AdmissionError { get; } = admissionError;
+        internal ImmutableArray<Exception> CleanupErrors { get; } = cleanupErrors;
+    }
+
     internal static SchemaOperationLeaseSet Acquire(object session, ImmutableArray<Member> members,
         int maxMembers, Action checkSession, CancellationToken cancellation = default)
     {
-        ArgumentNullException.ThrowIfNull(session);
-        ArgumentNullException.ThrowIfNull(checkSession);
-        if (maxMembers <= 0) throw new ArgumentOutOfRangeException(nameof(maxMembers));
-        if (members.IsDefault) throw new ArgumentException("Explicit membership is required.", nameof(members));
-        if (members.Length > maxMembers) throw new ArgumentException("Operation membership limit exceeded.", nameof(members));
-        var copied = members.ToArray();
-        var identities = new HashSet<Member>(ReferenceEqualityComparer.Instance);
-        foreach (var member in copied)
-            if (member is null || !ReferenceEquals(member.Session, session) || !identities.Add(member))
-                throw new ArgumentException("Members must be unique admissions from this session.", nameof(members));
-        cancellation.ThrowIfCancellationRequested();
-        checkSession();
-        var leases = new IDisposable[copied.Length];
+        var outcome = AcquireOutcome(session, members, maxMembers, checkSession, cancellation);
+        if (outcome.AdmissionError is null) return outcome.Leases!;
+        if (!outcome.CleanupErrors.IsEmpty)
+            throw new AggregateException("Operation entry/work and lease cleanup failures.",
+                new[] { outcome.AdmissionError }.Concat(outcome.CleanupErrors));
+        ExceptionDispatchInfo.Capture(outcome.AdmissionError).Throw();
+        throw new InvalidOperationException("Unreachable admission outcome.");
+    }
+
+    internal static Acquisition AcquireOutcome(object session, ImmutableArray<Member> members,
+        int maxMembers, Action checkSession, CancellationToken cancellation = default)
+    {
+        IDisposable[] leases = [];
         int acquired = 0;
         try
         {
+            ArgumentNullException.ThrowIfNull(session);
+            ArgumentNullException.ThrowIfNull(checkSession);
+            if (maxMembers <= 0) throw new ArgumentOutOfRangeException(nameof(maxMembers));
+            if (members.IsDefault) throw new ArgumentException("Explicit membership is required.", nameof(members));
+            if (members.Length > maxMembers) throw new ArgumentException("Operation membership limit exceeded.", nameof(members));
+            var copied = members.ToArray();
+            var identities = new HashSet<Member>(ReferenceEqualityComparer.Instance);
+            foreach (var member in copied)
+                if (member is null || !ReferenceEquals(member.Session, session) || !identities.Add(member))
+                    throw new ArgumentException("Members must be unique admissions from this session.", nameof(members));
+            cancellation.ThrowIfCancellationRequested();
+            checkSession();
+            leases = new IDisposable[copied.Length];
             foreach (var member in copied)
             {
                 cancellation.ThrowIfCancellationRequested();
@@ -69,12 +93,11 @@ internal sealed class SchemaOperationLeaseSet
             }
             var result = new SchemaOperationLeaseSet(copied, leases, checkSession, cancellation);
             result.Check();
-            return result;
+            return new Acquisition(result, null, []);
         }
         catch (Exception primary)
         {
-            Release(leases, acquired, primary);
-            throw;
+            return new Acquisition(null, primary, [.. CollectFailures(leases, acquired)]);
         }
     }
 
@@ -99,13 +122,25 @@ internal sealed class SchemaOperationLeaseSet
         Release(leases, leases.Length, primary);
     }
 
-    private static void Release(IDisposable[] leases, int count, Exception? primary)
+    internal List<Exception> CompleteFailures()
     {
-        List<Exception>? failures = null;
+        var leases = Interlocked.Exchange(ref _leases, null);
+        return leases is null ? [] : CollectFailures(leases, leases.Length);
+    }
+
+    private static List<Exception> CollectFailures(IDisposable[] leases, int count)
+    {
+        List<Exception> failures = [];
         for (int i = count - 1; i >= 0; i--)
             try { leases[i].Dispose(); }
-            catch (Exception error) { (failures ??= []).Add(error); }
-        if (failures is not null)
+            catch (Exception error) { failures.Add(error); }
+        return failures;
+    }
+
+    private static void Release(IDisposable[] leases, int count, Exception? primary)
+    {
+        var failures = CollectFailures(leases, count);
+        if (failures.Count > 0)
         {
             if (primary is not null) failures.Insert(0, primary);
             if (primary is null && failures.Count == 1) ExceptionDispatchInfo.Capture(failures[0]).Throw();

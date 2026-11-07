@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.64.0",
+  "priorManifest": "docs/foundation-public-node-data/MANIFEST.json",
+  "priorManifestSha256": "122a10568f63cba6f41c2f3586c166e20709092e2e5a94eba316756a93ee87db",
+  "reviewInputs": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Core/Schema/QueryOperationLifetime.cs": "59c873444b045a93f6e77693dc1f4855dfd5c5fbc35ce996e65943981ceca622",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "df12d9b1877ddfe22a52416801a19bc43b8e4b38f157a09427ffb018fc320d12",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "00d7940bae654a7e62949c393a86546beac1b2c5e33ede94b3f7cb756460bc4c",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "c91d81607773da155fe0c9bfc6db9388effa7bd11e1b8e8b52e5cf067c4b1c82",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "f29a5915a7e21ccd5aa7b0d49094ee24d90d016f6e391fe737898e17c6cebe20",
+    "docs/foundation-typed-cache-policy/POLICY.md": "abfc77fdff69871ce7f0ba2865e6402b2e7b23d4e78eed377a2c22e5a07f5df7",
+    "docs/foundation-provenance-lifetime/PROPOSED-LAWS.json": "c2f6bee61a2542a7f8bdbded89465ecf8fac9a305ca106919c72e262505fc810",
+    "docs/foundation-advisor-contract/README.md": "c3a4786ac49af16a3c91d31284029537a131cb7c880f6d93d70383e69efb23f1",
+    "docs/foundation-owner-reconciliation/README.md": "6d788c2c23db5d1e8aaa88f5c7421e9614cef943088ed168ef79ecacff1bc365"
+  },
+  "priorCandidateUncommitted": true,
+  "scope": "Finite Core source-free construction policy; existing contracts and historical owner needs inspected. No native/owner acceptance."
+}

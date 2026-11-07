@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.73.0",
+  "candidateVersion": "1.74.0",
+  "beforeHashes": {
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "cef6eded2464834bbffe6169c0e36c6e08b6870ff107b51b64bb9d7216605a88",
+    "src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs": "f78991371de770d5ac37d995e523de42bb0226d1d80fd952285e1589169a4d05",
+    "src/Directory.Build.props": "9bc6d10247adc96fc370595bb4815a56253d730409b4b514bb8e663ad5c286e6",
+    "docs/foundation-xslt-admission/MANIFEST.json": "d77a0101ccf6a3f1603ab9599e5bde615a811297853774cdee2ccb32ef38eb9c",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+  },
+  "semanticScope": "AH-03 internal source/provider completion report. Immutable XSLT REC https://www.w3.org/TR/2017/REC-xslt-30-20170608/ sections 2.3.2-2.3.4 and 2.9 remain the contextual invocation/error basis; this step changes engine-owned lifetime/error reporting only, not XSLT semantics.",
+  "hostPolicy": "The pinned reviewed Xslt.cs.txt owned outcome requires separate original admission/work/cleanup errors. Completion waits for real in-flight host/provider tails, releases target then source then raw leases, and records immutable cleanup errors without flattening provider aggregates or deduplicating obligations. Repeated completion shares the first request; existing throwing completion and Run/RunAsync retain primary-first exception behavior.",
+  "exclusions": "No public XSLT API, serializer/control-gate changes, general public structured run API or new required provider members. Native/owner/performance budgets, freeze, package artifacts and publication remain open."
+}

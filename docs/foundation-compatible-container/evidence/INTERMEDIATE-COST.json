@@ -1,0 +1,6 @@
+{
+  "trx": "evidence/focused-final-trx/charl_CHARLES_2026-11-06_13_24_52_net10.0.trx",
+  "sha256": "99583e58793c11ba683ac2b79defb29cc579bc17e573bf9c73f2649568b5c758",
+  "observation": "Compatible container cost: cold caller bytes 33032768; cold ticks 5414305; warm reads 2; warm caller bytes 33562944; warm ticks 1783337; frequency 10000000",
+  "scope": "Optimized metadata path with unreserved tracing-array growth in warm window; superseded measurement fixture. No frozen intermediate test-binary cohort or owner budget is claimed."
+}

@@ -1,0 +1,21 @@
+{
+  "publicDeclarationsIdentical": true,
+  "valueLayoutIdentical": true,
+  "friendDelta": {
+    "Bosak.XPath.Api": {
+      "added": [
+        "Bosak.XQuery"
+      ],
+      "removed": []
+    }
+  },
+  "referenceDelta": {
+    "Bosak.XQuery": {
+      "added": [
+        "Bosak.XPath.Api"
+      ],
+      "removed": []
+    }
+  },
+  "scope": "Engine-owned private XQuery bridge uses the existing project dependency; no new project/package reference or public delegate factory. Existing grants/references retained."
+}

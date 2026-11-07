@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.70.0",
+  "candidateVersion": "1.71.0",
+  "priorSourcePins": "docs/foundation-public-compatible/evidence/SOURCE-AND-BINARY-PINS.json",
+  "beforeHashes": {
+    "docs/foundation-r3-scope/MANIFEST.json": "044f8c00fc25fee1b2f5fc9cc49db0853c6d9a62d7795934b7cf3f69aaada73d",
+    "docs/foundation-r3-scope/NEXT-HOST-BRIDGE.md": "1364ee6957c63c3a785690170e9f2413520a391a0bb5c84fb47497390f16930c",
+    "docs/foundation-r3-scope/HOST-CASES.json": "009ef8ed3d073df77d5dbf47b64650d021c1175a00b330321eef0b607ef42d22",
+    "docs/foundation-r2-closure/REQUIREMENT-DISPOSITIONS.json": "9b951c4cf94a8caf923d13c1ad7989cf6dd638d00f132a8ccd14f6b50405c1d8",
+    "docs/foundation-bcap-profile/SPEC-BASIS.md": "a363051b85c863716310066e3154ad1ed038d893b6632fcdddaa7cbbf390fcdd",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "fa9b32a0b0332de7c9075ef808e13908141d350b41765bb368be4219117ca100",
+    "src/Bosak.XPath.Api/Bosak.XPath.Api.csproj": "bb8e9d09ab0085e328fecd79032077dbe813fbf35d0d5151dc00e868358d2b14",
+    "src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs": "d8e8a15761a987c0b70aee4f6c2beb7aff57ada1deb23bd3626acc68ca3293e7",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "a53ad86244e0ea88fff9a07115516bdf10bd800b6297d3e4c1646071bfdc68fa",
+    "src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs": "26ebe054f88cc4682b0df6d9617e2881f9f60216f878b6e3912053aff4d7de15",
+    "src/Directory.Build.props": "2b1ff187879c6e9aa50b5e3b9e9444a5be6aa1c45a0cac2b29d720715348740f"
+  },
+  "semanticScope": "AH-01/HC01-HC16 exact private engine host/executable/public-session/raw-operation bridge. Preserve accepted R2 D01/D04-D06/D11-D12 ownership/capture policy. Actual execution reuses existing immutable XDM REC 2017-03-21 and XSLT REC 2017-06-08 sections 2.3.2-2.3.4, 3.5.6 and 10.1.1 as previously adopted by explicit-context/BCAP cohorts. No new language behavior or normative adoption.",
+  "intentionalScope": "Private ordinary host bridge only: closed resource policy, copied data context, explicit finite internal binding/namespace bounds, document match roots, explicit distinct/shared/absent global source and source-free named templates. No new public XQuery/XSLT facade/capture signature, initial modes/streaming/arbitrary initial sequences, schema assessment/all-host typed routing, receipt or final outcome orchestration.",
+  "friendDelta": "Add Bosak.XQuery to Bosak.XPath.Api internal friends; existing XSLT/friends/references retained. No new public callback/evaluator factory or mandatory provider member.",
+  "exclusions": "Native owner acceptance, mid-expression hard cancellation, recursive result detachment, broader numeric/provenance/assessment coverage, budgets/freeze/package/push/publication remain pending."
+}

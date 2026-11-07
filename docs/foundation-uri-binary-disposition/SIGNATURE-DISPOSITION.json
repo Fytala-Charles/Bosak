@@ -1,0 +1,9 @@
+{
+  "existing": "Existing ReadTypedContainer and FromString representation retained",
+  "newSignatureSelected": false,
+  "publicApiChanged": false,
+  "newEnumFactoryImplemented": false,
+  "originalDraftModified": false,
+  "ownerAccepted": false,
+  "finalManifestAccepted": false
+}

@@ -1,0 +1,15 @@
+{
+  "measurement": {
+    "coldCallerBytes": 99872,
+    "coldTicks": 179524,
+    "warmRuns": 8,
+    "warmCallerBytes": 88448,
+    "warmTicks": 735602,
+    "stopwatchFrequency": 10000000
+  },
+  "allocationScope": "Calling thread only; excludes transform/serializer worker allocations.",
+  "latencyScope": "Cold compile plus first capture; eight warm captures including joined worker time.",
+  "fixture": "PX31 source-free Hello text, mandatory caps under Options(), no source provider.",
+  "ownerBudgetAccepted": false,
+  "representativeNativeWorkload": false
+}

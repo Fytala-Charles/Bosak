@@ -1,0 +1,551 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2425b895-7d97-4ee7-bd70-4c91aa15a350" name="charl@CHARLES 2026-11-06 08:46:20" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-06T08:46:20.0175784+01:00" queuing="2026-11-06T08:46:20.0175786+01:00" start="2026-11-06T08:46:18.6787639+01:00" finish="2026-11-06T08:46:20.4929275+01:00" />
+  <TestSettings name="default" id="4e503537-d326-4bdd-a88b-f95b7770d021">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-06_08_46_20" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="48c189fc-c228-4a8c-be79-54bebf66d418" testId="0470a303-9016-36ed-379d-2227c1507d77" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX17_OriginalSerializationError" computerName="CHARLES" duration="00:00:00.0009447" startTime="2026-11-06T08:46:20.4346116+01:00" endTime="2026-11-06T08:46:20.4350642+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48c189fc-c228-4a8c-be79-54bebf66d418" />
+    <UnitTestResult executionId="f2a73eec-8c0c-4df2-b480-21fb8a585dff" testId="6a1f734a-bc11-7a65-2c34-5bc9535624b0" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;default&quot;)" computerName="CHARLES" duration="00:00:00.0002836" startTime="2026-11-06T08:46:19.9741766+01:00" endTime="2026-11-06T08:46:19.9742018+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f2a73eec-8c0c-4df2-b480-21fb8a585dff" />
+    <UnitTestResult executionId="665aac30-53de-468e-aac6-7b405a4e7f8e" testId="9ee57122-68e0-f6f7-aa47-9aa48475ecfa" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;local-operations&quot;)" computerName="CHARLES" duration="00:00:00.0818818" startTime="2026-11-06T08:46:20.0149994+01:00" endTime="2026-11-06T08:46:20.0968629+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="665aac30-53de-468e-aac6-7b405a4e7f8e" />
+    <UnitTestResult executionId="ca3c98b8-aa2e-4ed6-89df-4290c12d6c05" testId="2ed424b8-f2e0-ed00-d8b3-e11aede34f14" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;per&quot;)" computerName="CHARLES" duration="00:00:00.0001530" startTime="2026-11-06T08:46:19.9965396+01:00" endTime="2026-11-06T08:46:19.9965622+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca3c98b8-aa2e-4ed6-89df-4290c12d6c05" />
+    <UnitTestResult executionId="926ab923-43d4-4ec8-bf0c-b6bb001bf586" testId="6c79f2f1-301b-cf85-a398-085c7586fe96" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;zero-operations&quot;)" computerName="CHARLES" duration="00:00:00.0001409" startTime="2026-11-06T08:46:19.9967861+01:00" endTime="2026-11-06T08:46:19.9968078+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="926ab923-43d4-4ec8-bf0c-b6bb001bf586" />
+    <UnitTestResult executionId="d8265663-7c31-40cb-a952-d9a64e667e2c" testId="cbd85e1d-b1da-8350-b505-30f3840cf0c5" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX01_PublicCompileAndCapture" computerName="CHARLES" duration="00:00:00.0025969" startTime="2026-11-06T08:46:20.4023468+01:00" endTime="2026-11-06T08:46:20.4049147+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d8265663-7c31-40cb-a952-d9a64e667e2c" />
+    <UnitTestResult executionId="4c423ea5-8492-48bf-b30d-b465465a04a7" testId="1f9ee9c7-59cd-04f1-0a5d-48cab1c104b4" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;node&quot;)" computerName="CHARLES" duration="00:00:00.0023704" startTime="2026-11-06T08:46:20.1196683+01:00" endTime="2026-11-06T08:46:20.1219317+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4c423ea5-8492-48bf-b30d-b465465a04a7" />
+    <UnitTestResult executionId="9f722160-c414-4070-a994-88cc504c6bb7" testId="4e3a28bd-e875-a2bf-7040-bcfa600ed35b" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX19_PerRunReceipts" computerName="CHARLES" duration="00:00:00.0048284" startTime="2026-11-06T08:46:20.4261565+01:00" endTime="2026-11-06T08:46:20.4309587+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f722160-c414-4070-a994-88cc504c6bb7" />
+    <UnitTestResult executionId="d4bcf4e9-8054-4934-acbb-27920416b08d" testId="2a833dca-34ea-1f03-b836-2fd6dee6641b" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX18_CopiedOptions" computerName="CHARLES" duration="00:00:00.0010083" startTime="2026-11-06T08:46:20.3799638+01:00" endTime="2026-11-06T08:46:20.3809649+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4bcf4e9-8054-4934-acbb-27920416b08d" />
+    <UnitTestResult executionId="a4d74431-bd0f-4616-aec4-b160a7e2a13a" testId="c19dc77e-0f1a-c9b7-ade0-1dcadd912562" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;local-cancel&quot;)" computerName="CHARLES" duration="00:00:00.0005702" startTime="2026-11-06T08:46:20.0969845+01:00" endTime="2026-11-06T08:46:20.0974460+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4d74431-bd0f-4616-aec4-b160a7e2a13a" />
+    <UnitTestResult executionId="8ccaa090-46ab-4932-8681-53dea1b2a39e" testId="44b3dc7c-6a47-e9a2-d049-dd3867e15098" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;total&quot;)" computerName="CHARLES" duration="00:00:00.0007178" startTime="2026-11-06T08:46:20.1864668+01:00" endTime="2026-11-06T08:46:20.1871901+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ccaa090-46ab-4932-8681-53dea1b2a39e" />
+    <UnitTestResult executionId="bc48e198-d672-405f-bc27-1c7998c564ce" testId="74c7d4dc-a4e5-5c86-e118-94d7f9bb2d72" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;context&quot;)" computerName="CHARLES" duration="00:00:00.0012128" startTime="2026-11-06T08:46:19.9977703+01:00" endTime="2026-11-06T08:46:19.9978079+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc48e198-d672-405f-bc27-1c7998c564ce" />
+    <UnitTestResult executionId="198a5a67-ff73-4ca3-9795-9601370aa4c6" testId="cd7855b5-208a-3f23-8983-74cbefb96415" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;xhtml&quot;)" computerName="CHARLES" duration="00:00:00.0005162" startTime="2026-11-06T08:46:20.3942646+01:00" endTime="2026-11-06T08:46:20.3998369+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="198a5a67-ff73-4ca3-9795-9601370aa4c6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.</Message>
+          <StackTrace>   at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 820&#xD;
+   at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 767&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2430&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 851&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 171&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 148&#xD;
+   at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs:line 322&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="dc6aaf04-9903-473c-a923-d16df1306b9c" testId="5eaef4b3-d1dd-e91e-18c9-74bfe2d393df" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX21_SerializerTailAndCleanup" computerName="CHARLES" duration="00:00:00.0092716" startTime="2026-11-06T08:46:20.3815109+01:00" endTime="2026-11-06T08:46:20.3936287+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc6aaf04-9903-473c-a923-d16df1306b9c" />
+    <UnitTestResult executionId="0a19ead4-e386-49ac-ad06-d9cf7c898367" testId="db6eccae-2d38-8be8-de9e-2032ed9ecc29" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership" computerName="CHARLES" duration="00:00:00.0020071" startTime="2026-11-06T08:46:20.1957413+01:00" endTime="2026-11-06T08:46:20.2022627+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a19ead4-e386-49ac-ad06-d9cf7c898367">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.IsType() Failure: Value is not the exact type&#xD;
+Expected: typeof(System.ArgumentException)&#xD;
+Actual:   typeof(System.NotSupportedException)</Message>
+          <StackTrace>   at Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership() in D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs:line 346&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ec3eed24-52c6-4790-aeec-7f7d54e82d2c" testId="918d1349-ad64-7c01-108f-a058eef7586a" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX09_ZeroCaps" computerName="CHARLES" duration="00:00:00.0015864" startTime="2026-11-06T08:46:20.4325002+01:00" endTime="2026-11-06T08:46:20.4340714+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec3eed24-52c6-4790-aeec-7f7d54e82d2c" />
+    <UnitTestResult executionId="b63562b6-4316-4e04-a0ed-3bde8f09b2b8" testId="4ad29c09-1f41-8196-208e-5ba887af26b8" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX25_CompileCancellation" computerName="CHARLES" duration="00:00:00.0002758" startTime="2026-11-06T08:46:20.3796756+01:00" endTime="2026-11-06T08:46:20.3799134+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b63562b6-4316-4e04-a0ed-3bde8f09b2b8" />
+    <UnitTestResult executionId="fb6c0081-45c1-4305-a94e-509a6fe249c8" testId="c565cd6f-0675-9bfd-aeb3-afd839a4f062" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;messages&quot;)" computerName="CHARLES" duration="00:00:00.0008209" startTime="2026-11-06T08:46:19.9757410+01:00" endTime="2026-11-06T08:46:19.9757946+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb6c0081-45c1-4305-a94e-509a6fe249c8" />
+    <UnitTestResult executionId="a44fd688-4133-4587-8526-ab82ee4f7cf0" testId="6e5a7d29-5078-c053-1938-6cd3eb520220" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: False)" computerName="CHARLES" duration="00:00:00.0006346" startTime="2026-11-06T08:46:20.4055784+01:00" endTime="2026-11-06T08:46:20.4062038+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a44fd688-4133-4587-8526-ab82ee4f7cf0" />
+    <UnitTestResult executionId="ef1dfbb2-1eae-4478-af1d-9187caf1b43d" testId="dffba2b0-c1ce-0218-e53d-ebc40eb82d82" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: True)" computerName="CHARLES" duration="00:00:00.0003721" startTime="2026-11-06T08:46:20.4068187+01:00" endTime="2026-11-06T08:46:20.4068496+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef1dfbb2-1eae-4478-af1d-9187caf1b43d" />
+    <UnitTestResult executionId="b1dea702-0cce-49c9-98f6-ab9503b89b9b" testId="6a236f84-e534-4b75-77d7-3239dec685d6" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX20_RawCancellation" computerName="CHARLES" duration="00:00:00.0016252" startTime="2026-11-06T08:46:20.3722500+01:00" endTime="2026-11-06T08:46:20.3738336+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1dea702-0cce-49c9-98f6-ab9503b89b9b" />
+    <UnitTestResult executionId="ae577fca-5616-442d-ae43-e7c972f93945" testId="701c2583-4ca2-b45c-8e32-4f23a2956939" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;operations&quot;)" computerName="CHARLES" duration="00:00:00.0007205" startTime="2026-11-06T08:46:20.1945336+01:00" endTime="2026-11-06T08:46:20.1951883+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae577fca-5616-442d-ae43-e7c972f93945" />
+    <UnitTestResult executionId="133ba8ec-c675-454e-9b3b-83f366cf5715" testId="92b7bf6a-5111-b9bb-7199-79da664e77c6" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;inherited-cancel&quot;)" computerName="CHARLES" duration="00:00:00.0013607" startTime="2026-11-06T08:46:20.0136561+01:00" endTime="2026-11-06T08:46:20.0149020+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="133ba8ec-c675-454e-9b3b-83f366cf5715" />
+    <UnitTestResult executionId="c8515d00-e4f5-47e7-8d80-d9f851686768" testId="0b27fe88-2d5e-3bfd-f324-fe2e4f0d8d4f" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;shared&quot;)" computerName="CHARLES" duration="00:00:00.0919768" startTime="2026-11-06T08:46:20.2054054+01:00" endTime="2026-11-06T08:46:20.2939273+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8515d00-e4f5-47e7-8d80-d9f851686768" />
+    <UnitTestResult executionId="a6f1ae72-4154-45d0-8c4b-63ccf4dfa2a8" testId="17e3f082-3d37-471f-9291-093ab9c63662" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;mode&quot;)" computerName="CHARLES" duration="00:00:00.0001352" startTime="2026-11-06T08:46:19.9966625+01:00" endTime="2026-11-06T08:46:19.9966846+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a6f1ae72-4154-45d0-8c4b-63ccf4dfa2a8" />
+    <UnitTestResult executionId="e3e5a751-1cd8-43b8-9bb9-26b6c92c1fb0" testId="692be54d-a39f-a710-b01a-15d5e38b647f" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;include&quot;)" computerName="CHARLES" duration="00:00:00.0000559" startTime="2026-11-06T08:46:19.9755118+01:00" endTime="2026-11-06T08:46:19.9755699+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3e5a751-1cd8-43b8-9bb9-26b6c92c1fb0" />
+    <UnitTestResult executionId="6482b72a-abbe-4cb8-8637-7b23fc81ca5a" testId="5bd2707a-9361-7266-b603-27462e462438" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;count&quot;)" computerName="CHARLES" duration="00:00:00.0001481" startTime="2026-11-06T08:46:19.9967225+01:00" endTime="2026-11-06T08:46:19.9967456+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6482b72a-abbe-4cb8-8637-7b23fc81ca5a" />
+    <UnitTestResult executionId="041f4123-0522-4c7c-bdce-0622d1cef11f" testId="97b816aa-a15f-4324-b7fc-1566cae0b299" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX27_ExpiredOperation" computerName="CHARLES" duration="00:00:00.0210149" startTime="2026-11-06T08:46:20.0990279+01:00" endTime="2026-11-06T08:46:20.1195198+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="041f4123-0522-4c7c-bdce-0622d1cef11f" />
+    <UnitTestResult executionId="faf5c392-791c-44df-b2e5-85efbe28012a" testId="af1cea7f-e573-e962-09e9-0209d91e4664" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;total&quot;)" computerName="CHARLES" duration="00:00:00.0001800" startTime="2026-11-06T08:46:19.9963261+01:00" endTime="2026-11-06T08:46:19.9963531+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="faf5c392-791c-44df-b2e5-85efbe28012a" />
+    <UnitTestResult executionId="b1f47b97-35a7-46b9-9205-e6b36ef24b6f" testId="412e8c81-d048-7e6b-7de3-370336c77f86" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX28_QueryPolicyUnchanged" computerName="CHARLES" duration="00:00:00.0751870" startTime="2026-11-06T08:46:20.2969369+01:00" endTime="2026-11-06T08:46:20.3721295+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b1f47b97-35a7-46b9-9205-e6b36ef24b6f" />
+    <UnitTestResult executionId="60d73fd7-ee0d-4ff5-bcdf-360a50c85208" testId="a208e5db-e73d-d315-0a58-ac97dc9000d5" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;missing-role&quot;)" computerName="CHARLES" duration="00:00:00.0930285" startTime="2026-11-06T08:46:19.8709232+01:00" endTime="2026-11-06T08:46:19.9679876+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="60d73fd7-ee0d-4ff5-bcdf-360a50c85208" />
+    <UnitTestResult executionId="13d5b1e7-0aff-4913-9bcb-e0a2801dc999" testId="8936fa54-cde3-3f3a-7b50-5521d7550b3f" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX16_SecondaryOutputs" computerName="CHARLES" duration="00:00:00.0014381" startTime="2026-11-06T08:46:20.4310322+01:00" endTime="2026-11-06T08:46:20.4324271+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="13d5b1e7-0aff-4913-9bcb-e0a2801dc999" />
+    <UnitTestResult executionId="df9c9652-dcda-407d-8101-8c37a9e2fb98" testId="edc3f6d9-03ed-866d-4cc5-b8300a877107" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;count&quot;)" computerName="CHARLES" duration="00:00:00.0573426" startTime="2026-11-06T08:46:20.1276980+01:00" endTime="2026-11-06T08:46:20.1851161+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df9c9652-dcda-407d-8101-8c37a9e2fb98" />
+    <UnitTestResult executionId="d16646b2-54ed-4521-b97c-92fb3ee62957" testId="c4ef66b2-169e-2d76-b959-b92deafaeb8e" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;loader&quot;)" computerName="CHARLES" duration="00:00:00.0003798" startTime="2026-11-06T08:46:20.1273346+01:00" endTime="2026-11-06T08:46:20.1276258+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d16646b2-54ed-4521-b97c-92fb3ee62957" />
+    <UnitTestResult executionId="11c5ff0c-208d-4fdb-8c65-779548253320" testId="68a3ce86-08da-adbf-c51b-456a18018865" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;time&quot;)" computerName="CHARLES" duration="00:00:00.0361395" startTime="2026-11-06T08:46:19.9979523+01:00" endTime="2026-11-06T08:46:20.0129473+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11c5ff0c-208d-4fdb-8c65-779548253320" />
+    <UnitTestResult executionId="ba15acb4-dc9c-4bf9-9664-7858cbb34e1b" testId="34e604d1-5c92-a218-83a3-1e1851538548" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;distinct&quot;)" computerName="CHARLES" duration="00:00:00.0010382" startTime="2026-11-06T08:46:20.2958148+01:00" endTime="2026-11-06T08:46:20.2968619+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ba15acb4-dc9c-4bf9-9664-7858cbb34e1b" />
+    <UnitTestResult executionId="200864af-c61a-4caf-85d3-e3998dbb0311" testId="1cffe282-1726-44ad-0aad-596c775a5944" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;duplicate&quot;)" computerName="CHARLES" duration="00:00:00.0008137" startTime="2026-11-06T08:46:19.9736997+01:00" endTime="2026-11-06T08:46:19.9737541+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="200864af-c61a-4caf-85d3-e3998dbb0311" />
+    <UnitTestResult executionId="edecfd82-e24d-49d8-bb51-d9d206e26079" testId="06d545ef-396e-53e3-cca2-8d957b613a3f" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: True)" computerName="CHARLES" duration="00:00:00.0004304" startTime="2026-11-06T08:46:20.0979835+01:00" endTime="2026-11-06T08:46:20.0984191+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="edecfd82-e24d-49d8-bb51-d9d206e26079" />
+    <UnitTestResult executionId="e506e584-4b42-4aa6-bf32-a7e65c603ea5" testId="d601d147-4ffc-ba40-7c8f-a0bef7e276d5" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX04_AbsentGlobalContext" computerName="CHARLES" duration="00:00:00.0017196" startTime="2026-11-06T08:46:20.4012278+01:00" endTime="2026-11-06T08:46:20.4022652+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e506e584-4b42-4aa6-bf32-a7e65c603ea5" />
+    <UnitTestResult executionId="1da5100a-94b4-430b-b0c6-4ea0c7d8455b" testId="e619e53b-0b13-dead-bcbc-5fec600140d3" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;xml&quot;)" computerName="CHARLES" duration="00:00:00.0001004" startTime="2026-11-06T08:46:20.4007160+01:00" endTime="2026-11-06T08:46:20.4007363+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1da5100a-94b4-430b-b0c6-4ea0c7d8455b">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.</Message>
+          <StackTrace>   at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 820&#xD;
+   at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 767&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2430&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 851&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 171&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 148&#xD;
+   at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs:line 322&#xD;
+   at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0659239a-165c-4c5c-94fd-97efea330836" testId="6aca9a1a-bbd5-b580-fe7e-fd9f9b6b655f" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;root&quot;)" computerName="CHARLES" duration="00:00:00.0001683" startTime="2026-11-06T08:46:19.9751921+01:00" endTime="2026-11-06T08:46:19.9752491+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0659239a-165c-4c5c-94fd-97efea330836" />
+    <UnitTestResult executionId="3c917ea3-1208-4ba5-b70e-6b1a422e79ea" testId="b555613a-c18a-9730-1b95-43d9a546a48c" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: False)" computerName="CHARLES" duration="00:00:00.0004584" startTime="2026-11-06T08:46:20.0975128+01:00" endTime="2026-11-06T08:46:20.0979438+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c917ea3-1208-4ba5-b70e-6b1a422e79ea" />
+    <UnitTestResult executionId="c0f2889b-28e6-4f6d-82e7-e707c7d35e13" testId="0da8350a-fc31-60d4-ce7e-d0cda3522ef7" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;raw&quot;)" computerName="CHARLES" duration="00:00:00.0003079" startTime="2026-11-06T08:46:19.9961088+01:00" endTime="2026-11-06T08:46:19.9961532+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c0f2889b-28e6-4f6d-82e7-e707c7d35e13" />
+    <UnitTestResult executionId="5cba4406-ad66-40f4-a603-8fcba8b38c52" testId="47ae7bb1-e4e2-8302-1c3e-7bd09cd7691b" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;named&quot;)" computerName="CHARLES" duration="00:00:00.0053186" startTime="2026-11-06T08:46:20.4191094+01:00" endTime="2026-11-06T08:46:20.4243596+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5cba4406-ad66-40f4-a603-8fcba8b38c52" />
+    <UnitTestResult executionId="9bd5df8e-ad77-42e7-9730-580fb7de0859" testId="83434f31-cf4c-c351-3df0-0d961d60716e" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX02_BorrowedRoutes" computerName="CHARLES" duration="00:00:00.0109342" startTime="2026-11-06T08:46:20.4080597+01:00" endTime="2026-11-06T08:46:20.4189956+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9bd5df8e-ad77-42e7-9730-580fb7de0859" />
+    <UnitTestResult executionId="62e2172d-7150-48f9-8592-a244716c1f79" testId="41c20f58-8854-fd16-e696-82b7e9e5cfa6" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;html&quot;)" computerName="CHARLES" duration="00:00:00.0003014" startTime="2026-11-06T08:46:20.4003722+01:00" endTime="2026-11-06T08:46:20.4003944+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62e2172d-7150-48f9-8592-a244716c1f79">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.</Message>
+          <StackTrace>   at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 820&#xD;
+   at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 767&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2430&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 851&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 171&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 148&#xD;
+   at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs:line 322&#xD;
+   at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="66e83d8d-fa0a-4b8c-861d-4b6980fe0bd8" testId="ceea0505-8913-8c4d-8677-c159bdb12651" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX07_FrozenStatics" computerName="CHARLES" duration="00:00:00.0057225" startTime="2026-11-06T08:46:20.3739507+01:00" endTime="2026-11-06T08:46:20.3796011+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="66e83d8d-fa0a-4b8c-861d-4b6980fe0bd8" />
+    <UnitTestResult executionId="c5071184-8d8c-439b-8ed6-b139c21b4b89" testId="0d5f6e89-1491-36bd-5a61-43fc28f4d824" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX15_ActualCardinalities" computerName="CHARLES" duration="00:00:00.0013295" startTime="2026-11-06T08:46:20.4068995+01:00" endTime="2026-11-06T08:46:20.4079845+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5071184-8d8c-439b-8ed6-b139c21b4b89" />
+    <UnitTestResult executionId="d4aecd85-9e02-4c4c-8769-5820d3e09f70" testId="d4bef62f-c774-6ab4-a694-c523694deb88" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;#unnamed&quot;)" computerName="CHARLES" duration="00:00:00.0006655" startTime="2026-11-06T08:46:20.4254669+01:00" endTime="2026-11-06T08:46:20.4260870+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d4aecd85-9e02-4c4c-8769-5820d3e09f70" />
+    <UnitTestResult executionId="d059543f-b595-4fb3-8cc7-d52e2a4a769d" testId="6036f973-d6e6-50f3-3e09-c79457dca445" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;map&quot;)" computerName="CHARLES" duration="00:00:00.0052465" startTime="2026-11-06T08:46:20.1220159+01:00" endTime="2026-11-06T08:46:20.1272443+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d059543f-b595-4fb3-8cc7-d52e2a4a769d" />
+    <UnitTestResult executionId="8b76e2a9-6fe0-4179-8fa9-267a74edf237" testId="6d6359e4-a00d-d984-d8f6-a8e0d7957db4" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;text&quot;)" computerName="CHARLES" duration="00:00:00.0000754" startTime="2026-11-06T08:46:20.4009695+01:00" endTime="2026-11-06T08:46:20.4009882+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b76e2a9-6fe0-4179-8fa9-267a74edf237">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'encoding' in xsl:output declarations.</Message>
+          <StackTrace>   at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 820&#xD;
+   at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs:line 773&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2430&#xD;
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile) in D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 851&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 171&#xD;
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs:line 148&#xD;
+   at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method) in D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs:line 322&#xD;
+   at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f46ef542-8689-48b0-8315-e46c7b95a4dd" testId="013e9de5-aa5d-6570-caa0-f82b273e6f1c" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX12_ForeignExecutable" computerName="CHARLES" duration="00:00:00.0006119" startTime="2026-11-06T08:46:20.4049834+01:00" endTime="2026-11-06T08:46:20.4055312+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f46ef542-8689-48b0-8315-e46c7b95a4dd" />
+    <UnitTestResult executionId="9fdbc84f-5b95-41c9-8233-192904bf560c" testId="8f783f99-628c-57c0-7622-6d3887b2397b" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;time&quot;)" computerName="CHARLES" duration="00:00:00.0001547" startTime="2026-11-06T08:46:19.9964078+01:00" endTime="2026-11-06T08:46:19.9964332+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fdbc84f-5b95-41c9-8233-192904bf560c" />
+    <UnitTestResult executionId="ce207a4e-bafe-4916-9224-924bc0381d13" testId="55f30a8c-a953-98d8-d7f8-f72eb7129393" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;inherited-operations&quot;)" computerName="CHARLES" duration="00:00:00.0005504" startTime="2026-11-06T08:46:20.0130901+01:00" endTime="2026-11-06T08:46:20.0135359+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce207a4e-bafe-4916-9224-924bc0381d13" />
+    <UnitTestResult executionId="d0dc2652-4dbe-420d-a3e7-c65cb818b202" testId="13e9d074-b876-aee7-31cf-e574c895a5e7" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;foreign&quot;)" computerName="CHARLES" duration="00:00:00.0003588" startTime="2026-11-06T08:46:19.9740867+01:00" endTime="2026-11-06T08:46:19.9741167+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0dc2652-4dbe-420d-a3e7-c65cb818b202" />
+    <UnitTestResult executionId="168cb543-7ae8-49e3-a20c-92839c91d01e" testId="d0ed2199-c0ef-bf85-89e9-21fac29c348d" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;schema&quot;)" computerName="CHARLES" duration="00:00:00.0023383" startTime="2026-11-06T08:46:19.9749873+01:00" endTime="2026-11-06T08:46:19.9750578+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="168cb543-7ae8-49e3-a20c-92839c91d01e" />
+    <UnitTestResult executionId="19708c33-3f36-4a6a-894d-d4d7810ea004" testId="076ab93b-f5d9-39d0-fc40-c3dee93b88f2" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;template&quot;)" computerName="CHARLES" duration="00:00:00.0002197" startTime="2026-11-06T08:46:19.9978652+01:00" endTime="2026-11-06T08:46:19.9978878+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19708c33-3f36-4a6a-894d-d4d7810ea004" />
+    <UnitTestResult executionId="dee73b42-a6aa-48c9-b861-43a4234cfa5a" testId="2423ab70-5249-1ec8-2852-c66cdbb0bdbb" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;template&quot;)" computerName="CHARLES" duration="00:00:00.0017682" startTime="2026-11-06T08:46:20.2940528+01:00" endTime="2026-11-06T08:46:20.2957249+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dee73b42-a6aa-48c9-b861-43a4234cfa5a" />
+    <UnitTestResult executionId="3d1f0811-abe8-4178-9229-bee67e1a6e98" testId="3cd6bbb9-cb0f-f300-4496-7ac1da5e565d" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;per&quot;)" computerName="CHARLES" duration="00:00:00.0012999" startTime="2026-11-06T08:46:20.1852473+01:00" endTime="2026-11-06T08:46:20.1864097+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d1f0811-abe8-4178-9229-bee67e1a6e98" />
+    <UnitTestResult executionId="530a3bf0-912f-4be1-9334-ede53f94d7ca" testId="ccc8c08c-929c-da4f-4a8c-8bb4e07ce742" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;assessor&quot;)" computerName="CHARLES" duration="00:00:00.0000392" startTime="2026-11-06T08:46:19.9753493+01:00" endTime="2026-11-06T08:46:19.9754176+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="530a3bf0-912f-4be1-9334-ede53f94d7ca" />
+    <UnitTestResult executionId="7c246074-17cb-4ecd-822b-442f19f3ea2b" testId="c2482276-2474-6fe2-646e-cfcd3d35286d" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;#default&quot;)" computerName="CHARLES" duration="00:00:00.0010058" startTime="2026-11-06T08:46:20.4244280+01:00" endTime="2026-11-06T08:46:20.4254058+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c246074-17cb-4ecd-822b-442f19f3ea2b" />
+    <UnitTestResult executionId="4b1e8289-72dc-4d35-bd36-25f821aaffbe" testId="d9a5b4c4-fca0-c71a-4815-668d8632df74" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;base&quot;)" computerName="CHARLES" duration="00:00:00.0001449" startTime="2026-11-06T08:46:19.9964744+01:00" endTime="2026-11-06T08:46:19.9964997+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b1e8289-72dc-4d35-bd36-25f821aaffbe" />
+    <UnitTestResult executionId="b244fe25-a3ea-4b31-a055-4f210b9b464b" testId="08cb5fcc-3991-2362-4c5a-c8f37debb81a" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;messages&quot;)" computerName="CHARLES" duration="00:00:00.0071885" startTime="2026-11-06T08:46:20.1872582+01:00" endTime="2026-11-06T08:46:20.1944393+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b244fe25-a3ea-4b31-a055-4f210b9b464b" />
+    <UnitTestResult executionId="9d257fdc-3f2c-402e-836c-daf49e8d76f0" testId="84c2d505-bf9e-3da7-5c47-ead643045baa" testName="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;operations&quot;)" computerName="CHARLES" duration="00:00:00.0001393" startTime="2026-11-06T08:46:19.9966016+01:00" endTime="2026-11-06T08:46:19.9966246+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d257fdc-3f2c-402e-836c-daf49e8d76f0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;operations&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="84c2d505-bf9e-3da7-5c47-ead643045baa">
+      <Execution id="9d257fdc-3f2c-402e-836c-daf49e8d76f0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;foreign&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="13e9d074-b876-aee7-31cf-e574c895a5e7">
+      <Execution id="d0dc2652-4dbe-420d-a3e7-c65cb818b202" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX13_SourceAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX02_BorrowedRoutes" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="83434f31-cf4c-c351-3df0-0d961d60716e">
+      <Execution id="9bd5df8e-ad77-42e7-9730-580fb7de0859" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX02_BorrowedRoutes" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: True)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="dffba2b0-c1ce-0218-e53d-ebc40eb82d82">
+      <Execution id="ef1dfbb2-1eae-4478-af1d-9187caf1b43d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX23_DocumentRootRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: False)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="b555613a-c18a-9730-1b95-43d9a546a48c">
+      <Execution id="3c917ea3-1208-4ba5-b70e-6b1a422e79ea" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX26_OwnedAdmissionRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;per&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="3cd6bbb9-cb0f-f300-4496-7ac1da5e565d">
+      <Execution id="3d1f0811-abe8-4178-9229-bee67e1a6e98" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX10_CaptureLimits" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX20_RawCancellation" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6a236f84-e534-4b75-77d7-3239dec685d6">
+      <Execution id="b1dea702-0cce-49c9-98f6-ab9503b89b9b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX20_RawCancellation" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;total&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="44b3dc7c-6a47-e9a2-d049-dd3867e15098">
+      <Execution id="8ccaa090-46ab-4932-8681-53dea1b2a39e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX10_CaptureLimits" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;total&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="af1cea7f-e573-e962-09e9-0209d91e4664">
+      <Execution id="faf5c392-791c-44df-b2e5-85efbe28012a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX15_ActualCardinalities" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="0d5f6e89-1491-36bd-5a61-43fc28f4d824">
+      <Execution id="c5071184-8d8c-439b-8ed6-b139c21b4b89" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX15_ActualCardinalities" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;text&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6d6359e4-a00d-d984-d8f6-a8e0d7957db4">
+      <Execution id="8b76e2a9-6fe0-4179-8fa9-267a74edf237" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX22_SerializerFidelity" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;schema&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="d0ed2199-c0ef-bf85-89e9-21fac29c348d">
+      <Execution id="168cb543-7ae8-49e3-a20c-92839c91d01e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX06_CompilerRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="db6eccae-2d38-8be8-de9e-2032ed9ecc29">
+      <Execution id="0a19ead4-e386-49ac-ad06-d9cf7c898367" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX24_AmbiguousOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;base&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="d9a5b4c4-fca0-c71a-4815-668d8632df74">
+      <Execution id="4b1e8289-72dc-4d35-bd36-25f821aaffbe" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;time&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="68a3ce86-08da-adbf-c51b-456a18018865">
+      <Execution id="11c5ff0c-208d-4fdb-8c65-779548253320" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX11_ComposedControls" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;distinct&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="34e604d1-5c92-a218-83a3-1e1851538548">
+      <Execution id="ba15acb4-dc9c-4bf9-9664-7858cbb34e1b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX03_IndependentRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;inherited-cancel&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="92b7bf6a-5111-b9bb-7199-79da664e77c6">
+      <Execution id="133ba8ec-c675-454e-9b3b-83f366cf5715" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX11_ComposedControls" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;loader&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="c4ef66b2-169e-2d76-b959-b92deafaeb8e">
+      <Execution id="d16646b2-54ed-4521-b97c-92fb3ee62957" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX14_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;time&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="8f783f99-628c-57c0-7622-6d3887b2397b">
+      <Execution id="9fdbc84f-5b95-41c9-8233-192904bf560c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;map&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6036f973-d6e6-50f3-3e09-c79457dca445">
+      <Execution id="d059543f-b595-4fb3-8cc7-d52e2a4a769d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX14_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;default&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6a1f734a-bc11-7a65-2c34-5bc9535624b0">
+      <Execution id="f2a73eec-8c0c-4df2-b480-21fb8a585dff" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX13_SourceAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;assessor&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="ccc8c08c-929c-da4f-4a8c-8bb4e07ce742">
+      <Execution id="530a3bf0-912f-4be1-9334-ede53f94d7ca" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX06_CompilerRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;duplicate&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="1cffe282-1726-44ad-0aad-596c775a5944">
+      <Execution id="200864af-c61a-4caf-85d3-e3998dbb0311" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX13_SourceAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX27_ExpiredOperation" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="97b816aa-a15f-4324-b7fc-1566cae0b299">
+      <Execution id="041f4123-0522-4c7c-bdce-0622d1cef11f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX27_ExpiredOperation" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX14_ContextRefusal(mode: &quot;node&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="1f9ee9c7-59cd-04f1-0a5d-48cab1c104b4">
+      <Execution id="4c423ea5-8492-48bf-b30d-b465465a04a7" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX14_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;count&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="5bd2707a-9361-7266-b603-27462e462438">
+      <Execution id="6482b72a-abbe-4cb8-8637-7b23fc81ca5a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;xml&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="e619e53b-0b13-dead-bcbc-5fec600140d3">
+      <Execution id="1da5100a-94b4-430b-b0c6-4ea0c7d8455b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX22_SerializerFidelity" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;operations&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="701c2583-4ca2-b45c-8e32-4f23a2956939">
+      <Execution id="ae577fca-5616-442d-ae43-e7c972f93945" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX10_CaptureLimits" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;count&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="edc3f6d9-03ed-866d-4cc5-b8300a877107">
+      <Execution id="df9c9652-dcda-407d-8101-8c37a9e2fb98" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX10_CaptureLimits" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX17_OriginalSerializationError" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="0470a303-9016-36ed-379d-2227c1507d77">
+      <Execution id="48c189fc-c228-4a8c-be79-54bebf66d418" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX17_OriginalSerializationError" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX28_QueryPolicyUnchanged" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="412e8c81-d048-7e6b-7de3-370336c77f86">
+      <Execution id="b1f47b97-35a7-46b9-9205-e6b36ef24b6f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX28_QueryPolicyUnchanged" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX19_PerRunReceipts" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="4e3a28bd-e875-a2bf-7040-bcfa600ed35b">
+      <Execution id="9f722160-c414-4070-a994-88cc504c6bb7" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX19_PerRunReceipts" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;inherited-operations&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="55f30a8c-a953-98d8-d7f8-f72eb7129393">
+      <Execution id="ce207a4e-bafe-4916-9224-924bc0381d13" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX11_ComposedControls" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;messages&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="c565cd6f-0675-9bfd-aeb3-afd839a4f062">
+      <Execution id="fb6c0081-45c1-4305-a94e-509a6fe249c8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;raw&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="0da8350a-fc31-60d4-ce7e-d0cda3522ef7">
+      <Execution id="c0f2889b-28e6-4f6d-82e7-e707c7d35e13" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX21_SerializerTailAndCleanup" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="5eaef4b3-d1dd-e91e-18c9-74bfe2d393df">
+      <Execution id="dc6aaf04-9903-473c-a923-d16df1306b9c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX21_SerializerTailAndCleanup" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX13_SourceAdmission(mode: &quot;missing-role&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="a208e5db-e73d-d315-0a58-ac97dc9000d5">
+      <Execution id="60d73fd7-ee0d-4ff5-bcdf-360a50c85208" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX13_SourceAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX01_PublicCompileAndCapture" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="cbd85e1d-b1da-8350-b505-30f3840cf0c5">
+      <Execution id="d8265663-7c31-40cb-a952-d9a64e667e2c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX01_PublicCompileAndCapture" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;#unnamed&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="d4bef62f-c774-6ab4-a694-c523694deb88">
+      <Execution id="d4aecd85-9e02-4c4c-8769-5820d3e09f70" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX05_InitialModes" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX18_CopiedOptions" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="2a833dca-34ea-1f03-b836-2fd6dee6641b">
+      <Execution id="d4bcf4e9-8054-4934-acbb-27920416b08d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX18_CopiedOptions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX16_SecondaryOutputs" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="8936fa54-cde3-3f3a-7b50-5521d7550b3f">
+      <Execution id="13d5b1e7-0aff-4913-9bcb-e0a2801dc999" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX16_SecondaryOutputs" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX25_CompileCancellation" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="4ad29c09-1f41-8196-208e-5ba887af26b8">
+      <Execution id="b63562b6-4316-4e04-a0ed-3bde8f09b2b8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX25_CompileCancellation" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;root&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6aca9a1a-bbd5-b580-fe7e-fd9f9b6b655f">
+      <Execution id="0659239a-165c-4c5c-94fd-97efea330836" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX06_CompilerRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX23_DocumentRootRoles(global: False)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6e5a7d29-5078-c053-1938-6cd3eb520220">
+      <Execution id="a44fd688-4133-4587-8526-ab82ee4f7cf0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX23_DocumentRootRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX12_ForeignExecutable" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="013e9de5-aa5d-6570-caa0-f82b273e6f1c">
+      <Execution id="f46ef542-8689-48b0-8315-e46c7b95a4dd" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX12_ForeignExecutable" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;context&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="74c7d4dc-a4e5-5c86-e118-94d7f9bb2d72">
+      <Execution id="bc48e198-d672-405f-bc27-1c7998c564ce" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;per&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="2ed424b8-f2e0-ed00-d8b3-e11aede34f14">
+      <Execution id="ca3c98b8-aa2e-4ed6-89df-4290c12d6c05" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;named&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="47ae7bb1-e4e2-8302-1c3e-7bd09cd7691b">
+      <Execution id="5cba4406-ad66-40f4-a603-8fcba8b38c52" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX05_InitialModes" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX07_FrozenStatics" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="ceea0505-8913-8c4d-8677-c159bdb12651">
+      <Execution id="66e83d8d-fa0a-4b8c-861d-4b6980fe0bd8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX07_FrozenStatics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX10_CaptureLimits(mode: &quot;messages&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="08cb5fcc-3991-2362-4c5a-c8f37debb81a">
+      <Execution id="b244fe25-a3ea-4b31-a055-4f210b9b464b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX10_CaptureLimits" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;template&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="076ab93b-f5d9-39d0-fc40-c3dee93b88f2">
+      <Execution id="19708c33-3f36-4a6a-894d-d4d7810ea004" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;html&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="41c20f58-8854-fd16-e696-82b7e9e5cfa6">
+      <Execution id="62e2172d-7150-48f9-8592-a244716c1f79" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX22_SerializerFidelity" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: &quot;xhtml&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="cd7855b5-208a-3f23-8983-74cbefb96415">
+      <Execution id="198a5a67-ff73-4ca3-9795-9601370aa4c6" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX22_SerializerFidelity" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;shared&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="0b27fe88-2d5e-3bfd-f324-fe2e4f0d8d4f">
+      <Execution id="c8515d00-e4f5-47e7-8d80-d9f851686768" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX03_IndependentRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX26_OwnedAdmissionRefusal(cancel: True)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="06d545ef-396e-53e3-cca2-8d957b613a3f">
+      <Execution id="edecfd82-e24d-49d8-bb51-d9d206e26079" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX26_OwnedAdmissionRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX05_InitialModes(mode: &quot;#default&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="c2482276-2474-6fe2-646e-cfcd3d35286d">
+      <Execution id="7c246074-17cb-4ecd-822b-442f19f3ea2b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX05_InitialModes" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;mode&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="17e3f082-3d37-471f-9291-093ab9c63662">
+      <Execution id="a6f1ae72-4154-45d0-8c4b-63ccf4dfa2a8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;local-cancel&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="c19dc77e-0f1a-c9b7-ade0-1dcadd912562">
+      <Execution id="a4d74431-bd0f-4616-aec4-b160a7e2a13a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX11_ComposedControls" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX08_OptionsRefusal(mode: &quot;zero-operations&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="6c79f2f1-301b-cf85-a398-085c7586fe96">
+      <Execution id="926ab923-43d4-4ec8-bf0c-b6bb001bf586" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX08_OptionsRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX11_ComposedControls(mode: &quot;local-operations&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="9ee57122-68e0-f6f7-aa47-9aa48475ecfa">
+      <Execution id="665aac30-53de-468e-aac6-7b405a4e7f8e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX11_ComposedControls" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX03_IndependentRoles(mode: &quot;template&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="2423ab70-5249-1ec8-2852-c66cdbb0bdbb">
+      <Execution id="dee73b42-a6aa-48c9-b861-43a4234cfa5a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX03_IndependentRoles" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX04_AbsentGlobalContext" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="d601d147-4ffc-ba40-7c8f-a0bef7e276d5">
+      <Execution id="e506e584-4b42-4aa6-bf32-a7e65c603ea5" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX04_AbsentGlobalContext" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX06_CompilerRefusal(mode: &quot;include&quot;)" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="692be54d-a39f-a710-b01a-15d5e38b647f">
+      <Execution id="e3e5a751-1cd8-43b8-9bb9-26b6c92c1fb0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX06_CompilerRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.Xslt.Tests.PublicXsltSessionTests.PX09_ZeroCaps" storage="d:\development\bosak\tests\bosak.xslt.tests\bin\release\net10.0\bosak.xslt.tests.dll" id="918d1349-ad64-7c01-108f-a058eef7586a">
+      <Execution id="ec3eed24-52c6-4790-aeec-7f7d54e82d2c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Xslt.Tests.PublicXsltSessionTests" name="PX09_ZeroCaps" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="0470a303-9016-36ed-379d-2227c1507d77" executionId="48c189fc-c228-4a8c-be79-54bebf66d418" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a1f734a-bc11-7a65-2c34-5bc9535624b0" executionId="f2a73eec-8c0c-4df2-b480-21fb8a585dff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ee57122-68e0-f6f7-aa47-9aa48475ecfa" executionId="665aac30-53de-468e-aac6-7b405a4e7f8e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ed424b8-f2e0-ed00-d8b3-e11aede34f14" executionId="ca3c98b8-aa2e-4ed6-89df-4290c12d6c05" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c79f2f1-301b-cf85-a398-085c7586fe96" executionId="926ab923-43d4-4ec8-bf0c-b6bb001bf586" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cbd85e1d-b1da-8350-b505-30f3840cf0c5" executionId="d8265663-7c31-40cb-a952-d9a64e667e2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f9ee9c7-59cd-04f1-0a5d-48cab1c104b4" executionId="4c423ea5-8492-48bf-b30d-b465465a04a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e3a28bd-e875-a2bf-7040-bcfa600ed35b" executionId="9f722160-c414-4070-a994-88cc504c6bb7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2a833dca-34ea-1f03-b836-2fd6dee6641b" executionId="d4bcf4e9-8054-4934-acbb-27920416b08d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c19dc77e-0f1a-c9b7-ade0-1dcadd912562" executionId="a4d74431-bd0f-4616-aec4-b160a7e2a13a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="44b3dc7c-6a47-e9a2-d049-dd3867e15098" executionId="8ccaa090-46ab-4932-8681-53dea1b2a39e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="74c7d4dc-a4e5-5c86-e118-94d7f9bb2d72" executionId="bc48e198-d672-405f-bc27-1c7998c564ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cd7855b5-208a-3f23-8983-74cbefb96415" executionId="198a5a67-ff73-4ca3-9795-9601370aa4c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5eaef4b3-d1dd-e91e-18c9-74bfe2d393df" executionId="dc6aaf04-9903-473c-a923-d16df1306b9c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db6eccae-2d38-8be8-de9e-2032ed9ecc29" executionId="0a19ead4-e386-49ac-ad06-d9cf7c898367" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="918d1349-ad64-7c01-108f-a058eef7586a" executionId="ec3eed24-52c6-4790-aeec-7f7d54e82d2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ad29c09-1f41-8196-208e-5ba887af26b8" executionId="b63562b6-4316-4e04-a0ed-3bde8f09b2b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c565cd6f-0675-9bfd-aeb3-afd839a4f062" executionId="fb6c0081-45c1-4305-a94e-509a6fe249c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e5a7d29-5078-c053-1938-6cd3eb520220" executionId="a44fd688-4133-4587-8526-ab82ee4f7cf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dffba2b0-c1ce-0218-e53d-ebc40eb82d82" executionId="ef1dfbb2-1eae-4478-af1d-9187caf1b43d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6a236f84-e534-4b75-77d7-3239dec685d6" executionId="b1dea702-0cce-49c9-98f6-ab9503b89b9b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="701c2583-4ca2-b45c-8e32-4f23a2956939" executionId="ae577fca-5616-442d-ae43-e7c972f93945" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92b7bf6a-5111-b9bb-7199-79da664e77c6" executionId="133ba8ec-c675-454e-9b3b-83f366cf5715" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b27fe88-2d5e-3bfd-f324-fe2e4f0d8d4f" executionId="c8515d00-e4f5-47e7-8d80-d9f851686768" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17e3f082-3d37-471f-9291-093ab9c63662" executionId="a6f1ae72-4154-45d0-8c4b-63ccf4dfa2a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="692be54d-a39f-a710-b01a-15d5e38b647f" executionId="e3e5a751-1cd8-43b8-9bb9-26b6c92c1fb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bd2707a-9361-7266-b603-27462e462438" executionId="6482b72a-abbe-4cb8-8637-7b23fc81ca5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="97b816aa-a15f-4324-b7fc-1566cae0b299" executionId="041f4123-0522-4c7c-bdce-0622d1cef11f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af1cea7f-e573-e962-09e9-0209d91e4664" executionId="faf5c392-791c-44df-b2e5-85efbe28012a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="412e8c81-d048-7e6b-7de3-370336c77f86" executionId="b1f47b97-35a7-46b9-9205-e6b36ef24b6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a208e5db-e73d-d315-0a58-ac97dc9000d5" executionId="60d73fd7-ee0d-4ff5-bcdf-360a50c85208" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8936fa54-cde3-3f3a-7b50-5521d7550b3f" executionId="13d5b1e7-0aff-4913-9bcb-e0a2801dc999" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="edc3f6d9-03ed-866d-4cc5-b8300a877107" executionId="df9c9652-dcda-407d-8101-8c37a9e2fb98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4ef66b2-169e-2d76-b959-b92deafaeb8e" executionId="d16646b2-54ed-4521-b97c-92fb3ee62957" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68a3ce86-08da-adbf-c51b-456a18018865" executionId="11c5ff0c-208d-4fdb-8c65-779548253320" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="34e604d1-5c92-a218-83a3-1e1851538548" executionId="ba15acb4-dc9c-4bf9-9664-7858cbb34e1b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1cffe282-1726-44ad-0aad-596c775a5944" executionId="200864af-c61a-4caf-85d3-e3998dbb0311" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06d545ef-396e-53e3-cca2-8d957b613a3f" executionId="edecfd82-e24d-49d8-bb51-d9d206e26079" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d601d147-4ffc-ba40-7c8f-a0bef7e276d5" executionId="e506e584-4b42-4aa6-bf32-a7e65c603ea5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e619e53b-0b13-dead-bcbc-5fec600140d3" executionId="1da5100a-94b4-430b-b0c6-4ea0c7d8455b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6aca9a1a-bbd5-b580-fe7e-fd9f9b6b655f" executionId="0659239a-165c-4c5c-94fd-97efea330836" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b555613a-c18a-9730-1b95-43d9a546a48c" executionId="3c917ea3-1208-4ba5-b70e-6b1a422e79ea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0da8350a-fc31-60d4-ce7e-d0cda3522ef7" executionId="c0f2889b-28e6-4f6d-82e7-e707c7d35e13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="47ae7bb1-e4e2-8302-1c3e-7bd09cd7691b" executionId="5cba4406-ad66-40f4-a603-8fcba8b38c52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83434f31-cf4c-c351-3df0-0d961d60716e" executionId="9bd5df8e-ad77-42e7-9730-580fb7de0859" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41c20f58-8854-fd16-e696-82b7e9e5cfa6" executionId="62e2172d-7150-48f9-8592-a244716c1f79" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ceea0505-8913-8c4d-8677-c159bdb12651" executionId="66e83d8d-fa0a-4b8c-861d-4b6980fe0bd8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0d5f6e89-1491-36bd-5a61-43fc28f4d824" executionId="c5071184-8d8c-439b-8ed6-b139c21b4b89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4bef62f-c774-6ab4-a694-c523694deb88" executionId="d4aecd85-9e02-4c4c-8769-5820d3e09f70" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6036f973-d6e6-50f3-3e09-c79457dca445" executionId="d059543f-b595-4fb3-8cc7-d52e2a4a769d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d6359e4-a00d-d984-d8f6-a8e0d7957db4" executionId="8b76e2a9-6fe0-4179-8fa9-267a74edf237" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="013e9de5-aa5d-6570-caa0-f82b273e6f1c" executionId="f46ef542-8689-48b0-8315-e46c7b95a4dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8f783f99-628c-57c0-7622-6d3887b2397b" executionId="9fdbc84f-5b95-41c9-8233-192904bf560c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="55f30a8c-a953-98d8-d7f8-f72eb7129393" executionId="ce207a4e-bafe-4916-9224-924bc0381d13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="13e9d074-b876-aee7-31cf-e574c895a5e7" executionId="d0dc2652-4dbe-420d-a3e7-c65cb818b202" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0ed2199-c0ef-bf85-89e9-21fac29c348d" executionId="168cb543-7ae8-49e3-a20c-92839c91d01e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="076ab93b-f5d9-39d0-fc40-c3dee93b88f2" executionId="19708c33-3f36-4a6a-894d-d4d7810ea004" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2423ab70-5249-1ec8-2852-c66cdbb0bdbb" executionId="dee73b42-a6aa-48c9-b861-43a4234cfa5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3cd6bbb9-cb0f-f300-4496-7ac1da5e565d" executionId="3d1f0811-abe8-4178-9229-bee67e1a6e98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ccc8c08c-929c-da4f-4a8c-8bb4e07ce742" executionId="530a3bf0-912f-4be1-9334-ede53f94d7ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2482276-2474-6fe2-646e-cfcd3d35286d" executionId="7c246074-17cb-4ecd-822b-442f19f3ea2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9a5b4c4-fca0-c71a-4815-668d8632df74" executionId="4b1e8289-72dc-4d35-bd36-25f821aaffbe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08cb5fcc-3991-2362-4c5a-c8f37debb81a" executionId="b244fe25-a3ea-4b31-a055-4f210b9b464b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84c2d505-bf9e-3da7-5c47-ead643045baa" executionId="9d257fdc-3f2c-402e-836c-daf49e8d76f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="64" executed="64" passed="59" failed="5" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.14]   Discovering: Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:00.87]   Discovered:  Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:00.89]   Starting:    Bosak.Xslt.Tests&#xD;
+[xUnit.net 00:00:01.24]       Assert.IsType() Failure: Value is not the exact type&#xD;
+[xUnit.net 00:00:01.24]       Expected: typeof(System.ArgumentException)&#xD;
+[xUnit.net 00:00:01.24]       Actual:   typeof(System.NotSupportedException)&#xD;
+[xUnit.net 00:00:01.24]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.24]         D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs(346,0): at Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership()&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.24]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.44]       System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.&#xD;
+[xUnit.net 00:00:01.44]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(820,0): at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(767,0): at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(2430,0): at Bosak.Xslt.Stylesheet.Stylesheet.Load()&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(851,0): at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(171,0): at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(148,0): at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs(322,0): at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method)&#xD;
+[xUnit.net 00:00:01.44]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.44]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.44]       System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.&#xD;
+[xUnit.net 00:00:01.44]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(820,0): at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(767,0): at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(2430,0): at Bosak.Xslt.Stylesheet.Stylesheet.Load()&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(851,0): at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(171,0): at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(148,0): at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs(322,0): at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method)&#xD;
+[xUnit.net 00:00:01.44]            at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.44]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.44]       System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'method' in xsl:output declarations.&#xD;
+[xUnit.net 00:00:01.44]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(820,0): at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(767,0): at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(2430,0): at Bosak.Xslt.Stylesheet.Stylesheet.Load()&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(851,0): at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(171,0): at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(148,0): at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs(322,0): at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method)&#xD;
+[xUnit.net 00:00:01.44]            at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.44]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.44]       System.InvalidOperationException : XTSE1560: Conflicting explicit values for attribute 'encoding' in xsl:output declarations.&#xD;
+[xUnit.net 00:00:01.44]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(820,0): at Bosak.Xslt.Stylesheet.OutputProperties.ThrowConflict(String attribute)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\OutputProperties.cs(773,0): at Bosak.Xslt.Stylesheet.OutputProperties.MergeChecked(OutputProperties target, OutputProperties source)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(2430,0): at Bosak.Xslt.Stylesheet.Stylesheet.Load()&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Stylesheet\Stylesheet.cs(851,0): at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth, XsltProcessorProfile processorProfile)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(171,0): at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\src\Bosak.Xslt\Api\XsltCompiler.cs(148,0): at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri)&#xD;
+[xUnit.net 00:00:01.44]         D:\Development\Bosak\tests\Bosak.Xslt.Tests\PublicXsltSessionTests.cs(322,0): at Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(String method)&#xD;
+[xUnit.net 00:00:01.44]            at InvokeStub_PublicXsltSessionTests.PX22_SerializerFidelity(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.44]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.47]   Finished:    Bosak.Xslt.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T08:46:20.2040699+01:00">
+        <Text>[xUnit.net 00:00:01.24]     Bosak.Xslt.Tests.PublicXsltSessionTests.PX24_AmbiguousOwnership [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T08:46:20.4002374+01:00">
+        <Text>[xUnit.net 00:00:01.44]     Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: "xhtml") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T08:46:20.4004486+01:00">
+        <Text>[xUnit.net 00:00:01.44]     Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: "html") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T08:46:20.4008037+01:00">
+        <Text>[xUnit.net 00:00:01.44]     Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: "xml") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-06T08:46:20.4010775+01:00">
+        <Text>[xUnit.net 00:00:01.44]     Bosak.Xslt.Tests.PublicXsltSessionTests.PX22_SerializerFidelity(method: "text") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

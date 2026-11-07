@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.80.0",
+  "policyBeforeImplementation": true,
+  "productionChanged": false,
+  "beforeHashes": {
+    "docs/foundation-compatible-container/MANIFEST.json": "0d59471c635ab1d1c5726d77a60461a105afa969dac8a26baba106e9f1a854af",
+    "docs/foundation-container-policy/POLICY.json": "6f4e1772984124053b8052bea0eb12346806aaa311d8f41120c39a502a72c8b5",
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e",
+    "src/Bosak.XPath.Core/Xdm/XdmValueKind.cs": "919c96e9e3b852af8d5775a20b6bddd9cc410dbf67cbf30a0f2fd2dc74818963",
+    "src/Bosak.XPath.Core/Xdm/XsQName.cs": "4b2f0a3c31213676a49d296930b050eec85e2bd0f795b6dfc3b17d3d7210604f",
+    "src/Bosak.XPath.Core/Xdm/XPathDateTime.cs": "026ea5c05b102411e5ac809920669b955950ad79e2c020edc1010f4dd9f74acb",
+    "src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs": "3ae985bf53a60ad6f2320b6be427da64cb52292135afbfdb3fbc1b7fcf7bb0c5",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "e9319bac2fc4dcef32feabdd470f3293ce0e9b13815a80d73ade88de0794bc4a",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "2.7.7",
+        "3.3.1.2",
+        "3.3.2",
+        "3.3.3",
+        "5.14"
+      ]
+    }
+  ],
+  "scope": "PV-T04 wider primitive payload snapshot/lifetime policy only. No source, public declarations, runtime profile or version change. Current complete containers still select four primitive families.",
+  "intentionalExtensions": "Bosak carrier-preserving host transport and exact raw ownership checks extend XDM API policy. Lexical validity belongs to provider-issued evidence and separate validation routes; this boundary neither casts nor proves all XML Schema facets. Unsupported enum-only/internal carriers and malformed public factories receive explicit disposition, not fabricated factories or authority."
+}

@@ -17,6 +17,7 @@
 //                      |                  |       |                | Cancelled/TimeLimitExceeded/OperationLimitExceeded classification (XV0011-XV0013)        |
 //                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1/D-F1: bounded serialization and terminal control observation.                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4 | 06-11-2026     | Observe original run errors without changing legacy capture (1.76.0). |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -46,6 +47,7 @@ internal sealed class XsltCaptureSession
 
     private readonly XsltCaptureOptions _options;
     private readonly ExecutionGate? _gate;
+    private readonly Action<Exception>? _observeError;
     private readonly Action<long>? _observeProduction;
     private readonly List<XsltCapturedOutput> _secondary = new();
     private readonly List<XsltCaptureFailure> _failures = new();
@@ -56,9 +58,9 @@ internal sealed class XsltCaptureSession
     private Exception? _outputLevelFailure;
 
     internal XsltCaptureSession(XsltCaptureOptions options, IXsltMessageListener? hostListener, ExecutionGate? gate,
-        Action<long>? observeProduction = null)
+        Action<long>? observeProduction = null,Action<Exception>? observeError=null)
     {
-        _options = options;
+        _options = options; _observeError=observeError;
         _hostListener = hostListener;
         _gate = gate;
         _observeProduction = observeProduction;
@@ -84,7 +86,7 @@ internal sealed class XsltCaptureSession
                 CountLimitCode,
                 resolvedUri,
                 $"Secondary output count bound ({maxCount}) exceeded; output '{resolvedUri}' was not captured and the transformation was terminated."));
-            throw new XsltCaptureLimitException(XsltCaptureFailureKind.OutputCountLimitExceeded, resolvedUri);
+            throw ObserveLimit(XsltCaptureFailureKind.OutputCountLimitExceeded, resolvedUri);
         }
 
         byte[] bytes;
@@ -102,6 +104,7 @@ internal sealed class XsltCaptureSession
         catch (XsltCaptureLimitException) { throw; }
         catch (Exception ex)
         {
+            _observeError?.Invoke(ex);
             // A serialization failure (for example SESU0007 for an unsupported encoding) aborts the
             // run with the output's identity attached; the exception is rethrown for the engine to
             // unwind. It is already recorded here, so BuildResult must not classify it a second time.
@@ -133,6 +136,7 @@ internal sealed class XsltCaptureSession
         catch (XsltCaptureLimitException) { return; }
         catch (Exception ex)
         {
+            _observeError?.Invoke(ex);
             RecordFailure(ClassifyTransformFailure(ex, identity));
             return;
         }
@@ -154,13 +158,14 @@ internal sealed class XsltCaptureSession
         }
         catch (SerializationByteLimitException ex)
         {
+            _observeError?.Invoke(ex);
             var perOutput = ex.PerOutput;
             var kind = perOutput ? XsltCaptureFailureKind.OutputSizeLimitExceeded
                 : XsltCaptureFailureKind.AggregateSizeLimitExceeded;
             RecordFailure(new XsltCaptureFailure(kind,
                 perOutput ? PerOutputLimitCode : AggregateLimitCode, identity,
                 $"Output '{identity}' exceeded its {(perOutput ? "per-output" : "remaining aggregate")} byte budget ({ex.Limit}) during production; serialization stopped and the output was dropped."));
-            throw new XsltCaptureLimitException(kind, identity);
+            throw ObserveLimit(kind, identity);
         }
     }
 
@@ -168,6 +173,7 @@ internal sealed class XsltCaptureSession
     // it is classified here unless it is a bound breach that was already recorded at the breach point.
     internal XsltCaptureResult BuildResult(Exception? failure)
     {
+        if(failure is not null)_observeError?.Invoke(failure);
         if (failure is XsltCaptureLimitException)
         {
             // Recorded at the breach point; nothing more to classify. (A stylesheet-level xsl:catch
@@ -227,10 +233,14 @@ internal sealed class XsltCaptureSession
         return new XsltCaptureFailure(kind, code, resolvedUri: null, interrupt.Message);
     }
 
+    private XsltCaptureLimitException ObserveLimit(XsltCaptureFailureKind kind,string identity)
+    {var error=new XsltCaptureLimitException(kind,identity);_observeError?.Invoke(error);return error;}
+
     private void RecordFailure(XsltCaptureFailure failure) => _failures.Add(failure);
 
     private void RecordInterrupt(ExecutionInterruptException interrupt)
     {
+        _observeError?.Invoke(interrupt);
         var classified = ClassifyInterrupt(interrupt);
         if (!_failures.Any(f => f.Code == classified.Code)) RecordFailure(classified);
     }

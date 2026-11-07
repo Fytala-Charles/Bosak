@@ -1,0 +1,19 @@
+{
+  "review": "Agent static source/binary review,not owner acceptance",
+  "candidateSourceSha256": "c0213cb12b517d9f1124e29ed6220b902a1c85922a13dda2466cd50a535d597c",
+  "productionSourceSha256": "d732c8bd6f42ee807303ba95ccfddb537eb8f6c56be57ac19ef9b15443545dba",
+  "changedProofScope": "Two callback-free engine-captured identity getters only",
+  "providerOwnershipMethodsByteEquivalentAsText": true,
+  "capturedIdentityDoesNotGrantAuthority": true,
+  "noPositiveOwnershipCacheAcrossCallbacks": true,
+  "rawSnapshotCancellationGuardsRetained": true,
+  "fullProviderFacingProofsRetained": true,
+  "newControls": "QueryNodeFactsTests.CapturedIdentityKeepsOwnedTypedContainer and three CapturedIdentityKeepsCallbackPostconditions cases",
+  "reviewedGuards": {
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "90f15cc396eb142328469249ddad94c37f0f063da3c845d0d31aad94f6d4a18b",
+    "src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs": "f84542a5e220a9730690294ad087434852ab79ba3e9c20a5a74b668522ac740f",
+    "src/Bosak.XPath.Core/Xdm/QuerySnapshotLifetime.cs": "e5035cda8935ec3435a5aae0604c1fe82949ea4f86860c89a22d555b4c7bd486",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "1ed7a59e35cadbbd2d7537fc1db73723aafb10c6409dc0df4a610d39b7581bea"
+  },
+  "scope": "No public API,member layout,producer callback,source/advisor/tuple/container proof or resource cleanup policy selected for change. Authority object remains provider-owned;only its captured reference is callback-free."
+}

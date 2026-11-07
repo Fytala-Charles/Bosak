@@ -1,0 +1,14 @@
+{
+  "policyCases": "docs/foundation-primitive-policy/IMPLEMENTATION-CASES.json",
+  "additionalPassedTestCount": false,
+  "newGroups": "PublicTypedIdentityTests.PW01-PW12 and PublicCompatibleTests.PW01-PW14",
+  "retainedContainerRegressions": 87,
+  "limitations": [
+    "PW fixtures exercise transport of supplied carriers/tags, not independent native lexical/calendar/facet validation.",
+    "Temporal fixtures preserve independently supplied wrapper/component timezone flags; no DateTimeOffset conversion or schema-validity claim for arbitrary fields.",
+    "Enum-only Uri/Binary carriers are not fabricated for tests or reported as public factory coverage.",
+    "Existing TC/CC controls cover proof/lifetime/cursor/resource/failure paths; not every planned PPV failure combination is a distinct new test.",
+    "Actual native/owner/aggregate retained-memory and broader host/construction/persistence requirements remain open."
+  ],
+  "requirementsWaived": 0
+}

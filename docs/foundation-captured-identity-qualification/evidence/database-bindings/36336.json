@@ -1,0 +1,41 @@
+{
+  "processId": 36336,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "dc5b66d766836526f8fa613fb7245324500c08fe62e395e58ba8fe50f62c5b52",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.Tests.dll",
+      "sha256": "7dc21fb240bb6779053baab64ad3e2f031e06db9de1cac56c0c5985eff298203",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "9ddffaecbccce9db967a667300cb7840b07795b00549a2249fbb8214069b7c74",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "a158efb96c498f05d22d14027df27fc5dff2015cc0586e41fe25789493c67b7f",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "5263836d9499e0d2b930adc604d8103e49a0e22ed0d1d8f81e7969af53692e90",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

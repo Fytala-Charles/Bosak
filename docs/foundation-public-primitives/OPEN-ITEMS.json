@@ -1,0 +1,33 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-T05",
+      "status": "CompleteElevenPublicFactoryKinds_CoreSelection"
+    },
+    {
+      "id": "PV-T06",
+      "status": "RequiredEnumOnlyRepresentationDisposition"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderAndBudgetAcceptancePending"
+    },
+    {
+      "id": "NU-01",
+      "status": "Open"
+    },
+    {
+      "id": "SC-01",
+      "status": "Open"
+    },
+    {
+      "id": "R4-R7",
+      "status": "Unwaived"
+    }
+  ]
+}

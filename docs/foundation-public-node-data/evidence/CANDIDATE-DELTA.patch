@@ -1,0 +1,746 @@
+--- 1.63.1/src/Bosak.XPath.Api/Schema/OriginalNodeDataPlan.cs
++++ 1.64.0/src/Bosak.XPath.Api/Schema/OriginalNodeDataPlan.cs
+@@ -0,0 +1,62 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 05 November 2026
++// PURPOSE              : Compiles and evaluates the bounded original-node data profile.
++// SPECIAL NOTES        : Public surface API for compiling and evaluating XPath 3.1 expressions.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : license.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; bounded public original-node data profile (1.64.0).                             |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++using System.Collections.Immutable;
++using System.Text.Json;
++using Bosak.XPath.Core.Schema;
++using Bosak.XPath.Core.Xdm;
++using Bosak.XPath.Runtime.Vm;
++namespace Bosak.XPath.Api.Schema;
++
++/// <summary>Compiles and evaluates the bounded original-node data profile.</summary>
++internal static class OriginalNodeDataPlan
++{
++    internal const string Profile="bosak-original-node-data-v1";
++    internal const string Descriptor="bosak-original-node-data-descriptor-v1";
++    internal static bool TryCompile(string expression,SchemaQueryLimits limits,CompileOptions options,CancellationToken token,out QuerySourceSession? runtime)
++    {
++        runtime=null;token.ThrowIfCancellationRequested();
++        if(expression.Trim() is not("data($node)" or "fn:data($node)")
++            ||!SchemaSessionCompilation.TrySnapshotOptions(options,out var frozen,out _))return false;
++        if(frozen!.Namespaces is not null&&frozen.Namespaces.TryGetValue("fn",out var fn)&&fn!="http://www.w3.org/2005/xpath-functions")return false;
++        var captured=SchemaSessionCompilation.Capture(frozen,frozen.Namespaces,frozen.DefaultElementNamespace);
++        var descriptor=JsonSerializer.Serialize(new{format=Descriptor,profile=Profile,staticContext=captured.Fingerprint,operation="fn:data",variable="node",ownership="exact-selected-source-and-original-tuple",metadata="original-typed-container",output="ordered-materialized-zero-one-many",cache="scalar-container-origin-ordinal",transaction="whole-batch",provenance="original-cell-types-and-assessment",limits.MaxOpenSnapshots,limits.MaxCachedValuesPerSnapshot,limits.MaxTypedValueAtoms,limits.MaxNumericDigits,limits.MaxDecimalScale});
++        token.ThrowIfCancellationRequested();
++        runtime=new QuerySourceSession(new SchemaQueryEnvironment(captured.Namespaces,descriptor),static _=>throw new NotSupportedException("Original data requires explicit admitted dispatch."),limits.MaxOpenSnapshots);
++        return true;
++    }
++    internal static XdmValue Evaluate(QuerySourceSession.Operation operation,SchemaAdvisorBinding binding,ImmutableArray<SchemaQuerySnapshot> snapshots,SchemaQueryLimits limits,EvaluationContext context)
++    {
++        var token=operation.Cancellation;
++        void Check(){operation.Check();binding.CheckAvailable(token);operation.Check();}
++        Check();var value=context.CaptureOriginalNode();Check();
++        if(value.IsUndefined){Check();return XdmValue.Undefined;}
++        var node=value.NodeValue??throw new ArgumentException("Missing node payload.");
++        var owner=operation.FindNodeOwner(node);Check();
++        void CheckNode(){Check();operation.RequireNodeOwner(owner,node);Check();}
++        CheckNode();var kind=node.NodeKind;CheckNode();
++        if(kind is not(XdmNodeKind.Document or XdmNodeKind.Element or XdmNodeKind.Attribute or XdmNodeKind.Text or XdmNodeKind.Comment or XdmNodeKind.ProcessingInstruction or XdmNodeKind.Namespace))
++            throw new ArgumentException("Unknown original node kind.");
++        if(kind is not(XdmNodeKind.Element or XdmNodeKind.Attribute))throw new NotSupportedException("This profile atomizes original elements and attributes only.");
++        var snapshot=snapshots.Single(s=>ReferenceEquals(s.Runtime,owner));
++        var typed=snapshot.TypedState;
++        if(node is not ISchemaAnnotatedNode annotated||typed?.Origin is null)throw new NotSupportedException("Original node facts and selected original assessment are required.");
++        if(typed.Issuer is not IQueryNodeFactsIssuer issuer)throw new NotSupportedException("Original node issuance is unavailable.");
++        CheckNode();var facts=annotated.OriginalSchemaFacts;CheckNode();
++        if(facts is null)throw new ArgumentException("Missing original facts.");
++        return operation.AtomizeOriginalNode(owner,issuer,typed.Input,typed.Origin,node,facts,kind,limits.MaxCachedValuesPerSnapshot,limits.MaxTypedValueAtoms,limits.MaxNumericDigits,limits.MaxDecimalScale);
++    }
++}
+--- 1.63.1/src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs
++++ 1.64.0/src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs
+@@ -15,6 +15,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.2   | 04-11-2026     | Document numeric digit/scale enforcement in the exact arithmetic profile (1.48.0).       |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.3   | 05-11-2026     | Describe existing typed result and scalar registry units (1.64.0). |
++//                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System;
+ using System.Collections.Immutable;
+@@ -25,7 +27,7 @@
+ using Bosak.XPath.Runtime.Vm;
+ namespace Bosak.XPath.Api.Schema;
+ /// <summary>Explicit finite admission limits; no owner workload defaults are selected.</summary>
+-/// <remarks>The ordinary string/boolean profile excludes numeric evaluation; the exact arithmetic profile enforces numeric digit/scale limits. Schema caches and typed enumeration remain unavailable.</remarks>
++/// <remarks>The ordinary string/boolean profile excludes numeric evaluation; the exact arithmetic profile enforces numeric digit/scale limits. Assessor-bound profiles enforce scalar cache capacity and typed-result atom limits; these are not byte or provider-time budgets.</remarks>
+ public readonly struct SchemaQueryLimits
+ {
+     /// <summary>Specifies positive counts and nonnegative scale; the default struct is invalid.</summary>
+--- 1.63.1/src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs
++++ 1.64.0/src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs
+@@ -33,6 +33,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.11   | 05-11-2026     | Dispatch bounded public original-node nilled with copied results (1.63.0). |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.12   | 05-11-2026     | Dispatch bounded original-node data with ordered atomic results (1.64.0). |
++//                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System;
+ using System.Text.Json;
+@@ -44,7 +46,7 @@
+ using Bosak.XPath.Runtime.Vm;
+ namespace Bosak.XPath.Api.Schema;
+ /// <summary>Engine-created XPath session with an explicit bounded ordinary, numeric or typed identity profile.</summary>
+-/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound typed profiles support single-atomic identity, bounded exact numeric computation and original-node nilled metadata. Construction and compatibility remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
++/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound typed profiles support single-atomic identity, bounded exact numeric computation and original-node nilled metadata/ordered atomization. Construction and compatibility remain unavailable; profiles do not impose a hard time/graph-size budget.</remarks>
+ public sealed class SchemaQuerySession : IDisposable
+ {
+     private bool _closed;
+@@ -54,9 +56,10 @@
+     private readonly SchemaQueryLimits _limits;
+     private readonly bool _numeric;
+     private readonly bool _nilled;
++    private readonly bool _data;
+     private SchemaAdvisorBinding? _binding;
+     private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null)
+-    { _runtime=runtime;_limits=limits;_numeric=numeric;_nilled=profile==OriginalNodeNilledPlan.Profile;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name)); }
++    { _runtime=runtime;_limits=limits;_numeric=numeric;_nilled=profile==OriginalNodeNilledPlan.Profile;_data=profile==OriginalNodeDataPlan.Profile;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name)); }
+     internal static SchemaResult<SchemaQuerySession> CompileTypedIdentityCandidate(string expression,SchemaQueryLimits limits,CompileOptions? options=null,CancellationToken token=default)
+     {
+         ArgumentNullException.ThrowIfNull(expression);limits.Validate();token.ThrowIfCancellationRequested();
+@@ -67,6 +70,7 @@
+     internal static SchemaResult<T> Unsupported<T>() => new Outcome<T>(default!, false);
+     internal static SchemaResult<T> Supported<T>(T value) => new Outcome<T>(value, true);
+     internal static SchemaResult<T> UnsupportedNumeric<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-NUMERIC-UNSUPPORTED");
++    internal static SchemaResult<T> UnsupportedData<T>() => new Outcome<T>(default!,false,"BOSAK-ORIGINAL-DATA-UNSUPPORTED");
+     internal static SchemaResult<T> UnsupportedNilled<T>() => new Outcome<T>(default!,false,"BOSAK-ORIGINAL-NILLED-UNSUPPORTED");
+     internal static SchemaResult<T> UnsupportedTyped<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-IDENTITY-UNSUPPORTED");
+     private sealed class Outcome<T>(T value, bool supported,string diagnostic="BOSAK-ORDINARY-PROFILE-UNSUPPORTED") : SchemaResult<T>
+@@ -84,7 +88,7 @@
+     /// <param name="options">Existing options copied under the selected capture policy.</param>
+     /// <param name="assessor">Optional borrowed schema assessor.</param>
+     /// <param name="cancellationToken">Compilation/binding cancellation.</param>
+-    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or an assessor-bound typed identity/numeric/original-node nilled session; Unsupported for unavailable syntax, options or provider binding.</returns>
++    /// <returns>An ordinary or bounded exact arithmetic/scalar session, or an assessor-bound typed identity/numeric/original-node nilled/data session; Unsupported for unavailable syntax, options or provider binding.</returns>
+     /// <exception cref="ArgumentException">The source, explicit limits or provider binding are invalid.</exception>
+     /// <exception cref="OperationCanceledException">Compilation was canceled.</exception>
+     public static SchemaResult<SchemaQuerySession> CompileXPath(string expression, SchemaQueryLimits limits, CompileOptions? options = null, ISchemaAssessor? assessor = null, CancellationToken cancellationToken = default)
+@@ -92,14 +96,15 @@
+         ArgumentNullException.ThrowIfNull(expression); limits.Validate(); cancellationToken.ThrowIfCancellationRequested();
+         if (assessor is not null)
+         {
+-            bool nilled=OriginalNodeNilledPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out var typedRuntime);
+-            bool identity=!nilled&&TypedIdentityPlan.TryCompilePublic(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime);
+-            if(!nilled&&!identity&&!TypedNumericPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime))return UnsupportedTyped<SchemaQuerySession>();
+-            var typed=new SchemaQuerySession(typedRuntime!,limits,profile:nilled?OriginalNodeNilledPlan.Profile:identity?TypedIdentityPlan.PublicProfile:TypedNumericPlan.Profile);
++            bool data=OriginalNodeDataPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out var typedRuntime);
++            bool nilled=!data&&OriginalNodeNilledPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime);
++            bool identity=!data&&!nilled&&TypedIdentityPlan.TryCompilePublic(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime);
++            if(!data&&!nilled&&!identity&&!TypedNumericPlan.TryCompile(expression,limits,options??CompileOptions.Default,cancellationToken,out typedRuntime))return UnsupportedTyped<SchemaQuerySession>();
++            var typed=new SchemaQuerySession(typedRuntime!,limits,profile:data?OriginalNodeDataPlan.Profile:nilled?OriginalNodeNilledPlan.Profile:identity?TypedIdentityPlan.PublicProfile:TypedNumericPlan.Profile);
+             try
+             {
+                 typed._binding=typed.BindAdvisorCandidate(assessor,cancellationToken);
+-                if(typed._binding is null){typed.Dispose();return nilled?UnsupportedNilled<SchemaQuerySession>():identity?UnsupportedTyped<SchemaQuerySession>():UnsupportedNumeric<SchemaQuerySession>();}
++                if(typed._binding is null){typed.Dispose();return data?UnsupportedData<SchemaQuerySession>():nilled?UnsupportedNilled<SchemaQuerySession>():identity?UnsupportedTyped<SchemaQuerySession>():UnsupportedNumeric<SchemaQuerySession>();}
+                 cancellationToken.ThrowIfCancellationRequested();return Supported(typed);
+             }
+             catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,typed.Dispose);throw;}
+@@ -162,7 +167,7 @@
+         ArgumentNullException.ThrowIfNull(input); ArgumentNullException.ThrowIfNull(lifetime);
+         cancellationToken.ThrowIfCancellationRequested();
+         lock (_gate) ObjectDisposedException.ThrowIf(_closed, this);
+-        if (compatibilityView is not null||originalAssessment is not null&&_binding is null) return _binding is null?Unsupported<SchemaQuerySnapshot>():_runtime.TypedNumericProfile?UnsupportedNumeric<SchemaQuerySnapshot>():UnsupportedTyped<SchemaQuerySnapshot>();
++        if (compatibilityView is not null||originalAssessment is not null&&_binding is null) return _binding is null?Unsupported<SchemaQuerySnapshot>():_data?UnsupportedData<SchemaQuerySnapshot>():_runtime.TypedNumericProfile?UnsupportedNumeric<SchemaQuerySnapshot>():UnsupportedTyped<SchemaQuerySnapshot>();
+         lock(_gate)if(_inputs.ContainsKey(input))throw new ArgumentException("Input is already admitted or entering.",nameof(input));
+         _binding?.ValidateOrigin(originalAssessment,cancellationToken);
+         var adapter = new InputAdmission(this, input, lifetime, cancellationToken);
+@@ -197,7 +202,7 @@
+     public T Run<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, T> work, CancellationToken cancellationToken = default)
+     {
+         ArgumentNullException.ThrowIfNull(work);
+-        return _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled?_binding:null,snapshots)), cancellationToken);
++        return _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data)), cancellationToken);
+     }
+     /// <summary>Retains admissions until the raw callback task completes, independent of canceled waits.</summary>
+     /// <typeparam name="T">Caller result type.</typeparam>
+@@ -208,7 +213,7 @@
+     public Task<T> RunAsync<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, Task<T>> work, CancellationToken cancellationToken = default)
+     {
+         ArgumentNullException.ThrowIfNull(work);
+-        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled?_binding:null,snapshots)), cancellationToken);
++        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data)), cancellationToken);
+     }
+     /// <summary>Waits for admitted raw work; canceling this wait does not end that work.</summary>
+     /// <param name="cancellationToken">Wait cancellation only.</param>
+@@ -244,7 +249,7 @@
+         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
+         string IQuerySemanticEnvironment.BehaviorProfile => profile;
+         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
+-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==OriginalNodeNilledPlan.Profile?OriginalNodeNilledPlan.Descriptor:profile==TypedNumericPlan.Profile?TypedNumericPlan.Descriptor:profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
++        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==OriginalNodeDataPlan.Profile?OriginalNodeDataPlan.Descriptor:profile==OriginalNodeNilledPlan.Profile?OriginalNodeNilledPlan.Descriptor:profile==TypedNumericPlan.Profile?TypedNumericPlan.Descriptor:profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
+         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
+     }
+@@ -316,12 +321,13 @@
+     private readonly SchemaQueryLimits _limits;
+     private readonly bool _numeric;
+     private readonly bool _publicTyped;
+-    private readonly SchemaAdvisorBinding? _nilledBinding;
++    private readonly SchemaAdvisorBinding? _nodeBinding;
+     private readonly ImmutableArray<SchemaQuerySnapshot> _snapshots;
++    private readonly bool _data;
+     internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric)
+         :this(runtime,limits,numeric,false) { }
+-    internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric,bool publicTyped,SchemaAdvisorBinding? nilledBinding=null,ImmutableArray<SchemaQuerySnapshot> snapshots=default)
+-    { _runtime=runtime;_limits=limits;_numeric=numeric;_publicTyped=publicTyped;_nilledBinding=nilledBinding;_snapshots=snapshots; }
++    internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric,bool publicTyped,SchemaAdvisorBinding? nilledBinding=null,ImmutableArray<SchemaQuerySnapshot> snapshots=default,bool data=false)
++    { _runtime=runtime;_limits=limits;_numeric=numeric;_publicTyped=publicTyped;_nodeBinding=nilledBinding;_snapshots=snapshots;_data=data; }
+     private void ValidateInput(XdmValue value)
+     {
+         _runtime.Check();
+@@ -344,7 +350,7 @@
+     {
+         ArgumentNullException.ThrowIfNull(snapshot); ArgumentNullException.ThrowIfNull(value);
+         _runtime.RequireMember(snapshot.Runtime);
+-        if(_nilledBinding is not null)return SchemaQuerySession.UnsupportedNilled<XdmValue>();
++        if(_nodeBinding is not null)return _data?SchemaQuerySession.UnsupportedData<XdmValue>():SchemaQuerySession.UnsupportedNilled<XdmValue>();
+         if(!_publicTyped)return SchemaQuerySession.Unsupported<XdmValue>();
+         var typed=snapshot.TypedState??throw new ArgumentException("Snapshot has no bound typed input.",nameof(snapshot));
+         var staged=_runtime.PrepareTypedRegistration(snapshot.Runtime,typed.Issuer,typed.Input,typed.Origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+@@ -368,11 +374,12 @@
+     public SchemaResult<XdmValue> ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode)
+     {
+         _runtime.Check(); ArgumentNullException.ThrowIfNull(targetType); ArgumentNullException.ThrowIfNull(episode);
++        if(_data)return SchemaQuerySession.UnsupportedData<XdmValue>();
+         return _publicTyped?(_runtime.TypedNumericProfile?SchemaQuerySession.UnsupportedNumeric<XdmValue>():SchemaQuerySession.UnsupportedTyped<XdmValue>()):SchemaQuerySession.Unsupported<XdmValue>();
+     }
+     /// <summary>Evaluates captured XPath or XQuery; XSLT uses its typed transform producer instead.</summary>
+     /// <param name="context">Dynamic inputs whose selected policy must be enforced.</param>
+-    /// <returns>A scalar selected by the ordinary/numeric profile, the same authenticated value for typed identity, a plain computed result for typed numeric execution, or an optional Boolean for original-node nilled.</returns>
++    /// <returns>A scalar selected by the ordinary/numeric profile, the same authenticated value for typed identity, a plain computed result for typed numeric execution, an optional Boolean for original-node nilled, or ordered atomic results for original-node data.</returns>
+     /// <exception cref="NotSupportedException">Context state, numeric or structured inputs, or the result is outside this profile.</exception>
+     /// <exception cref="ArgumentException">Inputs do not have exactly one admitted owner or contain invalid typed scalar evidence.</exception>
+     /// <exception cref="ObjectDisposedException">The operation or a required admission is revoked.</exception>
+@@ -380,7 +387,7 @@
+     public XdmValue Evaluate(EvaluationContext context)
+     {
+         _runtime.Check(); ArgumentNullException.ThrowIfNull(context);
+-        if(_nilledBinding is not null)return OriginalNodeNilledPlan.Evaluate(_runtime,_nilledBinding,_snapshots,_limits,context);
++        if(_nodeBinding is not null)return _data?OriginalNodeDataPlan.Evaluate(_runtime,_nodeBinding,_snapshots,_limits,context):OriginalNodeNilledPlan.Evaluate(_runtime,_nodeBinding,_snapshots,_limits,context);
+         if(_publicTyped)
+         {
+             var value=context.CaptureTypedIdentityScalar();
+--- 1.63.1/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs
++++ 1.64.0/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs
+@@ -135,6 +135,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 1.63   | 05-11-2026     | Capture the closed original-node variable profile (1.63.0). |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 1.64   | 05-11-2026     | Share closed original-node capture diagnostics with data profile (1.64.0). |
++//                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Xdm;
+ using Bosak.XPath.Runtime.Functions;
+@@ -394,7 +396,7 @@
+                 "math"=>"http://www.w3.org/2005/xpath-functions/math","map"=>"http://www.w3.org/2005/xpath-functions/map",
+                 "array"=>"http://www.w3.org/2005/xpath-functions/array","local"=>"http://www.w3.org/2005/xquery-local-functions",
+                 "err"=>"http://www.w3.org/2005/xqt-errors",_=>null})))
+-            throw new NotSupportedException("Original nilled requires only an unprefixed node variable, absent focus and default runtime namespaces.");
++            throw new NotSupportedException("Original-node queries require only an unprefixed node variable, absent focus and default runtime namespaces.");
+         return CaptureSchemaInputsCore(static _=>true,1,9,null,false,true).VariableBindings[0].Value;
+     }
+     private SchemaOperationInputs CaptureSchemaInputsCore(Func<IXdmNode,bool> ownsNode,int maxBindings,int maxNamespaces,SchemaEvidenceKernel.Snapshot? snapshot,bool typedIdentity,bool originalNode=false)
+--- 1.63.1/src/Bosak.XPath.Runtime/Vm/QueryAtomizedSequence.cs
++++ 1.64.0/src/Bosak.XPath.Runtime/Vm/QueryAtomizedSequence.cs
+@@ -0,0 +1,32 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 05 November 2026
++// PURPOSE              : Stores a private materialized ordered sequence of registered atomic transports.
++// SPECIAL NOTES        : Part of the register-based virtual machine execution engine.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : license.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; materialized original-node atomic output (1.64.0).                             |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++using Bosak.XPath.Core.Xdm;
++namespace Bosak.XPath.Runtime.Vm;
++/// <summary>Stores a private materialized ordered sequence of registered atomic transports.</summary>
++internal sealed class QueryAtomizedSequence(int count):IXdmSequence
++{
++    private readonly XdmValue[] _values=new XdmValue[count];
++    internal void Set(int index,XdmValue value)=>_values[index]=value;
++    bool IXdmSequence.TryGetLength(out int length){length=_values.Length;return true;}
++    IXdmSequenceEnumerator IXdmSequence.GetEnumerator()=>new Cursor(_values);
++    private sealed class Cursor(XdmValue[] values):IXdmSequenceEnumerator
++    {
++        private int _index=-1;
++        XdmValue IXdmSequenceEnumerator.Current=>(uint)_index<(uint)values.Length?values[_index]:throw new InvalidOperationException("No current atomic value.");
++        bool IXdmSequenceEnumerator.MoveNext(){if(_index<values.Length)_index++;return _index<values.Length;}
++    }
++}
+--- 1.63.1/src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs
++++ 1.64.0/src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs
+@@ -18,6 +18,8 @@
+ //                      | Charles Korthout | 0.3   | 05-11-2026     | Add explicit metadata-only NotRequested observation mode (1.62.0). |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.4   | 05-11-2026     | Share adjacent live proofs and call issuer guards directly (1.63.1). |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.5   | 05-11-2026     | Stage original typed values into resident scalar output (1.64.0). |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Schema;
+@@ -159,6 +161,47 @@
+         }
+         CheckStored(); return new QueryNodeFacts(CheckStored,_type!,_declaration,_origin,absent,nilled,nodeKind,kind,value);
+     }
++    internal XdmValue Atomize(XdmNodeKind expectedKind,int maxCached,int faultAfter=-1)
++    {
++        var metadata=Read(true);
++        var kind=metadata.NodeKind;
++        if(kind!=expectedKind||kind is not(XdmNodeKind.Element or XdmNodeKind.Attribute))throw new ArgumentException("Original node kind changed.");
++        if(metadata.HasNoTypedValue)
++        {
++            CheckStored();
++            if(kind==XdmNodeKind.Attribute)throw new ArgumentException("An attribute cannot have an absent typed value.");
++            throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
++        }
++        bool nilled=metadata.IsNilled;
++        CheckStored();var outcome=_facts.ReadTypedValue(_token);CheckStored();
++        if(outcome is null)throw new ArgumentException("Missing facts typed-value outcome.");
++        CheckStored();var resultKind=outcome.Kind;CheckStored();
++        if(resultKind==SchemaResultKind.Unsupported)throw new NotSupportedException("Original typed value is unsupported.");
++        if(resultKind!=SchemaResultKind.Supported)throw new ArgumentException("Malformed original typed-value outcome.");
++        CheckStored();var container=outcome.Value;CheckStored();
++        if(container is null)throw new ArgumentException("Supported original typed value is missing.");
++        var cache=_snapshot.GetTypedScalars(_issuer,_input,_authority,maxCached);
++        var reader=new QueryTypedContainerReader(_operation,_snapshot,_environment,new GuardedIssuer(this),_input,_origin,container,_atoms,_digits,_scale,_token);
++        var group=cache.Find(container,_origin);
++        if(group is null)
++        {
++            var captured=reader.Read().Capture();CheckStored();
++            group=new QueryTypedScalarCache.Group(cache,container,_origin,captured.Governing,captured.List,captured.Cells);
++        }
++        reader.ValidateStored(group.Governing,group.Cells);CheckStored();
++        if(!ReferenceEquals(group.Governing,_type))throw new ArgumentException("Original governing type differs from typed value.");
++        if(nilled&&group.Cells.Length!=0)throw new ArgumentException("Nilled original node has a nonempty typed value.");
++        if(group.Cells.Length==0){CheckStored();return XdmValue.Undefined;}
++        if(faultAfter==-2)throw new InvalidOperationException("Injected atomization output allocation fault.");
++        var sequence=group.Cells.Length>1?new QueryAtomizedSequence(group.Cells.Length):null;
++        var result=sequence is null?default:XdmValue.FromSequence(XdmSequence.FromSource(sequence));
++        var registration=new QueryTypedScalarRegistration(cache,_operation,_snapshot,reader,group);
++        CheckStored();var installed=registration.Commit(faultAfter);CheckStored();
++        if(installed.Count!=group.Cells.Length)throw new ArgumentException("Issued container shape changed.");
++        if(sequence is null)result=installed.GetTransport(0);
++        else for(int index=0;index<group.Cells.Length;index++)sequence.Set(index,installed.GetTransport(index));
++        installed.Check();CheckStored();return result;
++    }
+     private sealed class GuardedIssuer(QueryNodeFactsReader owner) : IQueryTypedContainerIssuer
+     {
+         SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment { get { owner.CheckStored(); return owner._environment; } }
+--- 1.63.1/src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs
++++ 1.64.0/src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs
+@@ -44,6 +44,8 @@
+ //                      | Charles Korthout | 0.14   | 05-11-2026     | Allow internal original facts metadata-only reads (1.62.0). |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.15   | 05-11-2026     | Select exactly one raw node owner before public nilled getters (1.63.0). |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.16   | 05-11-2026     | Bridge original node atomization to the scalar registry (1.64.0). |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+@@ -276,6 +278,10 @@
+             RequireMember(selected);
+             if(!ReferenceEquals(FindNodeOwner(node),selected))throw new ArgumentException("Node requires exactly the selected admitted owner.",nameof(node));
+         }
++        internal XdmValue AtomizeOriginalNode(Snapshot snapshot,IQueryNodeFactsIssuer issuer,
++            Bosak.XPath.Core.Schema.ISchemaAssessmentInput input,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin,
++            IXdmNode node,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts,XdmNodeKind kind,int maxCached,int atoms,int digits,int scale,int faultAfter=-1)
++            =>new QueryNodeFactsReader(this,snapshot,_owner.Environment,issuer,input,origin,node,facts,atoms,digits,scale,_cancellation).Atomize(kind,maxCached,faultAfter);
+         internal CancellationToken Cancellation=>_cancellation;
+         internal Snapshot FindNodeOwner(IXdmNode node)
+         {
+--- 1.63.1/src/Directory.Build.props
++++ 1.64.0/src/Directory.Build.props
+@@ -3,7 +3,7 @@
+   <PropertyGroup>
+     <IsPackable>true</IsPackable>
+     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+-    <Version>1.63.1</Version>
++    <Version>1.64.0</Version>
+     <Authors>Fytala</Authors>
+     <Company>Fytala</Company>
+     <Copyright>Copyright (c) 2026 FYTALA</Copyright>
+--- 1.63.1/tests/Bosak.XPath.Runtime.Tests/PublicOriginalDataTests.cs
++++ 1.64.0/tests/Bosak.XPath.Runtime.Tests/PublicOriginalDataTests.cs
+@@ -0,0 +1,224 @@
++// ===========================================================================================================================================================
++// AUTHOR               : Charles Korthout
++// CREATE DATE          : 05 November 2026
++// PURPOSE              : Verifies original-node atomization, ordered evidence and transactional lifetime guards.
++// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
++//
++// COPYRIGHT            : Fytala
++// LICENSE              : license.md (Apache-2.0)
++// SPDX-License-Identifier: Apache-2.0
++// ===========================================================================================================================================================
++// Change History:      |==================|=======|================|=========================================================================================
++//                      |     Author       |Version|  Date          | Notes                                                                                    |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; public original-node atomization controls (1.64.0).                             |
++//                      |==================|=======|================|=========================================================================================
++// ===========================================================================================================================================================
++using System.Numerics;
++using System.Xml.Linq;
++using Bosak.XPath.Api;
++using Bosak.XPath.Api.Schema;
++using Bosak.XPath.Core.Schema;
++using Bosak.XPath.Core.Xdm;
++using Bosak.XPath.Providers.Xml;
++using Bosak.XPath.Runtime.Vm;
++using Xunit;
++using Xunit.Abstractions;
++using Shared=Bosak.XPath.Runtime.Tests.PublicOriginalNilledTests;
++using Container=Bosak.XPath.Runtime.Tests.QueryTypedContainerTests.Container;
++using Provenance=Bosak.XPath.Runtime.Tests.QueryTypedContainerTests.Provenance;
++using Handle=Bosak.XPath.Runtime.Tests.QueryTypedContainerTests.Handle;
++using Origin=Bosak.XPath.Runtime.Tests.QueryTypedContainerTests.Origin;
++using Session=Bosak.XPath.Api.Schema.SchemaQuerySession;
++namespace Bosak.XPath.Runtime.Tests;
++
++/// <summary>Verifies original-node atomization, ordered evidence and transactional lifetime guards.</summary>
++/// <param name="output">Records bounded public allocation observations.</param>
++public sealed class PublicOriginalDataTests(ITestOutputHelper output)
++{
++    private sealed class Fixture:IDisposable
++    {
++        internal readonly Shared.Fixture Inner;internal readonly Handle Actual=new();internal Container Value;
++        internal Fixture(int count=1,bool? list=null,XdmNodeKind kind=XdmNodeKind.Element,int capacity=8,int atoms=8,bool open=true,bool original=true,string expression="data($node)",CompileOptions? options=null)
++        {
++            Inner=new(expression,open,original,options,new(4,capacity,atoms,128,128));Inner.Node.Kind=kind;
++            Inner.Facts.TypedAllowed=true;Inner.Provider.TypedAllowed=true;Inner.Provider.Authority.Types.Add(Actual);
++            Value=Create(count,list??count!=1);Select(Value);
++        }
++        internal Container Create(int count,bool list)
++        {var value=new Container{Governing=Inner.Type,List=list,Fast=count==1};value.Items=Enumerable.Range(0,count).Select(i=>new SchemaAtomicItem(XdmValue.FromInteger(i+1),new Provenance(value,Inner.Type,Actual,Inner.Origin))).ToArray();return value;}
++        internal void Select(Container value){Value=value;Inner.Facts.Value=value;Inner.Provider.Values.Add(value);}
++        internal XdmValue Evaluate()=>Inner.Session.Run([Inner.Snapshot!],op=>op.Evaluate(Context(XdmValue.FromNode(Inner.Input.Node))));
++        internal XdmValue Raw(int faultAfter=-1)=>Inner.Snapshot!.Runtime.Owner.Run(Inner.Snapshot.Runtime.Owner.Environment,[Inner.Snapshot.Runtime],op=>op.AtomizeOriginalNode(Inner.Snapshot.Runtime,(IQueryNodeFactsIssuer)Inner.Snapshot.TypedState!.Issuer,Inner.Input,Inner.Origin,Inner.Input.Node,Inner.Facts,Inner.Node.Kind,8,8,128,128,faultAfter));
++        internal QueryRegisteredTypedContainer Validate(QuerySourceSession.Operation op,XdmValue value)=>op.ValidateTypedTransport(Inner.Snapshot!.Runtime,value,8,128,128);
++        internal int Count=>Inner.Snapshot!.Runtime.TypedScalarCount;
++        /// <inheritdoc/>
++        public void Dispose()=>Inner.Dispose();
++    }
++    private static EvaluationContext Context(XdmValue value)=>new EvaluationContext().WithVariable("node",value);
++    private static XdmValue[] Cells(XdmValue value)
++    {if(value.IsUndefined)return [];if(value.Kind!=XdmValueKind.Sequence)return [value];var result=new List<XdmValue>();var cursor=value.SequenceValue!.GetEnumerator();while(cursor.MoveNext())result.Add(cursor.Current);return result.ToArray();}
++    /// <summary>AD01-AD02 original element/attribute returns a direct marked cell through public compilation.</summary>
++    /// <param name="kind">Original node kind.</param>
++    [Theory][InlineData(XdmNodeKind.Element)][InlineData(XdmNodeKind.Attribute)] public void AD01_AD02_Single(XdmNodeKind kind)
++    {
++        using var f=new Fixture(kind:kind);var result=f.Evaluate();Assert.Equal(1,result.IntegerValue);Assert.NotNull(XdmValue.SchemaTransportMarker(result));Assert.Equal(1,f.Count);
++        Assert.Equal(OriginalNodeDataPlan.Profile,f.Inner.Session.Environment.BehaviorProfile);Assert.Equal(OriginalNodeDataPlan.Descriptor,f.Inner.Session.Environment.DescriptorFormatVersion);
++        f.Inner.Snapshot!.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>{var view=f.Validate(op,result);Assert.Same(f.Actual,view.GetAtomic(0).ActualType);Assert.Same(f.Inner.Type,view.GetAtomic(0).DeclaredType);Assert.Same(f.Inner.Origin,view.GetAtomic(0).OriginalAssessment);return 0;});
++    }
++    /// <summary>AD03-AD04 materialized list order, duplicates and actual union members remain distinct.</summary>
++    [Fact] public void AD03_AD04_OrderedMembers()
++    {
++        using var f=new Fixture(3);var other=new Handle();f.Inner.Provider.Authority.Types.Add(other);
++        f.Value.Items=[new(XdmValue.FromInteger(7),new Provenance(f.Value,f.Inner.Type,f.Actual,f.Inner.Origin)),new(XdmValue.FromString("member"),new Provenance(f.Value,f.Inner.Type,other,f.Inner.Origin)),new(XdmValue.FromInteger(7),new Provenance(f.Value,f.Inner.Type,f.Actual,f.Inner.Origin))];
++        var result=f.Evaluate();Assert.Equal(XdmValueKind.Sequence,result.Kind);var cells=Cells(result);Assert.Equal(3,f.Count);Assert.Equal(7,cells[0].IntegerValue);Assert.Equal("member",cells[1].StringValue);Assert.Equal(7,cells[2].IntegerValue);Assert.NotSame(XdmValue.SchemaTransportMarker(cells[0]),XdmValue.SchemaTransportMarker(cells[2]));
++        f.Inner.Snapshot!.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>{Assert.Same(other,f.Validate(op,cells[1]).GetAtomic(1).ActualType);return 0;});
++    }
++    /// <summary>AD05 empty input checks current borrowed advisor with no source access.</summary>
++    [Fact] public void AD05_EmptyInput()
++    {using var f=new Fixture(open:false);Assert.True(f.Inner.Session.Run([],op=>op.Evaluate(Context(XdmValue.Undefined))).IsUndefined);f.Inner.Provider.Available=false;Assert.Throws<ObjectDisposedException>(()=>f.Inner.Session.Run([],op=>op.Evaluate(Context(XdmValue.Undefined))));Assert.Empty(f.Inner.Node.Reads);}
++    /// <summary>AD06 absent element raises FOTY0012 without touching poisoned typed getters.</summary>
++    [Fact] public void AD06_Absent()
++    {using var f=new Fixture();f.Inner.Facts.Absent=true;f.Inner.Facts.TypedAllowed=false;Assert.StartsWith("FOTY0012:",Assert.Throws<InvalidOperationException>(()=>f.Evaluate()).Message);Assert.DoesNotContain("typed",f.Inner.Facts.Reads);Assert.Equal(0,f.Count);}
++    /// <summary>AD07-AD08 supported empty and nilled-empty atomic/list results consume no slots.</summary>
++    /// <param name="list">List shape.</param><param name="nilled">Original nilled state.</param>
++    [Theory][InlineData(false,false)][InlineData(true,false)][InlineData(false,true)][InlineData(true,true)] public void AD07_AD08_Empty(bool list,bool nilled)
++    {using var f=new Fixture(0,list);f.Inner.Facts.Nilled=nilled;Assert.True(f.Evaluate().IsUndefined);Assert.Equal(0,f.Count);Assert.Contains("typed",f.Inner.Facts.Reads);Assert.Equal(1,f.Value.Disposals);}
++    /// <summary>AD09 contradictory metadata never becomes an empty result or absent-element error.</summary>
++    /// <param name="mode">Malformed state.</param>
++    [Theory][InlineData("absent-nilled")][InlineData("attribute-absent")][InlineData("attribute-nilled")][InlineData("nilled-nonempty")]
++    public void AD09_Contradictions(string mode)
++    {using var f=new Fixture();if(mode.StartsWith("attribute"))f.Inner.Node.Kind=XdmNodeKind.Attribute;f.Inner.Facts.Absent=mode.Contains("absent");f.Inner.Facts.Nilled=mode.Contains("nilled");Assert.Throws<ArgumentException>(()=>f.Evaluate());Assert.Equal(0,f.Count);}
++    /// <summary>AD10 missing/malformed outcomes differ from an unsupported read.</summary>
++    /// <param name="mode">Provider outcome selector.</param>
++    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)] public void AD10_Outcomes(int mode)
++    {using var f=new Fixture();if(mode<4)f.Inner.Facts.TypedKind=mode switch{0=>SchemaResultKind.Unsupported,1=>SchemaResultKind.NotFound,2=>SchemaResultKind.Invalid,_=>(SchemaResultKind)99};else if(mode==4)f.Inner.Facts.NullOutcome=true;else f.Inner.Facts.Value=null;if(mode==0)Assert.Throws<NotSupportedException>(()=>f.Evaluate());else Assert.Throws<ArgumentException>(()=>f.Evaluate());Assert.Empty(f.Value.Reads);Assert.Equal(0,f.Count);}
++    /// <summary>AD11 unsupported annotation/origin never falls back to legacy node properties.</summary>
++    /// <param name="annotation">Remove channel instead of original assessment.</param>
++    [Theory][InlineData(false)][InlineData(true)] public void AD11_MissingCapability(bool annotation)
++    {using var f=new Fixture(original:annotation);if(annotation)f.Inner.Input.Node=new XDocumentNode(XElement.Parse("<n/>"));Assert.Throws<NotSupportedException>(()=>f.Evaluate());Assert.Empty(f.Value.Reads);}
++    /// <summary>AD12 known out-of-profile kinds refuse before facts; invalid kinds are malformed.</summary>
++    /// <param name="kind">Node kind.</param>
++    [Theory][InlineData(XdmNodeKind.Document)][InlineData(XdmNodeKind.Text)][InlineData(XdmNodeKind.Comment)][InlineData(XdmNodeKind.ProcessingInstruction)][InlineData(XdmNodeKind.Namespace)][InlineData(XdmNodeKind.None)][InlineData(XdmNodeKind.All)]
++    public void AD12_NodeKinds(XdmNodeKind kind)
++    {using var f=new Fixture(kind:kind);if(kind is XdmNodeKind.None or XdmNodeKind.All)Assert.Throws<ArgumentException>(()=>f.Evaluate());else Assert.Throws<NotSupportedException>(()=>f.Evaluate());Assert.DoesNotContain("facts",f.Inner.Node.Reads);}
++    /// <summary>AD13 foreign/ambiguous sources reject before any node getter.</summary>
++    /// <param name="ambiguous">Admit a second claiming source.</param>
++    [Theory][InlineData(false)][InlineData(true)] public void AD13_SourceOwnership(bool ambiguous)
++    {using var f=new Fixture();var second=new Shared.Source{Node=f.Inner.Node};var snapshot=ambiguous?f.Inner.Session.OpenSnapshot(second,second).Value:null;if(!ambiguous)f.Inner.Input.Owned=false;f.Inner.Session.Run(snapshot is null?[f.Inner.Snapshot!]:[f.Inner.Snapshot!,snapshot],op=>{Assert.Throws<ArgumentException>(()=>op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node))));return 0;});Assert.Empty(f.Inner.Node.Reads);}
++    /// <summary>AD14 original facts/tuple issuance is checked before metadata getters.</summary>
++    /// <param name="mode">Malformed facts channel.</param>
++    [Theory][InlineData("null")][InlineData("copy")][InlineData("unissued")][InlineData("tuple")] public void AD14_Issuance(string mode)
++    {using var f=new Fixture();switch(mode){case "null":f.Inner.Node.Facts=null;break;case "copy":f.Inner.Node.Facts=new Shared.Facts();break;case "unissued":f.Inner.Provider.FactsOwned=false;break;default:f.Inner.Provider.TupleOwned=false;break;}Assert.Throws<ArgumentException>(()=>f.Evaluate());Assert.Empty(f.Inner.Facts.Reads);}
++    /// <summary>AD15 foreign metadata or atomic evidence never registers a partial result.</summary>
++    /// <param name="mode">Invalid evidence.</param>
++    [Theory][InlineData("type")][InlineData("declaration")][InlineData("origin")][InlineData("container")][InlineData("governing")][InlineData("actual")][InlineData("cell-origin")][InlineData("cell-declared")][InlineData("authority")]
++    public void AD15_ForeignEvidence(string mode)
++    {
++        using var f=new Fixture();switch(mode){case "type":f.Inner.Facts.Type=new Handle();break;case "declaration":f.Inner.Facts.Declaration=new Handle();break;case "origin":f.Inner.Facts.Origin=new Origin();break;case "container":f.Inner.Provider.Values.Clear();break;case "governing":f.Value.Governing=f.Actual;break;case "actual":f.Inner.Provider.Authority.Types.Remove(f.Actual);break;case "cell-origin":((Provenance)f.Value.Items[0].TypeEvidence).Origin=new Origin();break;case "cell-declared":((Provenance)f.Value.Items[0].TypeEvidence).Declared=new Handle();break;default:f.Inner.Provider.Selected=new QueryTypedContainerTests.Authority();break;}
++        Assert.Throws<ArgumentException>(()=>f.Evaluate());Assert.Equal(0,f.Count);
++    }
++    private sealed class PoisonSequence:IXdmSequence
++    {bool IXdmSequence.TryGetLength(out int length)=>throw new Exception("length poison");IXdmSequenceEnumerator IXdmSequence.GetEnumerator()=>throw new Exception("iterator poison");}
++    /// <summary>AD16-AD17 closed capture refuses unsupported inputs/state before node getters.</summary>
++    /// <param name="mode">Unsupported dynamic state.</param>
++    [Theory][InlineData("missing")][InlineData("extra")][InlineData("prefixed")][InlineData("atomic")][InlineData("sequence")][InlineData("map")][InlineData("array")][InlineData("function")][InlineData("focus")][InlineData("namespace")][InlineData("service")]
++    public void AD16_AD17_Capture(string mode)
++    {using var f=new Fixture();var context=Context(XdmValue.FromNode(f.Inner.Node));switch(mode){case "missing":context=new();break;case "extra":context.WithVariable("extra",XdmValue.Undefined);break;case "prefixed":context=new EvaluationContext().WithVariable("node",XdmValue.FromNode(f.Inner.Node),"urn:n");break;case "atomic":context=Context(XdmValue.FromInteger(1));break;case "sequence":context=Context(XdmValue.FromSequence(XdmSequence.FromSource(new PoisonSequence())));break;case "map":context=Context(XdmValue.FromMap(new XdmMap()));break;case "array":context=Context(XdmValue.FromArray(new XdmArray()));break;case "function":context=Context(XdmValue.FromFunction(new object()));break;case "focus":context.WithFocus(XdmValue.FromNode(f.Inner.Node),1,1);break;case "namespace":context.WithNamespace("p","urn:p");break;default:context.DocumentLoader=_=>throw new Exception("loader poison");break;}f.Inner.Session.Run([f.Inner.Snapshot!],op=>{Assert.Throws<NotSupportedException>(()=>op.Evaluate(context));return 0;});Assert.Empty(f.Inner.Node.Reads);}
++    /// <summary>AD18 syntax/options refusal occurs before provider Bind.</summary>
++    /// <param name="expression">Unsupported syntax.</param><param name="foreign">Foreign fn namespace.</param>
++    [Theory][InlineData("data()",false)][InlineData("data(.)",false)][InlineData("data($node)/x",false)][InlineData("f:data($node)",false)][InlineData("Q{http://www.w3.org/2005/xpath-functions}data($node)",false)][InlineData("data($node) + 1",false)][InlineData("fn:data($node)",true)]
++    public void AD18_CompileRefusal(string expression,bool foreign)
++    {var provider=new Shared.Provider();var options=foreign?new CompileOptions{Namespaces=new Dictionary<string,string>{{"fn","urn:foreign"}}}:null;Assert.Equal(SchemaResultKind.Unsupported,Session.CompileXPath(expression,new(4,8,8,128,128),options,provider).Kind);Assert.Equal(0,provider.Binds);}
++    /// <summary>AD19 descriptor freezes options, canonical spelling and every finite limit.</summary>
++    [Fact] public void AD19_Descriptors()
++    {using var f=new Fixture();using var other=new Fixture(expression:"fn:data($node)");Assert.Equal(f.Inner.Session.Environment.StaticContextFingerprint,other.Inner.Session.Environment.StaticContextFingerprint);foreach(var limits in new[]{new SchemaQueryLimits(5,8,8,128,128),new(4,9,8,128,128),new(4,8,9,128,128),new(4,8,8,129,128),new(4,8,8,128,127)}){using var candidate=new Shared.Fixture("data($node)",limits:limits);Assert.NotEqual(f.Inner.Session.Environment.StaticContextFingerprint,candidate.Session.Environment.StaticContextFingerprint);}var ns=new Dictionary<string,string>{{"p","urn:one"}};using var frozen=new Fixture(options:new CompileOptions{Namespaces=ns});ns["p"]="urn:two";Assert.Equal("urn:one",frozen.Inner.Session.Environment.StaticContext.Namespaces["p"]);Assert.Equal(1,frozen.Evaluate().IntegerValue);}
++    /// <summary>AD20 excess typed atoms refuse before reading an excess Current and dispose exactly once.</summary>
++    [Fact] public void AD20_AtomLimit()
++    {using var f=new Fixture(3,atoms:2);Assert.Throws<NotSupportedException>(()=>f.Evaluate());Assert.Equal(2,f.Value.Reads.Count(s=>s=="current"));Assert.Equal(1,f.Value.Disposals);Assert.Equal(0,f.Count);}
++    /// <summary>AD21 whole-batch cache capacity failure leaves room for a fitting retry.</summary>
++    [Fact] public void AD21_CapacityRetry()
++    {using var f=new Fixture(3,capacity:2);Assert.Throws<NotSupportedException>(()=>f.Evaluate());Assert.Equal(0,f.Count);f.Select(f.Create(1,false));Assert.Equal(1,f.Evaluate().IntegerValue);Assert.Equal(1,f.Count);}
++    /// <summary>AD22 warm nonempty reuse rereads facts/outcome but never container payload getters.</summary>
++    [Fact] public void AD22_WarmReuse()
++    {using var f=new Fixture(3);var first=Cells(f.Evaluate());int reads=f.Value.Reads.Count;f.Value.OnRead=_=>throw new Exception("payload replay poison");var second=Cells(f.Evaluate());Assert.Equal(reads,f.Value.Reads.Count);Assert.Equal(2,f.Inner.Facts.Reads.Count(s=>s=="typed"));for(int i=0;i<3;i++)Assert.Same(XdmValue.SchemaTransportMarker(first[i]),XdmValue.SchemaTransportMarker(second[i]));Assert.Equal(3,f.Count);}
++    /// <summary>AD23-AD24 empty results do not fill an index; equal different container identities stay distinct.</summary>
++    [Fact] public void AD23_AD24_ContainerKeys()
++    {using var f=new Fixture(0);for(int i=0;i<12;i++){f.Select(f.Create(0,true));Assert.True(f.Evaluate().IsUndefined);Assert.Equal(0,f.Count);}f.Select(f.Create(1,false));var first=f.Evaluate();f.Select(f.Create(1,false));var second=f.Evaluate();Assert.Equal(first.IntegerValue,second.IntegerValue);Assert.NotSame(XdmValue.SchemaTransportMarker(first),XdmValue.SchemaTransportMarker(second));Assert.Equal(2,f.Count);}
++    /// <summary>AD25 fixed insertion fault seams roll back the entire node-derived batch before retry.</summary>
++    /// <param name="point">Fault after this many insertions.</param>
++    [Theory][InlineData(-2)][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)] public void AD25_TransactionFault(int point)
++    {using var f=new Fixture(3);Assert.Throws<InvalidOperationException>(()=>f.Raw(point));Assert.Equal(0,f.Count);Assert.Equal(3,Cells(f.Evaluate()).Length);}
++    /// <summary>AD26 postcommit cancellation/close returns no result and preserves complete-batch semantics.</summary>
++    /// <param name="close">Close instead of cancel.</param>
++    [Theory][InlineData(false)][InlineData(true)] public void AD26_Postcommit(bool close)
++    {using var f=new Fixture(2);using var cancel=new CancellationTokenSource();f.Inner.Provider.Hook=_=>{if(f.Count==2){if(close)f.Inner.Session.Dispose();else cancel.Cancel();}};f.Inner.Session.Run([f.Inner.Snapshot!],op=>{if(close)Assert.Throws<ObjectDisposedException>(()=>op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node))));else Assert.Throws<OperationCanceledException>(()=>op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node))));Assert.Equal(0,f.Inner.Input.Releases);return 0;},cancel.Token);Assert.Equal(close?0:2,f.Count);}
++    /// <summary>AD27 same-key staged public operations return the installed winning transport identities.</summary>
++    /// <returns>A task completing after both real raw operations.</returns>
++    [Fact] public async Task AD27_ConcurrentWinner()
++    {using var f=new Fixture(3);f.Inner.Facts.Record=false;f.Inner.Node.Record=false;f.Value.Record=false;using var barrier=new Barrier(2);f.Value.OnRead=s=>{if(s=="governing")Assert.True(barrier.SignalAndWait(TimeSpan.FromSeconds(10)));};var result=await Task.WhenAll(Task.Run(f.Evaluate),Task.Run(f.Evaluate));var a=Cells(result[0]);var b=Cells(result[1]);for(int i=0;i<3;i++)Assert.Same(XdmValue.SchemaTransportMarker(a[i]),XdmValue.SchemaTransportMarker(b[i]));Assert.Equal(3,f.Count);}
++    /// <summary>AD27 distinct issued wrapper identities race for one slot without rolling back the winner.</summary>
++    /// <returns>A task completing after both public evaluations.</returns>
++    [Fact] public async Task AD27_CapacityRace()
++    {
++        using var f=new Fixture(capacity:1);f.Inner.Facts.Record=false;f.Inner.Node.Record=false;
++        var a=f.Value;var b=f.Create(1,false);f.Inner.Provider.Values.Add(b);a.Record=b.Record=false;
++        using var selected=new ThreadLocal<Container>();f.Inner.Facts.ValueFactory=()=>selected.Value!;
++        using var barrier=new Barrier(2);void Wait(string stage){if(stage=="governing")Assert.True(barrier.SignalAndWait(TimeSpan.FromSeconds(10)));}a.OnRead=b.OnRead=Wait;
++        (Container Container,bool Passed,XdmValue Value) Evaluate(Container value){selected.Value=value;try{return(value,true,f.Evaluate());}catch(NotSupportedException){return(value,false,default);}}
++        var results=await Task.WhenAll(Task.Run(()=>Evaluate(a)),Task.Run(()=>Evaluate(b)));
++        var winner=Assert.Single(results,r=>r.Passed);Assert.Single(results,r=>!r.Passed);Assert.Equal(1,f.Count);
++        a.OnRead=b.OnRead=null;f.Inner.Facts.ValueFactory=()=>winner.Container;
++        Assert.Same(XdmValue.SchemaTransportMarker(winner.Value),XdmValue.SchemaTransportMarker(f.Evaluate()));
++    }
++    /// <summary>AD28 provider getter/ownership interruptions stop output and retain resources through raw completion.</summary>
++    /// <param name="stage">Interrupted callback.</param><param name="mode">Cancel, close or revoke.</param>
++    /// <returns>A task completing after raw work drains.</returns>
++    [Theory][InlineData("node-kind","cancel")][InlineData("facts","cancel")][InlineData("type","cancel")][InlineData("typed","cancel")][InlineData("kind","cancel")][InlineData("payload","cancel")][InlineData("governing","cancel")][InlineData("list","cancel")][InlineData("current","cancel")][InlineData("actual","cancel")][InlineData("dispose","cancel")]
++    [InlineData("owns","close")][InlineData("owns-facts","close")][InlineData("owns-value","close")][InlineData("current","close")][InlineData("typed","revoke")][InlineData("payload","revoke")]
++    public async Task AD28_Interruption(string stage,string mode)
++    {using var f=new Fixture(2);using var cancel=new CancellationTokenSource();void Interrupt(string name){if(name!=stage)return;if(mode=="cancel")cancel.Cancel();else if(mode=="close")f.Inner.Session.Dispose();else f.Inner.Provider.Available=false;}f.Inner.Node.Hook=Interrupt;f.Inner.Facts.Hook=Interrupt;f.Inner.Facts.OutcomeHook=Interrupt;f.Inner.Provider.Hook=Interrupt;f.Inner.Input.Hook=Interrupt;f.Value.OnRead=Interrupt;f.Inner.Session.Run([f.Inner.Snapshot!],op=>{if(mode=="cancel")Assert.Throws<OperationCanceledException>(()=>op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node))));else Assert.Throws<ObjectDisposedException>(()=>op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node))));Assert.Equal(0,f.Inner.Input.Releases);return 0;},cancel.Token);await f.Inner.Session.DrainAsync().WaitAsync(TimeSpan.FromSeconds(5));Assert.Equal(0,f.Count);}
++    /// <summary>AD29 iterator primary/cleanup failures keep their original ordering and no batch.</summary>
++    [Fact] public void AD29_CleanupOrder()
++    {using var f=new Fixture(2);f.Value.OnRead=s=>{if(s is "current" or "dispose")throw new InvalidOperationException(s);};var e=Assert.Throws<AggregateException>(()=>f.Evaluate());Assert.Equal(new[]{"current","dispose"},e.InnerExceptions.Select(n=>n.Message));Assert.Equal(1,f.Value.Disposals);Assert.Equal(0,f.Count);}
++    /// <summary>AD30 the separate nilled route remains metadata-only; data does not export registration helpers.</summary>
++    [Fact] public void AD30_ProfileSeparation()
++    {using var nilled=new Shared.Fixture();Assert.False(nilled.Evaluate().BooleanValue);Assert.DoesNotContain("typed",nilled.Facts.Reads);using var data=new Fixture();data.Inner.Session.Run([data.Inner.Snapshot!],op=>{Assert.Equal("BOSAK-ORIGINAL-DATA-UNSUPPORTED",op.ReadTypedValue(data.Inner.Snapshot!,data.Value).DiagnosticCode);return 0;});}
++    /// <summary>AD31 materialized traversal stays readable after close without provider callbacks or a lease.</summary>
++    [Fact] public void AD31_CopiedPayload()
++    {using var f=new Fixture(3);var result=f.Evaluate();f.Inner.Session.Dispose();int calls=f.Inner.Provider.Calls;f.Inner.Provider.Available=false;f.Value.OnRead=_=>throw new Exception("provider poison");Assert.True(result.SequenceValue!.TryGetLength(out int count));Assert.Equal(3,count);Assert.Equal(new long[]{1,2,3},Cells(result).Select(v=>v.IntegerValue));Assert.Equal(3,Cells(result).Length);Assert.Equal(calls,f.Inner.Provider.Calls);Assert.Equal(1,f.Inner.Input.Releases);}
++    /// <summary>AD32-AD33 extraction tuples and independently issued resident-cell authorization are distinct.</summary>
++    [Fact] public void AD32_AD33_LaterCellAuthorization()
++    {using var f=new Fixture(2);var cell=Cells(f.Evaluate())[0];QueryRegisteredTypedContainer? retained=null;f.Inner.Snapshot!.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>{retained=f.Validate(op,cell);return 0;});Assert.Throws<ObjectDisposedException>(()=>retained!.Count);f.Inner.Provider.TupleOwned=false;Assert.Throws<ArgumentException>(()=>f.Evaluate());f.Inner.Snapshot.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>{Assert.Equal(2,f.Validate(op,cell).Count);return 0;});}
++    /// <summary>AD34 stale, foreign or representation-tampered resident cells never gain authority from payloads.</summary>
++    /// <param name="mode">Revoked or invalid evidence.</param>
++    [Theory][InlineData("container")][InlineData("origin")][InlineData("actual")][InlineData("source")][InlineData("plain")][InlineData("tampered")]
++    public void AD34_RevokedCell(string mode)
++    {using var f=new Fixture();var cell=f.Evaluate();switch(mode){case "container":f.Inner.Provider.Values.Remove(f.Value);break;case "origin":f.Inner.Provider.OriginOwned=false;break;case "actual":f.Inner.Provider.Authority.Types.Remove(f.Actual);break;case "source":f.Inner.Input.Available=false;break;case "plain":cell=XdmValue.FromInteger(1);break;default:cell=XdmValue.SchemaTransportAttach(XdmValue.FromInteger(2),XdmValue.SchemaTransportMarker(cell)!);break;}if(mode=="source")Assert.Throws<ObjectDisposedException>(()=>f.Inner.Snapshot!.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>f.Validate(op,cell)));else f.Inner.Snapshot!.Runtime.Owner.Run(f.Inner.Snapshot.Runtime.Owner.Environment,[f.Inner.Snapshot.Runtime],op=>{Assert.Throws<ArgumentException>(()=>f.Validate(op,cell));return 0;});}
++    /// <summary>AD35 equal source/assessor labels do not import markers into another compiled session.</summary>
++    [Fact] public void AD35_ForeignSession()
++    {using var f=new Fixture();var cell=f.Evaluate();using var other=Session.CompileXPath("data($node)",new(4,8,8,128,128),assessor:f.Inner.Provider).Value;using var admitted=other.OpenSnapshot(f.Inner.Input,f.Inner.Input,f.Inner.Origin).Value;admitted.Runtime.Owner.Run(admitted.Runtime.Owner.Environment,[admitted.Runtime],op=>{Assert.Throws<ArgumentException>(()=>op.ValidateTypedTransport(admitted.Runtime,cell,8,128,128));return 0;});other.Run([admitted],op=>{Assert.Throws<NotSupportedException>(()=>op.Evaluate(Context(cell)));return 0;});}
++    /// <summary>AD36 two issued node associations may share the exact container/ordinal keys.</summary>
++    [Fact] public void AD36_SharedContainer()
++    {using var f=new Fixture();var first=f.Evaluate();var other=new Shared.Node{Facts=f.Inner.Facts};f.Inner.Input.AdditionalNode=other;var second=f.Inner.Session.Run([f.Inner.Snapshot!],op=>op.Evaluate(Context(XdmValue.FromNode(other))));Assert.Same(XdmValue.SchemaTransportMarker(first),XdmValue.SchemaTransportMarker(second));Assert.Equal(1,f.Count);}
++    /// <summary>AD37 multi-result publication contains only a complete installed batch and no default prefix.</summary>
++    [Fact] public void AD37_CompleteOutput()
++    {using var f=new Fixture(3);var result=f.Evaluate();var cells=Cells(result);Assert.Equal(3,cells.Length);Assert.All(cells,cell=>Assert.NotNull(XdmValue.SchemaTransportMarker(cell)));Assert.Equal(3,f.Count);}
++    /// <summary>AD38 numeric limits and malformed nonplain cells fail before registration.</summary>
++    /// <param name="mode">Unsupported carrier/representation.</param>
++    [Theory][InlineData("wide")][InlineData("default")][InlineData("structured")][InlineData("marked")]
++    public void AD38_InvalidPayload(string mode)
++    {using var f=new Fixture();var plain=mode=="wide"?XdmValue.FromInteger(BigInteger.Pow(10,200)):mode=="structured"?XdmValue.FromNode(f.Inner.Node):XdmValue.FromInteger(1);if(mode=="marked")plain=XdmValue.SchemaTransportAttach(plain,new object());f.Value.Items=mode=="default"?[default]:[new(plain,new Provenance(f.Value,f.Inner.Type,f.Actual,f.Inner.Origin))];if(mode=="wide")Assert.Throws<NotSupportedException>(()=>f.Evaluate());else Assert.Throws<ArgumentException>(()=>f.Evaluate());Assert.Equal(0,f.Count);}
++    /// <summary>AD38 supported exact and reference-backed atomic representations are preserved unchanged.</summary>
++    /// <param name="kind">Payload case.</param>
++    [Theory][InlineData(0)][InlineData(1)][InlineData(2)][InlineData(3)][InlineData(4)][InlineData(5)]
++    public void AD38_ExactPayload(int kind)
++    {using var f=new Fixture();var plain=kind switch{0=>XdmValue.FromInteger(BigInteger.Pow(10,100)),1=>XdmValue.FromDecimal(new XdmExactDecimal(12300,4,128,128)),2=>XdmValue.FromDouble(-0d),3=>XdmValue.FromString("owned","xs:string","urn:original"),4=>XdmValue.FromBoolean(true),_=>XdmValue.FromQName(new XsQName("n","urn:n","p"))};f.Value.Items=[new(plain,new Provenance(f.Value,f.Inner.Type,f.Actual,f.Inner.Origin))];var value=f.Evaluate();Assert.True(value.SchemaTransportMatches(plain));Assert.NotNull(XdmValue.SchemaTransportMarker(value));Assert.Equal(plain.UserSchemaTypeName,value.UserSchemaTypeName);}
++    /// <summary>AD39 actual public asynchronous callbacks retain complete raw ownership through detachment.</summary>
++    /// <returns>A task completing after public async evaluation.</returns>
++    [Fact] public async Task AD39_Async()
++    {using var f=new Fixture(2);var result=await f.Inner.Session.RunAsync([f.Inner.Snapshot!],async op=>{await Task.Yield();var value=op.Evaluate(Context(XdmValue.FromNode(f.Inner.Node)));Assert.Equal(0,f.Inner.Input.Releases);return value;});Assert.Equal(2,Cells(result).Length);}
++    /// <summary>AD40 records cold/warm public costs and unchanged payload getters/slot accounting.</summary>
++    [Fact] public void AD40_Allocation()
++    {using var f=new Fixture(3);f.Value.Record=false;f.Inner.Session.Run([f.Inner.Snapshot!],op=>{var context=Context(XdmValue.FromNode(f.Inner.Node));_=op.Evaluate(context);int typed=f.Inner.Facts.Reads.Count(s=>s=="typed");long before=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<10;i++)Assert.Equal(3,Cells(op.Evaluate(context)).Length);long bytes=(GC.GetAllocatedBytesForCurrentThread()-before)/10;output.WriteLine($"Public data warm three: {bytes} bytes/query; slots: {f.Count}; typed outcomes: {f.Inner.Facts.Reads.Count(s=>s=="typed")-typed}");Assert.Equal(3,f.Count);return 0;});long start=GC.GetAllocatedBytesForCurrentThread();using(var cold=new Fixture(3))Assert.Equal(3,Cells(cold.Evaluate()).Length);output.WriteLine($"Public data cold session three: {GC.GetAllocatedBytesForCurrentThread()-start} bytes");}
++}
+--- 1.63.1/tests/Bosak.XPath.Runtime.Tests/PublicOriginalNilledTests.cs
++++ 1.64.0/tests/Bosak.XPath.Runtime.Tests/PublicOriginalNilledTests.cs
+@@ -14,6 +14,8 @@
+ //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; public original-node nilled controls (1.63.0).                             |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.2   | 05-11-2026     | Attribute guard fanout and qualify adjacent proof sharing (1.63.1). |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.3   | 05-11-2026     | Share guarded fixture and retain separate data-profile refusal boundaries (1.64.0). |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+@@ -37,17 +39,18 @@
+ /// <param name="output">Records local allocation/callback observations.</param>
+ public sealed class PublicOriginalNilledTests(ITestOutputHelper output)
+ {
+-    private sealed class Source:ISchemaAssessmentInput,IQueryOperationLifetime
+-    {
+-        internal IXdmNode Node=null!;internal bool Available=true,Owned=true,EnterFails;internal int Releases;
++    internal sealed class Source:ISchemaAssessmentInput,IQueryOperationLifetime
++    {
++        internal IXdmNode Node=null!;internal IXdmNode? AdditionalNode;internal bool Available=true,Owned=true,EnterFails;internal int Releases;
+         internal Action<string>? Hook;
+         IXdmNode ISchemaAssessmentInput.Root=>throw new Exception("root poison");
+         ISchemaSourceBinding ISchemaAssessmentInput.Source=>BindingSource;
+         ISchemaSnapshotBinding ISchemaAssessmentInput.Snapshot=>BindingSnapshot;
+         private readonly SourceBinding BindingSource=new();private readonly SnapshotBinding BindingSnapshot=new();
+-        private sealed class SourceBinding:ISchemaSourceBinding { }
++        internal sealed class SourceBinding:ISchemaSourceBinding { }
+         private sealed class SnapshotBinding:ISchemaSnapshotBinding { }
+-        bool ISchemaAssessmentInput.OwnsNode(IXdmNode node){Hook?.Invoke("owns");return Owned&&ReferenceEquals(node,Node);}
++        internal bool ClaimsNode(IXdmNode node)=>ReferenceEquals(node,Node)||ReferenceEquals(node,AdditionalNode);
++        bool ISchemaAssessmentInput.OwnsNode(IXdmNode node){Hook?.Invoke("owns");return Owned&&ClaimsNode(node);}
+         void ISchemaAssessmentInput.ThrowIfUnavailable(CancellationToken token){token.ThrowIfCancellationRequested();ObjectDisposedException.ThrowIf(!Available,this);}
+         IQueryOperationLease IQueryOperationLifetime.Enter(CancellationToken token){if(EnterFails)throw new InvalidOperationException("enter");return new Lease(this);}
+         private sealed class Lease(Source owner):IQueryOperationLease
+@@ -59,24 +62,26 @@
+             public void Dispose(){if(!_closed){_closed=true;owner.Releases++;}}
+         }
+     }
+-    private sealed class Facts:ISchemaNodeFacts
++    internal sealed class Facts:ISchemaNodeFacts
+     {
+         internal ISchemaComponentHandle Type=null!;internal ISchemaComponentHandle? Declaration;
+-        internal ISchemaAssessmentOrigin Origin=null!;internal bool Absent,Nilled;
+-        internal readonly List<string> Reads=[];internal Action<string>? Hook;
+-        private void Hit(string name){Reads.Add(name);Hook?.Invoke(name);}
++        internal ISchemaAssessmentOrigin Origin=null!;internal bool Absent,Nilled,TypedAllowed,NullOutcome;
++        internal SchemaResultKind TypedKind=SchemaResultKind.Supported;internal ISchemaTypedValue? Value;internal Func<ISchemaTypedValue>? ValueFactory;internal Action<string>? OutcomeHook;
++        internal readonly List<string> Reads=[];internal bool Record=true;internal Action<string>? Hook;
++        private void Hit(string name){if(Record)Reads.Add(name);Hook?.Invoke(name);}
+         ISchemaComponentHandle ISchemaNodeFacts.Type{get{Hit("type");return Type;}}
+         ISchemaComponentHandle? ISchemaNodeFacts.Declaration{get{Hit("declaration");return Declaration;}}
+         ISchemaAssessmentOrigin ISchemaNodeFacts.Origin{get{Hit("origin");return Origin;}}
+         bool ISchemaNodeFacts.HasNoTypedValue{get{Hit("absent");return Absent;}}
+         bool ISchemaNodeFacts.IsNilled{get{Hit("nilled");return Nilled;}}
+-        SchemaResult<ISchemaTypedValue> ISchemaNodeFacts.ReadTypedValue(CancellationToken token)=>throw new Exception("typed poison");
+-    }
+-    private sealed class Node:ISchemaAnnotatedNode
++        SchemaResult<ISchemaTypedValue> ISchemaNodeFacts.ReadTypedValue(CancellationToken token)
++        {if(!TypedAllowed)throw new Exception("typed poison");Hit("typed");token.ThrowIfCancellationRequested();return NullOutcome?null!:new Outcome<ISchemaTypedValue>(TypedKind,ValueFactory is null?Value!:ValueFactory()){Hook=OutcomeHook};}
++    }
++    internal sealed class Node:ISchemaAnnotatedNode
+     {
+         internal XdmNodeKind Kind=XdmNodeKind.Element;internal ISchemaNodeFacts? Facts;
+-        internal Action<string>? Hook;internal readonly List<string> Reads=[];
+-        private void Hit(string name){Reads.Add(name);Hook?.Invoke(name);}
++        internal Action<string>? Hook;internal readonly List<string> Reads=[];internal bool Record=true;
++        private void Hit(string name){if(Record)Reads.Add(name);Hook?.Invoke(name);}
+         XdmNodeKind IXdmNode.NodeKind{get{Hit("node-kind");return Kind;}}
+         ISchemaNodeFacts ISchemaAnnotatedNode.OriginalSchemaFacts{get{Hit("facts");return Facts!;}}
+         string IXdmNode.LocalName=>throw new Exception("name poison");
+@@ -98,20 +103,23 @@
+         string IXdmNode.DocumentUri=>throw new Exception("uri poison");
+         string IXdmNode.ToXmlString()=>throw new Exception("serialize poison");
+     }
+-    private sealed class Outcome<T>(SchemaResultKind kind,T value):SchemaResult<T>
+-    {
+-        /// <inheritdoc/>
+-        public override SchemaResultKind Kind=>kind;
+-        /// <inheritdoc/>
+-        public override T Value=>kind==SchemaResultKind.Supported?value:throw new Exception("unsupported payload poison");
++    internal sealed class Outcome<T>(SchemaResultKind kind,T value):SchemaResult<T>
++    {
++        /// <inheritdoc/>
++        internal Action<string>? Hook;
++        /// <inheritdoc/>
++        public override SchemaResultKind Kind{get{Hook?.Invoke("kind");return kind;}}
++        /// <inheritdoc/>
++        public override T Value{get{Hook?.Invoke("payload");return kind==SchemaResultKind.Supported?value:throw new Exception("unsupported payload poison");}}
+         /// <inheritdoc/>
+         public override string? DiagnosticCode=>throw new Exception("diagnostic poison");
+     }
+-    private sealed class Provider:ISchemaAssessor,ISchemaAssessmentAdvisor
++    internal sealed class Provider:ISchemaAssessor,ISchemaAssessmentAdvisor
+     {
+         internal readonly Authority Authority=new();internal ISchemaAuthority Selected;
+         internal ISchemaAssessor Endpoint;internal IQuerySemanticEnvironment Environment=null!;
+-        internal bool Available=true,FactsOwned=true,TupleOwned=true,OriginOwned=true;
++        internal bool Available=true,FactsOwned=true,TupleOwned=true,OriginOwned=true,TypedAllowed;
++        internal readonly HashSet<ISchemaTypedValue> Values=new(ReferenceEqualityComparer.Instance);
+         internal Facts Issued=null!;internal Source Input=null!;internal Origin Origin=null!;
+         internal int Binds,Calls;internal Action<string>? Hook;
+         internal Func<SchemaResult<ISchemaAssessmentAdvisor>>? BindingOutcome;
+@@ -128,12 +136,13 @@
+         bool ISchemaAssessmentAdvisor.OwnsAssessment(ISchemaAssessmentOrigin origin){Hit("owns-origin");return OriginOwned&&ReferenceEquals(origin,Origin);}
+         bool ISchemaAssessmentAdvisor.OwnsNodeFacts(ISchemaNodeFacts facts){Hit("owns-facts");return FactsOwned&&ReferenceEquals(facts,Issued);}
+         bool ISchemaAssessmentAdvisor.OwnsNode(IXdmNode node,ISchemaNodeFacts facts,ISchemaAssessmentInput input,ISchemaAssessmentOrigin origin)
+-        {Hit("owns-tuple");return TupleOwned&&ReferenceEquals(node,Input.Node)&&ReferenceEquals(facts,Issued)&&ReferenceEquals(input,Input)&&ReferenceEquals(origin,Origin);}
+-        bool ISchemaAssessmentAdvisor.OwnsTypedValue(ISchemaTypedValue value,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin)=>throw new Exception("typed issuance poison");
++        {Hit("owns-tuple");return TupleOwned&&Input.ClaimsNode(node)&&ReferenceEquals(facts,Issued)&&ReferenceEquals(input,Input)&&ReferenceEquals(origin,Origin);}
++        bool ISchemaAssessmentAdvisor.OwnsTypedValue(ISchemaTypedValue value,ISchemaAssessmentInput input,ISchemaAssessmentOrigin? origin)
++        {if(!TypedAllowed)throw new Exception("typed issuance poison");Hit("owns-value");return Values.Contains(value)&&ReferenceEquals(input,Input)&&ReferenceEquals(origin,Origin);}
+         ISchemaAssessmentResult ISchemaAssessmentAdvisor.Assess(SchemaAssessmentRequest request,CancellationToken token)=>throw new Exception("assess poison");
+         SchemaResult<ISchemaTypedValue> ISchemaAssessmentAdvisor.ConstructSimpleValue(XdmValue input,ISchemaComponentHandle type,ISchemaAssessmentEpisode episode,CancellationToken token)=>throw new Exception("construct poison");
+     }
+-    private sealed class Fixture:IDisposable
++    internal sealed class Fixture:IDisposable
+     {
+         internal readonly Source Input=new();internal readonly Node Node=new();internal readonly Facts Facts=new();
+         internal readonly Provider Provider=new();internal readonly Origin Origin=new();internal readonly Handle Type=new(),Declaration=new();
+@@ -220,9 +229,9 @@
+     /// <summary>NP15 metadata-only prerequisite remains explicit and complete reads keep their original default.</summary>
+     [Fact] public void NP15_MetadataState()
+     {Assert.Equal(3,(int)QueryNodeTypedValueKind.NotRequested);Assert.Equal(0,(int)QueryNodeTypedValueKind.Absent);Assert.Equal(1,(int)QueryNodeTypedValueKind.Unsupported);Assert.Equal(2,(int)QueryNodeTypedValueKind.Supported);using var f=new Fixture();Assert.False(f.Evaluate().BooleanValue);}
+-    /// <summary>NP16-NP17/NP24 unsupported syntax and foreign fn bindings refuse before Bind.</summary>
++    /// <summary>NP16-NP17/NP24 unsupported syntax and foreign fn bindings refuse before Bind; data has a separate profile.</summary>
+     /// <param name="expression">Unsupported syntax.</param><param name="foreign">Foreign fn binding.</param>
+-    [Theory][InlineData("nilled()",false)][InlineData("nilled(.)",false)][InlineData("data($node)",false)][InlineData("$node/n",false)][InlineData("nilled($node) or true()",false)][InlineData("f:nilled($node)",false)][InlineData("Q{http://www.w3.org/2005/xpath-functions}nilled($node)",false)][InlineData("fn:nilled($node)",true)]
++    [Theory][InlineData("nilled()",false)][InlineData("nilled(.)",false)][InlineData("data($node)/x",false)][InlineData("$node/n",false)][InlineData("nilled($node) or true()",false)][InlineData("f:nilled($node)",false)][InlineData("Q{http://www.w3.org/2005/xpath-functions}nilled($node)",false)][InlineData("fn:nilled($node)",true)]
+     public void NP16_NP17_NP24_CompileRefusal(string expression,bool foreign)
+     {var provider=new Provider();var opts=foreign?new CompileOptions{Namespaces=new Dictionary<string,string>{{"fn","urn:foreign"}}}:null;var result=Session.CompileXPath(expression,new(4,8,8,128,128),opts,provider);Assert.Equal(SchemaResultKind.Unsupported,result.Kind);Assert.Equal(0,provider.Binds);}
+     /// <summary>NP18 canonical spelling shares a descriptor; each limit and frozen option mutation is distinguished.</summary>

@@ -1,0 +1,23 @@
+{
+  "ACCEPTANCE-CASES.json": "280bd4f0e00f4a2e6e092ae5cc83e06419f93698b668de89143b676cd1a070fb",
+  "evidence/bindings/api/36564.json": "7eaeb86e6f99ae05aa9e470ddb0bed06357937f9d2931e804b056d241f509617",
+  "evidence/bindings/api/73300.json": "33b40c4be574f5c8aae68b0952ef52dd65bb655443471e3c3be2f81552826c56",
+  "evidence/bindings/api/8520.json": "ff44a2f7c443818c1f367975826d87d20ec0fc067ebc2f4d3a46fbcf40464f9f",
+  "evidence/bindings/runtime/49860.json": "d5983dd99b2bf9432e11dcba4f0981236147e4438fdc2231b0e35b269de8c62c",
+  "evidence/bindings/runtime/51352.json": "37c2b90df074b762003e392c2e07293390b7a86cf3bb33cedc3fcb881e1901a1",
+  "evidence/bindings/runtime/73248.json": "71376ff35b1f9e2aab654ce58ed3b3e0a5f00c84708a1a9b311a5d32bce020c5",
+  "evidence/CONTROLS.json": "9da1b799034c9b7fbd2c274c0563a462e5446045c338acdd00ca9d517da7de84",
+  "evidence/DOCUMENTATION-CHECKS.json": "efa2f67d005abe28482a65ca715b2dd7b925473d54ddd12ca8bf6b0d35068507",
+  "evidence/EXECUTION-RECEIPTS.zip": "36bff68b70b02a3b4d9c099e4d4fb375d25456fc3ab43011bf8ca1e2113eef64",
+  "IMPLEMENTATION.md": "07eff6c5ef56a0114cadad40c7882373502d38b7c767840c697af8deaa377dee",
+  "INPUTS.json": "f30bade820a050d395691e5322bebae648eb8cf5a08141013354e5f166293fda",
+  "LIFETIME-CASES.json": "75e9ae65443ca225ecf7cc0b6d4495d885fca9ea8e2d990fc285710769fd5a0f",
+  "POLICY.md": "c2806b26710025f2674a74d9b8ce0a79dc52d420a3afd6283415d09afc368e20",
+  "PROFILE.json": "304332a3dea7f51516f1c4c8596269b8112094894949663824d35a5b649f81c9",
+  "README.md": "a7c14ffdd1630a05decfbc9795ae959b672742733929800378e9d3942c2d4332",
+  "SPEC-BASIS.md": "502c4a825e20090e67eb7af268e97acfc12ac4ea8bfe65872678f7551be6f291",
+  "STATUS.json": "52529f8a37d3458d4be182ae186f6efc83c7e3111ca55a07cfbb44cd81e2d667",
+  "tools/render.cjs": "76d8b586d7f5ae650c59f9b351f4f9a954a8d70aa7e3b1dfd63f811c164e803e",
+  "tools/verify.py": "fcb44b712d7efd873b796657fcc32c1db00f8e09a536a84a86aba54ac664d433",
+  "TRACEABILITY.md": "cf0739ef1c49dc7e80e19aa021638a80021226a5cf192deb45d989d5dd786159"
+}

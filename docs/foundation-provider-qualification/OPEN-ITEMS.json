@@ -1,0 +1,37 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderPerformanceQualificationStillPending"
+    },
+    {
+      "id": "PV-Q02",
+      "status": "NativeArtifactAndSourceLanePreflightNext"
+    },
+    {
+      "id": "PV-Q03",
+      "status": "PublicNativeProviderBindingUnqualified"
+    },
+    {
+      "id": "R3",
+      "status": "NU-01_SC-01_PersistentConstructionNilNoValueRemainOpen"
+    },
+    {
+      "id": "PF-01-PF-09",
+      "status": "NoAcceptedOwnerBudgets"
+    },
+    {
+      "id": "R5",
+      "status": "FourOwnerC45FreezePending"
+    },
+    {
+      "id": "R6",
+      "status": "CorrectNineLibraryMetadataOnly_CommitVersionArtifactsConsumersPending"
+    },
+    {
+      "id": "R7",
+      "status": "PublicationNotAuthorized"
+    }
+  ]
+}

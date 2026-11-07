@@ -1,0 +1,72 @@
+{
+  "sourceVersion": "1.81.0",
+  "rows": [
+    {
+      "id": "PVQ-C01",
+      "owner": "Core",
+      "lane": "Current public ordinary/compatible provenance and containers",
+      "status": "QualifiedCoreFixturesOnly",
+      "evidence": "docs/foundation-public-primitives/STATUS.json",
+      "gap": "Native/owner workload and accepted budgets not supplied"
+    },
+    {
+      "id": "PVQ-S01",
+      "owner": "Schema",
+      "lane": "Native assessment/document existing source lane",
+      "status": "HistoricalOnly_CurrentCandidatePreflightRequired",
+      "evidence": "docs/schema-document-bridge/api-review/CHECKPOINT.json",
+      "gap": "Resolve exact isolated source wrapper/fixtures against1.81.0; do not infer public provider implementation"
+    },
+    {
+      "id": "PVQ-S02",
+      "owner": "Schema",
+      "lane": "Unchanged native consumer binary lane",
+      "status": "HistoricalOnly_ExactArtifactsRequired",
+      "evidence": "docs/schema-assessment/RESULTS.json",
+      "gap": "Resolve immutable consumer/baseline config and loaded replacement engine hashes before launch"
+    },
+    {
+      "id": "PVQ-S03",
+      "owner": "Schema + Core",
+      "lane": "Actual public advisor/complete-container native binding",
+      "status": "FeasibilityAndImplementationRequired",
+      "evidence": "evidence/OWNER-SOURCE-SNAPSHOT.json",
+      "gap": "No public interface token occurrences in scanned sources; actual public native route not qualified by reviewed receipts"
+    },
+    {
+      "id": "PVQ-X01",
+      "owner": "XmlDb + Core",
+      "lane": "Persistent reader/navigation and original store bytes",
+      "status": "HistoricalOnly_CurrentCandidateQualificationRequired",
+      "evidence": "docs/release-planning/INPUTS.json",
+      "gap": "Source and unchanged-binary lanes, actual stores/leases/read amplification and partial consumption"
+    },
+    {
+      "id": "PVQ-B01",
+      "owner": "Braid + Core",
+      "lane": "Worker/IPC typed preview and resource invalidation",
+      "status": "HistoricalOnly_CurrentCandidateQualificationRequired",
+      "evidence": "docs/release-planning/INPUTS.json",
+      "gap": "Actual source/binary worker inputs; outputs/messages/config/run identity/IPC/tails with explicit owner budget"
+    },
+    {
+      "id": "PVQ-P01",
+      "owner": "All owners",
+      "lane": "PF-01-PF-09",
+      "status": "BudgetAcceptancePending",
+      "evidence": "PF-MATRIX.json",
+      "gap": "All nine owner fixture/baseline/threshold/tolerance acceptance slots remain null"
+    },
+    {
+      "id": "PVQ-R01",
+      "owner": "Core + all owners",
+      "lane": "Remaining required R3 scope",
+      "status": "InProgress_Unwaived",
+      "evidence": "docs/foundation-r3-scope/PLAN.json",
+      "gap": "NU-01/SC-01,persistent/construction/nil/no-value and actual qualification remain separate dependencies"
+    }
+  ],
+  "r3Complete": false,
+  "r4Accepted": false,
+  "requirementsWaived": 0
+}

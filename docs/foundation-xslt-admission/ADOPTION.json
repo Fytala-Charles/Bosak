@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.72.0",
+  "candidateVersion": "1.73.0",
+  "beforeHashes": {
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "e2c4d7ec392e8aa69daa7ddb365dc957d216d970dde35e6fc8a7529de62331d2",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaOperationLeaseSetTests.cs": "a690a12934a48aa769a889470ddf09f67385d5d359046ad7f8716ca1af033ac5",
+    "src/Directory.Build.props": "fad0b5b71c2e3cfcc86f649bc9b99aac51256c9c4d1b7f49cdc9fec3901acba2",
+    "docs/foundation-public-xquery/MANIFEST.json": "fa1fd81d08518b394643721cc8da2bd0890fb31c1f7f2bad673c261114277282",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+  },
+  "semanticScope": "AH-03 internal admission outcome prerequisite only. XSLT REC https://www.w3.org/TR/2017/REC-xslt-30-20170608/ sections 2.3.2-2.3.4 describe invocation context; section 2.9 defines errors. The separate original admission/cleanup report is host policy from the immutable reviewed Xslt.cs.txt hash above, not an XSLT conformance claim.",
+  "hostPolicy": "Record original admission exception and every rollback exception in reverse acquisition order; retain provider AggregateException boundaries and repeated exception identities. The existing throwing Acquire entry must retain exact primary-first aggregation and original exception identity. Success transfers leases, refusal publishes no leases.",
+  "exclusions": "No public XSLT API or owned run outcome activated. No session/provider completion changes, capture/serializer/gate changes, owner/native/budget/freeze/package/publication acceptance. AH-03 remains open."
+}

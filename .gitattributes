@@ -440,3 +440,167 @@ docs/foundation-node-facts-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-bla
 
 # Preserve exact selected public original-node profile evidence.
 docs/foundation-node-query-profile/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-13 metadata-only original-facts qualification evidence.
+docs/foundation-node-metadata-reader/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-14 public original-node nilled qualification evidence.
+docs/foundation-public-node-nilled/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-15 public nilled guard-cost qualification evidence.
+docs/foundation-public-nilled-cost/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-16 atomization policy selection and prerequisite receipts.
+docs/foundation-node-atomization-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-17 public original-node data qualification evidence.
+docs/foundation-public-node-data/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-18 source-free construction policy and prerequisite receipts.
+docs/foundation-sourcefree-construction-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-19 provider-operation lifetime receipts.
+docs/foundation-provider-operation-lifetime/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-20 public construction qualification receipts.
+docs/foundation-public-construction/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-21 compatible-view selection and package preflight receipts.
+docs/foundation-compatible-view-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-22 paired-provider lifetime and refreshed metadata receipts.
+docs/foundation-paired-provider-lifetime/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve exact TA-23 private compatible proof/admission and cache-gap receipts.
+docs/foundation-compatible-admission/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-compatible-cache/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-compatible/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-r3-scope/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-host-operation-bridge/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-xquery/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-xslt-admission/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-xslt-completion/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-host-outcome/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-xslt/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-provenance-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-provenance/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-leased-provenance/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-container-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-container/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-compatible-container/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-primitive-policy/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-public-primitives/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-uri-binary-disposition/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-legacy-disposition/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-provider-qualification/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-schema-adapter-feasibility/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-native-container-prototype/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-native-node-prototype/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-native-assessment-prototype/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-native-consumer-handoff/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-native-immutable-guard/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-owner-workload-protocol/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-public-data-callback-attribution/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-captured-identity-candidate/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-captured-identity-qualification/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/foundation-captured-identity-production/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Preserve qualified checkpoint source and canonical document bytes across checkout.
+/README.md -text whitespace=cr-at-eol
+/ROADMAP.md -text whitespace=cr-at-eol
+/docs/AGENT_HANDOVER.md -text whitespace=cr-at-eol
+/docs/ARCHITECTURE.md -text whitespace=cr-at-eol
+/docs/DEVELOPMENT_HISTORY.md -text whitespace=cr-at-eol
+/docs/DOCUMENTATION_RENDERER_TEST.md -text whitespace=cr-at-eol
+/docs/FEATURE_REQUESTS.md -text whitespace=cr-at-eol
+/docs/IMPLEMENTATION_STATUS.md -text whitespace=cr-at-eol
+/docs/INTEGRATION.md -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/CapturedHostBinding.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/CapturedQueryResult.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/ConstructedAtomicPlan.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/OriginalNodeDataPlan.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/OriginalNodeNilledPlan.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/SchemaQueryCompatibilityResult.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Core/Schema/SchemaAtomics.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/ExecutionGate.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryAtomizedSequence.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs -text whitespace=cr-at-eol
+/src/Bosak.XQuery/Api/CapturedQueryHost.cs -text whitespace=cr-at-eol
+/src/Bosak.XQuery/Api/Schema/SchemaXQueryCompiler.cs -text whitespace=cr-at-eol
+/src/Bosak.XQuery/Api/XQueryExecutable.cs -text whitespace=cr-at-eol
+/src/Bosak.Xslt/Api/CapturedTransformHost.cs -text whitespace=cr-at-eol
+/src/Bosak.Xslt/Api/Schema/SchemaXslt.cs -text whitespace=cr-at-eol
+/src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs -text whitespace=cr-at-eol
+/src/Bosak.Xslt/Api/XsltExecutable.cs -text whitespace=cr-at-eol
+/src/Bosak.Xslt/Capture/XsltCaptureSession.cs -text whitespace=cr-at-eol
+/src/Directory.Build.props -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/CapturedHostBindingTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/CapturedIdentityTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/CapturedQueryResultTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/CompatibleAdmissionTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/CompatibleCacheTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PairedProviderOperationScopeTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PublicCompatibleTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PublicConstructionTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PublicOriginalDataTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PublicOriginalNilledTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/PublicTypedIdentityTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/QueryCompletionOutcomeTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/QueryNodeFactsTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/QueryProviderOperationScopeTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/RetainedSourceAdmissionTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/SchemaAtomicsTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Runtime.Tests/SchemaOperationLeaseSetTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.XQuery.Tests/PublicQuerySessionTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.Xslt.Tests/CapturedHostExecutionTests.cs -text whitespace=cr-at-eol
+/tests/Bosak.Xslt.Tests/PublicXsltSessionTests.cs -text whitespace=cr-at-eol
+
+# Large immutable execution archives use Git LFS;working-tree SHA-256 receipts stay unchanged.
+/docs/foundation-captured-identity-production/evidence/EXECUTION-LAYOUTS.zip filter=lfs diff=lfs merge=lfs -text
+/docs/foundation-captured-identity-qualification/evidence/EXECUTION-LAYOUTS.zip filter=lfs diff=lfs merge=lfs -text

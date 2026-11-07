@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.77.0",
+  "unitTestsPassed": 26118,
+  "newProvenanceControlsPassed": 64,
+  "publicHelperActivated": true,
+  "pvH01CompleteBounded": true,
+  "pv01Complete": false,
+  "proposedPublicTypesPresent": 47,
+  "proposedPublicTypesTotal": 47,
+  "publicApiChanged": true,
+  "newPublicTypes": 1,
+  "newDeclarationRows": 4,
+  "exportedTypes": 318,
+  "declarationRows": 6461,
+  "qt3": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "skipMapsUnchanged": true,
+  "compatibleUnleasedObservation": false,
+  "generalPublicContainerTransportImplemented": false,
+  "packagesBuilt": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "pushPerformed": false,
+  "nextStep": "PV-H02 required leased compatible provenance observation/disposition; PV-T01 general empty/list/union transport and PV-L01 legacy disposition remain open. NU-01/SC-01 and actual R4-R7 unwaived."
+}

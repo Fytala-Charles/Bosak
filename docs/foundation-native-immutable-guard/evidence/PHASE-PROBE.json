@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-07",
+  "scope": "Single candidate-only cold phase probe;not accepted budget or statistical benchmark",
+  "phases": [
+    {
+      "phase": "compileAndBind",
+      "elapsedMs": 635.704,
+      "allocatedBytes": 915464
+    },
+    {
+      "phase": "captureAndAssess",
+      "elapsedMs": 209.2036,
+      "allocatedBytes": 445176
+    },
+    {
+      "phase": "openSnapshot",
+      "elapsedMs": 1.9202,
+      "allocatedBytes": 952
+    },
+    {
+      "phase": "projectNavigation",
+      "elapsedMs": 0.8803,
+      "allocatedBytes": 1968
+    },
+    {
+      "phase": "publicDataEvaluate",
+      "elapsedMs": 131.3851,
+      "allocatedBytes": 8896
+    },
+    {
+      "phase": "closeAdmission",
+      "elapsedMs": 0.3892,
+      "allocatedBytes": 40
+    },
+    {
+      "phase": "closeResult",
+      "elapsedMs": 0.0488,
+      "allocatedBytes": 40
+    }
+  ]
+}

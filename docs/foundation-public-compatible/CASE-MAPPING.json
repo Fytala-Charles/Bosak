@@ -1,0 +1,271 @@
+{
+  "implementationStatus": "BoundedPublicCompatibleQualified",
+  "publicCompatibilityActivated": true,
+  "cases": [
+    {
+      "id": "CV01",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV01_PublicSelector"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV02",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV02_TargetCapabilities"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV03",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV03_OriginalLineage"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV04",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV04_NullDisposedSource"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV05",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV05_RawViewRefusal"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV06",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV06_ExactEndpoints"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV07",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV06_ExactEndpoints"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV08",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV08_NegativeOutcomes"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV09",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV09_Malformed"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV10",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV10_CopiedEndpoints",
+        "CV10_FinalViewCurrentness"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV11",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV11_RawReproof"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV12",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV12_NegativeReproof"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV13",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV13_ProofRevocation"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV14",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV14_ActualResources"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV15",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV15_CleanupOrdering",
+        "CV15_EntryRollback"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV16",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV16_SourceAuthentication"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV17",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV17_OriginalEvidence"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV18",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV17_OriginalEvidence"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV19",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV19_ExactIdentity"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV20",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV20_Eligibility"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV21",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV21_Capacity"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV22",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV22_TransactionalCache"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV23",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV23_Transport"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV24",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV24_Context",
+        "CV24_Grammar"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV25",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV25_Quotas"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV26",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV26_NoTransitiveImport"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV27",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV27_AsyncClosure",
+        "CV27_AsyncRawAndWait",
+        "CV27_CleanupRevocation"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV28",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV28_IndependentOperations",
+        "CV28_Overlap",
+        "CV28_Reentry"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV29",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV29_ResultSurface"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV30",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV30_ClosedMembership"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV31",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV30_ClosedMembership",
+        "Documented native/budget/all-host exclusions in STATUS.json and IMPLEMENTATION.md"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    },
+    {
+      "id": "CV32",
+      "status": "QualifiedBoundedPublicProfile",
+      "tests": [
+        "CV32_Descriptor",
+        "Full solution/gates/API/binding qualification in evidence"
+      ],
+      "scope": "Public compatible singleton identity; native/budget/all-host and owner acceptance excluded."
+    }
+  ]
+}

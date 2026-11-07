@@ -1,0 +1,85 @@
+{
+  "implementationStatus": "NotStarted",
+  "cases": [
+    {
+      "id": "HC01",
+      "trigger": "Engine-created exact host/executable/environment; no public arbitrary evaluator factory",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC02",
+      "trigger": "Foreign/copy/same-fingerprint operation refuses before node getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC03",
+      "trigger": "Exactly-one-owner dynamic node membership before getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC04",
+      "trigger": "Distinct/shared/absent initial-match and global-context roles",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC05",
+      "trigger": "Explicit empty membership for source-free work",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC06",
+      "trigger": "Frozen static settings survive caller mutation; unsupported services refuse",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC07",
+      "trigger": "Current source/target sessions and snapshot closure deny new work/delivery",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC08",
+      "trigger": "Raw async completion holds actual resources; canceled wait does not release work",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC09",
+      "trigger": "All original admission/work/cleanup errors preserve identity/order/aggregate boundaries",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC10",
+      "trigger": "Serializer/deferred consumption stays inside complete raw ownership",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC11",
+      "trigger": "Ordinary XPath/numeric/typed/node/construction/compatible profiles unchanged",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC12",
+      "trigger": "No second lifetime owner, fake input, provider disposal transfer or new mandatory node member",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC13",
+      "trigger": "Exact per-host descriptor/static-context capture and explicit unsupported profiles",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC14",
+      "trigger": "Cross-assembly friend/reference delta minimal and explicitly audited",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC15",
+      "trigger": "Source/binary/configuration/corpus and actual loaded assembly proof",
+      "status": "NotRun"
+    },
+    {
+      "id": "HC16",
+      "trigger": "Full Release tests, exact QT3/qt4 skip maps, public metadata and docs qualification",
+      "status": "NotRun"
+    }
+  ]
+}

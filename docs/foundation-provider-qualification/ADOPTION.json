@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "policyBeforeImplementation": true,
+  "productionChanged": false,
+  "beforeHashes": {
+    "docs/foundation-legacy-disposition/MANIFEST.json": "38d02b9fd771ca21e12af6453b4627cc1dd821ea42b43fb5536267f260e39e53",
+    "docs/foundation-r3-scope/REQUIREMENTS.json": "66f2463529ec136cdd7f3ac0cd4afad8d89cfb93cb131c73311e1dc99170dc81",
+    "docs/foundation-r3-scope/PLAN.json": "697928cefccf48c7b7458a1d95e06a14ed98f7332f6085f51b90de4463e17d3f",
+    "docs/foundation-performance/PLAN.json": "4c6ac831a781246bc18bcde3c3943fad714c77ba55a41a5a8e6149928e031f43",
+    "docs/foundation-performance/README.md": "d1670a107582d98d40214c52ace3568db2f8d24bc73f0b53052755a52d4af299",
+    "docs/release-planning/INPUTS.json": "231acf7af952195e2192db48fbc5cf7927b7f4b67e47f0834d61c99ec9901430",
+    "docs/schema-document-bridge/api-review/CHECKPOINT.json": "e6b6c203f75ffba735593df4f03aa9680dc38ed5cc215ba885c2502ac3e3083a",
+    "docs/schema-assessment/RESULTS.json": "e402322b5bfa6dfc1318a6e828f1a4806909c34d43cba33f1577b3a0e1cb1999",
+    "docs/foundation-bcap-cost/evidence/SUMMARY.json": "134470bafa2f13b4084c1885dee2718c1549d31452d66e3728969a4ba37184ff",
+    "docs/foundation-public-primitives/evidence/COST-OBSERVATION.json": "4a4c915264f5276f8c9d9178cafda6dd410e242fa1a9794869d360b8b7553651",
+    "docs/foundation-public-primitives/evidence/PACKAGE-PREFLIGHT.json": "1e2ae48d7ef9933e20a4cbb6aef5f3c5ef4869f239a428d3b4360163b095b99c"
+  },
+  "scope": "PV-Q01 exact-candidate provider/performance readiness audit and executable receipt preflight. No new engine semantic adoption, runtime implementation,API/version change,actual owner/native acceptance or invented budget.",
+  "intentionalExtensions": "Qualification protocol follows the already registered PF-01-PF-09 and R4-R7 requirements. Historical design/fixture/source/binary evidence remains separate from changed-candidate actual-provider qualification and explicit owner budgets."
+}

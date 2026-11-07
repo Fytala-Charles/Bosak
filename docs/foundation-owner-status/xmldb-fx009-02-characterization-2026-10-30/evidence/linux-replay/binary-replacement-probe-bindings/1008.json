@@ -1,0 +1,97 @@
+{
+  "processId": 1008,
+  "processName": "dotnet",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "3c7fa51f0f3fce7105027967d6ae272bf8cecdf92031cf0b5353f22bcce1d24d"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "63012205a327a28152c5671ef8d32d9d1aa0c2b2858d1ec8805dc0791a2e5e64"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "57a394263370888a2b0c996db4998d50eabc17f10186acdc0749139b95d2a406"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "cb6c4e2318cb90e795a19ef9e0e71d6fef9d996eaf5770f8a6b4d3e59c94e247"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "d2d89384cda7b44c5d366ae5148357e8a9973f88cd64882d52fb7059ac79d3a2"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.34.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.34.2\u002Bc88eea4308c0e49a81e7bfe2f481319f2e4d208c",
+      "sha256": "2cf5e58f845cef8f9483c46fb593858eaa6df86f515eb30161cfcc2d6989a61d"
+    },
+    {
+      "name": "Bosak.XmlDb.Core",
+      "identity": "Bosak.XmlDb.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XmlDb.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0",
+      "sha256": "115cf453cc389e73dcf7ccbf8c57d54c002bcfa76b3f0085eeb778eefa37ec41"
+    },
+    {
+      "name": "Bosak.XmlDb.Storage",
+      "identity": "Bosak.XmlDb.Storage, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XmlDb.Storage.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0",
+      "sha256": "2e6f8d726bb016993362e5dd066748a252d161697765663255dceb7fc5c246d6"
+    },
+    {
+      "name": "Bosak.XmlDb.Xdm",
+      "identity": "Bosak.XmlDb.Xdm, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "/work/frozen/replacement/probe/Bosak.XmlDb.Xdm.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0",
+      "sha256": "a2abbd08b34296a53d8978c40b5097a5f546d6de08ba26f6226a8ae22342eab1"
+    }
+  ],
+  "captureErrors": []
+}

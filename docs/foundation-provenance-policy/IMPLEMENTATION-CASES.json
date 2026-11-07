@@ -1,0 +1,228 @@
+{
+  "status": "Planned_NotRun",
+  "newTestsPassed": 0,
+  "cases": [
+    {
+      "id": "POV01",
+      "trigger": "Plain primitive",
+      "expected": "False/null without provider calls",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV02",
+      "trigger": "Exact integer/decimal payload",
+      "expected": "False/null without treating numeric payload as marker",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV03",
+      "trigger": "Labels/QName-only value",
+      "expected": "False/null; never authority by name",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV04",
+      "trigger": "Undefined and empty sequence",
+      "expected": "False/null without inventing atomic item",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV05",
+      "trigger": "Node/map/array/function/sequence",
+      "expected": "False/null without traversal",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV06",
+      "trigger": "Unknown or spoofed marker",
+      "expected": "False/null without marker callbacks",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV07",
+      "trigger": "Original string scalar",
+      "expected": "Cached declared/actual/origin identity",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV08",
+      "trigger": "Original integer/decimal scalar",
+      "expected": "Exact payload and tag validation",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV09",
+      "trigger": "QName/date/time/binary atomic family",
+      "expected": "Preserve factory payload representation",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV10",
+      "trigger": "Originless scalar",
+      "expected": "Null origin retained, no invented assessment",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV11",
+      "trigger": "Derived declared/actual split",
+      "expected": "Both original handle identities retained",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV12",
+      "trigger": "Ordinary observation between operations",
+      "expected": "Allowed only while engine snapshot/cache lives; no authorization",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV13",
+      "trigger": "Snapshot close before observation",
+      "expected": "False/null",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV14",
+      "trigger": "Session close before observation",
+      "expected": "False/null",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV15",
+      "trigger": "Retained view after close",
+      "expected": "All getters refuse without provider callbacks",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV16",
+      "trigger": "Payload rebound",
+      "expected": "False/null and no cache mutation",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV17",
+      "trigger": "Unregistered/rolled-back entry",
+      "expected": "False/null",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV18",
+      "trigger": "Canceled constructed raw operation",
+      "expected": "False/null and prior view getters refuse",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV19",
+      "trigger": "Live constructed receipt",
+      "expected": "Declared/actual cached, origin null",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV20",
+      "trigger": "Completed constructed raw operation",
+      "expected": "False/null; cannot migrate receipt",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV21",
+      "trigger": "Forged constructed receipt",
+      "expected": "False/null; no attachment authority",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV22",
+      "trigger": "Compatible entry during live caller operation",
+      "expected": "False/null; no unleased proof inference",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV23",
+      "trigger": "Compatible entry after operation",
+      "expected": "False/null, no stale issuer retention",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV24",
+      "trigger": "Compatible entry in later proof episode",
+      "expected": "False/null; runtime reproof unchanged",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV25",
+      "trigger": "Two concurrent compatible operations",
+      "expected": "No latest-proof overwrite or ambient authority",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV26",
+      "trigger": "Private legacy kernel evidence",
+      "expected": "No unqualified public handle casts",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV27",
+      "trigger": "Empty list",
+      "expected": "Governing/list metadata retained separately; zero scalar slots",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV28",
+      "trigger": "Singleton list",
+      "expected": "Never relabel entire container scalar",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV29",
+      "trigger": "Mixed selected union members",
+      "expected": "Ordered per-cell declared/actual/origin identities",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV30",
+      "trigger": "Over-limit complete container",
+      "expected": "Refuse whole batch with no prefix/quota mutation",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV31",
+      "trigger": "List cache warm reuse",
+      "expected": "Preserve list shape and distinct origin keys",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV32",
+      "trigger": "Late provider/container mutation",
+      "expected": "Runtime revalidation unchanged; observation no fresh-ownership claim",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV33",
+      "trigger": "Provider callback poison",
+      "expected": "Helper and getters invoke none",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV34",
+      "trigger": "Close between observation and provenance getter",
+      "expected": "All getters refuse through engine-only checks; no provider callback",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV35",
+      "trigger": "Observation forgery reused as typed input",
+      "expected": "Issued container/raw proof still required",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV36",
+      "trigger": "Currentness/storage cost",
+      "expected": "Measure allocations/retention; no new quota unit or budget default",
+      "status": "NotRun"
+    },
+    {
+      "id": "POV37",
+      "trigger": "Original snapshot cancellation without disposal",
+      "expected": "False/null and retained engine view getters refuse; no provider availability callback",
+      "status": "NotRun"
+    }
+  ]
+}

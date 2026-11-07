@@ -1,0 +1,22 @@
+{
+  "publicProposedTypePresence": {
+    "present": 47,
+    "total": 47,
+    "missing": 0
+  },
+  "remainingPublicTypes": [],
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T04",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "pv01Complete": false,
+  "remaining": [
+    "Wider primitive-family payload snapshot/lifetime policy and implementation",
+    "Persistent/copy/nil/no-typed-value dispatch",
+    "General constructed containers",
+    "Legacy disposition",
+    "Actual native/provider and aggregate retained-memory budgets",
+    "NU-01/SC-01",
+    "R4-R7"
+  ]
+}

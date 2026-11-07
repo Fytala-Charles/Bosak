@@ -1,0 +1,28 @@
+{
+  "sourceVersion": "1.78.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T02",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-T01",
+      "status": "CorePolicySelected_ImplementationPending"
+    },
+    {
+      "id": "PV-T02",
+      "status": "Next_OrdinaryCompleteContainer"
+    },
+    {
+      "id": "PV-T03",
+      "status": "Required_CompatibleCompleteContainer"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderBudgetAcceptancePending"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-05",
+  "rootProject": "Bosak.XQuery",
+  "selectedPackages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery"
+  ],
+  "previousSelectedRoot": "Bosak.XPath.Api",
+  "previousSelectedClosure": 7,
+  "currentSelectedClosure": 8,
+  "reason": "The public XQuery entry is shipped in Bosak.XQuery; its actual existing project dependency closure adds that package to the seven-library API closure. This metadata scope supersedes the earlier seven-only preview for this entry.",
+  "noticeOverlay": "docs/foundation-compatible-view-policy/packaging/PreviewAssets.targets",
+  "candidateCommit": null,
+  "previewVersion": null,
+  "packagesBuilt": false,
+  "publicationAuthorized": false
+}

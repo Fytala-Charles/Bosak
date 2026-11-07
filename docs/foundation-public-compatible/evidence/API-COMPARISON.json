@@ -1,0 +1,10 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 311,
+  "declarationRows": 6382,
+  "exactSelectedDelta": true,
+  "friendGrantsIdentical": true,
+  "referencesIdentical": true,
+  "previousInventorySha256": "5e19ec95369a329a19cb2bcc4d23af79e8938d40866db39dddcd06262ae0e71d",
+  "deltaSha256": "08a2753574093ea5d264e4f554cba93dae310bad6843055e695a9c4fa4b1cf30"
+}

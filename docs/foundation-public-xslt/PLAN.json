@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.76.0",
+  "nextCoreTask": "PV-01",
+  "noRequirementWaivers": true,
+  "previewPreparationMayRunBeforeFreeze": true,
+  "work": [
+    {
+      "id": "AH-01",
+      "dependsOn": [],
+      "owner": "Core",
+      "title": "Shared engine-owned host operation bridge",
+      "work": "Bind captured host/executable/environment to the public session and its complete raw operation; retain exactly-one-owner before getters and typed refusal profiles. Existing XSLT friendship can access API internals; XQuery currently cannot. Determine the smallest internal cross-assembly bridge, record any friend/reference change explicitly; do not publish a general callback factory.",
+      "exitEvidence": "Production bridge and negative ownership/currentness/source-role/cleanup tests; public XPath profiles unchanged; exact source/API/friends/full gates.",
+      "status": "CompletePrivateHostBridge",
+      "evidence": "docs/foundation-host-operation-bridge/STATUS.json",
+      "scope": "Private production host bridge; public host facades, BCAP capture/receipts/outcome and native qualification remain separate."
+    },
+    {
+      "id": "AH-02",
+      "dependsOn": [
+        "AH-01"
+      ],
+      "owner": "Core",
+      "title": "Public XQuery captured-session entry",
+      "work": "Implement the reviewed SchemaXQueryCompiler against captured effective prolog/options/module closure; explicit supported/refused dynamic services and exact raw ownership.",
+      "exitEvidence": "Actual public compile/evaluate path with immutable capture and positive/error/closure/deferred tests; source/binary/API/gate proof.",
+      "status": "CompleteBoundedOrdinaryPublicEntry",
+      "evidence": "docs/foundation-public-xquery/STATUS.json",
+      "scope": "Ordinary scalar/admitted-node inputs and flat empty/atomic/node results. Schema-aware/structured routes remain unsupported and unwaived broader requirements."
+    },
+    {
+      "id": "AH-03",
+      "dependsOn": [
+        "AH-01"
+      ],
+      "owner": "Core",
+      "title": "Public XSLT executable, invocation and BCAP capture",
+      "work": "Implement five missing XSLT types and Transform/CaptureTransform/RunCaptureTransform on the same exact session/executable. Rebase reviewed isolated ideas onto current source; do not copy old candidate assemblies/entire changed source. Preserve invocation/context precedence, distinct match/global roles, source-free work, modes, frozen limits/policy, receipts, original work/cleanup failures and real serialization tails.",
+      "exitEvidence": "Actual production public route plus C01-C10/invocation/error/receipt controls and full qualification; synthetic qualification is separate from native owner evidence.",
+      "status": "CompleteBoundedPublicOrdinaryXslt",
+      "admissionEvidence": "docs/foundation-xslt-admission/STATUS.json",
+      "scope": "Five reviewed public XSLT types, copied bounded capture, independent roles, real serialization/control composition, per-run receipts and separate original errors. Schema/native/worker/owner budgets and broader language scope remain unwaived.",
+      "completionEvidence": "docs/foundation-xslt-completion/STATUS.json",
+      "hostOutcomeEvidence": "docs/foundation-host-outcome/STATUS.json",
+      "publicEvidence": "docs/foundation-public-xslt/STATUS.json"
+    },
+    {
+      "id": "PV-01",
+      "dependsOn": [],
+      "owner": "Core with Schema review",
+      "title": "Public atomic evidence observation and complete typed-container policy",
+      "work": "Resolve missing SchemaAtomics.TryGetProvenance semantics for ordinary/original/compatible/operation-local constructed results. Current-compatible authorization is raw-local and cannot be revived by an unleased observation helper. Specify descriptive evidence versus authority, expired/closed behavior and selected list/union/container transport before implementation.",
+      "exitEvidence": "Exact immutable policy and declaration disposition, then public positive/negative evidence and list/union/empty/quota/lifetime cases; no known signature need silently omitted.",
+      "status": "PolicyRequired"
+    },
+    {
+      "id": "NU-01",
+      "dependsOn": [],
+      "owner": "Core",
+      "title": "Remaining exact numeric pipeline coverage",
+      "work": "Keep all six declared numeric intents and source-default migration. Map parsing/arithmetic/casts/map keys/serialization and all-host paths to actual bounded behavior; adopt exact immutable semantics before changing legacy routes.",
+      "exitEvidence": "Per-route supported/refused matrix and implementation/qualification for selected required coverage; no blanket exact-number claim.",
+      "status": "ScopeAndImplementationRequired"
+    },
+    {
+      "id": "SC-01",
+      "dependsOn": [
+        "PV-01"
+      ],
+      "owner": "Core with Schema review",
+      "title": "Remaining assessment, authority and node evidence integration",
+      "work": "Represent and qualify assessment/CTA/assertion, general authority/affiliation/complete closure and copy/preserve/strip/predicates, and compatible coverage beyond singleton identity; preserve explicit provider Unsupported outcomes.",
+      "exitEvidence": "Public engine routes plus actual provider supported/refused cases; broad native conformance remains separate.",
+      "status": "PendingDependency"
+    },
+    {
+      "id": "R4-01",
+      "dependsOn": [
+        "AH-02",
+        "AH-03",
+        "PV-01",
+        "NU-01",
+        "SC-01"
+      ],
+      "owner": "Core/Schema/XmlDb/Braid",
+      "title": "Actual same-candidate consumer integration",
+      "work": "Use one immutable candidate for source and supported unchanged-binary runs, native projection/persistent stores/actual readers and worker ownership, early-exit/fault/cancellation and permitted concurrency. Preparation can run earlier; older owner pins do not qualify new Core.",
+      "exitEvidence": "Pinned actual assemblies/resources/corpora and exact owner evidence; existing stored bytes/formats remain unchanged.",
+      "status": "QualificationPending"
+    },
+    {
+      "id": "R4-02",
+      "dependsOn": [
+        "R4-01"
+      ],
+      "owner": "Core/Schema/XmlDb/Braid",
+      "title": "Representative performance budgets",
+      "work": "Execute PF-01-PF-09 representative workloads, baselines, tolerances, allocations/latency/retention/I/O/IPC/lifetimes; obtain explicit budgets instead of selecting workload defaults.",
+      "exitEvidence": "Exact candidate owner workload results and explicit agreed budgets; synthetic local samples remain scoped.",
+      "status": "BudgetAcceptancePending"
+    },
+    {
+      "id": "R5-01",
+      "dependsOn": [
+        "R4-01",
+        "R4-02"
+      ],
+      "owner": "Core/Schema/XmlDb/Braid",
+      "title": "Exact public manifest acceptance and freeze",
+      "work": "Review final required public surfaces, compatible delta, signature needs and migration with four-owner dispositions.",
+      "exitEvidence": "Explicit C45/freeze dispositions tied to exact manifest/candidate; no inherited acceptance.",
+      "status": "OwnerAcceptancePending"
+    },
+    {
+      "id": "PK-01",
+      "dependsOn": [
+        "R5-01"
+      ],
+      "owner": "Core",
+      "title": "Package artifacts and publication qualification",
+      "work": "Preview preparation can run earlier after immutable source/assets/recipe checkpoint and chosen preview version; inspect NOTICE/licenses/provenance and fresh-cache package-only consumers. Final publication follows concrete reviewed artifact/release authorization.",
+      "exitEvidence": "Exact reviewed packages, consumer checks, release approval and publication/download receipts; product pin adoption separate.",
+      "status": "ArtifactQualificationPending"
+    }
+  ]
+}

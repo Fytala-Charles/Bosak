@@ -15,6 +15,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Authenticate original facts/node/input/origin issuance (1.63.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4 | 05-11-2026     | Guard source-free construction and operation-local capture (1.66.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5 | 05-11-2026     | Capture original binding for private compatible proof admission (1.68.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Schema;
 using Bosak.XPath.Runtime.Vm;
@@ -31,6 +37,10 @@ internal sealed class SchemaAdvisorBinding
     private readonly ISchemaAuthority _authority;
     private readonly Action<CancellationToken> _checkSession;
     internal ISchemaAssessmentAdvisor Advisor=>_advisor;
+    internal void CheckEngineSession(CancellationToken token)=>_checkSession(token);
+    internal void RequireRuntime(QuerySourceSession runtime)
+    {if(!ReferenceEquals(runtime,_runtime))throw new ArgumentException("Original binding belongs to another runtime session.");}
+
     internal void ValidateOrigin(ISchemaAssessmentOrigin? origin,CancellationToken token)
     {
         Check(token);
@@ -55,22 +65,25 @@ internal sealed class SchemaAdvisorBinding
         if(advisor is null)throw new ArgumentException("Supported binding has no advisor.",nameof(assessor));
         var result=new SchemaAdvisorBinding(runtime,environment,assessor,advisor,authority,checkSession);result.Check(token);return result;
     }
-    private void Check(CancellationToken token)
+    private void Check(CancellationToken token,Action? operationCheck=null)
     {
-        _checkSession(token);_advisor.ThrowIfUnavailable(token);_checkSession(token);
-        var assessor=_advisor.Assessor;_checkSession(token);_advisor.ThrowIfUnavailable(token);_checkSession(token);
+        void Guard(){operationCheck?.Invoke();_checkSession(token);operationCheck?.Invoke();}
+        Guard();_advisor.ThrowIfUnavailable(token);Guard();
+        var assessor=_advisor.Assessor;Guard();_advisor.ThrowIfUnavailable(token);Guard();
         if(!ReferenceEquals(assessor,_assessor))throw new ArgumentException("Advisor endpoint changed.");
-        var environment=_advisor.QueryEnvironment;_checkSession(token);_advisor.ThrowIfUnavailable(token);_checkSession(token);
+        var environment=_advisor.QueryEnvironment;Guard();_advisor.ThrowIfUnavailable(token);Guard();
         if(!ReferenceEquals(environment,_environment))throw new ArgumentException("Advisor environment changed.");
-        var authority=_assessor.Authority;_checkSession(token);_advisor.ThrowIfUnavailable(token);_checkSession(token);
+        var authority=_assessor.Authority;Guard();_advisor.ThrowIfUnavailable(token);Guard();
         if(!ReferenceEquals(authority,_authority))throw new ArgumentException("Assessor authority changed.");
     }
+    internal ISchemaAuthority Authority=>_authority;
+    internal void CheckAvailable(CancellationToken token,Action? operationCheck=null)=>Check(token,operationCheck);
     internal IQueryTypedContainerIssuer ForInput(QuerySourceSession runtime,ISchemaAssessmentInput original,IQuerySourceInput current,CancellationToken token)
     {
         if(!ReferenceEquals(runtime,_runtime))throw new ArgumentException("Foreign binding session.");
         Check(token);return new Issuer(this,original,current);
     }
-    private sealed class Issuer(SchemaAdvisorBinding owner,ISchemaAssessmentInput original,IQuerySourceInput current) : IQueryTypedContainerIssuer
+    private sealed class Issuer(SchemaAdvisorBinding owner,ISchemaAssessmentInput original,IQuerySourceInput current) : IQueryNodeFactsIssuer
     {
         SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment=>owner._runtime.Environment;
         ISchemaAuthority IQueryTypedContainerIssuer.Authority=>owner._authority;
@@ -81,5 +94,8 @@ internal sealed class SchemaAdvisorBinding
             =>ReferenceEquals(input,original)&&ReferenceEquals(projection,current)&&owner._advisor.OwnsAssessment(origin);
         bool IQueryTypedContainerIssuer.OwnsContainer(ISchemaTypedValue value,ISchemaAssessmentInput input,IQuerySourceInput projection,ISchemaAssessmentOrigin? origin)
             =>ReferenceEquals(input,original)&&ReferenceEquals(projection,current)&&owner._advisor.OwnsTypedValue(value,original,origin);
+        bool IQueryNodeFactsIssuer.OwnsFacts(ISchemaNodeFacts facts)=>owner._advisor.OwnsNodeFacts(facts);
+        bool IQueryNodeFactsIssuer.OwnsNode(Bosak.XPath.Core.Xdm.IXdmNode node,ISchemaNodeFacts facts,ISchemaAssessmentInput input,ISchemaAssessmentOrigin origin)
+            =>ReferenceEquals(input,original)&&owner._advisor.OwnsNode(node,facts,original,origin);
     }
 }

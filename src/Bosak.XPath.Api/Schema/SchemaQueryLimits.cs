@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 04-11-2026     | Document numeric digit/scale enforcement in the exact arithmetic profile (1.48.0).       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 05-11-2026     | Describe existing typed result and scalar registry units (1.64.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Immutable;
@@ -25,7 +27,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XPath.Api.Schema;
 /// <summary>Explicit finite admission limits; no owner workload defaults are selected.</summary>
-/// <remarks>The ordinary string/boolean profile excludes numeric evaluation; the exact arithmetic profile enforces numeric digit/scale limits. Schema caches and typed enumeration remain unavailable.</remarks>
+/// <remarks>The ordinary string/boolean profile excludes numeric evaluation; the exact arithmetic profile enforces numeric digit/scale limits. Assessor-bound profiles enforce scalar cache capacity and typed-result atom limits; these are not byte or provider-time budgets.</remarks>
 public readonly struct SchemaQueryLimits
 {
     /// <summary>Specifies positive counts and nonnegative scale; the default struct is invalid.</summary>

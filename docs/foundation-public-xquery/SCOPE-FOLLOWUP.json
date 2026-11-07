@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-05",
+  "sourceVersion": "1.72.0",
+  "historicalAudit": "docs/foundation-r3-scope/STATUS.json",
+  "completedWork": [
+    "AH-01",
+    "AH-02"
+  ],
+  "nextCoreTask": "AH-03",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "publicProposedTypePresence": {
+    "present": 41,
+    "total": 47,
+    "missing": 6
+  },
+  "remainingPublicTypes": [
+    "Bosak.XPath.Core.Schema.SchemaAtomics",
+    "Bosak.Xslt.Api.Schema.SchemaXsltCompiler",
+    "Bosak.Xslt.Api.Schema.SchemaXsltExecutable",
+    "Bosak.Xslt.Api.Schema.SchemaXsltInvocation",
+    "Bosak.Xslt.Api.Schema.SchemaXsltCaptureResult",
+    "Bosak.Xslt.Api.Schema.SchemaXsltRunResult"
+  ],
+  "scope": "AH-02 completion is bounded ordinary XQuery entry only. No broad schema-aware/structured/nested result or native/owner acceptance. All remaining R3/R4 requirements remain represented.",
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

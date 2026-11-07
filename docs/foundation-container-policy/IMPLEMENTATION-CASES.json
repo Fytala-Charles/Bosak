@@ -1,0 +1,198 @@
+{
+  "status": "Planned_NotRun",
+  "newTestsPassed": 0,
+  "cases": [
+    {
+      "id": "CTV01",
+      "trigger": "EmptyList",
+      "expected": "Supported empty enumerable with exact governing/list metadata; zero scalar slots",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV02",
+      "trigger": "SingletonList",
+      "expected": "List flag true despite scalar fast path",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV03",
+      "trigger": "MultiList",
+      "expected": "Complete ordered list",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV04",
+      "trigger": "EmptyNonList",
+      "expected": "Supported zero without invented nil/no-value",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV05",
+      "trigger": "UnionMembers",
+      "expected": "Distinct declared/selected actual handles in order",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV06",
+      "trigger": "NullOrigin",
+      "expected": "Ordinary null origin remains null",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV07",
+      "trigger": "FourFamilies",
+      "expected": "String/boolean/integer/decimal payload equality",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV08",
+      "trigger": "UnsupportedFamily",
+      "expected": "Whole result Unsupported without prefix",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV09",
+      "trigger": "DefaultCell",
+      "expected": "Reject missing evidence",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV10",
+      "trigger": "InvalidPayload",
+      "expected": "Reject nodes/maps/arrays/functions/default/marked/null strings",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV11",
+      "trigger": "ForeignContainer",
+      "expected": "Reject before provider getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV12",
+      "trigger": "ForeignInputSnapshot",
+      "expected": "Exact membership/input rejection",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV13",
+      "trigger": "ForeignTypeOrigin",
+      "expected": "All governing/declared/actual/origin ownership checks",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV14",
+      "trigger": "AtomLimit",
+      "expected": "One-extra MoveNext refuses before excess Current",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV15",
+      "trigger": "NumericLimits",
+      "expected": "Digit/scale bounds over entire batch",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV16",
+      "trigger": "EnumerationFailures",
+      "expected": "Acquisition/MoveNext/Current/Dispose primary-cleanup order",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV17",
+      "trigger": "ScalarRegression",
+      "expected": "Existing ReadTypedValue result/identity/descriptor unchanged",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV18",
+      "trigger": "NoRegistryMutation",
+      "expected": "Empty/nonempty/failure/retry never changes scalar slots",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV19",
+      "trigger": "RepeatedRead",
+      "expected": "Fresh uncached complete reads and no empty resident group growth",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV20",
+      "trigger": "OrdinaryExpiry",
+      "expected": "All public access paths late-refuse before callbacks",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV21",
+      "trigger": "CachedCellEscape",
+      "expected": "Plain Value survives while TypeEvidence revokes",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV22",
+      "trigger": "EnumeratorProtocol",
+      "expected": "Independent cursors/position/end/reset/idempotent dispose",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV23",
+      "trigger": "FastPath",
+      "expected": "False default out; singleton list true retains list flag",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV24",
+      "trigger": "ForgedRoundTrip",
+      "expected": "Adapter/copied cells cannot gain issuer authority",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV25",
+      "trigger": "CompatibleWindow",
+      "expected": "Whole read and later access guarded by exact proof",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV26",
+      "trigger": "CompatibleTurnover",
+      "expected": "Stable scalar/cache unchanged; raw-local views never rebind",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV27",
+      "trigger": "ConcurrentOperations",
+      "expected": "No cross-operation latest-proof state",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV28",
+      "trigger": "OverlapReentry",
+      "expected": "Single operation window rejects overlap/reentry",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV29",
+      "trigger": "CancellationCloseTail",
+      "expected": "Actual resource retention/drain during blocked provider access",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV30",
+      "trigger": "FailureIdentity",
+      "expected": "Provider exception identity and cleanup order preserved",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV31",
+      "trigger": "OtherProfile",
+      "expected": "Unsupported without provider container getters",
+      "status": "NotRun"
+    },
+    {
+      "id": "CTV32",
+      "trigger": "Cost",
+      "expected": "Cold/materialization/warm getter/callback/allocation observations; no owner budget claim",
+      "status": "NotRun"
+    }
+  ]
+}

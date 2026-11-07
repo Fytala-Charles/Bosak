@@ -1,0 +1,230 @@
+{
+  "implementationStatus": "InternalAdmissionQualified",
+  "publicCompatibilityActivated": false,
+  "cases": [
+    {
+      "id": "AC01",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC01_AuthenticatedAdmission"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC02",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC02_PublicBoundary"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC03",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC03_TargetCapabilities"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC04",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC04_SourceCapabilities"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC05",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC05_NegativeDecisions"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC06",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC06_MalformedProof"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC07",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC07_EndpointMismatch"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC08",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC08_OriginalMetadata"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC09",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC09_LivenessAndOwnership"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC10",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC10_FreshReproof"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC11",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC11_NegativeReproof"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC12",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC12_QuotaAndNeutrality"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC13",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC13_CallbackRevocation"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC14",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC14_BindingChange"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC15",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC15_FailureOrdering"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC16",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC16_CleanupRevocation"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC17",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC17_PublicationFailure"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC18",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC18_MetadataMutation"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC19",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC19_ViewMutationDuringWork"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC20",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC20_ConsumerConfinement"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC21",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC21_ActualProofResources"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC22",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC22_RawCancellation"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC23",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC23_FrozenDescriptor"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC24",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC24_Grammar"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC25",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC25_AcquisitionRollback"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC26",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC26_InputCallbackClosure"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC27",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC27_ExpiredProofGuard"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    },
+    {
+      "id": "AC28",
+      "status": "QualifiedInternalAdmission",
+      "tests": [
+        "AC28_IndependentRawProofs"
+      ],
+      "scope": "Actual private proof/admission/reproof; not public data execution or native acceptance."
+    }
+  ]
+}

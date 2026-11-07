@@ -56,6 +56,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 01-11-2026     | Expose effective static values internally for bounded capture. |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21 | 06-11-2026     | Run explicit source-role capture with local serialization diagnostics (1.76.0). |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -130,6 +131,35 @@ public sealed class XsltExecutable
             .TransformCore(matchInput, initialTemplate, null, true, null, null, true, true, globalInput, false), DefaultTransformStackSize);
     }
 
+
+    internal XdmValue TransformCapturedContext(IXdmNode? match,IXdmNode? global,string? template,string? mode,
+        bool raw,string? outputUri,EvaluationContext context)
+        =>RunWithStack(()=>new Runtime.TransformEngine(_stylesheet,context,null,_treatRecoverableAmbiguousMatchAsError)
+            .TransformCore(match,template,mode,raw,outputUri,null,true,false,global,false),DefaultTransformStackSize);
+
+    internal XsltCaptureResult CaptureExplicitContext(IXdmNode? match,IXdmNode? global,XsltCaptureOptions options,
+        EvaluationContext context,Action<Exception> observeError,Action<long>? observeProduction=null)
+    {
+        var session=new XsltCaptureSession(options,null,context.ExecutionGate,observeProduction,observeError);
+        Exception? failure=null;
+        try
+        {
+            context.ExecutionGate?.Checkpoint();
+            RunWithStack<object?>(()=>
+            {
+                var engine=new Runtime.TransformEngine(_stylesheet,context,session.MessageListener,_treatRecoverableAmbiguousMatchAsError);
+                engine.ResultDocumentCaptureObserver=session.ObserveResultDocument;
+                var result=engine.TransformCore(match,options.InitialTemplate,options.InitialMode,false,options.BaseOutputUri,null,true,false,global,false);
+                var props=(engine.PrincipalResultDocumentProperties??OutputProperties).Clone();
+                props.EffectiveVersion??=_stylesheet.Version;
+                props.ImplicitResultTree=engine.PrincipalResultDocumentProperties is null;
+                session.CapturePrincipal(result,props);
+                return null;
+            },DefaultTransformStackSize);
+        }
+        catch(Exception error){failure=error;}
+        return session.BuildResult(failure);
+    }
 
     /// <summary>
     /// Default stack size (bytes) allocated for the transformation thread.  A larger

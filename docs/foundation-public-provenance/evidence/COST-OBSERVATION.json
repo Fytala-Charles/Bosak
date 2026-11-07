@@ -1,0 +1,8 @@
+{
+  "warmCallerBytes": 0,
+  "observations": 1000,
+  "gettersPerObservation": 3,
+  "fixture": "PV06 one admitted ordinary integer, warm engine checks and exact registry lookup; excludes native/worker/retained-memory budgets.",
+  "newScalarSlots": 0,
+  "ownerBudgetAccepted": false
+}

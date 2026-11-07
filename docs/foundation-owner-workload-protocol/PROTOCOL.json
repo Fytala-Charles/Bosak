@@ -1,0 +1,41 @@
+{
+  "format": "bosak-owner-workload-proposal-v1",
+  "date": "2026-11-07",
+  "sourceVersion": "1.81.0",
+  "scenario": "PF-03-native-decimal-subset",
+  "schema": "fixtures/schema.xsd",
+  "schemaSha256": "1098462ac6ce030eec503d5b17b962d6e4b9676eb32d24569a02918c8350ef4a",
+  "expression": "data($node)",
+  "behaviorProfile": "bosak-original-node-data-v1",
+  "limits": {
+    "openSnapshots": 4,
+    "cachedValues": 8,
+    "typedAtoms": 8,
+    "numericDigits": 128,
+    "decimalScale": 128
+  },
+  "measurementScope": "parse-assess-admit-navigate-raw-data-all-children-dispose",
+  "repetitions": 3,
+  "warmup": 2,
+  "iterations": 5,
+  "workloads": [
+    {
+      "id": "native-decimal-1",
+      "children": 1,
+      "instance": "fixtures/amounts-1.xml",
+      "instanceSha256": "7971fbac7e8ede0fa4bfcb1d853b1600740376c5a1496d41d9c32fd91f59c702",
+      "expectedSum": "1.25"
+    },
+    {
+      "id": "native-decimal-8",
+      "children": 8,
+      "instance": "fixtures/amounts-8.xml",
+      "instanceSha256": "320b00d324a4455a9a1cf8e026a32390d880fa75ac6a583676ef905cd8568ca4",
+      "expectedSum": "10.0"
+    }
+  ],
+  "ownerAccepted": false,
+  "ownerBudget": null,
+  "baselineSelected": false,
+  "comparableBaseline": null
+}

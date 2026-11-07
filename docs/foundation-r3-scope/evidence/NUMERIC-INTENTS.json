@@ -1,0 +1,13 @@
+{
+  "allSixDeclared": true,
+  "witnesses": [
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromDecimal:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromDecimal:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmExactDecimal value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromInteger:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=):",
+    "M Bosak.XPath.Core.Xdm.XdmValue.FromInteger:Public, Static, HideBySig:Standard:Bosak.XPath.Core.Xdm.XdmValue :None:none:required=:optional=:attrs=(System.Numerics.BigInteger value:None:none:required=:optional=:attrs=,System.String schemaTypeName:None:none:required=:optional=:attrs=,System.String userSchemaTypeName:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)2)];[System.Runtime.InteropServices.OptionalAttribute()]):",
+    "P Bosak.XPath.Core.Xdm.XdmValue.BigIntegerValue:System.Numerics.BigInteger():attrs=",
+    "P Bosak.XPath.Core.Xdm.XdmValue.ExactDecimalValue:Bosak.XPath.Core.Xdm.XdmExactDecimal():attrs="
+  ],
+  "fullNumericPipelineQualified": false,
+  "remaining": "Legacy parsing/arithmetic/casts/map keys/serialization and broad all-host routes remain separate from bounded exact profiles; default-literal source migration remains recorded."
+}

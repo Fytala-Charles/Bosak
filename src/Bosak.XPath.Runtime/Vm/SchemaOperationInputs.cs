@@ -23,6 +23,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 03-11-2026     | Create isolated contexts eligible for read-only standard function sharing.              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7 | 06-11-2026     | Retain optional inherited engine controls on copied inputs (1.76.0). |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -31,6 +32,7 @@ namespace Bosak.XPath.Runtime.Vm;
 /// <summary>Copied bounded data; node graphs remain borrowed from their admitted owner.</summary>
 internal sealed class SchemaOperationInputs
 {
+    private readonly ExecutionGate? _executionGate;
     private readonly XdmValue _focus;
     private readonly int _position, _size;
     private readonly KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>[] _variables;
@@ -42,7 +44,7 @@ internal sealed class SchemaOperationInputs
     internal object? OperationIdentity { get; private init; }
     internal ReadOnlySpan<KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>> VariableBindings => _variables;
     internal SchemaOperationInputs ForOperation(object identity, Func<IXdmNode, bool> ownsNode) => new(_focus, _position, _size, _variables,
-        _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null) { OperationIdentity = identity, _ownsNode = ownsNode };
+        _namespaces, _baseUri, _defaultNamespace, _definingNamespace, _collation, null,_executionGate) { OperationIdentity = identity, _ownsNode = ownsNode };
     internal bool OwnsNode(object operation, IXdmNode node) => ReferenceEquals(OperationIdentity, operation) && _ownsNode is not null && _ownsNode(node);
 
     internal void ValidateNodeInputs(object operation)
@@ -57,18 +59,19 @@ internal sealed class SchemaOperationInputs
     internal SchemaOperationInputs(XdmValue focus, int position, int size,
         KeyValuePair<(string LocalName, string NamespaceUri), XdmValue>[] variables,
         KeyValuePair<string, string>[] namespaces, string? baseUri,
-        string? defaultNamespace, string? definingNamespace, string collation, SchemaEvidenceKernel.Snapshot? snapshot)
+        string? defaultNamespace, string? definingNamespace, string collation, SchemaEvidenceKernel.Snapshot? snapshot,ExecutionGate? executionGate=null)
     {
         _focus = focus; _position = position; _size = size;
         _variables = variables; _namespaces = namespaces;
         _baseUri = baseUri; _defaultNamespace = defaultNamespace;
         _definingNamespace = definingNamespace; _collation = collation;
-        Snapshot = snapshot;
+        Snapshot = snapshot; _executionGate=executionGate;
     }
 
     internal EvaluationContext CreateContext()
     {
         var context = EvaluationContext.CreateIsolated();
+        context.ExecutionGate=_executionGate;
         context.BaseUri = _baseUri; context.DefaultElementNamespace = _defaultNamespace;
         context.DefiningElementDefaultNamespace = _definingNamespace; context.DefaultCollation = _collation;
         context.WithFocus(_focus, _position, _size);

@@ -1,0 +1,83 @@
+{
+  "processId": 52776,
+  "assemblies": [
+    {
+      "name": "Bosak.Schema.Tests",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.Schema.Tests.dll",
+      "sha256": "4d586e29202a8e119ffa7fe7ea6ec806e5731d0933b651004f4cf1ca53121527",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.Schema",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.Schema.dll",
+      "sha256": "ce6c77bbb8ec0f02e953bd301c336651811686717cfebb25b90d8869fa3612f9",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Api",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Api.dll",
+      "sha256": "adb4f2b74df02975462f20c0896aa1f877d362cbd6fe00203fc08661e3794fc1",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Compiler.dll",
+      "sha256": "41d39d1340fc495299f4f4adc62a9e7ab29f0617ab311238f92612c4bfdf72a4",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Core.dll",
+      "sha256": "615c874dde4a240c4ca9d23cdc82a0e2693a9940b14a1bf193302d5903e65486",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Parser.dll",
+      "sha256": "bdc43090a6361db7d44e81dc90bb063956d02ec0ee3166f27d62274ffef126c0",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Providers.dll",
+      "sha256": "b0df93101264284d12df1d79ea08a35f2346e8a5e81c40d7681205f936ae95ca",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Runtime.dll",
+      "sha256": "e635e1139367aa227b2d4fcc929bd3ff8af51857412037691e66706d5ec8f945",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XPath.Standard.dll",
+      "sha256": "cd932a32786831fb658429bbe6195afe22d1671f41eaa0c6e3da651378f5442b",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XQuery",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.XQuery.dll",
+      "sha256": "c274d9abae01afdf327c588c7703635bb17145dee940ecda9dae1e02aec4f986",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.Xslt",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\baseline\\Bosak.Xslt.dll",
+      "sha256": "c661549d66461f335b8def0a9bd2c2bde163a0f8e6af1e8f008402c6f89e9c48",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

@@ -41,6 +41,26 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.13   | 05-11-2026     | Add uncached original-node facts and exact selected ownership (1.61.0).                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.14   | 05-11-2026     | Allow internal original facts metadata-only reads (1.62.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15   | 05-11-2026     | Select exactly one raw node owner before public nilled getters (1.63.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.16   | 05-11-2026     | Bridge original node atomization to the scalar registry (1.64.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.17   | 05-11-2026     | Retain raw leases through optional provider call tails (1.65.0). |
+//                      | Charles Korthout | 0.18 | 05-11-2026     | Guard source-free construction and operation-local capture (1.66.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.19 | 05-11-2026     | Add internal paired calls and revocable neutral source retention (1.67.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.20 | 05-11-2026     | Separate stable payload scope from current compatible issuer (1.69.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.21 | 05-11-2026     | Bind private host windows to current neutral source operations (1.71.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.22 | 06-11-2026     | Report internal source admission/work/cleanup outcomes without flattening (1.74.0). |
+//                      | Charles Korthout | 0.23 | 06-11-2026     | Select inherited gate on explicit host capture only (1.76.0). |
+//                      | Charles Korthout | 0.24 | 06-11-2026     | Expose callback-free observation expiry with original admission cancellation (1.77.0). |
+//                      | Charles Korthout | 0.25 | 06-11-2026     | Offer opt-in complete stored-metadata validation for borrowed reads (1.79.0). |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -94,6 +114,19 @@ internal sealed class QuerySourceSession : IDisposable
     }
     internal Snapshot OpenSnapshot(SchemaQueryEnvironment environment, IQuerySourceInput input,
         Func<IDisposable> enterOwner, object? originalAssessment = null, CancellationToken cancellation = default)
+        => OpenSnapshotCore(environment, input, enterOwner, originalAssessment, cancellation, null);
+
+    // Mechanical retention only: no schema proof, original assessment or compatible view is minted.
+    internal Snapshot OpenRetainedSourceSnapshot(SchemaQueryEnvironment environment, Snapshot source, CancellationToken cancellation = default)
+    {
+        CheckEnvironment(environment); ArgumentNullException.ThrowIfNull(source);
+        if (ReferenceEquals(source.Owner, this) || source.RetainedSource is not null)
+            throw new NotSupportedException("Retained source admission requires a distinct original source session.");
+        return OpenSnapshotCore(environment, source.Input, source.Lifetime.Enter, null, cancellation, source);
+    }
+
+    private Snapshot OpenSnapshotCore(SchemaQueryEnvironment environment, IQuerySourceInput input,
+        Func<IDisposable> enterOwner, object? originalAssessment, CancellationToken cancellation, Snapshot? retainedSource)
     {
         CheckEnvironment(environment); ArgumentNullException.ThrowIfNull(input); ArgumentNullException.ThrowIfNull(enterOwner);
         if (originalAssessment is not null) throw new NotSupportedException("Original assessment requires an explicitly bound schema advisor.");
@@ -109,8 +142,22 @@ internal sealed class QuerySourceSession : IDisposable
         IDisposable? retained = null;
         try
         {
+            if (retainedSource is not null)
+            {
+                // Acquire the real source lifetime before any source input callback can be on stack.
+                retainedSource.Owner.CheckEnvironment(retainedSource.Owner.Environment);
+                retainedSource.Lifetime.Check();
+                CheckEnvironment(environment); cancellation.ThrowIfCancellationRequested();
+            }
             retained = enterOwner() ?? throw new InvalidOperationException("Owner returned no admission lease.");
-            input.ThrowIfUnavailable(cancellation); cancellation.ThrowIfCancellationRequested();
+            if (retainedSource is null) input.ThrowIfUnavailable(cancellation);
+            else
+            {
+                CheckEnvironment(environment); cancellation.ThrowIfCancellationRequested();
+                CheckRetainedSource(retainedSource, cancellation);
+                CheckEnvironment(environment);
+            }
+            cancellation.ThrowIfCancellationRequested();
             lock (_gate)
             {
                 ObjectDisposedException.ThrowIf(_closing, this);
@@ -120,7 +167,7 @@ internal sealed class QuerySourceSession : IDisposable
                 {
                     try { lease.Dispose(); }
                     finally { lock (_gate) _snapshots.Remove(input); }
-                });
+                }, retainedSource,cancellation);
                 _snapshots.Add(input, snapshot); retained = null; return snapshot;
             }
         }
@@ -131,6 +178,14 @@ internal sealed class QuerySourceSession : IDisposable
         }
         finally { lock (_gate) _opening--; openingLease.Dispose(); }
     }
+    private static void CheckRetainedSource(Snapshot? source, CancellationToken cancellation)
+    {
+        if (source is null) return;
+        source.Owner.CheckEnvironment(source.Owner.Environment);
+        source.CheckSource(cancellation);
+        source.Owner.CheckEnvironment(source.Owner.Environment);
+    }
+
     internal Snapshot OpenAssessedSnapshot(SchemaQueryEnvironment environment, IQuerySourceInput input,
         Func<IDisposable> enterOwner, IQuerySchemaAdvisor advisor, object originalAssessment, int valueLimit,
         CancellationToken cancellation = default)
@@ -152,7 +207,7 @@ internal sealed class QuerySourceSession : IDisposable
         catch (Exception primary) { SchemaEvidenceKernel.PreserveFailure(primary, snapshot.Dispose); throw; }
     }
 
-    private Operation OpenOperation(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, CancellationToken cancellation)
+    private ImmutableArray<SchemaOperationLeaseSet.Member> PrepareOperation(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, CancellationToken cancellation)
     {
         CheckEnvironment(environment);
         if (snapshots.IsDefault || snapshots.Length > _snapshotLimit) throw new ArgumentException("Explicit bounded membership required.", nameof(snapshots));
@@ -163,22 +218,69 @@ internal sealed class QuerySourceSession : IDisposable
         var members = ImmutableArray.CreateBuilder<SchemaOperationLeaseSet.Member>(snapshots.Length + 1);
         members.Add(new(this, () => CheckEnvironment(environment), _lifetime.Enter));
         foreach (var snapshot in snapshots) members.Add(new(this, () => snapshot.Check(cancellation), snapshot.Lifetime.Enter));
-        var leases = SchemaOperationLeaseSet.Acquire(this, members.ToImmutable(), _snapshotLimit == int.MaxValue ? int.MaxValue : _snapshotLimit + 1, () => CheckEnvironment(environment), cancellation);
+        return members.ToImmutable();
+    }
+
+    private Operation OpenOperation(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, CancellationToken cancellation)
+    {
+        var members = PrepareOperation(environment, snapshots, cancellation);
+        var leases = SchemaOperationLeaseSet.Acquire(this, members, _snapshotLimit == int.MaxValue ? int.MaxValue : _snapshotLimit + 1, () => CheckEnvironment(environment), cancellation);
         return new Operation(this, snapshots, leases, cancellation);
     }
+    internal sealed class RunCompletion<T>(bool hasResult, T result, Exception? admissionError,
+        Exception? workError, ImmutableArray<Exception> cleanupErrors)
+    {
+        internal bool HasResult { get; } = hasResult;
+        internal T Result { get; } = result;
+        internal Exception? AdmissionError { get; } = admissionError;
+        internal Exception? WorkError { get; } = workError;
+        internal ImmutableArray<Exception> CleanupErrors { get; } = cleanupErrors;
+        internal bool IsSuccess => HasResult && AdmissionError is null && WorkError is null && CleanupErrors.IsEmpty;
+    }
+
+    internal RunCompletion<T> RunOutcome<T>(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots,
+        Func<Operation, T> work, CancellationToken cancellation = default)
+    {
+        ArgumentNullException.ThrowIfNull(work);
+        SchemaOperationLeaseSet.Acquisition admission;
+        try
+        {
+            var members = PrepareOperation(environment, snapshots, cancellation);
+            admission = SchemaOperationLeaseSet.AcquireOutcome(this, members,
+                _snapshotLimit == int.MaxValue ? int.MaxValue : _snapshotLimit + 1,
+                () => CheckEnvironment(environment), cancellation);
+        }
+        catch (Exception error) { return new(false, default!, error, null, []); }
+        if (admission.AdmissionError is not null)
+            return new(false, default!, admission.AdmissionError, null, admission.CleanupErrors);
+        Operation operation;
+        try { operation = new Operation(this, snapshots, admission.Leases!, cancellation); }
+        catch (Exception error)
+        { return new(false, default!, error, null, [.. admission.Leases!.CompleteFailures()]); }
+        bool hasResult = false;
+        T result = default!;
+        Exception? failure = null;
+        try { operation.Check(); result = work(operation); hasResult = true; operation.Check(); }
+        catch (Exception error) { failure = error; }
+        var completion = operation.CompleteOutcomeAsync(failure).GetAwaiter().GetResult();
+        return new(hasResult, result, null, completion.Primary, completion.CleanupErrors);
+    }
+
     internal T Run<T>(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, Func<Operation, T> work, CancellationToken cancellation = default)
     {
         ArgumentNullException.ThrowIfNull(work); var operation = OpenOperation(environment, snapshots, cancellation);
-        try { return work(operation); }
-        catch (Exception primary) { operation.Complete(primary); throw; }
-        finally { operation.Complete(); }
+        T result = default!; Exception? failure = null;
+        try { result = work(operation); } catch (Exception error) { failure = error; }
+        operation.CompleteAsync(failure).GetAwaiter().GetResult();
+        return result;
     }
     internal async Task<T> RunAsync<T>(SchemaQueryEnvironment environment, ImmutableArray<Snapshot> snapshots, Func<Operation, Task<T>> work, CancellationToken cancellation = default)
     {
         ArgumentNullException.ThrowIfNull(work); var operation = OpenOperation(environment, snapshots, cancellation);
-        try { return await work(operation).ConfigureAwait(false); }
-        catch (Exception primary) { operation.Complete(primary); throw; }
-        finally { operation.Complete(); }
+        T result = default!; Exception? failure = null;
+        try { result = await work(operation).ConfigureAwait(false); } catch (Exception error) { failure = error; }
+        await operation.CompleteAsync(failure).ConfigureAwait(false);
+        return result;
     }
     /// <summary>Revokes admissions and attempts every snapshot release; raw work retains its leases.</summary>
     public void Dispose()
@@ -233,10 +335,24 @@ internal sealed class QuerySourceSession : IDisposable
             try{Lifetime.Check();}catch{cache.Close();throw;}
             cache.RequireScope(issuer,originalInput,authority,limit);return cache;
         }
-        internal Snapshot(QuerySourceSession owner, IQuerySourceInput input, Action release)
-        { Owner = owner; Input = input; Lifetime = new QuerySnapshotLifetime(release); }
+        internal Snapshot? RetainedSource { get; }
+        private readonly CancellationToken _observationCancellation;
+        internal void CheckObservationActive()
+        {
+            _observationCancellation.ThrowIfCancellationRequested();Owner.CheckEnvironment(Owner.Environment);Lifetime.Check();
+            RetainedSource?.CheckObservationActive();
+            _observationCancellation.ThrowIfCancellationRequested();Owner.CheckEnvironment(Owner.Environment);Lifetime.Check();
+        }
+        internal Snapshot(QuerySourceSession owner, IQuerySourceInput input, Action release, Snapshot? retainedSource = null,CancellationToken observationCancellation=default)
+        { Owner = owner; Input = input; Lifetime = new QuerySnapshotLifetime(release); RetainedSource = retainedSource; _observationCancellation=observationCancellation; }
         internal void CheckSource() => CheckSource(default);
-        internal void CheckSource(CancellationToken cancellation) { Lifetime.Check(); Input.ThrowIfUnavailable(cancellation); cancellation.ThrowIfCancellationRequested(); Lifetime.Check(); }
+        internal void CheckSource(CancellationToken cancellation)
+        {
+            Lifetime.Check();
+            if (RetainedSource is null) Input.ThrowIfUnavailable(cancellation);
+            else CheckRetainedSource(RetainedSource, cancellation);
+            cancellation.ThrowIfCancellationRequested(); Lifetime.Check();
+        }
         internal void Check() => Check(default);
         internal void Check(CancellationToken cancellation) { CheckSource(cancellation); Schema?.Check(); CheckSource(cancellation); }
         /// <summary>Revokes access without releasing an active raw-operation resource.</summary>
@@ -253,30 +369,62 @@ internal sealed class QuerySourceSession : IDisposable
         private readonly ImmutableArray<Snapshot> _snapshots;
         private readonly SchemaOperationLeaseSet _leases;
         private readonly CancellationToken _cancellation;
+        private readonly QueryProviderOperationScope _providerCalls;
         internal Operation(QuerySourceSession owner, ImmutableArray<Snapshot> snapshots, SchemaOperationLeaseSet leases, CancellationToken cancellation)
-        { _owner = owner; _snapshots = snapshots; _leases = leases; _cancellation = cancellation; }
-        internal void Check() => _leases.Check();
+        { _owner = owner; _snapshots = snapshots; _leases = leases; _cancellation = cancellation;
+            _providerCalls = new QueryProviderOperationScope(_leases.Check, cancellation); }
+        internal void Check() { _providerCalls.CheckActive(); _leases.Check(); _providerCalls.CheckActive(); }
+        internal void RequireOwner(QuerySourceSession owner){Check();if(!ReferenceEquals(owner,_owner))throw new ArgumentException("Operation belongs to another runtime session.");}
+        internal T CallHost<T>(object host,Func<Action,T> work)=>_providerCalls.CallHost(host,work);
+        internal T CallProvider<T>(Bosak.XPath.Core.Schema.IQueryOperationLifetime provider, Func<Action,T> work, Action<Action>? beforeEnter=null)
+            => _providerCalls.Call(provider, work, beforeEnter);
+        internal T CallProviderPair<T>(Bosak.XPath.Core.Schema.IQueryOperationLifetime source,
+            Bosak.XPath.Core.Schema.IQueryOperationLifetime target, Func<Action,T> work, Action<Action>? beforeEnter=null)
+            => _providerCalls.CallPair(source, target, work, beforeEnter);
         internal QueryTypedContainer ReadTypedContainer(Snapshot snapshot,IQueryTypedContainerIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput originalInput,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin? origin,
-            Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxAtoms,int digits,int scale)
+            Bosak.XPath.Core.Schema.ISchemaTypedValue value,int maxAtoms,int digits,int scale,bool validateStored=false)
         {
             RequireMember(snapshot);
-            return new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation).Read();
+            var reader=new QueryTypedContainerReader(this,snapshot,_owner.Environment,issuer,originalInput,origin,value,maxAtoms,digits,scale,_cancellation);
+            var result=reader.Read();
+            if(!validateStored)return result;
+            var captured=result.Capture();
+            void CheckComplete()
+            {
+                CheckObservationActive();reader.ValidateStored(captured.Governing,captured.Cells);CheckObservationActive();
+            }
+            CheckComplete();return new QueryTypedContainer(CheckComplete,captured.Governing,captured.List,captured.Cells);
         }
         internal QueryNodeFacts ReadNodeFacts(Snapshot snapshot,IQueryNodeFactsIssuer issuer,
             Bosak.XPath.Core.Schema.ISchemaAssessmentInput input,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin,
-            IXdmNode node,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts,int atoms,int digits,int scale)
-            =>new QueryNodeFactsReader(this,snapshot,_owner.Environment,issuer,input,origin,node,facts,atoms,digits,scale,_cancellation).Read();
+            IXdmNode node,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts,int atoms,int digits,int scale,bool metadataOnly=false)
+            =>new QueryNodeFactsReader(this,snapshot,_owner.Environment,issuer,input,origin,node,facts,atoms,digits,scale,_cancellation).Read(metadataOnly);
         internal void RequireNodeOwner(Snapshot selected,IXdmNode node)
         {
-            RequireMember(selected); int owners=0; Snapshot? owner=null;
+            RequireMember(selected);
+            if(!ReferenceEquals(FindNodeOwner(node),selected))throw new ArgumentException("Node requires exactly the selected admitted owner.",nameof(node));
+        }
+        internal XdmValue AtomizeOriginalNode(Snapshot snapshot,IQueryNodeFactsIssuer issuer,
+            Bosak.XPath.Core.Schema.ISchemaAssessmentInput input,Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin origin,
+            IXdmNode node,Bosak.XPath.Core.Schema.ISchemaNodeFacts facts,XdmNodeKind kind,int maxCached,int atoms,int digits,int scale,int faultAfter=-1)
+            =>new QueryNodeFactsReader(this,snapshot,_owner.Environment,issuer,input,origin,node,facts,atoms,digits,scale,_cancellation).Atomize(kind,maxCached,faultAfter);
+        internal CancellationToken Cancellation=>_cancellation;
+        internal Snapshot FindNodeOwner(IXdmNode node)
+        {
+            Check(); int owners=0; Snapshot? owner=null;
             foreach(var snapshot in _snapshots)
             {
                 snapshot.Check(_cancellation); bool owns=snapshot.Input.OwnsNode(node); Check(); snapshot.Check(_cancellation);
                 if(owns){owners++;owner=snapshot;}
             }
-            if(owners!=1||!ReferenceEquals(owner,selected))throw new ArgumentException("Node requires exactly the selected admitted owner.",nameof(node));
-            Check();
+            if(owners!=1)throw new ArgumentException("Node requires exactly one admitted owner.",nameof(node));
+            Check();return owner!;
+        }
+        internal void CheckObservationActive()
+        {
+            _providerCalls.CheckActive();_leases.CheckActive();_owner.CheckEnvironment(_owner.Environment);
+            _providerCalls.CheckActive();_leases.CheckActive();
         }
         internal void CheckRegistrationActive(Snapshot snapshot)
         {
@@ -289,6 +437,10 @@ internal sealed class QuerySourceSession : IDisposable
         {
             RequireMember(snapshot);
             return snapshot.RequireTypedScalars().ValidateTransport(this,value,maxAtoms,digits,scale,_cancellation);
+        }
+        internal QueryRegisteredTypedContainer ValidateTypedTransport(Snapshot snapshot,XdmValue value,IQueryTypedContainerIssuer issuer,int maxAtoms,int digits,int scale)
+        {
+            RequireMember(snapshot);return snapshot.RequireTypedScalars().ValidateTransport(this,value,maxAtoms,digits,scale,_cancellation,issuer);
         }
         internal XdmValue ProjectTypedNumeric(Snapshot snapshot,XdmValue value,int maxAtoms,int digits,int scale)
         {
@@ -405,13 +557,13 @@ internal sealed class QuerySourceSession : IDisposable
             }
             if (owners != 1) throw new ArgumentException("Scalar evidence requires exactly one admitted schema association.", nameof(value));
         }
-        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, int maxBindings, int maxNamespaces)
+        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller, int maxBindings, int maxNamespaces,bool inheritExecutionGate=false)
         {
             Check(); ArgumentNullException.ThrowIfNull(caller);
             if(_owner._typedIdentity||_owner._typedNumeric)throw new NotSupportedException("Typed execution requires an explicit authenticated operand route.");
             foreach (var value in caller.SnapshotVariables().Values)
                 ValidateTransport(value);
-            var inputs = caller.CaptureSchemaInputs(OwnsNode, maxBindings, maxNamespaces).ForOperation(this, OwnsNode);
+            var inputs = caller.CaptureSchemaInputs(OwnsNode, maxBindings, maxNamespaces,allowExecutionGate:inheritExecutionGate).ForOperation(this, OwnsNode);
             Check(); return inputs;
         }
         internal XdmValue EvaluateAtomic(SchemaOperationInputs inputs)
@@ -429,6 +581,8 @@ internal sealed class QuerySourceSession : IDisposable
                 throw new NotSupportedException("Only copied scalar results are supported by this slice.");
             ValidateTransport(result); Check(); return result;
         }
-        internal void Complete(Exception? primary = null) => _leases.Complete(primary);
+        internal Task<QueryProviderOperationScope.Completion> CompleteOutcomeAsync(Exception? primary = null)
+            => _providerCalls.CompleteOutcomeAsync(_leases.CompleteFailures, primary);
+        internal Task CompleteAsync(Exception? primary = null) => _providerCalls.CompleteAsync(_leases.CompleteFailures, primary);
     }
 }

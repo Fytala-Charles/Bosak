@@ -1,0 +1,226 @@
+{
+  "Bosak.XPath.Api/1.26.2": {
+    "filename": "bosak.xpath.api.1.26.2.nupkg",
+    "sha256": "94c27a8d66d7d22bdb45e7a228f93f0301b03bc54419d1f606c0e6f7454199b5",
+    "rawArchiveSha512": "3pMKn/yNwZ/10XCnCHCnOlfYUE7eYOlnoyFzbO4CGKnWMCI+0rOmuC/5xc3L+GeQIQzH3JSgTp2uYsk6h/f4bw==",
+    "nugetContentHash": "4M0uR1Ayw7xvaljx2SSWWVTFL+PCEyR0zC7miucW2+Q3HOjU1z3gL5JHjpUiioSaHyQ+B0L3vU2Imnzq/DB6hQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Compiler/1.26.2": {
+    "filename": "bosak.xpath.compiler.1.26.2.nupkg",
+    "sha256": "d2d7acced0d370ae53cf27a4995c6c347f43d5e128c67c58924ae7e225a57d90",
+    "rawArchiveSha512": "pkOeoUzlFv3VuSX54ddzzEHG0s0HOeMPsaibXfHivc2mjPwnKqZtGklFaBPi22HJFYYaFqZt07mEHgx3IOG3YQ==",
+    "nugetContentHash": "5pFNGMSlgfLFtIU6Bx2KPMFjv75PFc7pNtHtMuQwOLfqZ8R8GctQNoisFUJIraFBmRzYBKUAChwJ3CZA2I6ijg==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Core/1.26.2": {
+    "filename": "bosak.xpath.core.1.26.2.nupkg",
+    "sha256": "1938d14c5b5abbc9436098a6fbc2504c5682ff100d6e455f744185cbe04065dd",
+    "rawArchiveSha512": "eGEhXAKjOVUjZahyZgY88kGMXPv0hMzjFhDDHghhz6CYuHtR+zG2kDSgCDzYTzEjIlKttt3Lexy8i18TLDQyfQ==",
+    "nugetContentHash": "u+6W0zbYaFVP2scOdlzPJfzh9LW3vAGi1M73J6kS3auXN+XJuidm8+UidNW6HZvu0a2PnxMu8VK3NpHDYoPN2A==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Parser/1.26.2": {
+    "filename": "bosak.xpath.parser.1.26.2.nupkg",
+    "sha256": "6c3623cb03c6307ea8b705cd6d3b438f3579d666ac2d84cf943551b2f64e7c7f",
+    "rawArchiveSha512": "H6FT3led2nKMSFXSRl/VIlFAb37RylWyrtOtLkmzUPnPTq899ctWkBG5sntgklm4vxIDEL2eWihYQrSBlLIGxA==",
+    "nugetContentHash": "VHvx/l7uLRcRVYnYuHFknDVL50GfluUIN527PncjozhgRRIBpyxDNeeTpAxp9AS1dfQP5yeUYbn27DPLeohwiQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Providers/1.26.2": {
+    "filename": "bosak.xpath.providers.1.26.2.nupkg",
+    "sha256": "5dcfa05044e3aae52c7b2461a8042d2cbf304249e10b8512f76d48b92b93855d",
+    "rawArchiveSha512": "xih6r2mJrg3UsF3sMV+OwP77QPfG1kuwqLQTftgLWQw1C9TsROiM1G3kpFA02wgx9diPaQmshu6lRXD9D49/FA==",
+    "nugetContentHash": "0j69tKO7Or0CN4R2UESZdmZ1aWHSQcZcgfsZAtLB/GnyNYfWuTPakZlzFEEYylzjMN63wNX7uR0lT6t9IQ35iQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Runtime/1.26.2": {
+    "filename": "bosak.xpath.runtime.1.26.2.nupkg",
+    "sha256": "3030a7031942a75b181bf28dbbb44e6f164c01146072b95b887260263a3a5a17",
+    "rawArchiveSha512": "p9QAA7AqbzBEpgyQ4YnsUjjzHL56Wx44Cth0UX4ByRweBKJqQ2EdSy4BQ6WEwu1Am27Pl8IRrieh2ad3uIlpwQ==",
+    "nugetContentHash": "WP1QajUtT8S9Afw2Qp4P80csF36kuChxNseBkmV/UVjaaJrXGd962r9qQkn4pCjWSDPg0vh8HHJrmr6zw2QLAg==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Standard/1.26.2": {
+    "filename": "bosak.xpath.standard.1.26.2.nupkg",
+    "sha256": "b7021a4a855212a3e2e03193b37dcf5cba78f202f4b34d18db76c5f91ec6affa",
+    "rawArchiveSha512": "TWd4EpAXEDu20jyXjyoJeD4HV4LzivAG3vb5gkqRl3YM8L23IUYi/Ub0hVNs/uIQKyhFoHIoQL762vSJyK4Z6g==",
+    "nugetContentHash": "369MJP1KC98hRknasMNSVDGxh2yHycRO5A6lU0B5Lca6Fwn9SVVJ/LSSPlUuS1lH+NhlyszCLQuDlsWmaWG7nw==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Microsoft.CodeCoverage/17.14.1": {
+    "filename": "microsoft.codecoverage.17.14.1.nupkg",
+    "sha256": "7fc432b46f06bd1a0fe3baced8a1269c32f1229c9eb1aab6e931630dd5b8d06b",
+    "rawArchiveSha512": "J/ZZlEKHfgDMZSUtDbsaccoLC1rrETvotQMMf4n6TbfLxytdYTP3dbKxaE5x2D+bXuwoESZeSgyd24Ao3prhZg==",
+    "nugetContentHash": "pmTrhfFIoplzFVbhVwUquT+77CbGH+h4/3mBpdmIlYtBi9nAB+kKI6dN3A/nV4DFi3wLLx/BlHIPK+MkbQ6Tpg==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Microsoft.NET.Test.Sdk/17.14.1": {
+    "filename": "microsoft.net.test.sdk.17.14.1.nupkg",
+    "sha256": "9995330c5bc5a7bc759caadc9d17748616cdbb983c11062df122a74607614ff0",
+    "rawArchiveSha512": "StGq/XXxPRDVTuHokqg1QDNWNo/NCHBF+7EAQWIt1revlYeTM/zdTEp193L1Sqtd0wIUhuT/7AiIzJKQ3HNxsw==",
+    "nugetContentHash": "HJKqKOE+vshXra2aEHpi2TlxYX7Z9VFYkr+E5rwEvHC8eIXiyO+K9kNm8vmNom3e2rA56WqxU+/N9NJlLGXsJQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Microsoft.TestPlatform.ObjectModel/17.14.1": {
+    "filename": "microsoft.testplatform.objectmodel.17.14.1.nupkg",
+    "sha256": "40c7fa3bec34213fb5e8caf3a3bc27f8ddb47f72f5fe60e1b3faa3984a35ad8b",
+    "rawArchiveSha512": "+jiozvIIOnkO3pnZf4QIuswoZBbj8e4+RTx11KkfDbrhnFLYwSfuXkI0p/7xQIBP6XWfZvEsmfCPrzy9zIo+3Q==",
+    "nugetContentHash": "xTP1W6Mi6SWmuxd3a+jj9G9UoC850WGwZUps1Wah9r1ZxgXhdJfj1QqDLJkFjHDCvN42qDL2Ps5KjQYWUU0zcQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Microsoft.TestPlatform.TestHost/17.14.1": {
+    "filename": "microsoft.testplatform.testhost.17.14.1.nupkg",
+    "sha256": "d5cc4759cbc7443ee8ad0dc41043cfc55184913a71a26d7fce82020bd4889c9b",
+    "rawArchiveSha512": "/V3Acu/lqnYDInFcadS5g+1Pd19Qd+xrdQqQ4t08i4euP9qWH6XGoyz6YldTBa6EUf2b/8cAoD8cLjzoCGATBA==",
+    "nugetContentHash": "d78LPzGKkJwsJXAQwsbJJ7LE7D1wB+rAyhHHAaODF+RDSQ0NgMjDFkSA1Djw18VrxO76GlKAjRUhl+H8NL8Z+Q==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "MinVer/6.0.0": {
+    "filename": "minver.6.0.0.nupkg",
+    "sha256": "eb6fd48021578b588898d23124c19e944871564a0a71d95db3112e1a8e483047",
+    "rawArchiveSha512": "XYkT13GeqY+9JHj/NHDDhCYvsYOcA9vr/y1+bDrJFfOp0FG/JUgVQifdwnClHJCT8WFxBdYROJGtOSPHcX+Y+w==",
+    "nugetContentHash": "+/SsmiySsXJlvQLCGBqaZKNVt3s/Y/HbAdwtop7Km2CnuZbaScoqkWJEBQ5Cy9ebkn6kCYKrHsXgwrFdTgcb3g==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Newtonsoft.Json/13.0.3": {
+    "filename": "newtonsoft.json.13.0.3.nupkg",
+    "sha256": "872fc189e638ab1056555b03aaa38f68bcb54286e221aa646eb1129babf63c77",
+    "rawArchiveSha512": "mbJSvHfRxfX3tR/U6n1WU+mWHXswYc+SB/hkOpx8yZZe68hNZGfymJu0cjsaJEkVzCMqePiU6LdIyogqfIn7kg==",
+    "nugetContentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit/2.9.3": {
+    "filename": "xunit.2.9.3.nupkg",
+    "sha256": "04fae949b8e5201ecfa07fa8702baca8c0eb3198114194b3793789cc72bf23d7",
+    "rawArchiveSha512": "3/ayVPC7NQWQENR5REbOgXYsbhoJsmpnxQa5pO4lxbjGbckOs62nsm4kLErzc8ng7V5Xz08uwVjMqaZGJiXCrg==",
+    "nugetContentHash": "TlXQBinK35LpOPKHAqbLY4xlEen9TBafjs0V5KnA4wZsoQLQJiirCR4CbIXvOH8NzkW4YeJKP5P/Bnrodm0h9Q==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.abstractions/2.0.3": {
+    "filename": "xunit.abstractions.2.0.3.nupkg",
+    "sha256": "d03d72fc2df8880448f7a81bddb00e1bcb5c18f323c7e7cc69b4cfa727469403",
+    "rawArchiveSha512": "PKJri5f0qEQPFvgY6CZR9XG8JROlWSdC/ZYLkkDQuID++Egn+yWjB+Yf57AZ8U6GRlP7z33uDQ4/r5BZPer2JA==",
+    "nugetContentHash": "pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.analyzers/1.18.0": {
+    "filename": "xunit.analyzers.1.18.0.nupkg",
+    "sha256": "0ce81a98b9df8bd51ae480e6dc9566f4c68e15b4926e6ab997c8f634f3b7a9dd",
+    "rawArchiveSha512": "Yy9tOAzVncE1avA2GrOJoUxTmT6fQJOcqxsg9f53Ox7Y7V//BtQ4GV9zg7qnqMzyzymabriJ55SGKb1HKbPOOA==",
+    "nugetContentHash": "OtFMHN8yqIcYP9wcVIgJrq01AfTxijjAqVDy/WeQVSyrDC1RzBWeQPztL49DN2syXRah8TYnfvk035s7L95EZQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.assert/2.9.3": {
+    "filename": "xunit.assert.2.9.3.nupkg",
+    "sha256": "bc760e75ef1b775d293a6afb89301836d3e5a87cec265e31dedd430ee61d0c20",
+    "rawArchiveSha512": "wfqwCKAhSWGy9P/dPqDGSIBnPW3sUJ49MEfcTqNF+5BgJwjwtHb9SE7ajYZuR8ymTd8dwxoEGnlJHiejbgDv9w==",
+    "nugetContentHash": "/Kq28fCE7MjOV42YLVRAJzRF0WmEqsmflm0cfpMjGtzQ2lR5mYVj1/i0Y8uDAOLczkL3/jArrwehfMD0YogMAA==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.core/2.9.3": {
+    "filename": "xunit.core.2.9.3.nupkg",
+    "sha256": "aa4550f09c3f2d95a6c62ae43cec22af2edbbd99f722e691ceefeca761fc6a7c",
+    "rawArchiveSha512": "cv2sO37qJkIbBL3fXDIn3EPQ2zK8LQ6FkMJNnn1xc9n8mo3ik0URA4MfUNCmwDDCx83ZiJeRrJ0y1ykasojNJg==",
+    "nugetContentHash": "BiAEvqGvyme19wE0wTKdADH+NloYqikiU0mcnmiNyXaF9HyHmE6sr/3DC5vnBkgsWaE6yPyWszKSPSApWdRVeQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.extensibility.core/2.9.3": {
+    "filename": "xunit.extensibility.core.2.9.3.nupkg",
+    "sha256": "99ca555fe9b447b1747aff426819db6a2f60b6ee0655caa28c4b91a9ef3d0f48",
+    "rawArchiveSha512": "S0a+jmIF/DraKuJ+FfWbqXMwvpcKxjP3GdrQzz5pr3GYtgII2XfDdAhkU/5VIWqWon2R6Q31X/9sTGaU+koDaQ==",
+    "nugetContentHash": "kf3si0YTn2a8J8eZNb+zFpwfoyvIrQ7ivNk5ZYA5yuYk1bEtMe4DxJ2CF/qsRgmEnDr7MnW1mxylBaHTZ4qErA==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.extensibility.execution/2.9.3": {
+    "filename": "xunit.extensibility.execution.2.9.3.nupkg",
+    "sha256": "dabc4cb360ede1c01c98e14cc0fe587774693f40679a22fc71794acac5d8d23c",
+    "rawArchiveSha512": "IidoBSrGw/KhWzZsKXIcStohj/oRFZizbWeUv+0hOFLeMJMegSW5QoGNzmjQuF8BuRtCyPQQukWSYdNnnfPAkA==",
+    "nugetContentHash": "yMb6vMESlSrE3Wfj7V6cjQ3S4TXdXpRqYeNEI3zsX31uTsGMJjEw6oD5F5u1cHnMptjhEECnmZSsPxB6ChZHDQ==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "xunit.runner.visualstudio/3.1.4": {
+    "filename": "xunit.runner.visualstudio.3.1.4.nupkg",
+    "sha256": "5b54674b105a5f2cbd5e6e0e67956a1b67e082d94eaa7fddbc803110e6eff2d4",
+    "rawArchiveSha512": "kBchYhMXhe6mbAAkCuh2wrLbxDYdj3VzNOJ3m1Q9LoCEJ6ePsFC1S3vsjj/QlY6aaQ8HeRip816tlwP0lLtb3Q==",
+    "nugetContentHash": "5mj99LvCqrq3CNi06xYdyIAXOEh+5b33F2nErCzI5zWiDdLHXiPXEWFSUAF8zlIv0ZWqjZNCwHTQeAPYbF3pCg==",
+    "signatureEntryPresent": true,
+    "rawAndContentHashesEqual": false
+  },
+  "Bosak.XPath.Api/1.34.2": {
+    "filename": "bosak.xpath.api.1.34.2.nupkg",
+    "sha256": "8affd6ecf6c983ea092c646c754a03e1cb94edf965f394aca93e2e325914a446",
+    "rawArchiveSha512": "2x6WbevqDg7X6GMIIvUsucB4aG3qgD+8M9YTOTw0JFce2wXFokndoYX8uuwelLbjAsqG/Ld+U+gNV7f9eogFjg==",
+    "nugetContentHash": "2x6WbevqDg7X6GMIIvUsucB4aG3qgD+8M9YTOTw0JFce2wXFokndoYX8uuwelLbjAsqG/Ld+U+gNV7f9eogFjg==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Compiler/1.34.2": {
+    "filename": "bosak.xpath.compiler.1.34.2.nupkg",
+    "sha256": "765d5de691b3fa2772470eadc8bd58fa279cde6cfd0b38ead80dc65bb1286413",
+    "rawArchiveSha512": "g6WQHAo//ypGrDhTw5Yh+mRb3cNQ+po0v3O8KineHsHyVUv9RjDhC1mKdod09/oB5o58fQuvCYlGkR6+XGQOQg==",
+    "nugetContentHash": "g6WQHAo//ypGrDhTw5Yh+mRb3cNQ+po0v3O8KineHsHyVUv9RjDhC1mKdod09/oB5o58fQuvCYlGkR6+XGQOQg==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Core/1.34.2": {
+    "filename": "bosak.xpath.core.1.34.2.nupkg",
+    "sha256": "79514e70900806183f70fbe5420f1052c3f211f15e6ec36d4f5df987111b95af",
+    "rawArchiveSha512": "vkg9M4Il1LOmSJZUaeXGZ57dhpTjdgtpJoX31hQbBMnl/h2wN+VX8bEtDiRnMiNIGyib17tZc40DUZ5r14NO5A==",
+    "nugetContentHash": "vkg9M4Il1LOmSJZUaeXGZ57dhpTjdgtpJoX31hQbBMnl/h2wN+VX8bEtDiRnMiNIGyib17tZc40DUZ5r14NO5A==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Parser/1.34.2": {
+    "filename": "bosak.xpath.parser.1.34.2.nupkg",
+    "sha256": "82240efa77d9a8388dfe6380e92dc5d6ebe52c1b5415e0451572f9c1538f00fb",
+    "rawArchiveSha512": "WS0xUVfSnIzF3PFCN8iIAqNoXniIvq816agRBV9SeY00qs4tVoPTdj4Fdp4xi28zNL2Wq+zMkVACU6H4+f2tRQ==",
+    "nugetContentHash": "WS0xUVfSnIzF3PFCN8iIAqNoXniIvq816agRBV9SeY00qs4tVoPTdj4Fdp4xi28zNL2Wq+zMkVACU6H4+f2tRQ==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Providers/1.34.2": {
+    "filename": "bosak.xpath.providers.1.34.2.nupkg",
+    "sha256": "30e3903b22c3859e506c2e6255bdeb552537ca5420f24a1bb0f1f9a523eab298",
+    "rawArchiveSha512": "1/Fx3zscbLa/bNgEGB7C1PZ677W1mVpk0+OodD2uzp4QUhuXJFUA/ql78A0J52yjBTvv5I+uNKe6M12IFSgYIQ==",
+    "nugetContentHash": "1/Fx3zscbLa/bNgEGB7C1PZ677W1mVpk0+OodD2uzp4QUhuXJFUA/ql78A0J52yjBTvv5I+uNKe6M12IFSgYIQ==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Runtime/1.34.2": {
+    "filename": "bosak.xpath.runtime.1.34.2.nupkg",
+    "sha256": "26ea987d9217e651ec4ec9a7b8c0089adf658622b53ce892b8859f4625b62fdb",
+    "rawArchiveSha512": "Cftt97feJf6TRoOgQL0VHI1vJQhtdeLxbGEQ2f/cAXL5rVz9ariz7imd3Lqb+IzgW/xHd1syS0eoLXfStMWIWQ==",
+    "nugetContentHash": "Cftt97feJf6TRoOgQL0VHI1vJQhtdeLxbGEQ2f/cAXL5rVz9ariz7imd3Lqb+IzgW/xHd1syS0eoLXfStMWIWQ==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  },
+  "Bosak.XPath.Standard/1.34.2": {
+    "filename": "bosak.xpath.standard.1.34.2.nupkg",
+    "sha256": "5904230b58f5b9637391b94e06670ce07f868a6aab4c630594fb3d71df702d40",
+    "rawArchiveSha512": "Zw1/P0REapR3UzlKUpXdSxec5kuMwoutBSwYWEySl7InaKWNzI6QaLsJpQM85L79SxRzsFmoIOPTKkTiTCDrsA==",
+    "nugetContentHash": "Zw1/P0REapR3UzlKUpXdSxec5kuMwoutBSwYWEySl7InaKWNzI6QaLsJpQM85L79SxRzsFmoIOPTKkTiTCDrsA==",
+    "signatureEntryPresent": false,
+    "rawAndContentHashesEqual": true
+  }
+}
