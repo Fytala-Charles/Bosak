@@ -1,0 +1,14 @@
+{
+  "passed": 6,
+  "failed": 0,
+  "cases": [
+    "xpath-arithmetic",
+    "xpath-empty",
+    "xpath-map",
+    "xquery-flwor",
+    "xquery-empty",
+    "xslt-sourcefree-template"
+  ],
+  "ownerAccepted": false,
+  "publicationAuthorized": false
+}

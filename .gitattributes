@@ -604,3 +604,20 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 # Large immutable execution archives use Git LFS;working-tree SHA-256 receipts stay unchanged.
 /docs/foundation-captured-identity-production/evidence/EXECUTION-LAYOUTS.zip filter=lfs diff=lfs merge=lfs -text
 /docs/foundation-captured-identity-qualification/evidence/EXECUTION-LAYOUTS.zip filter=lfs diff=lfs merge=lfs -text
+
+# Preserve exact bytes in post-checkpoint qualification and owner-review receipts.
+/docs/CHECKPOINT-1.81.1.md -text whitespace=cr-at-eol
+/docs/foundation-owner-gap-review/** -text whitespace=cr-at-eol
+/docs/foundation-owner-repo-review/** -text whitespace=cr-at-eol
+/docs/foundation-owner-workload-draft/** -text whitespace=cr-at-eol
+/docs/foundation-package-workload/** -text whitespace=cr-at-eol
+/docs/foundation-preview-packages/** -text whitespace=cr-at-eol
+/docs/foundation-preview-qualification/** -text whitespace=cr-at-eol
+/docs/foundation-provider-adoption/** -text whitespace=cr-at-eol
+/docs/foundation-workload-1811/** -text whitespace=cr-at-eol
+/docs/foundation-xmldb-package-readiness/** -text whitespace=cr-at-eol
+/docs/foundation-xmldb-source-candidate/** -text whitespace=cr-at-eol
+/docs/foundation-xmldb-full-qualification/** -text whitespace=cr-at-eol
+/docs/QUALIFICATION-CHECKPOINT-REVIEW.md -text whitespace=cr-at-eol
+/docs/foundation-preview-qualification/evidence/qt3-skips.txt -text whitespace=cr-at-eol,-blank-at-eof
+/docs/foundation-preview-qualification/evidence/qt4-skips.txt -text whitespace=cr-at-eol,-blank-at-eof

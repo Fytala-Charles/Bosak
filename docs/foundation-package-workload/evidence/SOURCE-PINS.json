@@ -1,0 +1,8 @@
+{
+  "workload/Program.cs": "84eee771dc94304dd72096be25598c64e9c32b6568748022db7bb6abbd1b1dac",
+  "workload/Workload.csproj": "885d8ffac95ea71f81f6706b73c17c9bac02be3dba61262bd09ce075463486c8",
+  "fixtures/amounts-1.xml": "7971fbac7e8ede0fa4bfcb1d853b1600740376c5a1496d41d9c32fd91f59c702",
+  "fixtures/amounts-8.xml": "320b00d324a4455a9a1cf8e026a32390d880fa75ac6a583676ef905cd8568ca4",
+  "fixtures/schema.xsd": "1098462ac6ce030eec503d5b17b962d6e4b9676eb32d24569a02918c8350ef4a",
+  "PROTOCOL.json": "cedf1e4e849347ebe2615d8bbed5b67d161a78a7bf4dc5bd4a76f45bb5dbf4d3"
+}

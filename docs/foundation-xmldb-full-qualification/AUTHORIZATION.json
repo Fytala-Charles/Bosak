@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-07",
+  "explicitUserAuthorizationReceived": true,
+  "userInstruction": "Yes, allowed to do the storage sweep and integration intentional child-process kill/fault probes",
+  "scope": "Isolated full Storage sweep and Integration intentional child-process termination/fault probes only; not owner release/API/budget acceptance.",
+  "unexpectedManagedFailuresMustBeCaught": true,
+  "machineWideErrorSettingsAllowed": false,
+  "priorRestrictionReceiptSha256": "13936d32c181cdece2662341c22235c1d38d8f9ce0b7cbda17da02e70562f0b9"
+}

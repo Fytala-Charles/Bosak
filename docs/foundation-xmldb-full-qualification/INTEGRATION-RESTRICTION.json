@@ -1,0 +1,10 @@
+{
+  "status": "UserAuthorizedButAutomaticReviewRejected",
+  "explicitUserAuthorizationReceived": true,
+  "fullIntegrationLaunched": false,
+  "rejectedAction": "Elevated isolated full Integration suite with intentional child-process kill/fault probes",
+  "reason": "Automatic approval review rejected the action even after explicit approval because intentional child-process termination/fault behavior remained; it did not consider the caught-failure entry sufficient.",
+  "rejectedMethodRetriedOrBypassed": false,
+  "safeAlternative": "Select only the in-process NativeSnapshotWorkTests; preserve all unrun process cases as unqualified.",
+  "machineWideErrorSettingsChanged": false
+}

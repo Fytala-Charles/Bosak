@@ -1,0 +1,38 @@
+[
+  {
+    "key": "units/bosak.xpath.parser.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.parser.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.parser.tests\\bosak.xpath.parser.tests.dll"
+  },
+  {
+    "key": "units/bosak.xpath.compiler.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.compiler.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.compiler.tests\\bosak.xpath.compiler.tests.dll"
+  },
+  {
+    "key": "units/bosak.xpath.api.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.api.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.api.tests\\bosak.xpath.api.tests.dll"
+  },
+  {
+    "key": "units/bosak.xpath.core.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.core.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.core.tests\\bosak.xpath.core.tests.dll"
+  },
+  {
+    "key": "units/bosak.xpath.providers.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.providers.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.providers.tests\\bosak.xpath.providers.tests.dll"
+  },
+  {
+    "key": "units/bosak.xpath.runtime.tests",
+    "exitCode": 1,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.runtime.tests.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\units\\bosak.xpath.runtime.tests\\bosak.xpath.runtime.tests.dll"
+  }
+]

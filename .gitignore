@@ -98,3 +98,5 @@ mult/
 
 # BenchmarkDotNet artifacts
 BenchmarkDotNet.Artifacts/
+# Retain the explicitly manifested synthetic receipt-checker output.
+!docs/foundation-provider-adoption/evidence/receipt-controls.log

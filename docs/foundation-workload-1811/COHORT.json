@@ -1,0 +1,62 @@
+{
+  "date": "2026-11-07",
+  "recordedBeforeExecution": true,
+  "sourceVersion": "1.81.1",
+  "candidateCommit": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "scope": "Observational cohort rebind only; identical timed C# workload and fixture/method fields. No engine/provider semantics, APIs or owner acceptance changed.",
+  "priorProtocolSha256": "1eff0c76ec2b572fce34aa2b9f57bd9a3f4752d4b56f6fca2a1f312f630d0d86",
+  "priorProgramSha256": "92772a7a4d4c2d2fa3292d3b7b212f0eb5083237ba570567b3f99786d43261b6",
+  "qualificationPinsSha256": "609eb62abab39f9676d22a4dfde29b93537f4d13cf7eda166181819aa584b4e1",
+  "references": {
+    "Bosak.XPath.Api": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "b142d5759ea4a7b15a89ec3b0e46ccada8097fb79681ac09504b5b1beee14ac6"
+    },
+    "Bosak.XPath.Compiler": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Compiler\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "154018d00bf2d8fa8209146bf0fe4137e5090538328f05644838c8b44efc2ab8"
+    },
+    "Bosak.XPath.Core": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Core\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "3c48d8bb912d2df0fbda0372f9b8e2ab322686b880912c7986f6ab3290c9a2d9"
+    },
+    "Bosak.XPath.Parser": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Parser\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "827b4a5b98de72b6b7394baa0b1530183843f842e34fab8e8cdf63ee528c921e"
+    },
+    "Bosak.XPath.Providers": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Providers\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "69d4711e529201452befc345528b22db3887f510608d5ba71be0ea2c36b6488f"
+    },
+    "Bosak.XPath.Runtime": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "c6d903ce3de56d0375746815a56a82b4b168a0871aace6f1590445af36d69b07"
+    },
+    "Bosak.XPath.Standard": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "05408b3616b93df90e3d2d932d2d84c41cc17e9a454419be78dd465a9ee65984"
+    },
+    "Bosak.XQuery": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.XQuery\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "b3cfb71891aa4ed574866d2f2db80b0d59e1912879c1592132fc53625f86c858"
+    },
+    "Bosak.Xslt": {
+      "path": "D:\\Development\\Bosak\\src\\Bosak.Xslt\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "a00232324201b4541fa77d0398e2597dc2826eba472ac68be273294aaedc105d"
+    }
+  },
+  "nativeAssembly": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\Source\\bin\\Release\\net10.0\\Bosak.Schema.dll",
+    "sha256": "8a41f9ebd7489f323c4006a0e3272795844c3e9974de29910b9acb7c58d8d119"
+  },
+  "providerAssembly": {
+    "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\provider\\bin\\Release\\net10.0\\Bosak.Schema.ExperimentalProvider.dll",
+    "sha256": "ef4352faa6f87e0ef459228cf6136d554de2d1c0ad2e676335fe991ee6fa017a"
+  },
+  "hook": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\hook-v2\\PackageBindingHook.dll",
+    "sha256": "0eff1dda612d1a114e7a35056cac39a3111ea05881d0171bda4c7974e16a1073"
+  },
+  "ownerAccepted": false,
+  "budgetsAccepted": false
+}

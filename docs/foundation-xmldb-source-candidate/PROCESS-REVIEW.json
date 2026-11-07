@@ -1,0 +1,13 @@
+{
+  "status": "BlockedByAutomaticApprovalReview",
+  "action": "Elevated full rebuilt XmlDb suite retry, including Integration child-process kill/fault probes",
+  "reason": "Automatic review rejected intentional child-process kill/fault probes under the automation discipline; general qualification authorization was insufficient for that execution method.",
+  "integrationProbesLaunched": false,
+  "integrationCasesNotRun": 863,
+  "explicitUserAuthorizationReceived": false,
+  "safeAlternative": "Run only XDM and Storage in-process suites after checking their sources for process-start/kill calls. This narrower elevated action was approved.",
+  "machineWideErrorSettingsChanged": false,
+  "fullStorageSweepCancelled": true,
+  "storageCancellationReason": "Retained full Storage run took about one hour; the launched 15-minute watchdog was insufficient. Only the verified owned test process tree was cancelled. No completed full Storage result is claimed.",
+  "boundedStorageSelection": "139 NativeSnapshotCleanupTests, in process; no Integration process probes"
+}

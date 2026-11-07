@@ -1,0 +1,33 @@
+{
+  "ownerHead": "fbb829052f606f683aaf8620fa9401b4ba46c8e9",
+  "previewVersion": "1.81.1-preview.c0b926de",
+  "status": "PreparedNotExecuted",
+  "productionAdapterImplemented": false,
+  "requirementsWaived": 0,
+  "steps": [
+    {
+      "id": "S1",
+      "work": "Archive exact clean owner revision into a new isolated workspace; include src, tests/TestData, test projects, sample project and build configuration. Hash-bind original-format fixtures; preserve live checkout and original histories."
+    },
+    {
+      "id": "S2",
+      "work": "Record source-build/version/tool inputs and external dependency provenance. In the isolated recipe only, update selected Bosak PackageReference versions to the exact preview cohort; preserve original owner pins/projects as evidence. Resolve MinVer identity explicitly before build; do not accidentally inherit parent Core repository versioning."
+    },
+    {
+      "id": "S3",
+      "work": "Build and test all source projects under owner analysis/doc requirements. Compare exact 3572 Storage,863 Integration,47 XDM case names with retained source catalogs; audit process helper safety before launching full integration/crash lanes. Record source/default-overload migration errors separately."
+    },
+    {
+      "id": "S4",
+      "work": "Prepare a separately adopted ordinary input/lifetime adapter over actual snapshot ownership. Use provider-private exact membership before foreign getters; do not expose a generic callback factory or fabricate Schema authority. Existing private helpers require a reviewed production placement or a clearly labeled friend-test-only diagnostic."
+    },
+    {
+      "id": "S5",
+      "work": "Qualify same/distinct/duplicate/foreign inputs, cancellation/close/reentry, deferred consumption through XSLT serialization and original work/cleanup failure graphs. Keep raw work alive until actual completion; caller timeout/kill is not confirmed native cleanup."
+    },
+    {
+      "id": "S6",
+      "work": "Choose actual worker/currentness routing with owners, then run representative PF-04/05/shared scenarios with explicit baselines/budgets. Source/binary compatibility is not R4/C45/freeze or product adoption."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "evidence/bindings/baseline/28824.json": "c1768ed63b83e789b9792b2b1d620c7296ea6fa9ccb7485ac38ae7a12862c595",
+  "evidence/bindings/baseline/38688.json": "e13a124d53e583a93b7d07e4de61af0435782d0e95f7629468d5876bc24b254d",
+  "evidence/bindings/baseline/73568.json": "c8626f1b777f8619e7ae4e7aff6a2ccc97748b2274801b2a37663291b9b9a18e",
+  "evidence/bindings/preview/27088.json": "e57eab24f2d8c1657450636d7412d57bb026faaa723c4682aa4def3bd552a2bb",
+  "evidence/bindings/preview/59640.json": "bb0bd57d59015c3acce20cfabe8714261dafb333435ffb5bbb6032f0845c3533",
+  "evidence/bindings/preview/8536.json": "d2bfa1297f175bf83b7d1e77c6b167596dc24ac5d3c85a96711c2988183eab16",
+  "evidence/EXECUTION-RECEIPTS.zip": "87aed335793680da7942aed49fd03385d7e3fde11edb4c5485bd2aa05d773a19",
+  "evidence/RESULTS.json": "38292bcac71aea36661e02627168d4521855095afd4adac9ab9462322c53b2b6",
+  "evidence/trx/baseline/charl_CHARLES_2026-11-07_12_02_41_net10.0.trx": "f7557d5a61af016030b7509e00234a2ead9f27a72a1427e421f79026429a87a1",
+  "evidence/trx/preview/charl_CHARLES_2026-11-07_12_02_51_net10.0.trx": "a6055a2de3c1d91473e8db2cbe1af87217db64d0aab70fd2bea5447444858ff7",
+  "evidence/TRX-RESULTS.zip": "d82ceaf193269e183841cfd2f0924ac6fa66be9f73b3c8130ceb2a1263a6fc58",
+  "PLAN.json": "daa004924406848db7551b3fafe55c6221d3105feab2f452868defcf7fcbb34b",
+  "QUALIFICATION-RECIPE.json": "7222f87bd090d57323b6df4b7631843948faf1189ae749a30c33091fa3e62bd4",
+  "README.md": "c2c9d975cb5aad0273b1e312a7bf1e24a0a2517090f207555d547d8c8c2e1a54",
+  "tools/capture.py": "027afc4ea5d559d574796f88c0596ddfd97bd93648455efc1fab8ae81752ab11",
+  "tools/run.py": "a30393aa585ad46ff90adc12e0b742d18ae8e0868bf25f9dd7e2d8e14c38574a",
+  "tools/verify.py": "ec484d988cd32adf70ffccab3aefca750e9a8bb78a71a62910302a592265237a"
+}

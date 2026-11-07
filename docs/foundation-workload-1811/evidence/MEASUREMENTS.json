@@ -1,0 +1,179 @@
+{
+  "format": "bosak-owner-measurement-v1",
+  "date": "2026-11-07",
+  "protocolSha256": "a3d3de3d48bbdece9cd2625a08a2397ea1ca760d127e138f42271865ea6d2984",
+  "runtime": "10.0.11",
+  "architecture": "X64",
+  "osDescription": "Microsoft Windows 10.0.26300",
+  "sourceVersion": "1.81.1",
+  "role": "candidate",
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "baselineRun": false,
+  "comparisonRatio": null,
+  "scope": "Proposed serial native decimal PF-03 subset;not complete owner coverage or statistical regression acceptance.",
+  "rows": [
+    {
+      "workload": "native-decimal-1",
+      "children": 1,
+      "repetition": 0,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 120.2512,
+      "elapsedMs": 364.7602,
+      "latencySamplesMs": [
+        92.1032,
+        83.4197,
+        62.2988,
+        63.6939,
+        63.233
+      ],
+      "allocatedBytes": 749856,
+      "allocatedBytesPerCycle": 149971.2,
+      "allocatedBytesPerCell": 149971.2,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1078520,
+      "retainedAfter": 1078368,
+      "outputRootsAliveAfterForcedGc": 0
+    },
+    {
+      "workload": "native-decimal-1",
+      "children": 1,
+      "repetition": 1,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 0.6343,
+      "elapsedMs": 323.1595,
+      "latencySamplesMs": [
+        65.2466,
+        64.31,
+        64.2046,
+        62.9434,
+        66.4463
+      ],
+      "allocatedBytes": 749592,
+      "allocatedBytesPerCycle": 149918.4,
+      "allocatedBytesPerCell": 149918.4,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1083024,
+      "retainedAfter": 1082736,
+      "outputRootsAliveAfterForcedGc": 0
+    },
+    {
+      "workload": "native-decimal-1",
+      "children": 1,
+      "repetition": 2,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 0.7512,
+      "elapsedMs": 322.7905,
+      "latencySamplesMs": [
+        65.5533,
+        62.9627,
+        64.3525,
+        67.9963,
+        61.9187
+      ],
+      "allocatedBytes": 749592,
+      "allocatedBytesPerCycle": 149918.4,
+      "allocatedBytesPerCell": 149918.4,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1083304,
+      "retainedAfter": 1083104,
+      "outputRootsAliveAfterForcedGc": 0
+    },
+    {
+      "workload": "native-decimal-8",
+      "children": 8,
+      "repetition": 0,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 0.3418,
+      "elapsedMs": 2676.2863,
+      "latencySamplesMs": [
+        535.3028,
+        547.2376,
+        543.3194,
+        521.831,
+        528.5883
+      ],
+      "allocatedBytes": 1040288,
+      "allocatedBytesPerCycle": 208057.6,
+      "allocatedBytesPerCell": 26007.2,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1087576,
+      "retainedAfter": 1087400,
+      "outputRootsAliveAfterForcedGc": 0
+    },
+    {
+      "workload": "native-decimal-8",
+      "children": 8,
+      "repetition": 1,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 0.5134,
+      "elapsedMs": 2626.3633,
+      "latencySamplesMs": [
+        524.3699,
+        513.013,
+        532.6286,
+        530.7351,
+        525.602
+      ],
+      "allocatedBytes": 1025312,
+      "allocatedBytesPerCycle": 205062.4,
+      "allocatedBytesPerCell": 25632.8,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1088072,
+      "retainedAfter": 1087680,
+      "outputRootsAliveAfterForcedGc": 0
+    },
+    {
+      "workload": "native-decimal-8",
+      "children": 8,
+      "repetition": 2,
+      "iterations": 5,
+      "warmup": 2,
+      "compileAndBindMs": 0.4329,
+      "elapsedMs": 2616.3535,
+      "latencySamplesMs": [
+        522.8686,
+        523.4567,
+        525.5364,
+        527.8635,
+        516.6252
+      ],
+      "allocatedBytes": 1024272,
+      "allocatedBytesPerCycle": 204854.4,
+      "allocatedBytesPerCell": 25606.8,
+      "gcDeltas": [
+        0,
+        0,
+        0
+      ],
+      "retainedBefore": 1088384,
+      "retainedAfter": 1087992,
+      "outputRootsAliveAfterForcedGc": 0
+    }
+  ]
+}

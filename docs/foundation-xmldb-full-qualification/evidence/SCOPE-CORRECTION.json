@@ -1,0 +1,8 @@
+{
+  "scope": "NativeSnapshotWorkTests class filter",
+  "originalExpectedMetadata": 51,
+  "correctExpectedCount": 39,
+  "reason": "The historical focused 51-case Integration selection also included 12 process-lifetime cases; the selected in-process class contains 39. Its original execution record is preserved; final counts use the exact TRX/historical case catalog.",
+  "runtimeCaseFailures": 0,
+  "testBodiesOrFilterChangedForCorrection": false
+}

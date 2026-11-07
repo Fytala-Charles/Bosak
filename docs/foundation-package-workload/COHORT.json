@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-07",
+  "recordedBeforeExecution": true,
+  "sourceVersion": "1.81.1",
+  "candidateCommit": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "scope": "Exact preview-package candidate-only measurements; fresh private package cache, unchanged native/provider DLLs and timed method. No baseline or budget acceptance.",
+  "priorProtocolSha256": "1eff0c76ec2b572fce34aa2b9f57bd9a3f4752d4b56f6fca2a1f312f630d0d86",
+  "priorProgramSha256": "92772a7a4d4c2d2fa3292d3b7b212f0eb5083237ba570567b3f99786d43261b6",
+  "qualificationPinsSha256": "609eb62abab39f9676d22a4dfde29b93537f4d13cf7eda166181819aa584b4e1",
+  "references": {
+    "Bosak.XPath.Api": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.api\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "0fa4de7d4432a24e0a049301c1192de2b21e9bf09adde5feacce4816fd374359"
+    },
+    "Bosak.XPath.Compiler": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.compiler\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "dd1ef817340dc210425fe570dc230f42b83903f17a9d353c86d28287c31e01f1"
+    },
+    "Bosak.XPath.Core": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.core\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "cab08b8c38f32b3d602b3e29e3dd36affc3a5853a813de96a1a0162ef02ffd43"
+    },
+    "Bosak.XPath.Parser": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.parser\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "2a169b8a894ce78ffbb754bfa0a8a540b093fcd5e8024076a4c9372467aefe72"
+    },
+    "Bosak.XPath.Providers": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.providers\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "09425c35455d20a777b285fcbfe8a960d4dd397972f1beb84704e7f3356775d8"
+    },
+    "Bosak.XPath.Runtime": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.runtime\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "e155763ce56c746e3d6916398ba0b317e72780008b3a8d4be2e7787a003c2151"
+    },
+    "Bosak.XPath.Standard": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xpath.standard\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "0814065371bc088de8cee39e764babab5a03dc46ceaa0edd0bf3e563569b0d02"
+    },
+    "Bosak.XQuery": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xquery\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "9e6d351a7bf8d6aa6cf47c170f7a2b3ec214ce530b843d2c4933bf47d2fb8b07"
+    },
+    "Bosak.Xslt": {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache\\bosak.xslt\\1.81.1-preview.c0b926de\\lib\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "383c794cf44b86244368990d2b49a7dfac708e5020969606f7a08ecfce3119cc"
+    }
+  },
+  "nativeAssembly": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\native-schema-181-lane\\Source\\bin\\Release\\net10.0\\Bosak.Schema.dll",
+    "sha256": "8a41f9ebd7489f323c4006a0e3272795844c3e9974de29910b9acb7c58d8d119"
+  },
+  "providerAssembly": {
+    "path": "D:\\Development\\Bosak\\docs\\foundation-native-immutable-guard\\provider\\bin\\Release\\net10.0\\Bosak.Schema.ExperimentalProvider.dll",
+    "sha256": "ef4352faa6f87e0ef459228cf6136d554de2d1c0ad2e676335fe991ee6fa017a"
+  },
+  "hook": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\foundation-package-gates-2026-10-30\\hook-v2\\PackageBindingHook.dll",
+    "sha256": "0eff1dda612d1a114e7a35056cac39a3111ea05881d0171bda4c7974e16a1073"
+  },
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "previewVersion": "1.81.1-preview.c0b926de",
+  "work": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811",
+  "cache": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\cache",
+  "config": "D:\\Development\\Bosak\\.guard-tmp\\package-workload-1811\\NuGet.Config",
+  "feed": "D:\\Development\\Bosak\\.guard-tmp\\preview-packages-1811-v3\\feed",
+  "packageManifestSha256": "43a44086d680e859a5884c54f589b5de885634b68283b47f5e94e6b28540996b",
+  "regressionManifestSha256": "9e1ec45bed4951329ebcbaa266b903b4765dd1e46adb3a756e9ef7fed07e37c1"
+}
