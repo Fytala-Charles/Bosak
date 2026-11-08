@@ -1,0 +1,82 @@
+{
+  "ownerRole": "XmlDb",
+  "candidate": {
+    "sourceCommit": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+    "coreVersion": "1.81.2",
+    "extensionVersion": "0.2.6",
+    "artifacts": [
+      {
+        "kind": "nuget",
+        "runId": 42479094503,
+        "archive": "../release-linux-collection-hosted/nuget-42479094503.zip",
+        "manifestPath": "nuget/release-manifest.json",
+        "manifestSha256": "3bfc5cd7116f6a97b1d438084ed9932b274ac26de79e677e92ed46b1644d92cf",
+        "verificationExitCode": 0
+      },
+      {
+        "kind": "vscode",
+        "runId": 42479096917,
+        "archive": "../release-linux-collection-hosted/vscode-42479096917.zip",
+        "manifestPath": "vscode/release-manifest.json",
+        "manifestSha256": "82b19dc721b1209c3308d0c510fa0072d0ebc78055ef20607f0a010f08b3fc2d",
+        "verificationExitCode": 0
+      }
+    ],
+    "hostedResultsSha256": "8dd52ea9cb81598cef771571710b7e048930e234be3806946eed103abbbb3246",
+    "apiInventoryPath": "../release-1.81.2-final/evidence/public-api.json",
+    "apiInventorySha256": "497b530708381741adc9b6b2f90fc09bb2cbcceab409d4151dfaa7582f400f30",
+    "apiInventoryBoundary": "Historical local inventory from identical shipping src tree; unchanged declaration surface is not C45 acceptance. Hosted assembly identities carry their own producer source commit.",
+    "pathBase": "Paths are relative to this packet root, including copies embedded in returns."
+  },
+  "reviewerIdentity": null,
+  "reviewDate": null,
+  "decision": null,
+  "supportedProfile": null,
+  "deferredRequirementDispositions": null,
+  "apiDisposition": null,
+  "scenarioReturns": [
+    {
+      "scenario": "PF-04",
+      "fixtureAndSettingsPins": null,
+      "baselinePins": null,
+      "metricsUnitsStatisticsAndLimits": null,
+      "rawEvidence": null,
+      "disposition": null
+    },
+    {
+      "scenario": "PF-05",
+      "fixtureAndSettingsPins": null,
+      "baselinePins": null,
+      "metricsUnitsStatisticsAndLimits": null,
+      "rawEvidence": null,
+      "disposition": null
+    },
+    {
+      "scenario": "PF-06",
+      "fixtureAndSettingsPins": null,
+      "baselinePins": null,
+      "metricsUnitsStatisticsAndLimits": null,
+      "rawEvidence": null,
+      "disposition": null
+    },
+    {
+      "scenario": "PF-08",
+      "fixtureAndSettingsPins": null,
+      "baselinePins": null,
+      "metricsUnitsStatisticsAndLimits": null,
+      "rawEvidence": null,
+      "disposition": null
+    },
+    {
+      "scenario": "PF-09",
+      "fixtureAndSettingsPins": null,
+      "baselinePins": null,
+      "metricsUnitsStatisticsAndLimits": null,
+      "rawEvidence": null,
+      "disposition": null
+    }
+  ],
+  "providerAdoptionDisposition": null,
+  "signingProvenanceDisposition": null,
+  "notes": null
+}

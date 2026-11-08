@@ -1,0 +1,80 @@
+{
+  "nuget": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json"
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json"
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.81.2",
+      "listed": false,
+      "endpoint": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json"
+    }
+  ],
+  "marketplace": {
+    "extension": "fytala.vscode-bosak",
+    "version": "0.2.6",
+    "listed": false,
+    "observedVersions": [
+      "0.2.5",
+      "0.2.4",
+      "0.2.3",
+      "0.2.2",
+      "0.2.1",
+      "0.2.0",
+      "0.1.6",
+      "0.1.5",
+      "0.1.4"
+    ]
+  }
+}

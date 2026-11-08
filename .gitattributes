@@ -670,3 +670,6 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/release-linux-collection-fix/** -text whitespace=cr-at-eol
 
 /docs/release-linux-collection-hosted/** -text whitespace=cr-at-eol
+
+/docs/release-1.81.2-owner-review/** -text whitespace=cr-at-eol
+/docs/release-1.81.2-publication/** -text whitespace=cr-at-eol

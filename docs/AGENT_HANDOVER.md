@@ -1,3 +1,15 @@
+# Release approved with deferred budgets - 8 November 2026
+
+[User approval](release-1.81.2-publication/APPROVAL.json) accepts scoped release/API and signing/provenance for all four owner roles and authorizes tags/publication over the exact hosted source7249d0e0 and manifests. User explicitly defers numerical workload budgets for this release with no performance guarantees claimed. Production Schema/XmlDb/Braid adoption is not represented as delivered. The earlier unfilled draft forms remain historical; this is a user disposition, not an independent reviewer signature. Registry preflight finds all target versions absent. Next execute approved exact-artifact publication and verify service-side delivery.
+
+---
+
+# Hosted owner review inputs - 8 November 2026
+
+[Current owner/signing packet](release-1.81.2-owner-review/README.md) pins source7249d0e0 and both successful hosted manifests, with four unfilled reviewer forms. Read-only inspection of Schema/XmlDb/Braid documentation found earlier scoped design reviews and no1.81.2/7249d0e0 documentation match; no exact-cohort acceptance is established. Ten hosted NuGet packages have no embedded NuGet signature entry; signing/trust policy acceptance remains open. Reviewer identities or current approval locations have been requested. Owner repositories and publisher settings were unchanged; no message was sent to reviewers. New review documents remain local drafts, not approval.
+
+---
+
 # Hosted release preparation qualified - 8 November 2026
 
 Code checkpoint `7249d0e01628c47f92b89a3380bc69cf58d70045` is pushed. [Corrected hosted preparation](release-linux-collection-hosted/README.md) passes both workflows: NuGet run42479094503 has26345 solution passes in one invocation and exact QT3 31397/0/424, gated qt4 8941/0/1918 plus11 experimental passes; extension run42479096917 has90 server passes. Ten1.81.2 packages and0.2.6 VSIX independently verify from the clean LF producer checkout. Both publication jobs are skipped. The earlier Linux collection failure is resolved by harness-only file URI transport; shipping source tree6694d2c9 remains unchanged. Local initial authoring/listener failures are preserved separately.

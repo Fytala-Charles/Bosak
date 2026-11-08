@@ -65,3 +65,7 @@ Hosted preparation exposes six Linux QT3 collection fixture failures; NuGet pack
 The Linux collection fixture harness correction passes local regression, solution coverage across the Database listener retry, and exact frozen gates. Fresh hosted preparation remains required; see release-linux-collection-fix/README.md.
 
 Current hosted status: the six Linux collection failures are resolved. [Both corrected preparation runs pass](release-linux-collection-hosted/README.md), with26345 solution tests,90 server tests, exact frozen gates, and independently verified ten-package/VSIX artifacts. B6 hosted preparation is complete; signing/provenance disposition remains open. B2/B3/B5/B7 are not closed by this technical result.
+
+Current hosted owner/signing forms and read-only owner evidence are in [the final review packet](release-1.81.2-owner-review/README.md). Reviewer identities or current approval locations are needed to advance B2/B3/B5 and signing disposition; historical design returns do not close them.
+
+User now explicitly approves scoped release/API and signing/provenance for all four roles, tagging and publication over the verified hosted artifacts. Numerical workload budgets are deferred for this release, with no performance guarantees claimed. [Approval and execution dossier](release-1.81.2-publication/README.md) supersedes earlier pending decision entries for this scope; service-side publication verification remains required.

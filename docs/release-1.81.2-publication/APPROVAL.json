@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-08",
+  "authority": "User approval in this conversation; no independent human signature or cryptographic attestation is claimed",
+  "sourceCommit": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+  "coreVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "approvedArtifacts": [
+    {
+      "kind": "nuget",
+      "runId": 42479094503,
+      "archive": "../release-linux-collection-hosted/nuget-42479094503.zip",
+      "manifestPath": "nuget/release-manifest.json",
+      "manifestSha256": "3bfc5cd7116f6a97b1d438084ed9932b274ac26de79e677e92ed46b1644d92cf",
+      "verificationExitCode": 0
+    },
+    {
+      "kind": "vscode",
+      "runId": 42479096917,
+      "archive": "../release-linux-collection-hosted/vscode-42479096917.zip",
+      "manifestPath": "vscode/release-manifest.json",
+      "manifestSha256": "82b19dc721b1209c3308d0c510fa0072d0ebc78055ef20607f0a010f08b3fc2d",
+      "verificationExitCode": 0
+    }
+  ],
+  "roleScopeApiAndSigningProvenanceApproved": [
+    "Core",
+    "Schema",
+    "XmlDb",
+    "Braid"
+  ],
+  "publicationAuthorized": true,
+  "tagsAuthorized": [
+    "v1.81.2",
+    "vscode-v0.2.6"
+  ],
+  "budgetDisposition": "Explicitly deferred for this release; no performance guarantees claimed",
+  "numericalBudgetsAccepted": false,
+  "providerBoundary": "Ten Core libraries including existing Database REST-loader plus extension only. No Schema/XmlDb/Braid production adoption or proprietary binaries are represented as delivered.",
+  "signingBoundary": "User accepted signing/provenance disposition for the exact verified hosted artifacts as prepared. No extra author signing, certificate trust or signed attestation is asserted.",
+  "conversationEvidence": [
+    {
+      "assistantScope": "Approval of release scope/API and signing/provenance for all four owner roles, plus tagging and publishing ten NuGet1.81.2 and extension0.2.6 from verified hosted runs",
+      "userAnswer": "Yes, I do"
+    },
+    {
+      "assistantQuestion": "Should the unfilled numerical workload budgets remain a publication blocker, or do you explicitly approve deferring them for this release, with no performance guarantees claimed?",
+      "userAnswer": "Please defer"
+    }
+  ]
+}
