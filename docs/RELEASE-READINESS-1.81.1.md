@@ -61,3 +61,5 @@ The [exact-artifact review packet](release-1.81.2-review/README.md) pins the fin
 Authorized preparation-only runs are recorded in the [hosted dossier](release-1.81.2-hosted/README.md), separately from the local candidate and its manifest hashes. Publication remains unapproved.
 
 Hosted preparation exposes six Linux QT3 collection fixture failures; NuGet packing is blocked. Extension preparation and exact-byte verification pass. See the hosted dossier for raw receipts and the required file-path/URI fix.
+
+The Linux collection fixture harness correction passes local regression, solution coverage across the Database listener retry, and exact frozen gates. Fresh hosted preparation remains required; see release-linux-collection-fix/README.md.

@@ -1,0 +1,18 @@
+{
+  "LOCAL-RECEIPTS.zip": {
+    "sha256": "7a1eff2b167c596f4751577b4189fea91ef5a99571fa62cd63dab26ac9706826",
+    "bytes": 5869373
+  },
+  "LOCAL-RESULTS.json": {
+    "sha256": "0ba20a42e81a0f655c0aa8231fea2b71843b2c05646ad9cc31c7fb496b019077",
+    "bytes": 8047
+  },
+  "README.md": {
+    "sha256": "b4328b7fd6487187c1eca227806f86c2a529fda5be6fbeb97f66f3ce1b51df9b",
+    "bytes": 2467
+  },
+  "SPECIFICATION-ADOPTION.json": {
+    "sha256": "7cec2d79d73e9ae8d1e13df71993e276abd166b18db98cd4229565ce56d1f9f4",
+    "bytes": 1134
+  }
+}

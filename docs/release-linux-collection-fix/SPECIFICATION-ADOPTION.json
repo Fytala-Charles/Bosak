@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-08",
+  "kind": "QT3 fixture transport correction; no engine or XPath semantic adoption",
+  "sourceRepository": "https://github.com/w3c/qt3tests",
+  "sourceRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "sources": [
+    {
+      "path": "fn/collection.xml",
+      "sha256": "d33269ebfd8b59f3e9edffad174744bd147120384759c78067b3e4032cbd8020"
+    }
+  ],
+  "affectedSections": [
+    "QT3 environment collection/source file attribute versus uri attribute",
+    "fn-collection-4, fn-collection-8, collection-005/006/007/009"
+  ],
+  "implementationBase": "46dcbe85f9e3895cb1de470c4690788019cc6602",
+  "harnessBeforeSha256": "d8dbe1bdc320553600a07df8b7c8d3f77556e28a9983cd0f3585e7c2cb116c84",
+  "intent": "Represent existing local collection file fixtures as explicit absolute file URIs before passing them to EvaluationContext. Preserve URI-valued members and all runtime/resource policy behavior.",
+  "intentionalDeviations": [],
+  "versionDecision": "Keep unpublished release targets 1.81.2 and 0.2.6; this patch changes test harness transport only, not shipping engine or public API."
+}

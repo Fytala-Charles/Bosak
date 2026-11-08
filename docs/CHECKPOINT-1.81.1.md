@@ -1,3 +1,9 @@
+# Linux collection fixture correction - 8 November 2026
+
+[Harness correction](release-linux-collection-fix/README.md) converts known QT3 collection file fixtures to explicit escaped file URIs; URI-valued members are unchanged. Shipping source/API/runtime policy and unpublished versions1.81.2/0.2.6 are unchanged. Three new regression cases pass after two valid before-fix failures. Local build, all26345 distinct solution cases across the full run plus reviewed Database listener retry, and exact frozen gates pass. Initial authoring/listener failures remain retained. The checkpoint containing this entry follows46dcbe85; push and fresh preparation-only runs are next. Earlier hosted failure and successful extension artifact retain their own identities; owner/API/budget/signing/publication remain open.
+
+---
+
 # Hosted preparation started - 8 November 2026
 
 User authorized evidence commit/push and both preparation-only workflows. Evidence checkpoint `e2893d1aa36c2a68545a2d0eed34f103ab65632d` is pushed. [Hosted dossier](release-1.81.2-hosted/README.md) records NuGet run42477093485 and extension run42477095428; both publish jobs are skipped. Extension preparation and exact-byte verification pass with90 server tests. NuGet solution26342 passes, but QT3 fails six collection fixture loads (31391/6/424); qt4/packing were not reached. Next is a focused cross-platform file-path/URI boundary fix and fresh qualification. Owner/API/budget/signing and publication decisions remain open. The prior review packet remains a historical unfilled decision packet.

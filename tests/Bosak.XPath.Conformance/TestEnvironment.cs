@@ -32,6 +32,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.5   | 21-09-2026     | API freeze stage D: XDocumentProvider.LoadXml -> LoadFile                                |
 //                      | Charles Korthout | 1.6   | 27-10-2026     | Preserve XSD profile metadata and support guarded diagnostic schema deferral.              |
+//                      | Charles Korthout | 1.7   | 08-11-2026     | Register collection file fixtures as explicit escaped file URIs on all platforms.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -154,7 +155,9 @@ internal sealed class TestEnvironment
                     if (!File.Exists(path))
                         path = Path.Combine(suitePath, file);
                     if (File.Exists(path))
-                        docs.Add(Path.GetFullPath(path));
+                        // A catalog file attribute is a local fixture, not a URI-reference.
+                        // In particular, Unix /paths must not resolve against an HTTP base.
+                        docs.Add(new Uri(Path.GetFullPath(path)).AbsoluteUri);
                 }
                 else if (sourceUri is not null)
                 {
