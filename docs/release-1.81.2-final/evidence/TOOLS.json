@@ -1,0 +1,10 @@
+{
+  "node": "v24.16.0",
+  "npm": "11.13.0",
+  "dotnetSdk": "10.0.301",
+  "vsceVersion": "4.0.0",
+  "vscePackageJsonSha256": "578509ac7ec727cb2fc105be03e750da82be07a31c6298862422d65a1008bd1b",
+  "npmInstall": "Fresh npm ci --offline --no-audit --no-fund from the candidate lock; cache reused as download source.",
+  "nugetBuildRestore": "Offline external dependency cache reused for builds; separate package-only consumer uses a new private cache and local feed only.",
+  "vulnerabilityAuditPerformed": false
+}

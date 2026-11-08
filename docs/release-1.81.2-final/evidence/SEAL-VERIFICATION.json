@@ -1,0 +1,16 @@
+[
+  {
+    "kind": "nuget",
+    "manifestSha256": "dfe2e32f3413fc3aae458b1ea6c4fa56b883e1296820c41046efa1eecc54c277",
+    "sourceCommit": "1d69d059c14888c1c43264efa8668909292af858",
+    "exitCode": 0,
+    "output": "Verified reviewed artifact bytes, source commit, versions, dependency closure and legal assets.\nwarning: in the working copy of 'vscode-bosak/NOTICE', LF will be replaced by CRLF the next time Git touches it\n"
+  },
+  {
+    "kind": "vscode",
+    "manifestSha256": "5362ae62c218b2bb7ca03879244ca6820aa5f14eed727b4315da456f711637e6",
+    "sourceCommit": "1d69d059c14888c1c43264efa8668909292af858",
+    "exitCode": 0,
+    "output": "Verified reviewed artifact bytes, source commit, versions, dependency closure and legal assets.\nwarning: in the working copy of 'vscode-bosak/NOTICE', LF will be replaced by CRLF the next time Git touches it\n"
+  }
+]

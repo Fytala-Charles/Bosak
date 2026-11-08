@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\.github\\scripts\\release_artifacts.py",
+    "seal",
+    "vscode",
+    "D:\\Development\\Bosak\\docs\\release-1.81.2-final\\evidence\\vsix-out"
+  ],
+  "exitCode": 0,
+  "logSha256": "8870c15cc342d84cf31a3f41635a639ae1b3c126827a2eeef8533514d1d185b0"
+}

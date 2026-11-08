@@ -47,3 +47,5 @@ python .github/scripts/check_workflows.py
 The YAML checker requires pinned `PyYAML==6.0.3`; install it in a task-local environment, or use the CI recipe-control job. The tests exercise valid artifact sets and refusal of changed bytes, source/version mismatch, missing legal assets, unexpected packages, unsafe ZIP entries, changed skip reasons, wrong experimental counts and invalid preparation metadata. Synthetic controls are not engine or hosted publication tests.
 
 The read-only artifact helper prints pinned versions/projects, checks tag correspondence, seals fresh manifests and verifies supplied reviewed hashes. It contains no publish or network operation. Real release artifacts must be produced and checked from the matching clean immutable checkout.
+
+The [exact-artifact review packet](release-1.81.2-review/README.md) pins the final local cohort and lists outstanding owner, budget, API, signing/provenance and hosted preparation decisions. No approval is inferred from its consistency check.

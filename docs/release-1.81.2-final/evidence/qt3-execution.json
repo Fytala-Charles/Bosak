@@ -1,0 +1,9 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+    "D:\\Development\\Bosak\\tests\\qt3tests"
+  ],
+  "exitCode": 0,
+  "log": "docs/foundation-r2-closure/evidence/execution/final-1812-qt3.log"
+}

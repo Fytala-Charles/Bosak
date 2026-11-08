@@ -1,0 +1,31 @@
+Executing prepublish script 'npm run vscode:prepublish'...
+
+> vscode-bosak@0.2.6 vscode:prepublish
+> npm run compile
+
+
+> vscode-bosak@0.2.6 compile
+> tsc -p ./
+
+ WARNING  This extension consists of 294 files, out of which 166 are JavaScript files. For performance reasons, you should bundle your extension: https://aka.ms/vscode-bundle-extension. You should also exclude unnecessary files by adding them to your .vscodeignore: https://aka.ms/vscode-vscodeignore.
+
+ INFO  Files included in the VSIX:
+vscode-bosak-0.2.6.vsix
+├─ [Content_Types].xml 
+├─ extension.vsixmanifest 
+└─ extension/
+   ├─ LICENSE.md [7.21 KB]
+   ├─ NOTICE [1.24 KB]
+   ├─ language-configuration.json [0.34 KB]
+   ├─ package.json [4.17 KB]
+   ├─ readme.md [12.61 KB]
+   ├─ assets/ (1 file) [7.63 KB]
+   ├─ licenses/ (1 file) [1.95 KB]
+   ├─ node_modules/ (202 files) [1.07 MB]
+   ├─ out/ (1 file) [12.28 KB]
+   ├─ server/ (79 files) [12.21 MB]
+   └─ syntaxes/ (3 files) [11.34 KB]
+
+=> Run vsce ls --tree to see all included files.
+
+ DONE  Packaged: D:\Development\Bosak\docs\release-1.81.2-final\evidence\vsix-out\vscode-bosak-0.2.6.vsix (294 files, 4.59 MB)

@@ -1,0 +1,70 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Conformance40\Bosak.XPath.Conformance40.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Providers.Database\Bosak.XPath.Providers.Database.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 75 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.Xslt\Bosak.Xslt.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Conformance\Bosak.XPath.Conformance.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XQuery\Bosak.XQuery.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Parser.Tests\Bosak.XPath.Parser.Tests.csproj (in 165 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Compiler.Tests\Bosak.XPath.Compiler.Tests.csproj (in 166 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Providers.Tests\Bosak.XPath.Providers.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Core.Tests\Bosak.XPath.Core.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Providers.Database.Tests\Bosak.XPath.Providers.Database.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XQuery.Tests\Bosak.XQuery.Tests.csproj (in 167 ms).
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\Bosak.XPath.Api.Tests.csproj (in 166 ms).
+  Bosak.XPath.Core -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Providers.Database -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Providers.Database\bin\Release\net10.0\Bosak.XPath.Providers.Database.dll
+  Bosak.XPath.Parser.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Compiler.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Providers.Database.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XPath.Core.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll
+  Bosak.XQuery -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.XPath.Providers.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\PublicOrdinarySessionTests.cs(62,26): warning CS0649: Field 'PublicOrdinarySessionTests.Input.EnterAction' is never assigned to, and will always have its default value null [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\Bosak.XPath.Api.Tests.csproj]
+  Bosak.XPath.Api.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(309,20): warning CS8619: Nullability of reference types in value of type 'Task<Exception>' doesn't match target type 'Task<Exception?>'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\PublicCompatibleTests.cs(341,20): warning CS8619: Nullability of reference types in value of type 'Task<Exception>' doesn't match target type 'Task<Exception?>'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(64,54): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(83,79): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerRadixTests.cs(152,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\ParseIntegerTests.cs(167,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+  Bosak.XPath.Runtime.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll
+  Bosak.XPath.Standard.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll
+  Bosak.XQuery.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll
+  Bosak.Xslt -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.XPath.Conformance -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Conformance\bin\Release\net10.0\Bosak.XPath.Conformance.dll
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+  Bosak.XPath.Conformance40 -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Conformance40\bin\Release\net10.0\Bosak.XPath.Conformance40.dll
+  Bosak.Xslt.Conformance -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\bin\Release\net10.0\Bosak.Xslt.Conformance.dll
+  Bosak.Xslt.Tests -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll
+
+Build succeeded.
+
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\PublicOrdinarySessionTests.cs(62,26): warning CS0649: Field 'PublicOrdinarySessionTests.Input.EnterAction' is never assigned to, and will always have its default value null [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Api.Tests\Bosak.XPath.Api.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(309,20): warning CS8619: Nullability of reference types in value of type 'Task<Exception>' doesn't match target type 'Task<Exception?>'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\PublicCompatibleTests.cs(341,20): warning CS8619: Nullability of reference types in value of type 'Task<Exception>' doesn't match target type 'Task<Exception?>'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Runtime.Tests\Bosak.XPath.Runtime.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(64,54): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerVariationTests.cs(83,79): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\FormatIntegerRadixTests.cs(152,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\ParseIntegerTests.cs(167,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.XPath.Standard.Tests\Bosak.XPath.Standard.Tests.csproj]
+D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+    8 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:17.21

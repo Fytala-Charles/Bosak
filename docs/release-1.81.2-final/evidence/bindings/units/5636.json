@@ -1,0 +1,43 @@
+{
+  "processId": 5636,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "566de7017762250f32c64d73c9a9c511c98d5cc7ce32704a66b520a52373af15"
+    },
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "identity": "Bosak.XPath.Compiler.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.0.0\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "198ae4b2cc508a42a16b45c8ce39fcb8d5b482f3a6f668feed50392be3068804"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "65868bb49f21c8c1eea8ccfdc3e4b6e1e81c0bab7b56bc809663249c34231efe"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "d7a661dc8abcb615b64fdd7888535bd9292820b1bb82da92232bf45f405f3601"
+    }
+  ],
+  "captureErrors": []
+}

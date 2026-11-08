@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "pack",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\src\\Bosak.XPath.Runtime\\Bosak.XPath.Runtime.csproj",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "-o",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed",
+    "-p:SourceRevisionId=f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+    "-p:RepositoryCommit=f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+    "-p:ContinuousIntegrationBuild=true",
+    "-p:NuGetAudit=false"
+  ],
+  "exitCode": 0,
+  "logSha256": "40249139d392adee55f9c901b14128132c69cf1be499c751a1f9b5e56962c58d"
+}

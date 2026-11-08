@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npm.cmd",
+    "ci",
+    "--offline",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "exitCode": 0,
+  "logSha256": "30aba9132590d992eecf1a31c38e69aed27feeda2c61f7f0dc7c44c3bc7d5247"
+}

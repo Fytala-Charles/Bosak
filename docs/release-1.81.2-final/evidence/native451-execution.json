@@ -1,0 +1,11 @@
+{
+  "command": [
+    "dotnet",
+    "vstest",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-final-1d69d059\\native\\native451\\Bosak.Schema.Tests.dll",
+    "--logger:trx",
+    "--ResultsDirectory:D:\\Development\\Bosak\\docs\\release-1.81.2-final\\evidence\\native-trx\\native451"
+  ],
+  "exitCode": 0,
+  "log": "docs/foundation-r2-closure/evidence/execution/final-1812-native451.log"
+}

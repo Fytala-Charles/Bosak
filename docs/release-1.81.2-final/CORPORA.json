@@ -1,0 +1,14 @@
+[
+  {
+    "name": "qt3tests",
+    "expectedGitlink": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "observedHead": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "trackedAndUntrackedStatus": ""
+  },
+  {
+    "name": "qt4tests",
+    "expectedGitlink": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+    "observedHead": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+    "trackedAndUntrackedStatus": ""
+  }
+]

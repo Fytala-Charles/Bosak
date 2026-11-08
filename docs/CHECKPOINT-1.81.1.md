@@ -1,3 +1,19 @@
+# Exact-artifact decision packet - 8 November 2026
+
+[Current release review](release-1.81.2-review/README.md) pins the final local NuGet, VSIX, API and qualification inputs without transferring older owner approvals. All owner/budget/API/signing/hosted/publication decisions remain unfilled. Inspection found no NuGet signature entry in any of the ten local packages; this is not certificate or service trust validation. The packet consistency check passes. Next technical check is explicitly authorized push/hosted preparation only; no workflow was dispatched. Source remains 1d69d059; this packet and final evidence are uncommitted.
+
+---
+
+# Final local release qualification - 8 November 2026
+
+Current source checkpoint is `1d69d059c14888c1c43264efa8668909292af858` on `checkpoint/foundation-1.81.1`, following alignment commit `f0f3e9c892fb9afb6b6b6417e4d707ebf338d599`. Both commits remain local; the last pushed checkpoint is e992d90b. [Final qualification](release-1.81.2-final/README.md) seals ten stock NuGet packages at 1.81.2 and extension 0.2.6 from this immutable source. No metadata override or NOTICE overlay was used. Seventy generated server files were removed from tracking; all local files were preserved.
+
+The final cohort passes 26,342 solution tests in one invocation, 90 language-server tests, consumer7, retained20, native451/adapter59/consumer10, unchanged frozen gates and API inventory, five installed editor commands and live diagnostic/correction checks. Both artifact manifests and payloads verify. The earlier f0 stock packet remains historical and contains no VSIX. Final evidence and this documentation update are local and uncommitted.
+
+Next: review exact-artifact owner workload/budget and C45/API dispositions, signing/provenance, and qualify the hosted preparation workflows under the [release guide](RELEASING.md). Hosted workflows, publisher authentication, push, tags and publication were not performed. Publication remains unauthorized. Earlier entries below retain their original identities.
+
+---
+
 # Qualified foundation checkpoint — 7 November 2026
 
 The owner authorized committing and pushing the cumulative qualified work on

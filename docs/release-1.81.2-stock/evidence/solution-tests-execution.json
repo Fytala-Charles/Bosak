@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "--logger:trx",
+    "--results-directory",
+    "D:\\Development\\Bosak\\docs\\release-1.81.2-stock\\evidence\\solution-trx",
+    "-p:SourceRevisionId=f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+    "-p:RepositoryCommit=f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+    "-p:ContinuousIntegrationBuild=true",
+    "-p:NuGetAudit=false"
+  ],
+  "exitCode": 0,
+  "log": "docs/foundation-r2-closure/evidence/execution/stock-1812-solution-tests.log"
+}

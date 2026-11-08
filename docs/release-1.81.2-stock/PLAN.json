@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-08",
+  "version": "1.81.2",
+  "previewVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "candidateCommit": "f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+  "source": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8",
+  "work": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8",
+  "feed": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed",
+  "selectedPackages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt",
+    "Bosak.XPath.Providers.Database"
+  ],
+  "sourceTrees": {
+    "src": "6694d2c90d7fd00c99800a6626416d35ebb334f4",
+    "tests": "39b28b287c32aa98133b64c62778e9bb80f6796b",
+    "vscode-bosak": "7e72014b2110a7b95651b7830765066a4941b986",
+    ".github": "05717792f321947836cd7325b5b58fed8aab57ff",
+    "docs/xpath40-catalog/worked-examples": "f6d7d9ffffff876dc8c8038a0578ed480d931433",
+    "docs/xpath40-catalog/examples": "c7a51b984d0901fe3d9e88c6d0a5e13a33e64259"
+  },
+  "versionMethod": "Tracked defaults from immutable Git worktree; no Version/PackageVersion overrides.",
+  "noticeMethod": "Normal stock MSBuild pack metadata; no preview overlay.",
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

@@ -1,0 +1,12 @@
+{
+  "products": 11,
+  "packaged": 10,
+  "nonpackaged": [
+    "Bosak.LanguageServer"
+  ],
+  "publicTypes": 318,
+  "declarationRows": 6465,
+  "allowedDelta": "Bosak assembly identity/reference version1.81.1.0 to1.81.2.0 only",
+  "apiFrozen": false,
+  "toolSha256": "151c372e8c1344af84779dcd19277ce1b6197f86abffea5d38bdb29e9375d955"
+}

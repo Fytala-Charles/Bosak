@@ -1,0 +1,42 @@
+{
+  "extensionVersion": "0.2.6",
+  "extensionPath": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-final-1d69d059\\final-fresh\\extensions\\fytala.vscode-bosak-0.2.6",
+  "defaultBundledServer": true,
+  "results": [
+    {
+      "command": "bosak.evaluateXPath",
+      "expected": "6",
+      "actual": "6",
+      "outputLanguage": "plaintext",
+      "passed": true
+    },
+    {
+      "command": "bosak.runXQuery",
+      "expected": "q1|q2|q3",
+      "actual": "q1|q2|q3",
+      "outputLanguage": "xquery",
+      "passed": true
+    },
+    {
+      "command": "bosak.evaluateXQuery",
+      "expected": "42",
+      "actual": "42",
+      "outputLanguage": "xquery",
+      "passed": true
+    },
+    {
+      "command": "bosak.transformXslt",
+      "expected": "<result>23</result>",
+      "actual": "<result>23</result>",
+      "outputLanguage": "xml",
+      "passed": true
+    },
+    {
+      "command": "bosak.runInitialTemplate",
+      "expected": "initial-42",
+      "actual": "initial-42",
+      "outputLanguage": "xml",
+      "passed": true
+    }
+  ]
+}

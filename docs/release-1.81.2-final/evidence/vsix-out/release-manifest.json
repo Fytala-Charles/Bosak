@@ -1,0 +1,14 @@
+{
+  "artifacts": [
+    {
+      "bytes": 4809180,
+      "file": "vscode-bosak-0.2.6.vsix",
+      "sha256": "7ee82ff518176d257bb187feecf71c1a3cd8ed4019665a45bbf13c00cdd55d48"
+    }
+  ],
+  "coreVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "formatVersion": 1,
+  "kind": "vscode",
+  "sourceCommit": "1d69d059c14888c1c43264efa8668909292af858"
+}

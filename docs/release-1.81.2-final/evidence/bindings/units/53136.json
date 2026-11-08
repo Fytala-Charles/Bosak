@@ -1,0 +1,34 @@
+{
+  "processId": 53136,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Parser.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "65868bb49f21c8c1eea8ccfdc3e4b6e1e81c0bab7b56bc809663249c34231efe"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Parser.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "d7a661dc8abcb615b64fdd7888535bd9292820b1bb82da92232bf45f405f3601"
+    },
+    {
+      "name": "Bosak.XPath.Parser.Tests",
+      "identity": "Bosak.XPath.Parser.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\tests\\Bosak.XPath.Parser.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.0.0\u002B1d69d059c14888c1c43264efa8668909292af858",
+      "sha256": "b3b51f077db4df0b9be038b1a0753eefb47b90f56676a00a1a840b23ce7be6c8"
+    }
+  ],
+  "captureErrors": []
+}
