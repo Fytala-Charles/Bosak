@@ -1,0 +1,29 @@
+{
+  "runId": 42479096917,
+  "sourceCommit": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+  "manifestSha256": "82b19dc721b1209c3308d0c510fa0072d0ebc78055ef20607f0a010f08b3fc2d",
+  "verificationExitCode": 0,
+  "verificationSource": "clean LF checkout of exact producer commit",
+  "serverTests": [
+    {
+      "total": "90",
+      "executed": "90",
+      "passed": "90",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  ],
+  "publicationJob": "skipped",
+  "publisherAuthenticationTested": false
+}

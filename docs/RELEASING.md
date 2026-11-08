@@ -51,3 +51,5 @@ The read-only artifact helper prints pinned versions/projects, checks tag corres
 The [exact-artifact review packet](release-1.81.2-review/README.md) pins the final local cohort and lists outstanding owner, budget, API, signing/provenance and hosted preparation decisions. No approval is inferred from its consistency check.
 
 Authorized preparation-only runs are recorded in the [hosted dossier](release-1.81.2-hosted/README.md), separately from the local candidate and its manifest hashes. Publication remains unapproved.
+
+[Corrected hosted preparation](release-linux-collection-hosted/README.md) now passes both workflows at source7249d0e0: solution26345, server90, exact frozen conformance gates and independent ten-package/VSIX verification. No shipping API or runtime change was needed for the harness correction. Owner/API/budget/signing and publication decisions remain open.

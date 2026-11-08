@@ -5006,3 +5006,5 @@ Use the [atomic observation guide](foundation-public-provenance/GUIDE.md). True 
 The [final local 1.81.2 / extension 0.2.6 qualification](release-1.81.2-final/README.md) records stock artifacts from source `1d69d059`, exact manifests, full solution and server tests, frozen gates and installed editor checks. This technical qualification does not grant owner/API acceptance or publication approval; hosted preparation and signing/provenance review remain pending.
 
 The [Linux collection fixture correction](release-linux-collection-fix/README.md) makes QT3 catalog `file=` collection members explicit escaped `file:` URIs. Catalog `uri=` members retain URI-reference semantics. This is harness transport only: shipping runtime/API/resource-policy behavior and unpublished version targets are unchanged.
+
+[Corrected hosted preparation](release-linux-collection-hosted/README.md) now passes both workflows at source7249d0e0: solution26345, server90, exact frozen conformance gates and independent ten-package/VSIX verification. No shipping API or runtime change was needed for the harness correction. Owner/API/budget/signing and publication decisions remain open.

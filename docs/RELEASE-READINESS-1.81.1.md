@@ -63,3 +63,5 @@ Authorized preparation-only runs are recorded in the [hosted dossier](release-1.
 Hosted preparation exposes six Linux QT3 collection fixture failures; NuGet packing is blocked. Extension preparation and exact-byte verification pass. See the hosted dossier for raw receipts and the required file-path/URI fix.
 
 The Linux collection fixture harness correction passes local regression, solution coverage across the Database listener retry, and exact frozen gates. Fresh hosted preparation remains required; see release-linux-collection-fix/README.md.
+
+Current hosted status: the six Linux collection failures are resolved. [Both corrected preparation runs pass](release-linux-collection-hosted/README.md), with26345 solution tests,90 server tests, exact frozen gates, and independently verified ten-package/VSIX artifacts. B6 hosted preparation is complete; signing/provenance disposition remains open. B2/B3/B5/B7 are not closed by this technical result.

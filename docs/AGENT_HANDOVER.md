@@ -1,3 +1,11 @@
+# Hosted release preparation qualified - 8 November 2026
+
+Code checkpoint `7249d0e01628c47f92b89a3380bc69cf58d70045` is pushed. [Corrected hosted preparation](release-linux-collection-hosted/README.md) passes both workflows: NuGet run42479094503 has26345 solution passes in one invocation and exact QT3 31397/0/424, gated qt4 8941/0/1918 plus11 experimental passes; extension run42479096917 has90 server passes. Ten1.81.2 packages and0.2.6 VSIX independently verify from the clean LF producer checkout. Both publication jobs are skipped. The earlier Linux collection failure is resolved by harness-only file URI transport; shipping source tree6694d2c9 remains unchanged. Local initial authoring/listener failures are preserved separately.
+
+Next: obtain owner/budget/deferred-provider and C45/API decisions over these hosted source/manifest identities, complete signing/provenance review and seek explicit publication approval. No tag/authentication/publication occurred. The documentation/evidence checkpoint containing this entry follows7249d0e0. Earlier entries retain their historical identities.
+
+---
+
 # Linux collection fixture correction - 8 November 2026
 
 [Harness correction](release-linux-collection-fix/README.md) converts known QT3 collection file fixtures to explicit escaped file URIs; URI-valued members are unchanged. Shipping source/API/runtime policy and unpublished versions1.81.2/0.2.6 are unchanged. Three new regression cases pass after two valid before-fix failures. Local build, all26345 distinct solution cases across the full run plus reviewed Database listener retry, and exact frozen gates pass. Initial authoring/listener failures remain retained. The checkpoint containing this entry follows46dcbe85; push and fresh preparation-only runs are next. Earlier hosted failure and successful extension artifact retain their own identities; owner/API/budget/signing/publication remain open.
