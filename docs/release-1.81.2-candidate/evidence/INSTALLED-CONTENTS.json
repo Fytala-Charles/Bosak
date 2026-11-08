@@ -1,0 +1,16 @@
+[
+  {
+    "profile": "final-fresh",
+    "payloadVerified": true,
+    "exceptions": {
+      "extension/package.json": "VS Code-added __metadata only"
+    }
+  },
+  {
+    "profile": "upgrade",
+    "payloadVerified": true,
+    "exceptions": {
+      "extension/package.json": "VS Code-added __metadata only"
+    }
+  }
+]

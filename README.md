@@ -221,3 +221,5 @@ The [bounded presence assertion candidate](docs/schema-presence-implementation/R
 [Finite consumer read-only session adoption proposal](docs/braid-readonly-adoption/README.md).
 
 [Read-only consumer adoption proposal review](docs/braid-readonly-adoption-review/README.md).
+
+Maintainers can find artifact preparation and publication instructions in the [release guide](docs/RELEASING.md).

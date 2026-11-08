@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.81.1</Version>
+    <Version>1.81.2</Version>
     <Authors>Fytala</Authors>
     <Company>Fytala</Company>
     <Copyright>Copyright (c) 2026 FYTALA</Copyright>
@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\NOTICE" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\license.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\assets\logos\*.svg" Pack="true" PackagePath="\assets\logos\" />

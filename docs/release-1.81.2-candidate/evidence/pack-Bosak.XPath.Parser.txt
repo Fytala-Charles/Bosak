@@ -1,0 +1,1 @@
+  Successfully created package 'D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\feed\Bosak.XPath.Parser.1.81.2.nupkg'.

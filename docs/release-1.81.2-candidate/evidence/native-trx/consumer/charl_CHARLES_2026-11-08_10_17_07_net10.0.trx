@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c8ff49b3-68f3-4892-923b-1728a0e3bffb" name="charl@CHARLES 2026-11-08 10:17:07" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-08T10:17:07.5283972+01:00" queuing="2026-11-08T10:17:07.5283976+01:00" start="2026-11-08T10:17:06.3128873+01:00" finish="2026-11-08T10:17:07.7274141+01:00" />
+  <TestSettings name="default" id="ed47e3ec-830b-4203-848f-f2caa1dafec0">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-08_10_17_07" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="803abdd7-6ba1-43c8-949d-17977cfe2604" testId="9d5386a4-f25d-a541-d5bc-46e3b29f11a9" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.SessionAndResultHaveSeparateOwners" computerName="CHARLES" duration="00:00:00.0017457" startTime="2026-11-08T10:17:07.1730815+01:00" endTime="2026-11-08T10:17:07.1731016+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="803abdd7-6ba1-43c8-949d-17977cfe2604" />
+    <UnitTestResult executionId="84caae4f-8f55-41ca-a4a9-e4036b639216" testId="e348b904-4e3f-8806-acaa-c1d85828136e" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.ResultDisposalRevokesItsOutputOnly" computerName="CHARLES" duration="00:00:00.0011079" startTime="2026-11-08T10:17:07.1731521+01:00" endTime="2026-11-08T10:17:07.1731791+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84caae4f-8f55-41ca-a4a9-e4036b639216" />
+    <UnitTestResult executionId="2f40a22e-57ae-4e86-b2f5-eb37a9554bf4" testId="8418e78d-74a6-3f01-2957-2a7b2bb8e346" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.DuplicateAdmissionPreservesFirst" computerName="CHARLES" duration="00:00:00.0984850" startTime="2026-11-08T10:17:07.2748997+01:00" endTime="2026-11-08T10:17:07.3733875+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f40a22e-57ae-4e86-b2f5-eb37a9554bf4" />
+    <UnitTestResult executionId="296ce9a1-b9a0-4b65-8554-d9b61b3de31f" testId="5bfd0084-3b55-98f7-d4cf-c4b4081528b5" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.CallerDocumentsStayIndependent" computerName="CHARLES" duration="00:00:00.1018578" startTime="2026-11-08T10:17:07.1732278+01:00" endTime="2026-11-08T10:17:07.2747477+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="296ce9a1-b9a0-4b65-8554-d9b61b3de31f" />
+    <UnitTestResult executionId="8d3b6d2c-9686-4ed5-8ce2-7c7e1b2b43d0" testId="cea56efa-9ef5-5aaa-4a9c-67554e4d8164" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.PublicRoundTrip" computerName="CHARLES" duration="00:00:00.3551872" startTime="2026-11-08T10:17:06.8053892+01:00" endTime="2026-11-08T10:17:07.1649488+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8d3b6d2c-9686-4ed5-8ce2-7c7e1b2b43d0" />
+    <UnitTestResult executionId="1a0fe8bd-e5ad-4430-b314-cb39a7d1cb41" testId="42578dd7-97a4-40aa-0319-43fb58a0c068" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: &quot;&lt;order&gt;&lt;amount&gt;bad&lt;/amount&gt;&lt;/order&gt;&quot;, status: Invalid)" computerName="CHARLES" duration="00:00:00.0007336" startTime="2026-11-08T10:17:07.1729780+01:00" endTime="2026-11-08T10:17:07.1730034+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a0fe8bd-e5ad-4430-b314-cb39a7d1cb41" />
+    <UnitTestResult executionId="400bb579-b71a-496d-88d0-4bff85169bc3" testId="4d3f731c-6c9c-20b2-0062-011fa1c1087c" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: &quot;&lt;order&gt;&lt;amount&gt;0.00000000000000000000000000001&lt;/am&quot;···, status: Unsupported)" computerName="CHARLES" duration="00:00:00.0032574" startTime="2026-11-08T10:17:07.1726426+01:00" endTime="2026-11-08T10:17:07.1726840+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="400bb579-b71a-496d-88d0-4bff85169bc3" />
+    <UnitTestResult executionId="f3595af0-5612-410c-9bda-4dcd26f6fe0e" testId="821b1c83-3263-9c2d-f81d-7322a40c653a" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.ForeignResultNodeRefuses" computerName="CHARLES" duration="00:00:00.0012265" startTime="2026-11-08T10:17:07.4814299+01:00" endTime="2026-11-08T10:17:07.4825363+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3595af0-5612-410c-9bda-4dcd26f6fe0e" />
+    <UnitTestResult executionId="7f0eb7c3-51bb-4f5e-8e34-4b72b15ad6e2" testId="a929f422-57c4-328c-d7d2-7e6293ae8765" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.CanceledAdmissionCanRetry" computerName="CHARLES" duration="00:00:00.1077069" startTime="2026-11-08T10:17:07.3735321+01:00" endTime="2026-11-08T10:17:07.4812407+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7f0eb7c3-51bb-4f5e-8e34-4b72b15ad6e2" />
+    <UnitTestResult executionId="e3be7712-af23-4e88-8a3c-37e5abaacd38" testId="2f4e9298-de87-0d3c-5d67-8c7c7b377d71" testName="Bosak.Schema.PublicConsumer.PublicConsumerTests.AdmissionCanBeReopened" computerName="CHARLES" duration="00:00:00.1954504" startTime="2026-11-08T10:17:07.5056347+01:00" endTime="2026-11-08T10:17:07.6781425+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3be7712-af23-4e88-8a3c-37e5abaacd38" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.ForeignResultNodeRefuses" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="821b1c83-3263-9c2d-f81d-7322a40c653a">
+      <Execution id="f3595af0-5612-410c-9bda-4dcd26f6fe0e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="ForeignResultNodeRefuses" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: &quot;&lt;order&gt;&lt;amount&gt;bad&lt;/amount&gt;&lt;/order&gt;&quot;, status: Invalid)" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="42578dd7-97a4-40aa-0319-43fb58a0c068">
+      <Execution id="1a0fe8bd-e5ad-4430-b314-cb39a7d1cb41" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="FailedResultHasNoAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.FailedResultHasNoAdmission(xml: &quot;&lt;order&gt;&lt;amount&gt;0.00000000000000000000000000001&lt;/am&quot;···, status: Unsupported)" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="4d3f731c-6c9c-20b2-0062-011fa1c1087c">
+      <Execution id="400bb579-b71a-496d-88d0-4bff85169bc3" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="FailedResultHasNoAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.PublicRoundTrip" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="cea56efa-9ef5-5aaa-4a9c-67554e4d8164">
+      <Execution id="8d3b6d2c-9686-4ed5-8ce2-7c7e1b2b43d0" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="PublicRoundTrip" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.CanceledAdmissionCanRetry" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="a929f422-57c4-328c-d7d2-7e6293ae8765">
+      <Execution id="7f0eb7c3-51bb-4f5e-8e34-4b72b15ad6e2" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="CanceledAdmissionCanRetry" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.AdmissionCanBeReopened" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="2f4e9298-de87-0d3c-5d67-8c7c7b377d71">
+      <Execution id="e3be7712-af23-4e88-8a3c-37e5abaacd38" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="AdmissionCanBeReopened" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.CallerDocumentsStayIndependent" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="5bfd0084-3b55-98f7-d4cf-c4b4081528b5">
+      <Execution id="296ce9a1-b9a0-4b65-8554-d9b61b3de31f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="CallerDocumentsStayIndependent" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.ResultDisposalRevokesItsOutputOnly" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="e348b904-4e3f-8806-acaa-c1d85828136e">
+      <Execution id="84caae4f-8f55-41ca-a4a9-e4036b639216" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="ResultDisposalRevokesItsOutputOnly" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.DuplicateAdmissionPreservesFirst" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="8418e78d-74a6-3f01-2957-2a7b2bb8e346">
+      <Execution id="2f40a22e-57ae-4e86-b2f5-eb37a9554bf4" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="DuplicateAdmissionPreservesFirst" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.PublicConsumer.PublicConsumerTests.SessionAndResultHaveSeparateOwners" storage="d:\development\bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\bosak.schema.publicconsumer.tests.dll" id="9d5386a4-f25d-a541-d5bc-46e3b29f11a9">
+      <Execution id="803abdd7-6ba1-43c8-949d-17977cfe2604" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\release-1812-candidate-e992d90b\native\consumer\Bosak.Schema.PublicConsumer.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.PublicConsumer.PublicConsumerTests" name="SessionAndResultHaveSeparateOwners" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="9d5386a4-f25d-a541-d5bc-46e3b29f11a9" executionId="803abdd7-6ba1-43c8-949d-17977cfe2604" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e348b904-4e3f-8806-acaa-c1d85828136e" executionId="84caae4f-8f55-41ca-a4a9-e4036b639216" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8418e78d-74a6-3f01-2957-2a7b2bb8e346" executionId="2f40a22e-57ae-4e86-b2f5-eb37a9554bf4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bfd0084-3b55-98f7-d4cf-c4b4081528b5" executionId="296ce9a1-b9a0-4b65-8554-d9b61b3de31f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cea56efa-9ef5-5aaa-4a9c-67554e4d8164" executionId="8d3b6d2c-9686-4ed5-8ce2-7c7e1b2b43d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="42578dd7-97a4-40aa-0319-43fb58a0c068" executionId="1a0fe8bd-e5ad-4430-b314-cb39a7d1cb41" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d3f731c-6c9c-20b2-0062-011fa1c1087c" executionId="400bb579-b71a-496d-88d0-4bff85169bc3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="821b1c83-3263-9c2d-f81d-7322a40c653a" executionId="f3595af0-5612-410c-9bda-4dcd26f6fe0e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a929f422-57c4-328c-d7d2-7e6293ae8765" executionId="7f0eb7c3-51bb-4f5e-8e34-4b72b15ad6e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2f4e9298-de87-0d3c-5d67-8c7c7b377d71" executionId="e3be7712-af23-4e88-8a3c-37e5abaacd38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.09]   Discovering: Bosak.Schema.PublicConsumer.Tests&#xD;
+[xUnit.net 00:00:00.12]   Discovered:  Bosak.Schema.PublicConsumer.Tests&#xD;
+[xUnit.net 00:00:00.14]   Starting:    Bosak.Schema.PublicConsumer.Tests&#xD;
+[xUnit.net 00:00:01.03]   Finished:    Bosak.Schema.PublicConsumer.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

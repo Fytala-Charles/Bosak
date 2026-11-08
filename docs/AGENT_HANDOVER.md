@@ -1,3 +1,19 @@
+# Tracked release recipe alignment - 8 November 2026
+
+Parent code/evidence checkpoint is `e992d90b0efa01d45224771a9f8e53dee05096a6`. User authorized the next step: align Core/server1.81.2, extension0.2.6, ten NuGet packages, NOTICE and exact-artifact publication recipes, commit the changes and qualify the resulting cohort. [Alignment evidence](release-workflow-alignment/README.md) records14 artifact/gate tests, ten source-run cases, YAML checks, real prior-artifact validation and normal pack metadata. No engine or handler body changed. The source/recipe checkpoint is identified by the Git commit containing this entry; final qualification follows it and must not relabel the e992d90b override cohort.
+
+Both publishing workflows now prepare on tags/default dispatch only; explicit publication requires successful preparation run ID and reviewed manifest hash, then verifies downloaded bytes/source before publisher credentials. Source pins are1.81.2/0.2.6; live-source preflights tied to old version files remain historical. Do not create tags/dispatch/publish during qualification. Owner workload/budget/API acceptance and signing/provenance remain open. No secret/environment policy, machine ACL, active profile or owner repository changed. Earlier entries below are historical.
+
+---
+
+# Local1.81.2 / extension0.2.6 candidate - 8 November 2026
+
+Latest committed code/evidence checkpoint is `e992d90b0efa01d45224771a9f8e53dee05096a6` on `checkpoint/foundation-1.81.1`; subsequent candidate planning/artifacts are uncommitted. User explicitly selected Core/server1.81.2, extension0.2.6 and existing Database REST-loader package inclusion as tenth NuGet library. [New cohort](release-1.81.2-candidate/README.md) builds archived immutable e992d90b with explicit1.81.2 metadata overrides; tracked Core1.81.1 and extension0.2.5 version files are preserved. No new code body changed.
+
+Ten-package fresh consumer7, retained20, solution26,342 across a focused fixture correction, server90, native451/adapter59/consumer10, frozen QT3/gated qt4 exact skip maps/API318/6465 and new installed editor command/live correction checks pass. Initial restricted build failure and incomplete XSLT fixture catalog remain retained. No owner workload/budget/API acceptance, source-published version promotion, tag or publication is implied. Next work is final production version/workflow/NOTICE/exact-artifact recipe reconciliation and explicit owner/API acceptance; never dispatch existing publishing workflows as a preparation check. Old XmlDb/performance receipts keep their original cohort identity. Entries below are historical.
+
+---
+
 # Current editor fix - 8 November 2026
 
 Parent evidence checkpoint is `57865fc845c3eb081a38588cc4f73f5e11e42767` on `checkpoint/foundation-1.81.1`. The reviewed fix/evidence checkpoint is the Git commit containing this entry; see [checkpoint review](RELEASE-CHECKPOINT-REVIEW-2026-11-08.md). User authorized committing/pushing this checkpoint, with no tag/publication. User authorized fixing the failed extension commands. ExecuteCommandHandler now parses command URI arguments through DocumentUri before lookup; six new regressions cover escaping and missing-document isolation. Core engine source/version and the nine sealed1.81.1-preview.c0b926de DLLs are unchanged. The fixed server is a separate1.81.2-preview.urifix1 diagnostic snapshot (base C0 plus source hash), not an immutable new commit or approved release version. Tracked extension version remains0.2.5; isolated VSIX candidate is0.2.6.

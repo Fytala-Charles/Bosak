@@ -1,0 +1,180 @@
+{
+  "name": "vscode-bosak",
+  "displayName": "Bosak XPath / XSLT",
+  "description": "Language support for XPath 3.1 and XSLT 3.0 using the Bosak engine",
+  "version": "0.2.5",
+  "publisher": "fytala",
+  "icon": "assets/logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fytala/bosak"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "keywords": [
+    "xpath",
+    "xslt",
+    "xml",
+    "bosak"
+  ],
+  "activationEvents": [
+    "onLanguage:xpath",
+    "onLanguage:xslt",
+    "onLanguage:xquery"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "xpath",
+        "aliases": [
+          "XPath",
+          "xpath"
+        ],
+        "extensions": [
+          ".xpath"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "xslt",
+        "aliases": [
+          "XSLT",
+          "xslt"
+        ],
+        "extensions": [
+          ".xsl",
+          ".xslt"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "xquery",
+        "aliases": [
+          "XQuery",
+          "xquery"
+        ],
+        "extensions": [
+          ".xq",
+          ".xqy",
+          ".xquery"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "xpath",
+        "scopeName": "source.xpath",
+        "path": "./syntaxes/xpath.tmLanguage.json"
+      },
+      {
+        "language": "xslt",
+        "scopeName": "text.xml.xsl",
+        "path": "./syntaxes/xslt.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.xpath": "xpath"
+        }
+      },
+      {
+        "language": "xquery",
+        "scopeName": "source.xquery",
+        "path": "./syntaxes/xquery.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Bosak",
+      "properties": {
+        "bosak.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the Bosak language server."
+        },
+        "bosak.server.path": {
+          "scope": "resource",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Path to the Bosak language server executable. If not set, the bundled server is used."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "bosak.evaluateXPath",
+        "title": "Evaluate XPath Expression",
+        "category": "Bosak"
+      },
+      {
+        "command": "bosak.transformXslt",
+        "title": "Run XSLT Transformation",
+        "category": "Bosak"
+      },
+      {
+        "command": "bosak.evaluateXQuery",
+        "title": "Evaluate XQuery Expression",
+        "category": "Bosak"
+      },
+      {
+        "command": "bosak.runXQuery",
+        "title": "Run XQuery",
+        "category": "Bosak"
+      },
+      {
+        "command": "bosak.runInitialTemplate",
+        "title": "Run XSLT Initial Template",
+        "category": "Bosak"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "bosak.evaluateXPath",
+          "when": "editorLangId == xpath",
+          "group": "1_bosak@1"
+        },
+        {
+          "command": "bosak.transformXslt",
+          "when": "editorLangId == xslt",
+          "group": "1_bosak@2"
+        },
+        {
+          "command": "bosak.runXQuery",
+          "when": "editorLangId == xquery",
+          "group": "1_bosak@3"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "vscode:prepublish": "npm run compile",
+    "test": "node test/highlighting.cjs && node test/launch.cjs"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0",
+    "vscode-oniguruma": "^2.0.1",
+    "vscode-textmate": "^9.3.2"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.0"
+  }
+}

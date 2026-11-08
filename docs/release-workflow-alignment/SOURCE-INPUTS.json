@@ -1,0 +1,27 @@
+{
+  "hashMethod": "SHA-256 after LF/CRLF-only normalization for checkout-portable source review; artifact hashes remain raw bytes.",
+  "files": {
+    "src/Directory.Build.props": "16f3820ec647c3b33fd2002dfe99a3e2da42e62a7dfdf8ad46176c156957a9a5",
+    "src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj": "703ab1f655d1bec172dbfdb14075ba2531909c70f96f6693d3ab68bf540285cc",
+    "vscode-bosak/package.json": "00e554a2cf261c7326ea0f948def24e8f9257cffc4a69a66a6840c4fe58bb378",
+    "vscode-bosak/package-lock.json": "7cc8b0ba84cb6b773377906bd2aeb8d69106cc86da7470299bcc7615d7aa4b5e",
+    "vscode-bosak/.vscodeignore": "61d3f4389c7e217188af60c5dd8ea9d2968d9744aebe5324c448051265fa09d6",
+    "vscode-bosak/NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+    "vscode-bosak/licenses/Unicode17-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+    ".github/release-config.json": "03f5a2e41005bbd63323d6cec276039458505e40dfb79d54ba6ac0c2f047e6b6",
+    ".github/scripts/release_artifacts.py": "b3d023c914ecaf4f1979a881dacea35e02deb24ed592ff7f2f6d9efbcaa40a66",
+    ".github/scripts/source-run.cjs": "651a9dc27be3492dd25450df2d8e7820a2acf16eafdc3a3420e46304787bd115",
+    ".github/scripts/test_release_artifacts.py": "11c78a1f102ed794dc6cec4f4db207f8fafa52b0e2639a448bee198f35b68d4d",
+    ".github/scripts/test-source-run.cjs": "dea67791b9dfe74a74d4a35df48cf7f1fbe7d9b0176d3fd7b6548054e7f32913",
+    ".github/scripts/check_workflows.py": "71a8217256fc7fca0fc4b02991270259cbdf37db67615c594f435d67ffa4958c",
+    ".github/workflows/ci.yml": "0a3fc52836cecca827f4d200ad2572d22ef769b41c82fab7410d0c275f3cfb6d",
+    ".github/workflows/release.yml": "0de51d11fd0b88fc66e5e1b93f1de23b25c5d19b2beb3d96f5d0f358afb84f2c",
+    ".github/workflows/vscode-publish.yml": "cdf4edd0d6cc5b7d4a8b3290434214db1fd0cbe2566f48bd80bb14e20d174c5e"
+  },
+  "coreVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "packages": 10,
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

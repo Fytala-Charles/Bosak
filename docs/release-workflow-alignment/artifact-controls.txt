@@ -1,0 +1,7 @@
+.C:\Python314\Lib\zipfile\__init__.py:1722: UserWarning: Duplicate name: 'same'
+  return self._open_to_write(zinfo, force_zip64=force_zip64)
+.............
+----------------------------------------------------------------------
+Ran 14 tests in 0.619s
+
+OK

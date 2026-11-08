@@ -1,0 +1,79 @@
+{
+  "processId": 65900,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "f58b87dcfffd47cae1c73ffecdfb518efebe2ee94d4c224181d09be19f108c95"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "76aabd5e3c1d8e7bb33cb61f1826ae385f19522eae6cd0ba1c3afd87e9babb1e"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "891d490ed13173966a805ebf095f21c1594207b9583e92988fe8722ba7fa33d4"
+    },
+    {
+      "name": "Bosak.XPath.Core.Tests",
+      "identity": "Bosak.XPath.Core.Tests, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "0600a996a955f042bacffad2c1c184a4282bacda73db996434dcc636f364f335"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "d1bf42182a0af4f0f58be6b17dcfa78949294bc69784fec81d76a41b6182743e"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "ee225ba57a14d57c156cdd8fae0f46851becd2c436f21377dfd3d3e4b4d7856a"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "34b6fa706b2f174206d69103f7bead313959fd3ab748be4ba74e84006a1b34c2"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Core.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "ac821fef1da9d2d9187814ed323acbe614f9e2415adb0b4492c34908c9477712"
+    }
+  ],
+  "captureErrors": []
+}

@@ -4,6 +4,11 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Release artifact boundary
+
+The tracked candidate is Core/server1.81.2 and extension0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. This changes release automation, not the execution layers or public engine semantics. [Release guide](RELEASING.md).
+
+
 # Current checkpoint — 7 November 2026
 
 [Development patch1.81.1](foundation-captured-identity-production/README.md) is adopted and freshly qualified:26,342 solution tests,84 separate language-server tests,exact frozen gates,native/consumer lanes and20 retained binary cases. Only captured issuer identity guards changed;provider-facing full proofs remain. Owner workloads/budgets,production Schema adoption,C45/freeze and release gates remain pending. Next PV-Q05 reviews those exact-cohort gaps. No package,commit,push or publication. Earlier checkpoint entries below are historical.

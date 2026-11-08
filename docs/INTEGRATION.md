@@ -4,11 +4,16 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Tracked release candidate and packaging
+
+Core/server metadata is1.81.2 and the extension manifest/lock are0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. These source pins are unpublished. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
+
+
 ## Prepared editor command URI correction
 
 The next local VS Code candidate resolves Windows URI escaping consistently when XPath and XQuery commands look up an open document. Paths with an escaped drive colon, spaces, Unicode or a percent sign now use the same document identity as synchronization. Distinct unopened documents still report an error. This changes editor document lookup, not engine evaluation semantics or provider lifetimes.
 
-[URI correction qualification](release-vscode-uri-fix/README.md) records the separately rebuilt server/VSIX and regression checks. The candidate is local and unpublished; existing released extension behavior is not relabeled. Earlier checkpoint entries below are historical.
+[URI correction qualification](release-vscode-uri-fix/README.md) records the separately rebuilt server/VSIX and regression checks. The [new local1.81.2 cohort](release-1.81.2-candidate/README.md) includes ten NuGet libraries (including the existing Database REST loaders) and extension0.2.6 with matching server; it remains unpublished and does not imply production Schema/XmlDb/Braid adoption. The candidate is local and unpublished; existing released extension behavior is not relabeled. Earlier checkpoint entries below are historical.
 
 
 # Current checkpoint — 7 November 2026

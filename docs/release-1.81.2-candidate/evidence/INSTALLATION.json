@@ -1,0 +1,26 @@
+[
+  {
+    "label": "fresh",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\final-fresh",
+    "artifactSha256": "3f0bace4053943afc4c329f237f0ca4de9699eea98a343375dab45d49be3489c",
+    "exitCode": 0,
+    "log": "evidence/install-fresh.txt",
+    "logSha256": "df12defd4c5b60e1c8f9aa086a3b0090108cd522f2321a525396aaf001c5a7a8"
+  },
+  {
+    "label": "baseline",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\upgrade",
+    "artifactSha256": "3d2c15cb03a4bf9d4487ea0711fc0bc9e861b4eebfdf368c1fca38be17dd9e1c",
+    "exitCode": 0,
+    "log": "evidence/install-baseline.txt",
+    "logSha256": "f648f550b86cb539699e27bd85b5601e3e67ad42c6d2b289e49f2671c5b5b03e"
+  },
+  {
+    "label": "upgrade",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\upgrade",
+    "artifactSha256": "3f0bace4053943afc4c329f237f0ca4de9699eea98a343375dab45d49be3489c",
+    "exitCode": 0,
+    "log": "evidence/install-upgrade.txt",
+    "logSha256": "77ca364708111df5efa01dfc08142845ea3903d8d93723aeb0a67eaa979e9733"
+  }
+]

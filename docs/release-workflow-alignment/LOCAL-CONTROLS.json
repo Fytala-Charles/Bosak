@@ -1,0 +1,32 @@
+[
+  {
+    "name": "artifact-controls",
+    "command": [
+      "python",
+      ".github/scripts/test_release_artifacts.py"
+    ],
+    "exitCode": 0,
+    "log": "artifact-controls.txt",
+    "logSha256": "d6259c95fbbf5ef3a03ff2c0a9308ccf90702fb1b491bc9eb37145e64b29238e"
+  },
+  {
+    "name": "source-run-controls",
+    "command": [
+      "node",
+      ".github/scripts/test-source-run.cjs"
+    ],
+    "exitCode": 0,
+    "log": "source-run-controls.txt",
+    "logSha256": "f89b135107e60b4f20f4538880e7cc4ef3d624d63ca9ea9b1aabe0aca54954b6"
+  },
+  {
+    "name": "yaml-controls",
+    "command": [
+      "python",
+      ".github/scripts/check_workflows.py"
+    ],
+    "exitCode": 0,
+    "log": "yaml-controls.txt",
+    "logSha256": "7f1e8768b78229fd7cf2f68bfbfe6ee40884ef680fec21480b36f685146d6231"
+  }
+]

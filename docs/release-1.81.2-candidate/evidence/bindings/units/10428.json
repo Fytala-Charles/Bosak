@@ -1,0 +1,43 @@
+{
+  "processId": 10428,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "76aabd5e3c1d8e7bb33cb61f1826ae385f19522eae6cd0ba1c3afd87e9babb1e"
+    },
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "identity": "Bosak.XPath.Compiler.Tests, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "4f425e59c1c48b604dc01c61cf4f38b05e94879c963b7116261a2a6268deaad5"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "891d490ed13173966a805ebf095f21c1594207b9583e92988fe8722ba7fa33d4"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Be992d90b0efa01d45224771a9f8e53dee05096a6",
+      "sha256": "d1bf42182a0af4f0f58be6b17dcfa78949294bc69784fec81d76a41b6182743e"
+    }
+  ],
+  "captureErrors": []
+}

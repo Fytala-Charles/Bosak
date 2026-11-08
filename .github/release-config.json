@@ -1,0 +1,36 @@
+{
+  "packages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt",
+    "Bosak.XPath.Providers.Database"
+  ],
+  "dotnetSdk": "10.0.301",
+  "nodeVersion": "24.16.0",
+  "vsceVersion": "4.0.0",
+  "gates": {
+    "qt3": {
+      "counts": [
+        31397,
+        0,
+        424
+      ],
+      "skipMap": "docs/foundation-preview-qualification/evidence/qt3-skips.txt"
+    },
+    "qt4": {
+      "counts": [
+        8941,
+        0,
+        1918
+      ],
+      "skipMap": "docs/foundation-preview-qualification/evidence/qt4-skips.txt",
+      "experimentalPassed": 11
+    }
+  }
+}

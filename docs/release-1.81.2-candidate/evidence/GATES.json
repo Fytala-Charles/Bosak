@@ -1,0 +1,16 @@
+{
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424,
+    "exactSkipMapEqual": true,
+    "skipSha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187"
+  },
+  "qt4": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "exactSkipMapEqual": true,
+    "skipSha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a"
+  }
+}

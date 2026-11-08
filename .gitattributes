@@ -641,3 +641,15 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/release-vscode-command-smoke/command-protocol-trace.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 /docs/release-vscode-uri-fix/compile.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 /docs/release-vscode-uri-fix/package.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+/docs/release-final-candidate-plan/** -text whitespace=cr-at-eol
+
+/docs/release-1.81.2-candidate/** -text whitespace=cr-at-eol
+
+/docs/release-workflow-alignment/** -text whitespace=cr-at-eol
+
+# Preserve exact whitespace in qualified1.81.2 raw tool/skip receipts.
+/docs/release-1.81.2-candidate/evidence/extension-compile.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-1.81.2-candidate/evidence/qt3-skips.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-1.81.2-candidate/evidence/qt4-skips.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-1.81.2-candidate/evidence/vsix-package.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

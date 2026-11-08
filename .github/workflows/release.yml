@@ -1,60 +1,127 @@
 name: Release
 
-# Publishes NuGet packages via Trusted Publishing (OIDC — no long-lived API key).
-# The filename of THIS workflow is registered in the nuget.org trusted publishing
-# policy; if you rename it, update the policy at nuget.org → Trusted Publishing.
-
+# Keep this filename and publish job ID: NuGet trusted publishing binds to them.
+# Tags prepare artifacts only. Publication explicitly consumes a reviewed prior run.
 on:
   push:
-    # Extension tags use vscode-v* and must not start a NuGet publication.
     tags: ['v[0-9]*']
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish previously reviewed artifacts (preparation is the default)
+        type: boolean
+        default: false
+      source_run_id:
+        description: Successful preparation run ID; required for publication
+        type: string
+        default: ''
+      expected_manifest_sha256:
+        description: Reviewed release-manifest.json SHA-256; required for publication
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  publish:
+  prepare:
+    if: github.event_name != 'workflow_dispatch' || !inputs.publish
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write   # required for the OIDC token exchange with nuget.org
-      contents: read
     steps:
-      - name: Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-
-      - name: Setup .NET 10
-        uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
-
-      - name: Restore & build
+          dotnet-version: '10.0.301'
+      - name: Check pinned tag/version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: python3 .github/scripts/release_artifacts.py check-tag nuget --ref-type "$REF_TYPE" --ref-name "$REF_NAME"
+      - name: Restore, build and test
         run: |
           dotnet restore Bosak.sln
-          dotnet build Bosak.sln -c Release --no-restore
+          dotnet build Bosak.sln -c Release --no-restore -p:ContinuousIntegrationBuild=true -p:SourceRevisionId="$GITHUB_SHA" -p:RepositoryCommit="$GITHUB_SHA"
+          dotnet test Bosak.sln -c Release --no-build --nologo --logger:trx --results-directory "$RUNNER_TEMP/test-results"
+      - name: Frozen conformance gates
+        run: |
+          mkdir -p "$RUNNER_TEMP/gates"
+          BOSAK_QT3_DUMP_SKIPS="$RUNNER_TEMP/gates/qt3-skips.txt" dotnet run --project tests/Bosak.XPath.Conformance -c Release --no-build -- tests/qt3tests | tee "$RUNNER_TEMP/gates/qt3.txt"
+          BOSAK_QT4_GATE_ONLY=1 BOSAK_QT4_DUMP_SKIPS="$RUNNER_TEMP/gates/qt4-skips.txt" dotnet run --project tests/Bosak.XPath.Conformance40 -c Release --no-build -- tests/qt4tests | tee "$RUNNER_TEMP/gates/qt4.txt"
+          python3 .github/scripts/release_artifacts.py check-gates nuget "$RUNNER_TEMP/gates"
+      - name: Pack the selected ten libraries and seal their manifest
+        run: |
+          mkdir -p "$RUNNER_TEMP/nuget-out"
+          while IFS= read -r project; do
+            dotnet pack "$project" -c Release --no-build --no-restore -o "$RUNNER_TEMP/nuget-out" -p:ContinuousIntegrationBuild=true -p:SourceRevisionId="$GITHUB_SHA" -p:RepositoryCommit="$GITHUB_SHA"
+          done < <(python3 .github/scripts/release_artifacts.py projects)
+          python3 .github/scripts/release_artifacts.py seal nuget "$RUNNER_TEMP/nuget-out" | tee "$RUNNER_TEMP/nuget-manifest-sha256.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nuget-${{ github.sha }}
+          path: ${{ runner.temp }}/nuget-out/
+          if-no-files-found: error
 
-      - name: Test
-        run: dotnet test Bosak.sln -c Release --no-build --nologo
+      - name: Retain qualification receipts even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-qualification-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/test-results/
+            ${{ runner.temp }}/gates/
+          if-no-files-found: warn
 
-      - name: Pack
-        run: dotnet pack Bosak.sln -c Release --no-build -o nupkgs
-
-      # Exchange the GitHub OIDC token for a short-lived (1 hour) NuGet API key.
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate preparation run
+        id: source
+        uses: actions/github-script@v7
+        env:
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          EXPECTED_MANIFEST_SHA256: ${{ inputs.expected_manifest_sha256 }}
+          EXPECTED_WORKFLOW: .github/workflows/release.yml
+        with:
+          script: |
+            await require(process.env.GITHUB_WORKSPACE + '/.github/scripts/source-run.cjs')({ github, context, core });
+      - uses: actions/download-artifact@v4
+        with:
+          name: nuget-${{ steps.source.outputs.sha }}
+          path: ${{ runner.temp }}/release-input
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout the artifact's source commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.301'
+      - name: Verify the exact reviewed artifact set
+        env:
+          REVIEWED_SHA256: ${{ inputs.expected_manifest_sha256 }}
+        run: python3 .github/scripts/release_artifacts.py verify nuget "$RUNNER_TEMP/release-input" --expected-sha "$REVIEWED_SHA256"
       - name: NuGet login (OIDC)
         uses: NuGet/login@v1
         id: login
         with:
-          user: ${{ secrets.NUGET_USER }}   # nuget.org profile name, NOT your email
-
-      # Publish all library packages; the language server is a private EXE for the
-      # VS Code extension and is not published.
-      - name: NuGet push
+          user: ${{ secrets.NUGET_USER }}
+      - name: Push the verified packages without rebuilding
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: |
-          for pkg in nupkgs/*.nupkg; do
-            case "$pkg" in
-              *LanguageServer*) continue ;;
-            esac
-            dotnet nuget push "$pkg" \
-              --api-key ${{ steps.login.outputs.NUGET_API_KEY }} \
-              --source https://api.nuget.org/v3/index.json \
-              --skip-duplicate
+          for package in "$RUNNER_TEMP"/release-input/*.nupkg; do
+            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
           done
