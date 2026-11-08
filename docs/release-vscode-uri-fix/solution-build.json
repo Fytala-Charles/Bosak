@@ -1,0 +1,12 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-restore"
+  ],
+  "exitCode": 0,
+  "logSha256": "7acb5c04041b573bf284370a1f35219e4f3712019080d61a50e35af46f8d747c"
+}

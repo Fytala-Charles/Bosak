@@ -1,0 +1,6 @@
+
+> vscode-bosak@0.2.5 test
+> node test/highlighting.cjs && node test/launch.cjs
+
+TextMate highlighting checks passed: quotes, function/string scopes, XML exclusions, multiline and doubled quotes.
+Language-server launch checks passed: dotnet DLL, executable apphost and startup registration.

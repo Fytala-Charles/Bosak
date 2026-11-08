@@ -1,0 +1,150 @@
+[Trace - 9:14:46 AM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/sum.xpath",
+        "languageId": "xpath",
+        "version": 1,
+        "text": "sum((1, 2, 3))"
+    }
+}
+
+
+[Trace - 9:14:49 AM] Sending request 'workspace/executeCommand - (2)'.
+Params: {
+    "command": "bosak.evaluateXPath",
+    "arguments": [
+        "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/sum.xpath"
+    ]
+}
+
+
+[Trace - 9:14:49 AM] Received notification 'bosak/evaluationResult'.
+Params: {
+    "language": null,
+    "result": null,
+    "error": "Document is not open."
+}
+
+
+[Trace - 9:14:49 AM] Received response 'workspace/executeCommand - (2)' in 6ms.
+No result returned.
+
+
+[Trace - 9:15:00 AM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/loop.xq",
+        "languageId": "xquery",
+        "version": 1,
+        "text": "string-join(for $i in 1 to 3 return concat(\"q\", $i), \"|\")"
+    }
+}
+
+
+[Trace - 9:15:00 AM] Sending request 'workspace/executeCommand - (6)'.
+Params: {
+    "command": "bosak.evaluateXQuery",
+    "arguments": [
+        "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/loop.xq"
+    ]
+}
+
+
+[Trace - 9:15:01 AM] Received notification 'bosak/evaluationResult'.
+Params: {
+    "language": null,
+    "result": null,
+    "error": "Document is not open."
+}
+
+
+[Trace - 9:15:01 AM] Received response 'workspace/executeCommand - (6)' in 4ms.
+No result returned.
+
+
+[Trace - 9:15:11 AM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/alias.xq",
+        "languageId": "xquery",
+        "version": 1,
+        "text": "6 * 7"
+    }
+}
+
+
+[Trace - 9:15:12 AM] Sending request 'workspace/executeCommand - (10)'.
+Params: {
+    "command": "bosak.evaluateXQuery",
+    "arguments": [
+        "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/alias.xq"
+    ]
+}
+
+
+[Trace - 9:15:12 AM] Received notification 'bosak/evaluationResult'.
+Params: {
+    "language": null,
+    "result": null,
+    "error": "Document is not open."
+}
+
+
+[Trace - 9:15:12 AM] Received response 'workspace/executeCommand - (10)' in 2ms.
+No result returned.
+
+
+[Trace - 9:15:22 AM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/transform.xsl",
+        "languageId": "xslt",
+        "version": 1,
+        "text": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"3.0\"><xsl:output omit-xml-declaration=\"yes\"/><xsl:template match=\"/\"><result><xsl:value-of select=\"sum(/root/n)\"/></result></xsl:template></xsl:stylesheet>"
+    }
+}
+
+
+[Trace - 9:15:23 AM] Sending request 'bosak/transformXslt - (14)'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/transform.xsl"
+    },
+    "sourcePath": "d:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\command-complete-harness\\fixtures\\input.xml"
+}
+
+
+[Trace - 9:15:23 AM] Received response 'bosak/transformXslt - (14)' in 210ms.
+Result: {
+    "result": "<result>23</result>",
+    "error": null
+}
+
+
+[Trace - 9:15:23 AM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/initial.xsl",
+        "languageId": "xslt",
+        "version": 1,
+        "text": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template name=\"start\"><xsl:text>initial-42</xsl:text></xsl:template></xsl:stylesheet>"
+    }
+}
+
+
+[Trace - 9:15:24 AM] Sending request 'bosak/runInitialTemplate - (18)'.
+Params: {
+    "textDocument": {
+        "uri": "file:///d%3A/Development/Bosak/.guard-tmp/core-vscode-candidate-20261108/command-complete-harness/fixtures/initial.xsl"
+    },
+    "initialTemplate": "start"
+}
+
+
+[Trace - 9:15:24 AM] Received response 'bosak/runInitialTemplate - (18)' in 12ms.
+Result: {
+    "result": "initial-42",
+    "error": null
+}
+
+

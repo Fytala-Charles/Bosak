@@ -100,3 +100,10 @@ mult/
 BenchmarkDotNet.Artifacts/
 # Retain the explicitly manifested synthetic receipt-checker output.
 !docs/foundation-provider-adoption/evidence/receipt-controls.log
+
+# Retained exact-action approval and Integration execution receipts.
+!docs/foundation-xmldb-manual-approval/*.log
+
+!docs/release-core-vscode-candidate/*.vsix
+
+!docs/release-vscode-uri-fix/*.vsix

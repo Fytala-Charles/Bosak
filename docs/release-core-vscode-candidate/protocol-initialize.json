@@ -1,0 +1,66 @@
+{
+  "capabilities": {
+    "textDocumentSync": {
+      "openClose": true,
+      "change": 1,
+      "save": {
+        "includeText": true
+      }
+    },
+    "hoverProvider": {},
+    "completionProvider": {
+      "triggerCharacters": [
+        "",
+        ":",
+        "$",
+        "("
+      ]
+    },
+    "definitionProvider": {},
+    "documentSymbolProvider": {},
+    "codeActionProvider": {
+      "codeActionKinds": [
+        "quickfix",
+        "refactor"
+      ]
+    },
+    "codeLensProvider": {},
+    "experimental": {},
+    "semanticTokensProvider": {
+      "legend": {
+        "tokenTypes": [
+          "function",
+          "variable",
+          "keyword",
+          "type",
+          "namespace",
+          "number",
+          "operator",
+          "string"
+        ],
+        "tokenModifiers": [
+          "declaration",
+          "definition",
+          "readonly"
+        ]
+      },
+      "range": true,
+      "full": {}
+    },
+    "diagnosticProvider": {
+      "identifier": "bosak",
+      "interFileDependencies": false,
+      "workspaceDiagnostics": false
+    },
+    "workspace": {
+      "workspaceFolders": {
+        "changeNotifications": false
+      },
+      "fileOperations": {}
+    }
+  },
+  "serverInfo": {
+    "name": "Bosak.LanguageServer",
+    "version": "1.81.1-preview.c0b926de+c0b926de34824ceb2010d5f814a4450b28b31dcc"
+  }
+}

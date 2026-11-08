@@ -1,0 +1,13 @@
+{
+  "status": "ExactActionManuallyApproved",
+  "approvalSource": "Developer-scoped exact-action approval from the VS Code Auto-review Denials picker",
+  "command": "python docs/foundation-xmldb-full-qualification/tools/run.py --lane integration",
+  "cwd": "D:\\Development\\Bosak",
+  "lane": "integration",
+  "guardedLayoutSha256": "f5d44f264d20fc60f4565b342a9696b97a13eca7cab02afb1a741abd8c2990d1",
+  "priorLauncherSha256": "0d4bdb309a435bb3a8353d4494aac316b27c379c86fa5838036f4c57371e6c4b",
+  "priorManifestSha256": "a3a5a7aa295b71d5840f7cfa3b3b02085a7e2f64558cd6604920b323f23587e5",
+  "oneRetryOnly": true,
+  "otherApprovedRetryNotUsed": "python docs/foundation-xmldb-source-candidate/tools/test.py --retry",
+  "scope": "Exact guarded Integration action only; Storage is not rerun. No publication, owner acceptance or broad permission change."
+}

@@ -1,0 +1,13 @@
+{
+  "BEFORE-CANDIDATE-MANIFEST.json": "a0207471092fbe5ef2d8904987d370ddd05a2db8f5cc93b79e00cf58e1812899",
+  "editor-pid.txt": "61add3c91ea5fda99b95b0a31c6f320dbbf9157f60d66a24c18f2715ed28c268",
+  "editor-stderr.txt": "070749c9dfcaa8b7f5cb5d5c975f7556f44668e65c23d2b768e10956b7b53c00",
+  "editor-stdout.txt": "a7f410d163ac969c5ef97b57d470b5211a4a5abd3c7a77aace15e93b5d049c0a",
+  "EDITOR.json": "7215ab1538bd9c706161ca7037f07b90ccd22c8aa1143d9ecdf3d79e9b0ccd22",
+  "PLAN.json": "12b6a62c210b2ddf87a24f3e29669a381d94ec321ba1e3271bfa56af752ffbf3",
+  "README.md": "cebc1fb72d969ce85a4934b86a4f6b62fc28e691891eb66d9f06d0b80db26325",
+  "RESULTS.json": "60e0bae7b043e247024ddaa61fdc0a9198c7e64f65fa6fcdc6b9dab60713293a",
+  "tools/editor-test.cjs": "4708ee4df60f97717de5871dc73ec9d69cd4e517f9adc391f303d95c01a5c2c4",
+  "tools/launch.ps1": "a1e394ee8b0e900edfd22af6f189b4ada76ef8cd8e2b10c95ca965843a867313",
+  "tools/verify.py": "c7df213f6cddf16281fb0dccf89d435e219f75108431dfdf0bc16a23a39645f8"
+}

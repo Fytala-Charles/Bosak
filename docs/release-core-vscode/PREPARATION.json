@@ -1,0 +1,84 @@
+{
+  "date": "2026-11-08",
+  "status": "PreparationOnly",
+  "sourceCandidate": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "corePreviewVersion": "1.81.1-preview.c0b926de",
+  "extensionManifestVersion": "0.2.5",
+  "proposedNextExtensionVersion": "0.2.6",
+  "versionChanged": false,
+  "publisher": "fytala",
+  "vscodeEngine": "^1.80.0",
+  "dotnetRuntime": "net10.0",
+  "inputs": {
+    "vscode-bosak/package.json": "c1fb676b5fbbc99f95a730e9a17193c7f1609c4d7740fb9a1416c71b856a1358",
+    "vscode-bosak/package-lock.json": "7d00decbcbc5dd24b2a74ca7aa7a5b6622c8f35c7faa18a6df7cc86289a86236",
+    "vscode-bosak/.vscodeignore": "ca2d890449ce5365c2b6237e2e6f1294ec12d3480e71a79a9ad5d6624eb541d5",
+    "vscode-bosak/src/extension.ts": "d0293185b3db474ebd9d0d1f3ae8ba59edc8debe068db6fd7f0d5ee27ea0485b",
+    "vscode-bosak/test/launch.cjs": "a6a3254d9b4034f68cca80b44239abfec4c1b5519b17efafe02f744552452403",
+    "vscode-bosak/test/highlighting.cjs": "7513ac1f31e756a815ddf8bb4fa39f167a130c5dac47a60b20c8349246e8c6fc",
+    ".github/workflows/vscode-publish.yml": "e023c740c56ca1d7d77d60a2c6d0d36414bec947ad4ac7463cdd88d8b35dace5",
+    ".github/workflows/release.yml": "acd5eef755fa6b7d72e718f40039d5d225edfa98cfcb2a935f3751ce38305f71",
+    "src/Bosak.LanguageServer/Bosak.LanguageServer.csproj": "cf11995381ad0289d2104aa5d19bd33ca970256fbdd7cf397cf1d0b294ff093e"
+  },
+  "compile": {
+    "command": "npm.cmd run compile",
+    "exitCode": 0,
+    "evidence": "Observed successful tool execution immediately before this report; no compile transcript retained."
+  },
+  "tests": {
+    "command": "npm.cmd test",
+    "exitCode": 0,
+    "log": "extension-tests.txt",
+    "sha256": "4377eb99d811f6fdce05fab2321d0ee047324fc3aa9c064108ffe775c3c8c57a",
+    "scope": "TextMate grammar and mocked launch/registration checks; not a real extension-host or VSIX install test."
+  },
+  "observedIgnoredServer": {
+    "Bosak.LanguageServer": {
+      "sha256": "feeebeae9220bd5bb3139f1992b1a890a11a21af623a9c909db5097b69ba41dd",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Api": {
+      "sha256": "9951bec2ca04489d6c032e0972031d734994713bd19ae16d5ca7fbf6072c7c11",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Compiler": {
+      "sha256": "2303ad9e7e9632a310fc200809e1d6bc91e76c586d787805598698f211023915",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Core": {
+      "sha256": "e8925a35035adab07000cd839c8aafbaa6a9968b755a49e385cac957ad86171e",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Parser": {
+      "sha256": "4f2ee4ca33c18b606dbbd9981bdc1da8b36250de44083120f8191b8431f900d5",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Providers": {
+      "sha256": "6fc85ab08f2c231db754e5d4f68de12c1eba8f5a4e9ad9049a19dd5f3d371ef3",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Runtime": {
+      "sha256": "1dcf1e5bfb3fd06b5d6e4c3bafad5bb222c5fc39e2a5a6983e503d5a60fc7131",
+      "matchesPreview": false
+    },
+    "Bosak.XPath.Standard": {
+      "sha256": "cc5e5209ec6d31659aec5aa989412486ae4e5ce712e429a7e6745ac164f78834",
+      "matchesPreview": false
+    },
+    "Bosak.XQuery": {
+      "sha256": "0dac7bcbdc6d9e16a430fd2e8d755038b33eed4fa9da0edfe52c89d9609c1bde",
+      "matchesPreview": false
+    },
+    "Bosak.Xslt": {
+      "sha256": "9fc9f7d05738c3bbf3698895636e859ddbaab2fcbf4a66acec86b56e6b030244",
+      "matchesPreview": false
+    }
+  },
+  "vsixBuilt": false,
+  "installUpgradeQualified": false,
+  "liveEditorQualified": false,
+  "marketplacePublished": false,
+  "productionProviderAdoptionDeferredByUserScopeDirection": true,
+  "ownerAcceptanceGranted": false,
+  "apiFreezeGranted": false
+}

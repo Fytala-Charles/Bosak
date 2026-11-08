@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b827cb48-53c8-4fca-aae6-19391da562ba" name="charl@CHARLES 2026-11-08 07:47:38" runUser="CHARLES\charl" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-08T07:47:38.7551501+01:00" queuing="2026-11-08T07:47:38.7551502+01:00" start="2026-11-08T07:47:37.6023360+01:00" finish="2026-11-08T07:47:38.7581877+01:00" />
+  <TestSettings name="default" id="b9c820a4-98be-49e1-a69b-beb985ca2afc">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-08_07_47_38" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="18a539e0-6968-41ee-a0f6-33fc6d4a061b" testId="0867e5f8-7e40-6e24-666f-e1229fb4756f" testName="Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads" computerName="CHARLES" duration="00:00:00.4733382" startTime="2026-11-08T07:47:38.1851244+01:00" endTime="2026-11-08T07:47:38.6640001+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18a539e0-6968-41ee-a0f6-33fc6d4a061b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads" storage="d:\development\bosak\.guard-tmp\xmldb-reopen-layout-20261108\tests\bosak.xmldb.integrationtests\bin\release\net10.0\bosak.xmldb.integrationtests.dll" id="0867e5f8-7e40-6e24-666f-e1229fb4756f">
+      <Execution id="18a539e0-6968-41ee-a0f6-33fc6d4a061b" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\xmldb-reopen-layout-20261108\tests\Bosak.XmlDb.IntegrationTests\bin\Release\net10.0\Bosak.XmlDb.IntegrationTests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XmlDb.IntegrationTests.ReopenTests" name="Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="0867e5f8-7e40-6e24-666f-e1229fb4756f" executionId="18a539e0-6968-41ee-a0f6-33fc6d4a061b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.08]   Discovering: Bosak.XmlDb.IntegrationTests&#xD;
+[xUnit.net 00:00:00.21]   Discovered:  Bosak.XmlDb.IntegrationTests&#xD;
+[xUnit.net 00:00:00.22]   Starting:    Bosak.XmlDb.IntegrationTests&#xD;
+[xUnit.net 00:00:00.72]   Finished:    Bosak.XmlDb.IntegrationTests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

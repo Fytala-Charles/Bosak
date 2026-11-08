@@ -1,0 +1,2 @@
+[20132:1108/085333.566:ERROR:components\os_crypt\sync\os_crypt_win.cc:78] Failed to encrypt: The system cannot find the file specified. (0x2)
+[20132:1108/085333.587:FATAL:electron\shell\browser\win\install_dir_access.cc:52] Sandboxed processes cannot read C:\Program Files\Microsoft VS Code\a717861c07: its ACL has an entry for an AppContainer package SID but none for ALL APPLICATION PACKAGES, so Windows denies the sandbox token access. Grant it with: icacls "C:\Program Files\Microsoft VS Code\a717861c07" /grant *S-1-15-2-1:(OI)(CI)(RX)

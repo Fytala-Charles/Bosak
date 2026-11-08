@@ -1,0 +1,48 @@
+{
+  "extensionVersion": "0.2.6",
+  "engineVersion": "1.81.1-preview.c0b926de",
+  "archiveSha256": "77b03b067953ea6f5587856bc222262a45a69160fffc8c4e6e30ec9b166ffd02",
+  "bundledProjects": [
+    "Bosak.LanguageServer/1.81.1-preview.c0b926de",
+    "Bosak.XPath.Api/1.81.1.0",
+    "Bosak.XPath.Compiler/1.81.1.0",
+    "Bosak.XPath.Core/1.81.1.0",
+    "Bosak.XPath.Parser/1.81.1.0",
+    "Bosak.XPath.Providers/1.81.1.0",
+    "Bosak.XPath.Runtime/1.81.1.0",
+    "Bosak.XPath.Standard/1.81.1.0",
+    "Bosak.XQuery/1.81.1.0",
+    "Bosak.Xslt/1.81.1.0"
+  ],
+  "packagedStdioChecks": [
+    {
+      "expression": "divide(a := 9)",
+      "diagnostics": []
+    },
+    {
+      "expression": "divide(?, b := 3)(9)",
+      "diagnostics": []
+    },
+    {
+      "expression": "divide(unknown := 9)",
+      "diagnostics": [
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 269
+            },
+            "end": {
+              "line": 0,
+              "character": 289
+            }
+          },
+          "severity": 1,
+          "code": "XPST0017",
+          "source": "bosak",
+          "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        }
+      ]
+    }
+  ]
+}

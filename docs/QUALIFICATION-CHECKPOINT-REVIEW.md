@@ -1,5 +1,7 @@
 # Qualification checkpoint and execution-review handoff
 
+Current supplement, 8 November 2026: the execution restriction described below is historical and has been resolved by fresh automatic review. [The follow-up](foundation-xmldb-manual-approval/README.md) records Integration862 plus one layout-corrected focused pass, giving 4,482 distinct XmlDb passes across runs. [The current release checklist](RELEASE-READINESS-1.81.1.md) lists remaining owner, scope and delivery gates. The original checkpoint narrative below is preserved.
+
 The owner authorized committing and pushing the completed qualification evidence
 on `checkpoint/foundation-1.81.1`. The code/package candidate remains
 `c0b926de34824ceb2010d5f814a4450b28b31dcc` and local preview

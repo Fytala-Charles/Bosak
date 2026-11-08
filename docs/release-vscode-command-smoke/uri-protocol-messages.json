@@ -1,0 +1,126 @@
+[
+  {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "capabilities": {
+        "textDocumentSync": {
+          "openClose": true,
+          "change": 1,
+          "save": {
+            "includeText": true
+          }
+        },
+        "hoverProvider": {},
+        "completionProvider": {
+          "triggerCharacters": [
+            "",
+            ":",
+            "$",
+            "("
+          ]
+        },
+        "definitionProvider": {},
+        "documentSymbolProvider": {},
+        "codeActionProvider": {
+          "codeActionKinds": [
+            "quickfix",
+            "refactor"
+          ]
+        },
+        "codeLensProvider": {},
+        "experimental": {},
+        "semanticTokensProvider": {
+          "legend": {
+            "tokenTypes": [
+              "function",
+              "variable",
+              "keyword",
+              "type",
+              "namespace",
+              "number",
+              "operator",
+              "string"
+            ],
+            "tokenModifiers": [
+              "declaration",
+              "definition",
+              "readonly"
+            ]
+          },
+          "range": true,
+          "full": {}
+        },
+        "diagnosticProvider": {
+          "identifier": "bosak",
+          "interFileDependencies": false,
+          "workspaceDiagnostics": false
+        },
+        "workspace": {
+          "workspaceFolders": {
+            "changeNotifications": false
+          },
+          "fileOperations": {}
+        }
+      },
+      "serverInfo": {
+        "name": "Bosak.LanguageServer",
+        "version": "1.81.1-preview.c0b926de+c0b926de34824ceb2010d5f814a4450b28b31dcc"
+      }
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 100,
+    "result": null
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 2,
+    "result": {
+      "kind": "full",
+      "items": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "result": {
+      "kind": "full",
+      "items": []
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 4,
+    "result": {
+      "kind": "full",
+      "items": [
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 269
+            },
+            "end": {
+              "line": 0,
+              "character": 289
+            }
+          },
+          "severity": 1,
+          "code": "XPST0017",
+          "source": "bosak",
+          "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        }
+      ]
+    }
+  },
+  {
+    "jsonrpc": "2.0",
+    "id": 500,
+    "error": {
+      "code": -32601,
+      "message": "Method not found - workspace/executeCommand"
+    }
+  }
+]

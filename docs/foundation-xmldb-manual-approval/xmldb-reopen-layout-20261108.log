@@ -1,0 +1,16 @@
+VSTest version 18.6.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.11)
+[xUnit.net 00:00:00.08]   Discovering: Bosak.XmlDb.IntegrationTests
+[xUnit.net 00:00:00.21]   Discovered:  Bosak.XmlDb.IntegrationTests
+[xUnit.net 00:00:00.22]   Starting:    Bosak.XmlDb.IntegrationTests
+[xUnit.net 00:00:00.72]   Finished:    Bosak.XmlDb.IntegrationTests
+  Passed Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads [473 ms]
+Results File: D:\Development\Bosak\docs\foundation-xmldb-manual-approval\trx-reopen\charl_CHARLES_2026-11-08_07_47_38_net10.0.trx
+
+Test Run Successful.
+Total tests: 1
+     Passed: 1
+ Total time: 1.1426 Seconds

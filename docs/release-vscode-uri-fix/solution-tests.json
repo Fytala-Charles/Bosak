@@ -1,0 +1,15 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build",
+    "--logger:trx",
+    "--results-directory",
+    "D:\\Development\\Bosak\\docs\\release-vscode-uri-fix\\solution-trx"
+  ],
+  "exitCode": 1,
+  "logSha256": "ebc8e7844746a4ecc490cefbb8b49f73d3f0d2be71c95698274c778683758977"
+}

@@ -1,3 +1,11 @@
+# Current editor fix - 8 November 2026
+
+Parent evidence checkpoint is `57865fc845c3eb081a38588cc4f73f5e11e42767` on `checkpoint/foundation-1.81.1`. The reviewed fix/evidence checkpoint is the Git commit containing this entry; see [checkpoint review](RELEASE-CHECKPOINT-REVIEW-2026-11-08.md). User authorized committing/pushing this checkpoint, with no tag/publication. User authorized fixing the failed extension commands. ExecuteCommandHandler now parses command URI arguments through DocumentUri before lookup; six new regressions cover escaping and missing-document isolation. Core engine source/version and the nine sealed1.81.1-preview.c0b926de DLLs are unchanged. The fixed server is a separate1.81.2-preview.urifix1 diagnostic snapshot (base C0 plus source hash), not an immutable new commit or approved release version. Tracked extension version remains0.2.5; isolated VSIX candidate is0.2.6.
+
+[The URI-fix dossier](release-vscode-uri-fix/README.md) retains results. Original command failures and old candidate bytes remain historical. Normal Chromium sandbox works through reviewed isolated editor launch outside the restricted process context; no installation ACL or active-profile change is needed. Preserve all prior packets and owner repositories. Owner budgets/C45/final artifact and publication decisions remain open; no tag or publication is authorized by testing. Entries below are historical.
+
+---
+
 # Current checkpoint — 7 November 2026
 
 

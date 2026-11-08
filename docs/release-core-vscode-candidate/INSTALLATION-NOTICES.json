@@ -1,0 +1,29 @@
+[
+  {
+    "label": "final-fresh",
+    "profile": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-fresh\\profile",
+    "extensions": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-fresh\\extensions",
+    "exitCode": 0,
+    "artifactSha256": "77b03b067953ea6f5587856bc222262a45a69160fffc8c4e6e30ec9b166ffd02",
+    "log": "final-fresh.txt",
+    "logSha256": "1c8d55b20058189ebf7911dd6fb4ca523c751dab031459f615c1453b07863c0e"
+  },
+  {
+    "label": "final-upgrade-baseline",
+    "profile": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-upgrade\\profile",
+    "extensions": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-upgrade\\extensions",
+    "exitCode": 0,
+    "artifactSha256": "3d2c15cb03a4bf9d4487ea0711fc0bc9e861b4eebfdf368c1fca38be17dd9e1c",
+    "log": "final-upgrade-baseline.txt",
+    "logSha256": "37fea53c26dc2ad0c941df4e6601a814bfad3c1b29c3bd10d152733efadb5e16"
+  },
+  {
+    "label": "final-upgrade",
+    "profile": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-upgrade\\profile",
+    "extensions": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-upgrade\\extensions",
+    "exitCode": 0,
+    "artifactSha256": "77b03b067953ea6f5587856bc222262a45a69160fffc8c4e6e30ec9b166ffd02",
+    "log": "final-upgrade.txt",
+    "logSha256": "76a0681869a7b0ddf2322cd6d844ac864ceef9bdf915e7e32bc0c9675e07e689"
+  }
+]

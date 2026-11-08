@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "vstest",
+    "D:\\Development\\Bosak\\.guard-tmp\\xmldb-reopen-layout-20261108\\tests\\Bosak.XmlDb.IntegrationTests\\bin\\Release\\net10.0\\Bosak.XmlDb.IntegrationTests.dll",
+    "--TestCaseFilter:FullyQualifiedName=Bosak.XmlDb.IntegrationTests.ReopenTests.Store_ReopenedInNewProcess_ReturnsHeaderWithoutLinePayloads",
+    "--logger:trx",
+    "--logger:console;verbosity=normal",
+    "--ResultsDirectory:D:\\Development\\Bosak\\docs\\foundation-xmldb-manual-approval\\trx-reopen"
+  ],
+  "exitCode": 0,
+  "failure": null,
+  "elapsedSeconds": 1.4838259000098333,
+  "qt4GateOnly": false,
+  "head": "57865fc845c3eb081a38588cc4f73f5e11e42767",
+  "workingTreeStatus": " M .gitattributes\n M docs/CHECKPOINT-1.81.1.md\n M docs/foundation-xmldb-full-qualification/MANIFEST.json\n M docs/foundation-xmldb-full-qualification/tools/run.py\n?? docs/foundation-xmldb-full-qualification/evidence/bindings/integration/\n?? docs/foundation-xmldb-full-qualification/evidence/integration-execution.json\n?? docs/foundation-xmldb-manual-approval/\n",
+  "logSha256": "d9090128cb118b6c7440dc90d9349641c19d75fad5d1cf2892e32964142ea1e6",
+  "qualificationAccepted": false
+}

@@ -1,0 +1,106 @@
+{
+  "processId": 54376,
+  "processName": "dotnet",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "0fa4de7d4432a24e0a049301c1192de2b21e9bf09adde5feacce4816fd374359"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "dd1ef817340dc210425fe570dc230f42b83903f17a9d353c86d28287c31e01f1"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "cab08b8c38f32b3d602b3e29e3dd36affc3a5853a813de96a1a0162ef02ffd43"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "2a169b8a894ce78ffbb754bfa0a8a540b093fcd5e8024076a4c9372467aefe72"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "09425c35455d20a777b285fcbfe8a960d4dd397972f1beb84704e7f3356775d8"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "e155763ce56c746e3d6916398ba0b317e72780008b3a8d4be2e7787a003c2151"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "0814065371bc088de8cee39e764babab5a03dc46ceaa0edd0bf3e563569b0d02"
+    },
+    {
+      "name": "Bosak.XmlDb.Core",
+      "identity": "Bosak.XmlDb.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XmlDb.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "c4c892569a61c417a677775a6c740f79076928a6491bc0499eb560953db4ef52"
+    },
+    {
+      "name": "Bosak.XmlDb.IntegrationTests",
+      "identity": "Bosak.XmlDb.IntegrationTests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XmlDb.IntegrationTests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "341ea55ad23900b3a7a797f034246d14a26d32ac8362ec7a94de4fa5f3008603"
+    },
+    {
+      "name": "Bosak.XmlDb.Storage",
+      "identity": "Bosak.XmlDb.Storage, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XmlDb.Storage.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "3069ac756aae51b0db5e5590b567950d8bf65bd0e28dccb807170c8ecd0796ae"
+    },
+    {
+      "name": "Bosak.XmlDb.Xdm",
+      "identity": "Bosak.XmlDb.Xdm, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XmlDb.Xdm.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "041075eb7a9e436d22d5ab51ed3c6dacfe80c648d15d6b6c361fd0028f7484a5"
+    }
+  ],
+  "captureErrors": []
+}

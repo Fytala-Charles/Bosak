@@ -4,6 +4,13 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Prepared editor command URI correction
+
+The next local VS Code candidate resolves Windows URI escaping consistently when XPath and XQuery commands look up an open document. Paths with an escaped drive colon, spaces, Unicode or a percent sign now use the same document identity as synchronization. Distinct unopened documents still report an error. This changes editor document lookup, not engine evaluation semantics or provider lifetimes.
+
+[URI correction qualification](release-vscode-uri-fix/README.md) records the separately rebuilt server/VSIX and regression checks. The candidate is local and unpublished; existing released extension behavior is not relabeled. Earlier checkpoint entries below are historical.
+
+
 # Current checkpoint — 7 November 2026
 
 [Development patch1.81.1](foundation-captured-identity-production/README.md) is adopted and freshly qualified:26,342 solution tests,84 separate language-server tests,exact frozen gates,native/consumer lanes and20 retained binary cases. Only captured issuer identity guards changed;provider-facing full proofs remain. Owner workloads/budgets,production Schema adoption,C45/freeze and release gates remain pending. Next PV-Q05 reviews those exact-cohort gaps. No package,commit,push or publication. Earlier checkpoint entries below are historical.

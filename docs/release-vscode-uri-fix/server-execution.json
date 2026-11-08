@@ -1,0 +1,21 @@
+{
+  "command": [
+    "dotnet",
+    "publish",
+    "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\source\\src\\Bosak.LanguageServer\\Bosak.LanguageServer.csproj",
+    "-c",
+    "Release",
+    "-p:UseAppHost=false",
+    "-p:Version=1.81.2-preview.urifix1",
+    "-p:SourceRevisionId=c0b926de34824ceb2010d5f814a4450b28b31dcc.uri-fix-4cd0bbf9a92e",
+    "-p:RepositoryCommit=c0b926de34824ceb2010d5f814a4450b28b31dcc.uri-fix-4cd0bbf9a92e",
+    "-p:NuGetAudit=false",
+    "--configfile",
+    "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\NuGet.Config",
+    "-o",
+    "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\extension\\server"
+  ],
+  "cwd": "D:\\Development\\Bosak",
+  "exitCode": 0,
+  "logSha256": "87bb8111989454163f41a7dc2740e4c1ffd29c04ec2afa5265d4113d41646559"
+}

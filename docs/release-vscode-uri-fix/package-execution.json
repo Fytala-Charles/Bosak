@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "C:\\Users\\charl\\AppData\\Local\\npm-cache\\_npx\\66fbc91407e86cd3\\node_modules\\@vscode\\vsce\\vsce",
+    "package",
+    "--out",
+    "D:\\Development\\Bosak\\docs\\release-vscode-uri-fix\\vscode-bosak-0.2.6-uri-fix.vsix"
+  ],
+  "cwd": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\extension",
+  "exitCode": 0,
+  "logSha256": "3ccd5d4c7245d5eeef0161d6934c45d09769813980bd5397813779b6175b7f56"
+}

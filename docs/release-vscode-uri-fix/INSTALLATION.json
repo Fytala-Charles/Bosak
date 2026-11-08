@@ -1,0 +1,26 @@
+[
+  {
+    "label": "fresh",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\final-fresh",
+    "artifactSha256": "2bf9e4abe17feca9319418a34cb2fef8ac6e3724f6c581892b77eefb98538f67",
+    "exitCode": 0,
+    "log": "install-fresh.txt",
+    "logSha256": "43fff3c9aa704d68453e101b09cb06ed267c494c4332248c4f954348d2c2520c"
+  },
+  {
+    "label": "baseline",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\upgrade",
+    "artifactSha256": "3d2c15cb03a4bf9d4487ea0711fc0bc9e861b4eebfdf368c1fca38be17dd9e1c",
+    "exitCode": 0,
+    "log": "install-baseline.txt",
+    "logSha256": "7445296e4866618b8c11f711540eb1bdb2ccf9608884fba51bbba07f5a79fbc2"
+  },
+  {
+    "label": "upgrade",
+    "folder": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\upgrade",
+    "artifactSha256": "2bf9e4abe17feca9319418a34cb2fef8ac6e3724f6c581892b77eefb98538f67",
+    "exitCode": 0,
+    "log": "install-upgrade.txt",
+    "logSha256": "4f0abeb77bb1aa517f48287c209bfc5ce41f945fba39b0108ffad054b76127c6"
+  }
+]

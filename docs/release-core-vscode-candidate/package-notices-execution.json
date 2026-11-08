@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "C:\\Users\\charl\\AppData\\Local\\npm-cache\\_npx\\66fbc91407e86cd3\\node_modules\\@vscode\\vsce\\vsce",
+    "package",
+    "--out",
+    "D:\\Development\\Bosak\\docs\\release-core-vscode-candidate\\vscode-bosak-0.2.6-candidate-notices.vsix"
+  ],
+  "exitCode": 0
+}

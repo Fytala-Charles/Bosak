@@ -1,0 +1,5 @@
+Installing extensions...
+Extension 'vscode-bosak-0.2.6-candidate.vsix' was successfully installed.
+[1108/085242.664:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: Access is denied. (0x5)
+(node:66380) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `Code --trace-deprecation ...` to show where the warning was created)

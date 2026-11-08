@@ -621,3 +621,23 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/QUALIFICATION-CHECKPOINT-REVIEW.md -text whitespace=cr-at-eol
 /docs/foundation-preview-qualification/evidence/qt3-skips.txt -text whitespace=cr-at-eol,-blank-at-eof
 /docs/foundation-preview-qualification/evidence/qt4-skips.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+/docs/foundation-xmldb-manual-approval/** -text whitespace=cr-at-eol
+
+/docs/release-core-vscode/** -text whitespace=cr-at-eol
+
+/docs/release-core-vscode-candidate/** -text whitespace=cr-at-eol
+
+/docs/release-vscode-editor-unblock/** -text whitespace=cr-at-eol
+
+/docs/release-vscode-command-smoke/** -text whitespace=cr-at-eol
+
+/docs/release-vscode-uri-fix/** -text whitespace=cr-at-eol
+
+# Preserve verbatim whitespace in these exact reviewed tool-output receipts.
+/docs/release-core-vscode-candidate/compile.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-core-vscode-candidate/package-notices.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-core-vscode-candidate/package.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-vscode-command-smoke/command-protocol-trace.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-vscode-uri-fix/compile.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+/docs/release-vscode-uri-fix/package.txt -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

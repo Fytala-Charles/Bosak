@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-08",
+  "method": "Fresh tool-level reviewed launch outside Codex restricted process context; normal Chromium sandbox retained.",
+  "harness": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\editor-harness-unblock",
+  "harnessSha256": "4708ee4df60f97717de5871dc73ec9d69cd4e517f9adc391f303d95c01a5c2c4",
+  "profile": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-fresh\\profile",
+  "extensions": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\final-fresh\\extensions",
+  "machineAclChanged": false,
+  "chromiumSandboxDisabled": false
+}
